@@ -19,6 +19,26 @@
 		F66FC3ED22C863550086A2F0 /* bvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3EB22C863550086A2F0 /* bvh.cpp */; };
 		F66FC3F122C863A40086A2F0 /* constant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3EF22C863A40086A2F0 /* constant.cpp */; };
 		F66FC3F522C8646A0086A2F0 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3F322C8646A0086A2F0 /* log.cpp */; };
+		F66FC3F922C8662C0086A2F0 /* transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3F722C8662C0086A2F0 /* transform.cpp */; };
+		F66FC3FE22C86C1D0086A2F0 /* shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3FC22C86C1D0086A2F0 /* shape.cpp */; };
+		F66FC40122C86C350086A2F0 /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3FF22C86C350086A2F0 /* material.cpp */; };
+		F66FC40422C86C4E0086A2F0 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC40222C86C4E0086A2F0 /* texture.cpp */; };
+		F66FC40722C86C7B0086A2F0 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC40522C86C7B0086A2F0 /* light.cpp */; };
+		F66FC40A22C87E850086A2F0 /* paladin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC40822C87E850086A2F0 /* paladin.cpp */; };
+		F66FC40E22C87FA50086A2F0 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC40C22C87FA50086A2F0 /* scene.cpp */; };
+		F66FC41122C886640086A2F0 /* spectrum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC40F22C886640086A2F0 /* spectrum.cpp */; };
+		F66FC41422C890FD0086A2F0 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC41222C890FD0086A2F0 /* camera.cpp */; };
+		F66FC41722C891140086A2F0 /* sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC41522C891140086A2F0 /* sampler.cpp */; };
+		F66FC41A22C891700086A2F0 /* sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC41822C891700086A2F0 /* sphere.cpp */; };
+		F66FC41D22C891970086A2F0 /* cylinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC41B22C891970086A2F0 /* cylinder.cpp */; };
+		F66FC42022C891A10086A2F0 /* cone.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC41E22C891A10086A2F0 /* cone.cpp */; };
+		F66FC42322C891BE0086A2F0 /* disk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC42122C891BE0086A2F0 /* disk.cpp */; };
+		F66FC42622C892D30086A2F0 /* kdtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC42422C892D30086A2F0 /* kdtree.cpp */; };
+		F66FC42922C892E80086A2F0 /* quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC42722C892E80086A2F0 /* quaternion.cpp */; };
+		F66FC42C22C893850086A2F0 /* bxdf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC42A22C893850086A2F0 /* bxdf.cpp */; };
+		F66FC42F22C8C5BD0086A2F0 /* sampling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC42D22C8C5BD0086A2F0 /* sampling.cpp */; };
+		F66FC43222C8C5E10086A2F0 /* fileio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC43022C8C5E10086A2F0 /* fileio.cpp */; };
+		F66FC43522C8C7960086A2F0 /* box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC43322C8C7960086A2F0 /* box.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -58,6 +78,51 @@
 		F66FC3F022C863A40086A2F0 /* constant.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = constant.hpp; sourceTree = "<group>"; };
 		F66FC3F322C8646A0086A2F0 /* log.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
 		F66FC3F422C8646A0086A2F0 /* log.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = log.hpp; sourceTree = "<group>"; };
+		F66FC3F722C8662C0086A2F0 /* transform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transform.cpp; sourceTree = "<group>"; };
+		F66FC3F822C8662C0086A2F0 /* transform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transform.hpp; sourceTree = "<group>"; };
+		F66FC3FC22C86C1D0086A2F0 /* shape.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = shape.cpp; sourceTree = "<group>"; };
+		F66FC3FD22C86C1D0086A2F0 /* shape.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = shape.hpp; sourceTree = "<group>"; };
+		F66FC3FF22C86C350086A2F0 /* material.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = material.cpp; sourceTree = "<group>"; };
+		F66FC40022C86C350086A2F0 /* material.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = material.hpp; sourceTree = "<group>"; };
+		F66FC40222C86C4E0086A2F0 /* texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = texture.cpp; sourceTree = "<group>"; };
+		F66FC40322C86C4E0086A2F0 /* texture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = texture.hpp; sourceTree = "<group>"; };
+		F66FC40522C86C7B0086A2F0 /* light.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = light.cpp; sourceTree = "<group>"; };
+		F66FC40622C86C7B0086A2F0 /* light.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = light.hpp; sourceTree = "<group>"; };
+		F66FC40822C87E850086A2F0 /* paladin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = paladin.cpp; sourceTree = "<group>"; };
+		F66FC40922C87E850086A2F0 /* paladin.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = paladin.hpp; sourceTree = "<group>"; };
+		F66FC40C22C87FA50086A2F0 /* scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scene.cpp; sourceTree = "<group>"; };
+		F66FC40D22C87FA50086A2F0 /* scene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = scene.hpp; sourceTree = "<group>"; };
+		F66FC40F22C886640086A2F0 /* spectrum.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = spectrum.cpp; sourceTree = "<group>"; };
+		F66FC41022C886640086A2F0 /* spectrum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = spectrum.hpp; sourceTree = "<group>"; };
+		F66FC41222C890FD0086A2F0 /* camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
+		F66FC41322C890FD0086A2F0 /* camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = camera.hpp; sourceTree = "<group>"; };
+		F66FC41522C891140086A2F0 /* sampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sampler.cpp; sourceTree = "<group>"; };
+		F66FC41622C891140086A2F0 /* sampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sampler.hpp; sourceTree = "<group>"; };
+		F66FC41822C891700086A2F0 /* sphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sphere.cpp; sourceTree = "<group>"; };
+		F66FC41922C891700086A2F0 /* sphere.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sphere.hpp; sourceTree = "<group>"; };
+		F66FC41B22C891970086A2F0 /* cylinder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cylinder.cpp; sourceTree = "<group>"; };
+		F66FC41C22C891970086A2F0 /* cylinder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cylinder.hpp; sourceTree = "<group>"; };
+		F66FC41E22C891A10086A2F0 /* cone.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cone.cpp; sourceTree = "<group>"; };
+		F66FC41F22C891A10086A2F0 /* cone.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cone.hpp; sourceTree = "<group>"; };
+		F66FC42122C891BE0086A2F0 /* disk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = disk.cpp; sourceTree = "<group>"; };
+		F66FC42222C891BE0086A2F0 /* disk.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = disk.hpp; sourceTree = "<group>"; };
+		F66FC42422C892D30086A2F0 /* kdtree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = kdtree.cpp; sourceTree = "<group>"; };
+		F66FC42522C892D30086A2F0 /* kdtree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = kdtree.hpp; sourceTree = "<group>"; };
+		F66FC42722C892E80086A2F0 /* quaternion.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = quaternion.cpp; sourceTree = "<group>"; };
+		F66FC42822C892E80086A2F0 /* quaternion.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = quaternion.hpp; sourceTree = "<group>"; };
+		F66FC42A22C893850086A2F0 /* bxdf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bxdf.cpp; sourceTree = "<group>"; };
+		F66FC42B22C893850086A2F0 /* bxdf.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bxdf.hpp; sourceTree = "<group>"; };
+		F66FC42D22C8C5BD0086A2F0 /* sampling.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sampling.cpp; sourceTree = "<group>"; };
+		F66FC42E22C8C5BD0086A2F0 /* sampling.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sampling.hpp; sourceTree = "<group>"; };
+		F66FC43022C8C5E10086A2F0 /* fileio.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fileio.cpp; sourceTree = "<group>"; };
+		F66FC43122C8C5E10086A2F0 /* fileio.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fileio.hpp; sourceTree = "<group>"; };
+		F66FC43322C8C7960086A2F0 /* box.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = box.cpp; sourceTree = "<group>"; };
+		F66FC43422C8C7960086A2F0 /* box.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = box.hpp; sourceTree = "<group>"; };
+		F66FC43622C8C7E70086A2F0 /* point.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = point.hpp; sourceTree = "<group>"; };
+		F66FC43922C8FBCA0086A2F0 /* macro.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = macro.hpp; sourceTree = "<group>"; };
+		F66FC43A22C910490086A2F0 /* bound.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bound.hpp; sourceTree = "<group>"; };
+		F66FC43B22C9106E0086A2F0 /* vector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vector.hpp; sourceTree = "<group>"; };
+		F66FC43C22C91BEC0086A2F0 /* header.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = header.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +163,9 @@
 		F66FC3C622C85F3E0086A2F0 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				F66FC3FB22C86BCA0086A2F0 /* parallel */,
+				F66FC3FA22C867C20086A2F0 /* util */,
+				F66FC3F622C8660E0086A2F0 /* math */,
 				F66FC3F222C863DF0086A2F0 /* ext */,
 				F66FC3EE22C863840086A2F0 /* textures */,
 				F66FC3EA22C862ED0086A2F0 /* accelerators */,
@@ -119,6 +187,29 @@
 			children = (
 				F66FC3C822C8601C0086A2F0 /* integrator.cpp */,
 				F66FC3C922C8601C0086A2F0 /* integrator.hpp */,
+				F66FC3FC22C86C1D0086A2F0 /* shape.cpp */,
+				F66FC3FD22C86C1D0086A2F0 /* shape.hpp */,
+				F66FC3FF22C86C350086A2F0 /* material.cpp */,
+				F66FC40022C86C350086A2F0 /* material.hpp */,
+				F66FC40222C86C4E0086A2F0 /* texture.cpp */,
+				F66FC40322C86C4E0086A2F0 /* texture.hpp */,
+				F66FC40522C86C7B0086A2F0 /* light.cpp */,
+				F66FC40622C86C7B0086A2F0 /* light.hpp */,
+				F66FC40822C87E850086A2F0 /* paladin.cpp */,
+				F66FC40922C87E850086A2F0 /* paladin.hpp */,
+				F66FC40C22C87FA50086A2F0 /* scene.cpp */,
+				F66FC40D22C87FA50086A2F0 /* scene.hpp */,
+				F66FC40F22C886640086A2F0 /* spectrum.cpp */,
+				F66FC41022C886640086A2F0 /* spectrum.hpp */,
+				F66FC41222C890FD0086A2F0 /* camera.cpp */,
+				F66FC41322C890FD0086A2F0 /* camera.hpp */,
+				F66FC41522C891140086A2F0 /* sampler.cpp */,
+				F66FC41622C891140086A2F0 /* sampler.hpp */,
+				F66FC42A22C893850086A2F0 /* bxdf.cpp */,
+				F66FC42B22C893850086A2F0 /* bxdf.hpp */,
+				F66FC42D22C8C5BD0086A2F0 /* sampling.cpp */,
+				F66FC42E22C8C5BD0086A2F0 /* sampling.hpp */,
+				F66FC43C22C91BEC0086A2F0 /* header.hpp */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -128,6 +219,8 @@
 			children = (
 				F66FC3CC22C860750086A2F0 /* sinc.cpp */,
 				F66FC3CD22C860750086A2F0 /* sinc.hpp */,
+				F66FC43322C8C7960086A2F0 /* box.cpp */,
+				F66FC43422C8C7960086A2F0 /* box.hpp */,
 			);
 			path = filters;
 			sourceTree = "<group>";
@@ -164,6 +257,14 @@
 			children = (
 				F66FC3DF22C862230086A2F0 /* triangle.cpp */,
 				F66FC3E022C862230086A2F0 /* triangle.hpp */,
+				F66FC41822C891700086A2F0 /* sphere.cpp */,
+				F66FC41922C891700086A2F0 /* sphere.hpp */,
+				F66FC41B22C891970086A2F0 /* cylinder.cpp */,
+				F66FC41C22C891970086A2F0 /* cylinder.hpp */,
+				F66FC41E22C891A10086A2F0 /* cone.cpp */,
+				F66FC41F22C891A10086A2F0 /* cone.hpp */,
+				F66FC42122C891BE0086A2F0 /* disk.cpp */,
+				F66FC42222C891BE0086A2F0 /* disk.hpp */,
 			);
 			path = shapes;
 			sourceTree = "<group>";
@@ -191,6 +292,8 @@
 			children = (
 				F66FC3EB22C863550086A2F0 /* bvh.cpp */,
 				F66FC3EC22C863550086A2F0 /* bvh.hpp */,
+				F66FC42422C892D30086A2F0 /* kdtree.cpp */,
+				F66FC42522C892D30086A2F0 /* kdtree.hpp */,
 			);
 			path = accelerators;
 			sourceTree = "<group>";
@@ -211,6 +314,37 @@
 				F66FC3F422C8646A0086A2F0 /* log.hpp */,
 			);
 			path = ext;
+			sourceTree = "<group>";
+		};
+		F66FC3F622C8660E0086A2F0 /* math */ = {
+			isa = PBXGroup;
+			children = (
+				F66FC3F722C8662C0086A2F0 /* transform.cpp */,
+				F66FC3F822C8662C0086A2F0 /* transform.hpp */,
+				F66FC42722C892E80086A2F0 /* quaternion.cpp */,
+				F66FC42822C892E80086A2F0 /* quaternion.hpp */,
+				F66FC43622C8C7E70086A2F0 /* point.hpp */,
+				F66FC43A22C910490086A2F0 /* bound.hpp */,
+				F66FC43B22C9106E0086A2F0 /* vector.hpp */,
+			);
+			path = math;
+			sourceTree = "<group>";
+		};
+		F66FC3FA22C867C20086A2F0 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				F66FC43022C8C5E10086A2F0 /* fileio.cpp */,
+				F66FC43122C8C5E10086A2F0 /* fileio.hpp */,
+				F66FC43922C8FBCA0086A2F0 /* macro.hpp */,
+			);
+			path = util;
+			sourceTree = "<group>";
+		};
+		F66FC3FB22C86BCA0086A2F0 /* parallel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = parallel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -271,17 +405,37 @@
 			buildActionMask = 2147483647;
 			files = (
 				F66FC3D922C861700086A2F0 /* matte.cpp in Sources */,
+				F66FC43522C8C7960086A2F0 /* box.cpp in Sources */,
 				F66FC3D522C860F50086A2F0 /* point.cpp in Sources */,
 				F66FC3E122C862230086A2F0 /* triangle.cpp in Sources */,
 				F66FC3DD22C861AF0086A2F0 /* path.cpp in Sources */,
+				F66FC41122C886640086A2F0 /* spectrum.cpp in Sources */,
 				F66FC3E622C8628F0086A2F0 /* random.cpp in Sources */,
+				F66FC40A22C87E850086A2F0 /* paladin.cpp in Sources */,
+				F66FC41422C890FD0086A2F0 /* camera.cpp in Sources */,
+				F66FC40E22C87FA50086A2F0 /* scene.cpp in Sources */,
+				F66FC3FE22C86C1D0086A2F0 /* shape.cpp in Sources */,
 				F66FC3CA22C8601C0086A2F0 /* integrator.cpp in Sources */,
 				F66FC3F522C8646A0086A2F0 /* log.cpp in Sources */,
 				F66FC3C022C858040086A2F0 /* main.cpp in Sources */,
+				F66FC42922C892E80086A2F0 /* quaternion.cpp in Sources */,
+				F66FC43222C8C5E10086A2F0 /* fileio.cpp in Sources */,
+				F66FC42022C891A10086A2F0 /* cone.cpp in Sources */,
+				F66FC40122C86C350086A2F0 /* material.cpp in Sources */,
+				F66FC42622C892D30086A2F0 /* kdtree.cpp in Sources */,
 				F66FC3CE22C860750086A2F0 /* sinc.cpp in Sources */,
+				F66FC42322C891BE0086A2F0 /* disk.cpp in Sources */,
+				F66FC41D22C891970086A2F0 /* cylinder.cpp in Sources */,
+				F66FC42C22C893850086A2F0 /* bxdf.cpp in Sources */,
 				F66FC3ED22C863550086A2F0 /* bvh.cpp in Sources */,
+				F66FC41A22C891700086A2F0 /* sphere.cpp in Sources */,
+				F66FC41722C891140086A2F0 /* sampler.cpp in Sources */,
 				F66FC3F122C863A40086A2F0 /* constant.cpp in Sources */,
+				F66FC40722C86C7B0086A2F0 /* light.cpp in Sources */,
+				F66FC42F22C8C5BD0086A2F0 /* sampling.cpp in Sources */,
+				F66FC40422C86C4E0086A2F0 /* texture.cpp in Sources */,
 				F66FC3E922C862DF0086A2F0 /* perspective.cpp in Sources */,
+				F66FC3F922C8662C0086A2F0 /* transform.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
