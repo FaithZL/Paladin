@@ -9,7 +9,7 @@
 #ifndef paladin_hpp
 #define paladin_hpp
 
-#include <iostream>
+
 #include "header.hpp"
 
 

@@ -17,6 +17,9 @@
 #define PALADIN_BEGIN namespace paladin {
 #define PALADIN_END }
 
+#define DCHECK(args) (args)
+#define CHECK_NE(a, b) (a, b)
+
 #ifdef FLOAT_AS_DOUBLE
     typedef double Float;
 #else

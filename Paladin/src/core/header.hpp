@@ -9,7 +9,18 @@
 #ifndef header_hpp
 #define header_hpp
 
+#include <iostream>
+#include <cmath>
+#include "stringprint.hpp"
 #include "macro.hpp"
+#include "vector.hpp"
 #include "point.hpp"
+
+
+PALADIN_BEGIN
+
+
+
+PALADIN_END
 
 #endif /* header_h */

@@ -120,9 +120,10 @@
 		F66FC43422C8C7960086A2F0 /* box.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = box.hpp; sourceTree = "<group>"; };
 		F66FC43622C8C7E70086A2F0 /* point.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = point.hpp; sourceTree = "<group>"; };
 		F66FC43922C8FBCA0086A2F0 /* macro.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = macro.hpp; sourceTree = "<group>"; };
-		F66FC43A22C910490086A2F0 /* bound.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bound.hpp; sourceTree = "<group>"; };
+		F66FC43A22C910490086A2F0 /* bounds.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bounds.hpp; sourceTree = "<group>"; };
 		F66FC43B22C9106E0086A2F0 /* vector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vector.hpp; sourceTree = "<group>"; };
 		F66FC43C22C91BEC0086A2F0 /* header.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = header.hpp; sourceTree = "<group>"; };
+		F66FC43D22CA583B0086A2F0 /* stringprint.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = stringprint.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,7 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				F66FC3FB22C86BCA0086A2F0 /* parallel */,
-				F66FC3FA22C867C20086A2F0 /* util */,
+				F66FC3FA22C867C20086A2F0 /* tools */,
 				F66FC3F622C8660E0086A2F0 /* math */,
 				F66FC3F222C863DF0086A2F0 /* ext */,
 				F66FC3EE22C863840086A2F0 /* textures */,
@@ -324,20 +325,21 @@
 				F66FC42722C892E80086A2F0 /* quaternion.cpp */,
 				F66FC42822C892E80086A2F0 /* quaternion.hpp */,
 				F66FC43622C8C7E70086A2F0 /* point.hpp */,
-				F66FC43A22C910490086A2F0 /* bound.hpp */,
+				F66FC43A22C910490086A2F0 /* bounds.hpp */,
 				F66FC43B22C9106E0086A2F0 /* vector.hpp */,
 			);
 			path = math;
 			sourceTree = "<group>";
 		};
-		F66FC3FA22C867C20086A2F0 /* util */ = {
+		F66FC3FA22C867C20086A2F0 /* tools */ = {
 			isa = PBXGroup;
 			children = (
 				F66FC43022C8C5E10086A2F0 /* fileio.cpp */,
 				F66FC43122C8C5E10086A2F0 /* fileio.hpp */,
 				F66FC43922C8FBCA0086A2F0 /* macro.hpp */,
+				F66FC43D22CA583B0086A2F0 /* stringprint.hpp */,
 			);
-			path = util;
+			path = tools;
 			sourceTree = "<group>";
 		};
 		F66FC3FB22C86BCA0086A2F0 /* parallel */ = {
