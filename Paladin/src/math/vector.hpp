@@ -231,8 +231,8 @@ public:
         return *this;
     }
     Vector3<T> operator-() const { return Vector3<T>(-x, -y, -z); }
-    Float LengthSquared() const { return x * x + y * y + z * z; }
-    Float Length() const { return std::sqrt(LengthSquared()); }
+    Float lengthSquared() const { return x * x + y * y + z * z; }
+    Float length() const { return std::sqrt(lengthSquared()); }
     explicit Vector3(const Normal3<T> &n);
     
     // Vector3 Public Data
@@ -385,10 +385,25 @@ typedef Normal3<Float> Normal3f;
 
 template <typename T>
 class Direction3 {
+    
+    void normalize() {
+        T len = length();
+        x = x / len;
+        y = y / len;
+        z = z / len;
+    }
+    
 public:
     // Direction3 Public Methods
     Direction3(T x, T y, T z) : x(x),y(y),z(z) {
-        
+        normalize();
+    }
+    
+    Direction3(const Vector3<T> &v) {
+        x = v.x;
+        y = v.y;
+        z = v.z;
+        normalize();
     }
     
     T operator[](int i) const {
@@ -415,6 +430,7 @@ public:
         x = v.x;
         y = v.y;
         z = v.z;
+        normalize();
     }
     
     Direction3<T> &operator=(const Direction3<T> &v) {
@@ -422,6 +438,7 @@ public:
         x = v.x;
         y = v.y;
         z = v.z;
+        normalize();
         return *this;
     }
 #endif  // !NDEBUG
