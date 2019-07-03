@@ -22,7 +22,7 @@ public:
     Vector2(T xx, T yy) : x(xx), y(yy) { 
         // DCHECK(!HasNaNs()); 
     }
-    bool HasNaNs() const { return isNaN(x) || isNaN(y); }
+    bool hasNaNs() const { return isNaN(x) || isNaN(y); }
     explicit Vector2(const Point2<T> &p);
     explicit Vector2(const Point3<T> &p);
 #ifndef NDEBUG
@@ -113,6 +113,18 @@ public:
 };
 
 template <typename T>
+Vector2<T>::Vector2(const Point2<T> &p)
+: x(p.x), y(p.y) {
+    DCHECK(!hasNaNs());
+}
+
+template <typename T>
+Vector2<T>::Vector2(const Point3<T> &p)
+: x(p.x), y(p.y) {
+    DCHECK(!hasNaNs());
+}
+
+template <typename T>
 inline std::ostream &operator<<(std::ostream &os, const Vector2<T> &v) {
     os << "[ " << v.x << ", " << v.y << " ]";
     return os;
@@ -145,8 +157,9 @@ public:
         return z;
     }
     Vector3() { x = y = z = 0; }
-    // Vector3(T x, T y, T z) : x(x), y(y), z(z) { DCHECK(!HasNaNs()); }
+    
     bool hasNaNs() const { return isNaN(x) || isNaN(y) || isNaN(z); }
+    
     explicit Vector3(const Point3<T> &p);
 #ifndef NDEBUG
     // The default versions of these are fine for release builds; for debug
@@ -242,6 +255,12 @@ public:
 };
 
 template <typename T>
+inline Vector3<T>::Vector3(const Point3<T> &p)
+: x(p.x), y(p.y), z(p.z) {
+    DCHECK(!hasNaNs());
+}
+
+template <typename T>
 inline std::ostream &operator<<(std::ostream &os, const Vector3<T> &v) {
     os << "[ " << v.x << ", " << v.y << ", " << v.z << " ]";
     return os;
@@ -252,6 +271,8 @@ inline std::ostream &operator<<(std::ostream &os, const Vector3<Float> &v) {
     os << StringPrintf("[ %f, %f, %f ]", v.x, v.y, v.z);
     return os;
 }
+
+
 
 typedef Vector2<Float> Vector2f;
 typedef Vector2<int> Vector2i;

@@ -5,4 +5,6 @@ dependencies: \
   /Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools/stringprint.hpp \
   /Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools/macro.hpp \
   /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/vector.hpp \
-  /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/point.hpp
+  /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/point.hpp \
+  /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/bounds.hpp \
+  /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/mathutil.hpp

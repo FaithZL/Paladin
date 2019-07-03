@@ -124,6 +124,7 @@
 		F66FC43B22C9106E0086A2F0 /* vector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vector.hpp; sourceTree = "<group>"; };
 		F66FC43C22C91BEC0086A2F0 /* header.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = header.hpp; sourceTree = "<group>"; };
 		F66FC43D22CA583B0086A2F0 /* stringprint.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = stringprint.hpp; sourceTree = "<group>"; };
+		F66FC43E22CD031F0086A2F0 /* mathutil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = mathutil.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +157,7 @@
 		F66FC3BE22C858040086A2F0 /* Paladin */ = {
 			isa = PBXGroup;
 			children = (
+				F66FC3F222C863DF0086A2F0 /* ext */,
 				F66FC3C622C85F3E0086A2F0 /* src */,
 			);
 			path = Paladin;
@@ -167,7 +169,6 @@
 				F66FC3FB22C86BCA0086A2F0 /* parallel */,
 				F66FC3FA22C867C20086A2F0 /* tools */,
 				F66FC3F622C8660E0086A2F0 /* math */,
-				F66FC3F222C863DF0086A2F0 /* ext */,
 				F66FC3EE22C863840086A2F0 /* textures */,
 				F66FC3EA22C862ED0086A2F0 /* accelerators */,
 				F66FC3E322C862600086A2F0 /* cameras */,
@@ -327,6 +328,7 @@
 				F66FC43622C8C7E70086A2F0 /* point.hpp */,
 				F66FC43A22C910490086A2F0 /* bounds.hpp */,
 				F66FC43B22C9106E0086A2F0 /* vector.hpp */,
+				F66FC43E22CD031F0086A2F0 /* mathutil.hpp */,
 			);
 			path = math;
 			sourceTree = "<group>";

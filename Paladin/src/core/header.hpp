@@ -36,6 +36,8 @@ class Bounds2;
 #include "macro.hpp"
 #include "vector.hpp"
 #include "point.hpp"
+#include "bounds.hpp"
+#include "mathutil.hpp"
 
 
 PALADIN_BEGIN
