@@ -167,6 +167,40 @@ typedef Bounds2<int> Bounds2i;
 typedef Bounds3<Float> Bounds3f;
 typedef Bounds3<int> Bounds3i;
 
+class Bounds2iIterator : public std::forward_iterator_tag {
+public:
+    Bounds2iIterator(const Bounds2i &b, const Point2i &pt)
+    : p(pt), bounds(&b) {}
+    Bounds2iIterator operator++() {
+        advance();
+        return *this;
+    }
+    Bounds2iIterator operator++(int) {
+        Bounds2iIterator old = *this;
+        advance();
+        return old;
+    }
+    bool operator==(const Bounds2iIterator &bi) const {
+        return p == bi.p && bounds == bi.bounds;
+    }
+    bool operator!=(const Bounds2iIterator &bi) const {
+        return p != bi.p || bounds != bi.bounds;
+    }
+    
+    Point2i operator*() const { return p; }
+    
+private:
+    void advance() {
+        ++p.x;
+        if (p.x == bounds->pMax.x) {
+            p.x = bounds->pMin.x;
+            ++p.y;
+        }
+    }
+    Point2i p;
+    const Bounds2i *bounds;
+};
+
 PALADIN_END
 
 #endif /* bound_h */
