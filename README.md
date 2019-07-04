@@ -1,1 +1,2 @@
-# Paladin is a pbrt-style renderer
+# Paladin
+Paladin is a pbrt style renderer
