@@ -408,10 +408,10 @@ template <typename T>
 class Direction3 {
     
     void normalize() {
-        T len = length();
-        x = x / len;
-        y = y / len;
-        z = z / len;
+        T lenInv = 1 / length();
+        x = x * lenInv;
+        y = y * lenInv;
+        z = z * lenInv;
     }
     
 public:
