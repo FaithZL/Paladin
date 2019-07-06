@@ -9,6 +9,8 @@
 #ifndef macro_hpp
 #define macro_hpp
 
+#include "header.hpp"
+
 #define CONSTEXPR constexpr
 
 #define USING_PALADIN using namespace paladin;

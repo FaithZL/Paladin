@@ -14,15 +14,15 @@
 
 PALADIN_BEGIN
 
-template <typename T>
-inline bool isNaN(const T x) {
-    return std::isnan(x);
-}
-
-template <>
-inline bool isNaN(const int x) {
-    return false;
-}
+//template <typename T>
+//inline bool isNaN(const T x) {
+//    return std::isnan(x);
+//}
+//
+//template <>
+//inline bool isNaN(const int x) {
+//    return false;
+//}
 
 template<typename T>
 class Point3;
