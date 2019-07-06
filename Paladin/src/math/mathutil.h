@@ -455,6 +455,9 @@ inline bool quadratic(Float a, Float b, Float c, Float *t0, Float *t1) {
     return true;
 }
 
+inline Float gamma(int n) {
+    return (n * MachineEpsilon) / (1 - n * MachineEpsilon);
+}
 
 PALADIN_END
 

@@ -70,7 +70,7 @@ public:
     }
     void boundingSphere(Point2<T> *c, Float *rad) const {
         *c = (pMin + pMax) / 2;
-        *rad = Inside(*c, *this) ? Distance(*c, pMax) : 0;
+        *rad = inside(*c, *this) ? distance(*c, pMax) : 0;
     }
     friend std::ostream &operator<<(std::ostream &os, const Bounds2<T> &b) {
         os << "[ " << b.pMin << " - " << b.pMax << " ]";
@@ -161,7 +161,7 @@ public:
     
     void boundingSphere(Point3<T> *center, Float *radius) const {
         *center = (pMin + pMax) / 2;
-        *radius = Inside(*center, *this) ? Distance(*center, pMax) : 0;
+        *radius = inside(*center, *this) ? distance(*center, pMax) : 0;
     }
     
     template <typename U>
@@ -169,10 +169,11 @@ public:
         return Bounds3<U>((Point3<U>)pMin, (Point3<U>)pMax);
     }
     
-//    bool intersectP(const Ray &ray, Float *hitt0 = nullptr,
-//                    Float *hitt1 = nullptr) const;
-//    inline bool intersectP(const Ray &ray, const Vector3f &invDir,
-//                           const int dirIsNeg[3]) const;
+    bool intersectP(const Ray &ray, Float *hitt0 = nullptr,
+                    Float *hitt1 = nullptr) const;
+    
+    inline bool intersectP(const Ray &ray, const Vector3f &invDir,
+                           const int dirIsNeg[3]) const;
     
     friend std::ostream &operator<<(std::ostream &os, const Bounds3<T> &b) {
         os << "[ " << b.pMin << " - " << b.pMax << " ]";
@@ -195,63 +196,70 @@ inline Point3<T> &Bounds3<T>::operator[](int i) {
     return (i == 0) ? pMin : pMax;
 }
 
-//template <typename T>
-//inline bool Bounds3<T>::intersectP(const Ray &ray, Float *hitt0,
-//                                   Float *hitt1) const {
-//    Float t0 = 0, t1 = ray.tMax;
-//    for (int i = 0; i < 3; ++i) {
-//        // Update interval for _i_th bounding box slab
-//        Float invRayDir = 1 / ray.d[i];
-//        Float tNear = (pMin[i] - ray.o[i]) * invRayDir;
-//        Float tFar = (pMax[i] - ray.o[i]) * invRayDir;
-//
-//        // Update parametric interval from slab intersection $t$ values
-//        if (tNear > tFar) std::swap(tNear, tFar);
-//
-//        // Update _tFar_ to ensure robust ray--bounds intersection
-//        tFar *= 1 + 2 * gamma(3);
-//        t0 = tNear > t0 ? tNear : t0;
-//        t1 = tFar < t1 ? tFar : t1;
-//        if (t0 > t1) return false;
-//    }
-//    if (hitt0) *hitt0 = t0;
-//    if (hitt1) *hitt1 = t1;
-//    return true;
-//}
+template <typename T>
+inline bool Bounds3<T>::intersectP(const Ray &ray, Float *hitt0,
+                                   Float *hitt1) const {
+    Float t0 = 0, t1 = ray.tMax;
+    // bound可以理解三对互相垂直的平行面组成的范围
+    for (int i = 0; i < 3; ++i) {
+        // 计算ray与每个维度的slab的两个交点t值
+        Float invRayDir = 1 / ray.d[i];
+        Float tNear = (pMin[i] - ray.o[i]) * invRayDir;
+        Float tFar = (pMax[i] - ray.o[i]) * invRayDir;
+
+        if (tNear > tFar) std::swap(tNear, tFar);
+
+        // 用于误差分析
+        tFar *= 1 + 2 * paladin::gamma(3);
+        t0 = tNear > t0 ? tNear : t0;
+        t1 = tFar < t1 ? tFar : t1;
+        if (t0 > t1) return false;
+    }
+    if (hitt0) *hitt0 = t0;
+    if (hitt1) *hitt1 = t1;
+    return true;
+}
 
 typedef Bounds2<Float> Bounds2f;
 typedef Bounds2<int> Bounds2i;
 typedef Bounds3<Float> Bounds3f;
 typedef Bounds3<int> Bounds3i;
 
-//template <typename T>
-//inline bool Bounds3<T>::intersectP(const Ray &ray, const Vector3f &invDir,
-//                                   const int dirIsNeg[3]) const {
-//    const Bounds3f &bounds = *this;
-//    // Check for ray intersection against $x$ and $y$ slabs
-//    Float tMin = (bounds[dirIsNeg[0]].x - ray.o.x) * invDir.x;
-//    Float tMax = (bounds[1 - dirIsNeg[0]].x - ray.o.x) * invDir.x;
-//    Float tyMin = (bounds[dirIsNeg[1]].y - ray.o.y) * invDir.y;
-//    Float tyMax = (bounds[1 - dirIsNeg[1]].y - ray.o.y) * invDir.y;
-//
-//    // Update _tMax_ and _tyMax_ to ensure robust bounds intersection
-//    tMax *= 1 + 2 * gamma(3);
-//    tyMax *= 1 + 2 * gamma(3);
-//    if (tMin > tyMax || tyMin > tMax) return false;
-//    if (tyMin > tMin) tMin = tyMin;
-//    if (tyMax < tMax) tMax = tyMax;
-//
-//    // Check for ray intersection against $z$ slab
-//    Float tzMin = (bounds[dirIsNeg[2]].z - ray.o.z) * invDir.z;
-//    Float tzMax = (bounds[1 - dirIsNeg[2]].z - ray.o.z) * invDir.z;
-//
-//    // Update _tzMax_ to ensure robust bounds intersection
-//    tzMax *= 1 + 2 * gamma(3);
-//    if (tMin > tzMax || tzMin > tMax) return false;
-//    if (tzMin > tMin) tMin = tzMin;
-//    if (tzMax < tMax) tMax = tzMax;
-//    return (tMin < ray.tMax) && (tMax > 0);
-//}
+template <typename T>
+inline bool Bounds3<T>::intersectP(const Ray &ray, const Vector3f &invDir,
+                                   const int dirIsNeg[3]) const {
+    // 总体思路，先用x方向求出两个交点t值，再加入y方向更新t值，最后加入z方向更新t值
+    //dirIsNeg为数组，表示ray方向的三个分量是否为负，dirIsNeg[0]=1表示，x方向为负，以此类推
+    // 此方法只需要返回是否相交，不需要求交点，所以效率比上一个求交点的要高
+    const Bounds3f &bounds = *this;
+    // 以下三个维度的t值均为ray沿着d方向的t值，已经考虑了方向，因此可以直接比较t值之间的大小可以确定是否相交
+    // 首先求出xy两个方向维度与slab的四个交点
+    Float tMin = (bounds[dirIsNeg[0]].x - ray.o.x) * invDir.x;
+    Float tMax = (bounds[1 - dirIsNeg[0]].x - ray.o.x) * invDir.x;
+    Float tyMin = (bounds[dirIsNeg[1]].y - ray.o.y) * invDir.y;
+    Float tyMax = (bounds[1 - dirIsNeg[1]].y - ray.o.y) * invDir.y;
+
+    // gamma函数用于误差分析
+    tMax *= 1 + 2 * paladin::gamma(3);
+    tyMax *= 1 + 2 * paladin::gamma(3);
+    if (tMin > tyMax || tyMin > tMax) return false;
+    
+    // 如果xy两个维度的交点在bound以内，则更新两个交点位置，修正两个交点的t值
+    if (tyMin > tMin) tMin = tyMin;
+    if (tyMax < tMax) tMax = tyMax;
+
+    // 求出z方向的t值
+    Float tzMin = (bounds[dirIsNeg[2]].z - ray.o.z) * invDir.z;
+    Float tzMax = (bounds[1 - dirIsNeg[2]].z - ray.o.z) * invDir.z;
+
+    tzMax *= 1 + 2 * paladin::gamma(3);
+    
+    if (tMin > tzMax || tzMin > tMax) return false;
+    
+    if (tzMin > tMin) tMin = tzMin;
+    if (tzMax < tMax) tMax = tzMax;
+    return (tMin < ray.tMax) && (tMax > 0);
+}
 
 
 

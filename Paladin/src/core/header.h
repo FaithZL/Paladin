@@ -30,6 +30,13 @@ class Bounds3;
 template<typename T>
 class Bounds2;
 
+template<typename T>
+class Direction3;
+
+class Medium;
+
+class Ray;
+
 #include <iostream>
 #include <cmath>
 #include "stringprint.hpp"
@@ -37,6 +44,7 @@ class Bounds2;
 #include "mathutil.h"
 #include "vector.h"
 #include "point.h"
+#include "ray.h"
 #include "bounds.h"
 
 

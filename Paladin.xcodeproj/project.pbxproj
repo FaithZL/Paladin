@@ -54,6 +54,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F666921322D0D38500B50538 /* ray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ray.h; sourceTree = "<group>"; };
 		F66FC3BC22C858040086A2F0 /* Paladin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Paladin; sourceTree = BUILT_PRODUCTS_DIR; };
 		F66FC3BF22C858040086A2F0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		F66FC3C822C8601C0086A2F0 /* integrator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = integrator.cpp; sourceTree = "<group>"; };
@@ -329,6 +330,7 @@
 				F66FC43A22C910490086A2F0 /* bounds.h */,
 				F66FC43B22C9106E0086A2F0 /* vector.h */,
 				F66FC43E22CD031F0086A2F0 /* mathutil.h */,
+				F666921322D0D38500B50538 /* ray.h */,
 			);
 			path = math;
 			sourceTree = "<group>";

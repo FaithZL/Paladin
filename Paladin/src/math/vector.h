@@ -504,39 +504,28 @@ public:
     }
     
     template <typename U>
-    Direction3<T> operator*(U s) const {
-        return Direction3<T>(s * x, s * y, s * z);
+    Vector3<T> operator*(U s) const {
+        return Vector3<T>(s * x, s * y, s * z);
     }
     
     template <typename U>
-    Direction3<T> &operator*=(U s) {
-        // DCHECK(!isNaN(s));
-        x *= s;
-        y *= s;
-        z *= s;
-        return *this;
-    }
-    
-    template <typename U>
-    Direction3<T> operator/(U f) const {
+    Vector3<T> operator/(U f) const {
         CHECK_NE(f, 0);
         Float inv = (Float)1 / f;
-        return Direction3<T>(x * inv, y * inv, z * inv);
+        return Vector3<T>(x * inv, y * inv, z * inv);
+    }
+
+    Direction3<T> operator-() const {
+        return Direction3<T>(-x, -y, -z);
     }
     
-    template <typename U>
-    Direction3<T> &operator/=(U f) {
-        CHECK_NE(f, 0);
-        Float inv = (Float)1 / f;
-        x *= inv;
-        y *= inv;
-        z *= inv;
-        return *this;
+    Float lengthSquared() const {
+        return x * x + y * y + z * z;
     }
-    Direction3<T> operator-() const { return Direction3<T>(-x, -y, -z); }
-    Float lengthSquared() const { return x * x + y * y + z * z; }
-    Float length() const { return std::sqrt(lengthSquared()); }
-    explicit Direction3(const Normal3<T> &n);
+    
+    Float length() const {
+        return std::sqrt(lengthSquared());
+    }
     
     // Direction3 Public Data
     T x;
@@ -545,6 +534,18 @@ public:
 };
 
 typedef Direction3<Float> Direction3f;
+
+template <typename T>
+inline std::ostream &operator<<(std::ostream &os, const Direction3<T> &v) {
+    os << "[ " << v.x << ", " << v.y << ", " << v.z << " ]";
+    return os;
+}
+
+template <>
+inline std::ostream &operator<<(std::ostream &os, const Direction3f &v) {
+    os << StringPrintf("[ %f, %f, %f ]", v.x, v.y, v.z);
+    return os;
+}
 
 PALADIN_END
 

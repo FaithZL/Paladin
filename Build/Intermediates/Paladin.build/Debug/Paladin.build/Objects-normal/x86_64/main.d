@@ -7,4 +7,5 @@ dependencies: \
   /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/mathutil.h \
   /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/vector.h \
   /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/point.h \
+  /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/ray.h \
   /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/bounds.h
