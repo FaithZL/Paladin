@@ -9,10 +9,12 @@
 #include <iostream>
 #include "paladin.hpp"
 
+USING_PALADIN
 
 int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << "Hello, paladin!\n";
-    paladin::Paladin paladin;
+    Paladin paladin;
     return paladin.run(argc, argv);
 }
+

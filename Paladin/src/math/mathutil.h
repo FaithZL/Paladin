@@ -430,8 +430,6 @@ Bounds2<T> expand(const Bounds2<T> &b, U delta) {
 }
 
 
-
-
 PALADIN_END
 
 #endif /* mathutil_h */

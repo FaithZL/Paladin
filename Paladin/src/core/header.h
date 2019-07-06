@@ -42,8 +42,6 @@ class Bounds2;
 
 
 
-
-
 PALADIN_BEGIN
 
 

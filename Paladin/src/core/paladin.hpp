@@ -13,7 +13,6 @@
 #include "header.h"
 
 
-
 class Scene;
 class Integrator;
 
@@ -29,7 +28,6 @@ public:
     
     Integrator * m_integrator;
 };
-
 
 
 PALADIN_END
