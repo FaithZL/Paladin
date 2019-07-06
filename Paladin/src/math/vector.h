@@ -136,10 +136,11 @@ inline std::ostream &operator<<(std::ostream &os, const Vector2<Float> &v) {
     return os;
 }
 
+
 template <typename T>
 class Vector3 {
 public:
-    // Vector3 Public Methods
+    
     Vector3() { x = y = z = 0; }
     
     Vector3(T x, T y, T z) : x(x),y(y),z(z) {
@@ -405,9 +406,14 @@ inline std::ostream &operator<<(std::ostream &os, const Normal3<Float> &v) {
 
 typedef Normal3<Float> Normal3f;
 
+
+/*
+用于区别向量类，方向是单位向量
+ */
 template <typename T>
 class Direction3 {
     
+public:
     void normalize() {
         T lenInv = 1 / length();
         x = x * lenInv;
@@ -415,7 +421,6 @@ class Direction3 {
         z = z * lenInv;
     }
     
-public:
     // Direction3 Public Methods
     Direction3(T x, T y, T z) : x(x),y(y),z(z) {
         normalize();

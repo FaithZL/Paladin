@@ -58,10 +58,10 @@ public:
     bool operator!=(const Bounds2<T> &b) const {
         return b.pMin != pMin || b.pMax != pMax;
     }
-    //    Point2<T> Lerp(const Point2f &t) const {
-    //        return Point2<T>(pbrt::Lerp(t.x, pMin.x, pMax.x),
-    //                         pbrt::Lerp(t.y, pMin.y, pMax.y));
-    //    }
+    Point2<T> lerp(const Point2f &t) const {
+        return Point2<T>(paladin::lerp(t.x, pMin.x, pMax.x),
+                         paladin::lerp(t.y, pMin.y, pMax.y));
+    }
     Vector2<T> offset(const Point2<T> &p) const {
         Vector2<T> o = p - pMin;
         if (pMax.x > pMin.x) o.x /= pMax.x - pMin.x;
@@ -91,35 +91,50 @@ public:
         pMin = Point3<T>(maxNum, maxNum, maxNum);
         pMax = Point3<T>(minNum, minNum, minNum);
     }
-    explicit Bounds3(const Point3<T> &p) : pMin(p), pMax(p) {}
+    explicit Bounds3(const Point3<T> &p) : pMin(p), pMax(p) {
+        
+    }
     Bounds3(const Point3<T> &p1, const Point3<T> &p2)
     : pMin(std::min(p1.x, p2.x), std::min(p1.y, p2.y),
            std::min(p1.z, p2.z)),
     pMax(std::max(p1.x, p2.x), std::max(p1.y, p2.y),
-    std::max(p1.z, p2.z)) {}
+    std::max(p1.z, p2.z)) {
+        
+    }
+    
     const Point3<T> &operator[](int i) const;
+    
     Point3<T> &operator[](int i);
+    
     bool operator==(const Bounds3<T> &b) const {
         return b.pMin == pMin && b.pMax == pMax;
     }
+    
     bool operator!=(const Bounds3<T> &b) const {
         return b.pMin != pMin || b.pMax != pMax;
     }
+    
     Point3<T> corner(int corner) const {
         DCHECK(corner >= 0 && corner < 8);
         return Point3<T>((*this)[(corner & 1)].x,
                          (*this)[(corner & 2) ? 1 : 0].y,
                          (*this)[(corner & 4) ? 1 : 0].z);
     }
-    Vector3<T> diagonal() const { return pMax - pMin; }
+    
+    Vector3<T> diagonal() const {
+        return pMax - pMin;
+    }
+    
     T surfaceArea() const {
         Vector3<T> d = diagonal();
         return 2 * (d.x * d.y + d.x * d.z + d.y * d.z);
     }
+    
     T volume() const {
         Vector3<T> d = diagonal();
         return d.x * d.y * d.z;
     }
+    
     int maximumExtent() const {
         Vector3<T> d = diagonal();
         if (d.x > d.y && d.x > d.z)
@@ -129,11 +144,13 @@ public:
         else
             return 2;
     }
-//    Point3<T> lerp(const Point3f &t) const {
-//        return Point3<T>(pbrt::lerp(t.x, pMin.x, pMax.x),
-//                         pbrt::lerp(t.y, pMin.y, pMax.y),
-//                         pbrt::lerp(t.z, pMin.z, pMax.z));
-//    }
+    
+    Point3<T> lerp(const Point3f &t) const {
+        return Point3<T>(paladin::lerp(t.x, pMin.x, pMax.x),
+                         paladin::lerp(t.y, pMin.y, pMax.y),
+                         paladin::lerp(t.z, pMin.z, pMax.z));
+    }
+    
     Vector3<T> offset(const Point3<T> &p) const {
         Vector3<T> o = p - pMin;
         if (pMax.x > pMin.x) o.x /= pMax.x - pMin.x;
@@ -141,18 +158,22 @@ public:
         if (pMax.z > pMin.z) o.z /= pMax.z - pMin.z;
         return o;
     }
+    
     void boundingSphere(Point3<T> *center, Float *radius) const {
         *center = (pMin + pMax) / 2;
         *radius = Inside(*center, *this) ? Distance(*center, pMax) : 0;
     }
+    
     template <typename U>
     explicit operator Bounds3<U>() const {
         return Bounds3<U>((Point3<U>)pMin, (Point3<U>)pMax);
     }
+    
 //    bool intersectP(const Ray &ray, Float *hitt0 = nullptr,
 //                    Float *hitt1 = nullptr) const;
 //    inline bool intersectP(const Ray &ray, const Vector3f &invDir,
 //                           const int dirIsNeg[3]) const;
+    
     friend std::ostream &operator<<(std::ostream &os, const Bounds3<T> &b) {
         os << "[ " << b.pMin << " - " << b.pMax << " ]";
         return os;

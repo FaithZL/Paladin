@@ -429,6 +429,32 @@ Bounds2<T> expand(const Bounds2<T> &b, U delta) {
                       b.pMax + Vector2<T>(delta, delta));
 }
 
+inline Float lerp(Float t, Float v1, Float v2) {
+    return (1 - t) * v1 + t * v2;
+}
+
+inline bool quadratic(Float a, Float b, Float c, Float *t0, Float *t1) {
+    // Find quadratic discriminant
+    double discrim = (double)b * (double)b - 4 * (double)a * (double)c;
+    if (discrim < 0) {
+        return false;
+    }
+    double rootDiscrim = std::sqrt(discrim);
+    // Compute quadratic _t_ values
+    double q;
+    if (b < 0){
+        q = -.5 * (b - rootDiscrim);
+    } else {
+        q = -.5 * (b + rootDiscrim);
+    }
+    *t0 = q / a;
+    *t1 = c / q;
+    if (*t0 > *t1) {
+        std::swap(*t0, *t1);
+    }
+    return true;
+}
+
 
 PALADIN_END
 
