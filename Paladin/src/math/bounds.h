@@ -6,8 +6,8 @@
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#ifndef bounds_hpp
-#define bounds_hpp
+#ifndef bounds_h
+#define bounds_h
 
 PALADIN_BEGIN
 

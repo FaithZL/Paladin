@@ -9,7 +9,7 @@
 #ifndef macro_hpp
 #define macro_hpp
 
-#include "header.hpp"
+#include "header.h"
 
 #define CONSTEXPR constexpr
 

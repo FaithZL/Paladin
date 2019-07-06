@@ -10,7 +10,7 @@
 #define paladin_hpp
 
 
-#include "header.hpp"
+#include "header.h"
 
 
 
@@ -29,6 +29,8 @@ public:
     
     Integrator * m_integrator;
 };
+
+
 
 PALADIN_END
 

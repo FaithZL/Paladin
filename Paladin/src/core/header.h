@@ -6,8 +6,8 @@
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#ifndef header_hpp
-#define header_hpp
+#ifndef header_h
+#define header_h
 
 template<typename T>
 class Point2;
@@ -34,10 +34,14 @@ class Bounds2;
 #include <cmath>
 #include "stringprint.hpp"
 #include "macro.hpp"
-#include "vector.hpp"
-#include "point.hpp"
-#include "bounds.hpp"
-#include "mathutil.hpp"
+#include "mathutil.h"
+#include "vector.h"
+#include "point.h"
+#include "bounds.h"
+
+
+
+
 
 
 PALADIN_BEGIN

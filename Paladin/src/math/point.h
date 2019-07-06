@@ -6,10 +6,10 @@
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#ifndef point_hpp
-#define point_hpp
+#ifndef point_h
+#define point_h
 
-#include "header.hpp"
+#include "header.h"
 
 
 PALADIN_BEGIN

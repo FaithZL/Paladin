@@ -1,16 +1,25 @@
 //
-//  mathutil.hpp
+//  mathutil.h
 //  Paladin
 //
 //  Created by SATAN_Z on 2019/7/3.
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#ifndef mathutil_hpp
-#define mathutil_hpp
+#ifndef mathutil_h
+#define mathutil_h
 
 PALADIN_BEGIN
 
+template <typename T>
+inline bool isNaN(const T x) {
+    return std::isnan(x);
+}
+
+template <>
+inline bool isNaN(const int x) {
+    return false;
+}
 
 template <typename T, typename U>
 inline Vector3<T> operator*(U s, const Vector3<T> &v) {
@@ -421,6 +430,8 @@ Bounds2<T> expand(const Bounds2<T> &b, U delta) {
 }
 
 
+
+
 PALADIN_END
 
-#endif /* mathutil_hpp */
+#endif /* mathutil_h */

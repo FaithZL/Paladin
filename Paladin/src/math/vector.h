@@ -6,22 +6,12 @@
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#ifndef vector_hpp
-#define vector_hpp
+#ifndef vector_h
+#define vector_h
 
-#include "header.hpp"
+#include "header.h"
 
 PALADIN_BEGIN
-
-template <typename T>
-inline bool isNaN(const T x) {
-    return std::isnan(x);
-}
-
-template <>
-inline bool isNaN(const int x) {
-    return false;
-}
 
 // Vector Declarations
 template <typename T>
