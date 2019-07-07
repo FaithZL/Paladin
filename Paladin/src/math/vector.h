@@ -174,6 +174,11 @@ public:
         z = v.z;
     }
     
+    Direction3<T> getDirection3() const {
+        Direction3<T> ret(x, y, z);
+        return ret;
+    }
+    
     Vector3<T> &operator=(const Vector3<T> &v) {
         // DCHECK(!v.HasNaNs());
         x = v.x;
@@ -408,7 +413,7 @@ typedef Normal3<Float> Normal3f;
 
 
 /*
-用于区别向量类，方向是单位向量
+用于区别向量类，方向是单位向量，此运算
  */
 template <typename T>
 class Direction3 {
@@ -448,7 +453,12 @@ public:
     Direction3() { x = y = z = 0; }
     // Direction3(T x, T y, T z) : x(x), y(y), z(z) { DCHECK(!HasNaNs()); }
     bool hasNaNs() const { return isNaN(x) || isNaN(y) || isNaN(z); }
-    explicit Direction3(const Point3<T> &p);
+    explicit Direction3(const Point3<T> &p) {
+        x = p.x;
+        y = p.y;
+        z = p.z;
+        normalize();
+    }
 #ifndef NDEBUG
     // The default versions of these are fine for release builds; for debug
     // we define them so that we can add the Assert checks.
@@ -482,6 +492,10 @@ public:
         return *this;
     }
     
+    Vector3<T> getVector3() const {
+        return Vector3<T>(x, y, z);
+    }
+    
     Direction3<T> operator-(const Direction3<T> &v) const {
         // DCHECK(!v.HasNaNs());
         return Direction3(x - v.x, y - v.y, z - v.z);
@@ -492,6 +506,7 @@ public:
         x -= v.x;
         y -= v.y;
         z -= v.z;
+        normalize();
         return *this;
     }
     

@@ -21,29 +21,29 @@ public:
         
     }
     
-    Ray(const Point3f &o, const Direction3f &d, Float tMax = Infinity,
+    Ray(const Point3f &ori, const Vector3f &dir, Float tMax = Infinity,
         Float time = 0.f, const Medium *medium = nullptr)
-    : o(o), d(d), tMax(tMax), time(time), medium(medium) {
+    : ori(ori), dir(dir), tMax(tMax), time(time), medium(medium) {
         
     }
     
     Point3f operator()(Float t) const {
-        return o + d * t;
+        return ori + dir * t;
     }
     
     bool hasNaNs() const {
-        return (o.hasNaNs() || d.hasNaNs() || isNaN(tMax));
+        return (ori.hasNaNs() || dir.hasNaNs() || isNaN(tMax));
     }
     
     friend std::ostream &operator<<(std::ostream &os, const Ray &r) {
-        os << "[o=" << r.o << ", d=" << r.d << ", tMax=" << r.tMax
+        os << "[o=" << r.ori << ", d=" << r.dir << ", tMax=" << r.tMax
         << ", time=" << r.time << "]";
         return os;
     }
     
     // Ray Public Data
-    Point3f o;
-    Direction3f d;
+    Point3f ori;
+    Vector3f dir;
     mutable Float tMax;
     Float time;
     const Medium *medium;
@@ -55,9 +55,9 @@ public:
     RayDifferential() {
         hasDifferentials = false;
     }
-    RayDifferential(const Point3f &o, const Direction3f &d, Float tMax = Infinity,
+    RayDifferential(const Point3f &ori, const Vector3f &dir, Float tMax = Infinity,
                     Float time = 0.f, const Medium *medium = nullptr)
-    : Ray(o, d, tMax, time, medium) {
+    : Ray(ori, dir, tMax, time, medium) {
         hasDifferentials = false;
     }
     RayDifferential(const Ray &ray) : Ray(ray) {
@@ -70,12 +70,10 @@ public:
                   rxDirection.hasNaNs() || ryDirection.hasNaNs()));
     }
     void ScaleDifferentials(Float s) {
-        rxOrigin = o + (rxOrigin - o) * s;
-        ryOrigin = o + (ryOrigin - o) * s;
-        rxDirection = d + (rxDirection - d) * s;
-        ryDirection = d + (ryDirection - d) * s;
-        rxDirection.normalize();
-        ryDirection.normalize();
+        rxOrigin = ori + (rxOrigin - ori) * s;
+        ryOrigin = ori + (ryOrigin - ori) * s;
+        rxDirection = dir + (rxDirection - dir) * s;
+        ryDirection = dir + (ryDirection - dir) * s;
     }
     
     friend std::ostream &operator<<(std::ostream &os, const RayDifferential &r) {
@@ -89,7 +87,7 @@ public:
     // RayDifferential Public Data
     bool hasDifferentials;
     Point3f rxOrigin, ryOrigin;
-    Direction3f rxDirection, ryDirection;
+    Vector3f rxDirection, ryDirection;
 };
 
 PALADIN_END

@@ -203,9 +203,9 @@ inline bool Bounds3<T>::intersectP(const Ray &ray, Float *hitt0,
     // bound可以理解三对互相垂直的平行面组成的范围
     for (int i = 0; i < 3; ++i) {
         // 计算ray与每个维度的slab的两个交点t值
-        Float invRayDir = 1 / ray.d[i];
-        Float tNear = (pMin[i] - ray.o[i]) * invRayDir;
-        Float tFar = (pMax[i] - ray.o[i]) * invRayDir;
+        Float invRayDir = 1 / ray.dir[i];
+        Float tNear = (pMin[i] - ray.ori[i]) * invRayDir;
+        Float tFar = (pMax[i] - ray.ori[i]) * invRayDir;
 
         if (tNear > tFar) std::swap(tNear, tFar);
 
@@ -234,10 +234,10 @@ inline bool Bounds3<T>::intersectP(const Ray &ray, const Vector3f &invDir,
     const Bounds3f &bounds = *this;
     // 以下三个维度的t值均为ray沿着d方向的t值，已经考虑了方向，因此可以直接比较t值之间的大小可以确定是否相交
     // 首先求出xy两个方向维度与slab的四个交点
-    Float tMin = (bounds[dirIsNeg[0]].x - ray.o.x) * invDir.x;
-    Float tMax = (bounds[1 - dirIsNeg[0]].x - ray.o.x) * invDir.x;
-    Float tyMin = (bounds[dirIsNeg[1]].y - ray.o.y) * invDir.y;
-    Float tyMax = (bounds[1 - dirIsNeg[1]].y - ray.o.y) * invDir.y;
+    Float tMin = (bounds[dirIsNeg[0]].x - ray.ori.x) * invDir.x;
+    Float tMax = (bounds[1 - dirIsNeg[0]].x - ray.ori.x) * invDir.x;
+    Float tyMin = (bounds[dirIsNeg[1]].y - ray.ori.y) * invDir.y;
+    Float tyMax = (bounds[1 - dirIsNeg[1]].y - ray.ori.y) * invDir.y;
 
     // gamma函数用于误差分析
     tMax *= 1 + 2 * paladin::gamma(3);
@@ -249,8 +249,8 @@ inline bool Bounds3<T>::intersectP(const Ray &ray, const Vector3f &invDir,
     if (tyMax < tMax) tMax = tyMax;
 
     // 求出z方向的t值
-    Float tzMin = (bounds[dirIsNeg[2]].z - ray.o.z) * invDir.z;
-    Float tzMax = (bounds[1 - dirIsNeg[2]].z - ray.o.z) * invDir.z;
+    Float tzMin = (bounds[dirIsNeg[2]].z - ray.ori.z) * invDir.z;
+    Float tzMax = (bounds[1 - dirIsNeg[2]].z - ray.ori.z) * invDir.z;
 
     tzMax *= 1 + 2 * paladin::gamma(3);
     
