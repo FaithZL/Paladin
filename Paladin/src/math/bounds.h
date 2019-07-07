@@ -262,7 +262,7 @@ inline bool Bounds3<T>::intersectP(const Ray &ray, const Vector3f &invDir,
 }
 
 
-
+// bounds2i的迭代器，用于遍历bounds2区域内的所有离散点
 class Bounds2iIterator : public std::forward_iterator_tag {
 public:
     Bounds2iIterator(const Bounds2i &b, const Point2i &pt)
@@ -302,12 +302,10 @@ inline Bounds2iIterator begin(const Bounds2i &b) {
 }
 
 inline Bounds2iIterator end(const Bounds2i &b) {
-    // Normally, the ending point is at the minimum x value and one past
-    // the last valid y value.
+    // end迭代器返回最后一个点的下一个位置
+    // 一般来说是最后一个点在pMax的下一个点
     Point2i pEnd(b.pMin.x, b.pMax.y);
-    // However, if the bounds are degenerate, override the end point to
-    // equal the start point so that any attempt to iterate over the bounds
-    // exits out immediately.
+    // 但如果bounds退化为一个点时，begin的位置等于end的位置，遍历bounds的操作将不会进行
     if (b.pMin.x >= b.pMax.x || b.pMin.y >= b.pMax.y)
         pEnd = b.pMin;
     return Bounds2iIterator(b, pEnd);
