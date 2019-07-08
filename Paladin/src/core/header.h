@@ -38,9 +38,10 @@ class Medium;
 class Ray;
 
 #include <iostream>
+#include <assert.h>
 #include <cmath>
 #include "stringprint.hpp"
-#include "macro.hpp"
+#include "macro.h"
 #include "mathutil.h"
 #include "vector.h"
 #include "point.h"

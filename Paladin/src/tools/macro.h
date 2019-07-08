@@ -19,7 +19,7 @@
 #define PALADIN_BEGIN namespace paladin {
 #define PALADIN_END }
 
-#define DCHECK(args) (args)
+#define DCHECK(args) assert(args)
 #define CHECK_NE(a, b) (a, b)
 
 #ifdef FLOAT_AS_DOUBLE

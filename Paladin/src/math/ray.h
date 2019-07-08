@@ -23,7 +23,11 @@ public:
     
     Ray(const Point3f &ori, const Vector3f &dir, Float tMax = Infinity,
         Float time = 0.f, const Medium *medium = nullptr)
-    : ori(ori), dir(dir), tMax(tMax), time(time), medium(medium) {
+    : ori(ori),
+    dir(dir),
+    tMax(tMax),
+    time(time),
+    medium(medium) {
         
     }
     
