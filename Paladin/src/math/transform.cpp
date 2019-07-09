@@ -74,7 +74,7 @@ Matrix4x4 Matrix4x4::getInverseMat() const {
 }
 
 Matrix4x4 Matrix4x4::getTransposeMat() const {
-    Float a[16] = {
+    Float _a[16] = {
         _11, _21, _31, _41,
         _12, _22, _32, _42,
         _13, _23, _33, _43,
@@ -97,10 +97,10 @@ Matrix4x4 Matrix4x4::operator * (const Matrix4x4 &other) const {
     Float ret[4][4];
     for (int i = 0 ; i < 4 ; ++ i) {
         for (int j = 0 ; j < 4 ; ++ j) {
-            ret[i][j] = m[i][0] * other.m[0][j]
-                    + m[i][1] * other.m[1][j]
-                    + m[i][2] * other.m[2][j]
-                    + m[i][3] * other.m[3][j];
+            ret[i][j] = _m[i][0] * other._m[0][j]
+                    + _m[i][1] * other._m[1][j]
+                    + _m[i][2] * other._m[2][j]
+                    + _m[i][3] * other._m[3][j];
         }
     }
     return Matrix4x4(ret);
@@ -109,7 +109,7 @@ Matrix4x4 Matrix4x4::operator * (const Matrix4x4 &other) const {
 Matrix4x4 Matrix4x4::operator * (Float num) const {
     Float t[16] = {};
     for (int i = 0 ; i < 16 ; ++ i) {
-        t[i] = a[i] * num;
+        t[i] = _a[i] * num;
     }
     return Matrix4x4(t);
 }
@@ -117,7 +117,7 @@ Matrix4x4 Matrix4x4::operator * (Float num) const {
 Matrix4x4 Matrix4x4::operator / (Float num) const {
     Float t[16] = {};
     for (int i = 0 ; i < 16 ; ++ i) {
-        t[i] = a[i] / num;
+        t[i] = _a[i] / num;
     }
     return Matrix4x4(t);
 }
@@ -125,7 +125,7 @@ Matrix4x4 Matrix4x4::operator / (Float num) const {
 Matrix4x4 Matrix4x4::operator - (const Matrix4x4 &other) const {
     Float ret[16];
     for (int i = 0 ; i < 16; ++ i) {
-        ret[i] = a[i] - other.a[i];
+        ret[i] = _a[i] - other._a[i];
     }
     return Matrix4x4(ret);
 }
@@ -133,14 +133,14 @@ Matrix4x4 Matrix4x4::operator - (const Matrix4x4 &other) const {
 Matrix4x4 Matrix4x4::operator + (const Matrix4x4 &other) const {
     Float ret[16];
     for (int i = 0 ; i < 16; ++ i) {
-        ret[i] = a[i] + other.a[i];
+        ret[i] = _a[i] + other._a[i];
     }
     return Matrix4x4(ret);
 }
 
 bool Matrix4x4::operator == (const Matrix4x4 &other) const {
     for (int i = 0 ; i < 16 ; ++ i) {
-        if (a[i] != other.a[i]) {
+        if (_a[i] != other._a[i]) {
             return false;
         }
     }
@@ -149,7 +149,7 @@ bool Matrix4x4::operator == (const Matrix4x4 &other) const {
 
 bool Matrix4x4::operator < (const Matrix4x4 &other) const {
     for (int i = 0; i < 16; ++ i) {
-        if (a[i] >= other.a[i]) {
+        if (_a[i] >= other._a[i]) {
             return false;
         }
     }
@@ -158,11 +158,20 @@ bool Matrix4x4::operator < (const Matrix4x4 &other) const {
 
 bool Matrix4x4::operator != (const Matrix4x4 &other) const {
     for (int i = 0; i < 16; ++ i) {
-        if (a[i] == other.a[i]) {
+        if (_a[i] == other._a[i]) {
             return false;
         }
     }
     return true;
+}
+
+bool Matrix4x4::isIdentity() const {
+    return (_m[0][0] == 1.f && _m[0][1] == 0.f && _m[0][2] == 0.f &&
+            _m[0][3] == 0.f && _m[1][0] == 0.f && _m[1][1] == 1.f &&
+            _m[1][2] == 0.f && _m[1][3] == 0.f && _m[2][0] == 0.f &&
+            _m[2][1] == 0.f && _m[2][2] == 1.f && _m[2][3] == 0.f &&
+            _m[3][0] == 0.f && _m[3][1] == 0.f && _m[3][2] == 0.f &&
+            _m[3][3] == 1.f);
 }
 
 PALADIN_END
