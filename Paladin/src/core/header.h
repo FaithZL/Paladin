@@ -37,6 +37,8 @@ class Medium;
 
 class Ray;
 
+class Transform;
+
 #include <iostream>
 #include <assert.h>
 #include <cmath>
