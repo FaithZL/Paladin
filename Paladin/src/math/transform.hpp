@@ -174,7 +174,19 @@ public:
 
     // 对点执行转换
     template<typename T>
-    inline Point3<T> exec(const Point3<T> &point) const;
+    inline Point3<T> exec(const Point3<T> &point) const {
+        T x = point.x, y = point.y, z = point.z;
+        T xp = _mat._m[0][0] * x + _mat._m[0][1] * y + _mat._m[0][2] * z + _mat._m[0][3];
+        T yp = _mat._m[1][0] * x + _mat._m[1][1] * y + _mat._m[1][2] * z + _mat._m[1][3];
+        T zp = _mat._m[2][0] * x + _mat._m[2][1] * y + _mat._m[2][2] * z + _mat._m[2][3];
+        T wp = _mat._m[3][0] * x + _mat._m[3][1] * y + _mat._m[3][2] * z + _mat._m[3][3];
+        CHECK_NE(wp, 0);
+        if (wp == 1)
+            return Point3<T>(xp, yp, zp);
+        else
+            return Point3<T>(xp, yp, zp) / wp;
+    }
+
     template <typename T>
     inline Point3<T> exec(const Point3<T> &pt, Vector3<T> *absError) const;
     template <typename T>
@@ -182,7 +194,12 @@ public:
 
     // 对向量执行转换
     template<typename T>
-    inline Vector3<T> exec(const Vector3<T> &vec) const;
+    inline Vector3<T> exec(const Vector3<T> &vec) const {
+        T x = vec.x, y = vec.y, z = vec.z;
+        return Vector3<T>(_mat._m[0][0] * x + _mat._m[0][1] * y + _mat._m[0][2] * z,
+                          _mat._m[1][0] * x + _mat._m[1][1] * y + _mat._m[1][2] * z,
+                          _mat._m[2][0] * x + _mat._m[2][1] * y + _mat._m[2][2] * z);
+    }
     template <typename T>
     inline Vector3<T> exec(const Vector3<T> &v, Vector3<T> *vTransError) const;
     template <typename T>
@@ -208,7 +225,9 @@ public:
 
     Transform operator * (const Transform &other) const;
 
-    bool swapsHandedness() const;
+    inline bool swapsHandedness() const {
+        return _mat.getDet() < 0;
+    }
 
     static Transform translate(const Vector3f &delta) {
         Float a[16] = {

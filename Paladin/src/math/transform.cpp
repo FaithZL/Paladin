@@ -10,6 +10,7 @@
 
 PALADIN_BEGIN
 
+//Matrix4x4
 Float Matrix4x4::getDet() const {
     Float result =
     _11 * _22 * _33 * _44   - _11 * _22 * _34 * _43   -
@@ -173,5 +174,13 @@ bool Matrix4x4::isIdentity() const {
             _m[3][0] == 0.f && _m[3][1] == 0.f && _m[3][2] == 0.f &&
             _m[3][3] == 1.f);
 }
+
+
+//Transform 
+
+Transform Transform::operator*(const Transform &other) const {
+    return Transform(_mat * other._mat, other._matInv * _matInv);
+}
+
 
 PALADIN_END
