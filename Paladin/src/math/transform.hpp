@@ -27,7 +27,7 @@ public:
     Matrix4x4(const Float p[4][4]) {
         for (int i = 0 ; i < 4; ++ i) {
             for (int j = 0 ; j < 4; ++ j) {
-                m[i][j] = p[i][j];
+                _m[i][j] = p[i][j];
             }
         }
     }
@@ -124,38 +124,38 @@ class Transform {
 // 比之前在写OpenGL程序时，需要用齐次坐标来区分点与向量要清晰
 public:
     Transform() {
-        
+
     }
-    
+
     Transform(const Float mat[4][4]) {
         _mat = Matrix4x4(mat);
         _matInv = _mat.getInverseMat();
     }
-    
-    Transform(const Matrix4x4 &mat) : _mat(mat), _matInv(m.getInverseMat()) {
-        
+
+    Transform(const Matrix4x4 &mat) : _mat(mat), _matInv(_mat.getInverseMat()) {
+
     }
-    
-    Transform(const Matrix4x4 &mat, const Matrix4x4 &matInv) : _mat(mat), matInv(_matInv) {
-        
+
+    Transform(const Matrix4x4 &mat, const Matrix4x4 &matInv) : _mat(mat), _matInv(matInv) {
+
     }
-    
+
     Transform getInverse() const {
         return Transform(_matInv, _mat);
     }
-    
+
     Transform getTranspose() const {
         return Transform(_mat.getTransposeMat(), _matInv.getTransposeMat());
     }
-    
+
     bool operator == (const Transform &other) const {
         return other._mat == _mat && other._matInv == _matInv;
     }
-    
+
     bool operator != (const Transform &other) const {
         return other._mat != _mat || other._matInv != _matInv;
     }
-    
+
     bool operator < (const Transform &other) const {
         return _mat < other._mat;
     }
@@ -169,7 +169,7 @@ public:
     }
 
     const Matrix4x4 &getInverseMatrix() const {
-        return _matInv
+        return _matInv;
     }
 
     // 对点执行转换
@@ -281,7 +281,7 @@ public:
         };
         Matrix4x4 mat(a);
         // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-        return Transform(mat, mat.getTranspose());
+        return Transform(mat, mat.getTransposeMat());
     }
 
     static Transform rotateY(Float theta, bool bRadian=false) {
@@ -289,14 +289,14 @@ public:
         Float sinTheta = std::sin(theta);
         Float cosTheta = std::cos(theta);
         Float a[16] = {
-            cosTheta,  0, sinTheta, 0, 
-            0,         1, 0,        0, 
+            cosTheta,  0, sinTheta, 0,
+            0,         1, 0,        0,
             -sinTheta, 0, cosTheta, 0,
             0,         0, 0,        1
         };
         Matrix4x4 mat(a);
         // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-        return Transform(mat, mat.getTranspose());
+        return Transform(mat, mat.getTransposeMat());
     }
 
     static Transform rotateZ(Float theta, bool bRadian=false) {
@@ -305,20 +305,21 @@ public:
         Float cosTheta = std::cos(theta);
         Float a[16] = {
             cosTheta, -sinTheta, 0, 0,
-            sinTheta,  cosTheta, 0, 0, 
+            sinTheta,  cosTheta, 0, 0,
             0,         0,        1, 0,
             0,         0,        0, 1
         };
         Matrix4x4 mat(a);
         // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-        return Transform(mat, mat.getTranspose());
+        return Transform(mat, mat.getTransposeMat());
     }
 
     static Transform rotate(Float theta, const Vector3f &axis, bool bRadian=false) {
-        Vector3f a = Normalize(axis);
+//        Vector3f a = paladin::normalize(axis);
+        Vector3f a = paladin::normalize(axis);
         theta = bRadian ? theta : degree2radian(theta);
-        Float sinTheta = std::sin(Radians(theta));
-        Float cosTheta = std::cos(Radians(theta));
+        Float sinTheta = std::sin(theta);
+        Float cosTheta = std::cos(theta);
         Matrix4x4 mat;
 
         mat._m[0][0] = a.x * a.x + (1 - a.x * a.x) * cosTheta;
@@ -336,16 +337,16 @@ public:
         mat._m[2][2] = a.z * a.z + (1 - a.z * a.z) * cosTheta;
         mat._m[2][3] = 0;
         // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-        return Transform(mat, mat.getTranspose());
+        return Transform(mat, mat.getTransposeMat());
     }
 
     static Transform lookAt(const Point3f &pos, const Point3f &look, const Vector3f &up) {
-        // 基本思路，先用up向量与dir向量确定right向量
-        // right向量与dir向量互相垂直，由此可以确定新的up向量
-        //right，dir，newUp向量两两垂直，可以构成直角坐标系，也就是视图空间
+         基本思路，先用up向量与dir向量确定right向量
+         right向量与dir向量互相垂直，由此可以确定新的up向量
+        right，dir，newUp向量两两垂直，可以构成直角坐标系，也就是视图空间
         Vector3f dir = normalize(look - pos);
         Vector3f right = cross(normalize(up), dir);
-        if (right.LengthSquared() == 0) {
+        if (right.lengthSquared() == 0) {
             // dir与up向量共线不合法
             return Transform();
         }
@@ -357,8 +358,8 @@ public:
             right.z, newUp.z, dir.z, pos.z
             0,       0,       0,     1
         };
-        Matrix4x4 cameraToWorld(a);
-        return Transform(cameraToWorld.getInverse(), cameraToWorld);
+        Matrix4x4 cameraToWorld;
+        return Transform(cameraToWorld.getInverseMat(), cameraToWorld);
     }
 
     static Transform orthographic(Float zNear, Float zFar) {
@@ -368,16 +369,16 @@ public:
             0, 0, 1 / (zFar - zNear), -zNear,
             0, 0, 0,                  1,
         };
-        return Transform(mat(a));
+        return Transform(Matrix4x4(a));
     }
 
-    static Transform perspective(Float fov, Float zNear, Float zFar, bool bRadiazNear=false) {
+    static Transform perspective(Float fov, Float zNear, Float zFar, bool bRadian=false) {
         //这里的透视矩阵没有aspect参数，暂时不知道具体原因，等待后续了解
         fov = bRadian ? fov : degree2radian(fov);
-        Float invTanAng = 1 / std::tan(Radians(fov) / 2);
+        Float invTanAng = 1 / std::tan(fov / 2);
         Float a[16] = {
-            invTanAng, 0, 0,             0, 
-            0, invTanAng, 0,             0, 
+            invTanAng, 0, 0,             0,
+            0, invTanAng, 0,             0,
             0, 0, zFar / (zFar - zNear), -zFar * zNear / (zFar - zNear),
             0, 0,         1,             0
         };
@@ -385,12 +386,12 @@ public:
         return Transform(mat);
     }
 
-    
+
 private:
-    
+
     Matrix4x4 _mat;
     Matrix4x4 _matInv;
-    
+
 };
 
 PALADIN_END

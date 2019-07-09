@@ -21,7 +21,7 @@ inline bool isNaN(const int x) {
     return false;
 }
 
-inline Float degree2radian(Float deg) { 
+inline Float degree2radian(Float deg) {
     return (Pi / 180) * deg;
 }
 
@@ -33,6 +33,7 @@ template <typename T, typename U>
 inline Vector3<T> operator*(U s, const Vector3<T> &v) {
     return v * s;
 }
+
 template <typename T>
 Vector3<T> abs(const Vector3<T> &v) {
     return Vector3<T>(std::abs(v.x), std::abs(v.y), std::abs(v.z));
@@ -128,6 +129,7 @@ template <typename T, typename U>
 inline Vector2<T> operator*(U f, const Vector2<T> &v) {
     return v * f;
 }
+
 template <typename T>
 inline Float dot(const Vector2<T> &v1, const Vector2<T> &v2) {
     DCHECK(!v1.hasNaNs() && !v2.hasNaNs());
@@ -144,6 +146,7 @@ template <typename T>
 inline Vector2<T> normalize(const Vector2<T> &v) {
     return v / v.length();
 }
+
 template <typename T>
 Vector2<T> abs(const Vector2<T> &v) {
     return Vector2<T>(std::abs(v.x), std::abs(v.y));

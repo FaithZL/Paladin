@@ -75,7 +75,7 @@ Matrix4x4 Matrix4x4::getInverseMat() const {
 }
 
 Matrix4x4 Matrix4x4::getTransposeMat() const {
-    Float _a[16] = {
+    Float a[16] = {
         _11, _21, _31, _41,
         _12, _22, _32, _42,
         _13, _23, _33, _43,
@@ -176,11 +176,23 @@ bool Matrix4x4::isIdentity() const {
 }
 
 
-//Transform 
+//Transform
+//Transform Transform::operator*(const Transform &other) const {
+//    return Transform(_mat * other._mat, other._matInv * _matInv);
+//}
 
-Transform Transform::operator*(const Transform &other) const {
-    return Transform(_mat * other._mat, other._matInv * _matInv);
-}
 
 
 PALADIN_END
+
+
+
+
+
+
+
+
+
+
+
+
