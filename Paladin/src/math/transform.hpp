@@ -206,7 +206,22 @@ public:
     inline Vector3<T> exec(const Vector3<T> &v, const Vector3<T> &vError, Vector3<T> *vTransError) const;
 
     template<typename T>
-    inline Normal3<T> exec(const Normal3<T> &normal) const;
+    inline Normal3<T> exec(const Normal3<T> &normal) {
+        /*
+        法线的转换跟向量的转换所有不同，如果有非比例缩放法线就不能套用向量的转换了
+        法线转换矩阵与原转换矩阵的关系如下t为切线向量,S为法线转换矩阵，M为切线转换矩阵
+        dot(n, t) = 0
+        transpose(n) * t = 0
+        transpose(S * n) * (M * t) = 0
+        transpose(n) * transpose(S) * M * t = 0 
+        只要满足这个表达式的S矩阵，就是我们的目标矩阵
+        我们可以假设 transpose(S) * M = I , 可得 S = transpose(inverse(M))
+        */
+        T x = _matInv._m[0][0] * x + _matInv._m[1][0] * y + _matInv._m[2][0] * z;
+        T y = _matInv._m[0][1] * x + _matInv._m[1][1] * y + _matInv._m[2][1] * z;
+        T z = _matInv._m[0][2] * x + _matInv._m[1][2] * y + _matInv._m[2][2] * z;
+        return Normal3<T>(x, y, z);
+    }
 
     // 对射线执行转换
     inline Ray exec(const Ray &ray) const;
