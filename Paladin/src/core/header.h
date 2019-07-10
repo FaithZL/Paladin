@@ -44,12 +44,11 @@ class Transform;
 #include <cmath>
 #include "stringprint.hpp"
 #include "macro.h"
-#include "mathutil.h"
+#include "mathutil.hpp"
 #include "vector.h"
 #include "point.h"
 #include "ray.h"
 #include "bounds.h"
-
 
 
 

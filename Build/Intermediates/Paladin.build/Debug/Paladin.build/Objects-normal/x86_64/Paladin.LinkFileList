@@ -1,12 +1,13 @@
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/matte.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/box.o
-/Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/point.o
+/Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/pointlight.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/triangle.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/path.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/spectrum.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/random.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/paladin.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/camera.o
+/Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/mathutil.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/scene.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/shape.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/integrator.o
@@ -24,6 +25,7 @@
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/bvh.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/sphere.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/sampler.o
+/Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/interaction.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/constant.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/light.o
 /Users/satan_z/work/git/graphic/Paladin/Build/Intermediates/Paladin.build/Debug/Paladin.build/Objects-normal/x86_64/sampling.o

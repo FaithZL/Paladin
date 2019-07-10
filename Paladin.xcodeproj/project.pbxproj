@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F628C2CC22D6456700D981F5 /* interaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F628C2CA22D6456700D981F5 /* interaction.cpp */; };
+		F628C2CF22D6466C00D981F5 /* mathutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F628C2CD22D6466C00D981F5 /* mathutil.cpp */; };
 		F66FC3C022C858040086A2F0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3BF22C858040086A2F0 /* main.cpp */; };
 		F66FC3CA22C8601C0086A2F0 /* integrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3C822C8601C0086A2F0 /* integrator.cpp */; };
 		F66FC3CE22C860750086A2F0 /* sinc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3CC22C860750086A2F0 /* sinc.cpp */; };
-		F66FC3D522C860F50086A2F0 /* point.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3D322C860F50086A2F0 /* point.cpp */; };
+		F66FC3D522C860F50086A2F0 /* pointlight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3D322C860F50086A2F0 /* pointlight.cpp */; };
 		F66FC3D922C861700086A2F0 /* matte.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3D722C861700086A2F0 /* matte.cpp */; };
 		F66FC3DD22C861AF0086A2F0 /* path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3DB22C861AF0086A2F0 /* path.cpp */; };
 		F66FC3E122C862230086A2F0 /* triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3DF22C862230086A2F0 /* triangle.cpp */; };
@@ -54,6 +56,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F628C2CA22D6456700D981F5 /* interaction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interaction.cpp; sourceTree = "<group>"; };
+		F628C2CB22D6456700D981F5 /* interaction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = interaction.hpp; sourceTree = "<group>"; };
+		F628C2CD22D6466C00D981F5 /* mathutil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mathutil.cpp; sourceTree = "<group>"; };
+		F628C2CE22D6466C00D981F5 /* mathutil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = mathutil.hpp; sourceTree = "<group>"; };
 		F666921322D0D38500B50538 /* ray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ray.h; sourceTree = "<group>"; };
 		F66FC3BC22C858040086A2F0 /* Paladin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Paladin; sourceTree = BUILT_PRODUCTS_DIR; };
 		F66FC3BF22C858040086A2F0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -61,8 +67,8 @@
 		F66FC3C922C8601C0086A2F0 /* integrator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = integrator.hpp; sourceTree = "<group>"; };
 		F66FC3CC22C860750086A2F0 /* sinc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sinc.cpp; sourceTree = "<group>"; };
 		F66FC3CD22C860750086A2F0 /* sinc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sinc.hpp; sourceTree = "<group>"; };
-		F66FC3D322C860F50086A2F0 /* point.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = point.cpp; sourceTree = "<group>"; };
-		F66FC3D422C860F50086A2F0 /* point.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = point.hpp; sourceTree = "<group>"; };
+		F66FC3D322C860F50086A2F0 /* pointlight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pointlight.cpp; sourceTree = "<group>"; };
+		F66FC3D422C860F50086A2F0 /* pointlight.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = pointlight.hpp; sourceTree = "<group>"; };
 		F66FC3D722C861700086A2F0 /* matte.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = matte.cpp; sourceTree = "<group>"; };
 		F66FC3D822C861700086A2F0 /* matte.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = matte.hpp; sourceTree = "<group>"; };
 		F66FC3DB22C861AF0086A2F0 /* path.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = path.cpp; sourceTree = "<group>"; };
@@ -213,6 +219,8 @@
 				F66FC42D22C8C5BD0086A2F0 /* sampling.cpp */,
 				F66FC42E22C8C5BD0086A2F0 /* sampling.hpp */,
 				F66FC43C22C91BEC0086A2F0 /* header.h */,
+				F628C2CA22D6456700D981F5 /* interaction.cpp */,
+				F628C2CB22D6456700D981F5 /* interaction.hpp */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -231,8 +239,8 @@
 		F66FC3CF22C860800086A2F0 /* lights */ = {
 			isa = PBXGroup;
 			children = (
-				F66FC3D322C860F50086A2F0 /* point.cpp */,
-				F66FC3D422C860F50086A2F0 /* point.hpp */,
+				F66FC3D322C860F50086A2F0 /* pointlight.cpp */,
+				F66FC3D422C860F50086A2F0 /* pointlight.hpp */,
 			);
 			path = lights;
 			sourceTree = "<group>";
@@ -331,6 +339,8 @@
 				F66FC43B22C9106E0086A2F0 /* vector.h */,
 				F66FC43E22CD031F0086A2F0 /* mathutil.h */,
 				F666921322D0D38500B50538 /* ray.h */,
+				F628C2CD22D6466C00D981F5 /* mathutil.cpp */,
+				F628C2CE22D6466C00D981F5 /* mathutil.hpp */,
 			);
 			path = math;
 			sourceTree = "<group>";
@@ -412,13 +422,14 @@
 			files = (
 				F66FC3D922C861700086A2F0 /* matte.cpp in Sources */,
 				F66FC43522C8C7960086A2F0 /* box.cpp in Sources */,
-				F66FC3D522C860F50086A2F0 /* point.cpp in Sources */,
+				F66FC3D522C860F50086A2F0 /* pointlight.cpp in Sources */,
 				F66FC3E122C862230086A2F0 /* triangle.cpp in Sources */,
 				F66FC3DD22C861AF0086A2F0 /* path.cpp in Sources */,
 				F66FC41122C886640086A2F0 /* spectrum.cpp in Sources */,
 				F66FC3E622C8628F0086A2F0 /* random.cpp in Sources */,
 				F66FC40A22C87E850086A2F0 /* paladin.cpp in Sources */,
 				F66FC41422C890FD0086A2F0 /* camera.cpp in Sources */,
+				F628C2CF22D6466C00D981F5 /* mathutil.cpp in Sources */,
 				F66FC40E22C87FA50086A2F0 /* scene.cpp in Sources */,
 				F66FC3FE22C86C1D0086A2F0 /* shape.cpp in Sources */,
 				F66FC3CA22C8601C0086A2F0 /* integrator.cpp in Sources */,
@@ -436,6 +447,7 @@
 				F66FC3ED22C863550086A2F0 /* bvh.cpp in Sources */,
 				F66FC41A22C891700086A2F0 /* sphere.cpp in Sources */,
 				F66FC41722C891140086A2F0 /* sampler.cpp in Sources */,
+				F628C2CC22D6456700D981F5 /* interaction.cpp in Sources */,
 				F66FC3F122C863A40086A2F0 /* constant.cpp in Sources */,
 				F66FC40722C86C7B0086A2F0 /* light.cpp in Sources */,
 				F66FC42F22C8C5BD0086A2F0 /* sampling.cpp in Sources */,

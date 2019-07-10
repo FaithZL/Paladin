@@ -7,7 +7,6 @@
 //
 
 #include "paladin.hpp"
-
 using namespace paladin;
 
 int Paladin::run(int argc, const char *argv[]) {

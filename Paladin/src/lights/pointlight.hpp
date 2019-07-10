@@ -1,14 +1,14 @@
 //
-//  point.hpp
+//  pointlight.hpp
 //  Paladin
 //
 //  Created by SATAN_Z on 2019/6/30.
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#ifndef point_hpp
-#define point_hpp
+#ifndef pointlight_hpp
+#define pointlight_hpp
 
 #include <stdio.h>
 
-#endif /* point_hpp */
+#endif /* pointlight_hpp */
