@@ -52,7 +52,7 @@ inline T absDot(const Vector3<T> &v1, const Vector3<T> &v2) {
 }
 
 template <typename T>
-inline Vector3<T> cross(const Vector3<T> &v1, const Vector3<T> &v2) {
+Vector3<T> cross(const Vector3<T> &v1, const Vector3<T> &v2) {
     DCHECK(!v1.hasNaNs() && !v2.hasNaNs());
     double v1x = v1.x, v1y = v1.y, v1z = v1.z;
     double v2x = v2.x, v2y = v2.y, v2z = v2.z;
@@ -61,7 +61,7 @@ inline Vector3<T> cross(const Vector3<T> &v1, const Vector3<T> &v2) {
 }
 
 template <typename T>
-inline Vector3<T> cross(const Vector3<T> &v1, const Normal3<T> &v2) {
+Vector3<T> cross(const Vector3<T> &v1, const Normal3<T> &v2) {
     DCHECK(!v1.hasNaNs() && !v2.hasNaNs());
     double v1x = v1.x, v1y = v1.y, v1z = v1.z;
     double v2x = v2.x, v2y = v2.y, v2z = v2.z;
@@ -70,7 +70,7 @@ inline Vector3<T> cross(const Vector3<T> &v1, const Normal3<T> &v2) {
 }
 
 template <typename T>
-inline Vector3<T> cross(const Normal3<T> &v1, const Vector3<T> &v2) {
+Vector3<T> cross(const Normal3<T> &v1, const Vector3<T> &v2) {
     DCHECK(!v1.hasNaNs() && !v2.hasNaNs());
     double v1x = v1.x, v1y = v1.y, v1z = v1.z;
     double v2x = v2.x, v2y = v2.y, v2z = v2.z;
@@ -252,7 +252,7 @@ inline Normal3<T> operator*(U f, const Normal3<T> &n) {
 }
 
 template <typename T>
-inline Normal3<T> normalize(const Normal3<T> &n) {
+Normal3<T> normalize(const Normal3<T> &n) {
     return n / n.length();
 }
 
@@ -444,7 +444,7 @@ inline Float lerp(Float t, Float v1, Float v2) {
     return (1 - t) * v1 + t * v2;
 }
 
-bool solveLinearSystem2x2(const Float A[2][2], const Float B[2], Float *x0, Float *x1) {
+inline bool solveLinearSystem2x2(const Float A[2][2], const Float B[2], Float *x0, Float *x1) {
     /*
     求解2元线性方程组
     a00 a01     x0     b0

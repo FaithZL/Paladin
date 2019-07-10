@@ -11,5 +11,6 @@
 using namespace paladin;
 
 int Paladin::run(int argc, const char *argv[]) {
+    Vector3f v;
     return 0;
 }

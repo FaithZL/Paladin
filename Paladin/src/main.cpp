@@ -14,7 +14,10 @@ USING_PALADIN
 int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << "Hello, paladin!\n";
-    Paladin paladin;
-    return paladin.run(argc, argv);
+    Paladin pld;
+    Point3f p;
+    Vector3f v;
+    
+    return pld.run(argc, argv);
 }
 

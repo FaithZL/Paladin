@@ -314,53 +314,53 @@ public:
         return Transform(mat, mat.getTransposeMat());
     }
 
-    static Transform rotate(Float theta, const Vector3f &axis, bool bRadian=false) {
-//        Vector3f a = paladin::normalize(axis);
-        Vector3f a = paladin::normalize(axis);
-        theta = bRadian ? theta : degree2radian(theta);
-        Float sinTheta = std::sin(theta);
-        Float cosTheta = std::cos(theta);
-        Matrix4x4 mat;
+//    static Transform rotate(Float theta, const Vector3f &axis, bool bRadian=false) {
+////        Vector3f a = paladin::normalize(axis);
+////        Vector3f a = paladin::normalize(axis);
+//        theta = bRadian ? theta : degree2radian(theta);
+//        Float sinTheta = std::sin(theta);
+//        Float cosTheta = std::cos(theta);
+//        Matrix4x4 mat;
+//
+//        mat._m[0][0] = a.x * a.x + (1 - a.x * a.x) * cosTheta;
+//        mat._m[0][1] = a.x * a.y * (1 - cosTheta) - a.z * sinTheta;
+//        mat._m[0][2] = a.x * a.z * (1 - cosTheta) + a.y * sinTheta;
+//        mat._m[0][3] = 0;
+//
+//        mat._m[1][0] = a.x * a.y * (1 - cosTheta) + a.z * sinTheta;
+//        mat._m[1][1] = a.y * a.y + (1 - a.y * a.y) * cosTheta;
+//        mat._m[1][2] = a.y * a.z * (1 - cosTheta) - a.x * sinTheta;
+//        mat._m[1][3] = 0;
+//
+//        mat._m[2][0] = a.x * a.z * (1 - cosTheta) - a.y * sinTheta;
+//        mat._m[2][1] = a.y * a.z * (1 - cosTheta) + a.x * sinTheta;
+//        mat._m[2][2] = a.z * a.z + (1 - a.z * a.z) * cosTheta;
+//        mat._m[2][3] = 0;
+//        // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
+//        return Transform(mat, mat.getTransposeMat());
+//    }
 
-        mat._m[0][0] = a.x * a.x + (1 - a.x * a.x) * cosTheta;
-        mat._m[0][1] = a.x * a.y * (1 - cosTheta) - a.z * sinTheta;
-        mat._m[0][2] = a.x * a.z * (1 - cosTheta) + a.y * sinTheta;
-        mat._m[0][3] = 0;
-
-        mat._m[1][0] = a.x * a.y * (1 - cosTheta) + a.z * sinTheta;
-        mat._m[1][1] = a.y * a.y + (1 - a.y * a.y) * cosTheta;
-        mat._m[1][2] = a.y * a.z * (1 - cosTheta) - a.x * sinTheta;
-        mat._m[1][3] = 0;
-
-        mat._m[2][0] = a.x * a.z * (1 - cosTheta) - a.y * sinTheta;
-        mat._m[2][1] = a.y * a.z * (1 - cosTheta) + a.x * sinTheta;
-        mat._m[2][2] = a.z * a.z + (1 - a.z * a.z) * cosTheta;
-        mat._m[2][3] = 0;
-        // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-        return Transform(mat, mat.getTransposeMat());
-    }
-
-    static Transform lookAt(const Point3f &pos, const Point3f &look, const Vector3f &up) {
-         基本思路，先用up向量与dir向量确定right向量
-         right向量与dir向量互相垂直，由此可以确定新的up向量
-        right，dir，newUp向量两两垂直，可以构成直角坐标系，也就是视图空间
-        Vector3f dir = normalize(look - pos);
-        Vector3f right = cross(normalize(up), dir);
-        if (right.lengthSquared() == 0) {
-            // dir与up向量共线不合法
-            return Transform();
-        }
-        right = normalize(right);
-        Vector3f newUp = cross(dir, right);
-        Float a[16] = {
-            right.x, newUp.x, dir.x, pos.x
-            right.y, newUp.y, dir.y, pos.y
-            right.z, newUp.z, dir.z, pos.z
-            0,       0,       0,     1
-        };
-        Matrix4x4 cameraToWorld;
-        return Transform(cameraToWorld.getInverseMat(), cameraToWorld);
-    }
+//    static Transform lookAt(const Point3f &pos, const Point3f &look, const Vector3f &up) {
+//        //基本思路，先用up向量与dir向量确定right向量
+//        // right向量与dir向量互相垂直，由此可以确定新的up向量
+//        // right，dir，newUp向量两两垂直，可以构成直角坐标系，也就是视图空间
+//        Vector3f dir = normalize(look - pos);
+//        Vector3f right = cross(normalize(up), dir);
+//        if (right.lengthSquared() == 0) {
+//            // dir与up向量共线不合法
+//            return Transform();
+//        }
+//        right = normalize(right);
+//        Vector3f newUp = cross(dir, right);
+//        Float a[16] = {
+//            right.x, newUp.x, dir.x, pos.x,
+//            right.y, newUp.y, dir.y, pos.y,
+//            right.z, newUp.z, dir.z, pos.z,
+//            0,       0,       0,     1
+//        };
+//        Matrix4x4 cameraToWorld;
+//        return Transform(cameraToWorld.getInverseMat(), cameraToWorld);
+//    }
 
     static Transform orthographic(Float zNear, Float zFar) {
         Float a[16] = {
