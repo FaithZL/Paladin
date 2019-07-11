@@ -44,7 +44,7 @@ class Transform;
 #include <cmath>
 #include "stringprint.hpp"
 #include "macro.h"
-#include "mathutil.hpp"
+#include "mathutil.h"
 #include "vector.h"
 #include "point.h"
 #include "ray.h"
