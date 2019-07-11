@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		F628C2CC22D6456700D981F5 /* interaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F628C2CA22D6456700D981F5 /* interaction.cpp */; };
-		F628C2CF22D6466C00D981F5 /* mathutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F628C2CD22D6466C00D981F5 /* mathutil.cpp */; };
 		F66FC3C022C858040086A2F0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3BF22C858040086A2F0 /* main.cpp */; };
 		F66FC3CA22C8601C0086A2F0 /* integrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3C822C8601C0086A2F0 /* integrator.cpp */; };
 		F66FC3CE22C860750086A2F0 /* sinc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3CC22C860750086A2F0 /* sinc.cpp */; };
@@ -58,8 +57,6 @@
 /* Begin PBXFileReference section */
 		F628C2CA22D6456700D981F5 /* interaction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interaction.cpp; sourceTree = "<group>"; };
 		F628C2CB22D6456700D981F5 /* interaction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = interaction.hpp; sourceTree = "<group>"; };
-		F628C2CD22D6466C00D981F5 /* mathutil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mathutil.cpp; sourceTree = "<group>"; };
-		F628C2CE22D6466C00D981F5 /* mathutil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = mathutil.hpp; sourceTree = "<group>"; };
 		F666921322D0D38500B50538 /* ray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ray.h; sourceTree = "<group>"; };
 		F66FC3BC22C858040086A2F0 /* Paladin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Paladin; sourceTree = BUILT_PRODUCTS_DIR; };
 		F66FC3BF22C858040086A2F0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -339,8 +336,6 @@
 				F66FC43B22C9106E0086A2F0 /* vector.h */,
 				F66FC43E22CD031F0086A2F0 /* mathutil.h */,
 				F666921322D0D38500B50538 /* ray.h */,
-				F628C2CD22D6466C00D981F5 /* mathutil.cpp */,
-				F628C2CE22D6466C00D981F5 /* mathutil.hpp */,
 			);
 			path = math;
 			sourceTree = "<group>";
@@ -429,7 +424,6 @@
 				F66FC3E622C8628F0086A2F0 /* random.cpp in Sources */,
 				F66FC40A22C87E850086A2F0 /* paladin.cpp in Sources */,
 				F66FC41422C890FD0086A2F0 /* camera.cpp in Sources */,
-				F628C2CF22D6466C00D981F5 /* mathutil.cpp in Sources */,
 				F66FC40E22C87FA50086A2F0 /* scene.cpp in Sources */,
 				F66FC3FE22C86C1D0086A2F0 /* shape.cpp in Sources */,
 				F66FC3CA22C8601C0086A2F0 /* integrator.cpp in Sources */,

@@ -9,6 +9,14 @@
 #ifndef header_h
 #define header_h
 
+
+
+#include <iostream>
+#include <assert.h>
+#include <cmath>
+#include "stringprint.hpp"
+#include "macro.h"
+PALADIN_BEGIN
 template<typename T>
 class Point2;
 
@@ -38,12 +46,8 @@ class Medium;
 class Ray;
 
 class Transform;
+PALADIN_END
 
-#include <iostream>
-#include <assert.h>
-#include <cmath>
-#include "stringprint.hpp"
-#include "macro.h"
 #include "mathutil.h"
 #include "vector.h"
 #include "point.h"
