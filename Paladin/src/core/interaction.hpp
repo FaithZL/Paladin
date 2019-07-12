@@ -9,6 +9,13 @@
 #ifndef interaction_hpp
 #define interaction_hpp
 
-#include <stdio.h>
+#include "header.h"
+
+PALADIN_BEGIN
+
+
+
+
+PALADIN_END
 
 #endif /* interaction_hpp */
