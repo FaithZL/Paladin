@@ -172,6 +172,16 @@ public:
     const Matrix4x4 &getInverseMatrix() const {
         return _matInv;
     }
+    
+    bool hasScale() const {
+        // xyz三个方向的基向量进行变换，只要有一个长度不为1，则含有缩放
+        Float la2 = exec(Vector3f(1, 0, 0)).lengthSquared();
+        Float lb2 = exec(Vector3f(0, 1, 0)).lengthSquared();
+        Float lc2 = exec(Vector3f(0, 0, 1)).lengthSquared();
+    #define NOT_ONE(x) ((x) < .999f || (x) > 1.001f)
+        return (NOT_ONE(la2) || NOT_ONE(lb2) || NOT_ONE(lc2));
+    #undef NOT_ONE
+    }
 
     // 对点执行转换
     template<typename T>
