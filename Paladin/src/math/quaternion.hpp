@@ -10,7 +10,6 @@
 #define quaternion_hpp
 
 #include "header.h"
-
 PALADIN_BEGIN
 
 struct Quaternion {
@@ -105,6 +104,17 @@ struct Quaternion {
 inline Quaternion operator*(Float f, const Quaternion &q) { 
 	return q * f; 
 }
+
+inline Float dot(const Quaternion &q1, const Quaternion &q2) {
+    // 对应分量相乘之后相加
+    return dot(q1.v, q2.v) + q1.w * q2.w;
+}
+
+inline Quaternion normalize(const Quaternion &q) {
+    return q / std::sqrt(dot(q, q));
+}
+
+inline Quaternion slerp(Float t, const Quaternion &q1, const Quaternion &q2);
 
 PALADIN_END
 
