@@ -11,6 +11,16 @@
 
 PALADIN_BEGIN
 
+template <typename T, typename U, typename V>
+inline T clamp(T val, U low, V high) {
+    if (val < low)
+        return low;
+    else if (val > high)
+        return high;
+    else
+        return val;
+}
+
 template <typename T>
 inline bool isNaN(const T x) {
     return std::isnan(x);
@@ -480,8 +490,29 @@ inline bool quadratic(Float a, Float b, Float c, Float *t0, Float *t1) {
     return true;
 }
 
+inline Float dot(const Quaternion &q1, const Quaternion &q2) {
+    // 对应分量相乘之后相加
+    return dot(q1.v, q2.v) + q1.w * q2.w;
+}
+
 inline Float gamma(int n) {
     return (n * MachineEpsilon) / (1 - n * MachineEpsilon);
+}
+
+inline Quaternion normalize(const Quaternion &q) {
+    return q / std::sqrt(dot(q, q));
+}
+
+inline Quaternion slerp(Float t, const Quaternion &q1, const Quaternion &q2) {
+    Float cosTheta = Dot(q1, q2);
+    if (cosTheta > .9995f)
+        return normalize((1 - t) * q1 + t * q2);
+    else {
+        Float theta = std::acos(clamp(cosTheta, -1, 1));
+        Float thetap = theta * t;
+        Quaternion qperp = normalize(q2 - q1 * cosTheta);
+        return q1 * std::cos(thetap) + qperp * std::sin(thetap);
+    }
 }
 
 PALADIN_END
