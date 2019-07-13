@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F628C2CC22D6456700D981F5 /* interaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F628C2CA22D6456700D981F5 /* interaction.cpp */; };
+		F65A537A22D987EB009CE4DB /* animatedtransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F65A537822D987EB009CE4DB /* animatedtransform.cpp */; };
 		F66FC3C022C858040086A2F0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3BF22C858040086A2F0 /* main.cpp */; };
 		F66FC3CA22C8601C0086A2F0 /* integrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3C822C8601C0086A2F0 /* integrator.cpp */; };
 		F66FC3CE22C860750086A2F0 /* sinc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3CC22C860750086A2F0 /* sinc.cpp */; };
@@ -57,6 +58,8 @@
 /* Begin PBXFileReference section */
 		F628C2CA22D6456700D981F5 /* interaction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interaction.cpp; sourceTree = "<group>"; };
 		F628C2CB22D6456700D981F5 /* interaction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = interaction.hpp; sourceTree = "<group>"; };
+		F65A537822D987EB009CE4DB /* animatedtransform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = animatedtransform.cpp; sourceTree = "<group>"; };
+		F65A537922D987EB009CE4DB /* animatedtransform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = animatedtransform.hpp; sourceTree = "<group>"; };
 		F666921322D0D38500B50538 /* ray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ray.h; sourceTree = "<group>"; };
 		F66FC3BC22C858040086A2F0 /* Paladin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Paladin; sourceTree = BUILT_PRODUCTS_DIR; };
 		F66FC3BF22C858040086A2F0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -336,6 +339,8 @@
 				F66FC43B22C9106E0086A2F0 /* vector.h */,
 				F66FC43E22CD031F0086A2F0 /* mathutil.h */,
 				F666921322D0D38500B50538 /* ray.h */,
+				F65A537822D987EB009CE4DB /* animatedtransform.cpp */,
+				F65A537922D987EB009CE4DB /* animatedtransform.hpp */,
 			);
 			path = math;
 			sourceTree = "<group>";
@@ -440,6 +445,7 @@
 				F66FC42C22C893850086A2F0 /* bxdf.cpp in Sources */,
 				F66FC3ED22C863550086A2F0 /* bvh.cpp in Sources */,
 				F66FC41A22C891700086A2F0 /* sphere.cpp in Sources */,
+				F65A537A22D987EB009CE4DB /* animatedtransform.cpp in Sources */,
 				F66FC41722C891140086A2F0 /* sampler.cpp in Sources */,
 				F628C2CC22D6456700D981F5 /* interaction.cpp in Sources */,
 				F66FC3F122C863A40086A2F0 /* constant.cpp in Sources */,

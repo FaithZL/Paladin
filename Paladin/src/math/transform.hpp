@@ -237,170 +237,38 @@ public:
 
     Bounds3f exec(const Bounds3f &bounds) const;
 
-
-
     Transform operator * (const Transform &other) const;
 
     inline bool swapsHandedness() const {
-        return _mat.getDet() < 0;
+        /*
+         如果左上角3x3的矩阵行列式小于零，则说明这个变换是换了手的，至于为何是这样，暂时没有了解太深，搞完主线再说
+         */
+        Float det =
+        _mat._m[0][0] * (_mat._m[1][1] * _mat._m[2][2] - _mat._m[1][2] * _mat._m[2][1]) -
+        _mat._m[0][1] * (_mat._m[1][0] * _mat._m[2][2] - _mat._m[1][2] * _mat._m[2][0]) +
+        _mat._m[0][2] * (_mat._m[1][0] * _mat._m[2][1] - _mat._m[1][1] * _mat._m[2][0]);
+        return det < 0;
     }
 
-    static Transform translate(const Vector3f &delta) {
-        Float a[16] = {
-            1, 0, 0, delta.x,
-            0, 1, 0, delta.y,
-            0, 0, 1, delta.z,
-            0, 0, 0, 1,
-        };
-        Float inv[16] = {
-            1, 0, 0, -delta.x,
-            0, 1, 0, -delta.y,
-            0, 0, 1, -delta.z,
-            0, 0, 0, 1,
-        };
-        Matrix4x4 mat(a);
-        Matrix4x4 matInv(inv);
-        return Transform(mat, matInv);
-    }
+    static Transform translate(const Vector3f &delta);
 
-    static Transform scale(Float x, Float y, Float z) {
-        Float a[16] = {
-            x, 0, 0, 0,
-            0, y, 0, 0,
-            0, 0, z, 0,
-            0, 0, 0, 1,
-        };
-        Float inv[16] = {
-            1/x, 0,   0,   0,
-            0,   1/y, 0,   0,
-            0,   0,   1/z, 0,
-            0,   0,   0,   1,
-        };
-        Matrix4x4 mat(a);
-        Matrix4x4 matInv(inv);
-        return Transform(mat, matInv);
-    }
+    static Transform scale(Float x, Float y, Float z);
 
-    static Transform scale(Float s) {
-        return Transform::scale(s, s, s);
-    }
+    static Transform scale(Float s);
 
-    static Transform rotateX(Float theta, bool bRadian=false) {
-        theta = bRadian ? theta : degree2radian(theta);
-        Float sinTheta = std::sin(theta);
-        Float cosTheta = std::cos(theta);
-        Float a[16] = {
-            1, 0,        0,         0,
-            0, cosTheta, -sinTheta, 0,
-            0, sinTheta, cosTheta,  0,
-            0, 0,        0,         1
-        };
-        Matrix4x4 mat(a);
-        // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-        return Transform(mat, mat.getTransposeMat());
-    }
+    static Transform rotateX(Float theta, bool bRadian=false);
 
-    static Transform rotateY(Float theta, bool bRadian=false) {
-        theta = bRadian ? theta : degree2radian(theta);
-        Float sinTheta = std::sin(theta);
-        Float cosTheta = std::cos(theta);
-        Float a[16] = {
-            cosTheta,  0, sinTheta, 0,
-            0,         1, 0,        0,
-            -sinTheta, 0, cosTheta, 0,
-            0,         0, 0,        1
-        };
-        Matrix4x4 mat(a);
-        // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-        return Transform(mat, mat.getTransposeMat());
-    }
+    static Transform rotateY(Float theta, bool bRadian=false);
 
-    static Transform rotateZ(Float theta, bool bRadian=false) {
-        theta = bRadian ? theta : degree2radian(theta);
-        Float sinTheta = std::sin(theta);
-        Float cosTheta = std::cos(theta);
-        Float a[16] = {
-            cosTheta, -sinTheta, 0, 0,
-            sinTheta,  cosTheta, 0, 0,
-            0,         0,        1, 0,
-            0,         0,        0, 1
-        };
-        Matrix4x4 mat(a);
-        // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-        return Transform(mat, mat.getTransposeMat());
-    }
+    static Transform rotateZ(Float theta, bool bRadian=false);
 
-    static Transform rotate(Float theta, const Vector3f &axis, bool bRadian=false) {
-        Vector3f a = paladin::normalize(axis);
-        theta = bRadian ? theta : degree2radian(theta);
-        Float sinTheta = std::sin(theta);
-        Float cosTheta = std::cos(theta);
-        Matrix4x4 mat;
+    static Transform rotate(Float theta, const Vector3f &axis, bool bRadian=false);
 
-        mat._m[0][0] = a.x * a.x + (1 - a.x * a.x) * cosTheta;
-        mat._m[0][1] = a.x * a.y * (1 - cosTheta) - a.z * sinTheta;
-        mat._m[0][2] = a.x * a.z * (1 - cosTheta) + a.y * sinTheta;
-        mat._m[0][3] = 0;
+    static Transform lookAt(const Point3f &pos, const Point3f &look, const Vector3f &up);
 
-        mat._m[1][0] = a.x * a.y * (1 - cosTheta) + a.z * sinTheta;
-        mat._m[1][1] = a.y * a.y + (1 - a.y * a.y) * cosTheta;
-        mat._m[1][2] = a.y * a.z * (1 - cosTheta) - a.x * sinTheta;
-        mat._m[1][3] = 0;
+    static Transform orthographic(Float zNear, Float zFar);
 
-        mat._m[2][0] = a.x * a.z * (1 - cosTheta) - a.y * sinTheta;
-        mat._m[2][1] = a.y * a.z * (1 - cosTheta) + a.x * sinTheta;
-        mat._m[2][2] = a.z * a.z + (1 - a.z * a.z) * cosTheta;
-        mat._m[2][3] = 0;
-        // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-        return Transform(mat, mat.getTransposeMat());
-    }
-
-    static Transform lookAt(const Point3f &pos, const Point3f &look, const Vector3f &up) {
-        //基本思路，先用up向量与dir向量确定right向量
-        // right向量与dir向量互相垂直，由此可以确定新的up向量
-        // right，dir，newUp向量两两垂直，可以构成直角坐标系，也就是视图空间
-        Vector3f dir = normalize(look - pos);
-        Vector3f right = cross(normalize(up), dir);
-        if (right.lengthSquared() == 0) {
-            // dir与up向量共线不合法
-            return Transform();
-        }
-        right = normalize(right);
-        Vector3f newUp = cross(dir, right);
-        Float a[16] = {
-            right.x, newUp.x, dir.x, pos.x,
-            right.y, newUp.y, dir.y, pos.y,
-            right.z, newUp.z, dir.z, pos.z,
-            0,       0,       0,     1
-        };
-        Matrix4x4 cameraToWorld(a);
-        return Transform(cameraToWorld.getInverseMat(), cameraToWorld);
-    }
-
-    static Transform orthographic(Float zNear, Float zFar) {
-        Float a[16] = {
-            1, 0, 0,                  0,
-            0, 1, 0,                  0,
-            0, 0, 1 / (zFar - zNear), -zNear,
-            0, 0, 0,                  1,
-        };
-        return Transform(Matrix4x4(a));
-    }
-
-    static Transform perspective(Float fov, Float zNear, Float zFar, bool bRadian=false) {
-        //这里的透视矩阵没有aspect参数，暂时不知道具体原因，等待后续了解
-        fov = bRadian ? fov : degree2radian(fov);
-        Float invTanAng = 1 / std::tan(fov / 2);
-        Float a[16] = {
-            invTanAng, 0, 0,             0,
-            0, invTanAng, 0,             0,
-            0, 0, zFar / (zFar - zNear), -zFar * zNear / (zFar - zNear),
-            0, 0,         1,             0
-        };
-        Matrix4x4 mat(a);
-        return Transform(mat);
-    }
-
+    static Transform perspective(Float fov, Float zNear, Float zFar, bool bRadian=false);
 
 private:
 

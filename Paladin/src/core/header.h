@@ -46,6 +46,13 @@ class Medium;
 class Ray;
 
 class Transform;
+
+class Interaction;
+
+class AnimatedTransform;
+
+struct Quaternion;
+
 PALADIN_END
 
 #include "mathutil.h"
@@ -55,11 +62,5 @@ PALADIN_END
 #include "bounds.h"
 
 
-
-PALADIN_BEGIN
-
-
-
-PALADIN_END
 
 #endif /* header_h */

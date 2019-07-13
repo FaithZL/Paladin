@@ -13,7 +13,9 @@
 
 PALADIN_BEGIN
 
-
+class Interaction {
+    
+};
 
 
 PALADIN_END

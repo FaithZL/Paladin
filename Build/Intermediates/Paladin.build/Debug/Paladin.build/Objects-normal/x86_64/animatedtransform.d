@@ -1,6 +1,8 @@
 dependencies: \
-  /Users/satan_z/work/git/graphic/Paladin/Paladin/src/core/interaction.cpp \
-  /Users/satan_z/work/git/graphic/Paladin/Paladin/src/core/interaction.hpp \
+  /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/animatedtransform.cpp \
+  /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/animatedtransform.hpp \
+  /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/transform.hpp \
+  /Users/satan_z/work/git/graphic/Paladin/Paladin/src/core/paladin.hpp \
   /Users/satan_z/work/git/graphic/Paladin/Paladin/src/core/header.h \
   /Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools/stringprint.hpp \
   /Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools/macro.h \
