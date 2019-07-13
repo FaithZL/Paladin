@@ -116,6 +116,7 @@ private:
     };
 
     friend class Transform;
+    friend class Quaternion;
 };
 
 
@@ -241,7 +242,7 @@ public:
 
     inline bool swapsHandedness() const {
         /*
-         如果左上角3x3的矩阵行列式小于零，则说明这个变换是换了手的，至于为何是这样，暂时没有了解太深，搞完主线再说
+         如果左上角3x3的矩阵行列式小于零，则说明这个变换是换了手的，至于为何是这样，暂时没有了解太深，搞完主线再说todo
          */
         Float det =
         _mat._m[0][0] * (_mat._m[1][1] * _mat._m[2][2] - _mat._m[1][2] * _mat._m[2][1]) -
