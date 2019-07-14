@@ -114,7 +114,7 @@ inline Quaternion normalize(const Quaternion &q) {
     return q / std::sqrt(dot(q, q));
 }
 
-inline Quaternion slerp(Float t, const Quaternion &q1, const Quaternion &q2);
+Quaternion slerp(Float t, const Quaternion &q1, const Quaternion &q2);
 
 PALADIN_END
 

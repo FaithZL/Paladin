@@ -21,6 +21,8 @@
 
 #define DCHECK(args) assert(args)
 #define CHECK_NE(a, b) DCHECK((a) != (b))
+#define CHECK_LE(a, b) DCHECK((a) <= (b))
+#define CHECK_GE(a, b) DCHECK((a) >= (b))
 
 #ifdef FLOAT_AS_DOUBLE
     typedef double Float;

@@ -247,7 +247,19 @@ public:
 
     inline RayDifferential exec(const RayDifferential &rd) const;
 
-    Bounds3f exec(const Bounds3f &bounds) const;
+    Bounds3f exec(const Bounds3f &b) const {
+        //对包围盒的8个顶点都进行变换，然后合并，每个顶点都进行了变换，运算量大
+        //todo ，待优化
+        Bounds3f ret(exec(Point3f(b.pMin.x, b.pMin.y, b.pMin.z)));
+        ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMin.y, b.pMin.z)));
+        ret = unionSet(ret, exec(Point3f(b.pMin.x, b.pMax.y, b.pMin.z)));
+        ret = unionSet(ret, exec(Point3f(b.pMin.x, b.pMin.y, b.pMax.z)));
+        ret = unionSet(ret, exec(Point3f(b.pMin.x, b.pMax.y, b.pMax.z)));
+        ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMax.y, b.pMin.z)));
+        ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMin.y, b.pMax.z)));
+        ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMax.y, b.pMax.z)));
+        return ret;
+    }
 
     Transform operator * (const Transform &other) const;
 
