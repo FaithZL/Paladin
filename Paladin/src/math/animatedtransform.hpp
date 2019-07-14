@@ -96,12 +96,14 @@ void intervalFindZeros(Float c1, Float c2, Float c3, Float c4, Float c5,
 
 /*
 两个变换之间的过度，用于实现动态模糊
+进行变换的顺序为缩放旋转平移 M = TRS
 */
 class AnimatedTransform {
 
 public:
     AnimatedTransform(const Transform *startTransform, Float startTime,
                       const Transform *endTransform, Float endTime);
+    
    /*
     基本思路
     M = TRS
