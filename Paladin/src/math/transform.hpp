@@ -117,6 +117,7 @@ private:
 
     friend class Transform;
     friend class Quaternion;
+    friend class AnimatedTransform;
 };
 
 
