@@ -725,6 +725,7 @@ Bounds3f AnimatedTransform::MotionBounds(const Bounds3f &b) const {
         return _startTransform->exec(b);
     if (_hasRotation == false)
         // 如果没有旋转，只有平移缩放，可以用两个变换的并集
+        // 因为没有只有平移缩放的情况下 p'= f(t) * p，p'与t呈线性关系
         return unionSet(_startTransform->exec(b), _endTransform->exec(b));
     // 如果有旋转，则用最暴力的方式，计算8个顶点轨迹的包围盒，然后取并集
     Bounds3f bounds;
