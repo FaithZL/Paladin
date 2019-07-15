@@ -779,19 +779,22 @@ Transform AnimatedTransform::interpolate(Float time) const {
 Bounds3f AnimatedTransform::BoundPointMotion(const Point3f &p) const {
     if (!_actuallyAnimated)
         return Bounds3f(_startTransform->exec(p));
+    // todo 如果没有旋转变换，是不是可以用起止两个端点来确定包围盒？
     Bounds3f bounds(_startTransform->exec(p), _endTransform->exec(p));
     Float cosTheta = dot(_R[0], _R[1]);
     Float theta = std::acos(clamp(cosTheta, -1, 1));
+    
+    // 分xyz三个维度依次求出三个维度极值点
     for (int c = 0; c < 3; ++c) {
-        // Find any motion derivative zeros for the component _c_
         Float zeros[8];
         int nZeros = 0;
+        // 找到对应维度的所有极值点
         intervalFindZeros(c1[c].Eval(p), c2[c].Eval(p), c3[c].Eval(p),
                           c4[c].Eval(p), c5[c].Eval(p), theta, Interval(0., 1.),
                           zeros, &nZeros);
         CHECK_LE(nZeros, sizeof(zeros) / sizeof(zeros[0]));
         
-        // Expand bounding box for any motion derivative zeros found
+        // 扩展根据极值点扩展包围盒
         for (int i = 0; i < nZeros; ++i) {
             Point3f pz = exec(lerp(zeros[i], _startTime, _endTime), p);
             bounds = unionSet(bounds, pz);

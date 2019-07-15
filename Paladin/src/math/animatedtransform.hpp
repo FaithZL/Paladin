@@ -13,43 +13,62 @@
 #include "quaternion.hpp"
 PALADIN_BEGIN
 
-// Interval Definitions
+
 struct Interval {
-    // Interval Public Methods
     Interval(Float v) : low(v), high(v) {}
     Interval(Float v0, Float v1)
     : low(std::min(v0, v1)), high(std::max(v0, v1)) {}
+    
     Interval operator + (const Interval &i) const {
         return Interval(low + i.low, high + i.high);
     }
+    
     Interval operator - (const Interval &i) const {
         return Interval(low - i.high, high - i.low);
     }
+    
     Interval operator * (const Interval &i) const {
-        return Interval(std::min(std::min(low * i.low, high * i.low),
-                                 std::min(low * i.high, high * i.high)),
-                        std::max(std::max(low * i.low, high * i.low),
-                                 std::max(low * i.high, high * i.high)));
+        Float ll = low * i.low;
+        Float hl = high * i.low;
+        Float hh = high * i.high;
+        Float lh = low * i.high;
+        return Interval(std::min(std::min(ll, hl),
+                                 std::min(lh, hh)),
+                        std::max(std::max(ll, hl),
+                                 std::max(lh, hh)));
     }
+    
     Float low, high;
 };
 
 inline Interval sin(const Interval &i) {
     CHECK_GE(i.low, 0);
     CHECK_LE(i.high, 2.0001 * Pi);
-    Float sinLow = std::sin(i.low), sinHigh = std::sin(i.high);
-    if (sinLow > sinHigh) std::swap(sinLow, sinHigh);
-    if (i.low < Pi / 2 && i.high > Pi / 2) sinHigh = 1.;
-    if (i.low < (3.f / 2.f) * Pi && i.high > (3.f / 2.f) * Pi) sinLow = -1.;
+    Float sinLow = std::sin(i.low);
+    Float sinHigh = std::sin(i.high);
+    if (sinLow > sinHigh) {
+        std::swap(sinLow, sinHigh);
+    }
+    if (i.low < Pi / 2 && i.high > Pi / 2) {
+        sinHigh = 1.;
+    }
+    if (i.low < (3.f / 2.f) * Pi && i.high > (3.f / 2.f) * Pi) {
+        sinLow = -1.;
+    }
     return Interval(sinLow, sinHigh);
 }
 
 inline Interval cos(const Interval &i) {
     CHECK_GE(i.low, 0);
     CHECK_LE(i.high, 2.0001 * Pi);
-    Float cosLow = std::cos(i.low), cosHigh = std::cos(i.high);
-    if (cosLow > cosHigh) std::swap(cosLow, cosHigh);
-    if (i.low < Pi && i.high > Pi) cosLow = -1.;
+    Float cosLow = std::cos(i.low);
+    Float cosHigh = std::cos(i.high);
+    if (cosLow > cosHigh) {
+        std::swap(cosLow, cosHigh);
+    }
+    if (i.low < Pi && i.high > Pi) {
+        cosLow = -1.;
+    }
     return Interval(cosLow, cosHigh);
 }
 
@@ -159,11 +178,24 @@ public:
     RayDifferential exec(const RayDifferential &r) const;
     
     Point3f exec(Float time, const Point3f &p) const {
-        // todo
-        return p;
+        if (time <= _startTime || !_actuallyAnimated) {
+            return _startTransform->exec(p);
+        }
+        if (time >= _endTime) {
+            return _endTransform->exec(p);
+        }
+        return interpolate(time).exec(p);
     }
     
-    Vector3f exec(Float time, const Vector3f &v) const;
+    Vector3f exec(Float time, const Vector3f &v) const {
+        if (time <= _startTime || !_actuallyAnimated) {
+            return _startTransform->exec(v);
+        }
+        if (time >= _endTime) {
+            return _endTransform->exec(v);
+        }
+        return interpolate(time).exec(v);
+    }
     
     bool hasScale() const {
         return _startTransform->hasScale() || _endTransform->hasScale();

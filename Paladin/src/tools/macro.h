@@ -20,6 +20,7 @@
 #define PALADIN_END }
 
 #define DCHECK(args) assert(args)
+#define CHECK_OP(op, a, b) DCHECK((a) op (b))
 #define CHECK_NE(a, b) DCHECK((a) != (b))
 #define CHECK_LE(a, b) DCHECK((a) <= (b))
 #define CHECK_GE(a, b) DCHECK((a) >= (b))
