@@ -248,16 +248,50 @@ public:
     inline RayDifferential exec(const RayDifferential &rd) const;
 
     Bounds3f exec(const Bounds3f &b) const {
-        //对包围盒的8个顶点都进行变换，然后合并，每个顶点都进行了变换，运算量大
-        //todo ，待优化
-        Bounds3f ret(exec(Point3f(b.pMin.x, b.pMin.y, b.pMin.z)));
-        ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMin.y, b.pMin.z)));
-        ret = unionSet(ret, exec(Point3f(b.pMin.x, b.pMax.y, b.pMin.z)));
-        ret = unionSet(ret, exec(Point3f(b.pMin.x, b.pMin.y, b.pMax.z)));
-        ret = unionSet(ret, exec(Point3f(b.pMin.x, b.pMax.y, b.pMax.z)));
-        ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMax.y, b.pMin.z)));
-        ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMin.y, b.pMax.z)));
-        ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMax.y, b.pMax.z)));
+        // 对包围盒的8个顶点都进行变换，然后合并，每个顶点都进行了变换，运算量大
+       // Bounds3f ret(exec(Point3f(b.pMin.x, b.pMin.y, b.pMin.z)));
+       // ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMin.y, b.pMin.z)));
+       // ret = unionSet(ret, exec(Point3f(b.pMin.x, b.pMax.y, b.pMin.z)));
+       // ret = unionSet(ret, exec(Point3f(b.pMin.x, b.pMin.y, b.pMax.z)));
+       // ret = unionSet(ret, exec(Point3f(b.pMin.x, b.pMax.y, b.pMax.z)));
+       // ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMax.y, b.pMin.z)));
+       // ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMin.y, b.pMax.z)));
+       // ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMax.y, b.pMax.z)));
+
+        /*
+        优化思路如下：
+        假设矩阵第一行元素为为abcd, 原始点p(x,y,z)
+        则 x' = ax + by + cz + d
+        x'的最小值为
+        min(ax + by + cz + d) = min(ax) + min(by) + min(cz) + min(d)
+        x'的最大值为
+        max(ax + by + cz + d) = max(ax) + max(by) + max(cz) + max(d)
+        立方体xyz三个维度各自只有两个值，最大值跟最小值，组成了8个顶点(2^3 = 8)
+        所以ax只有这两个值，最大值跟最小值，以下代码中，遍历到较大值的时候加载max上，较小值加载min上
+        y跟z同理
+         */
+        const Matrix4x4& mat = _mat;
+        Point3f minPoint = Point3f(mat._m[0][3], mat._m[1][3], mat._m[2][3]);
+        Point3f maxPoint = minPoint;
+
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3;++j) {
+                Float e = mat._m[i][j];
+                float p1 = e * b.pMin[j];
+                float p2 = e * b.pMax[j];
+                if (p1 > p2) {
+                    minPoint[i] += p2;
+                    maxPoint[i] += p1;
+                }
+                else {
+                    minPoint[i] += p1;
+                    maxPoint[i] += p2;
+                }
+            }
+        }
+        Bounds3f ret;
+        ret.pMin = minPoint;
+        ret.pMax = maxPoint;
         return ret;
     }
 
