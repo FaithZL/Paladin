@@ -51,6 +51,12 @@ class Interaction;
 
 class AnimatedTransform;
 
+class Shape;
+
+class MemoryArena;
+
+class Primitive;
+
 class BSDF;
 
 class BSSRDF;

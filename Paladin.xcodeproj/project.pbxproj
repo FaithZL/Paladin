@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		F628C2CC22D6456700D981F5 /* interaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F628C2CA22D6456700D981F5 /* interaction.cpp */; };
+		F64AD4B222DE2B9800F8EDC3 /* medium.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F64AD4B022DE2B9800F8EDC3 /* medium.cpp */; };
+		F64AD4B522DE310E00F8EDC3 /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F64AD4B322DE310E00F8EDC3 /* memory.cpp */; };
 		F65A537A22D987EB009CE4DB /* animatedtransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F65A537822D987EB009CE4DB /* animatedtransform.cpp */; };
 		F66FC3C022C858040086A2F0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3BF22C858040086A2F0 /* main.cpp */; };
 		F66FC3CA22C8601C0086A2F0 /* integrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3C822C8601C0086A2F0 /* integrator.cpp */; };
@@ -58,6 +60,10 @@
 /* Begin PBXFileReference section */
 		F628C2CA22D6456700D981F5 /* interaction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interaction.cpp; sourceTree = "<group>"; };
 		F628C2CB22D6456700D981F5 /* interaction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = interaction.hpp; sourceTree = "<group>"; };
+		F64AD4B022DE2B9800F8EDC3 /* medium.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = medium.cpp; sourceTree = "<group>"; };
+		F64AD4B122DE2B9800F8EDC3 /* medium.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = medium.hpp; sourceTree = "<group>"; };
+		F64AD4B322DE310E00F8EDC3 /* memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = memory.cpp; sourceTree = "<group>"; };
+		F64AD4B422DE310E00F8EDC3 /* memory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = memory.hpp; sourceTree = "<group>"; };
 		F65A537822D987EB009CE4DB /* animatedtransform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = animatedtransform.cpp; sourceTree = "<group>"; };
 		F65A537922D987EB009CE4DB /* animatedtransform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = animatedtransform.hpp; sourceTree = "<group>"; };
 		F666921322D0D38500B50538 /* ray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ray.h; sourceTree = "<group>"; };
@@ -221,6 +227,8 @@
 				F66FC43C22C91BEC0086A2F0 /* header.h */,
 				F628C2CA22D6456700D981F5 /* interaction.cpp */,
 				F628C2CB22D6456700D981F5 /* interaction.hpp */,
+				F64AD4B022DE2B9800F8EDC3 /* medium.cpp */,
+				F64AD4B122DE2B9800F8EDC3 /* medium.hpp */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -352,6 +360,8 @@
 				F66FC43122C8C5E10086A2F0 /* fileio.hpp */,
 				F66FC43922C8FBCA0086A2F0 /* macro.h */,
 				F66FC43D22CA583B0086A2F0 /* stringprint.hpp */,
+				F64AD4B322DE310E00F8EDC3 /* memory.cpp */,
+				F64AD4B422DE310E00F8EDC3 /* memory.hpp */,
 			);
 			path = tools;
 			sourceTree = "<group>";
@@ -451,6 +461,8 @@
 				F66FC3F122C863A40086A2F0 /* constant.cpp in Sources */,
 				F66FC40722C86C7B0086A2F0 /* light.cpp in Sources */,
 				F66FC42F22C8C5BD0086A2F0 /* sampling.cpp in Sources */,
+				F64AD4B222DE2B9800F8EDC3 /* medium.cpp in Sources */,
+				F64AD4B522DE310E00F8EDC3 /* memory.cpp in Sources */,
 				F66FC40422C86C4E0086A2F0 /* texture.cpp in Sources */,
 				F66FC3E922C862DF0086A2F0 /* perspective.cpp in Sources */,
 				F66FC3F922C8662C0086A2F0 /* transform.cpp in Sources */,

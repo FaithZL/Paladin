@@ -10,6 +10,7 @@
 #define interaction_hpp
 
 #include "header.h"
+#include "medium.hpp"
 
 PALADIN_BEGIN
 
@@ -19,22 +20,23 @@ Interaction为光线与物体作用的点
 */
 struct Interaction {
     
-	Interaction(): _time(0) {}
+	Interaction(): time(0) {}
 
 	Interaction(const Point3f &p, const Normal3f &n, const Vector3f &pError,
                 const Vector3f &wo, Float time,
-                const MediumInterface &mediumInterface):
-	:_pos(p),
-	_time(time),
-	_pError(pError),
-	_wo(Normalize(wo)),
-	_normal(n),
-	_mediumInterface(mediumInterface) {
+                const MediumInterface &mediumInterface)
+	:pos(p),
+	time(time),
+	pError(pError),
+	wo(normalize(wo)),
+	normal(n),
+    mediumInterface(mediumInterface)
+    {
 
 	}
 
 	bool isSurfaceInteraction() const {
-		return !_normal.isZero();
+		return !normal.isZero();
 	}
 
 	bool IsMediumInteraction() const {
@@ -56,24 +58,30 @@ struct Interaction {
 		return Ray();
 	}
 
-    Point3f _pos;
+    Point3f pos;
 
-    Float _time;
+    Float time;
 
     // 位置误差
-    Vector3f _pError;
+    Vector3f pError;
 
     // 出射方向
-    Vector3f _wo;
+    Vector3f wo;
 
-    Normal3f _normal;
+    Normal3f normal;
 
-    MediumInterface _mediumInterface;
+    MediumInterface mediumInterface;
 };
 
 
 class SurfaceInteraction : public Interaction {
-
+    // 用于着色的参数结构
+    struct Shading {
+        Normal3f normal;
+        Vector3f dpdu, dpdv;
+        Normal3f dndu, dndv;
+    };
+    
 public:
 	SurfaceInteraction() {}
 	SurfaceInteraction(const Point3f &p, const Vector3f &pError,
@@ -87,23 +95,25 @@ public:
                             const Normal3f &dndu, const Normal3f &dndv,
                             bool orientationIsAuthoritative);
 	
+    // 表面坐标
+	Point2f uv;
+    // 空间点对表面坐标的一阶导数
+    Vector3f dpdu, dpdv;
+    // 法线对表面坐标的一阶导数
+    Normal3f dndu, dndv;
+    
+    const Shape *shape = nullptr;
+    Shading shading;
+    const Primitive * primitive = nullptr;
+    BSDF * bsdf = nullptr;
+    BSSRDF * bssrdf = nullptr;
+    
+    // 空间点对屏幕坐标之间的一阶导数
+    mutable Vector3f dpdx, dpdy;
+    // 表面坐标对屏幕坐标对屏幕坐标的一阶导数
+    mutable Float dudx = 0, dvdx = 0, dudy = 0, dvdy = 0;
 
-	Point2f _uv;
-    Vector3f _dpdu, _dpdv;
-    Normal3f _dndu, _dndv;
-    const Shape *_shape = nullptr;
-    struct {
-        Normal3f normal;
-        Vector3f dpdu, dpdv;
-        Normal3f dndu, dndv;
-    } _shading;
-    const Primitive * _primitive = nullptr;
-    BSDF * _bsdf = nullptr;
-    BSSRDF * _bssrdf = nullptr;
-    mutable Vector3f _dpdx, _dpdy;
-    mutable Float _dudx = 0, _dvdx = 0, _dudy = 0, _dvdy = 0;
-
-    int _faceIndex = 0;
+    int faceIndex = 0;
 };
 
 PALADIN_END

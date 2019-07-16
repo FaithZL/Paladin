@@ -761,7 +761,6 @@ Transform AnimatedTransform::interpolate(Float time) const {
 Bounds3f AnimatedTransform::BoundPointMotion(const Point3f &p) const {
     if (!_actuallyAnimated)
         return Bounds3f(_startTransform->exec(p));
-    // todo 如果没有旋转变换，是不是可以用起止两个端点来确定包围盒？
     Bounds3f bounds(_startTransform->exec(p), _endTransform->exec(p));
     Float cosTheta = dot(_R[0], _R[1]);
     Float theta = std::acos(clamp(cosTheta, -1, 1));

@@ -245,6 +245,7 @@ private:
             return kc + kx * p.x + ky * p.y + kz * p.z;
         }
     };
+    // xyz三个维度，所以要用数组
     DerivativeTerm c1[3], c2[3], c3[3], c4[3], c5[3];
 };
 

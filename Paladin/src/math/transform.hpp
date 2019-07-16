@@ -58,7 +58,7 @@ public:
     Float getDet() const;
 
     // 返回左上角3x3矩阵的行列式
-    inline det3x3() const {
+    inline Float det3x3() const {
         Float det =
             _m[0][0] * (_m[1][1] * _m[2][2] - _m[1][2] * _m[2][1]) -
             _m[0][1] * (_m[1][0] * _m[2][2] - _m[1][2] * _m[2][0]) +
