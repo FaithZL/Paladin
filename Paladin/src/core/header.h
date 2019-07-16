@@ -51,7 +51,15 @@ class Interaction;
 
 class AnimatedTransform;
 
+class BSDF;
+
+class BSSRDF;
+
 struct Quaternion;
+
+struct Interaction;
+
+struct MediumInterface;
 
 PALADIN_END
 

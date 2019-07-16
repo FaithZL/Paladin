@@ -131,9 +131,22 @@ public:
         if (i == 0) return x;
         return y;
     }
-    bool operator==(const Point2<T> &p) const { return x == p.x && y == p.y; }
-    bool operator!=(const Point2<T> &p) const { return x != p.x || y != p.y; }
-    bool hasNaNs() const { return isNaN(x) || isNaN(y); }
+
+    bool operator==(const Point2<T> &p) const { 
+        return x == p.x && y == p.y;
+    }
+
+    bool operator!=(const Point2<T> &p) const { 
+        return x != p.x || y != p.y;
+    }
+
+    bool hasNaNs() const { 
+        return isNaN(x) || isNaN(y); 
+    }
+
+    bool isZero() const {
+        return x == 0 and y == 0;
+    }
     
     // Point2 Public Data
     T x, y;
@@ -258,14 +271,26 @@ public:
         if (i == 1) return y;
         return z;
     }
+
     bool operator==(const Point3<T> &p) const {
         return x == p.x && y == p.y && z == p.z;
     }
+
     bool operator!=(const Point3<T> &p) const {
         return x != p.x || y != p.y || z != p.z;
     }
-    bool hasNaNs() const { return isNaN(x) || isNaN(y) || isNaN(z); }
-    Point3<T> operator-() const { return Point3<T>(-x, -y, -z); }
+
+    bool hasNaNs() const { 
+        return isNaN(x) || isNaN(y) || isNaN(z); 
+    }
+
+    bool isZero() const {
+        return x == 0 and y == 0 and z == 0;
+    }
+
+    Point3<T> operator-() const { 
+        return Point3<T>(-x, -y, -z); 
+    }
     
     // Point3 Public Data
     T x, y, z;
