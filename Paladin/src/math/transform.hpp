@@ -267,7 +267,7 @@ public:
         x'的最大值为
         max(ax + by + cz + d) = max(ax) + max(by) + max(cz) + max(d)
         立方体xyz三个维度各自只有两个值，最大值跟最小值，组成了8个顶点(2^3 = 8)
-        所以ax只有这两个值，最大值跟最小值，以下代码中，遍历到较大值的时候加载max上，较小值加载min上
+        所以ax只有这两个值，最大值跟最小值，以下代码中，遍历到较大值的时候加在max上，较小值加在min上
         y跟z同理
          */
         const Matrix4x4& mat = _mat;
@@ -282,8 +282,7 @@ public:
                 if (p1 > p2) {
                     minPoint[i] += p2;
                     maxPoint[i] += p1;
-                }
-                else {
+                } else {
                     minPoint[i] += p1;
                     maxPoint[i] += p2;
                 }
