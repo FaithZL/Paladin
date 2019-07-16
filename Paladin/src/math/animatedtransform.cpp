@@ -735,25 +735,7 @@ Bounds3f AnimatedTransform::MotionBounds(const Bounds3f &b) const {
 }
 
 void AnimatedTransform::interpolate(Float time, Transform *t) const {
-    if (time <= _startTime || !_actuallyAnimated) {
-        * t = * _startTransform;
-        return;
-    }
-    if (time >= _endTime) {
-        * t = * _endTransform;
-        return;
-    }
-    // 根据平移旋转缩放三个分量进行插值然后再组合
-    Float dt = (time - _startTime) / (_endTime - _startTime);
-    Vector3f T = (1 - dt) * _T[0] + dt * _T[1];
-    Quaternion R = slerp(dt, _R[0], _R[1]);
-    
-    Matrix4x4 S;
-    for (int i = 0; i < 3; ++i)
-        for (int j = 0; j < 3; ++j)
-            S._m[i][j] = lerp(dt, _S[0]._m[i][j], _S[1]._m[i][j]);
-    
-    *t = Transform::translate(T) * R.ToTransform() * Transform(S);
+    *t = interpolate(time);
 }
 
 Transform AnimatedTransform::interpolate(Float time) const {
