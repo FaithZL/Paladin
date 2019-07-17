@@ -24,10 +24,15 @@ T *AllocAligned(size_t count) {
 }
 
 void FreeAligned(void *);
+
+/*
+内存管理是一个很复杂的问题，但在离线渲染器中，内存管理的情况相对简单，大部分的内存申请
+主要集中在解析场景的阶段
+*/
 class
 #ifdef PALADIN_HAVE_ALIGNAS
 alignas(PALADIN_L1_CACHE_LINE_SIZE)
-#endif // PBRT_HAVE_ALIGNAS
+#endif // PALADIN_HAVE_ALIGNAS
 MemoryArena {
 public:
     // MemoryArena Public Methods
