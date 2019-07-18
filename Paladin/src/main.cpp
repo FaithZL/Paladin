@@ -18,6 +18,8 @@ int main(int argc, const char * argv[]) {
     Point3f p;
     Vector3f v;
     
+    std::cout << Log2(8) << std::endl;
+    
     return pld.run(argc, argv);
 }
 
