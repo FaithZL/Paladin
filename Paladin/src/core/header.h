@@ -17,6 +17,7 @@
 #include <iostream>
 #include <assert.h>
 #include <cmath>
+#include <stdlib.h>
 #include "stringprint.hpp"
 #include "macro.h"
 PALADIN_BEGIN
