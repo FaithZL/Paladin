@@ -11,6 +11,8 @@
 
 USING_PALADIN
 
+USING_STD
+
 int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << "Hello, paladin!\n";
@@ -18,7 +20,8 @@ int main(int argc, const char * argv[]) {
     Point3f p;
     Vector3f v;
     
-    std::cout << Log2(8) << std::endl;
+    std::cout << sizeof(uint8_t) << std::endl;
+    
     
     return pld.run(argc, argv);
 }

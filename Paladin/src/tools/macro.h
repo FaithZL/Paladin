@@ -33,8 +33,14 @@
 
 #define PALADIN_HAVE_POSIX_MEMALIGN
 
+#define PALADIN_HAVE_CONSTEXPR
+
 #ifndef PALADIN_L1_CACHE_LINE_SIZE
 #define PALADIN_L1_CACHE_LINE_SIZE 64
+#endif
+
+#ifndef PALADIN_HAVE_ALIGNOF
+#define PALADIN_HAVE_ALIGNOF 16
 #endif
 
 static CONSTEXPR Float MaxFloat = std::numeric_limits<Float>::max();

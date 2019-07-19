@@ -16,14 +16,14 @@
 PALADIN_BEGIN
 
 // Memory Declarations
-#define ARENA_ALLOC(arena, Type) new ((arena).Alloc(sizeof(Type))) Type
-void *AllocAligned(size_t size);
+#define ARENA_ALLOC(arena, Type) new ((arena).alloc(sizeof(Type))) Type
+void *allocAligned(size_t size);
 template <typename T>
-T *AllocAligned(size_t count) {
-    return (T *)AllocAligned(count * sizeof(T));
+T *allocAligned(size_t count) {
+    return (T *)allocAligned(count * sizeof(T));
 }
 
-void FreeAligned(void *);
+void freeAligned(void *);
 
 /*
 内存管理是一个很复杂的问题，但在离线渲染器中，内存管理的情况相对简单，大部分的内存申请
@@ -43,84 +43,122 @@ void FreeAligned(void *);
 */
 class alignas(PALADIN_L1_CACHE_LINE_SIZE) MemoryArena {
 public:
-    // MemoryArena Public Methods
-    MemoryArena(size_t blockSize = 262144) : blockSize(blockSize) {}
-    ~MemoryArena() {
-        FreeAligned(currentBlock);
-        for (auto &block : usedBlocks) FreeAligned(block.second);
-        for (auto &block : availableBlocks) FreeAligned(block.second);
+    /*
+    MemoryArena是内存池的一种，基于arena方式分配内存
+    整个对象大体分为三个部分
+        1.可用列表，用于储存可分配的内存块
+        2.已用列表，储存已经使用的内存块
+        3.当前内存块
+    */
+    MemoryArena(size_t blockSize = 262144) : _blockSize(blockSize) {
+
     }
-    void *Alloc(size_t nBytes) {
-        // Round up _nBytes_ to minimum machine alignment
-#if __GNUC__ == 4 && __GNUC_MINOR__ < 9
-        // gcc bug: max_align_t wasn't in std:: until 4.9.0
-        const int align = alignof(::max_align_t);
-#elif !defined(PALADIN_HAVE_ALIGNOF)
-        const int align = 16;
-#else
-        const int align = alignof(std::max_align_t);
-#endif
-#ifdef PALADIN_HAVE_CONSTEXPR
-        static_assert(IsPowerOf2(align), "Minimum alignment not a power of two");
-#endif
-        nBytes = (nBytes + align - 1) & ~(align - 1);
-        if (currentBlockPos + nBytes > currentAllocSize) {
-            // Add current block to _usedBlocks_ list
-            if (currentBlock) {
-                usedBlocks.push_back(
-                                     std::make_pair(currentAllocSize, currentBlock));
-                currentBlock = nullptr;
-                currentAllocSize = 0;
+
+    ~MemoryArena() {
+        freeAligned(_currentBlock);
+
+        for (auto &block : _usedBlocks) {
+            freeAligned(block.second);
+        }
+
+        for (auto &block : _availableBlocks) {
+            freeAligned(block.second);
+        }
+    }
+
+    /*
+    1.对齐内存块
+    2.
+     */
+    void * alloc(size_t nBytes) {
+
+        // 16位对齐，对齐之后nBytes为16的整数倍
+        nBytes = (nBytes + 15) & ~(15);
+        if (_currentBlockPos + nBytes > _currentAllocSize) {
+            // 如果已经分配的内存加上请求内存大于当前内存块大小
+            
+            if (_currentBlock) {
+                // 如果当前块不为空，则把当前块放入已用列表中
+                _usedBlocks.push_back(std::make_pair(_currentAllocSize, _currentBlock));
+                _currentBlock = nullptr;
+                _currentAllocSize = 0;
             }
             
-            // Get new block of memory for _MemoryArena_
-            
-            // Try to get memory block from _availableBlocks_
-            for (auto iter = availableBlocks.begin();
-                 iter != availableBlocks.end(); ++iter) {
+            // 在可用列表中查找是否有尺寸大于请求内存的块
+            for (auto iter = _availableBlocks.begin(); iter != _availableBlocks.end(); ++iter) {
                 if (iter->first >= nBytes) {
-                    currentAllocSize = iter->first;
-                    currentBlock = iter->second;
-                    availableBlocks.erase(iter);
+                    // 如果找到将当前块指针指向该块，并将该块从可用列表中移除
+                    _currentAllocSize = iter->first;
+                    _currentBlock = iter->second;
+                    _availableBlocks.erase(iter);
                     break;
                 }
             }
-            if (!currentBlock) {
-                currentAllocSize = std::max(nBytes, blockSize);
-                currentBlock = AllocAligned<uint8_t>(currentAllocSize);
+
+            if (!_currentBlock) {
+                // 如果没有找到符合标准的内存块，则申请一块内存
+                _currentAllocSize = std::max(nBytes, _blockSize);
+                _currentBlock = allocAligned<uint8_t>(_currentAllocSize);
             }
-            currentBlockPos = 0;
+            _currentBlockPos = 0;
         }
-        void *ret = currentBlock + currentBlockPos;
-        currentBlockPos += nBytes;
+        void * ret = _currentBlock + _currentBlockPos;
+        _currentBlockPos += nBytes;
         return ret;
     }
+
     template <typename T>
-    T *Alloc(size_t n = 1, bool runConstructor = true) {
-        T *ret = (T *)Alloc(n * sizeof(T));
-        if (runConstructor)
-            for (size_t i = 0; i < n; ++i) new (&ret[i]) T();
+    T * alloc(size_t n = 1, bool runConstructor = true) {
+        T *ret = (T *)alloc(n * sizeof(T));
+        if (runConstructor) {
+            for (size_t i = 0; i < n; ++i) {
+                new (&ret[i]) T();
+            }
+        }
         return ret;
     }
-    void Reset() {
-        currentBlockPos = 0;
-        availableBlocks.splice(availableBlocks.begin(), usedBlocks);
+
+    /*
+    重置当前内存池，将可用列表与已用列表合并，已用列表在可用列表之前
+     */
+    void reset() {
+        _currentBlockPos = 0;
+        _availableBlocks.splice(_availableBlocks.begin(), _usedBlocks);
     }
-    size_t TotalAllocated() const {
-        size_t total = currentAllocSize;
-        for (const auto &alloc : usedBlocks) total += alloc.first;
-        for (const auto &alloc : availableBlocks) total += alloc.first;
+
+    //获取已经分配的内存大小
+    size_t totalAllocated() const {
+        size_t total = _currentAllocSize;
+        for (const auto &alloc : _usedBlocks) {
+            total += alloc.first;
+        }
+        for (const auto &alloc : _availableBlocks) {
+            total += alloc.first;
+        }
         return total;
     }
     
 private:
     MemoryArena(const MemoryArena &) = delete;
     MemoryArena &operator=(const MemoryArena &) = delete;
-    // MemoryArena Private Data
-    const size_t blockSize;
-    size_t currentBlockPos = 0, currentAllocSize = 0;
-    uint8_t *currentBlock = nullptr;
-    std::list<std::pair<size_t, uint8_t *>> usedBlocks, availableBlocks;
+
+    // 默认内存块大小
+    const size_t _blockSize;
+
+    // 当前块已经分配的位置
+    size_t _currentBlockPos = 0;
+
+    // 当前块的尺寸
+    size_t _currentAllocSize = 0;
+
+    // 当前块指针
+    uint8_t *_currentBlock = nullptr;
+
+    // 已经使用的内存块列表
+    std::list<std::pair<size_t, uint8_t *>> _usedBlocks;
+
+    // 可使用的内存块列表
+    std::list<std::pair<size_t, uint8_t *>> _availableBlocks;
 };
 
 template <typename T, int logBlockSize>
@@ -130,7 +168,7 @@ public:
     BlockedArray(int uRes, int vRes, const T *d = nullptr)
     : uRes(uRes), vRes(vRes), uBlocks(RoundUp(uRes) >> logBlockSize) {
         int nAlloc = RoundUp(uRes) * RoundUp(vRes);
-        data = AllocAligned<T>(nAlloc);
+        data = allocAligned<T>(nAlloc);
         for (int i = 0; i < nAlloc; ++i) new (&data[i]) T();
         if (d)
             for (int v = 0; v < vRes; ++v)
@@ -144,7 +182,7 @@ public:
     int vSize() const { return vRes; }
     ~BlockedArray() {
         for (int i = 0; i < uRes * vRes; ++i) data[i].~T();
-        FreeAligned(data);
+        freeAligned(data);
     }
     int Block(int a) const { return a >> logBlockSize; }
     int Offset(int a) const { return (a & (BlockSize() - 1)); }

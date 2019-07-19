@@ -9,7 +9,10 @@
 #ifndef header_h
 #define header_h
 
-
+// 1字节     uint8_t
+// 2字节     uint16_t
+// 4字节     uint32_t
+// 8字节     uint64_t
 
 #include <iostream>
 #include <assert.h>
@@ -164,15 +167,18 @@ inline Float mod(Float a, Float b) {
     return std::fmod(a, b);
 }
 
+// std的log是以e为底数 log2(x) = lnx / ln2
 inline Float Log2(Float x) {
     const Float invLog2 = 1.442695040888963387004650940071;
     return std::log(x) * invLog2;
 }
 
 template <typename T>
-inline CONSTEXPR bool IsPowerOf2(T v) {
+inline CONSTEXPR bool isPowerOf2(T v) {
     return v && !(v & (v - 1));
 }
+
+#include "memory.hpp"
 
 #endif /* header_h */
 
