@@ -71,6 +71,9 @@ struct Interaction;
 
 struct MediumInterface;
 
+template<typename T, int logBlockSize = 2>
+class BlockedArray;
+
 PALADIN_END
 
 #include "mathutil.h"

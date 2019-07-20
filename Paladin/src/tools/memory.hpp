@@ -166,67 +166,127 @@ private:
 
 
 /*
-2D数组优化
+2D数组优化，重新排布内存结构
 二维数组在内存中的排布实际上是1维连续的
-假设二维数组两个维度分别为uv，当索引a[u][v]时，编译器实际上会转成一位数组的索引方式
+假设二维数组两个维度分别为uv，当索引a[u][v]时，编译器实际上会转成一维数组的索引方式
 idx = u * width + v
+
+基本思路，将一连串内存地址分隔为一个个块，块的尺寸为2的整数次幂，每个块逐行排布
+
+    0          1
+|_0_|_1_|  |_0_|_1_| 
+| 2 | 3 |  | 2 | 3 | 
+
+    2          3
+|_0_|_1_|  |_0_|_1_| 
+| 2 | 3 |  | 2 | 3 | 
+
  */
 template <typename T, int logBlockSize>
 class BlockedArray {
 public:
+    /*
+    分配一段连续的内存块，用uv参数重排二维数组的索引
+     */
     BlockedArray(int uRes, int vRes, const T *d = nullptr)
-    : uRes(uRes), vRes(vRes), uBlocks(RoundUp(uRes) >> logBlockSize) {
-        int nAlloc = RoundUp(uRes) * RoundUp(vRes);
-        data = allocAligned<T>(nAlloc);
-        for (int i = 0; i < nAlloc; ++i) new (&data[i]) T();
-        if (d)
-            for (int v = 0; v < vRes; ++v)
-                for (int u = 0; u < uRes; ++u) (*this)(u, v) = d[v * uRes + u];
+    : _uRes(uRes), 
+    _vRes(vRes), 
+    _uBlocks(roundUp(uRes) >> logBlockSize) {
+        // 先向上取到2^logBlockSize
+        int nAlloc = roundUp(_uRes) * roundUp(_vRes);
+        _data = allocAligned<T>(nAlloc);
+        for (int i = 0; i < nAlloc; ++i) {
+            new (&_data[i]) T();
+        }
+        if (d) {
+            for (int v = 0; v < _vRes; ++v){
+                for (int u = 0; u < _uRes; ++u) {
+                    (*this)(u, v) = d[v * _uRes + u];
+                }
+            }
+        }
     }
 
-    CONSTEXPR int BlockSize() const { 
+    /*
+     2^logBlockSize
+     */
+    CONSTEXPR int blockSize() const { 
         return 1 << logBlockSize; 
     }
 
-    int RoundUp(int x) const {
-        return (x + BlockSize() - 1) & ~(BlockSize() - 1);
+    /*
+    向上取到最近的2的logBlockSize次幂
+     */
+    int roundUp(int x) const {
+        return (x + blockSize() - 1) & ~(blockSize() - 1);
     }
 
-    int uSize() const { return uRes; }
+    int uSize() const { 
+        return _uRes; 
+    }
 
-    int vSize() const { return vRes; }
+    int vSize() const { 
+        return _vRes; 
+    }
 
     ~BlockedArray() {
-        for (int i = 0; i < uRes * vRes; ++i) data[i].~T();
-        freeAligned(data);
+        for (int i = 0; i < _uRes * _vRes; ++i) {
+            _data[i].~T();
+        }
+        freeAligned(_data);
     }
 
-    int Block(int a) const { return a >> logBlockSize; }
+    /*
+    返回a * 2^logBlockSize
+     */
+    int block(int a) const { 
+        return a >> logBlockSize; 
+    }
 
-    int Offset(int a) const { return (a & (BlockSize() - 1)); }
+    int offset(int a) const { 
+        return (a & (blockSize() - 1)); 
+    }
 
+    /*
+     通过uv参数找到指定内存的思路
+     1.先找到指定内存在哪个块中(bu,bv)
+     2.然后找到块中的偏移量 (ou, ov)
+     */
     T &operator()(int u, int v) {
-        int bu = Block(u), bv = Block(v);
-        int ou = Offset(u), ov = Offset(v);
-        int offset = BlockSize() * BlockSize() * (uBlocks * bv + bu);
-        offset += BlockSize() * ov + ou;
-        return data[offset];
+        int bu = block(u); 
+        int bv = block(v);
+        int ou = offset(u);
+        int ov = offset(v);
+        // 小block的偏移 
+        int offset = blockSize() * blockSize() * (_uBlocks * bv + bu);
+        // 小block内的偏移
+        offset += blockSize() * ov + ou;
+        return _data[offset];
     }
+
     const T &operator()(int u, int v) const {
-        int bu = Block(u), bv = Block(v);
-        int ou = Offset(u), ov = Offset(v);
-        int offset = BlockSize() * BlockSize() * (uBlocks * bv + bu);
-        offset += BlockSize() * ov + ou;
-        return data[offset];
+        int bu = block(u); 
+        int bv = block(v);
+        int ou = offset(u);
+        int ov = offset(v);
+        // 小block的偏移 
+        int offset = blockSize() * blockSize() * (_uBlocks * bv + bu);
+        // 小block内的偏移
+        offset += blockSize() * ov + ou;
+        return _data[offset];
     }
-    void GetLinearArray(T *a) const {
-        for (int v = 0; v < vRes; ++v)
-            for (int u = 0; u < uRes; ++u) *a++ = (*this)(u, v);
+
+    void getLinearArray(T *a) const {
+        for (int v = 0; v < _vRes; ++v) {
+            for (int u = 0; u < _uRes; ++u) {
+                *a++ = (*this)(u, v);
+            }
+        }
     }
     
 private:
-    T *data;
-    const int uRes, vRes, uBlocks;
+    T *_data;
+    const int _uRes, _vRes, _uBlocks;
 };
 
 PALADIN_END

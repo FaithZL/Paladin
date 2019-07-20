@@ -17,11 +17,13 @@ int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << "Hello, paladin!\n";
     Paladin pld;
-    Point3f p;
     Vector3f v;
     
-    std::cout << sizeof(uint8_t) << std::endl;
+//    std::cout << sizeof(uint8_t) << std::endl;
     
+//    auto p = BlockedArray<int, 6>(5,5);
+    
+    cout << (1<< 1);
     
     return pld.run(argc, argv);
 }
