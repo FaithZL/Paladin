@@ -21,9 +21,18 @@ int main(int argc, const char * argv[]) {
     
 //    std::cout << sizeof(uint8_t) << std::endl;
     
-//    auto p = BlockedArray<int, 6>(5,5);
+    auto p = BlockedArray<int>(5,5);
     
-    cout << (1<< 1);
+    for (int i = 0; i < 5; ++ i) {
+        cout << p.block(i) <<"  b" << i << endl;
+        cout << p.offset(i) <<"  o" << i <<endl;
+    }
+    
+    for (int i = 0 ; i < 8; ++ i) {
+        for (int j = 0; j < 8; ++j) {
+            cout <<"getTotalOffset("<<i<<","<<j<<") = " << p.getTotalOffset(i, j) << endl;
+        }
+    }
     
     return pld.run(argc, argv);
 }

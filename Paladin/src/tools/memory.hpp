@@ -175,15 +175,40 @@ BlockedArray有何好处？
 数组的默认内存结构，a[u][v]被访问之后，通常周围的内存块容易被访问到
 比如说a[u + 1][v]，a[u - 1][v]但这这两个元素通常跟a[u][v]不在一个cache line上，导致cache miss
 
-基本思路，将一连串内存地址分隔为一个个块，块的尺寸为2的整数次幂，每个块逐行排布
+为了优化目前这个缺点，基本思路，将一连串内存地址分隔为一个个块，块的尺寸为2的整数次幂，每个块逐行排布
 
-    0          1
-|_0_|_1_|  |_0_|_1_| 
-| 2 | 3 |  | 2 | 3 | 
+假设
+logBlockSize = 2 ，blockSize = 4 块大小为4
+_uRes = 8
+_vRes = 8
+_uBlocks = roundUp(_uRes) >> logBlockSize = 2
+nAlloc = roundUp(_uRes) * roundUp(_vRes) = 64 需要申请64个单位的内存空间
 
-    2          3
-|_0_|_1_|  |_0_|_1_| 
-| 2 | 3 |  | 2 | 3 | 
+基本思路是先找到(u,v)所在的块的索引，然后找到块内的索引
+
+如上参数，内存重排如下，上部分是连续地址0-63，下部分是经过下标(u,v)重排之后索引的地址，
+可以看到，经过重排之后，(0,0)与(1,0)是相邻的
+
+|---------0 block-------|---------1 block-------|---------2 block---------|----------3 block----------|
+
+|__0__|__1__|__2__|__3__|__4__|__5__|__6__|__7__|__8__|__9__|__10__|__11__|__12__|__13__|__14__|__15__| 
+|_0,0_|_1,0_|_2,0_|_3,0_|_0,1_|_1,1_|_2,1_|_3,1_|_0,2_|_1,2_|_2,2__|_3,2__|_0,3__|__1,3_|_2,3__|_3,3__| 
+
+|---------4 block-----------|---------5 block-----------|----------6 block----------|----------7 block----------|
+
+|__16__|__17__|__18__|__19__|__20__|__21__|__22__|__23__|__24__|__25__|__26__|__27__|__28__|__29__|__30__|__31__| 
+|_4,0__|_5,0__|_6,0__|_7,0__|_4,1__|_5,1__|_6,1__|_7,1__|_4,2__|_5,2__|_6,2__|_7,2__|_4,3__|_5,3__|_6,3__|_7,3__| 
+
+|---------8 block-----------|---------9 block-----------|---------10 block----------|---------11 block----------|
+
+|__32__|__33__|__34__|__35__|__36__|__37__|__38__|__39__|__40__|__41__|__42__|__43__|__44__|__45__|__46__|__47__| 
+|__0,4_|_1,4__|_2,4__|_3,4__|_0,5__|_1,5__|_2,5__|_3,5__|_0,6__|_1,6__|_2,6__|_3,6__|__0,7_|_1,7__|_2,7__|_3,7__| 
+
+|--------12 block-----------|--------13 block-----------|---------14 block----------|---------15 block----------|
+
+|__48__|__49__|__50__|__51__|__52__|__53__|__54__|__55__|__56__|__57__|__58__|__59__|__60__|__61__|__62__|__63__| 
+|__4,4_|_5,4__|_6,4__|_7,4__|_4,5__|_5,5__|_6,5__|_7,5__|_4,6__|_5,6__|_6,6__|_7,6__|_4,7__|_5,7__|_6,7__|_7,7__| 
+
 
  */
 template <typename T, int logBlockSize>
@@ -251,32 +276,30 @@ public:
         return (a & (blockSize() - 1)); 
     }
 
+    inline int getTotalOffset(int u, int v) {
+        int bu = block(u); 
+        int bv = block(v);
+        int ou = offset(u);
+        int ov = offset(v);
+        // 小block的偏移 
+        int offset = blockSize() * blockSize() * (_uBlocks * bv + bu);
+        // 小block内的偏移
+        offset += blockSize() * ov + ou;
+        return offset;
+    }
+
     /*
      通过uv参数找到指定内存的思路
      1.先找到指定内存在哪个块中(bu,bv)
      2.然后找到块中的偏移量 (ou, ov)
      */
     T &operator()(int u, int v) {
-        int bu = block(u); 
-        int bv = block(v);
-        int ou = offset(u);
-        int ov = offset(v);
-        // 小block的偏移 
-        int offset = blockSize() * blockSize() * (_uBlocks * bv + bu);
-        // 小block内的偏移
-        offset += blockSize() * ov + ou;
+        int offset = getTotalOffset(u, v);
         return _data[offset];
     }
 
     const T &operator()(int u, int v) const {
-        int bu = block(u); 
-        int bv = block(v);
-        int ou = offset(u);
-        int ov = offset(v);
-        // 小block的偏移 
-        int offset = blockSize() * blockSize() * (_uBlocks * bv + bu);
-        // 小block内的偏移
-        offset += blockSize() * ov + ou;
+        int offset = getTotalOffset(u, v);
         return _data[offset];
     }
 
@@ -296,3 +319,70 @@ private:
 PALADIN_END
 
 #endif /* memory_hpp */
+
+/*
+getTotalOffset(0,0) = 0
+getTotalOffset(0,1) = 4
+getTotalOffset(0,2) = 8
+getTotalOffset(0,3) = 12
+getTotalOffset(0,4) = 32
+getTotalOffset(0,5) = 36
+getTotalOffset(0,6) = 40
+getTotalOffset(0,7) = 44
+getTotalOffset(1,0) = 1
+getTotalOffset(1,1) = 5
+getTotalOffset(1,2) = 9
+getTotalOffset(1,3) = 13
+getTotalOffset(1,4) = 33
+getTotalOffset(1,5) = 37
+getTotalOffset(1,6) = 41
+getTotalOffset(1,7) = 45
+getTotalOffset(2,0) = 2
+getTotalOffset(2,1) = 6
+getTotalOffset(2,2) = 10
+getTotalOffset(2,3) = 14
+getTotalOffset(2,4) = 34
+getTotalOffset(2,5) = 38
+getTotalOffset(2,6) = 42
+getTotalOffset(2,7) = 46
+getTotalOffset(3,0) = 3
+getTotalOffset(3,1) = 7
+getTotalOffset(3,2) = 11
+getTotalOffset(3,3) = 15
+getTotalOffset(3,4) = 35
+getTotalOffset(3,5) = 39
+getTotalOffset(3,6) = 43
+getTotalOffset(3,7) = 47
+getTotalOffset(4,0) = 16
+getTotalOffset(4,1) = 20
+getTotalOffset(4,2) = 24
+getTotalOffset(4,3) = 28
+getTotalOffset(4,4) = 48
+getTotalOffset(4,5) = 52
+getTotalOffset(4,6) = 56
+getTotalOffset(4,7) = 60
+getTotalOffset(5,0) = 17
+getTotalOffset(5,1) = 21
+getTotalOffset(5,2) = 25
+getTotalOffset(5,3) = 29
+getTotalOffset(5,4) = 49
+getTotalOffset(5,5) = 53
+getTotalOffset(5,6) = 57
+getTotalOffset(5,7) = 61
+getTotalOffset(6,0) = 18
+getTotalOffset(6,1) = 22
+getTotalOffset(6,2) = 26
+getTotalOffset(6,3) = 30
+getTotalOffset(6,4) = 50
+getTotalOffset(6,5) = 54
+getTotalOffset(6,6) = 58
+getTotalOffset(6,7) = 62
+getTotalOffset(7,0) = 19
+getTotalOffset(7,1) = 23
+getTotalOffset(7,2) = 27
+getTotalOffset(7,3) = 31
+getTotalOffset(7,4) = 51
+getTotalOffset(7,5) = 55
+getTotalOffset(7,6) = 59
+getTotalOffset(7,7) = 63
+ */
