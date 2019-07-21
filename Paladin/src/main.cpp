@@ -21,13 +21,13 @@ int main(int argc, const char * argv[]) {
     
 //    std::cout << sizeof(uint8_t) << std::endl;
     
-    auto p = BlockedArray<int>(5,5);
+    auto p = BlockedArray<int>(8,8);
     
     for (int i = 0; i < 5; ++ i) {
         cout << p.block(i) <<"  b" << i << endl;
         cout << p.offset(i) <<"  o" << i <<endl;
     }
-    
+    p.getTotalOffset(6, 6);
     for (int i = 0 ; i < 8; ++ i) {
         for (int j = 0; j < 8; ++j) {
             cout <<"getTotalOffset("<<i<<","<<j<<") = " << p.getTotalOffset(i, j) << endl;
