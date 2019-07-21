@@ -69,6 +69,10 @@ struct Interaction {
 	}
 
     Ray SpawnRay(const Vector3f &d) const {
+        /*
+          由于计算出的交点可能会有误差，如果直接把pos作为光线的起点，可能取到的是shape内部的点
+          如果从内部的点发出光线，则可能产生自相交，为了避免这种情况，通常会对pos做一定的偏移
+         */
         Point3f o = offsetRayOrigin(pos, pError, normal, d);
         return Ray(o, d, Infinity, time, GetMedium(d));
     }

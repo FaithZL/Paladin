@@ -103,7 +103,6 @@ inline Point3f offsetRayOrigin(const Point3f &p, const Vector3f &pError,
     Vector3f offset = d * Vector3f(n);
     if (dot(w, n) < 0) offset = -offset;
     Point3f po = p + offset;
-    // Round offset point _po_ away from _p_
     for (int i = 0; i < 3; ++i) {
         if (offset[i] > 0)
             po[i] = nextFloatUp(po[i]);
