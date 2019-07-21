@@ -74,6 +74,8 @@ struct MediumInterface;
 template<typename T, int logBlockSize = 2>
 class BlockedArray;
 
+class EFloat;
+
 PALADIN_END
 
 inline uint32_t floatToBits(float f) {
