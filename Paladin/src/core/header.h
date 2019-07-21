@@ -76,12 +76,6 @@ class BlockedArray;
 
 PALADIN_END
 
-#include "mathutil.h"
-#include "vector.h"
-#include "point.h"
-#include "ray.h"
-#include "bounds.h"
-
 inline uint32_t floatToBits(float f) {
     uint32_t ui;
     memcpy(&ui, &f, sizeof(float));
@@ -182,7 +176,13 @@ inline CONSTEXPR bool isPowerOf2(T v) {
     return v && !(v & (v - 1));
 }
 
+#include "mathutil.h"
+#include "vector.h"
+#include "point.h"
+#include "ray.h"
+#include "bounds.h"
 #include "memory.hpp"
+#include "errfloat.h"
 
 #endif /* header_h */
 

@@ -12,4 +12,5 @@ dependencies: \
   /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/ray.h \
   /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/bounds.h \
   /Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools/memory.hpp \
+  /Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools/errfloat.h \
   /Users/satan_z/work/git/graphic/Paladin/Paladin/src/math/quaternion.hpp

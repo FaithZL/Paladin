@@ -94,6 +94,25 @@ public:
     Vector3f rxDirection, ryDirection;
 };
 
+inline Point3f offsetRayOrigin(const Point3f &p, const Vector3f &pError,
+                               const Normal3f &n, const Vector3f &w) {
+    Float d = dot(abs(n), pError);
+#ifdef FLOAT_AS_DOUBLE
+    d *= 1024.;
+#endif
+    Vector3f offset = d * Vector3f(n);
+    if (dot(w, n) < 0) offset = -offset;
+    Point3f po = p + offset;
+    // Round offset point _po_ away from _p_
+    for (int i = 0; i < 3; ++i) {
+        if (offset[i] > 0)
+            po[i] = nextFloatUp(po[i]);
+        else if (offset[i] < 0)
+            po[i] = nextFloatDown(po[i]);
+    }
+    return po;
+}
+
 PALADIN_END
 
 #endif /* ray_h */

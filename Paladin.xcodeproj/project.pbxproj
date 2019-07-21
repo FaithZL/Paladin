@@ -64,6 +64,7 @@
 		F64AD4B122DE2B9800F8EDC3 /* medium.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = medium.hpp; sourceTree = "<group>"; };
 		F64AD4B322DE310E00F8EDC3 /* memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = memory.cpp; sourceTree = "<group>"; };
 		F64AD4B422DE310E00F8EDC3 /* memory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = memory.hpp; sourceTree = "<group>"; };
+		F64C73F022E436F300731491 /* errfloat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = errfloat.h; sourceTree = "<group>"; };
 		F65A537822D987EB009CE4DB /* animatedtransform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = animatedtransform.cpp; sourceTree = "<group>"; };
 		F65A537922D987EB009CE4DB /* animatedtransform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = animatedtransform.hpp; sourceTree = "<group>"; };
 		F666921322D0D38500B50538 /* ray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ray.h; sourceTree = "<group>"; };
@@ -362,6 +363,7 @@
 				F66FC43D22CA583B0086A2F0 /* stringprint.hpp */,
 				F64AD4B322DE310E00F8EDC3 /* memory.cpp */,
 				F64AD4B422DE310E00F8EDC3 /* memory.hpp */,
+				F64C73F022E436F300731491 /* errfloat.h */,
 			);
 			path = tools;
 			sourceTree = "<group>";
