@@ -74,9 +74,17 @@ a ⊘ b = round(a / b) ∈ [(a/b)*(1-ε), (a/b)*(1+ε)]
 sqrt(a) = round(√a) ∈ [(√a)*(1-ε), (√a)*(1+ε)]
 其中 ε = 2^-24
 
+接下来介绍误差传递
+
+我们可以推导出如下表达式的误差范围
+
+a ⊕ b ⊕ c ⊕ d 
+= (((a⊕b)⊕c)⊕d)
+⊂ ((((a+b)(1 ± εm))+c)(1± εm)+d)(1± εm) 
+= (a + b)(1± εm)^3 + c(1± εm)^2 + d(1± εm)
+
  */
 
-//inline bool quadratic(EFloat A, EFloat B, EFloat C, EFloat *t0, EFloat *t1);
 
 class EFloat {
 public:
