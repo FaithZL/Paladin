@@ -13,7 +13,10 @@
 
 PALADIN_BEGIN
 
-// Ray Declarations
+/*
+ray类由一个点作为起点，一个单位向量作为方向
+tMax决定了ray的最远距离
+*/
 class Ray {
 public:
     // Ray Public Methods
@@ -30,8 +33,8 @@ public:
     medium(medium) {
         
     }
-    
-    Point3f operator()(Float t) const {
+    // 个人风格，不喜欢重载括号，改用at
+    Point3f at(Float t) const {
         return ori + dir * t;
     }
     
@@ -45,17 +48,20 @@ public:
         return os;
     }
     
-    // Ray Public Data
+    // 起点
     Point3f ori;
+    // 方向，单位向量
     Vector3f dir;
+    // 光线的最远距离
     mutable Float tMax;
+    // 发射的时间，用于做motion blur
     Float time;
+    // 光线所在的介质(水，空气，玻璃等)
     const Medium *medium;
 };
 
 class RayDifferential : public Ray {
 public:
-    // RayDifferential Public Methods
     RayDifferential() {
         hasDifferentials = false;
     }
@@ -88,12 +94,15 @@ public:
         return os;
     }
     
-    // RayDifferential Public Data
     bool hasDifferentials;
     Point3f rxOrigin, ryOrigin;
     Vector3f rxDirection, ryDirection;
 };
 
+/*
+由于计算出的交点可能会有误差，如果直接把pos作为光线的起点，可能取到的是shape内部的点
+如果从内部的点发出光线，则可能产生自相交，为了避免这种情况，通常会对pos做一定的偏移
+*/
 inline Point3f offsetRayOrigin(const Point3f &p, const Vector3f &pError,
                                const Normal3f &n, const Vector3f &w) {
     Float d = dot(abs(n), pError);
