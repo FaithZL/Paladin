@@ -9,6 +9,7 @@
 #ifndef macro_hpp
 #define macro_hpp
 
+#include "macro_config.h"
 #include "header.h"
 
 #define CONSTEXPR constexpr

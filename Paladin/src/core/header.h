@@ -19,10 +19,20 @@
 #include <cmath>
 #include <stdlib.h>
 
-//fix 'numeric_limits' is not a member of 'std' for linux
-#include <limits>
-//fix 'memcpy' was not declared in this scope for linux
-#include <string.h>
+#ifdef __GNUC__
+    //fix 'numeric_limits' is not a member of 'std' for linux
+    #include <limits>
+    //fix 'memcpy' was not declared in this scope for linux
+    #include <string.h>
+#endif
+
+#ifdef _MSC_VER
+    //fix 二进制“>>”: 没有找到接受“std::string”类型的右操作数
+    //的运算符(或没有可接受的转换) for vs2015
+    #include <string>
+    //fix “max”: 不是“std”的成员 for vs2015
+    #include <algorithm>
+#endif
 
 #include "stringprint.hpp"
 #include "macro.h"
