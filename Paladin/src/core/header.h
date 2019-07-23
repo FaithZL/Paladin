@@ -18,8 +18,16 @@
 #include <assert.h>
 #include <cmath>
 #include <stdlib.h>
+
+//fix 'numeric_limits' is not a member of 'std' for linux
+#include <limits>
+//fix 'memcpy' was not declared in this scope for linux
+#include <string.h>
+
 #include "stringprint.hpp"
 #include "macro.h"
+
+
 PALADIN_BEGIN
 template<typename T>
 class Point2;
