@@ -7,6 +7,17 @@ project (Paladin)
 # 使用C++11特性
 add_definitions (-std=c++11)
 
+# 加入一个配置头文件，用于处理外部定义宏
+configure_file (
+  "${PROJECT_SOURCE_DIR}/src/tools/macro_config.h.in"
+  "${PROJECT_SOURCE_DIR}/src/tools/macro_config.h"
+  )
+option (PALADIN_HAVE__ALIGNED_MALLOC "Use _aligned_malloc function" OFF)
+
+# 收集所有头文件源文件，存入ALL_FILES变量中
+file(GLOB_RECURSE ALL_FILES "*.h" "*.h??" "*.cpp")
+
+# 定义按目录结构归类的方法
 function(assign_source_group)
     foreach(_source IN ITEMS ${ARGN})
         if (IS_ABSOLUTE "${_source}")
@@ -20,13 +31,6 @@ function(assign_source_group)
     endforeach()
 endfunction(assign_source_group)
 
-function(foreach_source_group)
-    foreach(_source IN ITEMS ${ARGN})
-        assign_source_group(${_source})
-    endforeach()
-endfunction(foreach_source_group)
-
-file(GLOB_RECURSE ALL_FILES "*.h??" "*.cpp")
 
 foreach(_source IN ITEMS ${ALL_FILES})
     assign_source_group(${_source})
