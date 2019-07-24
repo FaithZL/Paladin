@@ -68,7 +68,7 @@ struct Interaction {
 		return !isSurfaceInteraction(); 
 	}
 
-    Ray SpawnRay(const Vector3f &d) const {
+    Ray spawnRay(const Vector3f &d) const {
         /*
           由于计算出的交点可能会有误差，如果直接把pos作为光线的起点，可能取到的是shape内部的点
           如果从内部的点发出光线，则可能产生自相交，为了避免这种情况，通常会对pos做一定的偏移
@@ -77,13 +77,13 @@ struct Interaction {
         return Ray(o, d, Infinity, time, GetMedium(d));
     }
     
-    Ray SpawnRayTo(const Point3f &p2) const {
+    Ray spawnRayTo(const Point3f &p2) const {
         Point3f origin = offsetRayOrigin(pos, pError, normal, p2 - pos);
         Vector3f d = p2 - pos;
         return Ray(origin, d, 1 - ShadowEpsilon, time, GetMedium(d));
     }
     
-    Ray SpawnRayTo(const Interaction &it) const {
+    Ray spawnRayTo(const Interaction &it) const {
         Point3f origin = offsetRayOrigin(pos, pError, normal, it.pos - pos);
         Point3f target = offsetRayOrigin(it.pos, it.pError, it.normal, origin - it.pos);
         Vector3f d = target - origin;

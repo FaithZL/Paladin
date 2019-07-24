@@ -38,9 +38,9 @@ public:
 							SurfaceInteraction * isect, 
 							bool testAlphaTexture = true) const = 0;
 
-	virtual bool IntersectP(const Ray &ray,
+	virtual bool intersectP(const Ray &ray,
                             bool testAlphaTexture = true) const {
-        return Intersect(ray, nullptr, nullptr, testAlphaTexture);
+        return intersect(ray, nullptr, nullptr, testAlphaTexture);
     }
 
     // 表面积
@@ -61,7 +61,7 @@ public:
 	 在场景的某处ref处，随机采样shape，返回interaction结构
 	 以及在ref处采样到对应shape表面点的概率密度函数
     */
-	virtual Interaction sample(const Interaction &ref, const Point2f &u, Float *pdf) const;
+//    virtual Interaction sample(const Interaction &ref, const Point2f &u, Float *pdf) const;
 
 	/*
 	在场景中某处ref处沿着wi方向采样图形上某点的概率密度函数
@@ -69,7 +69,7 @@ public:
 	*/
     virtual Float pdf(const Interaction &ref, const Vector3f &wi) const;
 
-    virtual Float SolidAngle(const Point3f &p, int nSamples = 512) const;
+//    virtual Float SolidAngle(const Point3f &p, int nSamples = 512) const;
 
 	const Transform * _objectToWorld;
 	const Transform * _worldToObject;
