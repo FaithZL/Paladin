@@ -14,20 +14,11 @@
 PALADIN_BEGIN
 
 /*
-假设ray与shape相交的点为(x,y,z)，则t与x满足如下关系
-t = (x − Ox)/dx
-
-t = (x ⊖ Ox) ⊗ (1 ⊘ dx) ⊂ ((x − Ox)/dx) * (1 ± ε)^3
-
- */
-
-/*
 ray类由一个点作为起点，一个单位向量作为方向
 tMax决定了ray的最远距离
 */
 class Ray {
 public:
-    // Ray Public Methods
     Ray() : tMax(Infinity), time(0.f), medium(nullptr) {
         
     }

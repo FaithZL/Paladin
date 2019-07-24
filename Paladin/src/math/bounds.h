@@ -196,6 +196,31 @@ inline Point3<T> &Bounds3<T>::operator[](int i) {
     return (i == 0) ? pMin : pMax;
 }
 
+/*
+以下是误差分析的说明，假设读这样已经明白ray与bound求交的算法。
+计算ray与bound的交点
+假设ray与bound某个平面相交的点为(x,y,z)，则t与x满足如下关系
+t = (x − Ox)/dx
+t = (x ⊖ Ox) ⊗ (1 ⊘ dx) 
+∈ ((x − Ox)/dx) * (1 ± ε)^3
+∈ ((x − Ox)/dx) * (1 ± γ3)
+嗯对，gamma(3)就是这么计算出来的
+
+以上方法求出的t值是有个误差的
+如果两个t值的范围不重合，则直接对比大小(当t0 > t1时，返回false)
+如果两个t值的范围重合（t1可能大于t0，也可以小于t0）则需要保守估计，返回结果为相交
+所以，要想让结果更加保守，就尽可能提高t1，降低t0
+    |<------------------t1-------------------->|
+                  |<------t0------>|
+________________________________________________________
+
+综合以上两种情况
+代码可以表示成：t1 * (1 + γ3)，t0 * (1 - γ3)
+但在实际编码过程中，可以单方面的增加t0，保持t1不变
+如果t0 t1相差较大，如下写法对返回结果无影响
+如果t0与t1非常接近
+则可以写成：t0 * (1 + 2 * γ3)，t1保持不变，如下代码所示
+ */
 template <typename T>
 inline bool Bounds3<T>::intersectP(const Ray &ray, Float *hitt0,
                                    Float *hitt1) const {
@@ -215,8 +240,12 @@ inline bool Bounds3<T>::intersectP(const Ray &ray, Float *hitt0,
         t1 = tFar < t1 ? tFar : t1;
         if (t0 > t1) return false;
     }
-    if (hitt0) *hitt0 = t0;
-    if (hitt1) *hitt1 = t1;
+    if (hitt0) {
+        *hitt0 = t0;
+    }
+    if (hitt1) {
+        *hitt1 = t1;
+    }
     return true;
 }
 
