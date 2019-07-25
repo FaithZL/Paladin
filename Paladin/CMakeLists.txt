@@ -12,7 +12,7 @@ configure_file (
   "${PROJECT_SOURCE_DIR}/src/tools/macro_config.h.in"
   "${PROJECT_SOURCE_DIR}/src/tools/macro_config.h"
   )
-option (PALADIN_HAVE__ALIGNED_MALLOC "Use _aligned_malloc function" OFF)
+option (PALADIN_HAVE_ALIGNED_MALLOC "Use _aligned_malloc function" OFF)
 
 # 收集所有头文件源文件，存入ALL_FILES变量中
 file(GLOB_RECURSE ALL_FILES "*.h" "*.h??" "*.cpp")

@@ -12,7 +12,7 @@ Windows:
 
 	操作步骤:
 	1、命令行进入项目根目录，cd build(没有则新建)
-	2、cmake ../Paladin -D PALADIN_HAVE__ALIGNED_MALLOC=true
+	2、cmake ../Paladin
 	3、在build中找到VS工程文件Paladin.sln打开
 
 Linux:

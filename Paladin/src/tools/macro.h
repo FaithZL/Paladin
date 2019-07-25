@@ -37,6 +37,10 @@
 
 #define PALADIN_HAVE_CONSTEXPR
 
+#if defined(_WIN32) || defined(_WIN64)
+    #define PALADIN_HAVE_ALIGNED_MALLOC
+#endif
+
 #ifndef PALADIN_L1_CACHE_LINE_SIZE
 #define PALADIN_L1_CACHE_LINE_SIZE 64
 #endif

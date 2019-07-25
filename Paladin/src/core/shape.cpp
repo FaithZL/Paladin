@@ -29,7 +29,7 @@ Bounds3f Shape::worldBound() const {
 /*
 由立体角定义 dw/dA = cosθ/r^2
 联合表达式 py(y) * dy/dx = px(x)
-可得 p(w) = r^2 / (A * cosθ)
+可得 p(w) = r^2 / (A * cosθ) * p(A)
  */
 //Interaction Shape::sample(const Interaction &ref, const Point2f &u, Float *pdf) const {
 //    Interaction intr = sample(u, pdf);
