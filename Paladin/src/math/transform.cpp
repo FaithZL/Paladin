@@ -337,6 +337,12 @@ Transform Transform::perspective(Float fov, Float zNear, Float zFar, bool bRadia
     return Transform(mat);
 }
 
+SurfaceInteraction Transform::exec(const SurfaceInteraction &isect) const {
+    SurfaceInteraction ret;
+    
+    return ret;
+}
+
 PALADIN_END
 
 

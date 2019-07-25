@@ -20,7 +20,7 @@ public:
     // Vector2 Public Methods
     Vector2() { x = y = 0; }
     Vector2(T xx, T yy) : x(xx), y(yy) { 
-        // DCHECK(!HasNaNs()); 
+         DCHECK(!hasNaNs());
     }
     bool hasNaNs() const { return isNaN(x) || isNaN(y); }
     explicit Vector2(const Point2<T> &p);
@@ -29,12 +29,12 @@ public:
     // The default versions of these are fine for release builds; for debug
     // we define them so that we can add the Assert checks.
     Vector2(const Vector2<T> &v) {
-        // DCHECK(!v.HasNaNs());
+        DCHECK(!v.hasNaNs());
         x = v.x;
         y = v.y;
     }
     Vector2<T> &operator=(const Vector2<T> &v) {
-        // DCHECK(!v.HasNaNs());
+        DCHECK(!v.hasNaNs());
         x = v.x;
         y = v.y;
         return *this;
@@ -42,12 +42,12 @@ public:
 #endif  // !NDEBUG
     
     Vector2<T> operator+(const Vector2<T> &v) const {
-        // DCHECK(!v.HasNaNs());
+        DCHECK(!v.hasNaNs());
         return Vector2(x + v.x, y + v.y);
     }
     
     Vector2<T> &operator+=(const Vector2<T> &v) {
-        // DCHECK(!v.HasNaNs());
+        DCHECK(!v.hasNaNs());
         x += v.x;
         y += v.y;
         return *this;
@@ -58,7 +58,7 @@ public:
     }
     
     Vector2<T> &operator-=(const Vector2<T> &v) {
-        // DCHECK(!v.HasNaNs());
+        DCHECK(!v.hasNaNs());
         x -= v.x;
         y -= v.y;
         return *this;
@@ -72,21 +72,21 @@ public:
     
     template <typename U>
     Vector2<T> &operator*=(U f) {
-       DCHECK(!isNaN(f));
+        DCHECK(!isNaN(f));
         x *= f;
         y *= f;
         return *this;
     }
     template <typename U>
     Vector2<T> operator/(U f) const {
-//        CHECK_NE(f, 0);
+        CHECK_NE(f, 0);
         Float inv = (Float)1 / f;
         return Vector2<T>(x * inv, y * inv);
     }
     
     template <typename U>
     Vector2<T> &operator/=(U f) {
-//        CHECK_NE(f, 0);
+        CHECK_NE(f, 0);
         Float inv = (Float)1 / f;
         x *= inv;
         y *= inv;
@@ -94,13 +94,13 @@ public:
     }
     Vector2<T> operator-() const { return Vector2<T>(-x, -y); }
     T operator[](int i) const {
-//       DCHECK(i >= 0 && i <= 1);
+        DCHECK(i >= 0 && i <= 1);
         if (i == 0) return x;
         return y;
     }
     
     T &operator[](int i) {
-//       DCHECK(i >= 0 && i <= 1);
+        DCHECK(i >= 0 && i <= 1);
         if (i == 0) return x;
         return y;
     }
@@ -277,7 +277,9 @@ public:
         return x == 0 && y == 0 && z == 0;
     }
 
-    explicit Vector3(const Normal3<T> &n);
+    explicit Vector3(const Normal3<T> &n):x(n.x),y(n.y),z(n.z) {
+        
+    }
     
     // Vector3 Public Data
     T x;

@@ -10,7 +10,7 @@
 #define transform_hpp
 
 #include "paladin.hpp"
-
+#include "interaction.hpp"
 PALADIN_BEGIN
 
 
@@ -208,10 +208,80 @@ public:
             return Point3<T>(xp, yp, zp) / wp;
     }
 
+    /*
+    计算误差的点的变换
+    x′ = ((m0,0 ⊗ x) ⊕ (m0,1 ⊗ y)) ⊕ ((m0,2 ⊗ z) ⊕ m0,3)
+        ⊂ m0,0x(1± εm)^3 + m0,1y(1 ± εm)^3 + m0,2z(1± εm)^3 + m0,3(1± εm)^2 
+        ⊂(m0,0x+m0,1y+m0,2z+m0,3) + γ3(±m0,0x± m0,1y± m0,2z± m0,3) 
+        ⊂(m0,0x+m0,1y+m0,2z+m0,3) ± γ3(|m0,0x|+|m0,1y|+|m0,2z|+|m0,3|).
+    可以看出误差为  γ3(|m0,0x|+|m0,1y|+|m0,2z|+|m0,3|)
+    y与z同理
+     */
     template <typename T>
-    inline Point3<T> exec(const Point3<T> &pt, Vector3<T> *absError) const;
+    inline Point3<T> exec(const Point3<T> &point, Vector3<T> *absError) const {
+        T x = point.x, y = point.y, z = point.z;
+        T xp = _mat._m[0][0] * x + _mat._m[0][1] * y + _mat._m[0][2] * z + _mat._m[0][3];
+        T yp = _mat._m[1][0] * x + _mat._m[1][1] * y + _mat._m[1][2] * z + _mat._m[1][3];
+        T zp = _mat._m[2][0] * x + _mat._m[2][1] * y + _mat._m[2][2] * z + _mat._m[2][3];
+        T wp = _mat._m[3][0] * x + _mat._m[3][1] * y + _mat._m[3][2] * z + _mat._m[3][3];
+        
+        T xErr = (std::abs(_mat._m[0][0] * x) + std::abs(_mat._m[0][1] * y) +
+                  std::abs(_mat._m[0][2] * z) + std::abs(_mat._m[0][3]));
+        T yErr = (std::abs(_mat._m[1][0] * x) + std::abs(_mat._m[1][1] * y) +
+                  std::abs(_mat._m[1][2] * z) + std::abs(_mat._m[1][3]));
+        T zErr = (std::abs(_mat._m[2][0] * x) + std::abs(_mat._m[2][1] * y) +
+                  std::abs(_mat._m[2][2] * z) + std::abs(_mat._m[2][3]));
+
+        *absError = gamma(3) * Vector3f(xErr, yErr, zErr);
+        
+        CHECK_NE(wp, 0);
+        if (wp == 1)
+            return Point3<T>(xp, yp, zp);
+        else
+            return Point3<T>(xp, yp, zp) / wp;
+    }
+    
+    /*
+    上面的转换假设转换点是准确的，但如果被转换的点本身就有误差，则表达式如下
+     x′ = (m0,0 ⊗ (x ± δx) ⊕ m0,1 ⊗ (y ± δy)) ⊕ (m0,2 ⊗ (z ± δz) ⊕ m0,3).
+     x′ = m0,0(x ± δx)(1± εm)^3 + m0,1(y ± δy)(1± εm)^3 + m0,2(z± δz)(1± εm)^3 + m0,3(1± εm)^2.
+     用γ替换高次项，得出
+     xError = (γ3 + 1)(|m0,0|δx + |m0,1|δy + |m0,2|δz) 
+            + γ3(|m0,0 * x| + |m0,1 * y| + |m0,2 * z| + |m0,3|).
+     */
     template <typename T>
-    inline Point3<T> exec(const Point3<T> &p, const Vector3<T> &pError, Vector3<T> *pTransError) const;
+    inline Point3<T> exec(const Point3<T> &point, const Vector3<T> &ptError, Vector3<T> *pTransError) const {
+        T x = point.x, y = point.y, z = point.z;
+        T xp = _mat._m[0][0] * x + _mat._m[0][1] * y + _mat._m[0][2] * z + _mat._m[0][3];
+        T yp = _mat._m[1][0] * x + _mat._m[1][1] * y + _mat._m[1][2] * z + _mat._m[1][3];
+        T zp = _mat._m[2][0] * x + _mat._m[2][1] * y + _mat._m[2][2] * z + _mat._m[2][3];
+        T wp = _mat._m[3][0] * x + _mat._m[3][1] * y + _mat._m[3][2] * z + _mat._m[3][3];
+
+        pTransError->x =
+            (gamma(3) + (T)1) *
+                (std::abs(_mat._m[0][0]) * ptError.x + std::abs(_mat._m[0][1]) * ptError.y +
+                 std::abs(_mat._m[0][2]) * ptError.z) +
+            gamma(3) * (std::abs(_mat._m[0][0] * x) + std::abs(_mat._m[0][1] * y) +
+                        std::abs(_mat._m[0][2] * z) + std::abs(_mat._m[0][3]));
+        pTransError->y =
+            (gamma(3) + (T)1) *
+                (std::abs(_mat._m[1][0]) * ptError.x + std::abs(_mat._m[1][1]) * ptError.y +
+                 std::abs(_mat._m[1][2]) * ptError.z) +
+            gamma(3) * (std::abs(_mat._m[1][0] * x) + std::abs(_mat._m[1][1] * y) +
+                        std::abs(_mat._m[1][2] * z) + std::abs(_mat._m[1][3]));
+        pTransError->z =
+            (gamma(3) + (T)1) *
+                (std::abs(_mat._m[2][0]) * ptError.x + std::abs(_mat._m[2][1]) * ptError.y +
+                 std::abs(_mat._m[2][2]) * ptError.z) +
+            gamma(3) * (std::abs(_mat._m[2][0] * x) + std::abs(_mat._m[2][1] * y) +
+                        std::abs(_mat._m[2][2] * z) + std::abs(_mat._m[2][3]));
+        CHECK_NE(wp, 0);
+        if (wp == 1.)
+            return Point3<T>(xp, yp, zp);
+        else
+            return Point3<T>(xp, yp, zp) / wp;
+        
+    }
 
     // 对向量执行转换
     template<typename T>
@@ -253,6 +323,7 @@ public:
                           const Vector3f &dErrorIn, Vector3f *oErrorOut,
                           Vector3f *dErrorOut) const;
 
+    SurfaceInteraction exec(const SurfaceInteraction &isect) const;
 
     inline RayDifferential exec(const RayDifferential &rd) const;
 
