@@ -48,7 +48,7 @@ Bounds3f Shape::worldBound() const {
 //
 //
 Float Shape::pdf(const Interaction &ref, const Vector3f &wi) const {
-//    Ray ray = ref.spawnRay(wi);
+   Ray ray = ref.spawnRay(wi);
 //    Float tHit;
 //    SurfaceInteraction isectLight;
     return 0;
