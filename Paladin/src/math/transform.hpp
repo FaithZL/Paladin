@@ -214,7 +214,10 @@ public:
         ⊂ m0,0x(1± εm)^3 + m0,1y(1 ± εm)^3 + m0,2z(1± εm)^3 + m0,3(1± εm)^2 
         ⊂(m0,0x+m0,1y+m0,2z+m0,3) + γ3(±m0,0x± m0,1y± m0,2z± m0,3) 
         ⊂(m0,0x+m0,1y+m0,2z+m0,3) ± γ3(|m0,0x|+|m0,1y|+|m0,2z|+|m0,3|).
-    可以看出误差为  γ3(|m0,0x|+|m0,1y|+|m0,2z|+|m0,3|)
+    以上表达式来自pbrt,自己经过亲自推导之后发现略有不同，如下
+    m0,0x(1± εm)^3 + m0,1y(1 ± εm)^3 + m0,2z(1± εm)^2 + m0,3(1± εm)^2 
+    更加保守的估计误差为  γ3(|m0,0x|+|m0,1y|+|m0,2z|+|m0,3|)
+    以上的推导过程均来自errfloat.h中的基本误差推导公式
     y与z同理
      */
     template <typename T>
@@ -283,7 +286,9 @@ public:
         
     }
 
-    // 对向量执行转换
+    /*
+     以下三个函数是对向量执行转换，误差分析方式跟点的转换类似，因此不再赘述
+    */
     template<typename T>
     inline Vector3<T> exec(const Vector3<T> &vec) const {
         T x = vec.x, y = vec.y, z = vec.z;
@@ -291,10 +296,53 @@ public:
                           _mat._m[1][0] * x + _mat._m[1][1] * y + _mat._m[1][2] * z,
                           _mat._m[2][0] * x + _mat._m[2][1] * y + _mat._m[2][2] * z);
     }
+
     template <typename T>
-    inline Vector3<T> exec(const Vector3<T> &v, Vector3<T> *vTransError) const;
+    inline Vector3<T> exec(const Vector3<T> &v, Vector3<T> *absError) const {
+        T x = v.x, y = v.y, z = v.z;
+        absError->x =
+            gamma(3) * (std::abs(_mat._m[0][0] * v.x) + std::abs(_mat._m[0][1] * v.y) +
+                        std::abs(_mat._m[0][2] * v.z));
+        absError->y =
+            gamma(3) * (std::abs(_mat._m[1][0] * v.x) + std::abs(_mat._m[1][1] * v.y) +
+                        std::abs(_mat._m[1][2] * v.z));
+        absError->z =
+            gamma(3) * (std::abs(_mat._m[2][0] * v.x) + std::abs(_mat._m[2][1] * v.y) +
+                        std::abs(_mat._m[2][2] * v.z));
+        return Vector3<T>(_mat._m[0][0] * x + _mat._m[0][1] * y + _mat._m[0][2] * z,
+                      _mat._m[1][0] * x + _mat._m[1][1] * y + _mat._m[1][2] * z,
+                      _mat._m[2][0] * x + _mat._m[2][1] * y + _mat._m[2][2] * z);
+    }
+
     template <typename T>
-    inline Vector3<T> exec(const Vector3<T> &v, const Vector3<T> &vError, Vector3<T> *vTransError) const;
+    inline Vector3<T> exec(const Vector3<T> &v, const Vector3<T> &vError, Vector3<T> *vTransError) const {
+        T x = v.x, y = v.y, z = v.z;
+
+        vTransError->x =
+            (gamma(3) + (T)1) *
+                (std::abs(_mat._m[0][0]) * vError.x + std::abs(_mat._m[0][1]) * vError.y +
+                 std::abs(_mat._m[0][2]) * vError.z) +
+            gamma(3) * (std::abs(_mat._m[0][0] * v.x) + std::abs(_mat._m[0][1] * v.y) +
+                        std::abs(_mat._m[0][2] * v.z));
+
+        vTransError->y =
+            (gamma(3) + (T)1) *
+                (std::abs(_mat._m[1][0]) * vError.x + std::abs(_mat._m[1][1]) * vError.y +
+                 std::abs(_mat._m[1][2]) * vError.z) +
+            gamma(3) * (std::abs(_mat._m[1][0] * v.x) + std::abs(_mat._m[1][1] * v.y) +
+                        std::abs(_mat._m[1][2] * v.z));
+
+        vTransError->z =
+            (gamma(3) + (T)1) *
+                (std::abs(_mat._m[2][0]) * vError.x + std::abs(_mat._m[2][1]) * vError.y +
+                 std::abs(_mat._m[2][2]) * vError.z) +
+            gamma(3) * (std::abs(_mat._m[2][0] * v.x) + std::abs(_mat._m[2][1] * v.y) +
+                        std::abs(_mat._m[2][2] * v.z));
+
+        return Vector3<T>(_mat._m[0][0] * x + _mat._m[0][1] * y + _mat._m[0][2] * z,
+                      _mat._m[1][0] * x + _mat._m[1][1] * y + _mat._m[1][2] * z,
+                      _mat._m[2][0] * x + _mat._m[2][1] * y + _mat._m[2][2] * z);
+    }
 
     template<typename T>
     inline Normal3<T> exec(const Normal3<T> &normal) {
@@ -315,8 +363,12 @@ public:
         return Normal3<T>(x, y, z);
     }
 
-    // 对射线执行转换
-    inline Ray exec(const Ray &ray) const;
+    inline Ray exec(const Ray &ray) const {
+        Vector3f oError;
+        Point3f ori = exec(ray.ori, &oError);
+        Vector3f dir = exec(ray.dir);
+    }
+
     inline Ray exec(const Ray &r, Vector3f *oError,
                           Vector3f *dError) const;
     inline Ray exec(const Ray &ray, const Vector3f &oErrorIn,

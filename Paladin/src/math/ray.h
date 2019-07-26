@@ -101,16 +101,29 @@ public:
 /*
  由于计算出的交点可能会有误差，如果直接把pos作为光线的起点，可能取到的是shape内部的点
  如果从内部的点发出光线，则可能产生自相交，为了避免这种情况，通常会对pos做一定的偏移
+ 基本思路：
+ 以计算出的交点p为中心，误差偏移量为包围盒的一个顶点，组成一个最小包围盒b
+ 过p点做垂直于法线的平面s，将s沿着法线方向推到于b相交的最远位置，此时s与法线相交的点p'作为光线起点
  */
 static Point3f offsetRayOrigin(const Point3f &p, const Vector3f &pError,
                                const Normal3f &n, const Vector3f &w) {
+    // 包围盒b的八个顶点为 (±δx , ±δy , ±δz)
+    // 假设平面s的函数为 ax+by+cz = d，法向量为(a,b,c)
+    // 将法线的绝对值带入方程，求得d的最大值(注意此处把pError当成一个点带入函数)
     Float d = dot(abs(n), pError);
 #ifdef FLOAT_AS_DOUBLE
+    // 暂时不理解pbrt为何要这样写
     d *= 1024.;
 #endif
     Vector3f offset = d * Vector3f(n);
-    if (dot(w, n) < 0) offset = -offset;
+
+    if (dot(w, n) < 0) {
+        // 判断发射方向是向内还是向外
+        offset = -offset;
+    } 
+
     Point3f po = p + offset;
+    // 计算更加保守的值
     for (int i = 0; i < 3; ++i) {
         if (offset[i] > 0)
             po[i] = nextFloatUp(po[i]);
