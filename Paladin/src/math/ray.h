@@ -110,6 +110,7 @@ static Point3f offsetRayOrigin(const Point3f &p, const Vector3f &pError,
     // 包围盒b的八个顶点为 (±δx , ±δy , ±δz)
     // 假设平面s的函数为 ax+by+cz = d，法向量为(a,b,c)
     // 将法线的绝对值带入方程，求得d的最大值(注意此处把pError当成一个点带入函数)
+    // 注意：这里的法向量是单位向量
     Float d = dot(abs(n), pError);
 #ifdef FLOAT_AS_DOUBLE
     // 暂时不理解pbrt为何要这样写

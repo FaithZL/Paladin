@@ -362,11 +362,28 @@ public:
         z = _matInv._m[0][2] * x + _matInv._m[1][2] * y + _matInv._m[2][2] * z;
         return Normal3<T>(x, y, z);
     }
-
+    
+    /*
+      为了避免一个从物体表面外部发出的光线经过变换之后由于浮点误差导致光线起点变为物体内部
+      要把光线的起点沿着光线方向偏移，偏移到误差范围以外，保证经过转换之后，起点依然在物体外部
+     */
     inline Ray exec(const Ray &ray) const {
+        // 用于记录光线起点由于变换引起的误差
         Vector3f oError;
         Point3f ori = exec(ray.ori, &oError);
         Vector3f dir = exec(ray.dir);
+        Float tMax = ray.tMax;
+        // todo 这里跟pbrt代码不同，先按照自己的理解写，有问题再说
+        Float length = dir.length();
+        if (length > 0) {
+            // 找到dir方向上在误差范围以外的点
+            // 公式参见ray.h offsetRayOrigin函数注释
+            Float d = dot(abs(dir), oError);
+            Float dt = d / length;
+            ori = ori + dt * dir;
+            tMax = tMax - dt;
+        }
+        return Ray(ori, dir, tMax, ray.time, ray.medium);
     }
 
     inline Ray exec(const Ray &r, Vector3f *oError,
