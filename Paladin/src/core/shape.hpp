@@ -31,6 +31,10 @@ public:
 
 	// 返回在世界坐标系中的包围盒
 	virtual Bounds3f worldBound() const;
+    
+    // 初始化函数，每个子类构造时都要调用
+    // 目前用于计算表面积
+    virtual void init() = 0;
 
 	// 求交函数，填充SurfaceInteraction数据
 	virtual bool intersect(const Ray &ray, 
@@ -68,6 +72,8 @@ public:
 	函数空间为向量空间
 	*/
     virtual Float pdf(const Interaction &ref, const Vector3f &wi) const;
+    
+    
 
 //    virtual Float SolidAngle(const Point3f &p, int nSamples = 512) const;
 
@@ -75,6 +81,10 @@ public:
 	const Transform * _worldToObject;
 	const bool _reverseOrientation;
 	const bool _transformSwapsHandedness;
+protected:
+    // 参照mitsuba渲染器，后续优化，保存表面积的倒数，每次图形有变化时更新数据
+    // 初始值为零，0为非法值
+    Float _invArea = 0;
 };
 
 PALADIN_END
