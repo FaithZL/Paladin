@@ -738,6 +738,26 @@ void AnimatedTransform::interpolate(Float time, Transform *t) const {
     *t = interpolate(time);
 }
 
+Ray AnimatedTransform::exec(const paladin::Ray &ray) const {
+    if (!_actuallyAnimated || ray.time <= _startTime) {
+        return _startTransform->exec(ray);
+    } else if (ray.time >= _endTime) {
+        return _endTransform->exec(ray);
+    }
+    Transform trsf = interpolate(ray.time);
+    return trsf.exec(ray);
+}
+
+RayDifferential AnimatedTransform::exec(const paladin::RayDifferential &rd) const {
+    if (!_actuallyAnimated || rd.time <= _startTime) {
+        return _startTransform->exec(rd);
+    } else if (rd.time >= _endTime) {
+        return _endTransform->exec(rd);
+    }
+    Transform trsf = interpolate(rd.time);
+    return trsf.exec(rd);
+}
+
 Transform AnimatedTransform::interpolate(Float time) const {
     if (time <= _startTime || !_actuallyAnimated) {
         return * _startTransform;
