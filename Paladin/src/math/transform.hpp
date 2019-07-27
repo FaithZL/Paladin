@@ -345,7 +345,7 @@ public:
     }
 
     template<typename T>
-    inline Normal3<T> exec(const Normal3<T> &normal) {
+    inline Normal3<T> exec(const Normal3<T> &normal) const {
         /*
         法线的转换跟向量的转换所有不同，如果有非比例缩放法线就不能套用向量的转换了
         法线转换矩阵与原转换矩阵的关系如下t为切线向量,S为法线转换矩阵，M为切线转换矩阵
@@ -381,20 +381,65 @@ public:
             Float d = dot(abs(dir), oError);
             Float dt = d / length;
             ori = ori + dt * dir;
+            // 由于起点前移，为了保持终点不变，tMax缩小
             tMax = tMax - dt;
         }
         return Ray(ori, dir, tMax, ray.time, ray.medium);
     }
-
-    inline Ray exec(const Ray &r, Vector3f *oError,
-                          Vector3f *dError) const;
+    
+    // 同上
+    inline Ray exec(const Ray &ray, Vector3f *oError, Vector3f *dError) const {
+        Point3f ori = exec(ray.ori, oError);
+        Vector3f dir = exec(ray.dir, dError);
+        Float tMax = ray.tMax;
+        
+        Float length = dir.length();
+        if (length > 0) {
+            Float d = dot(abs(dir), *oError);
+            Float dt = d / length;
+            ori = ori + dt * dir;
+            // todo 这里被pbrt注释掉了，暂时不知道为什么，我先保留着
+            tMax = tMax - dt;
+        }
+        return Ray(ori, dir, tMax, ray.time, ray.medium);
+    }
+    
+    // 同上
     inline Ray exec(const Ray &ray, const Vector3f &oErrorIn,
                           const Vector3f &dErrorIn, Vector3f *oErrorOut,
-                          Vector3f *dErrorOut) const;
-
+                    Vector3f *dErrorOut) const {
+        Point3f ori = exec(ray.ori, oErrorIn, oErrorOut);
+        Vector3f dir = exec(ray.dir, dErrorIn, dErrorOut);
+        Float tMax = ray.tMax;
+        
+        Float length = dir.length();
+        if (length > 0) {
+            Float d = dot(abs(dir), oErrorIn);
+            Float dt = d / length;
+            ori = ori + dt * dir;
+            // todo 这里被pbrt注释掉了，暂时不知道为什么，我先保留着
+            tMax = tMax - dt;
+        }
+        return Ray(ori, dir, tMax, ray.time, ray.medium);
+    }
+    
+    // 同上
+    inline RayDifferential exec(const RayDifferential &rd) const {
+        Ray ray = exec(Ray(rd));
+        RayDifferential ret(ray);
+        ret.hasDifferentials = rd.hasDifferentials;
+        ret.rxOrigin = exec(rd.rxOrigin);
+        ret.rxDirection = exec(rd.rxDirection);
+        ret.ryOrigin = exec(rd.ryOrigin);
+        ret.ryDirection = exec(rd.ryDirection);
+        return ret;
+    }
+    
+    /*
+    个人理解：todo
+    对于表面交点的transform变换，只有空间之间的转换，而没有模型变换
+     */
     SurfaceInteraction exec(const SurfaceInteraction &isect) const;
-
-    inline RayDifferential exec(const RayDifferential &rd) const;
 
     Bounds3f exec(const Bounds3f &b) const {
         // 对包围盒的8个顶点都进行变换，然后合并，每个顶点都进行了变换，运算量大

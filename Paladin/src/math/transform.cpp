@@ -181,6 +181,53 @@ Transform Transform::operator * (const Transform &other) const {
     return Transform(_mat * other._mat, other._matInv * _matInv);
 }
 
+SurfaceInteraction Transform::exec(const paladin::SurfaceInteraction &isect) const {
+    SurfaceInteraction ret;
+    
+    // 基类Interaction中的成员
+    ret.pos = exec(isect.pos, isect.pError, &ret.pError);
+    ret.normal = normalize(exec(isect.normal));
+    ret.time = isect.time;
+    ret.wo = normalize(exec(isect.wo));
+    ret.mediumInterface = isect.mediumInterface;
+    
+    // 不需要变换的对象
+    ret.bsdf = isect.bsdf;
+    ret.bssrdf = isect.bssrdf;
+    ret.primitive = isect.primitive;
+    ret.shape = isect.shape;
+    ret.faceIndex = isect.faceIndex;
+    ret.uv = isect.uv;
+    
+    // 法向量对uv参数的导数
+    ret.dndu = exec(isect.dndu);
+    ret.dndv = exec(isect.dndv);
+    // 表面上点对uv参数的导数
+    ret.dpdu = exec(isect.dpdu);
+    ret.dpdv = exec(isect.dpdv);
+    // 表面上的点对屏幕坐标的导数
+    ret.dpdx = exec(isect.dpdx);
+    ret.dpdy = exec(isect.dpdy);
+
+    // todo 这部分为何没有变换，有点不明白
+    // 个人认为，如果变换没有涉及到缩放，则可以直接赋值
+    ret.dudx = isect.dudx;
+    ret.dudy = isect.dudy;
+    ret.dvdx = isect.dvdx;
+    ret.dvdy = isect.dvdy;
+
+    // 着色参数变换
+    ret.shading.normal = normalize(exec(isect.shading.normal));
+    ret.shading.dpdu = exec(isect.shading.dpdu);
+    ret.shading.dpdv = exec(isect.shading.dpdv);
+    ret.shading.dndu = exec(isect.shading.dndu);
+    ret.shading.dndv = exec(isect.shading.dndv);
+    // 使着色法线和结构法线在表面同侧
+    ret.shading.normal = faceforward(ret.shading.normal, ret.normal);
+    
+    return ret;
+}
+
 Transform Transform::translate(const Vector3f &delta) {
     Float a[16] = {
         1, 0, 0, delta.x,
@@ -335,12 +382,6 @@ Transform Transform::perspective(Float fov, Float zNear, Float zFar, bool bRadia
     };
     Matrix4x4 mat(a);
     return Transform(mat);
-}
-
-SurfaceInteraction Transform::exec(const SurfaceInteraction &isect) const {
-    SurfaceInteraction ret;
-    
-    return ret;
 }
 
 PALADIN_END
