@@ -7,6 +7,7 @@
 //
 
 #include "sphere.hpp"
+#include "sampling.hpp"
 
 PALADIN_BEGIN
 
@@ -53,12 +54,14 @@ Float Sphere::pdfW(const paladin::Interaction &ref, const Vector3f &wi) const {
     // Point3f origin = ref.pos; todo
     Point3f origin = offsetRayOrigin(ref.pos, ref.pError, ref.normal, wi);
     if (distanceSquared(pCenter, origin) <= _radius * _radius) {
-        
+        // 如果在球内
         return Shape::pdfW(ref, wi);
     }
-    Float sinThetaMax2 = _radius * _radius / distanceSquared(ref.pos, pCenter);
     
-    return 0;
+    // 如果在球外，则进行圆锥采样
+    Float sinThetaMax2 = _radius * _radius / distanceSquared(ref.pos, pCenter);
+    Float cosThetaMax = std::sqrt(std::max((Float)0, 1 - sinThetaMax2));
+    return uniformConePdf(cosThetaMax);
 }
 
 PALADIN_END
