@@ -41,11 +41,11 @@ bool Sphere::intersectP(const Ray &ray, bool testAlphaTexture) const {
     return false;
 }
 
-Interaction Sphere::sample(const Point2f &u, Float *pdf) const {
+Interaction Sphere::sampleA(const Point2f &u, Float *pdf) const {
     return Interaction();
 }
 
-Interaction Sphere::sample(const paladin::Interaction &ref, const Point2f &u, Float *pdf) const {
+Interaction Sphere::sampleW(const paladin::Interaction &ref, const Point2f &u, Float *pdf) const {
     return Interaction();
 }
 

@@ -181,6 +181,17 @@ Transform Transform::operator * (const Transform &other) const {
     return Transform(_mat * other._mat, other._matInv * _matInv);
 }
 
+/*
+ 个人对于以下函数的理解
+ 在pbrt中，对于SurfaceInteraction的变换，应该都是不同坐标系之间的坐标转换
+ 而不是物体自身的平移旋转缩放的变换
+ 因为如果SurfaceInteraction发生了方向或位置变化，那么du/dx这几个为标量的偏导数
+ 必定会发生变化
+
+ 延伸出以下总结
+ 各个坐标系之前的转换通常仅仅是平移跟旋转的组合
+ 所以经过变换后的向量，模长是不变的
+*/
 SurfaceInteraction Transform::exec(const paladin::SurfaceInteraction &isect) const {
     SurfaceInteraction ret;
     
@@ -210,7 +221,8 @@ SurfaceInteraction Transform::exec(const paladin::SurfaceInteraction &isect) con
     ret.dpdy = exec(isect.dpdy);
 
     // todo 这部分为何没有变换，有点不明白
-    // 个人认为，如果变换没有涉及到缩放，则可以直接赋值
+    // 个人理解，对于SurfaceInteraction的变换只能是不同坐标系之间的坐标转换
+    // 而不是物体的平移旋转缩放，所以以下偏导数不会变化
     ret.dudx = isect.dudx;
     ret.dudy = isect.dudy;
     ret.dvdx = isect.dvdx;

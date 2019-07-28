@@ -26,6 +26,7 @@ Shape::Shape(const Transform *objectToWorld, const Transform *worldToObject,
 Bounds3f Shape::worldBound() const {
     return _objectToWorld->exec(objectBound());
 }
+
 /*
 由立体角定义 dw/dA = cosθ/r^2
 联合表达式 py(y) * dy/dx = px(x)
@@ -33,8 +34,8 @@ Bounds3f Shape::worldBound() const {
  p(A) = 1/A
  p(w) = r^2 / (A cosθ)
  */
-Interaction Shape::sample(const Interaction &ref, const Point2f &u, Float *pdf) const {
-    Interaction intr = sample(u, pdf);
+Interaction Shape::sampleW(const Interaction &ref, const Point2f &u, Float *pdf) const {
+    Interaction intr = sampleA(u, pdf);
     Vector3f wi = intr.pos - ref.pos;
     if (wi.lengthSquared() == 0) {
         *pdf = 0.f;

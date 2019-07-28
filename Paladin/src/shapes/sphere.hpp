@@ -58,9 +58,9 @@ public:
     
     Float area() const;
     
-    Interaction sample(const Point2f &u, Float *pdf) const;
+    Interaction sampleA(const Point2f &u, Float *pdf) const;
     
-    Interaction sample(const Interaction &ref, const Point2f &u, Float *pdf) const;
+    Interaction sampleW(const Interaction &ref, const Point2f &u, Float *pdf) const;
     
     Float pdfW(const Interaction &ref, const Vector3f &wi) const;
     
