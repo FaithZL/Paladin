@@ -24,9 +24,11 @@ PALADIN_BEGIN
  形状请自行脑补，完全ojbk
 
  球的参数方程可以表示为
- x = sinθcosφ
- y = sinθsinφ
- z = cosθ
+ x = rsinθcosφ
+ y = rsinθsinφ
+ z = rcosθ
+ 
+ x^2 + y^2 +z^2 − r^2 =0.
  */
 class Sphere : public Shape {
     

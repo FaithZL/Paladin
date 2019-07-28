@@ -392,7 +392,7 @@ public:
     }
 #endif  // !NDEBUG
     explicit Normal3<T>(const Vector3<T> &v) : x(v.x), y(v.y), z(v.z) {
-        DCHECK(!v.HasNaNs());
+        DCHECK(!v.hasNaNs());
     }
     bool operator==(const Normal3<T> &n) const {
         return x == n.x && y == n.y && z == n.z;
