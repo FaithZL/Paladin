@@ -114,11 +114,25 @@ Float uniformConePdf(Float cosThetaMax);
 
 /*
  均匀采样一个圆锥，默认圆锥的中心轴为(0,0,1)，圆锥顶点为坐标原点
+ 可以认为圆锥采样是sphere，hemisphere采样的一般化
+ 当圆锥采样的θmax为π/2时，圆锥采样为hemisphere采样
+ 当圆锥采样的θmax为π时，圆锥采样为sphere采样
+
  p(θ) = sinθ/(1 - cosθmax)
 
  积分计算得到累积分布函数
  P(θ) = (cosθ - 1)/(cosθmax - 1)
- P(φ) = 1/2π
+ P(φ) = φ/2π
+ 
+ a,b为[0,1]的均匀分布随机数
+ cosθ = (1 - a) + a * cosθmax
+ φ = 2πb
+
+ sinθ = sqrt(1 - cosθ * cosθ)
+
+ x = sinθcosφ
+ y = sinθsinφ
+ z = cosθ
  */
 Vector3f uniformSampleCone(const Point2f &u, Float cosThetaMax);
 
