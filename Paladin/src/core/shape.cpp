@@ -49,11 +49,12 @@ Interaction Shape::sample(const Interaction &ref, const Point2f &u, Float *pdf) 
 }
 
 /*
+  p(w) = r^2 / cosθ * p(A)
   p(w) = r^2 / (A cosθ)
   这个接口通常是shape作为光源时，场景中某个interaction对光源采样的概率密度函数
   函数空间为向量空间
  */
-Float Shape::pdf(const Interaction &ref, const Vector3f &wi) const {
+Float Shape::pdfW(const Interaction &ref, const Vector3f &wi) const {
    Ray ray = ref.spawnRay(wi);
     Float tHit;
     SurfaceInteraction isect;

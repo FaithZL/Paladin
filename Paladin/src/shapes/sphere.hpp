@@ -62,7 +62,7 @@ public:
     
     Interaction sample(const Interaction &ref, const Point2f &u, Float *pdf) const;
     
-    Float pdf(const Interaction &ref, const Vector3f &wi) const;
+    Float pdfW(const Interaction &ref, const Vector3f &wi) const;
     
 private:
     

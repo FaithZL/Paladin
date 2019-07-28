@@ -48,8 +48,15 @@ Interaction Sphere::sample(const paladin::Interaction &ref, const Point2f &u, Fl
     return Interaction();
 }
 
-Float Sphere::pdf(const paladin::Interaction &ref, const Vector3f &wi) const {
+Float Sphere::pdfW(const paladin::Interaction &ref, const Vector3f &wi) const {
     Point3f pCenter = _objectToWorld->exec(Point3f(0,0,0));
+    // Point3f origin = ref.pos; todo
+    Point3f origin = offsetRayOrigin(ref.pos, ref.pError, ref.normal, wi);
+    if (distanceSquared(pCenter, origin) <= _radius * _radius) {
+        
+        return Shape::pdfW(ref, wi);
+    }
+    Float sinThetaMax2 = _radius * _radius / distanceSquared(ref.pos, pCenter);
     
     return 0;
 }
