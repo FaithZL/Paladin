@@ -79,10 +79,10 @@ public:
 
 //    virtual Float SolidAngle(const Point3f &p, int nSamples = 512) const;
 
-	const Transform * _objectToWorld;
-	const Transform * _worldToObject;
-	const bool _reverseOrientation;
-	const bool _transformSwapsHandedness;
+	const Transform * objectToWorld;
+	const Transform * worldToObject;
+	const bool reverseOrientation;
+	const bool transformSwapsHandedness;
 protected:
     // 参照mitsuba渲染器，后续优化，保存表面积的倒数，每次图形有变化时更新数据
     // 初始值为零，0为非法值

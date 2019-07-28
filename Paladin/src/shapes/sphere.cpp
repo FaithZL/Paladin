@@ -44,8 +44,8 @@ bool Sphere::intersectP(const Ray &ray, bool testAlphaTexture) const {
 Interaction Sphere::sampleA(const Point2f &u, Float *pdf) const {
     Point3f pObj = Point3f(0, 0, 0) + _radius * uniformSampleSphere(u);
     Interaction ret;
-    ret.normal = normalize(_objectToWorld->exec(Normal3f(pObj.x, pObj.y, pObj.z)));
-    if (_reverseOrientation) {
+    ret.normal = normalize(objectToWorld->exec(Normal3f(pObj.x, pObj.y, pObj.z)));
+    if (reverseOrientation) {
         ret.normal *= -1;
     }
     // 由于uniformSampleSphere函数使用了cos与sin函数
@@ -60,7 +60,7 @@ Interaction Sphere::sampleA(const Point2f &u, Float *pdf) const {
      y与z同理
     */
     Vector3f pObjError = gamma(5) * abs(Vector3f(pObj));
-    ret.pos = _objectToWorld->exec(pObj, pObjError, &ret.pError);
+    ret.pos = objectToWorld->exec(pObj, pObjError, &ret.pError);
     *pdf = pdfA(ret);
     return ret;
 }
@@ -70,7 +70,7 @@ Interaction Sphere::sampleW(const paladin::Interaction &ref, const Point2f &u, F
 }
 
 Float Sphere::pdfW(const paladin::Interaction &ref, const Vector3f &wi) const {
-    Point3f pCenter = _objectToWorld->exec(Point3f(0,0,0));
+    Point3f pCenter = objectToWorld->exec(Point3f(0,0,0));
     // Point3f origin = ref.pos; todo
     Point3f origin = offsetRayOrigin(ref.pos, ref.pError, ref.normal, wi);
     if (distanceSquared(pCenter, origin) <= _radius * _radius) {
