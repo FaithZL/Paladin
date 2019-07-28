@@ -42,7 +42,27 @@ bool Sphere::intersectP(const Ray &ray, bool testAlphaTexture) const {
 }
 
 Interaction Sphere::sampleA(const Point2f &u, Float *pdf) const {
-    return Interaction();
+    Point3f pObj = Point3f(0, 0, 0) + _radius * uniformSampleSphere(u);
+    Interaction ret;
+    ret.normal = normalize(_objectToWorld->exec(Normal3f(pObj.x, pObj.y, pObj.z)));
+    if (_reverseOrientation) {
+        ret.normal *= -1;
+    }
+    // 由于uniformSampleSphere函数使用了cos与sin函数
+    // pObj的误差取决于这些函数的精度，所以pObj需要被重新投影到球面上
+    pObj *= _radius / distance(pObj, Point3f(0, 0, 0));
+    /*
+     x' = x * (r / sqrt(x^2 + y^2 + z^2))
+     x' = x ⊗ r ⊘ sqrt((x ⊗ x) ⊕ (y ⊗ y) ⊕ (z ⊗ z))
+     ∈ xr(1± ε)^2 / sqrt(x^2*(1 ± ε)^3 + y^2*(1 ± ε)^3 + z^2*(1 ± ε)^2)(1 ± ε)
+     ∈ xr(1± γ2) / sqrt(x^2*(1 ± γ3) + y^2*(1 ± γ3) + z^2*(1 ± γ2))(1 ± γ)
+     ∈ (xr / sqrt(x2 + y2 + z2)) * (1 ± γ5)
+     y与z同理
+    */
+    Vector3f pObjError = gamma(5) * abs(Vector3f(pObj));
+    ret.pos = _objectToWorld->exec(pObj, pObjError, &ret.pError);
+    *pdf = pdfA(ret);
+    return ret;
 }
 
 Interaction Sphere::sampleW(const paladin::Interaction &ref, const Point2f &u, Float *pdf) const {

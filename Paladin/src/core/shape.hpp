@@ -51,7 +51,7 @@ public:
     virtual Float area() const = 0;
 
     /*
-	在图形表面采样一个点，返回该点的基于面积的概率密度函数值，与interaction结构
+	在图形表面采样一个点，返回该点的基于面积的概率密度函数值，与世界坐标中interaction结构
 	u为表面参数坐标，u ∈ [0, 1]^2，通常为外部通过某种算法生成，最简单就是随机数
 	基于面积的采样
     */
@@ -63,7 +63,7 @@ public:
     }
 
     /*
-	 在场景的某处ref处，随机采样shape，返回interaction结构
+	 在场景的某处ref处，随机采样shape，返回世界坐标中interaction结构
 	 以及在ref处采样到对应shape表面点的概率密度函数
 	 基于立体角的采样
     */
