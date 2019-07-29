@@ -29,6 +29,10 @@ PALADIN_BEGIN
  z = rcosθ
  
  x^2 + y^2 +z^2 − r^2 =0.
+
+ 表面参数uv为
+ φ = u * φmax
+ θ = θmin + v * (θmax - θmin)
  */
 class Sphere : public Shape {
     
@@ -42,11 +46,11 @@ public:
            Float phiMax):
     Shape(objectToWorld, worldToObject, reverseOrientation),
     _radius(radius),
-    _zMax(clamp(zMax, -radius, radius)),
-    _zMin(clamp(zMin, -radius, radius)),
+    _zMax(clamp(std::max(zMax, zMin), -radius, radius)),
+    _zMin(clamp(std::min(zMax, zMin), -radius, radius)),
     _phiMax(degree2radian(clamp(phiMax, 0, 360))),
-    _minTheta(std::acos(clamp(std::min(_zMin, _zMax) / _radius, -1, 1))),
-    _maxTheta(std::acos(clamp(std::max(_zMin, _zMax) / _radius, -1, 1))) {
+    _thetaMin(std::acos(clamp(_zMin / _radius, -1, 1))),
+    _thetaMax(std::acos(clamp(_zMax / _radius, -1, 1))) {
         init();
     }
     
@@ -72,8 +76,8 @@ private:
     const Float _zMax;
     const Float _phiMax;
     const Float _radius;
-    const Float _minTheta;
-    const Float _maxTheta;
+    const Float _thetaMin;
+    const Float _thetaMax;
 };
 
 PALADIN_END

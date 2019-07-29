@@ -19,7 +19,7 @@ void Sphere::init() {
  可以把球体当做一个180°的圆弧以z轴旋转360°得到的一个回转体
  球体的一部分则可以当做一个圆弧以z轴旋转φ
  由高等数学知识可得，回转体的表面积为
- area = φ * ∫f(z) * sqrt(1 + (f'(z))^2)dz (from zMin to zMax)
+ area = φ * ∫[zMin, zMax]f(z) * sqrt(1 + (f'(z))^2)dz
  f(z) = sqrt(r^2 - z^2)
  f'(z) = -(z / sqrt(r^2 - z^2))
  积分可得 area = φ * r * (zMax - zMin)
@@ -116,6 +116,52 @@ bool Sphere::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, boo
 
     }
 
+    // φ = u * φmax
+    // θ = θmin + v * (θmax - θmin)
+    Float u = phi / _phiMax;
+    Float theta = std::acos(clamp(pHit.z / _radius, -1, 1));
+    Float v = (theta - _thetaMin) / (_thetaMax - _thetaMin);
+
+    Float zRadius = std::sqrt(pHit.x * pHit.x + pHit.y * pHit.y);
+    Float invZRadius = 1 / zRadius;
+    Float cosPhi = pHit.x * invZRadius;
+    Float sinPhi = pHit.y * invZRadius;
+
+    // 曲面上的点p对参数uv的一阶偏导数，以及二阶偏导数，直接用高中数学知识求出即可
+    Vector3f dpdu(-_phiMax * pHit.y, _phiMax * pHit.x, 0);
+    Vector3f dpdv = (_thetaMax - _thetaMin) *
+        Vector3f(pHit.z * cosPhi, pHit.z * sinPhi, -_radius * std::sin(theta));
+
+    Vector3f d2Pduu = -_phiMax * _phiMax * Vector3f(pHit.x, pHit.y, 0);
+    Vector3f d2Pduv = (_thetaMax - _thetaMin) 
+                        * pHit.z * _phiMax
+                        * Vector3f(-sinPhi, cosPhi, 0.);
+    Vector3f d2Pdvv = -(_thetaMax - _thetaMin)
+                        * (_thetaMax - _thetaMin) 
+                        * Vector3f(pHit.x, pHit.y, pHit.z);
+
+    // 法线对于uv参数的一阶二阶偏导数就略显复杂
+    Float E = dot(dpdu, dpdu);
+    Float F = dot(dpdu, dpdv);
+    Float G = dot(dpdv, dpdv);
+    Vector3f N = normalize(cross(dpdu, dpdv));
+    Float e = dot(N, d2Pduu);
+    Float f = dot(N, d2Pduv);
+    Float g = dot(N, d2Pdvv);   
+
+    Float invEGF2 = 1 / (E * G - F * F);
+    Normal3f dndu = Normal3f((f * F - e * G) * invEGF2 * dpdu +
+                             (e * F - f * E) * invEGF2 * dpdv);
+    Normal3f dndv = Normal3f((g * F - f * G) * invEGF2 * dpdu +
+                             (f * F - g * E) * invEGF2 * dpdv);
+
+    Vector3f pError = gamma(5) * abs(Vector3f(pHit));
+
+    *isect = objectToWorld->exec(SurfaceInteraction(pHit, pError, Point2f(u, v),
+                                                 -ray.d, dpdu, dpdv, dndu, dndv,
+                                                 ray.time, this))
+    
+    *tHit = (Float)tShapeHit;
     return true;
 }
 

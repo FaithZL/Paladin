@@ -62,6 +62,11 @@ public:
     	return 1 / area();
     }
 
+    // 概率密度函数，表面某点的pdf，函数空间为表面参数空间
+    virtual Float pdfA() const {
+    	return 1 / area();
+    }
+
     /*
 	 在场景的某处ref处，随机采样shape，返回世界坐标中interaction结构
 	 以及在ref处采样到对应shape表面点的概率密度函数
