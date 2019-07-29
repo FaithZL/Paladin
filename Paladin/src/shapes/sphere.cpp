@@ -82,7 +82,7 @@ bool Sphere::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, boo
     // 测试球体的裁剪参数
     if ((_zMin > -_radius && pHit.z < _zMin) 
         || (_zMax < _radius && pHit.z > _zMax) 
-        || phi > phiMax) {
+        || phi > _phiMax) {
         // 如果pHit处在球的缺失部分
         if (tShapeHit == t1) {
             // 如果tShapeHit已经是较远点，则返回false
@@ -110,8 +110,8 @@ bool Sphere::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, boo
         // 再次测试球体裁剪参数
         if ((_zMin > -_radius && pHit.z < _zMin) 
             || (_zMax < _radius && pHit.z > _zMax) 
-            || phi > phiMax) {
-            return false
+            || phi > _phiMax) {
+            return false;
         }
 
     }
@@ -127,7 +127,7 @@ bool Sphere::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, boo
     Float cosPhi = pHit.x * invZRadius;
     Float sinPhi = pHit.y * invZRadius;
 
-    // 曲面上的点p对参数uv的一阶偏导数，以及二阶偏导数，直接用高中数学知识求出即可
+    // 曲面上的点p对参数uv的一阶偏导数，以及二阶偏导数，直接用高中数学知识求出即可，具体推导过程就不写了
     Vector3f dpdu(-_phiMax * pHit.y, _phiMax * pHit.x, 0);
     Vector3f dpdv = (_thetaMax - _thetaMin) *
         Vector3f(pHit.z * cosPhi, pHit.z * sinPhi, -_radius * std::sin(theta));
@@ -158,8 +158,8 @@ bool Sphere::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, boo
     Vector3f pError = gamma(5) * abs(Vector3f(pHit));
 
     *isect = objectToWorld->exec(SurfaceInteraction(pHit, pError, Point2f(u, v),
-                                                 -ray.d, dpdu, dpdv, dndu, dndv,
-                                                 ray.time, this))
+                                                 -ray.dir, dpdu, dpdv, dndu, dndv,
+                                                    ray.time, this));
     
     *tHit = (Float)tShapeHit;
     return true;
@@ -214,7 +214,7 @@ bool Sphere::intersectP(const Ray &r, bool testAlphaTexture) const {
     // 测试球体的裁剪参数
     if ((_zMin > -_radius && pHit.z < _zMin) 
         || (_zMax < _radius && pHit.z > _zMax) 
-        || phi > phiMax) {
+        || phi > _phiMax) {
         // 如果pHit处在球的缺失部分
         if (tShapeHit == t1) {
             // 如果tShapeHit已经是较远点，则返回false
@@ -242,8 +242,8 @@ bool Sphere::intersectP(const Ray &r, bool testAlphaTexture) const {
         // 再次测试球体裁剪参数
         if ((_zMin > -_radius && pHit.z < _zMin) 
             || (_zMax < _radius && pHit.z > _zMax) 
-            || phi > phiMax) {
-            return false
+            || phi > _phiMax) {
+            return false;
         }
 
     }
