@@ -34,9 +34,89 @@ Bounds3f Sphere::objectBound() const {
 }
 
 
-bool Sphere::intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect, bool testAlphaTexture) const {
+bool Sphere::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, bool testAlphaTexture) const {
+    Float phi;
+    Point3f pHit;
+    Vector3f oErr, dErr;
     
-    return false;
+    Ray ray = worldToObject->exec(r, &oErr, &dErr);
+    // (ox + t * dx^2) + (oy + t * dy^2) + (oz + t * dz^2) = r^2.
+    // a * t^2 + b * t + c = 0，则a，b，c如下所示
+    EFloat ox(ray.ori.x, oErr.x), oy(ray.ori.y, oErr.y), oz(ray.ori.z, oErr.z);
+    EFloat dx(ray.dir.x, dErr.x), dy(ray.dir.y, dErr.y), dz(ray.dir.z, dErr.z);
+    EFloat a = dx * dx + dy * dy + dz * dz;
+    EFloat b = 2 * (dx * ox + dy * oy + dz * oz);
+    EFloat c = ox * ox + oy * oy + oz * oz - EFloat(_radius) * EFloat(_radius);
+    
+    EFloat t0, t1;
+    if (!quadratic(a, b, c, &t0, &t1)) {
+        return false;
+    }
+
+    // 保守计算
+    if (t0.upperBound() > ray.tMax || t1.lowerBound() <= 0) {
+         return false;
+    }
+    EFloat tShapeHit = t0;
+
+    if (tShapeHit.lowerBound() <= 0) {
+        tShapeHit = t1;
+        if (tShapeHit.upperBound() > ray.tMax) {
+            return false;
+        }
+    }
+
+    pHit = ray.at((Float)tShapeHit);
+    pHit *= _radius / distance(pHit, Point3f(0, 0, 0));
+
+    if (pHit.x == 0 && pHit.y == 0) {
+        // 避免0/0
+        pHit.x = 1e-5f * _radius;
+    }
+
+    phi = std::atan2(pHit.x, pHit.y);
+    if (phi < 0) {
+        phi += 2 * Pi;
+    }
+
+    // 测试球体的裁剪参数
+    if ((_zMin > -_radius && pHit.z < _zMin) 
+        || (_zMax < _radius && pHit.z > _zMax) 
+        || phi > phiMax) {
+        // 如果pHit处在球的缺失部分
+        if (tShapeHit == t1) {
+            // 如果tShapeHit已经是较远点，则返回false
+            return false;
+        }
+        if (t1.upperBound() > ray.tMax) {
+            return false;
+        }
+
+        // 此时的逻辑是t0处于球的缺失部分，则开始判断t1
+        tShapeHit = t1;
+        pHit = ray.at((Float)tShapeHit);
+
+        pHit *= _radius / distance(pHit, Point3f(0, 0, 0));
+        if (pHit.x == 0 && pHit.y == 0) {
+            // 避免0/0
+            pHit.x = 1e-5f * _radius;
+        }
+
+        phi = std::atan2(pHit.x, pHit.y);
+        if (phi < 0) {
+            phi += 2 * Pi;
+        }
+
+        // 再次测试球体裁剪参数
+        if ((_zMin > -_radius && pHit.z < _zMin) 
+            || (_zMax < _radius && pHit.z > _zMax) 
+            || phi > phiMax) {
+            return false
+        }
+
+    }
+
+    return true;
 }
 
 
