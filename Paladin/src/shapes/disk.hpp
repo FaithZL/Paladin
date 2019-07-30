@@ -31,22 +31,25 @@ public:
         
     }
     
-    void init() {
+    virtual void init() {
         _invArea = 1 / area();
     }
     
-    Bounds3f objectBound() const;
+    virtual Bounds3f objectBound() const {
+        return Bounds3f(Point3f(-_radius, -_radius, _height),
+                    Point3f(_radius, _radius, _height));
+    }
     
-    bool intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
+    virtual bool intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
                    bool testAlphaTexture) const;
     
-    bool intersectP(const Ray &ray, bool testAlphaTexture) const;
+    virtual bool intersectP(const Ray &ray, bool testAlphaTexture) const;
    
-    Float area() const {
+    virtual Float area() const {
         return _phiMax * 0.5 * (_radius * _radius - _innerRadius * _innerRadius);
     }
     
-    Interaction sampleA(const Point2f &u, Float *pdf) const;
+    virtual Interaction sampleA(const Point2f &u, Float *pdf) const;
     
 private:
     // 暂时搞不懂为何要这个参数，略显多余

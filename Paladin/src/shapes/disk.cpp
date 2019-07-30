@@ -10,11 +10,6 @@
 
 PALADIN_BEGIN
 
-Bounds3f Disk::objectBound() const {
-    return Bounds3f(Point3f(-_radius, -_radius, _height),
-                    Point3f(_radius, _radius, _height));
-}
-
 bool Disk::intersectP(const paladin::Ray &ray, bool testAlphaTexture) const {
     // todo
     return false;

@@ -20,17 +20,17 @@ public:
     Cone(const Transform *o2w, const Transform *w2o, bool reverseOrientation,
          Float height, Float radius, Float phiMax);
     
+    virtual void init();
     
-    
-    Bounds3f objectBound() const;
+    virtual Bounds3f objectBound() const;
 
-    bool intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect, bool testAlphaTexture) const;
+    virtual bool intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect, bool testAlphaTexture) const;
 
-    bool intersectP(const Ray &ray, bool testAlphaTexture) const;
+    virtual bool intersectP(const Ray &ray, bool testAlphaTexture) const;
 
-    Float area() const;
+    virtual Float area() const;
 
-    Interaction sampleA(const Point2f &u, Float *pdf) const;
+    virtual Interaction sampleA(const Point2f &u, Float *pdf) const;
     
 protected:
 

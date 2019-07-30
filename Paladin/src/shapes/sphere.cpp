@@ -11,29 +11,6 @@
 
 PALADIN_BEGIN
 
-void Sphere::init() {
-    _invArea = 1.f / area();
-}
-
-/*
- 可以把球体当做一个180°的圆弧以z轴旋转360°得到的一个回转体
- 球体的一部分则可以当做一个圆弧以z轴旋转φ
- 由高等数学知识可得，回转体的表面积为
- area = φ * ∫[zMin, zMax]f(z) * sqrt(1 + (f'(z))^2)dz
- f(z) = sqrt(r^2 - z^2)
- f'(z) = -(z / sqrt(r^2 - z^2))
- 积分可得 area = φ * r * (zMax - zMin)
- */
-Float Sphere::area() const {
-    return _phiMax * _radius * (_zMax - _zMin);
-}
-
-Bounds3f Sphere::objectBound() const {
-    return Bounds3f(Point3f(-_radius, -_radius, _zMin),
-                    Point3f(_radius, _radius, _zMax));
-}
-
-
 bool Sphere::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, bool testAlphaTexture) const {
     Float phi;
     Point3f pHit;
