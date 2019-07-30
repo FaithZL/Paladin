@@ -7,3 +7,28 @@
 //
 
 #include "disk.hpp"
+
+PALADIN_BEGIN
+
+Bounds3f Disk::objectBound() const {
+    return Bounds3f(Point3f(-_radius, -_radius, _height),
+                    Point3f(_radius, _radius, _height));
+}
+
+bool Disk::intersectP(const paladin::Ray &ray, bool testAlphaTexture) const {
+    // todo
+    return false;
+}
+
+bool Disk::intersect(const paladin::Ray &ray, Float *tHit, paladin::SurfaceInteraction *isect, bool testAlphaTexture) const {
+    // todo
+    return false;
+}
+
+Interaction Disk::sampleA(const Point2f &u, Float *pdf) const {
+    Interaction ret;
+    // todo 
+    return ret;
+}
+
+PALADIN_END

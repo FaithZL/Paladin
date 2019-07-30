@@ -44,6 +44,7 @@
 		F66FC42F22C8C5BD0086A2F0 /* sampling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC42D22C8C5BD0086A2F0 /* sampling.cpp */; };
 		F66FC43222C8C5E10086A2F0 /* fileio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC43022C8C5E10086A2F0 /* fileio.cpp */; };
 		F66FC43522C8C7960086A2F0 /* box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC43322C8C7960086A2F0 /* box.cpp */; };
+		F682E05322EFBBA0000814A8 /* cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F682E05122EFBBA0000814A8 /* cube.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -144,6 +145,8 @@
 		F66FC43C22C91BEC0086A2F0 /* header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = header.h; sourceTree = "<group>"; };
 		F66FC43D22CA583B0086A2F0 /* stringprint.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = stringprint.hpp; sourceTree = "<group>"; };
 		F66FC43E22CD031F0086A2F0 /* mathutil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mathutil.h; sourceTree = "<group>"; };
+		F682E05122EFBBA0000814A8 /* cube.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cube.cpp; sourceTree = "<group>"; };
+		F682E05222EFBBA0000814A8 /* cube.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cube.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -290,6 +293,8 @@
 				F66FC41F22C891A10086A2F0 /* cone.hpp */,
 				F66FC42122C891BE0086A2F0 /* disk.cpp */,
 				F66FC42222C891BE0086A2F0 /* disk.hpp */,
+				F682E05122EFBBA0000814A8 /* cube.cpp */,
+				F682E05222EFBBA0000814A8 /* cube.hpp */,
 			);
 			path = shapes;
 			sourceTree = "<group>";
@@ -473,6 +478,7 @@
 				F66FC3F122C863A40086A2F0 /* constant.cpp in Sources */,
 				F66FC40722C86C7B0086A2F0 /* light.cpp in Sources */,
 				F66FC42F22C8C5BD0086A2F0 /* sampling.cpp in Sources */,
+				F682E05322EFBBA0000814A8 /* cube.cpp in Sources */,
 				F64AD4B222DE2B9800F8EDC3 /* medium.cpp in Sources */,
 				F64AD4B522DE310E00F8EDC3 /* memory.cpp in Sources */,
 				F66FC40422C86C4E0086A2F0 /* texture.cpp in Sources */,
