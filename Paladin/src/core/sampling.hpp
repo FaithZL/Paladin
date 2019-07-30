@@ -37,6 +37,8 @@ p(x) = ∫p(x,y)dy    6式
 条件概率密度函数
 p(y|x) = p(x,y) / p(x)  7式
 
+p(x,y) = p(θ,r)/r  8式
+
 要生成指定分布的随机数，逆变换算法很常用
 	积分求出指定pdf对应的cdf，记为F(x)
 	y = F(x)定义域为[-∞,+∞],值域为[0,1]
@@ -135,6 +137,20 @@ Float uniformConePdf(Float cosThetaMax);
  z = cosθ
  */
 Vector3f uniformSampleCone(const Point2f &u, Float cosThetaMax);
+
+/*
+ 均匀分布可得p(x,y) = 1/π
+ p(x,y) = p(θ,r)/r 8式
+ 又由8式，可得
+ p(θ,r) = r/π
+ 由边缘概率密度函数公式可得
+ p(r) = ∫[0,2π]p(θ,r)dθ = 2r
+ p(θ|r) = p(θ,r)/p(r) = 1/2π
+ θ与r相互独立 p(θ|r) = 1/2π = p(θ)
+
+
+*/
+Point2f UniformSampleDisk(const Point2f &u);
 
 PALADIN_END
 
