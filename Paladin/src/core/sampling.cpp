@@ -36,4 +36,10 @@ Vector3f uniformSampleCone(const Point2f &u, Float cosThetaMax) {
                     cosTheta);
 }
 
+Point2f uniformSampleDisk(const Point2f &u) {
+    Float r = std::sqrt(u[0]);
+    Float theta = 2 * Pi * u[1];
+    return Point2f(r * std::cos(theta), r * std::sin(theta));
+}
+
 PALADIN_END

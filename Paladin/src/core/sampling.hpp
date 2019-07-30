@@ -147,10 +147,17 @@ Vector3f uniformSampleCone(const Point2f &u, Float cosThetaMax);
  p(r) = ∫[0,2π]p(θ,r)dθ = 2r
  p(θ|r) = p(θ,r)/p(r) = 1/2π
  θ与r相互独立 p(θ|r) = 1/2π = p(θ)
+ 对p(θ)积分可得
+ P(θ) = θ/2π
+ 对p(r)积分可得
+ P(r) = r^2
 
+ a,b为[0,1]的均匀分布随机数
+ r = √(a)
+ θ = 2πb
 
 */
-Point2f UniformSampleDisk(const Point2f &u);
+Point2f uniformSampleDisk(const Point2f &u);
 
 PALADIN_END
 

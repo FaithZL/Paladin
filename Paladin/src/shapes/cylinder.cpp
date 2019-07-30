@@ -19,8 +19,8 @@ bool Cylinder::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, b
     // 圆柱方程为：x^2 + y^2 − r^2 = 0
     // 带入ray上的点：(ox + t * dx)^2 + (oy + t * dy)^2 - r^2 = 0
     // a * t^2 + b * t + c = 0，则a，b，c如下所示
-    EFloat ox(ray.o.x, oErr.x), oy(ray.o.y, oErr.y), oz(ray.o.z, oErr.z);
-    EFloat dx(ray.d.x, dErr.x), dy(ray.d.y, dErr.y), dz(ray.d.z, dErr.z);
+    EFloat ox(ray.ori.x, oErr.x), oy(ray.ori.y, oErr.y), oz(ray.ori.z, oErr.z);
+    EFloat dx(ray.dir.x, dErr.x), dy(ray.dir.y, dErr.y), dz(ray.dir.z, dErr.z);
     EFloat a = dx * dx + dy * dy;
     EFloat b = 2 * (dx * ox + dy * oy);
     EFloat c = ox * ox + oy * oy - EFloat(_radius) * EFloat(_radius);
@@ -61,12 +61,12 @@ bool Cylinder::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, b
         }
 
         tShapeHit = t1;
-        if (t1.UpperBound() > ray.tMax) {
+        if (t1.upperBound() > ray.tMax) {
         	return false;
         }
 
         // 此时的逻辑是t0处于圆柱的缺失部分，则开始判断t1
-        pHit = ray((Float)tShapeHit);
+        pHit = ray.at((Float)tShapeHit);
 
         Float hitRad = std::sqrt(pHit.x * pHit.x + pHit.y * pHit.y);
         pHit.x *= _radius / hitRad;
@@ -118,13 +118,13 @@ bool Cylinder::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, b
 
     *isect = objectToWorld->exec(SurfaceInteraction(pHit, pError, Point2f(u, v),
                                                  -ray.dir, dpdu, dpdv, dndu, dndv,
-                                                 ray.time, this))
+                                                    ray.time, this));
 
     *tHit = (Float)tShapeHit;
     return true;
 }
 
-bool Cylinder::IntersectP(const Ray &r, bool testAlphaTexture) const {
+bool Cylinder::intersectP(const Ray &r, bool testAlphaTexture) const {
 	Float phi;
     Point3f pHit;
 
@@ -133,8 +133,8 @@ bool Cylinder::IntersectP(const Ray &r, bool testAlphaTexture) const {
     // 圆柱方程为：x^2 + y^2 − r^2 = 0
     // 带入ray上的点：(ox + t * dx)^2 + (oy + t * dy)^2 - r^2 = 0
     // a * t^2 + b * t + c = 0，则a，b，c如下所示
-    EFloat ox(ray.o.x, oErr.x), oy(ray.o.y, oErr.y), oz(ray.o.z, oErr.z);
-    EFloat dx(ray.d.x, dErr.x), dy(ray.d.y, dErr.y), dz(ray.d.z, dErr.z);
+    EFloat ox(ray.ori.x, oErr.x), oy(ray.ori.y, oErr.y), oz(ray.ori.z, oErr.z);
+    EFloat dx(ray.dir.x, dErr.x), dy(ray.dir.y, dErr.y), dz(ray.dir.z, dErr.z);
     EFloat a = dx * dx + dy * dy;
     EFloat b = 2 * (dx * ox + dy * oy);
     EFloat c = ox * ox + oy * oy - EFloat(_radius) * EFloat(_radius);
@@ -175,12 +175,12 @@ bool Cylinder::IntersectP(const Ray &r, bool testAlphaTexture) const {
         }
 
         tShapeHit = t1;
-        if (t1.UpperBound() > ray.tMax) {
+        if (t1.upperBound() > ray.tMax) {
         	return false;
         }
 
         // 此时的逻辑是t0处于圆柱的缺失部分，则开始判断t1
-        pHit = ray((Float)tShapeHit);
+        pHit = ray.at((Float)tShapeHit);
 
         Float hitRad = std::sqrt(pHit.x * pHit.x + pHit.y * pHit.y);
         pHit.x *= _radius / hitRad;
@@ -194,6 +194,7 @@ bool Cylinder::IntersectP(const Ray &r, bool testAlphaTexture) const {
         	return false;
         }
     }
+    return true;
 }
 
 Interaction Cylinder::sampleA(const Point2f &u, Float *pdf) const {
