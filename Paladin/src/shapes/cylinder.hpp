@@ -14,6 +14,14 @@
 
 PALADIN_BEGIN
 
+
+/*
+圆柱参数方程如下
+φ = u φmax
+x = r cos φ
+y = r sin φ
+z = zmin + v(zmax − zmin).
+*/
 class Cylinder : public Shape {
 public:
     
