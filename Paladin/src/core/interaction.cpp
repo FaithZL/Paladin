@@ -24,19 +24,42 @@ dndu(dndu),
 dndv(dndv),
 shape(shape),
 faceIndex(faceIndex) {
-    // Initialize shading geometry from true geometry
+    
     shading.normal = normal;
     shading.dpdu = dpdu;
     shading.dpdv = dpdv;
     shading.dndu = dndu;
     shading.dndv = dndv;
     
-    // Adjust normal based on orientation and handedness
     if (shape &&
         (shape->reverseOrientation ^ shape->transformSwapsHandedness)) {
         normal *= -1;
         shading.normal *= -1;
     }
+}
+
+void SurfaceInteraction::setShadingGeometry(const Vector3f &dpdus,
+                                            const Vector3f &dpdvs,
+                                            const Normal3f &dndus,
+                                            const Normal3f &dndvs,
+                                            bool orientationIsAuthoritative) {
+
+    shading.normal = normalize((Normal3f)cross(dpdus, dpdvs));
+    
+    if (shape && (shape->reverseOrientation ^ shape->transformSwapsHandedness)) {
+        shading.normal = -shading.normal;
+    }
+
+    if (orientationIsAuthoritative) {
+        normal = faceforward(normal, shading.normal);
+    } else {
+        shading.normal = faceforward(shading.normal, normal);
+    }
+
+    shading.dpdu = dpdus;
+    shading.dpdv = dpdvs;
+    shading.dndu = dndus;
+    shading.dndv = dndvs;
 }
 
 PALADIN_END
