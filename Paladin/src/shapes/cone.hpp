@@ -14,6 +14,16 @@
 
 PALADIN_BEGIN
 
+/*
+圆锥隐式方程
+((hx)/r)^2 + ((hx)/r)^2 - (z - h)^2 = 0
+
+参数关系如下
+φ = u φmax
+x = r(1 - v)cosφ
+y = r(1 - v)sinφ
+z = v * h
+*/
 class Cone : public Shape {
 public:
 
@@ -43,6 +53,9 @@ public:
         return _radius * std::sqrt((_height * _height) + (_radius * _radius)) * _phiMax / 2;
     }
 
+    /*
+    均匀采样圆锥，可以将圆锥展开成扇形，均匀采样扇形
+    */
     virtual Interaction sampleA(const Point2f &u, Float *pdf) const;
     
 protected:
