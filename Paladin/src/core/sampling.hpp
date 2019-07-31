@@ -16,12 +16,12 @@ P为累积分布函数(cdf)，p为概率密度函数(pdf)，cdf求导得到pdf
 常用概率论基础公式
 
 Pr{X ≤ x} = Pr{Y ≤ y(x)}
-Py = Py(y(x)) = Px
-两边积分得 
+Py(y) = Py(y(x)) = Px(x)
+对 Py(y(x)) = Px(x) 两边求导得 
 
-py(y) * dy/dx = px(x)  1式
+py(y) * dy/dx = px(x)  1式 一维分布之间的转换
 
-dw = sinθdθdφ   2式
+dw = sinθdθdφ   2式  立体角公式不解释！
 
 p(θ, φ)dθdφ = p(w)dw   3式
 
@@ -37,6 +37,29 @@ p(x) = ∫p(x,y)dy    6式
 条件概率密度函数
 p(y|x) = p(x,y) / p(x)  7式
 
+多维概率密度函数之间的转换
+
+至于这个表达式如何推导，恕我直言，没搞过，等啃完主线任务再搞 todo
+p1(y1,y2,....yn) = p1(T(x1,x2,....xn)) = p2(x1,x2,....xn) / |det(T)|
+
+    | dT1/dx1 ... dT1/dxn |
+    |    '  .       '     |
+T = |    '      .   '     |
+    |    '          '     |
+    | dTn/dx1 ... dTn/dxn |
+
+如何从p(x,y)空间转换到p(r,θ)空间？
+
+1.  p1(x,y) = p1(T(r,θ)) = p2(r,θ) / |det(T)|
+2.  x = rcosθ  y = rsinθ
+
+    | dx/dr dx/dθ |     | cosθ -rsinθ |
+T = |             |  =  |             | 
+    | dy/dr dy/dθ |     | sinθ  rcosθ |
+
+det(T) = rcosθcosθ + rsinθsinθ = r
+
+可得
 p(x,y) = p(θ,r)/r  8式
 
 要生成指定分布的随机数，逆变换算法很常用

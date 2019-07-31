@@ -37,6 +37,8 @@ public:
 
     virtual bool intersectP(const Ray &ray, bool testAlphaTexture) const;
 
+    // 圆锥侧面积公式就不写推导过程了
+    // 可以用回转体面积公式，也可以用小学生方法将圆锥展开成扇形，求扇形面积
     virtual Float area() const {
         return _radius * std::sqrt((_height * _height) + (_radius * _radius)) * _phiMax / 2;
     }
