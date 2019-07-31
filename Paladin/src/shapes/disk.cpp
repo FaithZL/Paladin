@@ -40,8 +40,49 @@ bool Disk::intersectP(const paladin::Ray &r, bool testAlphaTexture) const {
     return true;
 }
 
-bool Disk::intersect(const paladin::Ray &ray, Float *tHit, paladin::SurfaceInteraction *isect, bool testAlphaTexture) const {
-    // todo
+bool Disk::intersect(const paladin::Ray &r, Float *tHit, paladin::SurfaceInteraction *isect, bool testAlphaTexture) const {
+    Vector3f oErr, dErr;
+    Ray ray = worldToObject->exec(r, &oErr, &dErr);
+    if (ray.dir.z == 0) {
+        return false;
+    }
+    
+    Float tShapeHit = (_height - ray.ori.z) / ray.dir.z;
+    if (tShapeHit <= 0 || tShapeHit >= ray.tMax) {
+        return false;
+    }
+    
+    Point3f pHit = ray.at(tShapeHit);
+    Float dist2 = pHit.x * pHit.x + pHit.y * pHit.y;
+    if (dist2 > _radius * _radius || dist2 < _innerRadius * _innerRadius) {
+        return false;
+    }
+    
+    Float phi = std::atan2(pHit.y, pHit.x);
+    if (phi < 0) {
+        phi += 2 * Pi;
+    }
+    
+    if (phi > _phiMax) {
+        return false;
+    }
+    
+    // 计算微分几何信息
+    Float u = phi / _phiMax;
+    Float rHit = sqrtf(dist2);
+    Float v = (_radius - rHit) / (_radius - _innerRadius);
+    
+    Vector3f dpdu(-_phiMax * pHit.y, _phiMax * pHit.x, 0);
+    Vector3f dpdv = Vector3f(pHit.x, pHit.y, 0.) * (_innerRadius - _radius) / rHit;
+    Normal3f dndu(0, 0, 0), dndv(0, 0, 0);
+    
+    pHit.z = _height;
+    
+    Vector3f pError(0, 0, 0);
+    
+    *isect = objectToWorld->exec(SurfaceInteraction(pHit, pError, Point2f(u, v), ray.dir, dpdu, dpdv, dndu, dndv, ray.time, this));
+    
+    *tHit = (Float)tShapeHit;
     return false;
 }
 

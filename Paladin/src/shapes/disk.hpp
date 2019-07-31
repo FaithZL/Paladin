@@ -52,7 +52,7 @@ public:
     virtual Interaction sampleA(const Point2f &u, Float *pdf) const;
     
 private:
-    // 暂时搞不懂为何要这个参数，略显多余
+
     const Float _height;
     const Float _radius;
     const Float _innerRadius;
