@@ -132,7 +132,7 @@ bool Sphere::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, boo
     Normal3f dndv = Normal3f((g * F - f * G) * invEGF2 * dpdu +
                              (f * F - g * E) * invEGF2 * dpdv);
 
-    // sampleA函数中有gamma(5)的推导过程
+    // sampleA函数中有gamma(5)的推导过程 为何不能像圆锥那样求误差？todo
     Vector3f pError = gamma(5) * abs(Vector3f(pHit));
 
     *isect = objectToWorld->exec(SurfaceInteraction(pHit, pError, Point2f(u, v),

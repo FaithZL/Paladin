@@ -11,11 +11,107 @@
 
 PALADIN_BEGIN
 
-bool Cone::intersect(const paladin::Ray &ray, Float *tHit, paladin::SurfaceInteraction *isect, bool testAlphaTexture) const {
-    // todo
+bool Cone::intersect(const paladin::Ray &r, Float *tHit, paladin::SurfaceInteraction *isect, bool testAlphaTexture) const {
+    Float phi;
+    Point3f pHit;
+    Vector3f oErr, dErr;
+    Ray ray = worldToObject->exec(r, &oErr, &dErr);
+    
+    //  ((hx)/r)^2 + ((hx)/r)^2 - (z - h)^2 = 0
+    //
+    EFloat ox(ray.ori.x, oErr.x), oy(ray.ori.y, oErr.y), oz(ray.ori.z, oErr.z);
+    EFloat dx(ray.dir.x, dErr.x), dy(ray.dir.y, dErr.y), dz(ray.dir.z, dErr.z);
+    EFloat k = EFloat(_radius) / EFloat(_height);
+    k = k * k;
+    EFloat a = dx * dx + dy * dy - k * dz * dz;
+    EFloat b = 2 * (dx * ox + dy * oy - k * dz * (oz - _height));
+    EFloat c = ox * ox + oy * oy - k * (oz - _height) * (oz - _height);
+    
+    EFloat t0, t1;
+    if (!quadratic(a, b, c, &t0, &t1)){
+        return false;
+    }
+    
+    if (t0.upperBound() > ray.tMax || t1.lowerBound() <= 0) {
+        return false;
+    }
+    
+    EFloat tShapeHit = t0;
+    if (tShapeHit.lowerBound() <= 0) {
+        tShapeHit = t1;
+        if (tShapeHit.upperBound() > ray.tMax) {
+            return false;
+        }
+    }
+    
+    pHit = ray.at((Float)tShapeHit);
+    phi = std::atan2(pHit.y, pHit.x);
+    if (phi < 0.) {
+        phi += 2 * Pi;
+    }
+    
+    if (pHit.z < 0 || pHit.z > _height || phi > _phiMax) {
+        if (tShapeHit == t1) {
+            return false;
+        }
+        
+        tShapeHit = t1;
+        if (t1.upperBound() > ray.tMax) {
+            return false;
+        }
+        
+        pHit = ray.at((Float)tShapeHit);
+        phi = std::atan2(pHit.y, pHit.x);
+        if (phi < 0.) {
+            phi += 2 * Pi;
+        }
+        
+        if (pHit.z < 0 || pHit.z > _height || phi > _phiMax) {
+            return false;
+        }
+    }
+    
+    Float u = phi / _phiMax;
+    Float v = pHit.z / _height;
+    
+    Vector3f dpdu(-_phiMax * pHit.y, _phiMax * pHit.x, 0);
+    Vector3f dpdv(-pHit.x / (1.f - v), -pHit.y / (1.f - v), _height);
+
+    Vector3f d2Pduu = -_phiMax * _phiMax * Vector3f(pHit.x, pHit.y, 0.);
+    Vector3f d2Pduv = _phiMax / (1.f - v) * Vector3f(pHit.y, -pHit.x, 0.);
+    Vector3f d2Pdvv(0, 0, 0);
+    
+    Float E = dot(dpdu, dpdu);
+    Float F = dot(dpdu, dpdv);
+    Float G = dot(dpdv, dpdv);
+    Vector3f N = normalize(cross(dpdu, dpdv));
+    Float e = dot(N, d2Pduu);
+    Float f = dot(N, d2Pduv);
+    Float g = dot(N, d2Pdvv);
+    
+    Float invEGF2 = 1 / (E * G - F * F);
+    Normal3f dndu = Normal3f((f * F - e * G) * invEGF2 * dpdu +
+                             (e * F - f * E) * invEGF2 * dpdv);
+    Normal3f dndv = Normal3f((g * F - f * G) * invEGF2 * dpdu +
+                             (f * F - g * E) * invEGF2 * dpdv);
+    
+ 
+    EFloat px = ox + tShapeHit * dx;
+    EFloat py = oy + tShapeHit * dy;
+    EFloat pz = oz + tShapeHit * dz;
+    Vector3f pError = Vector3f(px.getAbsoluteError(), py.getAbsoluteError(),
+                               pz.getAbsoluteError());
+    
+    *isect = objectToWorld->exec(SurfaceInteraction(pHit, pError, Point2f(u, v),
+                                                    -ray.dir, dpdu, dpdv, dndu, dndv,
+                                                    ray.time, this));
+    
+    *tHit = (Float)tShapeHit;
+    
     return true;
 }
-// todo
+
+
 bool Cone::intersectP(const paladin::Ray &r, bool testAlphaTexture) const {
     Float phi;
     Point3f pHit;
@@ -31,6 +127,50 @@ bool Cone::intersectP(const paladin::Ray &r, bool testAlphaTexture) const {
     EFloat a = dx * dx + dy * dy - k * dz * dz;
     EFloat b = 2 * (dx * ox + dy * oy - k * dz * (oz - _height));
     EFloat c = ox * ox + oy * oy - k * (oz - _height) * (oz - _height);
+    
+    EFloat t0, t1;
+    if (!quadratic(a, b, c, &t0, &t1)){
+        return false;
+    }
+    
+    if (t0.upperBound() > ray.tMax || t1.lowerBound() <= 0) {
+        return false;
+    }
+    EFloat tShapeHit = t0;
+    if (tShapeHit.lowerBound() <= 0) {
+        tShapeHit = t1;
+        if (tShapeHit.upperBound() > ray.tMax) {
+            return false;
+        }
+    }
+    
+    pHit = ray.at((Float)tShapeHit);
+    phi = std::atan2(pHit.y, pHit.x);
+    if (phi < 0.) {
+        phi += 2 * Pi;
+    }
+    
+    if (pHit.z < 0 || pHit.z > _height || phi > _phiMax) {
+        if (tShapeHit == t1) {
+            return false;
+        }
+
+        tShapeHit = t1;
+        if (t1.upperBound() > ray.tMax) {
+            return false;
+        }
+
+        pHit = ray.at((Float)tShapeHit);
+        phi = std::atan2(pHit.y, pHit.x);
+        if (phi < 0.) {
+            phi += 2 * Pi;
+        }
+
+        if (pHit.z < 0 || pHit.z > _height || phi > _phiMax) {
+            return false;
+        }
+
+    }
     
     return true;
 }
