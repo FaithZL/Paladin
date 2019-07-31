@@ -51,7 +51,7 @@ bool Sphere::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, boo
         pHit.x = 1e-5f * _radius;
     }
 
-    phi = std::atan2(pHit.x, pHit.y);
+    phi = std::atan2(pHit.y, pHit.x);
     if (phi < 0) {
         phi += 2 * Pi;
     }
@@ -79,7 +79,7 @@ bool Sphere::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, boo
             pHit.x = 1e-5f * _radius;
         }
 
-        phi = std::atan2(pHit.x, pHit.y);
+        phi = std::atan2(pHit.y, pHit.x);
         if (phi < 0) {
             phi += 2 * Pi;
         }
@@ -184,7 +184,7 @@ bool Sphere::intersectP(const Ray &r, bool testAlphaTexture) const {
         pHit.x = 1e-5f * _radius;
     }
 
-    phi = std::atan2(pHit.x, pHit.y);
+    phi = std::atan2(pHit.y, pHit.x);
     if (phi < 0) {
         phi += 2 * Pi;
     }
@@ -212,7 +212,7 @@ bool Sphere::intersectP(const Ray &r, bool testAlphaTexture) const {
             pHit.x = 1e-5f * _radius;
         }
 
-        phi = std::atan2(pHit.x, pHit.y);
+        phi = std::atan2(pHit.y, pHit.x);
         if (phi < 0) {
             phi += 2 * Pi;
         }
