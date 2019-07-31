@@ -182,6 +182,31 @@ Vector3f uniformSampleCone(const Point2f &u, Float cosThetaMax);
 */
 Point2f uniformSampleDisk(const Point2f &u);
 
+
+/*
+ 均匀采样扇形，其中扇形角度为 θmax
+ 面积为 s = θmax/2
+ 
+ 均匀分布可得p(x,y) = 1/s
+ p(x,y) = p(θ,r)/r 8式
+ 又由8式，可得
+ p(θ,r) = 2r/θmax
+ 由边缘概率密度函数公式可得
+ p(r) = ∫[0,θmax]p(θ,r)dθ = 2r
+ p(θ|r) = p(θ,r)/p(r) = 1/θmax
+ θ与r相互独立 p(θ|r) = 1/θmax = p(θ)
+ 对p(θ)积分可得
+ P(θ) = θ/θmax
+ 对p(r)积分可得
+ P(r) = r^2
+
+ a,b为[0,1]的均匀分布随机数
+ r = √(a)
+ θ = θmaxb
+
+*/
+Point2f uniformSampleSector(const Point2f &u, Float thetaMax);
+
 PALADIN_END
 
 
