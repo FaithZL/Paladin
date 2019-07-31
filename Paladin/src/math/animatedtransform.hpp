@@ -215,12 +215,12 @@ public:
     /*
      获取一个包围盒对象，返回运动过程中包围盒扫过的范围的包围盒
      */
-    Bounds3f MotionBounds(const Bounds3f &b) const;
+    AABB3f MotionAABB(const AABB3f &b) const;
     
     /*
      获取点对象，返回运动过程中点扫过的范围的包围盒
      */
-    Bounds3f BoundPointMotion(const Point3f &p) const;
+    AABB3f BoundPointMotion(const Point3f &p) const;
 
 private:
     

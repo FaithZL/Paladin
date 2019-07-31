@@ -37,10 +37,10 @@ public:
         _invArea = 1 / area();
     }
     
-    virtual Bounds3f objectBound() const {
+    virtual AABB3f objectBound() const {
         Point3f p1 = Point3f(-_radius, -_radius, 0);
         Point3f p2 = Point3f(_radius, _radius, _height);
-        return Bounds3f(p1, p2);
+        return AABB3f(p1, p2);
     }
 
     virtual bool intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect, bool testAlphaTexture) const;

@@ -719,7 +719,7 @@ _actuallyAnimated(*startTransform != *endTransform){
     }
 }
 
-Bounds3f AnimatedTransform::MotionBounds(const Bounds3f &b) const {
+AABB3f AnimatedTransform::MotionAABB(const AABB3f &b) const {
     if (!_actuallyAnimated)
         // 如果没有变化，直接使用变换
         return _startTransform->exec(b);
@@ -728,7 +728,7 @@ Bounds3f AnimatedTransform::MotionBounds(const Bounds3f &b) const {
         // 因为没有只有平移缩放的情况下 p'= f(t) * p，p'与t呈线性关系
         return unionSet(_startTransform->exec(b), _endTransform->exec(b));
     // 如果有旋转，则用最暴力的方式，计算8个顶点轨迹的包围盒，然后取并集
-    Bounds3f bounds;
+    AABB3f bounds;
     for (int corner = 0; corner < 8; ++corner)
         bounds = unionSet(bounds, BoundPointMotion(b.corner(corner)));
     return bounds;
@@ -778,10 +778,10 @@ Transform AnimatedTransform::interpolate(Float time) const {
     return Transform::translate(T) * R.ToTransform() * Transform(S);
 }
 
-Bounds3f AnimatedTransform::BoundPointMotion(const Point3f &p) const {
+AABB3f AnimatedTransform::BoundPointMotion(const Point3f &p) const {
     if (!_actuallyAnimated)
-        return Bounds3f(_startTransform->exec(p));
-    Bounds3f bounds(_startTransform->exec(p), _endTransform->exec(p));
+        return AABB3f(_startTransform->exec(p));
+    AABB3f bounds(_startTransform->exec(p), _endTransform->exec(p));
     Float cosTheta = dot(_R[0], _R[1]);
     Float theta = std::acos(clamp(cosTheta, -1, 1));
     

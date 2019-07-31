@@ -342,35 +342,35 @@ Normal3<T> abs(const Normal3<T> &v) {
 
 
 template <typename T>
-Bounds3<T> unionSet(const Bounds3<T> &b, const Point3<T> &p) {
-    Bounds3<T> ret;
+AABB3<T> unionSet(const AABB3<T> &b, const Point3<T> &p) {
+    AABB3<T> ret;
     ret.pMin = min(b.pMin, p);
     ret.pMax = max(b.pMax, p);
     return ret;
 }
 
 template <typename T>
-Bounds3<T> unionSet(const Bounds3<T> &b1, const Bounds3<T> &b2) {
-    Bounds3<T> ret;
+AABB3<T> unionSet(const AABB3<T> &b1, const AABB3<T> &b2) {
+    AABB3<T> ret;
     ret.pMin = min(b1.pMin, b2.pMin);
     ret.pMax = max(b1.pMax, b2.pMax);
     return ret;
 }
 
 template <typename T>
-Bounds3<T> intersect(const Bounds3<T> &b1, const Bounds3<T> &b2) {
-    // Important: assign to pMin/pMax directly and don't run the Bounds2()
+AABB3<T> intersect(const AABB3<T> &b1, const AABB3<T> &b2) {
+    // Important: assign to pMin/pMax directly and don't run the AABB2()
     // constructor, since it takes min/max of the points passed to it.  In
     // turn, that breaks returning an invalid bound for the case where we
     // intersect non-overlapping bounds (as we'd like to happen).
-    Bounds3<T> ret;
+    AABB3<T> ret;
     ret.pMin = max(b1.pMin, b2.pMin);
     ret.pMax = min(b1.pMax, b2.pMax);
     return ret;
 }
 
 template <typename T>
-bool overlaps(const Bounds3<T> &b1, const Bounds3<T> &b2) {
+bool overlaps(const AABB3<T> &b1, const AABB3<T> &b2) {
     bool x = (b1.pMax.x >= b2.pMin.x) && (b1.pMin.x <= b2.pMax.x);
     bool y = (b1.pMax.y >= b2.pMin.y) && (b1.pMin.y <= b2.pMax.y);
     bool z = (b1.pMax.z >= b2.pMin.z) && (b1.pMin.z <= b2.pMax.z);
@@ -378,27 +378,27 @@ bool overlaps(const Bounds3<T> &b1, const Bounds3<T> &b2) {
 }
 
 template <typename T>
-bool inside(const Point3<T> &p, const Bounds3<T> &b) {
+bool inside(const Point3<T> &p, const AABB3<T> &b) {
     return (p.x >= b.pMin.x && p.x <= b.pMax.x && p.y >= b.pMin.y &&
             p.y <= b.pMax.y && p.z >= b.pMin.z && p.z <= b.pMax.z);
 }
 
 template <typename T>
-bool insideExclusive(const Point3<T> &p, const Bounds3<T> &b) {
+bool insideExclusive(const Point3<T> &p, const AABB3<T> &b) {
     return (p.x >= b.pMin.x && p.x < b.pMax.x && p.y >= b.pMin.y &&
             p.y < b.pMax.y && p.z >= b.pMin.z && p.z < b.pMax.z);
 }
 
 template <typename T, typename U>
-inline Bounds3<T> expand(const Bounds3<T> &b, U delta) {
-    return Bounds3<T>(b.pMin - Vector3<T>(delta, delta, delta),
+inline AABB3<T> expand(const AABB3<T> &b, U delta) {
+    return AABB3<T>(b.pMin - Vector3<T>(delta, delta, delta),
                       b.pMax + Vector3<T>(delta, delta, delta));
 }
 
 // Minimum squared distance from point to box; returns zero if point is
 // inside.
 template <typename T, typename U>
-inline Float distanceSquared(const Point3<T> &p, const Bounds3<U> &b) {
+inline Float distanceSquared(const Point3<T> &p, const AABB3<U> &b) {
     Float dx = std::max({Float(0), b.pMin.x - p.x, p.x - b.pMax.x});
     Float dy = std::max({Float(0), b.pMin.y - p.y, p.y - b.pMax.y});
     Float dz = std::max({Float(0), b.pMin.z - p.z, p.z - b.pMax.z});
@@ -406,60 +406,60 @@ inline Float distanceSquared(const Point3<T> &p, const Bounds3<U> &b) {
 }
 
 template <typename T, typename U>
-inline Float distance(const Point3<T> &p, const Bounds3<U> &b) {
+inline Float distance(const Point3<T> &p, const AABB3<U> &b) {
     return std::sqrt(distanceSquared(p, b));
 }
 
 template <typename T>
-Bounds2<T> unionSet(const Bounds2<T> &b, const Point2<T> &p) {
-    Bounds2<T> ret;
+AABB2<T> unionSet(const AABB2<T> &b, const Point2<T> &p) {
+    AABB2<T> ret;
     ret.pMin = Min(b.pMin, p);
     ret.pMax = Max(b.pMax, p);
     return ret;
 }
 
 template <typename T>
-Bounds2<T> unionSet(const Bounds2<T> &b, const Bounds2<T> &b2) {
-    Bounds2<T> ret;
+AABB2<T> unionSet(const AABB2<T> &b, const AABB2<T> &b2) {
+    AABB2<T> ret;
     ret.pMin = Min(b.pMin, b2.pMin);
     ret.pMax = Max(b.pMax, b2.pMax);
     return ret;
 }
 
 template <typename T>
-Bounds2<T> intersect(const Bounds2<T> &b1, const Bounds2<T> &b2) {
-    // Important: assign to pMin/pMax directly and don't run the Bounds2()
+AABB2<T> intersect(const AABB2<T> &b1, const AABB2<T> &b2) {
+    // Important: assign to pMin/pMax directly and don't run the AABB2()
     // constructor, since it takes min/max of the points passed to it.  In
     // turn, that breaks returning an invalid bound for the case where we
     // intersect non-overlapping bounds (as we'd like to happen).
-    Bounds2<T> ret;
+    AABB2<T> ret;
     ret.pMin = Max(b1.pMin, b2.pMin);
     ret.pMax = Min(b1.pMax, b2.pMax);
     return ret;
 }
 
 template <typename T>
-bool overlaps(const Bounds2<T> &ba, const Bounds2<T> &bb) {
+bool overlaps(const AABB2<T> &ba, const AABB2<T> &bb) {
     bool x = (ba.pMax.x >= bb.pMin.x) && (ba.pMin.x <= bb.pMax.x);
     bool y = (ba.pMax.y >= bb.pMin.y) && (ba.pMin.y <= bb.pMax.y);
     return (x && y);
 }
 
 template <typename T>
-bool inside(const Point2<T> &pt, const Bounds2<T> &b) {
+bool inside(const Point2<T> &pt, const AABB2<T> &b) {
     return (pt.x >= b.pMin.x && pt.x <= b.pMax.x && pt.y >= b.pMin.y &&
             pt.y <= b.pMax.y);
 }
 
 template <typename T>
-bool insideExclusive(const Point2<T> &pt, const Bounds2<T> &b) {
+bool insideExclusive(const Point2<T> &pt, const AABB2<T> &b) {
     return (pt.x >= b.pMin.x && pt.x < b.pMax.x && pt.y >= b.pMin.y &&
             pt.y < b.pMax.y);
 }
 
 template <typename T, typename U>
-Bounds2<T> expand(const Bounds2<T> &b, U delta) {
-    return Bounds2<T>(b.pMin - Vector2<T>(delta, delta),
+AABB2<T> expand(const AABB2<T> &b, U delta) {
+    return AABB2<T>(b.pMin - Vector2<T>(delta, delta),
                       b.pMax + Vector2<T>(delta, delta));
 }
 

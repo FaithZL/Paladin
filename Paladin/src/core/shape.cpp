@@ -23,7 +23,7 @@ Shape::Shape(const Transform *objectToWorld, const Transform *worldToObject,
 
 }
 
-Bounds3f Shape::worldBound() const {
+AABB3f Shape::worldBound() const {
     return objectToWorld->exec(objectBound());
 }
 
