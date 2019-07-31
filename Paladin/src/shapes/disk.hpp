@@ -35,8 +35,8 @@ public:
         _invArea = 1 / area();
     }
     
-    virtual Bounds3f objectBound() const {
-        return Bounds3f(Point3f(-_radius, -_radius, _height),
+    virtual AABB3f objectBound() const {
+        return AABB3f(Point3f(-_radius, -_radius, _height),
                     Point3f(_radius, _radius, _height));
     }
     

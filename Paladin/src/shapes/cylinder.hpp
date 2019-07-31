@@ -36,8 +36,8 @@ public:
 
     } 
 
-    virtual Bounds3f objectBound() const {
-        return Bounds3f(Point3f(-_radius, -_radius, _zMin),
+    virtual AABB3f objectBound() const {
+        return AABB3f(Point3f(-_radius, -_radius, _zMin),
                     Point3f(_radius, _radius, _zMax));
     }
     

@@ -58,9 +58,9 @@ public:
         _invArea = 1.f / area();
     }
     
-    virtual Bounds3f objectBound() const {
+    virtual AABB3f objectBound() const {
         // 这里似乎可以优化一下，bound的范围可以再小些，todo
-        return Bounds3f(Point3f(-_radius, -_radius, _zMin),
+        return AABB3f(Point3f(-_radius, -_radius, _zMin),
                     Point3f(_radius, _radius, _zMax));
     }
     

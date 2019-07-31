@@ -441,9 +441,9 @@ public:
      */
     SurfaceInteraction exec(const SurfaceInteraction &isect) const;
 
-    Bounds3f exec(const Bounds3f &b) const {
+    AABB3f exec(const AABB3f &b) const {
         // 对包围盒的8个顶点都进行变换，然后合并，每个顶点都进行了变换，运算量大
-       // Bounds3f ret(exec(Point3f(b.pMin.x, b.pMin.y, b.pMin.z)));
+       // AABB3f ret(exec(Point3f(b.pMin.x, b.pMin.y, b.pMin.z)));
        // ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMin.y, b.pMin.z)));
        // ret = unionSet(ret, exec(Point3f(b.pMin.x, b.pMax.y, b.pMin.z)));
        // ret = unionSet(ret, exec(Point3f(b.pMin.x, b.pMin.y, b.pMax.z)));
@@ -482,7 +482,7 @@ public:
                 }
             }
         }
-        Bounds3f ret;
+        AABB3f ret;
         ret.pMin = minPoint;
         ret.pMax = maxPoint;
         return ret;

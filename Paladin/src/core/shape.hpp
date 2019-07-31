@@ -27,10 +27,10 @@ public:
 	virtual ~Shape();
 
 	// 返回在对象坐标系中的包围盒
-	virtual Bounds3f objectBound() const = 0;
+	virtual AABB3f objectBound() const = 0;
 
 	// 返回在世界坐标系中的包围盒
-	virtual Bounds3f worldBound() const;
+	virtual AABB3f worldBound() const;
     
     // 初始化函数，每个子类构造时都要调用
     // 目前用于计算表面积

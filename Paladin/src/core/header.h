@@ -55,10 +55,10 @@ template<typename T>
 class Normal3;
 
 template<typename T>
-class Bounds3;
+class AABB3;
 
 template<typename T>
-class Bounds2;
+class AABB2;
 
 template<typename T>
 class Direction3;
