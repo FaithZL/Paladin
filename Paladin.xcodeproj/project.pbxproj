@@ -11,6 +11,7 @@
 		F64AD4B222DE2B9800F8EDC3 /* medium.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F64AD4B022DE2B9800F8EDC3 /* medium.cpp */; };
 		F64AD4B522DE310E00F8EDC3 /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F64AD4B322DE310E00F8EDC3 /* memory.cpp */; };
 		F64F6BAD22E9FE6200FEC609 /* lowdiscrepancy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F64F6BAB22E9FE6200FEC609 /* lowdiscrepancy.cpp */; };
+		F64FD2DD22F1F2AE00D97D20 /* curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F64FD2DB22F1F2AE00D97D20 /* curve.cpp */; };
 		F65A537A22D987EB009CE4DB /* animatedtransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F65A537822D987EB009CE4DB /* animatedtransform.cpp */; };
 		F66FC3C022C858040086A2F0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3BF22C858040086A2F0 /* main.cpp */; };
 		F66FC3CA22C8601C0086A2F0 /* integrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3C822C8601C0086A2F0 /* integrator.cpp */; };
@@ -70,6 +71,8 @@
 		F64F6BAB22E9FE6200FEC609 /* lowdiscrepancy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = lowdiscrepancy.cpp; sourceTree = "<group>"; };
 		F64F6BAC22E9FE6200FEC609 /* lowdiscrepancy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = lowdiscrepancy.hpp; sourceTree = "<group>"; };
 		F64F6BAE22E9FFF500FEC609 /* rng.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rng.h; sourceTree = "<group>"; };
+		F64FD2DB22F1F2AE00D97D20 /* curve.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = curve.cpp; sourceTree = "<group>"; };
+		F64FD2DC22F1F2AE00D97D20 /* curve.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = curve.hpp; sourceTree = "<group>"; };
 		F65066F422E7639200E8B4EF /* macro_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macro_config.h; sourceTree = "<group>"; };
 		F65A537822D987EB009CE4DB /* animatedtransform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = animatedtransform.cpp; sourceTree = "<group>"; };
 		F65A537922D987EB009CE4DB /* animatedtransform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = animatedtransform.hpp; sourceTree = "<group>"; };
@@ -295,6 +298,8 @@
 				F66FC42222C891BE0086A2F0 /* disk.hpp */,
 				F682E05122EFBBA0000814A8 /* cube.cpp */,
 				F682E05222EFBBA0000814A8 /* cube.hpp */,
+				F64FD2DB22F1F2AE00D97D20 /* curve.cpp */,
+				F64FD2DC22F1F2AE00D97D20 /* curve.hpp */,
 			);
 			path = shapes;
 			sourceTree = "<group>";
@@ -446,6 +451,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F64FD2DD22F1F2AE00D97D20 /* curve.cpp in Sources */,
 				F66FC3D922C861700086A2F0 /* matte.cpp in Sources */,
 				F66FC43522C8C7960086A2F0 /* box.cpp in Sources */,
 				F66FC3D522C860F50086A2F0 /* pointlight.cpp in Sources */,
