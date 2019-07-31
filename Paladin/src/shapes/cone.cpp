@@ -16,7 +16,22 @@ bool Cone::intersect(const paladin::Ray &ray, Float *tHit, paladin::SurfaceInter
     return true;
 }
 // todo
-bool Cone::intersectP(const paladin::Ray &ray, bool testAlphaTexture) const {
+bool Cone::intersectP(const paladin::Ray &r, bool testAlphaTexture) const {
+    Float phi;
+    Point3f pHit;
+    Vector3f oErr, dErr;
+    Ray ray = worldToObject->exec(r, &oErr, &dErr);
+    
+    //  ((hx)/r)^2 + ((hx)/r)^2 - (z - h)^2 = 0
+    //  
+    EFloat ox(ray.ori.x, oErr.x), oy(ray.ori.y, oErr.y), oz(ray.ori.z, oErr.z);
+    EFloat dx(ray.dir.x, dErr.x), dy(ray.dir.y, dErr.y), dz(ray.dir.z, dErr.z);
+    EFloat k = EFloat(_radius) / EFloat(_height);
+    k = k * k;
+    EFloat a = dx * dx + dy * dy - k * dz * dz;
+    EFloat b = 2 * (dx * ox + dy * oy - k * dz * (oz - _height));
+    EFloat c = ox * ox + oy * oy - k * (oz - _height) * (oz - _height);
+    
     return true;
 }
 
