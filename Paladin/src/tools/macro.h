@@ -55,6 +55,7 @@ static CONSTEXPR Float MachineEpsilon = std::numeric_limits<Float>::epsilon() * 
 static CONSTEXPR Float Epsilon = std::numeric_limits<Float>::epsilon();
 static CONSTEXPR Float ShadowEpsilon = 0.0001f;
 static CONSTEXPR Float Pi = 3.14159265358979323846;
+static CONSTEXPR Float _2Pi = 3.14159265358979323846 * 2;
 static CONSTEXPR Float InvPi = 0.31830988618379067154;
 static CONSTEXPR Float Inv2Pi = 0.15915494309189533577;
 static CONSTEXPR Float Inv4Pi = 0.07957747154594766788;
