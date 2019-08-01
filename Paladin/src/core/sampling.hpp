@@ -120,6 +120,33 @@ Vector3f uniformSampleSphere(const Point2f &u);
 
 
 /*
+ 在一个局部球表面上生成均匀的随机点
+ 三个参数控制局部球，θmin θmax φmax
+ ∫p(w)dw = 1
+ 球的立体角为dw = sinθdθdφ
+ 局部球面面积为 s = ∫[0, φmax]∫[θmin, θmax]sinθdθdφ = φmax(cosθmin - cosθmax)
+
+ 均匀分布p(w)为常数c，求解 c = p(w) = 1 / s，又由3式得 p(θ,φ) = sinθ/s
+
+ p(θ) = ∫[0, φmax]p(θ,φ)dφ = ∫[0, φmax](sinθ/s)dφ = sinθ/(cosθmin - cosθmax)
+ p(φ|θ) = p(φ,θ)/p(θ) = 1/φmax
+
+ 对p(θ)积分: P(θ) = ∫[0,θ]sinθ'/(cosθmin - cosθmax)dθ' = (cosθmin - cosθ)/(cosθmin - cosθmax)
+ 对p(φ|θ)积分: P(φ|θ) = ∫[0,φ]1/φmaxdφ' = φ/φmax
+ a,b为[0,1]的均匀分布随机数
+ θ = arccos(cosθmin - a(cosθmin - cosθmax))
+ φ = φmax * b
+
+ sinθ = sqrt(1 - (cosθ)^2)
+ 求得
+ x = sinθcosφ = sinθcos(b * φmax)
+ y = sinθsinφ = sinθsin(b * φmax)
+ z = cosθ = cosθmin - a(cosθmin - cosθmax)
+ 
+ */
+Vector3f uniformSamplePartialSphere(const Point2f &u, Float phiMax, Float thetaMin, Float thetaMax);
+
+/*
  均匀采样一个圆锥的pdf函数
 
  p(θ, φ) = sinθ p(w)
