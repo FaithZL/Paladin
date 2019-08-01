@@ -9,6 +9,7 @@
 #ifndef constant_hpp
 #define constant_hpp
 
-#include <stdio.h>
+#include "texture.hpp"
+#include "header.h"
 
 #endif /* constant_hpp */
