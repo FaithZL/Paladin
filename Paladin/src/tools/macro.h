@@ -9,7 +9,6 @@
 #ifndef macro_hpp
 #define macro_hpp
 
-#include "macro_config.h"
 #include "header.h"
 
 #define CONSTEXPR constexpr
@@ -37,7 +36,7 @@
 
 #define PALADIN_HAVE_CONSTEXPR
 
-#if defined(_WIN32) || defined(_WIN64)
+#if defined(_MSC_VER)
     #define PALADIN_HAVE_ALIGNED_MALLOC
 #endif
 
