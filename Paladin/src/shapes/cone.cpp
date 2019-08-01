@@ -206,7 +206,10 @@ Interaction Cone::sampleA(const Point2f &u, Float *pdf) const {
         pObj.x = _radius * (1 - v) * std::cos(phi);
         pObj.y = _radius * (1 - v) * std::sin(phi);
         pObj.z = v * _height;
+        Vector3f dpdu(-_phiMax * pObj.y, _phiMax * pObj.x, 0);
+	    Vector3f dpdv(-pObj.x / (1.f - v), -pObj.y / (1.f - v), _height);
         Float rh = std::sqrt(pObj.x * pObj.x + pObj.y * pObj.y);
+        nObj = Normal3f(cross(dpdu, dpdv));
         // 采样时由于三角函数误差，校正一把
         pObj.x *= _radius / rh;
         pObj.y *= _radius / rh;
