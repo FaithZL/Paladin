@@ -142,7 +142,7 @@ Vector3f uniformSampleSphere(const Point2f &u);
  x = sinθcosφ = sinθcos(b * φmax)
  y = sinθsinφ = sinθsin(b * φmax)
  z = cosθ = cosθmin - a(cosθmin - cosθmax)
- 
+
  */
 Vector3f uniformSamplePartialSphere(const Point2f &u, Float phiMax, Float thetaMin, Float thetaMax);
 
@@ -233,6 +233,32 @@ Point2f uniformSampleDisk(const Point2f &u);
 
 */
 Point2f uniformSampleSector(const Point2f &u, Float thetaMax);
+
+
+/*
+ 均匀采样局部扇形，其中扇形角度为 θmax，外径为1，内径为rMin
+ 0 <= rMin <= 1
+ 面积为 s = θmax/2 * (1 - rMin^2)
+ 
+ 均匀分布可得p(x,y) = 1/s
+ p(x,y) = p(θ,r)/r 8式
+ 又由8式，可得
+ p(θ,r) = 2r/(θmax(1 - rMin^2))
+ 由边缘概率密度函数公式可得
+ p(r) = ∫[0,θmax]p(θ,r)dθ = 2r/(1 - rMin^2)
+ p(θ|r) = p(θ,r)/p(r) = 1/θmax
+ θ与r相互独立 p(θ|r) = 1/θmax = p(θ)
+ 对p(θ)积分可得
+ P(θ) = θ/θmax
+ 对p(r)积分可得
+ P(r) = (r^2 - rMin^2)/(1 - rMin^2)
+
+ a,b为[0,1]的均匀分布随机数
+ r = √(a(1 - rMin^2) + rMin^2)
+ θ = θmaxb
+
+*/
+Point2f uniformSamplePartialSector(const Point2f &u, Float thetaMax, Float rMin);
 
 PALADIN_END
 

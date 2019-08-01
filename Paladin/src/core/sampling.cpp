@@ -57,5 +57,11 @@ Point2f uniformSampleSector(const Point2f &u, Float thetaMax) {
     return Point2f(r * std::cos(theta), r * std::sin(theta));
 }
 
+Point2f uniformSamplePartialSector(const Point2f &u, Float thetaMax, Float rMin) {
+    Float rMin2 = rMin * rMin;
+    Float r = std::sqrt(u[0] * (1 - rMin2) + rMin2);
+    Float theta = thetaMax * u[1];
+    return Point2f(r * std::cos(theta), r * std::sin(theta));
+}
 
 PALADIN_END
