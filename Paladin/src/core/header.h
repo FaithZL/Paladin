@@ -32,6 +32,9 @@
     #include <string>
     //fix “max”: 不是“std”的成员 for vs2015
     #include <algorithm>
+    //fix “shared_ptr”: 不是“std”的成员 for vs2015
+    #include <memory>
+    
 #endif
 
 #include "stringprint.hpp"
