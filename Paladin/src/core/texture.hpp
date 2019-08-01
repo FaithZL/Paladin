@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 
+template<typename T>
 class Texture {
     
 public:
