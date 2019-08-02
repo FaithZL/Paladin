@@ -24,6 +24,8 @@
     #include <limits>
     //fix 'memcpy' was not declared in this scope for linux
     #include <string.h>
+    //fix 'shared_ptr' is not a member of 'std' for linux
+    #include <memory>
 #endif
 
 #ifdef _MSC_VER
