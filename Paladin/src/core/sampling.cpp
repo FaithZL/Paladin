@@ -24,9 +24,7 @@ Vector3f uniformSampleSphere(const Point2f &u) {
     return Vector3f(r * std::cos(phi), r * std::sin(phi), z);
 }
 
-Vector3f uniformSamplePartialSphere(const Point2f &u, Float phiMax, Float thetaMin, Float thetaMax) {
-    Float cosThetaMin = std::cos(thetaMin);
-    Float cosThetaMax = std::cos(thetaMax);
+Vector3f uniformSamplePartialSphere(const Point2f &u, Float phiMax, Float cosThetaMin, Float cosThetaMax) {
     Float z = cosThetaMin - u[0] * (cosThetaMin - cosThetaMax);
     Float r = std::sqrt(std::max((Float)0, (Float)1 - z * z));
     Float phi = phiMax * u[1];
