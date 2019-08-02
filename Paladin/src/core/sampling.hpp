@@ -144,7 +144,7 @@ Vector3f uniformSampleSphere(const Point2f &u);
  z = cosθ = cosθmin - a(cosθmin - cosθmax)
 
  */
-Vector3f uniformSamplePartialSphere(const Point2f &u, Float phiMax, Float thetaMin, Float thetaMax);
+Vector3f uniformSamplePartialSphere(const Point2f &u, Float phiMax, Float cosThetaMin, Float cosThetaMax);
 
 /*
  均匀采样一个圆锥的pdf函数
