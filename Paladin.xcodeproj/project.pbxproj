@@ -24,7 +24,6 @@
 		F66FC3E922C862DF0086A2F0 /* perspective.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3E722C862DF0086A2F0 /* perspective.cpp */; };
 		F66FC3ED22C863550086A2F0 /* bvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3EB22C863550086A2F0 /* bvh.cpp */; };
 		F66FC3F122C863A40086A2F0 /* constant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3EF22C863A40086A2F0 /* constant.cpp */; };
-		F66FC3F522C8646A0086A2F0 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3F322C8646A0086A2F0 /* log.cpp */; };
 		F66FC3F922C8662C0086A2F0 /* transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3F722C8662C0086A2F0 /* transform.cpp */; };
 		F66FC3FE22C86C1D0086A2F0 /* shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3FC22C86C1D0086A2F0 /* shape.cpp */; };
 		F66FC40122C86C350086A2F0 /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F66FC3FF22C86C350086A2F0 /* material.cpp */; };
@@ -73,7 +72,6 @@
 		F64F6BAE22E9FFF500FEC609 /* rng.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rng.h; sourceTree = "<group>"; };
 		F64FD2DB22F1F2AE00D97D20 /* curve.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = curve.cpp; sourceTree = "<group>"; };
 		F64FD2DC22F1F2AE00D97D20 /* curve.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = curve.hpp; sourceTree = "<group>"; };
-		F65066F422E7639200E8B4EF /* macro_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macro_config.h; sourceTree = "<group>"; };
 		F65A537822D987EB009CE4DB /* animatedtransform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = animatedtransform.cpp; sourceTree = "<group>"; };
 		F65A537922D987EB009CE4DB /* animatedtransform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = animatedtransform.hpp; sourceTree = "<group>"; };
 		F666921322D0D38500B50538 /* ray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ray.h; sourceTree = "<group>"; };
@@ -99,8 +97,6 @@
 		F66FC3EC22C863550086A2F0 /* bvh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bvh.hpp; sourceTree = "<group>"; };
 		F66FC3EF22C863A40086A2F0 /* constant.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = constant.cpp; sourceTree = "<group>"; };
 		F66FC3F022C863A40086A2F0 /* constant.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = constant.hpp; sourceTree = "<group>"; };
-		F66FC3F322C8646A0086A2F0 /* log.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
-		F66FC3F422C8646A0086A2F0 /* log.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = log.hpp; sourceTree = "<group>"; };
 		F66FC3F722C8662C0086A2F0 /* transform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transform.cpp; sourceTree = "<group>"; };
 		F66FC3F822C8662C0086A2F0 /* transform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transform.hpp; sourceTree = "<group>"; };
 		F66FC3FC22C86C1D0086A2F0 /* shape.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = shape.cpp; sourceTree = "<group>"; };
@@ -345,8 +341,6 @@
 		F66FC3F222C863DF0086A2F0 /* ext */ = {
 			isa = PBXGroup;
 			children = (
-				F66FC3F322C8646A0086A2F0 /* log.cpp */,
-				F66FC3F422C8646A0086A2F0 /* log.hpp */,
 			);
 			path = ext;
 			sourceTree = "<group>";
@@ -375,7 +369,6 @@
 		F66FC3FA22C867C20086A2F0 /* tools */ = {
 			isa = PBXGroup;
 			children = (
-				F65066F422E7639200E8B4EF /* macro_config.h */,
 				F66FC43022C8C5E10086A2F0 /* fileio.cpp */,
 				F66FC43122C8C5E10086A2F0 /* fileio.hpp */,
 				F66FC43922C8FBCA0086A2F0 /* macro.h */,
@@ -465,7 +458,6 @@
 				F66FC40E22C87FA50086A2F0 /* scene.cpp in Sources */,
 				F66FC3FE22C86C1D0086A2F0 /* shape.cpp in Sources */,
 				F66FC3CA22C8601C0086A2F0 /* integrator.cpp in Sources */,
-				F66FC3F522C8646A0086A2F0 /* log.cpp in Sources */,
 				F66FC3C022C858040086A2F0 /* main.cpp in Sources */,
 				F66FC42922C892E80086A2F0 /* quaternion.cpp in Sources */,
 				F66FC43222C8C5E10086A2F0 /* fileio.cpp in Sources */,

@@ -13,6 +13,14 @@
 
 #define CONSTEXPR constexpr
 
+//#define OUTPUT_LINENO 1
+
+#ifdef OUTPUT_LINENO
+#define out std::cout << __FILE__ << " " << __LINE__ << std::endl
+#else
+#define out std::cout
+#endif
+
 #define USING_PALADIN using namespace paladin;
 #define USING_STD using namespace std;
 
