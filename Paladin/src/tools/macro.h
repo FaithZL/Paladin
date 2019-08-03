@@ -16,9 +16,9 @@
 //#define OUTPUT_LINENO 1
 
 #ifdef OUTPUT_LINENO
-#define out std::cout << __FILE__ << " " << __LINE__ << std::endl
+#define COUT std::cout << __FILE__ << " " << __LINE__ << std::endl
 #else
-#define out std::cout
+#define COUT std::cout
 #endif
 
 #define USING_PALADIN using namespace paladin;
