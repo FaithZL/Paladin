@@ -13,9 +13,11 @@
 #include "shape.hpp"
 #include "texture.hpp"
 #include <vector>
+#include "model.h"
 
 PALADIN_BEGIN
 
+// 三角形网格
 struct TriangleMesh {
 
     TriangleMesh(const Transform &objectToWorld, int nTriangles,
