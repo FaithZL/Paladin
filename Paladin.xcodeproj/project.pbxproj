@@ -125,6 +125,62 @@
 		F617858E22F4A1EF00F10358 /* skeleton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = skeleton.png; sourceTree = "<group>"; };
 		F617858F22F4A1EF00F10358 /* sample.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample.obj; sourceTree = "<group>"; };
 		F617870B22F6E27A00F10358 /* tiny_obj_loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tiny_obj_loader.h; sourceTree = "<group>"; };
+		F617870C22F6F29300F10358 /* model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = model.h; sourceTree = "<group>"; };
+		F617870E22F71B4A00F10358 /* mtllib-multiple-files-issue-112.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "mtllib-multiple-files-issue-112.obj"; sourceTree = "<group>"; };
+		F617870F22F71B4A00F10358 /* usemtl-issue-68.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "usemtl-issue-68.obj"; sourceTree = "<group>"; };
+		F617871022F71B4A00F10358 /* leading-zero-in-exponent-notation-issue-210.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "leading-zero-in-exponent-notation-issue-210.mtl"; sourceTree = "<group>"; };
+		F617871122F71B4A00F10358 /* invalid-face-definition.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "invalid-face-definition.mtl"; sourceTree = "<group>"; };
+		F617871222F71B4A00F10358 /* colorspace-issue-184.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "colorspace-issue-184.obj"; sourceTree = "<group>"; };
+		F617871322F71B4A00F10358 /* smoothing-normal.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "smoothing-normal.obj"; sourceTree = "<group>"; };
+		F617871422F71B4A00F10358 /* usemtl-issue-104.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "usemtl-issue-104.obj"; sourceTree = "<group>"; };
+		F617871522F71B4A00F10358 /* leading-decimal-dot-issue-201.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "leading-decimal-dot-issue-201.obj"; sourceTree = "<group>"; };
+		F617871622F71B4A00F10358 /* line-prim.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "line-prim.obj"; sourceTree = "<group>"; };
+		F617871722F71B4A00F10358 /* texture-options-issue-85.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "texture-options-issue-85.obj"; sourceTree = "<group>"; };
+		F617871822F71B4A00F10358 /* issue-92.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "issue-92.mtl"; sourceTree = "<group>"; };
+		F617871922F71B4A00F10358 /* refl.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = refl.obj; sourceTree = "<group>"; };
+		F617871A22F71B4A00F10358 /* cornell_box.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cornell_box.obj; sourceTree = "<group>"; };
+		F617871B22F71B4A00F10358 /* issue-140-zero-face-idx.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "issue-140-zero-face-idx.obj"; sourceTree = "<group>"; };
+		F617871C22F71B4A00F10358 /* norm-texopt.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "norm-texopt.obj"; sourceTree = "<group>"; };
+		F617871D22F71B4A00F10358 /* points-prim.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "points-prim.obj"; sourceTree = "<group>"; };
+		F617871E22F71B4A00F10358 /* issue-95.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "issue-95.mtl"; sourceTree = "<group>"; };
+		F617871F22F71B4A00F10358 /* issue-138.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "issue-138.mtl"; sourceTree = "<group>"; };
+		F617872022F71B4A00F10358 /* missing_material_file.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = missing_material_file.obj; sourceTree = "<group>"; };
+		F617872122F71B4A00F10358 /* map-bump.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "map-bump.mtl"; sourceTree = "<group>"; };
+		F617872222F71B4A00F10358 /* tr-and-d-issue-43.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "tr-and-d-issue-43.obj"; sourceTree = "<group>"; };
+		F617872322F71B4A00F10358 /* texture-filename-with-whitespace.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "texture-filename-with-whitespace.obj"; sourceTree = "<group>"; };
+		F617872422F71B4A00F10358 /* issue-162-smoothing-group.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "issue-162-smoothing-group.mtl"; sourceTree = "<group>"; };
+		F617872522F71B4A00F10358 /* pbr-mat-ext.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "pbr-mat-ext.obj"; sourceTree = "<group>"; };
+		F617872622F71B4A00F10358 /* cornell_box_multimaterial.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cornell_box_multimaterial.obj; sourceTree = "<group>"; };
+		F617872722F71B4A00F10358 /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
+		F617872822F71B4A00F10358 /* issue-95-2.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "issue-95-2.obj"; sourceTree = "<group>"; };
+		F617872922F71B4A00F10358 /* issue-140-zero-face-idx.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "issue-140-zero-face-idx.mtl"; sourceTree = "<group>"; };
+		F617872A22F71B4A00F10358 /* cornell_box.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cornell_box.mtl; sourceTree = "<group>"; };
+		F617872B22F71B4A00F10358 /* refl.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = refl.mtl; sourceTree = "<group>"; };
+		F617872C22F71B4A00F10358 /* no_material.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = no_material.obj; sourceTree = "<group>"; };
+		F617872D22F71B4A00F10358 /* norm-texopt.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "norm-texopt.mtl"; sourceTree = "<group>"; };
+		F617872E22F71B4A00F10358 /* cube-vertexcol.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "cube-vertexcol.obj"; sourceTree = "<group>"; };
+		F617872F22F71B4A00F10358 /* issue-92.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "issue-92.obj"; sourceTree = "<group>"; };
+		F617873022F71B4A00F10358 /* cube.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.mtl; sourceTree = "<group>"; };
+		F617873122F71B4A00F10358 /* issue-95-2.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "issue-95-2.mtl"; sourceTree = "<group>"; };
+		F617873222F71B4A00F10358 /* pbr-mat-ext.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "pbr-mat-ext.mtl"; sourceTree = "<group>"; };
+		F617873322F71B4A00F10358 /* issue-162-smoothing-group.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "issue-162-smoothing-group.obj"; sourceTree = "<group>"; };
+		F617873422F71B4A00F10358 /* map-bump.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "map-bump.obj"; sourceTree = "<group>"; };
+		F617873522F71B4A00F10358 /* issue-138.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "issue-138.obj"; sourceTree = "<group>"; };
+		F617873622F71B4A00F10358 /* catmark_torus_creases0.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = catmark_torus_creases0.obj; sourceTree = "<group>"; };
+		F617873722F71B4A00F10358 /* issue-95.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "issue-95.obj"; sourceTree = "<group>"; };
+		F617873822F71B4A00F10358 /* smoothing-group-two-squares.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "smoothing-group-two-squares.obj"; sourceTree = "<group>"; };
+		F617873922F71B4A00F10358 /* texture-filename-with-whitespace.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "texture-filename-with-whitespace.mtl"; sourceTree = "<group>"; };
+		F617873A22F71B4A00F10358 /* tr-and-d-issue-43.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "tr-and-d-issue-43.mtl"; sourceTree = "<group>"; };
+		F617873B22F71B4A00F10358 /* usemtl-issue-68.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "usemtl-issue-68.mtl"; sourceTree = "<group>"; };
+		F617873C22F71B4A00F10358 /* leading-zero-in-exponent-notation-issue-210.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "leading-zero-in-exponent-notation-issue-210.obj"; sourceTree = "<group>"; };
+		F617873D22F71B4A00F10358 /* leading-decimal-dot-issue-201.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "leading-decimal-dot-issue-201.mtl"; sourceTree = "<group>"; };
+		F617873E22F71B4A00F10358 /* smoothing-normal.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "smoothing-normal.mtl"; sourceTree = "<group>"; };
+		F617873F22F71B4A00F10358 /* colorspace-issue-184.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "colorspace-issue-184.mtl"; sourceTree = "<group>"; };
+		F617874022F71B4B00F10358 /* invalid-face-definition.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "invalid-face-definition.obj"; sourceTree = "<group>"; };
+		F617874122F71B4B00F10358 /* mtllib-multiple-files-issue-112.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "mtllib-multiple-files-issue-112.mtl"; sourceTree = "<group>"; };
+		F617874222F71B4B00F10358 /* issue-161-inconsistent-f.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "issue-161-inconsistent-f.obj"; sourceTree = "<group>"; };
+		F617874322F71B4B00F10358 /* texture-options-issue-85.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "texture-options-issue-85.mtl"; sourceTree = "<group>"; };
+		F617874422F71B4B00F10358 /* test-nan.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-nan.obj"; sourceTree = "<group>"; };
 		F628C2CA22D6456700D981F5 /* interaction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interaction.cpp; sourceTree = "<group>"; };
 		F628C2CB22D6456700D981F5 /* interaction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = interaction.hpp; sourceTree = "<group>"; };
 		F64AD4B022DE2B9800F8EDC3 /* medium.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = medium.cpp; sourceTree = "<group>"; };
@@ -227,6 +283,7 @@
 		F617854A22F4A1EF00F10358 /* res */ = {
 			isa = PBXGroup;
 			children = (
+				F617870D22F71B4A00F10358 /* models */,
 				F617854B22F4A1EF00F10358 /* WusonOBJ.obj */,
 				F617854C22F4A1EF00F10358 /* nanosuit */,
 				F617856E22F4A1EF00F10358 /* planet */,
@@ -349,6 +406,68 @@
 				F617870B22F6E27A00F10358 /* tiny_obj_loader.h */,
 			);
 			path = tinyobj;
+			sourceTree = "<group>";
+		};
+		F617870D22F71B4A00F10358 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				F617870E22F71B4A00F10358 /* mtllib-multiple-files-issue-112.obj */,
+				F617870F22F71B4A00F10358 /* usemtl-issue-68.obj */,
+				F617871022F71B4A00F10358 /* leading-zero-in-exponent-notation-issue-210.mtl */,
+				F617871122F71B4A00F10358 /* invalid-face-definition.mtl */,
+				F617871222F71B4A00F10358 /* colorspace-issue-184.obj */,
+				F617871322F71B4A00F10358 /* smoothing-normal.obj */,
+				F617871422F71B4A00F10358 /* usemtl-issue-104.obj */,
+				F617871522F71B4A00F10358 /* leading-decimal-dot-issue-201.obj */,
+				F617871622F71B4A00F10358 /* line-prim.obj */,
+				F617871722F71B4A00F10358 /* texture-options-issue-85.obj */,
+				F617871822F71B4A00F10358 /* issue-92.mtl */,
+				F617871922F71B4A00F10358 /* refl.obj */,
+				F617871A22F71B4A00F10358 /* cornell_box.obj */,
+				F617871B22F71B4A00F10358 /* issue-140-zero-face-idx.obj */,
+				F617871C22F71B4A00F10358 /* norm-texopt.obj */,
+				F617871D22F71B4A00F10358 /* points-prim.obj */,
+				F617871E22F71B4A00F10358 /* issue-95.mtl */,
+				F617871F22F71B4A00F10358 /* issue-138.mtl */,
+				F617872022F71B4A00F10358 /* missing_material_file.obj */,
+				F617872122F71B4A00F10358 /* map-bump.mtl */,
+				F617872222F71B4A00F10358 /* tr-and-d-issue-43.obj */,
+				F617872322F71B4A00F10358 /* texture-filename-with-whitespace.obj */,
+				F617872422F71B4A00F10358 /* issue-162-smoothing-group.mtl */,
+				F617872522F71B4A00F10358 /* pbr-mat-ext.obj */,
+				F617872622F71B4A00F10358 /* cornell_box_multimaterial.obj */,
+				F617872722F71B4A00F10358 /* cube.obj */,
+				F617872822F71B4A00F10358 /* issue-95-2.obj */,
+				F617872922F71B4A00F10358 /* issue-140-zero-face-idx.mtl */,
+				F617872A22F71B4A00F10358 /* cornell_box.mtl */,
+				F617872B22F71B4A00F10358 /* refl.mtl */,
+				F617872C22F71B4A00F10358 /* no_material.obj */,
+				F617872D22F71B4A00F10358 /* norm-texopt.mtl */,
+				F617872E22F71B4A00F10358 /* cube-vertexcol.obj */,
+				F617872F22F71B4A00F10358 /* issue-92.obj */,
+				F617873022F71B4A00F10358 /* cube.mtl */,
+				F617873122F71B4A00F10358 /* issue-95-2.mtl */,
+				F617873222F71B4A00F10358 /* pbr-mat-ext.mtl */,
+				F617873322F71B4A00F10358 /* issue-162-smoothing-group.obj */,
+				F617873422F71B4A00F10358 /* map-bump.obj */,
+				F617873522F71B4A00F10358 /* issue-138.obj */,
+				F617873622F71B4A00F10358 /* catmark_torus_creases0.obj */,
+				F617873722F71B4A00F10358 /* issue-95.obj */,
+				F617873822F71B4A00F10358 /* smoothing-group-two-squares.obj */,
+				F617873922F71B4A00F10358 /* texture-filename-with-whitespace.mtl */,
+				F617873A22F71B4A00F10358 /* tr-and-d-issue-43.mtl */,
+				F617873B22F71B4A00F10358 /* usemtl-issue-68.mtl */,
+				F617873C22F71B4A00F10358 /* leading-zero-in-exponent-notation-issue-210.obj */,
+				F617873D22F71B4A00F10358 /* leading-decimal-dot-issue-201.mtl */,
+				F617873E22F71B4A00F10358 /* smoothing-normal.mtl */,
+				F617873F22F71B4A00F10358 /* colorspace-issue-184.mtl */,
+				F617874022F71B4B00F10358 /* invalid-face-definition.obj */,
+				F617874122F71B4B00F10358 /* mtllib-multiple-files-issue-112.mtl */,
+				F617874222F71B4B00F10358 /* issue-161-inconsistent-f.obj */,
+				F617874322F71B4B00F10358 /* texture-options-issue-85.mtl */,
+				F617874422F71B4B00F10358 /* test-nan.obj */,
+			);
+			path = models;
 			sourceTree = "<group>";
 		};
 		F66FC3B322C858040086A2F0 = {
@@ -562,6 +681,7 @@
 				F64AD4B322DE310E00F8EDC3 /* memory.cpp */,
 				F64AD4B422DE310E00F8EDC3 /* memory.hpp */,
 				F64C73F022E436F300731491 /* errfloat.h */,
+				F617870C22F6F29300F10358 /* model.h */,
 			);
 			path = tools;
 			sourceTree = "<group>";
@@ -583,6 +703,7 @@
 				F66FC3B822C858040086A2F0 /* Sources */,
 				F66FC3B922C858040086A2F0 /* Frameworks */,
 				F66FC3BA22C858040086A2F0 /* CopyFiles */,
+				F617874622F7262800F10358 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -624,6 +745,22 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		F617874622F7262800F10358 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -fr Build/Products/Debug/res && cp -r Paladin/res Build/Products/Debug";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F66FC3B822C858040086A2F0 /* Sources */ = {

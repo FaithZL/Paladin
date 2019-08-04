@@ -8,10 +8,11 @@
 
 #include <iostream>
 #include "paladin.hpp"
-#include "tiny_obj_loader.h"
+
 USING_PALADIN
 
 USING_STD
+
 
 int main(int argc, const char * argv[]) {
     // insert code here...
