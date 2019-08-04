@@ -5,10 +5,10 @@ cmake_minimum_required (VERSION 2.8)
 project (Paladin)
 
 # 使用C++11特性
-add_definitions (-std=c++11)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-# 收集所有头文件源文件，存入ALL_FILES变量中
-file(GLOB_RECURSE ALL_FILES "*.h" "*.h??" "*.cpp")
+# 收集所有头文件源文件，存入 ALL_FILES 变量中
+file(GLOB_RECURSE ALL_FILES "src/*.h*" "src/*.cpp")
 
 # 定义按目录结构归类的方法
 function(assign_source_group)
@@ -29,8 +29,13 @@ foreach(_source IN ITEMS ${ALL_FILES})
     assign_source_group(${_source})
 endforeach()
 
+# 添加各个库目录
+add_subdirectory(third/lua53)
+add_subdirectory(third/tinyobjloader)
+set(EXTRA_LIBS ${EXTRA_LIBS} lua53 tinyobjloader)
+
 # 设置头文件目录
-include_directories ("${PROJECT_SOURCE_DIR}/ext")
+include_directories ("${PROJECT_SOURCE_DIR}/src/alltest")
 include_directories ("${PROJECT_SOURCE_DIR}/src/accelerators")
 include_directories ("${PROJECT_SOURCE_DIR}/src/cameras")
 include_directories ("${PROJECT_SOURCE_DIR}/src/core")
@@ -43,7 +48,12 @@ include_directories ("${PROJECT_SOURCE_DIR}/src/samplers")
 include_directories ("${PROJECT_SOURCE_DIR}/src/shapes")
 include_directories ("${PROJECT_SOURCE_DIR}/src/textures")
 include_directories ("${PROJECT_SOURCE_DIR}/src/tools")
+include_directories ("${PROJECT_SOURCE_DIR}/third/lua53/lua")
+include_directories ("${PROJECT_SOURCE_DIR}/third/tinyobjloader")
 
 # 指定生成目标
 add_executable (Paladin ${ALL_FILES})
+
+# 添加链接库
+target_link_libraries(Paladin ${EXTRA_LIBS})
 
