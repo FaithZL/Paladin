@@ -8,14 +8,14 @@
 
 #include <iostream>
 #include "paladin.hpp"
-
+#include "tiny_obj_loader.h"
 USING_PALADIN
 
 USING_STD
 
 int main(int argc, const char * argv[]) {
     // insert code here...
-    out << "Hello, paladin!\n";
+    COUT << "Hello, paladin!\n";
     Paladin pld;
     
     return pld.run(argc, argv);

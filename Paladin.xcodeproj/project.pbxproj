@@ -124,6 +124,7 @@
 		F617858D22F4A1EF00F10358 /* right.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = right.jpg; sourceTree = "<group>"; };
 		F617858E22F4A1EF00F10358 /* skeleton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = skeleton.png; sourceTree = "<group>"; };
 		F617858F22F4A1EF00F10358 /* sample.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sample.obj; sourceTree = "<group>"; };
+		F617870B22F6E27A00F10358 /* tiny_obj_loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tiny_obj_loader.h; sourceTree = "<group>"; };
 		F628C2CA22D6456700D981F5 /* interaction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interaction.cpp; sourceTree = "<group>"; };
 		F628C2CB22D6456700D981F5 /* interaction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = interaction.hpp; sourceTree = "<group>"; };
 		F64AD4B022DE2B9800F8EDC3 /* medium.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = medium.cpp; sourceTree = "<group>"; };
@@ -334,6 +335,22 @@
 			path = skyBox;
 			sourceTree = "<group>";
 		};
+		F617870922F6E27A00F10358 /* ext */ = {
+			isa = PBXGroup;
+			children = (
+				F617870A22F6E27A00F10358 /* tinyobj */,
+			);
+			path = ext;
+			sourceTree = "<group>";
+		};
+		F617870A22F6E27A00F10358 /* tinyobj */ = {
+			isa = PBXGroup;
+			children = (
+				F617870B22F6E27A00F10358 /* tiny_obj_loader.h */,
+			);
+			path = tinyobj;
+			sourceTree = "<group>";
+		};
 		F66FC3B322C858040086A2F0 = {
 			isa = PBXGroup;
 			children = (
@@ -354,7 +371,6 @@
 			isa = PBXGroup;
 			children = (
 				F617854A22F4A1EF00F10358 /* res */,
-				F66FC3F222C863DF0086A2F0 /* ext */,
 				F66FC3C622C85F3E0086A2F0 /* src */,
 			);
 			path = Paladin;
@@ -363,6 +379,7 @@
 		F66FC3C622C85F3E0086A2F0 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				F617870922F6E27A00F10358 /* ext */,
 				F66FC3FB22C86BCA0086A2F0 /* parallel */,
 				F66FC3FA22C867C20086A2F0 /* tools */,
 				F66FC3F622C8660E0086A2F0 /* math */,
@@ -512,13 +529,6 @@
 				F66FC3F022C863A40086A2F0 /* constant.hpp */,
 			);
 			path = textures;
-			sourceTree = "<group>";
-		};
-		F66FC3F222C863DF0086A2F0 /* ext */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ext;
 			sourceTree = "<group>";
 		};
 		F66FC3F622C8660E0086A2F0 /* math */ = {
