@@ -119,6 +119,7 @@
 		ED5585415937436C9C43834A /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA0E9628D6B74F8DB0D16DF2 /* material.cpp */; settings = {COMPILER_FLAGS = ""; }; };
 		F037312B7357428390ACA135 /* lgc.c in Sources */ = {isa = PBXBuildFile; fileRef = E0834EEDEEDF4FB1BD214FF2 /* lgc.c */; settings = {COMPILER_FLAGS = ""; }; };
 		F242335162CB4D2E89201190 /* tiny_obj_loader.cc in Sources */ = {isa = PBXBuildFile; fileRef = CDB5420492C64BD1B37E95CA /* tiny_obj_loader.cc */; settings = {COMPILER_FLAGS = ""; }; };
+		F617874B22F88CB500F10358 /* luaparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F617874922F88CB500F10358 /* luaparser.cpp */; };
 		F75868DF09814B3B96EEC4B0 /* sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 397348DE773E4ACF88455411 /* sampler.cpp */; settings = {COMPILER_FLAGS = ""; }; };
 /* End PBXBuildFile section */
 
@@ -331,6 +332,8 @@
 		F418092AD6984BE1BE76011A /* llimits.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = llimits.h; path = third/lua53/lua/llimits.h; sourceTree = SOURCE_ROOT; };
 		F4DC96DD6D584C82A26C23B8 /* lowdiscrepancy.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = lowdiscrepancy.cpp; path = src/math/lowdiscrepancy.cpp; sourceTree = SOURCE_ROOT; };
 		F617874822F8638300F10358 /* model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model.h; sourceTree = "<group>"; };
+		F617874922F88CB500F10358 /* luaparser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = luaparser.cpp; sourceTree = "<group>"; };
+		F617874A22F88CB500F10358 /* luaparser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = luaparser.hpp; sourceTree = "<group>"; };
 		F6897FBF68F04AABA69A7565 /* lctype.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lctype.h; path = third/lua53/lua/lctype.h; sourceTree = SOURCE_ROOT; };
 		F703D0AAF1E84AF58DF75B1F /* medium.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = medium.cpp; path = src/core/medium.cpp; sourceTree = SOURCE_ROOT; };
 		F85F12F9680148DE890EF0EF /* linit.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = linit.c; path = third/lua53/lua/linit.c; sourceTree = SOURCE_ROOT; };
@@ -728,6 +731,8 @@
 			isa = PBXGroup;
 			children = (
 				F617874822F8638300F10358 /* model.h */,
+				F617874922F88CB500F10358 /* luaparser.cpp */,
+				F617874A22F88CB500F10358 /* luaparser.hpp */,
 			);
 			name = ext;
 			path = src/ext;
@@ -918,6 +923,7 @@
 				BF4BC4675B51463EB70814DE /* bxdf.cpp in Sources */,
 				DFC3C39457504ECB8690497F /* camera.cpp in Sources */,
 				64992E141B7F4877B99D37A4 /* integrator.cpp in Sources */,
+				F617874B22F88CB500F10358 /* luaparser.cpp in Sources */,
 				B6ADCAF6440B43A98CE1E4BD /* interaction.cpp in Sources */,
 				656F992D8EE54F23892F3CD5 /* light.cpp in Sources */,
 				ED5585415937436C9C43834A /* material.cpp in Sources */,
