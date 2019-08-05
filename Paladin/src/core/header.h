@@ -74,8 +74,6 @@ class Ray;
 
 class Transform;
 
-class Interaction;
-
 class AnimatedTransform;
 
 class Shape;
