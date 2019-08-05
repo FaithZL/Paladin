@@ -9,6 +9,8 @@
 #include <iostream>
 #include "paladin.hpp"
 
+#include "test_lua.hpp"
+
 USING_PALADIN
 
 USING_STD
@@ -19,6 +21,8 @@ int main(int argc, const char * argv[]) {
     COUT << "Hello, paladin!\n";
     Paladin pld;
     
+    test_lua_main();
+
     return pld.run(argc, argv);
 }
 
