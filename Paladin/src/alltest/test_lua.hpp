@@ -29,7 +29,7 @@ void test_lua_main()
 
     luaL_openlibs(lua_state);
     //运行lua脚本//
-    luaL_dofile(lua_state, "../../res/scripts/testlua.lua");
+    luaL_dofile(lua_state, "../../Paladin/res/scripts/testlua.lua");
     //关闭虚拟机//
     lua_close(lua_state);
 

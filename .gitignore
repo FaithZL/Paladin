@@ -1,4 +1,11 @@
 Build
 build
 
+xcode/CMakeFiles
+xcode/CMakeCache.txt
+xcode/cmake_install.cmake
+xcode/CMakeScripts
+xcode/Debug
+xcode/Paladin.build
+xcode/third
 xcuserdata

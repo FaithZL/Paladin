@@ -1,0 +1,2083 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		12F829C1BB454BBBB3C04903 /* ZERO_CHECK */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = D63DF7CDF9BF4AE4AF109008 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildPhases = (
+				AA9EE06640CB4C12BE470457 /* CMake Rules */,
+			);
+			dependencies = (
+			);
+			name = ZERO_CHECK;
+			productName = ZERO_CHECK;
+		};
+		5643D51D89A242D98D0B9C77 /* ALL_BUILD */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = A95BBC10807B4D7A9A14D1C8 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildPhases = (
+				EF8CB5929C384F579E5540AF /* CMake Rules */,
+			);
+			dependencies = (
+				BB5DB4516EDD43FEA2726420 /* PBXTargetDependency */,
+				7262E7E1D5F44FBBA2C19929 /* PBXTargetDependency */,
+				B7C2354F9FC64EBC9032AFC8 /* PBXTargetDependency */,
+				44AFA569804B4E2FBA8D5BB7 /* PBXTargetDependency */,
+			);
+			name = ALL_BUILD;
+			productName = ALL_BUILD;
+		};
+		DC000D25304A42AA9BC5F496 /* install */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = A08B6E22020840789A2A8D82 /* Build configuration list for PBXAggregateTarget "install" */;
+			buildPhases = (
+				25E7A3E0AA544CCCBA45FB58 /* CMake PostBuild Rules */,
+			);
+			dependencies = (
+				4A0A6459640944F286740097 /* PBXTargetDependency */,
+			);
+			name = install;
+			productName = install;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		0D0F45EB9A894BFA9CA5E65D /* lundump.c in Sources */ = {isa = PBXBuildFile; fileRef = 28807FDDA7B94BAAAE048DCA /* lundump.c */; settings = {COMPILER_FLAGS = ""; }; };
+		0E9CDD34DA8746C7B3E92761 /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = 621C360F4EFD486080A7AA0F /* lzio.c */; settings = {COMPILER_FLAGS = ""; }; };
+		1421C3DBFF82472496CE5CD0 /* lobject.c in Sources */ = {isa = PBXBuildFile; fileRef = B54453162D404A87894905FC /* lobject.c */; settings = {COMPILER_FLAGS = ""; }; };
+		18F73B80977F4700A7FC77BA /* liolib.c in Sources */ = {isa = PBXBuildFile; fileRef = CDB93A733B1F40BFAB530D98 /* liolib.c */; settings = {COMPILER_FLAGS = ""; }; };
+		1B7BC18390DB473FACF51499 /* perspective.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F80AFFBFA0E4DCB8F5B5150 /* perspective.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		1D5AC6A730BC43138F37F9E3 /* ltests.c in Sources */ = {isa = PBXBuildFile; fileRef = 0D841DE9553046AA927AA003 /* ltests.c */; settings = {COMPILER_FLAGS = ""; }; };
+		1E570B45349340D596EC0DE8 /* lstate.c in Sources */ = {isa = PBXBuildFile; fileRef = 49263C1511B646CC92341A80 /* lstate.c */; settings = {COMPILER_FLAGS = ""; }; };
+		207467ECA0BF4C128A59B09C /* lauxlib.c in Sources */ = {isa = PBXBuildFile; fileRef = EF669D4B43AE4D97A335CE6D /* lauxlib.c */; settings = {COMPILER_FLAGS = ""; }; };
+		22C80AB324484C3D987B5DA8 /* lbaselib.c in Sources */ = {isa = PBXBuildFile; fileRef = CA03335C7EAE4FBB907C59F4 /* lbaselib.c */; settings = {COMPILER_FLAGS = ""; }; };
+		287745982B244D6EB25649E4 /* lcode.c in Sources */ = {isa = PBXBuildFile; fileRef = 1BDEAC4CC95B4615A6AF9FAF /* lcode.c */; settings = {COMPILER_FLAGS = ""; }; };
+		28C02FC62AEE4986B641E154 /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C2C82216AE104E4FB25D73F9 /* memory.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		29765E92B6BC4B50A3CE916A /* disk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA77D1CA14384AD8BC9E1EBD /* disk.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		2D02D9AE74A14D75ADBE44E8 /* matte.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92CA8F2BDEBA4B06832F6AE8 /* matte.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		30FC5E48092C4259822EE57C /* random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E5FB5DAC3ED44D1B80F10048 /* random.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		3123E74115BC481C8795D5AE /* quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFC741B93F644CE4BCB69E38 /* quaternion.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		381C16CC410F431ABA6A3EF0 /* paladin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B215D131D966497EAEB7EC61 /* paladin.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		3C30431C202749219A08472B /* lcorolib.c in Sources */ = {isa = PBXBuildFile; fileRef = E8F35E72628143348CD0ED4E /* lcorolib.c */; settings = {COMPILER_FLAGS = ""; }; };
+		3E04ADB059574A999063A11A /* path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE3A2B5F6F6A40EA9E1CCF4C /* path.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		4D73CA8C78594AFC94F18504 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18A10640C15345D9B181136E /* texture.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		4E26C800B40845339BA45575 /* sinc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 678328A2619D4DC0A1A90986 /* sinc.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		5214AA25A1DE41AA8E87A91F /* lstrlib.c in Sources */ = {isa = PBXBuildFile; fileRef = B61C31F91DC74E65BA976D48 /* lstrlib.c */; settings = {COMPILER_FLAGS = ""; }; };
+		53BB280D7C264B199C6A30DC /* animatedtransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4008C07DD193441A9A0021AF /* animatedtransform.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		54BA9103A8104D219C4D5A19 /* medium.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F703D0AAF1E84AF58DF75B1F /* medium.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		558B82CCEB9A474397C228C0 /* lparser.c in Sources */ = {isa = PBXBuildFile; fileRef = 855DB014FA36482A8DF4B9E8 /* lparser.c */; settings = {COMPILER_FLAGS = ""; }; };
+		59C68500AC294E7E809AF773 /* kdtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ACEBFD8AE5A4386AD5A0CD3 /* kdtree.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		61726C88E934435B85324C9F /* pointlight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82C0FD9B6AEB4E0E890C9154 /* pointlight.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		63604EA4AC7048A388ED3A06 /* fileio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCAE06170A164606B1EDD26B /* fileio.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		64992E141B7F4877B99D37A4 /* integrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 62B794CEBB624E64A05CFC30 /* integrator.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		6530DA7EDDA14857BAC12BF1 /* loslib.c in Sources */ = {isa = PBXBuildFile; fileRef = FC296E64C21A400F9D204F5B /* loslib.c */; settings = {COMPILER_FLAGS = ""; }; };
+		656F992D8EE54F23892F3CD5 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55486C2B8BBE4B948C17F9DC /* light.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		698D63C6930F44499BF26B31 /* box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D23E2C8C7394A1CA34AF499 /* box.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		71F9BC2F3A9848AAA7D20753 /* ldo.c in Sources */ = {isa = PBXBuildFile; fileRef = 5BA0D616226A42BA9E47F78E /* ldo.c */; settings = {COMPILER_FLAGS = ""; }; };
+		7B2F44CE1A224A3797A3BA16 /* shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 175038C9A1EA4396BF47B37A /* shape.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		7BFA06C6D971441BABEA044A /* ltablib.c in Sources */ = {isa = PBXBuildFile; fileRef = 17B473BC76854EE0862AF485 /* ltablib.c */; settings = {COMPILER_FLAGS = ""; }; };
+		826F2B639C10459B8AAAF600 /* lctype.c in Sources */ = {isa = PBXBuildFile; fileRef = 35578B5526F54FAC8939330D /* lctype.c */; settings = {COMPILER_FLAGS = ""; }; };
+		82CA433932ED4A5FBB86820E /* cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EDB20E9CC8A444C0BC2E2165 /* cube.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		86BF0DA0BBD94974979A861B /* lopcodes.c in Sources */ = {isa = PBXBuildFile; fileRef = CF1A7C1902B145A3968CA2BE /* lopcodes.c */; settings = {COMPILER_FLAGS = ""; }; };
+		87A64B31A7AD46119B2487F0 /* transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26F984F63BA74C1A81F059AA /* transform.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		8CE844FAFAD44C07AFC1711C /* lmem.c in Sources */ = {isa = PBXBuildFile; fileRef = 0E3D4817940C4773BBA20DB7 /* lmem.c */; settings = {COMPILER_FLAGS = ""; }; };
+		908FCED4DB3443DE8EF23EBD /* linit.c in Sources */ = {isa = PBXBuildFile; fileRef = F85F12F9680148DE890EF0EF /* linit.c */; settings = {COMPILER_FLAGS = ""; }; };
+		943EBFED9EF64938A66778CC /* bvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 232B408EF8D741BE8A0392CD /* bvh.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		948834285A1841F7BBDA2BD2 /* loadlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 073D7F437C1C47F385DBC876 /* loadlib.c */; settings = {COMPILER_FLAGS = ""; }; };
+		9E23B62492C449C4AFB654B3 /* curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C669BBA8D5D5468E8B8BDBF8 /* curve.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		9F47EDBDB7CA47009539A667 /* ldump.c in Sources */ = {isa = PBXBuildFile; fileRef = E22B0B9AC4924AC2A7F1A02D /* ldump.c */; settings = {COMPILER_FLAGS = ""; }; };
+		A138286A3FEE416999FA04B5 /* constant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C39BDE6E83FB4F089D08D117 /* constant.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		A180349AA6CD4B0BA2F5B2E2 /* lfunc.c in Sources */ = {isa = PBXBuildFile; fileRef = 0FF79E1D9D4F4AE881862538 /* lfunc.c */; settings = {COMPILER_FLAGS = ""; }; };
+		A2B04E64FB754951A5ABDF01 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF668E31D90B47D295D6BFD0 /* scene.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		A40B8E72E4754222A71D72FC /* ltm.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A3A6CF9C918450D8553241A /* ltm.c */; settings = {COMPILER_FLAGS = ""; }; };
+		A75D44D7E92840ABAC703B29 /* sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF4F53C525FE47EDB392FC0E /* sphere.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		ACAB5E518AAD432CA7C0853A /* cylinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8D4044E4CA25454B86F589CC /* cylinder.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		AED63C4286974213804A0A76 /* lutf8lib.c in Sources */ = {isa = PBXBuildFile; fileRef = 0951C60A270D416D9CFB0F74 /* lutf8lib.c */; settings = {COMPILER_FLAGS = ""; }; };
+		B6ADCAF6440B43A98CE1E4BD /* interaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2202CF884B504E6692D13837 /* interaction.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		BEA16A06E17948ADBF7B3A68 /* sampling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B51E3BEEF299402B8087FC08 /* sampling.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		BF4BC4675B51463EB70814DE /* bxdf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 927A41BAAE8D49A48F52F620 /* bxdf.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		C2360A75E1DA4229A2DC0B30 /* lvm.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A90517CBE034D94B5FF4174 /* lvm.c */; settings = {COMPILER_FLAGS = ""; }; };
+		C6AC5722AFDC4B7EA55B8901 /* cone.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD7E71810D84A4D9785C427 /* cone.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		CD47B72320924CFD80DFA2E9 /* triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B7B49213D2124E0884E28A64 /* triangle.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		D025927307C44F7F955B4CA9 /* lmathlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 7EEAD0CD11294384B0ACA179 /* lmathlib.c */; settings = {COMPILER_FLAGS = ""; }; };
+		D0C1B104599349A1B1EF772E /* lstring.c in Sources */ = {isa = PBXBuildFile; fileRef = 7EB694A031AE4120BC65FE7E /* lstring.c */; settings = {COMPILER_FLAGS = ""; }; };
+		D2270A536AB7413A80BB4ECA /* spectrum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 47F9B7C91C2341E5898DA05A /* spectrum.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		D4B6CCDE4DE24F2BBEDD94F6 /* ldebug.c in Sources */ = {isa = PBXBuildFile; fileRef = 242C303248FD4E2D81404C32 /* ldebug.c */; settings = {COMPILER_FLAGS = ""; }; };
+		D4C87BBCD4A24C239ED4D13C /* llex.c in Sources */ = {isa = PBXBuildFile; fileRef = A0D68F1C5F184020A4282D87 /* llex.c */; settings = {COMPILER_FLAGS = ""; }; };
+		DCB1240038D447AB876BB318 /* lowdiscrepancy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F4DC96DD6D584C82A26C23B8 /* lowdiscrepancy.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		DFC3C39457504ECB8690497F /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68EBBF27FA254DEFACA156C3 /* camera.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		E3568F82140240BA9EA53AA8 /* ltable.c in Sources */ = {isa = PBXBuildFile; fileRef = 7D86A9D44129402C90190D00 /* ltable.c */; settings = {COMPILER_FLAGS = ""; }; };
+		E93CBA82B12A4095B9AAE80F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EE9307D9FD5B4EAFA999B25B /* main.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		E98425853AD44962A0A73343 /* lapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C3BFDC8F5F348B08B7BD1F2 /* lapi.c */; settings = {COMPILER_FLAGS = ""; }; };
+		EB6D0B7B8F384A4F9B026E24 /* ldblib.c in Sources */ = {isa = PBXBuildFile; fileRef = FC1CF0B43A034DA5A0444735 /* ldblib.c */; settings = {COMPILER_FLAGS = ""; }; };
+		ED5585415937436C9C43834A /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA0E9628D6B74F8DB0D16DF2 /* material.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		F037312B7357428390ACA135 /* lgc.c in Sources */ = {isa = PBXBuildFile; fileRef = E0834EEDEEDF4FB1BD214FF2 /* lgc.c */; settings = {COMPILER_FLAGS = ""; }; };
+		F242335162CB4D2E89201190 /* tiny_obj_loader.cc in Sources */ = {isa = PBXBuildFile; fileRef = CDB5420492C64BD1B37E95CA /* tiny_obj_loader.cc */; settings = {COMPILER_FLAGS = ""; }; };
+		F75868DF09814B3B96EEC4B0 /* sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 397348DE773E4ACF88455411 /* sampler.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		09B30243360042029006D110 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D42E4867796C471C9EF20325 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 03B22E8F5E614E48A5CF4686;
+			remoteInfo = lua53;
+		};
+		1613354EE81A415387CEFFAC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D42E4867796C471C9EF20325 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EF727D7A49A544E6851DC886;
+			remoteInfo = tinyobjloader;
+		};
+		35355B5183134061B81A9392 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D42E4867796C471C9EF20325 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 03B22E8F5E614E48A5CF4686;
+			remoteInfo = lua53;
+		};
+		442F735AC89546B69FBFF9CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D42E4867796C471C9EF20325 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5643D51D89A242D98D0B9C77;
+			remoteInfo = ALL_BUILD;
+		};
+		57ADF5FA406949E7939A8E32 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D42E4867796C471C9EF20325 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EF727D7A49A544E6851DC886;
+			remoteInfo = tinyobjloader;
+		};
+		B782B10F1FDA4091B68FEF30 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D42E4867796C471C9EF20325 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2D85CA9E5A86474AAAC2157C;
+			remoteInfo = Paladin;
+		};
+		D54AAF6503A4441088D4BF7A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D42E4867796C471C9EF20325 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 12F829C1BB454BBBB3C04903;
+			remoteInfo = ZERO_CHECK;
+		};
+		F62C659BE84F4CE1A4A3F65F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D42E4867796C471C9EF20325 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 12F829C1BB454BBBB3C04903;
+			remoteInfo = ZERO_CHECK;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0068EF0584DC4CD9A58B05F9 /* lcode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lcode.h; path = third/lua53/lua/lcode.h; sourceTree = SOURCE_ROOT; };
+		018C8107404F4CFE91AD0B90 /* lmem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lmem.h; path = third/lua53/lua/lmem.h; sourceTree = SOURCE_ROOT; };
+		021658DC49D840A88A146E23 /* luaconf.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = luaconf.h; path = third/lua53/lua/luaconf.h; sourceTree = SOURCE_ROOT; };
+		031D07219093461C86DBB1F9 /* mathutil.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = mathutil.h; path = src/math/mathutil.h; sourceTree = SOURCE_ROOT; };
+		073D7F437C1C47F385DBC876 /* loadlib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = loadlib.c; path = third/lua53/lua/loadlib.c; sourceTree = SOURCE_ROOT; };
+		090D076C8B1144BC89DB9CB0 /* llex.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = llex.h; path = third/lua53/lua/llex.h; sourceTree = SOURCE_ROOT; };
+		0951C60A270D416D9CFB0F74 /* lutf8lib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lutf8lib.c; path = third/lua53/lua/lutf8lib.c; sourceTree = SOURCE_ROOT; };
+		0BB7C45038954F3795F2D372 /* sinc.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = sinc.hpp; path = src/filters/sinc.hpp; sourceTree = SOURCE_ROOT; };
+		0BC7952142CC49F6B9DB1705 /* matte.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = matte.hpp; path = src/materials/matte.hpp; sourceTree = SOURCE_ROOT; };
+		0C155189F4764531BE451ED3 /* bvh.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = bvh.hpp; path = src/accelerators/bvh.hpp; sourceTree = SOURCE_ROOT; };
+		0D841DE9553046AA927AA003 /* ltests.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ltests.c; path = third/lua53/lua/ltests.c; sourceTree = SOURCE_ROOT; };
+		0E3D4817940C4773BBA20DB7 /* lmem.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lmem.c; path = third/lua53/lua/lmem.c; sourceTree = SOURCE_ROOT; };
+		0EB9A4E538C9481490822709 /* path.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = path.hpp; path = src/integrators/path.hpp; sourceTree = SOURCE_ROOT; };
+		0F24B2EC0E2B4EBC89C56C95 /* lopcodes.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lopcodes.h; path = third/lua53/lua/lopcodes.h; sourceTree = SOURCE_ROOT; };
+		0FCF41A4E37F4142BB7474F6 /* lauxlib.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lauxlib.h; path = third/lua53/lua/lauxlib.h; sourceTree = SOURCE_ROOT; };
+		0FF79E1D9D4F4AE881862538 /* lfunc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lfunc.c; path = third/lua53/lua/lfunc.c; sourceTree = SOURCE_ROOT; };
+		0FF93BCF940A461A9B4E1102 /* lobject.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lobject.h; path = third/lua53/lua/lobject.h; sourceTree = SOURCE_ROOT; };
+		1175748F11D04BE5803206E2 /* lopnames.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lopnames.h; path = third/lua53/lua/lopnames.h; sourceTree = SOURCE_ROOT; };
+		11A73C458C0A412895AC13D9 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		175038C9A1EA4396BF47B37A /* shape.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = shape.cpp; path = src/core/shape.cpp; sourceTree = SOURCE_ROOT; };
+		17B473BC76854EE0862AF485 /* ltablib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ltablib.c; path = third/lua53/lua/ltablib.c; sourceTree = SOURCE_ROOT; };
+		18A10640C15345D9B181136E /* texture.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = texture.cpp; path = src/core/texture.cpp; sourceTree = SOURCE_ROOT; };
+		19A08EB4EBD4465286FE2437 /* sampling.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = sampling.hpp; path = src/core/sampling.hpp; sourceTree = SOURCE_ROOT; };
+		1BDEAC4CC95B4615A6AF9FAF /* lcode.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lcode.c; path = third/lua53/lua/lcode.c; sourceTree = SOURCE_ROOT; };
+		1F0B6325498D4673ADAE19F1 /* libtinyobjloader.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libtinyobjloader.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F80AFFBFA0E4DCB8F5B5150 /* perspective.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = perspective.cpp; path = src/cameras/perspective.cpp; sourceTree = SOURCE_ROOT; };
+		2202CF884B504E6692D13837 /* interaction.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = interaction.cpp; path = src/core/interaction.cpp; sourceTree = SOURCE_ROOT; };
+		232B408EF8D741BE8A0392CD /* bvh.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = bvh.cpp; path = src/accelerators/bvh.cpp; sourceTree = SOURCE_ROOT; };
+		242C303248FD4E2D81404C32 /* ldebug.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ldebug.c; path = third/lua53/lua/ldebug.c; sourceTree = SOURCE_ROOT; };
+		25C2CEB5559D40B18B350180 /* scene.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = scene.hpp; path = src/core/scene.hpp; sourceTree = SOURCE_ROOT; };
+		26F984F63BA74C1A81F059AA /* transform.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = transform.cpp; path = src/math/transform.cpp; sourceTree = SOURCE_ROOT; };
+		277E26AF37484EF1A6880D1B /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = third/tinyobjloader/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		28807FDDA7B94BAAAE048DCA /* lundump.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lundump.c; path = third/lua53/lua/lundump.c; sourceTree = SOURCE_ROOT; };
+		2A9DAD81EA154BF6A36ABA24 /* lowdiscrepancy.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = lowdiscrepancy.hpp; path = src/math/lowdiscrepancy.hpp; sourceTree = SOURCE_ROOT; };
+		2DC7FFB9695F42FEAE43E79D /* macro.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = macro.h; path = src/tools/macro.h; sourceTree = SOURCE_ROOT; };
+		2F6D7D4B2BE9445D8D7DD600 /* kdtree.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = kdtree.hpp; path = src/accelerators/kdtree.hpp; sourceTree = SOURCE_ROOT; };
+		329A9E49E34746A1AB069294 /* integrator.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = integrator.hpp; path = src/core/integrator.hpp; sourceTree = SOURCE_ROOT; };
+		34637D332CD14EA0A33E341E /* lzio.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lzio.h; path = third/lua53/lua/lzio.h; sourceTree = SOURCE_ROOT; };
+		3464D37BE7A841649B051DAE /* spectrum.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = spectrum.hpp; path = src/core/spectrum.hpp; sourceTree = SOURCE_ROOT; };
+		35578B5526F54FAC8939330D /* lctype.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lctype.c; path = third/lua53/lua/lctype.c; sourceTree = SOURCE_ROOT; };
+		397348DE773E4ACF88455411 /* sampler.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = sampler.cpp; path = src/core/sampler.cpp; sourceTree = SOURCE_ROOT; };
+		3EB084783E4649669AD7ADFC /* cone.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = cone.hpp; path = src/shapes/cone.hpp; sourceTree = SOURCE_ROOT; };
+		4008C07DD193441A9A0021AF /* animatedtransform.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = animatedtransform.cpp; path = src/math/animatedtransform.cpp; sourceTree = SOURCE_ROOT; };
+		40EDA88AEDEA48AF97AC810E /* ltable.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ltable.h; path = third/lua53/lua/ltable.h; sourceTree = SOURCE_ROOT; };
+		4263308C74F34128B78DD187 /* camera.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = camera.hpp; path = src/core/camera.hpp; sourceTree = SOURCE_ROOT; };
+		441AFE9FDC1D45AF8E4FD547 /* random.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = random.hpp; path = src/samplers/random.hpp; sourceTree = SOURCE_ROOT; };
+		46118797C25043DA92A1340F /* lapi.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lapi.h; path = third/lua53/lua/lapi.h; sourceTree = SOURCE_ROOT; };
+		47F9B7C91C2341E5898DA05A /* spectrum.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = spectrum.cpp; path = src/core/spectrum.cpp; sourceTree = SOURCE_ROOT; };
+		49263C1511B646CC92341A80 /* lstate.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lstate.c; path = third/lua53/lua/lstate.c; sourceTree = SOURCE_ROOT; };
+		4A3A6CF9C918450D8553241A /* ltm.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ltm.c; path = third/lua53/lua/ltm.c; sourceTree = SOURCE_ROOT; };
+		4A90517CBE034D94B5FF4174 /* lvm.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lvm.c; path = third/lua53/lua/lvm.c; sourceTree = SOURCE_ROOT; };
+		4BD7E71810D84A4D9785C427 /* cone.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = cone.cpp; path = src/shapes/cone.cpp; sourceTree = SOURCE_ROOT; };
+		4D23E2C8C7394A1CA34AF499 /* box.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = box.cpp; path = src/filters/box.cpp; sourceTree = SOURCE_ROOT; };
+		4D98590AC8F648B68D39360F /* memory.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = memory.hpp; path = src/tools/memory.hpp; sourceTree = SOURCE_ROOT; };
+		55486C2B8BBE4B948C17F9DC /* light.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = light.cpp; path = src/core/light.cpp; sourceTree = SOURCE_ROOT; };
+		568E3D8CF6734880B26DAFB8 /* lparser.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lparser.h; path = third/lua53/lua/lparser.h; sourceTree = SOURCE_ROOT; };
+		5AC09F059B6F40D9AB08D76B /* animatedtransform.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = animatedtransform.hpp; path = src/math/animatedtransform.hpp; sourceTree = SOURCE_ROOT; };
+		5ACEBFD8AE5A4386AD5A0CD3 /* kdtree.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = kdtree.cpp; path = src/accelerators/kdtree.cpp; sourceTree = SOURCE_ROOT; };
+		5BA0D616226A42BA9E47F78E /* ldo.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ldo.c; path = third/lua53/lua/ldo.c; sourceTree = SOURCE_ROOT; };
+		5CC703CCD51D41CE8A9660D0 /* ljumptab.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ljumptab.h; path = third/lua53/lua/ljumptab.h; sourceTree = SOURCE_ROOT; };
+		5F21DA5DD34A40A6B2E14B31 /* medium.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = medium.hpp; path = src/core/medium.hpp; sourceTree = SOURCE_ROOT; };
+		621C360F4EFD486080A7AA0F /* lzio.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lzio.c; path = third/lua53/lua/lzio.c; sourceTree = SOURCE_ROOT; };
+		62B794CEBB624E64A05CFC30 /* integrator.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = integrator.cpp; path = src/core/integrator.cpp; sourceTree = SOURCE_ROOT; };
+		6364C518BDC74BE1A228DB23 /* ltests.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ltests.h; path = third/lua53/lua/ltests.h; sourceTree = SOURCE_ROOT; };
+		678328A2619D4DC0A1A90986 /* sinc.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = sinc.cpp; path = src/filters/sinc.cpp; sourceTree = SOURCE_ROOT; };
+		68EBBF27FA254DEFACA156C3 /* camera.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = camera.cpp; path = src/core/camera.cpp; sourceTree = SOURCE_ROOT; };
+		6FFB0ACD6A284C88A596DB98 /* lfunc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lfunc.h; path = third/lua53/lua/lfunc.h; sourceTree = SOURCE_ROOT; };
+		753D8CA9BCE94AD2B416A45F /* lua.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lua.h; path = third/lua53/lua/lua.h; sourceTree = SOURCE_ROOT; };
+		770C39600D0A4782BF0344EC /* transform.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = transform.hpp; path = src/math/transform.hpp; sourceTree = SOURCE_ROOT; };
+		77D4A4A66AA04A1195A3EE19 /* stringprint.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = stringprint.hpp; path = src/tools/stringprint.hpp; sourceTree = SOURCE_ROOT; };
+		7C3AFF28421B47BCB6162281 /* point.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = point.h; path = src/math/point.h; sourceTree = SOURCE_ROOT; };
+		7C3BFDC8F5F348B08B7BD1F2 /* lapi.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lapi.c; path = third/lua53/lua/lapi.c; sourceTree = SOURCE_ROOT; };
+		7CF62B46234045CF84DBA2F9 /* lgc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lgc.h; path = third/lua53/lua/lgc.h; sourceTree = SOURCE_ROOT; };
+		7D86A9D44129402C90190D00 /* ltable.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ltable.c; path = third/lua53/lua/ltable.c; sourceTree = SOURCE_ROOT; };
+		7EB694A031AE4120BC65FE7E /* lstring.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lstring.c; path = third/lua53/lua/lstring.c; sourceTree = SOURCE_ROOT; };
+		7EEAD0CD11294384B0ACA179 /* lmathlib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lmathlib.c; path = third/lua53/lua/lmathlib.c; sourceTree = SOURCE_ROOT; };
+		7F8337B20CD74634B19D71D2 /* texture.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = texture.hpp; path = src/core/texture.hpp; sourceTree = SOURCE_ROOT; };
+		82C0FD9B6AEB4E0E890C9154 /* pointlight.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = pointlight.cpp; path = src/lights/pointlight.cpp; sourceTree = SOURCE_ROOT; };
+		855DB014FA36482A8DF4B9E8 /* lparser.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lparser.c; path = third/lua53/lua/lparser.c; sourceTree = SOURCE_ROOT; };
+		897BB9FA7E724E999F02DE78 /* lstate.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lstate.h; path = third/lua53/lua/lstate.h; sourceTree = SOURCE_ROOT; };
+		89E76FCF56AA4D49BA344F62 /* cylinder.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = cylinder.hpp; path = src/shapes/cylinder.hpp; sourceTree = SOURCE_ROOT; };
+		8D4044E4CA25454B86F589CC /* cylinder.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = cylinder.cpp; path = src/shapes/cylinder.cpp; sourceTree = SOURCE_ROOT; };
+		8E9D0DC956064CECB6BBCD92 /* Paladin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = Paladin; sourceTree = BUILT_PRODUCTS_DIR; };
+		918D32382EE340E894CAF6CC /* paladin.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = paladin.hpp; path = src/core/paladin.hpp; sourceTree = SOURCE_ROOT; };
+		927A41BAAE8D49A48F52F620 /* bxdf.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = bxdf.cpp; path = src/core/bxdf.cpp; sourceTree = SOURCE_ROOT; };
+		92CA8F2BDEBA4B06832F6AE8 /* matte.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = matte.cpp; path = src/materials/matte.cpp; sourceTree = SOURCE_ROOT; };
+		93148331E6894207BBAF65E4 /* curve.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = curve.hpp; path = src/shapes/curve.hpp; sourceTree = SOURCE_ROOT; };
+		976C87B3154E41359A10F0EC /* fileio.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = fileio.hpp; path = src/tools/fileio.hpp; sourceTree = SOURCE_ROOT; };
+		9A64892A05504F63B46B6272 /* shape.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = shape.hpp; path = src/core/shape.hpp; sourceTree = SOURCE_ROOT; };
+		9D1D3D73534F44A8B88B5F74 /* bounds.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = bounds.h; path = src/math/bounds.h; sourceTree = SOURCE_ROOT; };
+		9F199949545D4CA99A812CC9 /* sphere.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = sphere.hpp; path = src/shapes/sphere.hpp; sourceTree = SOURCE_ROOT; };
+		A0D68F1C5F184020A4282D87 /* llex.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = llex.c; path = third/lua53/lua/llex.c; sourceTree = SOURCE_ROOT; };
+		A2D999C664E449B9946F5529 /* vector.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = vector.h; path = src/math/vector.h; sourceTree = SOURCE_ROOT; };
+		A3AB068472B2488AB324036F /* sampler.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = sampler.hpp; path = src/core/sampler.hpp; sourceTree = SOURCE_ROOT; };
+		A69BDBF9DCBF40EC9C6D5B54 /* triangle.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = triangle.hpp; path = src/shapes/triangle.hpp; sourceTree = SOURCE_ROOT; };
+		A9238055EC3149D8A53E3DF8 /* ldo.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ldo.h; path = third/lua53/lua/ldo.h; sourceTree = SOURCE_ROOT; };
+		A92912B378B44CDB802DD2A0 /* box.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = box.hpp; path = src/filters/box.hpp; sourceTree = SOURCE_ROOT; };
+		AA0E9628D6B74F8DB0D16DF2 /* material.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = material.cpp; path = src/core/material.cpp; sourceTree = SOURCE_ROOT; };
+		ADB1A86FE2754162B7FFE598 /* lstring.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lstring.h; path = third/lua53/lua/lstring.h; sourceTree = SOURCE_ROOT; };
+		AF4F53C525FE47EDB392FC0E /* sphere.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = sphere.cpp; path = src/shapes/sphere.cpp; sourceTree = SOURCE_ROOT; };
+		AFC741B93F644CE4BCB69E38 /* quaternion.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = quaternion.cpp; path = src/math/quaternion.cpp; sourceTree = SOURCE_ROOT; };
+		B184C6334ADE432D99526CFF /* bxdf.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = bxdf.hpp; path = src/core/bxdf.hpp; sourceTree = SOURCE_ROOT; };
+		B215D131D966497EAEB7EC61 /* paladin.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = paladin.cpp; path = src/core/paladin.cpp; sourceTree = SOURCE_ROOT; };
+		B51E3BEEF299402B8087FC08 /* sampling.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = sampling.cpp; path = src/core/sampling.cpp; sourceTree = SOURCE_ROOT; };
+		B54453162D404A87894905FC /* lobject.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lobject.c; path = third/lua53/lua/lobject.c; sourceTree = SOURCE_ROOT; };
+		B61C31F91DC74E65BA976D48 /* lstrlib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lstrlib.c; path = third/lua53/lua/lstrlib.c; sourceTree = SOURCE_ROOT; };
+		B6DCE30902134D7BB8922A70 /* ldebug.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ldebug.h; path = third/lua53/lua/ldebug.h; sourceTree = SOURCE_ROOT; };
+		B7B49213D2124E0884E28A64 /* triangle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = triangle.cpp; path = src/shapes/triangle.cpp; sourceTree = SOURCE_ROOT; };
+		BA77D1CA14384AD8BC9E1EBD /* disk.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = disk.cpp; path = src/shapes/disk.cpp; sourceTree = SOURCE_ROOT; };
+		BF65E8583FE64A56AD438284 /* interaction.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = interaction.hpp; path = src/core/interaction.hpp; sourceTree = SOURCE_ROOT; };
+		C07F65D6F97446AE9A640E78 /* ray.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ray.h; path = src/math/ray.h; sourceTree = SOURCE_ROOT; };
+		C16E148A46C6471790041EA3 /* lprefix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lprefix.h; path = third/lua53/lua/lprefix.h; sourceTree = SOURCE_ROOT; };
+		C1DAAD03D54D4C66A1666171 /* errfloat.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = errfloat.h; path = src/tools/errfloat.h; sourceTree = SOURCE_ROOT; };
+		C2C82216AE104E4FB25D73F9 /* memory.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = memory.cpp; path = src/tools/memory.cpp; sourceTree = SOURCE_ROOT; };
+		C39BDE6E83FB4F089D08D117 /* constant.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = constant.cpp; path = src/textures/constant.cpp; sourceTree = SOURCE_ROOT; };
+		C669BBA8D5D5468E8B8BDBF8 /* curve.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = curve.cpp; path = src/shapes/curve.cpp; sourceTree = SOURCE_ROOT; };
+		C705078A15964737989438A7 /* perspective.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = perspective.hpp; path = src/cameras/perspective.hpp; sourceTree = SOURCE_ROOT; };
+		CA03335C7EAE4FBB907C59F4 /* lbaselib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lbaselib.c; path = third/lua53/lua/lbaselib.c; sourceTree = SOURCE_ROOT; };
+		CA1C82A2437B4CFC976F05D4 /* liblua53.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = liblua53.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CCAE06170A164606B1EDD26B /* fileio.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = fileio.cpp; path = src/tools/fileio.cpp; sourceTree = SOURCE_ROOT; };
+		CDB5420492C64BD1B37E95CA /* tiny_obj_loader.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = tiny_obj_loader.cc; path = third/tinyobjloader/tiny_obj_loader.cc; sourceTree = SOURCE_ROOT; };
+		CDB93A733B1F40BFAB530D98 /* liolib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = liolib.c; path = third/lua53/lua/liolib.c; sourceTree = SOURCE_ROOT; };
+		CF1A7C1902B145A3968CA2BE /* lopcodes.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lopcodes.c; path = third/lua53/lua/lopcodes.c; sourceTree = SOURCE_ROOT; };
+		CF668E31D90B47D295D6BFD0 /* scene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = scene.cpp; path = src/core/scene.cpp; sourceTree = SOURCE_ROOT; };
+		D0FF093BAE1542E697F52E5F /* material.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = material.hpp; path = src/core/material.hpp; sourceTree = SOURCE_ROOT; };
+		D60BC715ED0B489C98758BF0 /* test_lua.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = test_lua.hpp; path = src/alltest/test_lua.hpp; sourceTree = SOURCE_ROOT; };
+		D646C558BA314996B1266B14 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		DAB3B77F35394BA9998E83EE /* quaternion.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = quaternion.hpp; path = src/math/quaternion.hpp; sourceTree = SOURCE_ROOT; };
+		DE7B935D4D72465C8AFECED3 /* disk.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = disk.hpp; path = src/shapes/disk.hpp; sourceTree = SOURCE_ROOT; };
+		DFD600AC8798469888CB32BA /* cube.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = cube.hpp; path = src/shapes/cube.hpp; sourceTree = SOURCE_ROOT; };
+		DFE7743BDF0F4BCF840CEB90 /* model.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = model.h; path = src/tools/model.h; sourceTree = SOURCE_ROOT; };
+		E0834EEDEEDF4FB1BD214FF2 /* lgc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lgc.c; path = third/lua53/lua/lgc.c; sourceTree = SOURCE_ROOT; };
+		E09AEEB98CA44AA1B75DAB51 /* constant.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = constant.hpp; path = src/textures/constant.hpp; sourceTree = SOURCE_ROOT; };
+		E22B0B9AC4924AC2A7F1A02D /* ldump.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ldump.c; path = third/lua53/lua/ldump.c; sourceTree = SOURCE_ROOT; };
+		E478ED7068394B288EF97903 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		E5FB5DAC3ED44D1B80F10048 /* random.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = random.cpp; path = src/samplers/random.cpp; sourceTree = SOURCE_ROOT; };
+		E8F35E72628143348CD0ED4E /* lcorolib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lcorolib.c; path = third/lua53/lua/lcorolib.c; sourceTree = SOURCE_ROOT; };
+		E95A724069934E1A849122A5 /* header.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = header.h; path = src/core/header.h; sourceTree = SOURCE_ROOT; };
+		ED57FBE1B19540DFB9B1B2AB /* pointlight.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = pointlight.hpp; path = src/lights/pointlight.hpp; sourceTree = SOURCE_ROOT; };
+		EDB20E9CC8A444C0BC2E2165 /* cube.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = cube.cpp; path = src/shapes/cube.cpp; sourceTree = SOURCE_ROOT; };
+		EE9307D9FD5B4EAFA999B25B /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
+		EE9786CDD35740FAA943E610 /* tiny_obj_loader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = tiny_obj_loader.h; path = third/tinyobjloader/tiny_obj_loader.h; sourceTree = SOURCE_ROOT; };
+		EF669D4B43AE4D97A335CE6D /* lauxlib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lauxlib.c; path = third/lua53/lua/lauxlib.c; sourceTree = SOURCE_ROOT; };
+		EF6EDB3AB4594230A623991A /* light.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = light.hpp; path = src/core/light.hpp; sourceTree = SOURCE_ROOT; };
+		F2C257F330DB41DCAB903E7C /* lvm.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lvm.h; path = third/lua53/lua/lvm.h; sourceTree = SOURCE_ROOT; };
+		F3AEEC972DF04D05988A6D88 /* lundump.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lundump.h; path = third/lua53/lua/lundump.h; sourceTree = SOURCE_ROOT; };
+		F418092AD6984BE1BE76011A /* llimits.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = llimits.h; path = third/lua53/lua/llimits.h; sourceTree = SOURCE_ROOT; };
+		F4DC96DD6D584C82A26C23B8 /* lowdiscrepancy.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = lowdiscrepancy.cpp; path = src/math/lowdiscrepancy.cpp; sourceTree = SOURCE_ROOT; };
+		F617874822F8638300F10358 /* model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model.h; sourceTree = "<group>"; };
+		F6897FBF68F04AABA69A7565 /* lctype.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lctype.h; path = third/lua53/lua/lctype.h; sourceTree = SOURCE_ROOT; };
+		F703D0AAF1E84AF58DF75B1F /* medium.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = medium.cpp; path = src/core/medium.cpp; sourceTree = SOURCE_ROOT; };
+		F85F12F9680148DE890EF0EF /* linit.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = linit.c; path = third/lua53/lua/linit.c; sourceTree = SOURCE_ROOT; };
+		F91AC57EFCE74C18A234F7C9 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = third/lua53/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		FA22A252BF4945E698DBBED3 /* ltm.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ltm.h; path = third/lua53/lua/ltm.h; sourceTree = SOURCE_ROOT; };
+		FC1CF0B43A034DA5A0444735 /* ldblib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ldblib.c; path = third/lua53/lua/ldblib.c; sourceTree = SOURCE_ROOT; };
+		FC296E64C21A400F9D204F5B /* loslib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = loslib.c; path = third/lua53/lua/loslib.c; sourceTree = SOURCE_ROOT; };
+		FE3A2B5F6F6A40EA9E1CCF4C /* path.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = path.cpp; path = src/integrators/path.cpp; sourceTree = SOURCE_ROOT; };
+		FF3D2068716E4CB68FB16423 /* rng.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rng.h; path = src/math/rng.h; sourceTree = SOURCE_ROOT; };
+		FFFA53B7829F403AAA96DBD5 /* lualib.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lualib.h; path = third/lua53/lua/lualib.h; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0A68B38292274578BD5974EE /* shapes */ = {
+			isa = PBXGroup;
+			children = (
+				4BD7E71810D84A4D9785C427 /* cone.cpp */,
+				3EB084783E4649669AD7ADFC /* cone.hpp */,
+				EDB20E9CC8A444C0BC2E2165 /* cube.cpp */,
+				DFD600AC8798469888CB32BA /* cube.hpp */,
+				C669BBA8D5D5468E8B8BDBF8 /* curve.cpp */,
+				93148331E6894207BBAF65E4 /* curve.hpp */,
+				8D4044E4CA25454B86F589CC /* cylinder.cpp */,
+				89E76FCF56AA4D49BA344F62 /* cylinder.hpp */,
+				BA77D1CA14384AD8BC9E1EBD /* disk.cpp */,
+				DE7B935D4D72465C8AFECED3 /* disk.hpp */,
+				AF4F53C525FE47EDB392FC0E /* sphere.cpp */,
+				9F199949545D4CA99A812CC9 /* sphere.hpp */,
+				B7B49213D2124E0884E28A64 /* triangle.cpp */,
+				A69BDBF9DCBF40EC9C6D5B54 /* triangle.hpp */,
+			);
+			name = shapes;
+			sourceTree = "<group>";
+		};
+		14E751D575AA4D98A266F2F8 /* accelerators */ = {
+			isa = PBXGroup;
+			children = (
+				232B408EF8D741BE8A0392CD /* bvh.cpp */,
+				0C155189F4764531BE451ED3 /* bvh.hpp */,
+				5ACEBFD8AE5A4386AD5A0CD3 /* kdtree.cpp */,
+				2F6D7D4B2BE9445D8D7DD600 /* kdtree.hpp */,
+			);
+			name = accelerators;
+			sourceTree = "<group>";
+		};
+		1EB6B7B9E7394A6AAC0E9FAF /* samplers */ = {
+			isa = PBXGroup;
+			children = (
+				E5FB5DAC3ED44D1B80F10048 /* random.cpp */,
+				441AFE9FDC1D45AF8E4FD547 /* random.hpp */,
+			);
+			name = samplers;
+			sourceTree = "<group>";
+		};
+		25AFB3EFB1774C35BA083AC2 /* tinyobjloader */ = {
+			isa = PBXGroup;
+			children = (
+				46EEA0E1264F40488F7B82F5 /* Header Files */,
+				E7720736329541CC8D911E37 /* Source Files */,
+				277E26AF37484EF1A6880D1B /* CMakeLists.txt */,
+			);
+			name = tinyobjloader;
+			sourceTree = "<group>";
+		};
+		25F53798BFCE41C58F25EF5D /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				ED1D23FB723943C7895F0E2D /* Paladin */,
+				FF9419D1996240AE94C983C4 /* ALL_BUILD */,
+				A019B5B6C8A940F5AA268A8F /* ZERO_CHECK */,
+				7AFF94B2145643C0953BAA01 /* lua53 */,
+				25AFB3EFB1774C35BA083AC2 /* tinyobjloader */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		284918F7A6DD4E618D0E1769 = {
+			isa = PBXGroup;
+			children = (
+				25F53798BFCE41C58F25EF5D /* Sources */,
+				E55E9658129E4246AA41C589 /* Resources */,
+				D3E3ED5CC11648668EB7694D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		447698ED38AB4E45877A3890 /* math */ = {
+			isa = PBXGroup;
+			children = (
+				4008C07DD193441A9A0021AF /* animatedtransform.cpp */,
+				5AC09F059B6F40D9AB08D76B /* animatedtransform.hpp */,
+				9D1D3D73534F44A8B88B5F74 /* bounds.h */,
+				F4DC96DD6D584C82A26C23B8 /* lowdiscrepancy.cpp */,
+				2A9DAD81EA154BF6A36ABA24 /* lowdiscrepancy.hpp */,
+				031D07219093461C86DBB1F9 /* mathutil.h */,
+				7C3AFF28421B47BCB6162281 /* point.h */,
+				AFC741B93F644CE4BCB69E38 /* quaternion.cpp */,
+				DAB3B77F35394BA9998E83EE /* quaternion.hpp */,
+				C07F65D6F97446AE9A640E78 /* ray.h */,
+				FF3D2068716E4CB68FB16423 /* rng.h */,
+				26F984F63BA74C1A81F059AA /* transform.cpp */,
+				770C39600D0A4782BF0344EC /* transform.hpp */,
+				A2D999C664E449B9946F5529 /* vector.h */,
+			);
+			name = math;
+			sourceTree = "<group>";
+		};
+		46EEA0E1264F40488F7B82F5 /* Header Files */ = {
+			isa = PBXGroup;
+			children = (
+				EE9786CDD35740FAA943E610 /* tiny_obj_loader.h */,
+			);
+			name = "Header Files";
+			sourceTree = "<group>";
+		};
+		4D47940996C1457FA7312B0C /* cameras */ = {
+			isa = PBXGroup;
+			children = (
+				1F80AFFBFA0E4DCB8F5B5150 /* perspective.cpp */,
+				C705078A15964737989438A7 /* perspective.hpp */,
+			);
+			name = cameras;
+			sourceTree = "<group>";
+		};
+		5004E6AFAA4F4E09BD139267 /* materials */ = {
+			isa = PBXGroup;
+			children = (
+				92CA8F2BDEBA4B06832F6AE8 /* matte.cpp */,
+				0BC7952142CC49F6B9DB1705 /* matte.hpp */,
+			);
+			name = materials;
+			sourceTree = "<group>";
+		};
+		59B2571A03934ABEB54F6F5F /* alltest */ = {
+			isa = PBXGroup;
+			children = (
+				D60BC715ED0B489C98758BF0 /* test_lua.hpp */,
+			);
+			name = alltest;
+			sourceTree = "<group>";
+		};
+		73CE862677864D7CA73D6ED5 /* Header Files */ = {
+			isa = PBXGroup;
+			children = (
+				46118797C25043DA92A1340F /* lapi.h */,
+				0FCF41A4E37F4142BB7474F6 /* lauxlib.h */,
+				0068EF0584DC4CD9A58B05F9 /* lcode.h */,
+				F6897FBF68F04AABA69A7565 /* lctype.h */,
+				B6DCE30902134D7BB8922A70 /* ldebug.h */,
+				A9238055EC3149D8A53E3DF8 /* ldo.h */,
+				6FFB0ACD6A284C88A596DB98 /* lfunc.h */,
+				7CF62B46234045CF84DBA2F9 /* lgc.h */,
+				5CC703CCD51D41CE8A9660D0 /* ljumptab.h */,
+				090D076C8B1144BC89DB9CB0 /* llex.h */,
+				F418092AD6984BE1BE76011A /* llimits.h */,
+				018C8107404F4CFE91AD0B90 /* lmem.h */,
+				0FF93BCF940A461A9B4E1102 /* lobject.h */,
+				0F24B2EC0E2B4EBC89C56C95 /* lopcodes.h */,
+				1175748F11D04BE5803206E2 /* lopnames.h */,
+				568E3D8CF6734880B26DAFB8 /* lparser.h */,
+				C16E148A46C6471790041EA3 /* lprefix.h */,
+				897BB9FA7E724E999F02DE78 /* lstate.h */,
+				ADB1A86FE2754162B7FFE598 /* lstring.h */,
+				40EDA88AEDEA48AF97AC810E /* ltable.h */,
+				6364C518BDC74BE1A228DB23 /* ltests.h */,
+				FA22A252BF4945E698DBBED3 /* ltm.h */,
+				753D8CA9BCE94AD2B416A45F /* lua.h */,
+				021658DC49D840A88A146E23 /* luaconf.h */,
+				FFFA53B7829F403AAA96DBD5 /* lualib.h */,
+				F3AEEC972DF04D05988A6D88 /* lundump.h */,
+				F2C257F330DB41DCAB903E7C /* lvm.h */,
+				34637D332CD14EA0A33E341E /* lzio.h */,
+			);
+			name = "Header Files";
+			sourceTree = "<group>";
+		};
+		75405A0AA3804E17916271B3 /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		7AFF94B2145643C0953BAA01 /* lua53 */ = {
+			isa = PBXGroup;
+			children = (
+				73CE862677864D7CA73D6ED5 /* Header Files */,
+				8FC9ED309671437094804202 /* Source Files */,
+				F91AC57EFCE74C18A234F7C9 /* CMakeLists.txt */,
+			);
+			name = lua53;
+			sourceTree = "<group>";
+		};
+		8131AF4C17E14AAD9073C000 /* textures */ = {
+			isa = PBXGroup;
+			children = (
+				C39BDE6E83FB4F089D08D117 /* constant.cpp */,
+				E09AEEB98CA44AA1B75DAB51 /* constant.hpp */,
+			);
+			name = textures;
+			sourceTree = "<group>";
+		};
+		83ED81A0871D4B65B1190452 /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		8E6A81E8421A4CEF843D0A5F /* integrators */ = {
+			isa = PBXGroup;
+			children = (
+				FE3A2B5F6F6A40EA9E1CCF4C /* path.cpp */,
+				0EB9A4E538C9481490822709 /* path.hpp */,
+			);
+			name = integrators;
+			sourceTree = "<group>";
+		};
+		8FC9ED309671437094804202 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				7C3BFDC8F5F348B08B7BD1F2 /* lapi.c */,
+				EF669D4B43AE4D97A335CE6D /* lauxlib.c */,
+				CA03335C7EAE4FBB907C59F4 /* lbaselib.c */,
+				1BDEAC4CC95B4615A6AF9FAF /* lcode.c */,
+				E8F35E72628143348CD0ED4E /* lcorolib.c */,
+				35578B5526F54FAC8939330D /* lctype.c */,
+				FC1CF0B43A034DA5A0444735 /* ldblib.c */,
+				242C303248FD4E2D81404C32 /* ldebug.c */,
+				5BA0D616226A42BA9E47F78E /* ldo.c */,
+				E22B0B9AC4924AC2A7F1A02D /* ldump.c */,
+				0FF79E1D9D4F4AE881862538 /* lfunc.c */,
+				E0834EEDEEDF4FB1BD214FF2 /* lgc.c */,
+				F85F12F9680148DE890EF0EF /* linit.c */,
+				CDB93A733B1F40BFAB530D98 /* liolib.c */,
+				A0D68F1C5F184020A4282D87 /* llex.c */,
+				7EEAD0CD11294384B0ACA179 /* lmathlib.c */,
+				0E3D4817940C4773BBA20DB7 /* lmem.c */,
+				073D7F437C1C47F385DBC876 /* loadlib.c */,
+				B54453162D404A87894905FC /* lobject.c */,
+				CF1A7C1902B145A3968CA2BE /* lopcodes.c */,
+				FC296E64C21A400F9D204F5B /* loslib.c */,
+				855DB014FA36482A8DF4B9E8 /* lparser.c */,
+				49263C1511B646CC92341A80 /* lstate.c */,
+				7EB694A031AE4120BC65FE7E /* lstring.c */,
+				B61C31F91DC74E65BA976D48 /* lstrlib.c */,
+				7D86A9D44129402C90190D00 /* ltable.c */,
+				17B473BC76854EE0862AF485 /* ltablib.c */,
+				0D841DE9553046AA927AA003 /* ltests.c */,
+				4A3A6CF9C918450D8553241A /* ltm.c */,
+				28807FDDA7B94BAAAE048DCA /* lundump.c */,
+				0951C60A270D416D9CFB0F74 /* lutf8lib.c */,
+				4A90517CBE034D94B5FF4174 /* lvm.c */,
+				621C360F4EFD486080A7AA0F /* lzio.c */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		A019B5B6C8A940F5AA268A8F /* ZERO_CHECK */ = {
+			isa = PBXGroup;
+			children = (
+				83ED81A0871D4B65B1190452 /* CMake Rules */,
+				11A73C458C0A412895AC13D9 /* CMakeLists.txt */,
+			);
+			name = ZERO_CHECK;
+			sourceTree = "<group>";
+		};
+		C2837BB851E84F0DBC429048 /* filters */ = {
+			isa = PBXGroup;
+			children = (
+				4D23E2C8C7394A1CA34AF499 /* box.cpp */,
+				A92912B378B44CDB802DD2A0 /* box.hpp */,
+				678328A2619D4DC0A1A90986 /* sinc.cpp */,
+				0BB7C45038954F3795F2D372 /* sinc.hpp */,
+			);
+			name = filters;
+			sourceTree = "<group>";
+		};
+		CDE14C8686524617B95DCEC8 /* tools */ = {
+			isa = PBXGroup;
+			children = (
+				C1DAAD03D54D4C66A1666171 /* errfloat.h */,
+				CCAE06170A164606B1EDD26B /* fileio.cpp */,
+				976C87B3154E41359A10F0EC /* fileio.hpp */,
+				2DC7FFB9695F42FEAE43E79D /* macro.h */,
+				C2C82216AE104E4FB25D73F9 /* memory.cpp */,
+				4D98590AC8F648B68D39360F /* memory.hpp */,
+				DFE7743BDF0F4BCF840CEB90 /* model.h */,
+				77D4A4A66AA04A1195A3EE19 /* stringprint.hpp */,
+			);
+			name = tools;
+			sourceTree = "<group>";
+		};
+		D3E3ED5CC11648668EB7694D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8E9D0DC956064CECB6BBCD92 /* Paladin */,
+				CA1C82A2437B4CFC976F05D4 /* liblua53.a */,
+				1F0B6325498D4673ADAE19F1 /* libtinyobjloader.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E55E9658129E4246AA41C589 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		E7720736329541CC8D911E37 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				CDB5420492C64BD1B37E95CA /* tiny_obj_loader.cc */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		ED1D23FB723943C7895F0E2D /* Paladin */ = {
+			isa = PBXGroup;
+			children = (
+				F14A5DB1B91E486693C31561 /* src */,
+				E478ED7068394B288EF97903 /* CMakeLists.txt */,
+			);
+			name = Paladin;
+			sourceTree = "<group>";
+		};
+		F14A5DB1B91E486693C31561 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				F617874722F8638300F10358 /* ext */,
+				C2837BB851E84F0DBC429048 /* filters */,
+				8131AF4C17E14AAD9073C000 /* textures */,
+				CDE14C8686524617B95DCEC8 /* tools */,
+				5004E6AFAA4F4E09BD139267 /* materials */,
+				F1AFF801F6CA4C36A1E21B27 /* core */,
+				59B2571A03934ABEB54F6F5F /* alltest */,
+				14E751D575AA4D98A266F2F8 /* accelerators */,
+				0A68B38292274578BD5974EE /* shapes */,
+				4D47940996C1457FA7312B0C /* cameras */,
+				8E6A81E8421A4CEF843D0A5F /* integrators */,
+				447698ED38AB4E45877A3890 /* math */,
+				1EB6B7B9E7394A6AAC0E9FAF /* samplers */,
+				F5CFFE213B4C42B087DB9208 /* lights */,
+				EE9307D9FD5B4EAFA999B25B /* main.cpp */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		F1AFF801F6CA4C36A1E21B27 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				927A41BAAE8D49A48F52F620 /* bxdf.cpp */,
+				B184C6334ADE432D99526CFF /* bxdf.hpp */,
+				68EBBF27FA254DEFACA156C3 /* camera.cpp */,
+				4263308C74F34128B78DD187 /* camera.hpp */,
+				E95A724069934E1A849122A5 /* header.h */,
+				62B794CEBB624E64A05CFC30 /* integrator.cpp */,
+				329A9E49E34746A1AB069294 /* integrator.hpp */,
+				2202CF884B504E6692D13837 /* interaction.cpp */,
+				BF65E8583FE64A56AD438284 /* interaction.hpp */,
+				55486C2B8BBE4B948C17F9DC /* light.cpp */,
+				EF6EDB3AB4594230A623991A /* light.hpp */,
+				AA0E9628D6B74F8DB0D16DF2 /* material.cpp */,
+				D0FF093BAE1542E697F52E5F /* material.hpp */,
+				F703D0AAF1E84AF58DF75B1F /* medium.cpp */,
+				5F21DA5DD34A40A6B2E14B31 /* medium.hpp */,
+				B215D131D966497EAEB7EC61 /* paladin.cpp */,
+				918D32382EE340E894CAF6CC /* paladin.hpp */,
+				397348DE773E4ACF88455411 /* sampler.cpp */,
+				A3AB068472B2488AB324036F /* sampler.hpp */,
+				B51E3BEEF299402B8087FC08 /* sampling.cpp */,
+				19A08EB4EBD4465286FE2437 /* sampling.hpp */,
+				CF668E31D90B47D295D6BFD0 /* scene.cpp */,
+				25C2CEB5559D40B18B350180 /* scene.hpp */,
+				175038C9A1EA4396BF47B37A /* shape.cpp */,
+				9A64892A05504F63B46B6272 /* shape.hpp */,
+				47F9B7C91C2341E5898DA05A /* spectrum.cpp */,
+				3464D37BE7A841649B051DAE /* spectrum.hpp */,
+				18A10640C15345D9B181136E /* texture.cpp */,
+				7F8337B20CD74634B19D71D2 /* texture.hpp */,
+			);
+			name = core;
+			sourceTree = "<group>";
+		};
+		F5CFFE213B4C42B087DB9208 /* lights */ = {
+			isa = PBXGroup;
+			children = (
+				82C0FD9B6AEB4E0E890C9154 /* pointlight.cpp */,
+				ED57FBE1B19540DFB9B1B2AB /* pointlight.hpp */,
+			);
+			name = lights;
+			sourceTree = "<group>";
+		};
+		F617874722F8638300F10358 /* ext */ = {
+			isa = PBXGroup;
+			children = (
+				F617874822F8638300F10358 /* model.h */,
+			);
+			name = ext;
+			path = src/ext;
+			sourceTree = "<group>";
+		};
+		FF9419D1996240AE94C983C4 /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				75405A0AA3804E17916271B3 /* CMake Rules */,
+				D646C558BA314996B1266B14 /* CMakeLists.txt */,
+			);
+			name = ALL_BUILD;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		03B22E8F5E614E48A5CF4686 /* lua53 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D9CD168224244643A42004D8 /* Build configuration list for PBXNativeTarget "lua53" */;
+			buildPhases = (
+				90630BE45AAF4380BD8FFD63 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = lua53;
+			productName = lua53;
+			productReference = CA1C82A2437B4CFC976F05D4 /* liblua53.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		2D85CA9E5A86474AAAC2157C /* Paladin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BA5FA5FA71F14EEE978A2E79 /* Build configuration list for PBXNativeTarget "Paladin" */;
+			buildPhases = (
+				F50CEBE6F95F40909DDCA435 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4DBF3D44B3534D0A882C567A /* PBXTargetDependency */,
+				140A56ABB4564E6E8AE6B80D /* PBXTargetDependency */,
+				C36D3369A00640ABA2884E8C /* PBXTargetDependency */,
+			);
+			name = Paladin;
+			productName = Paladin;
+			productReference = 8E9D0DC956064CECB6BBCD92 /* Paladin */;
+			productType = "com.apple.product-type.tool";
+		};
+		EF727D7A49A544E6851DC886 /* tinyobjloader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 33BBCF82ADF14ECD888C814D /* Build configuration list for PBXNativeTarget "tinyobjloader" */;
+			buildPhases = (
+				AAE6A48543B442E29A65296C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = tinyobjloader;
+			productName = tinyobjloader;
+			productReference = 1F0B6325498D4673ADAE19F1 /* libtinyobjloader.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D42E4867796C471C9EF20325 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 0920;
+			};
+			buildConfigurationList = 158F5625839A43179079D21B /* Build configuration list for PBXProject "Paladin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 284918F7A6DD4E618D0E1769;
+			projectDirPath = /Users/satan_z/work/git/graphic/Paladin/Paladin;
+			projectRoot = "";
+			targets = (
+				5643D51D89A242D98D0B9C77 /* ALL_BUILD */,
+				2D85CA9E5A86474AAAC2157C /* Paladin */,
+				12F829C1BB454BBBB3C04903 /* ZERO_CHECK */,
+				DC000D25304A42AA9BC5F496 /* install */,
+				03B22E8F5E614E48A5CF4686 /* lua53 */,
+				EF727D7A49A544E6851DC886 /* tinyobjloader */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		25E7A3E0AA544CCCBA45FB58 /* CMake PostBuild Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake PostBuild Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/satan_z/work/git/graphic/Paladin/xcode -f /Users/satan_z/work/git/graphic/Paladin/xcode/CMakeScripts/install_postBuildPhase.make$CONFIGURATION all";
+			showEnvVarsInLog = 0;
+		};
+		AA9EE06640CB4C12BE470457 /* CMake Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/satan_z/work/git/graphic/Paladin/xcode -f /Users/satan_z/work/git/graphic/Paladin/xcode/CMakeScripts/ZERO_CHECK_cmakeRulesBuildPhase.make$CONFIGURATION all";
+			showEnvVarsInLog = 0;
+		};
+		EF8CB5929C384F579E5540AF /* CMake Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/satan_z/work/git/graphic/Paladin/xcode -f /Users/satan_z/work/git/graphic/Paladin/xcode/CMakeScripts/ALL_BUILD_cmakeRulesBuildPhase.make$CONFIGURATION all";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		90630BE45AAF4380BD8FFD63 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E98425853AD44962A0A73343 /* lapi.c in Sources */,
+				207467ECA0BF4C128A59B09C /* lauxlib.c in Sources */,
+				22C80AB324484C3D987B5DA8 /* lbaselib.c in Sources */,
+				287745982B244D6EB25649E4 /* lcode.c in Sources */,
+				3C30431C202749219A08472B /* lcorolib.c in Sources */,
+				826F2B639C10459B8AAAF600 /* lctype.c in Sources */,
+				EB6D0B7B8F384A4F9B026E24 /* ldblib.c in Sources */,
+				D4B6CCDE4DE24F2BBEDD94F6 /* ldebug.c in Sources */,
+				71F9BC2F3A9848AAA7D20753 /* ldo.c in Sources */,
+				9F47EDBDB7CA47009539A667 /* ldump.c in Sources */,
+				A180349AA6CD4B0BA2F5B2E2 /* lfunc.c in Sources */,
+				F037312B7357428390ACA135 /* lgc.c in Sources */,
+				908FCED4DB3443DE8EF23EBD /* linit.c in Sources */,
+				18F73B80977F4700A7FC77BA /* liolib.c in Sources */,
+				D4C87BBCD4A24C239ED4D13C /* llex.c in Sources */,
+				D025927307C44F7F955B4CA9 /* lmathlib.c in Sources */,
+				8CE844FAFAD44C07AFC1711C /* lmem.c in Sources */,
+				948834285A1841F7BBDA2BD2 /* loadlib.c in Sources */,
+				1421C3DBFF82472496CE5CD0 /* lobject.c in Sources */,
+				86BF0DA0BBD94974979A861B /* lopcodes.c in Sources */,
+				6530DA7EDDA14857BAC12BF1 /* loslib.c in Sources */,
+				558B82CCEB9A474397C228C0 /* lparser.c in Sources */,
+				1E570B45349340D596EC0DE8 /* lstate.c in Sources */,
+				D0C1B104599349A1B1EF772E /* lstring.c in Sources */,
+				5214AA25A1DE41AA8E87A91F /* lstrlib.c in Sources */,
+				E3568F82140240BA9EA53AA8 /* ltable.c in Sources */,
+				7BFA06C6D971441BABEA044A /* ltablib.c in Sources */,
+				1D5AC6A730BC43138F37F9E3 /* ltests.c in Sources */,
+				A40B8E72E4754222A71D72FC /* ltm.c in Sources */,
+				0D0F45EB9A894BFA9CA5E65D /* lundump.c in Sources */,
+				AED63C4286974213804A0A76 /* lutf8lib.c in Sources */,
+				C2360A75E1DA4229A2DC0B30 /* lvm.c in Sources */,
+				0E9CDD34DA8746C7B3E92761 /* lzio.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAE6A48543B442E29A65296C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F242335162CB4D2E89201190 /* tiny_obj_loader.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F50CEBE6F95F40909DDCA435 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				943EBFED9EF64938A66778CC /* bvh.cpp in Sources */,
+				59C68500AC294E7E809AF773 /* kdtree.cpp in Sources */,
+				1B7BC18390DB473FACF51499 /* perspective.cpp in Sources */,
+				BF4BC4675B51463EB70814DE /* bxdf.cpp in Sources */,
+				DFC3C39457504ECB8690497F /* camera.cpp in Sources */,
+				64992E141B7F4877B99D37A4 /* integrator.cpp in Sources */,
+				B6ADCAF6440B43A98CE1E4BD /* interaction.cpp in Sources */,
+				656F992D8EE54F23892F3CD5 /* light.cpp in Sources */,
+				ED5585415937436C9C43834A /* material.cpp in Sources */,
+				54BA9103A8104D219C4D5A19 /* medium.cpp in Sources */,
+				381C16CC410F431ABA6A3EF0 /* paladin.cpp in Sources */,
+				F75868DF09814B3B96EEC4B0 /* sampler.cpp in Sources */,
+				BEA16A06E17948ADBF7B3A68 /* sampling.cpp in Sources */,
+				A2B04E64FB754951A5ABDF01 /* scene.cpp in Sources */,
+				7B2F44CE1A224A3797A3BA16 /* shape.cpp in Sources */,
+				D2270A536AB7413A80BB4ECA /* spectrum.cpp in Sources */,
+				4D73CA8C78594AFC94F18504 /* texture.cpp in Sources */,
+				698D63C6930F44499BF26B31 /* box.cpp in Sources */,
+				4E26C800B40845339BA45575 /* sinc.cpp in Sources */,
+				3E04ADB059574A999063A11A /* path.cpp in Sources */,
+				61726C88E934435B85324C9F /* pointlight.cpp in Sources */,
+				E93CBA82B12A4095B9AAE80F /* main.cpp in Sources */,
+				2D02D9AE74A14D75ADBE44E8 /* matte.cpp in Sources */,
+				53BB280D7C264B199C6A30DC /* animatedtransform.cpp in Sources */,
+				DCB1240038D447AB876BB318 /* lowdiscrepancy.cpp in Sources */,
+				3123E74115BC481C8795D5AE /* quaternion.cpp in Sources */,
+				87A64B31A7AD46119B2487F0 /* transform.cpp in Sources */,
+				30FC5E48092C4259822EE57C /* random.cpp in Sources */,
+				C6AC5722AFDC4B7EA55B8901 /* cone.cpp in Sources */,
+				82CA433932ED4A5FBB86820E /* cube.cpp in Sources */,
+				9E23B62492C449C4AFB654B3 /* curve.cpp in Sources */,
+				ACAB5E518AAD432CA7C0853A /* cylinder.cpp in Sources */,
+				29765E92B6BC4B50A3CE916A /* disk.cpp in Sources */,
+				A75D44D7E92840ABAC703B29 /* sphere.cpp in Sources */,
+				CD47B72320924CFD80DFA2E9 /* triangle.cpp in Sources */,
+				A138286A3FEE416999FA04B5 /* constant.cpp in Sources */,
+				63604EA4AC7048A388ED3A06 /* fileio.cpp in Sources */,
+				28C02FC62AEE4986B641E154 /* memory.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		140A56ABB4564E6E8AE6B80D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EF727D7A49A544E6851DC886 /* tinyobjloader */;
+			targetProxy = 1613354EE81A415387CEFFAC /* PBXContainerItemProxy */;
+		};
+		44AFA569804B4E2FBA8D5BB7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2D85CA9E5A86474AAAC2157C /* Paladin */;
+			targetProxy = B782B10F1FDA4091B68FEF30 /* PBXContainerItemProxy */;
+		};
+		4A0A6459640944F286740097 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5643D51D89A242D98D0B9C77 /* ALL_BUILD */;
+			targetProxy = 442F735AC89546B69FBFF9CD /* PBXContainerItemProxy */;
+		};
+		4DBF3D44B3534D0A882C567A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 12F829C1BB454BBBB3C04903 /* ZERO_CHECK */;
+			targetProxy = D54AAF6503A4441088D4BF7A /* PBXContainerItemProxy */;
+		};
+		7262E7E1D5F44FBBA2C19929 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EF727D7A49A544E6851DC886 /* tinyobjloader */;
+			targetProxy = 57ADF5FA406949E7939A8E32 /* PBXContainerItemProxy */;
+		};
+		B7C2354F9FC64EBC9032AFC8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 03B22E8F5E614E48A5CF4686 /* lua53 */;
+			targetProxy = 35355B5183134061B81A9392 /* PBXContainerItemProxy */;
+		};
+		BB5DB4516EDD43FEA2726420 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 12F829C1BB454BBBB3C04903 /* ZERO_CHECK */;
+			targetProxy = F62C659BE84F4CE1A4A3F65F /* PBXContainerItemProxy */;
+		};
+		C36D3369A00640ABA2884E8C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 03B22E8F5E614E48A5CF4686 /* lua53 */;
+			targetProxy = 09B30243360042029006D110 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0369ABF81C6C4425B9C66084 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CPLUSPLUSFLAGS = (
+					"-std=c++11",
+					"-DNDEBUG",
+				);
+				OTHER_LIBTOOLFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = tinyobjloader;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode/third/tinyobjloader;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = MinSizeRel;
+		};
+		0750CB18532A495BAD070B2A /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-std=c++11",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/satan_z/work/git/graphic/Paladin/xcode/third/lua53/MinSizeRel/liblua53.a,
+					/Users/satan_z/work/git/graphic/Paladin/xcode/third/tinyobjloader/MinSizeRel/libtinyobjloader.a,
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Paladin;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = MinSizeRel;
+		};
+		21827069B87E4CB5A851CCA6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk;
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode/build;
+			};
+			name = Debug;
+		};
+		291E3AE567014831929FC505 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = Debug;
+		};
+		342647EB940843869D28B33C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = Debug;
+		};
+		3E322958F1894F8A8F6AB90F /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		54884216DCB94BA5809A8699 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk;
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode/build;
+			};
+			name = Release;
+		};
+		61DD02427AD6452280A4FE47 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = /Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua;
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_LIBTOOLFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lua53;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode/third/lua53;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = Release;
+		};
+		63BAFA23AEA4453380386BBC /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CPLUSPLUSFLAGS = (
+					"-std=c++11",
+					"-DNDEBUG",
+				);
+				OTHER_LIBTOOLFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = tinyobjloader;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode/third/tinyobjloader;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		648A5E263B7E4533AA940C62 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-std=c++11",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/satan_z/work/git/graphic/Paladin/xcode/third/lua53/Release/liblua53.a,
+					/Users/satan_z/work/git/graphic/Paladin/xcode/third/tinyobjloader/Release/libtinyobjloader.a,
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Paladin;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = Release;
+		};
+		6C1791DB32974A74914CD441 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = Debug;
+		};
+		6CF67D3FAC5A401D964F6F1A /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-std=c++11",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/satan_z/work/git/graphic/Paladin/xcode/third/lua53/RelWithDebInfo/liblua53.a,
+					/Users/satan_z/work/git/graphic/Paladin/xcode/third/tinyobjloader/RelWithDebInfo/libtinyobjloader.a,
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Paladin;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		77BF72AAE70A407DBA06F493 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = /Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua;
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_LIBTOOLFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lua53;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode/third/lua53;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = MinSizeRel;
+		};
+		8C6EE613CFE848439D31CDFC /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk;
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode/build;
+			};
+			name = RelWithDebInfo;
+		};
+		92251EB585A74FE6B1F3E518 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CPLUSPLUSFLAGS = " -std=c++11     ";
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/satan_z/work/git/graphic/Paladin/xcode/third/lua53/Debug/liblua53.a,
+					/Users/satan_z/work/git/graphic/Paladin/xcode/third/tinyobjloader/Debug/libtinyobjloader.a,
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Paladin;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = Debug;
+		};
+		9AC2B74304DD447B9DEDED76 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = /Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua;
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_LIBTOOLFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lua53;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode/third/lua53;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		A01FA5AA21AF43D8BDB33442 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = Release;
+		};
+		A1798D89C67F4007A38CBA50 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk;
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode/build;
+			};
+			name = MinSizeRel;
+		};
+		B6A023C0355D4741BF66B18B /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = MinSizeRel;
+		};
+		B99B4BE5960D47FC9BDC515A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CPLUSPLUSFLAGS = (
+					"-std=c++11",
+					"-DNDEBUG",
+				);
+				OTHER_LIBTOOLFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = tinyobjloader;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode/third/tinyobjloader;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = Release;
+		};
+		B9D34652E7504E23A97EF7BD /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		BE67928993084DE7B54A9F11 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = MinSizeRel;
+		};
+		C2A37EC285B24EA485CB32B7 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = MinSizeRel;
+		};
+		D648B5FD8D3B46B68AE1AC4B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = Release;
+		};
+		F54712AEFE7B47968E690F53 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = Release;
+		};
+		F561700C7AB8411984842B43 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = /Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua;
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    ";
+				OTHER_LIBTOOLFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lua53;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode/third/lua53;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = Debug;
+		};
+		F7CD3CC42F874FD487F3D9E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CPLUSPLUSFLAGS = " -std=c++11     ";
+				OTHER_LIBTOOLFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = tinyobjloader;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode/third/tinyobjloader;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = Debug;
+		};
+		FEA89EAC53E64613BA23074B /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/alltest,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/accelerators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/cameras,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/core,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/filters,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/integrators,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/lights,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/materials,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/math,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/samplers,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/shapes,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/textures,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/src/tools,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/lua53/lua,
+					/Users/satan_z/work/git/graphic/Paladin/Paladin/third/tinyobjloader,
+				);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/satan_z/work/git/graphic/Paladin/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+					"$(inherited)",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		158F5625839A43179079D21B /* Build configuration list for PBXProject "Paladin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				21827069B87E4CB5A851CCA6 /* Debug */,
+				54884216DCB94BA5809A8699 /* Release */,
+				A1798D89C67F4007A38CBA50 /* MinSizeRel */,
+				8C6EE613CFE848439D31CDFC /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		33BBCF82ADF14ECD888C814D /* Build configuration list for PBXNativeTarget "tinyobjloader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F7CD3CC42F874FD487F3D9E0 /* Debug */,
+				B99B4BE5960D47FC9BDC515A /* Release */,
+				0369ABF81C6C4425B9C66084 /* MinSizeRel */,
+				63BAFA23AEA4453380386BBC /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A08B6E22020840789A2A8D82 /* Build configuration list for PBXAggregateTarget "install" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C1791DB32974A74914CD441 /* Debug */,
+				A01FA5AA21AF43D8BDB33442 /* Release */,
+				B6A023C0355D4741BF66B18B /* MinSizeRel */,
+				FEA89EAC53E64613BA23074B /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A95BBC10807B4D7A9A14D1C8 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				291E3AE567014831929FC505 /* Debug */,
+				D648B5FD8D3B46B68AE1AC4B /* Release */,
+				BE67928993084DE7B54A9F11 /* MinSizeRel */,
+				3E322958F1894F8A8F6AB90F /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BA5FA5FA71F14EEE978A2E79 /* Build configuration list for PBXNativeTarget "Paladin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				92251EB585A74FE6B1F3E518 /* Debug */,
+				648A5E263B7E4533AA940C62 /* Release */,
+				0750CB18532A495BAD070B2A /* MinSizeRel */,
+				6CF67D3FAC5A401D964F6F1A /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D63DF7CDF9BF4AE4AF109008 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				342647EB940843869D28B33C /* Debug */,
+				F54712AEFE7B47968E690F53 /* Release */,
+				C2A37EC285B24EA485CB32B7 /* MinSizeRel */,
+				B9D34652E7504E23A97EF7BD /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D9CD168224244643A42004D8 /* Build configuration list for PBXNativeTarget "lua53" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F561700C7AB8411984842B43 /* Debug */,
+				61DD02427AD6452280A4FE47 /* Release */,
+				77BF72AAE70A407DBA06F493 /* MinSizeRel */,
+				9AC2B74304DD447B9DEDED76 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D42E4867796C471C9EF20325 /* Project object */;
+}
