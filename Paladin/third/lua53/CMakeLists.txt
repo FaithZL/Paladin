@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 2.8)
+
+GET_FILENAME_COMPONENT(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+project(${PROJECT_NAME})
+#message(${PROJECT_NAME})
+
+file(GLOB ALL_SRC "lua/*.h*" "lua/*.c*")
+INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/lua")
+
+#message("${ALL_SRC}")
+
+get_filename_component(WILL_BE_REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/lua/lua.c ABSOLUTE)
+message("Remove ${WILL_BE_REMOVE} from ALL_SRC")
+LIST(REMOVE_ITEM ALL_SRC "${WILL_BE_REMOVE}")
+
+get_filename_component(WILL_BE_REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/lua/onelua.c ABSOLUTE)
+message("Remove ${WILL_BE_REMOVE} from ALL_SRC")
+LIST(REMOVE_ITEM ALL_SRC "${WILL_BE_REMOVE}")
+
+#message("${ALL_SRC}")
+
+ADD_LIBRARY(${PROJECT_NAME} ${ALL_SRC})
