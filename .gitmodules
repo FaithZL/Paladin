@@ -1,0 +1,8 @@
+[submodule "Paladin/third/lua53/lua"]
+	path = Paladin/third/lua53/lua
+	url = https://github.com/lua/lua.git
+	branch = v5.3
+[submodule "Paladin/third/tinyobjloader"]
+	path = Paladin/third/tinyobjloader
+	url = https://github.com/syoyo/tinyobjloader.git
+	branch = master
