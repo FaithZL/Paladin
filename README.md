@@ -3,9 +3,12 @@ Paladin is a pbrt style renderer
 
 代码内附带详细注释以及各种表达式推导过程，尽管来看，看不懂算我输😂
 
+# 获取仓库
+	git clone --recursive 仓库地址
+
 # 跨平台编译相关说明
-各平台最佳实践配置:
-Windows:
+Windows
+
 	Win7 64bit
 	CMake 3.15.0
 	VS2015(对应编译器cl版本 Microsoft (R) C/C++ 优化编译器 19.00.24215.1 版)
@@ -15,7 +18,9 @@ Windows:
 	2、cmake ../Paladin
 	3、在build中找到VS工程文件Paladin.sln打开
 
+
 Linux:
+
 	CentOS 6.5
 	CMake 2.8.12.2
 	GNU Make 3.81
@@ -26,7 +31,9 @@ Linux:
 	2、cmake ../Paladin
 	3、make
 
+
 MACOS:
+
 	Sierra 10.12.5
 	CMake 3.9.3
 	GNU Make 3.81
