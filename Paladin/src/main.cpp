@@ -23,7 +23,7 @@ int main(int argc, const char * argv[]) {
     Paladin pld;
     
     // test_tinyobjloader_main();
-    // test_lua_main();
+    test_lua_main();
 
     return pld.run(argc, argv);
 }
