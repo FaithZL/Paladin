@@ -21,6 +21,7 @@
 #define COUT std::cout
 #endif
 
+
 #define TINYOBJLOADER_IMPLEMENTATION
 
 #define USING_PALADIN using namespace paladin;
@@ -56,6 +57,20 @@
 
 #ifndef PALADIN_HAVE_ALIGNOF
 #define PALADIN_HAVE_ALIGNOF 16
+#endif
+
+#ifndef PALADIN_HAVE_HEX_FP_CONSTANTS
+static const double DoubleOneMinusEpsilon = 0.99999999999999989;
+static const float FloatOneMinusEpsilon = 0.99999994;
+#else
+static const double DoubleOneMinusEpsilon = 0x1.fffffffffffffp-1;
+static const float FloatOneMinusEpsilon = 0x1.fffffep-1;
+#endif
+
+#ifdef PALADIN_FLOAT_AS_DOUBLE
+static const Float OneMinusEpsilon = DoubleOneMinusEpsilon;
+#else
+static const Float OneMinusEpsilon = FloatOneMinusEpsilon;
 #endif
 
 static CONSTEXPR Float MaxFloat = std::numeric_limits<Float>::max();
