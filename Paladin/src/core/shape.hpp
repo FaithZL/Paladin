@@ -82,9 +82,10 @@ public:
 	*/
     virtual Float pdfW(const Interaction &ref, const Vector3f &wi) const;
     
-    
-
-//    virtual Float SolidAngle(const Point3f &p, int nSamples = 512) const;
+    /*
+      返回shape对于某个点的立体角大小
+     */
+    virtual Float solidAngle(const Point3f &p, int nSamples = 512) const;
 
 	const Transform * objectToWorld;
 	const Transform * worldToObject;
