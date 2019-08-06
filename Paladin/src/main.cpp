@@ -22,7 +22,8 @@ int main(int argc, const char * argv[]) {
     Paladin pld;
     
     test_lua_main();
-
+    system("pause");
+    
     return pld.run(argc, argv);
 }
 
