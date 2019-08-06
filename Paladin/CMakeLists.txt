@@ -2,7 +2,8 @@
 cmake_minimum_required (VERSION 2.8)
 
 # 项目信息
-project (Paladin)
+set(APP_NAME Paladin)
+project(${APP_NAME})
 
 # 使用C++11特性
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -52,8 +53,21 @@ include_directories ("${PROJECT_SOURCE_DIR}/third/lua53/lua")
 include_directories ("${PROJECT_SOURCE_DIR}/third/tinyobjloader")
 
 # 指定生成目标
-add_executable (Paladin ${ALL_FILES})
+add_executable (${APP_NAME} ${ALL_FILES})
 
 # 添加链接库
-target_link_libraries(Paladin ${EXTRA_LIBS})
+target_link_libraries(${APP_NAME} ${EXTRA_LIBS})
 
+# 设置输出路径
+MESSAGE(STATUS "operation system is ${CMAKE_SYSTEM}")
+
+if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+    set_target_properties(${APP_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+else()
+    set(APP_BIN_DIR "${CMAKE_BINARY_DIR}/bin")
+    set_target_properties(${APP_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${APP_BIN_DIR}")
+    add_custom_command(OUTPUT output1.txt
+        COMMAND ${CMAKE_COMMAND} -E remove_directory ${APP_BIN_DIR}/res
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/res ${APP_BIN_DIR}/res
+        )
+endif()
