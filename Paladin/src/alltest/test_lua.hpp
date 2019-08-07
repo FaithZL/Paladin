@@ -1,5 +1,11 @@
 #include <stdio.h>
-#include <direct.h>
+#ifdef _MSC_VER
+    #include <direct.h>
+    #define GET_CWD _getcwd
+#else
+    #include <unistd.h>
+    #define GET_CWD getcwd
+#endif
 
 /*
 头文件lua.h定义了Lua提供的基础函数，包括创建Lua环境、调用Lua函数、
@@ -28,7 +34,7 @@ extern "C" {
 static int fmt_fs_cwd(lua_State * L)
 {
     char path[1024];
-    if(NULL == _getcwd(path, 1023))
+    if(NULL == GET_CWD(path, 1023))
         lua_pushinteger(L, errno);
     else
         lua_pushstring(L, path);
