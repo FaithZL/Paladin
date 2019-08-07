@@ -260,7 +260,22 @@ Point2f uniformSampleSector(const Point2f &u, Float thetaMax);
 */
 Point2f uniformSamplePartialSector(const Point2f &u, Float thetaMax, Float rMin);
 
-
+/*
+ 均匀采样三角形
+ 转换为均匀采样直角三角形，直角边分别为uv，长度为1
+ 三角形面积为s = 1/2
+ p(u, v) = 2
+ p(u) = ∫[0, 1-u]p(u, v)dv = 2(1 - u)
+ p(u|v) = p(u,v)/p(u) = 1/(1 - u)
+ 积分得
+ P(u) = ∫[0, u]p(u')du' = 2u - u^2
+ P(v) = ∫[0, v]p(u|v')dv' = v/(1 - u)
+ 
+ ab为均匀分布的随机数
+ 对P(u) P(v)求反函数，得
+ u = 1 - √a
+ v = b * √a
+ */
 Point2f uniformSampleTriangle(const Point2f &u);
 
 PALADIN_END
