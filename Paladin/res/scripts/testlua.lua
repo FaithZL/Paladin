@@ -1,7 +1,7 @@
 local t = {}
 
 function t.who()
-	print("I'm testlua.lua")
+	print("\nI'm testlua.lua\n")
 end
 
 return t

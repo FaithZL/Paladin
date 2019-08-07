@@ -62,12 +62,9 @@ target_link_libraries(${APP_NAME} ${EXTRA_LIBS})
 MESSAGE(STATUS "operation system is ${CMAKE_SYSTEM}")
 
 if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+    #set_target_properties(${APP_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY $<TARGET_FILE_DIR:${APP_NAME}>)
     set_target_properties(${APP_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
-else()
-    set(APP_BIN_DIR "${CMAKE_BINARY_DIR}/bin")
-    set_target_properties(${APP_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${APP_BIN_DIR}")
-    add_custom_command(OUTPUT output1.txt
-        COMMAND ${CMAKE_COMMAND} -E remove_directory ${APP_BIN_DIR}/res
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/res ${APP_BIN_DIR}/res
-        )
 endif()
+
+add_custom_command(TARGET ${APP_NAME} POST_BUILD
+COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/res $<TARGET_FILE_DIR:${APP_NAME}>/res)
