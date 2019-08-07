@@ -320,7 +320,7 @@ public:
     Normal3(T xx, T yy, T zz) : x(xx), y(yy), z(zz) { DCHECK(!hasNaNs()); }
     Normal3<T> operator-() const { return Normal3(-x, -y, -z); }
     Normal3<T> operator+(const Normal3<T> &n) const {
-        DCHECK(!n.HasNaNs());
+        DCHECK(!n.hasNaNs());
         return Normal3<T>(x + n.x, y + n.y, z + n.z);
     }
     
