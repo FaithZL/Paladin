@@ -66,8 +66,13 @@ public:
                    bool testAlphaTexture = true) const;
 
     virtual bool intersectP(const Ray &ray, bool testAlphaTexture = true) const;
-
-    virtual Float area() const;
+    
+    virtual Float area() const {
+        const Point3f &p0 = _mesh->points[_vertexIdx[0]];
+        const Point3f &p1 = _mesh->points[_vertexIdx[1]];
+        const Point3f &p2 = _mesh->points[_vertexIdx[2]];
+        return 0.5 * cross(p1 - p0, p2 - p0).length();
+    }
     
     virtual Interaction sampleA(const Point2f &u, Float *pdf) const;
     

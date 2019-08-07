@@ -260,6 +260,9 @@ Point2f uniformSampleSector(const Point2f &u, Float thetaMax);
 */
 Point2f uniformSamplePartialSector(const Point2f &u, Float thetaMax, Float rMin);
 
+
+Point2f uniformSampleTriangle(const Point2f &u);
+
 PALADIN_END
 
 
