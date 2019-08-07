@@ -23,6 +23,10 @@ int main(int argc, const char * argv[]) {
     
     test_lua_main();
 
+#ifdef _MSC_VER
+    //让VS运行debug时不至于黑屏一闪而过
+    system("pause");
+#endif    
     return pld.run(argc, argv);
 }
 
