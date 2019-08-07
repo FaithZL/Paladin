@@ -62,4 +62,9 @@ Point2f uniformSamplePartialSector(const Point2f &u, Float thetaMax, Float rMin)
     return Point2f(r * std::cos(theta), r * std::sin(theta));
 }
 
+Point2f uniformSampleTriangle(const Point2f &u) {
+    Float su0 = std::sqrt(u[0]);
+    return Point2f(1 - su0, u[1] * su0);
+}
+
 PALADIN_END
