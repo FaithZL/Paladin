@@ -17,7 +17,9 @@
 
 PALADIN_BEGIN
 
-// 三角形网格
+/*
+ 三角形网格，所以的向量法线以及点都是在世界坐标上
+ */
 struct TriangleMesh {
 
     TriangleMesh(const Transform &objectToWorld, int nTriangles,
@@ -31,7 +33,7 @@ struct TriangleMesh {
     const int nTriangles, nVertices;
     // 顶点的索引
     std::vector<int> vertexIndices;
-    // 顶点列表
+    // 顶点列表，为世界坐标
     std::unique_ptr<Point3f[]> points;
     // 法线列表
     std::unique_ptr<Normal3f[]> normals;
