@@ -7,6 +7,7 @@
 //
 
 #include "shape.hpp"
+#include "lowdiscrepancy.hpp"
 
 PALADIN_BEGIN
 
@@ -68,6 +69,24 @@ Float Shape::pdfW(const Interaction &ref, const Vector3f &wi) const {
         pdf = 0.f;
     }
     return pdf;
+}
+
+/*
+ 基类获取立体角的方式，暴力低差异采样，三角形跟球体有简单的方式
+ */
+Float Shape::solidAngle(const Point3f &p, int nSamples) const {
+    Interaction ref(p, Normal3f(), Vector3f(), Vector3f(0, 0, 1), 0,
+                    MediumInterface{});
+    double solidAngle = 0;
+    for (int i = 0; i < nSamples; ++i) {
+        Point2f u{RadicalInverse(0, i), RadicalInverse(1, i)};
+        Float pdf;
+        Interaction pShape = sampleW(ref, u, &pdf);
+        if (pdf > 0 && !intersectP(Ray(p, pShape.pos - p, .999f))) {
+            solidAngle += 1 / pdf;
+        }
+    }
+    return solidAngle / nSamples;
 }
 
 PALADIN_END

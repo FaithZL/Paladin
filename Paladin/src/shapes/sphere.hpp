@@ -46,11 +46,11 @@ public:
            Float phiMax):
     Shape(objectToWorld, worldToObject, reverseOrientation),
     _radius(radius),
-    _zMax(clamp(std::max(zMax, zMin), -radius, radius)),
     _zMin(clamp(std::min(zMax, zMin), -radius, radius)),
+    _zMax(clamp(std::max(zMax, zMin), -radius, radius)),
     _phiMax(degree2radian(clamp(phiMax, 0, 360))),
-    _thetaMin(std::acos(clamp(_zMin / _radius, -1, 1))),
-    _thetaMax(std::acos(clamp(_zMax / _radius, -1, 1))) {
+    _thetaMin(std::acos(clamp(zMin / radius, -1, 1))),
+    _thetaMax(std::acos(clamp(zMax / radius, -1, 1))) {
         init();
     }
     
@@ -93,12 +93,23 @@ public:
     
     virtual Float pdfW(const Interaction &ref, const Vector3f &wi) const;
     
+    virtual Float solidAngle(const Point3f &p, int nSamples = 512) const {
+        Point3f pCenter = objectToWorld->exec(Point3f(0, 0, 0));
+        Float r2 = _radius * _radius;
+        if (distanceSquared(p, pCenter) <= r2) {
+            return 4 * Pi;
+        }
+        Float sinTheta2 = r2 / distanceSquared(p, pCenter);
+        Float cosTheta = std::sqrt(std::max((Float)0, 1 - sinTheta2));
+        return (2 * Pi * (1 - cosTheta));
+    }
+    
 private:
     
+    const Float _radius;
     const Float _zMin;
     const Float _zMax;
     const Float _phiMax;
-    const Float _radius;
     const Float _thetaMin;
     const Float _thetaMax;
 };
