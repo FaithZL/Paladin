@@ -50,8 +50,8 @@ public:
              bool reverseOrientation, const std::shared_ptr<TriangleMesh> &_mesh,
              int triNumber)
     : Shape(objectToWorld, worldToObject, reverseOrientation), _mesh(_mesh) {
-        v = &_mesh->vertexIndices[3 * triNumber];
-        faceIndex = _mesh->faceIndices.size() ? _mesh->faceIndices[triNumber] : 0;
+        _vertexIdx = &_mesh->vertexIndices[3 * triNumber];
+        _faceIndex = _mesh->faceIndices.size() ? _mesh->faceIndices[triNumber] : 0;
     }
 
     virtual void init() {
@@ -79,8 +79,8 @@ public:
      */
     Float solidAngle(const Point3f &p, int nSamples = 0) const {
         std::vector<Vector3f> pSphere = {
-            normalize(_mesh->points[v[0]] - p), normalize(_mesh->points[v[1]] - p),
-            normalize(_mesh->points[v[2]] - p)
+            normalize(_mesh->points[_vertexIdx[0]] - p), normalize(_mesh->points[_vertexIdx[1]] - p),
+            normalize(_mesh->points[_vertexIdx[2]] - p)
         };
         
         Vector3f cross01 = (cross(pSphere[0], pSphere[1]));
@@ -107,9 +107,9 @@ private:
 
     void getUVs(Point2f uv[3]) const {
         if (_mesh->uv) {
-            uv[0] = _mesh->uv[v[0]];
-            uv[1] = _mesh->uv[v[1]];
-            uv[2] = _mesh->uv[v[2]];
+            uv[0] = _mesh->uv[_vertexIdx[0]];
+            uv[1] = _mesh->uv[_vertexIdx[1]];
+            uv[2] = _mesh->uv[_vertexIdx[2]];
         } else {
             uv[0] = Point2f(0, 0);
             uv[1] = Point2f(1, 0);
@@ -118,8 +118,8 @@ private:
     }
     
     std::shared_ptr<TriangleMesh> _mesh;
-    const int *v;
-    int faceIndex;
+    const int * _vertexIdx;
+    int _faceIndex;
 };
 
 PALADIN_END
