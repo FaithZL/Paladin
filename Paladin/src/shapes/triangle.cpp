@@ -21,7 +21,59 @@ AABB3f Triangle::objectBound() const {
 
 bool Triangle::intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
                          bool testAlphaTexture) const {
-    // todo
+    const Point3f &p0 = _mesh->points[_vertexIdx[0]];
+    const Point3f &p1 = _mesh->points[_vertexIdx[1]];
+    const Point3f &p2 = _mesh->points[_vertexIdx[2]];
+    
+    Float u, v, t;
+    
+    Vector3f edge1 = p1 - p0;
+    Vector3f edge2 = p2 - p0;
+    
+    Vector3f pvec = cross(ray.dir, edge2);
+    
+    Float det = dot(edge1, pvec);
+    
+    if (det == 0) {
+        // ray与三角形所在平面平行
+        return false;
+    }
+    Float invDet = 1 / det;
+    Vector3f tvec = ray.ori - p0;
+    
+    u = dot(tvec, pvec) * invDet;
+    if (u < 0.0 || u > 1.0) {
+        return false;
+    }
+    
+    Vector3f qvec = cross(tvec, edge1);
+    
+    v = dot(ray.dir, qvec) * invDet;
+    
+    if (v >= 0.0 && u + v <= 1.0) {
+        t = dot(edge2, qvec) * invDet;
+        if (t > ray.tMax) {
+            return false;
+        }
+        * tHit = t;
+    }
+    
+    // 计算微分几何
+    Point3f pHit = u * p0 + v * p1 + (1 - u - v) * p2;
+    Vector3f dpdu, dpdv;
+    Point2f uv[3];
+    getUVs(uv);
+    Vector2f duv02 = uv[0] - uv[2], duv12 = uv[1] - uv[2];
+    Vector3f dp02 = p0 - p2, dp12 = p1 - p2;
+    Float determinant = duv02[0] * duv12[1] - duv02[1] * duv12[0];
+    bool degenerateUV = std::abs(determinant) < 1e-8;
+    
+    if (!degenerateUV) {
+        Float invdet = 1 / determinant;
+        dpdu = (duv12[1] * dp02 - duv02[1] * dp12) * invdet;
+        dpdv = (-duv12[0] * dp02 + duv02[0] * dp12) * invdet;
+    }
+    
     return true;
 }
 
@@ -40,9 +92,44 @@ bool Triangle::intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
                  t
  [-d  e1  e2] * [u] = T
                  v
+ 求解上述方程组
+ 求得u>=0, v >= 0,u+v<=1，t <= tMax则有交点
 */
 bool Triangle::intersectP(const Ray &ray, bool testAlphaTexture) const {
-    // todo
+    const Point3f &p0 = _mesh->points[_vertexIdx[0]];
+    const Point3f &p1 = _mesh->points[_vertexIdx[1]];
+    const Point3f &p2 = _mesh->points[_vertexIdx[2]];
+    
+    Float u, v, t;
+    
+    Vector3f edge1 = p1 - p0;
+    Vector3f edge2 = p2 - p0;
+    
+    Vector3f pvec = cross(ray.dir, edge2);
+    
+    Float det = dot(edge1, pvec);
+    
+    if (det == 0) {
+        // ray与三角形所在平面平行
+        return false;
+    }
+    Float invDet = 1 / det;
+    Vector3f tvec = ray.ori - p0;
+    
+    u = dot(tvec, pvec) * invDet;
+    if (u < 0.0 || u > 1.0) {
+        return false;
+    }
+    
+    Vector3f qvec = cross(tvec, edge1);
+    
+    v = dot(ray.dir, qvec) * invDet;
+    
+    if (v >= 0.0 && u + v <= 1.0) {
+        t = dot(edge2, qvec) * invDet;
+        return t <= ray.tMax;
+    }
+    
     return true;
 }
 
