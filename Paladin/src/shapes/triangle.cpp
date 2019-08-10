@@ -55,10 +55,19 @@ bool Triangle::intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
         if (t > ray.tMax) {
             return false;
         }
-        * tHit = t;
+        *tHit = t;
     }
     
     // 计算微分几何
+    // 三角形中的点可以表示为
+    // pi = p0 + ui * dp/du + vi * dp/dv
+    // 求解偏导数dp/du dp/dv 矩阵方程如下
+    // |u0 - u2  v0 - v2|   |dp/du|   |p0 - p2|
+    // |                | * |     | = |       |
+    // |u1 - u2  v1 - v2|   |dp/dv|   |p1 - p2|
+    // |dp/du|   |u0 - u2  v0 - v2| -1    |p0 - p2|
+    // |     | = |                |    *  |       |
+    // |dp/dv|   |u1 - u2  v1 - v2|       |p1 - p2|
     Point3f pHit = u * p0 + v * p1 + (1 - u - v) * p2;
     Vector3f dpdu, dpdv;
     Point2f uv[3];
@@ -73,7 +82,29 @@ bool Triangle::intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
         dpdu = (duv12[1] * dp02 - duv02[1] * dp12) * invdet;
         dpdv = (-duv12[0] * dp02 + duv02[0] * dp12) * invdet;
     }
+    if (degenerateUV || cross(dpdu, dpdv).lengthSquared() == 0) {
+        Vector3f ng = cross(edge2, edge1);
+        if (ng.lengthSquared() == 0){
+            return false;
+        }
+        coordinateSystem(normalize(ng), &dpdu, &dpdv);
+    }
     
+    // 保守估计误差
+    Vector3f pError = gamma(6) * Vector3f(pHit);
+    
+    *isect = SurfaceInteraction(pHit, pError, Point2f(u,v), -ray.dir, dpdu, dpdv,
+                                Normal3f(0, 0, 0), Normal3f(0, 0, 0), ray.time,
+                                this, _faceIndex);
+    
+    isect->normal = isect->shading.normal = Normal3f(normalize(cross(dp02, dp12)));
+    // 临时做个简单的，着色几何信息与实际信息一致
+    isect->setShadingGeometry(dpdu, dpdv, Normal3f(), Normal3f(), true);
+    if (_mesh->normals) {
+        isect->normal = faceforward(isect->normal, isect->shading.normal);
+    } else if (reverseOrientation ^ transformSwapsHandedness) {
+        isect->normal = isect->shading.normal = -isect->normal;
+    }
     return true;
 }
 
