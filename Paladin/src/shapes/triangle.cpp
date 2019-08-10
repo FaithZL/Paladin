@@ -11,6 +11,46 @@
 
 PALADIN_BEGIN
 
+TriangleMesh::TriangleMesh(
+                           const Transform &ObjectToWorld, int nTriangles, const int *vertexIndices,
+                           int nVertices, const Point3f *P, const Vector3f *S, const Normal3f *N,
+                           const Point2f *UV, const std::shared_ptr<Texture<Float>> &alphaMask,
+                           const std::shared_ptr<Texture<Float>> &shadowAlphaMask,
+                           const int *fIndices)
+: nTriangles(nTriangles),
+nVertices(nVertices),
+vertexIndices(vertexIndices, vertexIndices + 3 * nTriangles),
+alphaMask(alphaMask),
+shadowAlphaMask(shadowAlphaMask) {
+
+    
+    points.reset(new Point3f[nVertices]);
+    for (int i = 0; i < nVertices; ++i) {
+        points[i] = ObjectToWorld.exec(P[i]);
+    }
+    
+    if (UV) {
+        uv.reset(new Point2f[nVertices]);
+        memcpy(uv.get(), UV, nVertices * sizeof(Point2f));
+    }
+    if (N) {
+        normals.reset(new Normal3f[nVertices]);
+        for (int i = 0; i < nVertices; ++i) {
+            normals[i] = ObjectToWorld.exec(N[i]);
+        }
+    }
+    if (S) {
+        edges.reset(new Vector3f[nVertices]);
+        for (int i = 0; i < nVertices; ++i) {
+            edges[i] = ObjectToWorld.exec(S[i]);
+        }
+    }
+    
+    if (fIndices) {
+        faceIndices = std::vector<int>(fIndices, fIndices + nTriangles);
+    }
+}
+
 AABB3f Triangle::objectBound() const {
     const Point3f &p0 = _mesh->points[_vertexIdx[0]];
     const Point3f &p1 = _mesh->points[_vertexIdx[1]];
@@ -90,7 +130,7 @@ bool Triangle::intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
         coordinateSystem(normalize(ng), &dpdu, &dpdv);
     }
     
-    // 保守估计误差
+    // 保守估计误差todo 后续补上推导过程
     Vector3f pError = gamma(6) * Vector3f(pHit);
     
     *isect = SurfaceInteraction(pHit, pError, Point2f(u,v), -ray.dir, dpdu, dpdv,
@@ -98,7 +138,7 @@ bool Triangle::intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
                                 this, _faceIndex);
     
     isect->normal = isect->shading.normal = Normal3f(normalize(cross(dp02, dp12)));
-    // 临时做个简单的，着色几何信息与实际信息一致
+    // todo 临时做个简单的，着色几何信息与实际信息一致
     isect->setShadingGeometry(dpdu, dpdv, Normal3f(), Normal3f(), true);
     if (_mesh->normals) {
         isect->normal = faceforward(isect->normal, isect->shading.normal);
@@ -191,7 +231,7 @@ Interaction Triangle::sampleA(const Point2f &u, Float *pdf) const {
         ret.normal *= -1;
     }
     Point3f pAbsSum = abs(b[0] * p0) + abs(b[1] * p1) + abs((1 - b[0] - b[1]) * p2);
-    //todo
+    //todo 推导过程后续补上
     ret.pError = gamma(6) * Vector3f(pAbsSum.x, pAbsSum.y, pAbsSum.z);
     *pdf = pdfA();
     return ret;

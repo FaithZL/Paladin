@@ -9,6 +9,12 @@
 #ifndef bvh_hpp
 #define bvh_hpp
 
-#include <stdio.h>
+#include "header.h"
+
+PALADIN_BEGIN
+
+
+
+PALADIN_END
 
 #endif /* bvh_hpp */

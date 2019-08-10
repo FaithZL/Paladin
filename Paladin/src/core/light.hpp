@@ -9,6 +9,19 @@
 #ifndef light_hpp
 #define light_hpp
 
-#include <stdio.h>
+#include "header.h"
+
+PALADIN_BEGIN
+
+class Light {
+    
+public:
+    
+    virtual ~Light();
+    Light(int flags, const Transform &LightToWorld,
+          const MediumInterface &mediumInterface, int nSamples = 1);
+};
+
+PALADIN_END
 
 #endif /* light_hpp */
