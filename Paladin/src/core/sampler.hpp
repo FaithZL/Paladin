@@ -9,14 +9,16 @@
 #ifndef sampler_hpp
 #define sampler_hpp
 
-#include <stdio.h>
+#include "header.h"
 
-namespace paladin {
+PALADIN_BEGIN
+
+class Sampler {
     
-    class Sampler {
-        
-    };
+public:
     
-}
+};
+
+PALADIN_END
 
 #endif /* sampler_hpp */

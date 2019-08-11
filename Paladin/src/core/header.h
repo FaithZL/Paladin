@@ -95,6 +95,12 @@ class Primitive;
 
 class BSDF;
 
+class VisibilityTester;
+
+class Sampler;
+
+class Scene;
+
 class BSSRDF;
 
 struct Quaternion;
@@ -107,6 +113,10 @@ template<typename T, int logBlockSize = 2>
 class BlockedArray;
 
 class EFloat;
+
+class Light;
+
+class AreaLight;
 
 class Shape;
 
