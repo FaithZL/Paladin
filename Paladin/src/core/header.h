@@ -89,6 +89,8 @@ class AnimatedTransform;
 
 class Shape;
 
+class MediumInteraction;
+
 class MemoryArena;
 
 class Primitive;

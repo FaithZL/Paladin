@@ -13,15 +13,25 @@
 
 PALADIN_BEGIN
 
+class PhaseFunction {
+public:
+    // PhaseFunction Interface
+    virtual ~PhaseFunction();
+    virtual Float p(const Vector3f &wo, const Vector3f &wi) const = 0;
+    virtual Float sample_p(const Vector3f &wo, Vector3f *wi,
+                           const Point2f &u) const = 0;
+    virtual std::string toString() const = 0;
+};
+
 // 介质
 class Medium {
 public:
     // Medium Interface
     virtual ~Medium() {}
-//    virtual Spectrum Tr(const Ray &ray, Sampler &sampler) const = 0;
-//    virtual Spectrum Sample(const Ray &ray, Sampler &sampler,
-//                            MemoryArena &arena,
-//                            MediumInteraction *mi) const = 0;
+    virtual Spectrum tr(const Ray &ray, Sampler &sampler) const = 0;
+    virtual Spectrum sample(const Ray &ray, Sampler &sampler,
+                            MemoryArena &arena,
+                            MediumInteraction *mi) const = 0;
 };
 
 
@@ -39,7 +49,7 @@ struct MediumInterface {
 
     }
     
-    bool IsMediumTransition() const {
+    bool isMediumTransition() const {
         return inside != outside;
     }
     // 内部的介质
