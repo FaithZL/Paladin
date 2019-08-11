@@ -719,7 +719,7 @@ _actuallyAnimated(*startTransform != *endTransform){
     }
 }
 
-AABB3f AnimatedTransform::MotionAABB(const AABB3f &b) const {
+AABB3f AnimatedTransform::motionAABB(const AABB3f &b) const {
     if (!_actuallyAnimated)
         // 如果没有变化，直接使用变换
         return _startTransform->exec(b);
@@ -730,7 +730,7 @@ AABB3f AnimatedTransform::MotionAABB(const AABB3f &b) const {
     // 如果有旋转，则用最暴力的方式，计算8个顶点轨迹的包围盒，然后取并集
     AABB3f bounds;
     for (int corner = 0; corner < 8; ++corner)
-        bounds = unionSet(bounds, BoundPointMotion(b.corner(corner)));
+        bounds = unionSet(bounds, boundPointMotion(b.corner(corner)));
     return bounds;
 }
 
@@ -778,7 +778,7 @@ Transform AnimatedTransform::interpolate(Float time) const {
     return Transform::translate(T) * R.ToTransform() * Transform(S);
 }
 
-AABB3f AnimatedTransform::BoundPointMotion(const Point3f &p) const {
+AABB3f AnimatedTransform::boundPointMotion(const Point3f &p) const {
     if (!_actuallyAnimated)
         return AABB3f(_startTransform->exec(p));
     AABB3f bounds(_startTransform->exec(p), _endTransform->exec(p));
