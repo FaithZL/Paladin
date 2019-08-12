@@ -90,7 +90,7 @@ inline Interval cos(const Interval &i) {
  f'(t) = dp'/dt = c1 + (c2 + c3 * t) * cos(2θt) + (c4 + c5 * t) * sin(2θt)
  f''(t) = (c3 + 2θ(c4 + c5 * t)) * cos(2θt) + (c5 - 2θ(c2 + c3 * t)) * sin(2θt);
  */
-void intervalFindZeros(Float c1, Float c2, Float c3, Float c4, Float c5,
+inline void intervalFindZeros(Float c1, Float c2, Float c3, Float c4, Float c5,
                        Float theta, Interval tInterval, Float *zeros,
                        int *zeroCount, int depth = 8) {
     // 先根据t的取值范围(函数定义域)求出f'(t)的范围(函数值域)range
