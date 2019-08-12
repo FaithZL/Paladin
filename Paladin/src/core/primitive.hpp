@@ -11,6 +11,7 @@
 #include "header.h"
 #include "interaction.hpp"
 #include "material.hpp"
+#include "animatedtransform.hpp"
 
 PALADIN_BEGIN
 
@@ -42,9 +43,9 @@ public:
                        const std::shared_ptr<Material> &material,
                        const std::shared_ptr<AreaLight> &areaLight,
                        const MediumInterface &mediumInterface);
-    const AreaLight *getAreaLight() const;
-    const Material *getMaterial() const;
-    void computeScatteringFunctions(SurfaceInteraction *isect,
+    virtual const AreaLight *getAreaLight() const;
+    virtual const Material *getMaterial() const;
+    virtual void computeScatteringFunctions(SurfaceInteraction *isect,
                                     MemoryArena &arena, TransportMode mode,
                                     bool allowMultipleLobes) const;
     
@@ -57,18 +58,53 @@ private:
     MediumInterface _mediumInterface;
 };
 
+// 用于多个完全相同的实例，只保存一个实例对象在内存中，其他的不同通过transform来区分，节省内存空间
+class TransformedPrimitive : public Primitive {
+public:
+    TransformedPrimitive(std::shared_ptr<Primitive> &primitive,
+                         const AnimatedTransform &PrimitiveToWorld);
+    
+    virtual bool intersect(const Ray &r, SurfaceInteraction *in) const;
+    
+    virtual bool intersectP(const Ray &r) const;
+    
+    virtual const AreaLight *getAreaLight() const {
+        return nullptr;
+    }
+    
+    virtual const Material *getMaterial() const {
+        return nullptr;
+    }
+    
+    virtual void computeScatteringFunctions(SurfaceInteraction *isect,
+                                    MemoryArena &arena, TransportMode mode,
+                                    bool allowMultipleLobes) const {
+        COUT <<
+        "TransformedPrimitive::ComputeScatteringFunctions() shouldn't be "
+        "called";
+    }
+    
+    virtual AABB3f WorldBound() const {
+        return _primitiveToWorld.motionAABB(_primitive->worldBound());
+    }
+    
+private:
+    std::shared_ptr<Primitive> _primitive;
+    const AnimatedTransform _primitiveToWorld;
+};
+
 class Aggregate : public Primitive {
 public:
 
-    const AreaLight *getAreaLight() const {
+    virtual const AreaLight *getAreaLight() const {
         DCHECK(false);
         return nullptr;
     }
-    const Material *getMaterial() const {
+    virtual const Material *getMaterial() const {
         DCHECK(false);
         return nullptr;
     }
-    void computeScatteringFunctions(SurfaceInteraction *isect,
+    virtual void computeScatteringFunctions(SurfaceInteraction *isect,
                                     MemoryArena &arena, TransportMode mode,
                                     bool allowMultipleLobes) const {
         DCHECK(false);
