@@ -13,8 +13,8 @@
 
 PALADIN_BEGIN
 // 光谱类，太特么复杂了，代码照抄 pbrt-v3
-
-//人眼可见光谱波长范围380nm~780nm
+// 搞完主线再琢磨这些东西
+// 人眼可见光谱波长范围380nm~780nm
 static const int sampledLambdaStart = 400;
 static const int sampledLambdaEnd = 700;
 static const int nSpectralSamples = 60;
@@ -256,9 +256,10 @@ protected:
     Float c[nSpectrumSamples];
 };
 
+// 采样光谱默认从400到700纳米采样，总共有60个采样点
 class SampledSpectrum : public CoefficientSpectrum<nSpectralSamples> {
 public:
-    // SampledSpectrum Public Methods
+    
     SampledSpectrum(Float v = 0.f) : CoefficientSpectrum(v) {}
     SampledSpectrum(const CoefficientSpectrum<nSpectralSamples> &v)
     : CoefficientSpectrum<nSpectralSamples>(v) {}
@@ -433,6 +434,11 @@ public:
         const Float YWeight[3] = {0.212671f, 0.715160f, 0.072169f};
         return YWeight[0] * c[0] + YWeight[1] * c[1] + YWeight[2] * c[2];
     }
+
+    /*
+     lambda表示波长，v表示振幅
+     v中的第i个元素表示，lambda中第i个波长的振幅
+    */
     static RGBSpectrum FromSampled(const Float *lambda, const Float *v, int n) {
         // Sort samples if unordered, use sorted for returned spectrum
         if (!SpectrumSamplesSorted(lambda, v, n)) {
