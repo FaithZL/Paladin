@@ -78,12 +78,13 @@ bool TransformedPrimitive::intersect(const Ray &r,
                                      SurfaceInteraction *isect) const {
     // 插值获取primitive到world的变换
     Transform InterpolatedPrimToWorld = _primitiveToWorld.interpolate(r.time);
+    // 将局部坐标转换为世界坐标
     Ray ray = InterpolatedPrimToWorld.getInverse().exec(r);
     
     if (!_primitive->intersect(ray, isect)) {
         return false;
     }
-    
+    // 更新tMax
     r.tMax = ray.tMax;
 
     if (!InterpolatedPrimToWorld.isIdentity()) {
