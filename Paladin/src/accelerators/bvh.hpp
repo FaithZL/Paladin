@@ -51,6 +51,7 @@ struct BVHBuildNode {
     int nPrimitives;
 };
 
+// 莫顿码片元
 struct MortonPrimitive {
     int primitiveIndex;
     uint32_t mortonCode;
