@@ -62,7 +62,18 @@ struct LBVHTreelet {
     BVHBuildNode *buildNodes;
 };
 
-//在内存中的一个线性BVH节点
+/*
+ 在内存中的一个线性BVH节点
+ 布局如下
+     A
+    / \
+   B   C
+  / \
+ D   E
+
+ 线性顺序为 A B D E C
+ 一个节点的第一个子节点紧接在该节点的后面
+ */
 struct LinearBVHNode {
     AABB3f bounds;
     union {
