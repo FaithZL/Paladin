@@ -90,7 +90,7 @@ class BVHAccel : public Aggregate {
     
     ~BVHAccel();
     virtual bool intersect(const Ray &ray, SurfaceInteraction *isect) const;
-    virtual bool ntersectP(const Ray &ray) const;
+    virtual bool intersectP(const Ray &ray) const;
     
 private:
     BVHBuildNode *recursiveBuild(
