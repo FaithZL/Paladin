@@ -114,6 +114,26 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
         return node;
     } else {
         AABB3f centroidBounds;
+        for (int i = start; i < end; ++i) {
+            centroidBounds = unionSet(centroidBounds, primitiveInfo[i].centroid);
+        }
+        int dim = centroidBounds.maximumExtent();
+        int mid = (start + end) / 2;
+        // 如果最centroidBounds为一个点，则初始化叶子节点
+        if (centroidBounds.pMax[dim] == centroidBounds.pMin[dim]) {
+            int firstPrimOffset = orderedPrims.size();
+            node->initLeaf(firstPrimOffset, numPrimitives, bounds);
+            return node;
+        } else {
+            switch (_splitMethod) {
+                case Middle:
+                    
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
     }
 }
 
