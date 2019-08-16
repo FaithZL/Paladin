@@ -42,24 +42,29 @@ BVHAccel::BVHAccel(std::vector<std::shared_ptr<Primitive>> p,
 _splitMethod(splitMethod),
 _primitives(std::move(p)) {
 
+    // 基本思路，先构建出树形结构
+    // 完成之后再把树形结构转成连续储存
     if (_primitives.empty()) {
         return;
     }
     
     std::vector<BVHPrimitiveInfo> _primitiveInfo(_primitives.size());
-    
+    // 储存每个aabb的中心以及索引
     for (size_t i = 0; i < _primitives.size(); ++i) {
         _primitiveInfo[i] = {i, _primitives[i]->worldBound()};
     }
-    
+
+    // 先使用内存池分配指定大小空间，函数运行结束之后自动释放
     MemoryArena arena(1024 * 1024);
     int totalNodes = 0;
     std::vector<std::shared_ptr<Primitive>> orderedPrims;
     orderedPrims.reserve(_primitives.size());
     BVHBuildNode *root;
     if (splitMethod == SplitMethod::HLBVH) {
+        // HLBVH可以用并行构建
         root = HLBVHBuild(arena, _primitiveInfo, &totalNodes, orderedPrims);
     } else {
+        // 其余三种方式
         root = recursiveBuild(arena, _primitiveInfo, 0, _primitives.size(),
                               &totalNodes, orderedPrims);
     }
@@ -76,6 +81,7 @@ _primitives(std::move(p)) {
     
     _nodes = allocAligned<LinearBVHNode>(totalNodes);
     int offset = 0;
+    // 转换成连续储存
     flattenBVHTree(root, &offset);
     CHECK_EQ(totalNodes, offset);
 }
