@@ -126,9 +126,40 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
             return node;
         } else {
             switch (_splitMethod) {
-                case Middle:
-                    
+                case Middle: {
+                    Float pmid = (centroidBounds.pMin[dim] + centroidBounds.pMax[dim]) / 2;
+                    auto func = [dim, pmid](const BVHPrimitiveInfo &pi) {
+                        return pi.centroid[dim] < pmid;
+                    };
+                    // std::partition会将区间[first,last)中的元素重新排列，
+                    //满足判断条件的元素会被放在区间的前段，不满足的元素会被放在区间的后段。
+                    // 返回中间指针
+                    BVHPrimitiveInfo *midPtr = std::partition(&primitiveInfo[start], &primitiveInfo[end - 1] + 1,func);
+                    mid = midPtr - &primitiveInfo[0];
+                    if (mid != start && mid != end) {
+                        break;
+                    }
+                }
+                
+                case EqualCounts: {
+                    mid = (start + end) / 2;
+                    auto func = [dim](const BVHPrimitiveInfo &a,
+                                      const BVHPrimitiveInfo &b) {
+                        return a.centroid[dim] < b.centroid[dim];
+                    };
+                    //将迭代器指向的从_First 到 _last 之间的元素进行二分排序，
+                    //以_Nth 为分界，前面都比 _Nth 小（大），后面都比之大（小）；
+                    //但是两段内并不有序。
+                    std::nth_element(&primitiveInfo[start],
+                                     &primitiveInfo[mid],
+                                     &primitiveInfo[end - 1] + 1,
+                                     func);
                     break;
+                }
+                    
+                case SAH: {
+                    
+                }
                     
                 default:
                     break;
