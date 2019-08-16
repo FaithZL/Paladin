@@ -26,14 +26,16 @@ struct BVHPrimitiveInfo {
 };
 
 // bvh可以理解为一个二叉树
+// 这是构建二叉树时的节点对象
+// 构建完毕之后会转成连续内存的储存方式
 struct BVHBuildNode {
-    void InitLeaf(int first, int n, const AABB3f &b) {
+    void initLeaf(int first, int n, const AABB3f &b) {
         firstPrimOffset = first;
         nPrimitives = n;
         bounds = b;
         children[0] = children[1] = nullptr;
     }
-    void InitInterior(int axis, BVHBuildNode *c0, BVHBuildNode *c1) {
+    void initInterior(int axis, BVHBuildNode *c0, BVHBuildNode *c1) {
         children[0] = c0;
         children[1] = c1;
         bounds = unionSet(c0->bounds, c1->bounds);
@@ -57,6 +59,7 @@ struct MortonPrimitive {
     uint32_t mortonCode;
 };
 
+// 用于lbvh
 struct LBVHTreelet {
     int startIndex, nPrimitives;
     BVHBuildNode *buildNodes;
@@ -91,7 +94,7 @@ struct LinearBVHNode {
  */
 class BVHAccel : public Aggregate {
     
-    enum class SplitMethod { SAH, HLBVH, Middle, EqualCounts };
+    enum SplitMethod { SAH, HLBVH, Middle, EqualCounts };
     
     BVHAccel(std::vector<std::shared_ptr<Primitive>> p,
              int maxPrimsInNode = 1,
@@ -99,7 +102,8 @@ class BVHAccel : public Aggregate {
     
     virtual AABB3f worldBound() const;
     
-    ~BVHAccel();
+    virtual ~BVHAccel();
+    
     virtual bool intersect(const Ray &ray, SurfaceInteraction *isect) const;
     virtual bool intersectP(const Ray &ray) const;
     

@@ -36,6 +36,22 @@ inline uint32_t LeftShift3(uint32_t x) {
     return x;
 }
 
+AABB3f BVHAccel::worldBound() const {
+    return AABB3f();
+}
+
+bool BVHAccel::intersect(const paladin::Ray &ray, paladin::SurfaceInteraction *isect) const {
+    return false;
+}
+
+BVHAccel::~BVHAccel() {
+    
+}
+
+bool BVHAccel::intersectP(const paladin::Ray &ray) const {
+    return false;
+}
+
 BVHAccel::BVHAccel(std::vector<std::shared_ptr<Primitive>> p,
                    int maxPrimsInNode, SplitMethod splitMethod)
 : _maxPrimsInNode(std::min(255, maxPrimsInNode)),
@@ -70,13 +86,6 @@ _primitives(std::move(p)) {
     }
     _primitives.swap(orderedPrims);
     _primitiveInfo.resize(0);
-    COUT << StringPrintf("BVH created with %d nodes for %d "
-                              "primitives (%.2f MB), arena allocated %.2f MB",
-                              totalNodes, (int)_primitives.size(),
-                              float(totalNodes * sizeof(LinearBVHNode)) /
-                              (1024.f * 1024.f),
-                              float(arena.totalAllocated()) /
-                              (1024.f * 1024.f));
     
     
     _nodes = allocAligned<LinearBVHNode>(totalNodes);
@@ -87,8 +96,44 @@ _primitives(std::move(p)) {
 }
 
 BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo, int start, int end, int *totalNodes, std::vector<std::shared_ptr<Primitive> > &orderedPrims) {
-    return NULL;
+    BVHBuildNode *node = ARENA_ALLOC(arena, BVHBuildNode);
+    AABB3f bounds;
+    for (int i = start; i < end; ++ i) {
+        bounds = unionSet(bounds, primitiveInfo[i].bounds);
+    }
     
+    int numPrimitives = end - start;
+    if (numPrimitives == 1) {
+        // 生成叶子节点
+        int firstPrimOffset = orderedPrims.size();
+        for (int i = start; i < end; ++i) {
+            int primNum = primitiveInfo[i].primitiveNumber;
+            orderedPrims.push_back(_primitives[primNum]);
+        }
+        node->initLeaf(firstPrimOffset, numPrimitives, bounds);
+        return node;
+    } else {
+        AABB3f centroidBounds;
+    }
+}
+
+BVHBuildNode * BVHAccel::HLBVHBuild(paladin::MemoryArena &arena, const std::vector<BVHPrimitiveInfo> &primitiveInfo, int *totalNodes, std::vector<std::shared_ptr<Primitive> > &orderedPrims) const {
+    
+    return nullptr;
+}
+
+BVHBuildNode * BVHAccel::buildUpperSAH(paladin::MemoryArena &arena, std::vector<BVHBuildNode *> &treeletRoots, int start, int end, int *totalNodes) const {
+    
+    return nullptr;
+}
+
+BVHBuildNode * BVHAccel::emitLBVH(paladin::BVHBuildNode *&buildNodes, const std::vector<BVHPrimitiveInfo> &primitiveInfo, paladin::MortonPrimitive *mortonPrims, int nPrimitives, int *totalNodes, std::vector<std::shared_ptr<Primitive> > &orderedPrims, std::atomic<int> *orderedPrimsOffset, int bitIndex) const {
+    
+    return nullptr;
+}
+
+int BVHAccel::flattenBVHTree(paladin::BVHBuildNode *node, int *offset) {
+    return 0;
 }
 
 PALADIN_END
