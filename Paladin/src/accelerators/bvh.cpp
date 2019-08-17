@@ -106,10 +106,8 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
     if (numPrimitives == 1) {
         // 生成叶子节点
         int firstPrimOffset = orderedPrims.size();
-        for (int i = start; i < end; ++i) {
-            int primNum = primitiveInfo[i].primitiveNumber;
-            orderedPrims.push_back(_primitives[primNum]);
-        }
+        int primNum = primitiveInfo[start].primitiveNumber;
+        orderedPrims.push_back(_primitives[primNum]);
         node->initLeaf(firstPrimOffset, numPrimitives, bounds);
         return node;
     } else {
@@ -127,6 +125,7 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
         } else {
             switch (_splitMethod) {
                 case Middle: {
+                    // 选择范围最大的维度的中点进行划分
                     Float pmid = (centroidBounds.pMin[dim] + centroidBounds.pMax[dim]) / 2;
                     auto func = [dim, pmid](const BVHPrimitiveInfo &pi) {
                         return pi.centroid[dim] < pmid;
@@ -142,6 +141,7 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
                 }
                 
                 case EqualCounts: {
+                    // 相等数量划分
                     mid = (start + end) / 2;
                     auto func = [dim](const BVHPrimitiveInfo &a,
                                       const BVHPrimitiveInfo &b) {
@@ -158,7 +158,18 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
                 }
                     
                 case SAH: {
-                    
+                    // 表面启发式划分
+                    if (numPrimitives <= 2) {
+                        mid = (start + end) / 2;
+                        auto func = [dim](const BVHPrimitiveInfo &a,
+                                          const BVHPrimitiveInfo &b) {
+                            return a.centroid[dim] < b.centroid[dim];
+                        };
+                        std::nth_element(&primitiveInfo[start],
+                                         &primitiveInfo[mid],
+                                         &primitiveInfo[end - 1] + 1,
+                                         func);
+                    }
                 }
                     
                 default:
