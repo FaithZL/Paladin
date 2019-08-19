@@ -9,6 +9,18 @@
 #ifndef kdtree_hpp
 #define kdtree_hpp
 
-#include <stdio.h>
+#include "header.h"
+#include "primitive.hpp"
+
+PALADIN_BEGIN
+
+class KdTreeAccel : Aggregate{
+
+    
+public:
+    
+};
+
+PALADIN_END
 
 #endif /* kdtree_hpp */

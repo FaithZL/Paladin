@@ -41,7 +41,48 @@ AABB3f BVHAccel::worldBound() const {
 }
 
 bool BVHAccel::intersect(const paladin::Ray &ray, paladin::SurfaceInteraction *isect) const {
-    return false;
+    if (!_nodes) {
+        return false;
+    }
+
+    bool hit = false;
+    Vector3f invDir(1 / ray.dir.x, 1 / ray.dir.y, 1 / ray.dir.z);
+    int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
+
+    int toVisitOffset = 0, currentNodeIndex = 0;
+    int nodesToVisit[64];
+    while (true) {
+        const LinearBVHNode *node = &_nodes[currentNodeIndex];
+
+        if (node->bounds.intersectP(ray, invDir, dirIsNeg)) {
+            if (node->nPrimitives > 0) {
+     
+                for (int i = 0; i < node->nPrimitives; ++i)
+                    if (_primitives[node->primitivesOffset + i]->intersect(ray, isect)) {
+                        hit = true;
+                    }
+                if (toVisitOffset == 0) {
+                    break;
+                }
+                currentNodeIndex = nodesToVisit[--toVisitOffset];
+            } else {
+                
+                if (dirIsNeg[node->axis]) {
+                    nodesToVisit[toVisitOffset++] = currentNodeIndex + 1;
+                    currentNodeIndex = node->secondChildOffset;
+                } else {
+                    nodesToVisit[toVisitOffset++] = node->secondChildOffset;
+                    currentNodeIndex = currentNodeIndex + 1;
+                }
+            }
+        } else {
+            if (toVisitOffset == 0) {
+                break;
+            }
+            currentNodeIndex = nodesToVisit[--toVisitOffset];
+        }
+    }
+    return hit;
 }
 
 BVHAccel::~BVHAccel() {
@@ -49,6 +90,47 @@ BVHAccel::~BVHAccel() {
 }
 
 bool BVHAccel::intersectP(const paladin::Ray &ray) const {
+    if (!_nodes) {
+        return false;
+    }
+    Vector3f invDir(1.f / ray.dir.x, 1.f / ray.dir.y, 1.f / ray.dir.z);
+    int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
+    int nodesToVisit[64];
+    int toVisitOffset = 0, currentNodeIndex = 0;
+    
+    // 从根节点开始遍历
+    while (true) {
+        const LinearBVHNode *node = &_nodes[currentNodeIndex];
+        if (node->bounds.intersectP(ray, invDir, dirIsNeg)) {
+            
+            if (node->nPrimitives > 0) {
+                // 叶子节点
+                for (int i = 0; i < node->nPrimitives; ++i) {
+                    // 逐个片元判断求交
+                    if (_primitives[node->primitivesOffset + i]->intersectP(ray)) {
+                        return true;
+                    }
+                }
+                if (toVisitOffset == 0) {
+                    break;
+                }
+                currentNodeIndex = nodesToVisit[--toVisitOffset];
+            } else {
+                // 内部节点
+                if (dirIsNeg[node->axis]) {
+
+                    nodesToVisit[toVisitOffset++] = currentNodeIndex + 1;
+                    currentNodeIndex = node->secondChildOffset;
+                } else {
+                    nodesToVisit[toVisitOffset++] = node->secondChildOffset;
+                    currentNodeIndex = currentNodeIndex + 1;
+                }
+            }
+        } else {
+            if (toVisitOffset == 0) break;
+            currentNodeIndex = nodesToVisit[--toVisitOffset];
+        }
+    }
     return false;
 }
 
@@ -301,16 +383,17 @@ BVHBuildNode * BVHAccel::emitLBVH(paladin::BVHBuildNode *&buildNodes, const std:
 }
 
 int BVHAccel::flattenBVHTree(paladin::BVHBuildNode *node, int *offset) {
-    LinearBVHNode *linearNode = &nodes[*offset];
+    LinearBVHNode *linearNode = &_nodes[*offset];
     linearNode->bounds = node->bounds;
     int myOffset = (*offset)++;
     if (node->nPrimitives > 0) {
-        CHECK(!node->children[0] && !node->children[1]);
+        // 初始化叶子节点
+        DCHECK(!node->children[0] && !node->children[1]);
         CHECK_LT(node->nPrimitives, 65536);
         linearNode->primitivesOffset = node->firstPrimOffset;
         linearNode->nPrimitives = node->nPrimitives;
     } else {
-        
+        // 初始化内部节点
         linearNode->axis = node->splitAxis;
         linearNode->nPrimitives = 0;
         flattenBVHTree(node->children[0], offset);
