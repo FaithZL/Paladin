@@ -65,6 +65,7 @@ _primitives(std::move(p)) {
     }
     
     std::vector<BVHPrimitiveInfo> _primitiveInfo(_primitives.size());
+
     // 储存每个aabb的中心以及索引
     for (size_t i = 0; i < _primitives.size(); ++i) {
         _primitiveInfo[i] = {i, _primitives[i]->worldBound()};
@@ -73,6 +74,8 @@ _primitives(std::move(p)) {
     // 先使用内存池分配指定大小空间，函数运行结束之后自动释放
     MemoryArena arena(1024 * 1024);
     int totalNodes = 0;
+
+    // 有序的片元列表
     std::vector<std::shared_ptr<Primitive>> orderedPrims;
     orderedPrims.reserve(_primitives.size());
     BVHBuildNode *root;
@@ -90,7 +93,7 @@ _primitives(std::move(p)) {
     
     _nodes = allocAligned<LinearBVHNode>(totalNodes);
     int offset = 0;
-    // 转换成连续储存
+    // 将二叉树结构的bvh转换成连续储存结构
     flattenBVHTree(root, &offset);
     CHECK_EQ(totalNodes, offset);
 }
@@ -214,6 +217,13 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
                                 b1 = unionSet(b1, buckets[j].bounds);
                                 count1 += buckets[j].count;
                             }
+
+                            // 参见公式  C(A,B) = t1 + p(A) * C(A) + p(B) * C(B)
+                            // p(A) = S(A) / S, p(B) = S(B) / S
+                            // 概率与表面积成正比，耗时与片元个数成，
+                            // 假设C(A) = count(A)
+                            // 则可以写成以下形式
+
                             // 第一部分的总面积
                             Float s0 = count0 * b0.surfaceArea();
                             // 第二部分的总面积
@@ -242,6 +252,8 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
                             CHECK_LT(b, nBuckets);
                             return b <= minCostSplitBucket;
                         };
+
+                        
                         if (numPrimitives > _maxPrimsInNode || minCost < leafCost) {
                             // pmid指向第一个func为false的元素的
                             BVHPrimitiveInfo *pmid = std::partition(&primitiveInfo[start],
@@ -274,22 +286,38 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
 }
 
 BVHBuildNode * BVHAccel::HLBVHBuild(paladin::MemoryArena &arena, const std::vector<BVHPrimitiveInfo> &primitiveInfo, int *totalNodes, std::vector<std::shared_ptr<Primitive> > &orderedPrims) const {
-    
+    // HLBVH构建相关 todo
     return nullptr;
 }
 
 BVHBuildNode * BVHAccel::buildUpperSAH(paladin::MemoryArena &arena, std::vector<BVHBuildNode *> &treeletRoots, int start, int end, int *totalNodes) const {
-    
+    // HLBVH构建相关 todo
     return nullptr;
 }
 
 BVHBuildNode * BVHAccel::emitLBVH(paladin::BVHBuildNode *&buildNodes, const std::vector<BVHPrimitiveInfo> &primitiveInfo, paladin::MortonPrimitive *mortonPrims, int nPrimitives, int *totalNodes, std::vector<std::shared_ptr<Primitive> > &orderedPrims, std::atomic<int> *orderedPrimsOffset, int bitIndex) const {
-    
+    // HLBVH构建相关 todo
     return nullptr;
 }
 
 int BVHAccel::flattenBVHTree(paladin::BVHBuildNode *node, int *offset) {
-    return 0;
+    LinearBVHNode *linearNode = &nodes[*offset];
+    linearNode->bounds = node->bounds;
+    int myOffset = (*offset)++;
+    if (node->nPrimitives > 0) {
+        CHECK(!node->children[0] && !node->children[1]);
+        CHECK_LT(node->nPrimitives, 65536);
+        linearNode->primitivesOffset = node->firstPrimOffset;
+        linearNode->nPrimitives = node->nPrimitives;
+    } else {
+        
+        linearNode->axis = node->splitAxis;
+        linearNode->nPrimitives = 0;
+        flattenBVHTree(node->children[0], offset);
+        linearNode->secondChildOffset =
+            flattenBVHTree(node->children[1], offset);
+    }
+    return myOffset;
 }
 
 PALADIN_END
