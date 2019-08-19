@@ -118,16 +118,19 @@ bool BVHAccel::intersectP(const paladin::Ray &ray) const {
             } else {
                 // 内部节点
                 if (dirIsNeg[node->axis]) {
-
+                    // 如果ray的方向为负，则先判断右子树
                     nodesToVisit[toVisitOffset++] = currentNodeIndex + 1;
                     currentNodeIndex = node->secondChildOffset;
                 } else {
+                    // 如果ray的方向为正，则先判断左子树
                     nodesToVisit[toVisitOffset++] = node->secondChildOffset;
                     currentNodeIndex = currentNodeIndex + 1;
                 }
             }
         } else {
-            if (toVisitOffset == 0) break;
+            if (toVisitOffset == 0) {
+                break;
+            }
             currentNodeIndex = nodesToVisit[--toVisitOffset];
         }
     }
