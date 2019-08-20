@@ -124,6 +124,10 @@ class Shape;
 
 class Material;
 
+class Camera;
+
+struct CameraSample;
+
 template <typename T>
 class Texture;
 
