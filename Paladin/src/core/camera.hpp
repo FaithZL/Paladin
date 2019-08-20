@@ -9,6 +9,14 @@
 #ifndef camera_hpp
 #define camera_hpp
 
-#include <stdio.h>
+#include "header.h"
+
+PALADIN_BEGIN
+
+
+
+
+
+PALADIN_END
 
 #endif /* camera_hpp */
