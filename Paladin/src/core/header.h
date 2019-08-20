@@ -233,6 +233,8 @@ inline CONSTEXPR bool isPowerOf2(T v) {
     return v && !(v & (v - 1));
 }
 
+#define ALLOCA(TYPE, COUNT) (TYPE *) alloca((COUNT) * sizeof(TYPE))
+
 #include "mathutil.h"
 
 template <typename Predicate>
