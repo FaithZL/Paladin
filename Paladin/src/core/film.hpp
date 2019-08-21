@@ -11,6 +11,7 @@
 #include "header.h"
 #include "spectrum.hpp"
 #include "filter.h"
+#include "parallel.hpp"
 
 PALADIN_BEGIN
 
@@ -19,6 +20,9 @@ struct FilmTilePixel {
     Float filterWeightSum = 0.f;
 };
 
+/*
+ 把整个胶片分为若干个块
+ */
 class FilmTile {
 public:
     
@@ -89,7 +93,7 @@ public:
     }
     
 private:
-    
+    // 像素的范围
     const AABB2i _pixelBounds;
     
     const Vector2f _filterRadius, _invFilterRadius;
@@ -103,6 +107,55 @@ private:
     const Float _maxSampleLuminance;
     
     friend class Film;
+};
+
+class Film {
+public:
+    
+    Film(const Point2i &resolution, const AABB2f &cropWindow,
+         std::unique_ptr<Filter> filter, Float diagonal,
+         const std::string &filename, Float scale,
+         Float maxSampleLuminance = Infinity);
+    AABB2i GetSampleBounds() const;
+    AABB2f GetPhysicalExtent() const;
+    std::unique_ptr<FilmTile> GetFilmTile(const AABB2i &sampleBounds);
+    void MergeFilmTile(std::unique_ptr<FilmTile> tile);
+    void SetImage(const Spectrum *img) const;
+    void AddSplat(const Point2f &p, Spectrum v);
+    void WriteImage(Float splatScale = 1);
+    void Clear();
+    
+    // Film Public Data
+    const Point2i fullResolution;
+    const Float diagonal;
+    std::unique_ptr<Filter> filter;
+    const std::string filename;
+    AABB2i croppedPixelBounds;
+    
+private:
+    // Film Private Data
+    struct Pixel {
+        Pixel() { xyz[0] = xyz[1] = xyz[2] = filterWeightSum = 0; }
+        Float xyz[3];
+        Float filterWeightSum;
+        AtomicFloat splatXYZ[3];
+        Float pad;
+    };
+    std::unique_ptr<Pixel[]> _pixels;
+    static CONSTEXPR int _filterTableWidth = 16;
+    Float filterTable[_filterTableWidth * _filterTableWidth];
+    std::mutex _mutex;
+    const Float _scale;
+    const Float _maxSampleLuminance;
+    
+    // Film Private Methods
+    Pixel &GetPixel(const Point2i &p) {
+        DCHECK(insideExclusive(p, croppedPixelBounds));
+        int width = croppedPixelBounds.pMax.x - croppedPixelBounds.pMin.x;
+        int offset = (p.x - croppedPixelBounds.pMin.x) +
+        (p.y - croppedPixelBounds.pMin.y) * width;
+        return _pixels[offset];
+    }
 };
 
 
