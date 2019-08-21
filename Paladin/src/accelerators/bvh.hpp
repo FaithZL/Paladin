@@ -81,9 +81,9 @@ struct LinearBVHNode {
     AABB3f bounds;
     union {
         int primitivesOffset;   //指向图元
-        int secondChildOffset;  // interior
+        int secondChildOffset;  // 第二个子节点在数组中的偏移量
     };
-    uint16_t nPrimitives;  // 0 -> interior node
+    uint16_t nPrimitives;  // 图元数量
     uint8_t axis;          // interior node: xyz
     uint8_t pad[1];        // 确保32个字节为一个对象，提高缓存命中率
 };
