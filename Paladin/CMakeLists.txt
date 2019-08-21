@@ -38,6 +38,7 @@ set(EXTRA_LIBS ${EXTRA_LIBS} lua53 tinyobjloader)
 # 设置头文件目录
 include_directories ("${PROJECT_SOURCE_DIR}/src/alltest")
 include_directories ("${PROJECT_SOURCE_DIR}/src/accelerators")
+include_directories ("${PROJECT_SOURCE_DIR}/src/parallel")
 include_directories ("${PROJECT_SOURCE_DIR}/src/cameras")
 include_directories ("${PROJECT_SOURCE_DIR}/src/core")
 include_directories ("${PROJECT_SOURCE_DIR}/src/filters")
