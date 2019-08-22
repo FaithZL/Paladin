@@ -27,7 +27,7 @@ public:
         _bits = floatToBits(v);
         return v;
     }
-    void Add(Float v) {
+    void add(Float v) {
 #ifdef PALADIN_FLOAT_AS_DOUBLE
         uint64_t oldBits = bits, newBits;
 #else
