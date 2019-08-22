@@ -89,6 +89,13 @@ BVHAccel::~BVHAccel() {
     
 }
 
+/*
+ 基本思路
+ 根据根据光线的方向以及当前节点的分割轴
+ 选择较近的一个子节点求交，远的子节点放入栈中
+ 近的子节点如果与光线没有交点，则对栈中的节点求交
+ 循环以上过程
+*/
 bool BVHAccel::intersectP(const paladin::Ray &ray) const {
     if (!_nodes) {
         return false;
@@ -121,6 +128,8 @@ bool BVHAccel::intersectP(const paladin::Ray &ray) const {
                 if (toVisitOffset == 0) {
                     break;
                 }
+
+                // 取出栈中的节点求交
                 currentNodeIndex = nodesToVisit[--toVisitOffset];
             } else {
                 // 内部节点
