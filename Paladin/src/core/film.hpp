@@ -38,7 +38,7 @@ public:
         _pixels = std::vector<FilmTilePixel>(std::max(0, _pixelBounds.Area()));
     }
     
-    void AddSample(const Point2f &pFilm, Spectrum L,
+    void addSample(const Point2f &pFilm, Spectrum L,
                    Float sampleWeight = 1.) {
 
         if (L.y() > _maxSampleLuminance) {
@@ -116,16 +116,23 @@ public:
          std::unique_ptr<Filter> filter, Float diagonal,
          const std::string &filename, Float scale,
          Float maxSampleLuminance = Infinity);
-    AABB2i GetSampleBounds() const;
-    AABB2f GetPhysicalExtent() const;
-    std::unique_ptr<FilmTile> GetFilmTile(const AABB2i &sampleBounds);
-    void MergeFilmTile(std::unique_ptr<FilmTile> tile);
-    void SetImage(const Spectrum *img) const;
-    void AddSplat(const Point2f &p, Spectrum v);
-    void WriteImage(Float splatScale = 1);
-    void Clear();
     
-    // Film Public Data
+    AABB2i getSampleBounds() const;
+    
+    AABB2f getPhysicalExtent() const;
+    
+    std::unique_ptr<FilmTile> getFilmTile(const AABB2i &sampleBounds);
+    
+    void mergeFilmTile(std::unique_ptr<FilmTile> tile);
+    
+    void setImage(const Spectrum *img) const;
+    
+    void addSplat(const Point2f &p, Spectrum v);
+    
+    void writeImage(Float splatScale = 1);
+    
+    void clear();
+    
     const Point2i fullResolution;
     const Float diagonal;
     std::unique_ptr<Filter> filter;
@@ -133,27 +140,26 @@ public:
     AABB2i croppedPixelBounds;
     
 private:
-    // Film Private Data
+    // 像素数据
     struct Pixel {
         Pixel() { xyz[0] = xyz[1] = xyz[2] = filterWeightSum = 0; }
         Float xyz[3];
         Float filterWeightSum;
         AtomicFloat splatXYZ[3];
-        Float pad;
+        Float pad; // 占位，凑够32字节
     };
+    
     std::unique_ptr<Pixel[]> _pixels;
     static CONSTEXPR int _filterTableWidth = 16;
     Float filterTable[_filterTableWidth * _filterTableWidth];
-    std::mutex _mutex;
+    std::mutex _mutex; // 64字节
     const Float _scale;
     const Float _maxSampleLuminance;
     
-    // Film Private Methods
-    Pixel &GetPixel(const Point2i &p) {
+    Pixel &getPixel(const Point2i &p) {
         DCHECK(insideExclusive(p, croppedPixelBounds));
         int width = croppedPixelBounds.pMax.x - croppedPixelBounds.pMin.x;
-        int offset = (p.x - croppedPixelBounds.pMin.x) +
-        (p.y - croppedPixelBounds.pMin.y) * width;
+        int offset = (p.x - croppedPixelBounds.pMin.x) + (p.y - croppedPixelBounds.pMin.y) * width;
         return _pixels[offset];
     }
 };
