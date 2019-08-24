@@ -36,18 +36,23 @@ public:
                                Vector3f *wi, Float *pdf, Point2f *pRaster,
                                VisibilityTester *vis) const;
     
-
+    // 相机空间到世界空间的转换，用animatedTransform可以做动态模糊
     AnimatedTransform cameraToWorld;
     // 快门开启时间，快门关闭时间
     const Float shutterOpen, shutterClose;
+    // 胶片
     Film * film;
     // 相机所在的介质
     const Medium *medium;
 };
 
+// 相机样本
 struct CameraSample {
+    // 在胶片上采样的随机数
     Point2f pFilm;
+    // 在透镜上采样的随机数
     Point2f pLens;
+    // 采样时间
     Float time;
 };
 

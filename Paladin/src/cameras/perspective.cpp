@@ -7,3 +7,8 @@
 //
 
 #include "perspective.hpp"
+
+PALADIN_BEGIN
+
+
+PALADIN_END
