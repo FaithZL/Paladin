@@ -24,5 +24,8 @@ medium(medium) {
         
 }
 
+Float Camera::generateRayDifferential(const paladin::CameraSample &sample, paladin::RayDifferential *rd) const {
+    
+}
 
 PALADIN_END
