@@ -11,21 +11,18 @@
 
 PALADIN_BEGIN
 
-Camera::Camera(const AnimatedTransform &CameraToWorld, Float shutterOpen,
-               Float shutterClose, Film *film, const Medium *medium)
-: cameraToWorld(CameraToWorld),
-shutterOpen(shutterOpen),
-shutterClose(shutterClose),
-film(film),
-medium(medium) {
-    if (cameraToWorld.hasScale()) {
-        
-    }
-        
-}
+//Camera::Camera(const AnimatedTransform &CameraToWorld, Float shutterOpen,
+//               Float shutterClose, Film *film, const Medium *medium)
+//: cameraToWorld(CameraToWorld),
+//shutterOpen(shutterOpen),
+//shutterClose(shutterClose),
+//film(film),
+//medium(medium) {
+//    if (cameraToWorld.hasScale()) {
+//
+//    }
+//
+//}
 
-Float Camera::generateRayDifferential(const paladin::CameraSample &sample, paladin::RayDifferential *rd) const {
-    
-}
 
 PALADIN_END
