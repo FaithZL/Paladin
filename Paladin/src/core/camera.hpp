@@ -72,16 +72,20 @@ public:
         _lensRadius = lensr;
         _focalDistance = focald;
         
-        _screenToRaster = Transform::scale(film->fullResolution.x, film->fullResolution.y, 1) *
-        Transform::scale(1 / (screenWindow.pMax.x - screenWindow.pMin.x),
-              1 / (screenWindow.pMin.y - screenWindow.pMax.y), 1) *
-        Transform::translate(Vector3f(-screenWindow.pMin.x, -screenWindow.pMax.y, 0));
+        _screenToRaster = Transform::scale(film->fullResolution.x, film->fullResolution.y, 1) 
+        				* Transform::scale(1 / (screenWindow.pMax.x - screenWindow.pMin.x),
+											1 / (screenWindow.pMin.y - screenWindow.pMax.y), 1) 
+        				* Transform::translate(Vector3f(-screenWindow.pMin.x, -screenWindow.pMax.y, 0));
         _rasterToScreen = _screenToRaster.getInverse();
         _rasterToCamera = _cameraToScreen.getInverse() * _rasterToScreen;
     }
     
 protected:
-
+	/*
+	 屏幕空间：仍然是三维空间，定义在胶片平面上，z的值是[0,1]
+	 NDC空间：xyz三个维度都在[0,1]范围内，可以通过屏幕进行线性变换得到
+	 光栅空间：z范围是[0,1]，x范围是[0,res.x]，y范围是[0,res.y]
+	*/
     Transform _cameraToScreen, _rasterToCamera;
     Transform _screenToRaster, _rasterToScreen;
     
