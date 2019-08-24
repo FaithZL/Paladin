@@ -21,7 +21,9 @@ public:
     Camera(const AnimatedTransform &CameraToWorld, Float shutterOpen,
            Float shutterClose, Film *film, const Medium *medium);
     
-    virtual ~Camera();
+    virtual ~Camera() {
+        delete film;
+    }
     
     virtual Float generateRay(const CameraSample &sample, Ray *ray) const = 0;
     
