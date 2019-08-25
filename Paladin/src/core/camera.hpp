@@ -36,8 +36,17 @@ public:
         delete film;
     }
     
+    /*
+     生成的ray中dir分量为单位向量
+     返回值为一个浮点数，表示有多少沿着该光线有多少radiance到达相平面上
+     一般返回值为0或1，真实相机中可能返回其他值
+     */
     virtual Float generateRay(const CameraSample &sample, Ray *ray) const = 0;
     
+    /*
+     返回值为一个浮点数，表示有多少沿着该光线有多少radiance到达相平面上
+     一般返回值为0或1，真实相机中可能返回其他值
+     */
     virtual Float generateRayDifferential(const CameraSample &sample,
                                           RayDifferential *rd) const;
     
