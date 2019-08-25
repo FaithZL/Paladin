@@ -14,6 +14,10 @@
 
 PALADIN_BEGIN
 
+/*
+ 透视相机
+ 所有生成的ray的起点为相机空间的原点，方向为原点到像平面的采样的方向
+ */
 class PerspectiveCamera : public ProjectiveCamera {
 public:
     
@@ -21,6 +25,7 @@ public:
                       const AABB2f &screenWindow, Float shutterOpen,
                       Float shutterClose, Float lensRadius, Float focalDistance,
                       Float fov, Film *film, const Medium *medium);
+    
     virtual Float generateRay(const CameraSample &sample, Ray *) const;
     
     virtual Float generateRayDifferential(const CameraSample &sample,
@@ -35,10 +40,12 @@ public:
                        VisibilityTester *vis) const;
     
 private:
-    
-    Vector3f dxCamera, dyCamera;
-    
-    Float A;
+    // 向x轴移动一个像素，对应相机空间的变化率
+    Vector3f _dxCamera;
+    // 向y轴移动一个像素，对应相机空间的变化率
+    Vector3f _dyCamera;
+    // z=1的情况下的film的面积
+    Float _area;
 };
 
 PALADIN_END
