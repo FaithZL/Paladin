@@ -42,10 +42,13 @@ Float PerspectiveCamera::generateRay(const CameraSample &sample,
     // 生成光线
     *ray = Ray(Point3f(0, 0, 0), normalize(Vector3f(pCamera)));
     
+    // 如果透镜半径大于0，则需要重新确定光线的起点以及方向
     if (_lensRadius > 0) {
         Point2f pLens = _lensRadius * uniformSampleDisk(sample.pLens);
         
-        // 计算焦平面
+        /*
+         焦平面上的样本点，发出的所有光线通过透镜之后都会聚焦在film的一个点上
+        */
         Float ft = _focalDistance / ray->dir.z;
         Point3f pFocus = ray->at(ft);
         
