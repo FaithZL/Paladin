@@ -211,6 +211,22 @@ Point2f uniformSampleDisk(const Point2f &u);
 
 
 /*
+ 先把圆盘平均分为8个扇形，每个扇形的圆心角为45°
+ 我们针对每个扇形进行采样
+ 一个扇形内部的点可以理解为一个等腰直角三角形内部点的映射
+ (x,y)到 (r,θ)的映射为
+ r = x
+ θ = y/x * π/4
+ 整个映射方式相当于把一个边长为2的正方形的采样点通过上述方式
+ 映射到一个直径为2的圆盘
+ 知道以上思路之后，代码就很简单了
+ 至于为何这个方式比uniformSampleDisk要常用，目前还没有搞懂，todo
+ 明天生成一批样本对比一下
+ */
+Point2f concentricSampleDisk(const Point2f &u);
+
+
+/*
  均匀采样扇形，其中扇形角度为 θmax
  面积为 s = θmax/2
  
