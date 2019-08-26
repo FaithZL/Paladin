@@ -382,8 +382,36 @@ Transform Transform::orthographic(Float zNear, Float zFar) {
     return Transform(Matrix4x4(a));
 }
 
+/*
+要把相机空间xy分辨映射到[-1,1]中，z映射到[0,1]中
+x'只与x以及z有关
+y'只与y以及z有关
+因为z'与xy均无关
+可以假设投影矩阵如下
+X, 0, 0, 0, 
+0, Y, 0, 0,
+0, 0, A, B, 
+0, 0, 1, 0,
+
+从相机空间映射到视平面上
+透视效果，近大远小，可得
+x' = x/z
+y' = y/z
+将 z范围映射到[0,1]之间，可得
+经过
+z' = (Az + B)/z
+当 z = f时，z' = 1
+当 z = n时，z' = 0
+A = f/(f - n)
+B = -fn/(f - n)
+带入得
+z' = f(z-n) / z(f-n)
+由此可推导出透视投影矩阵如下
+
+这里的推导过程不清晰，以后补全todo
+*/
 Transform Transform::perspective(Float fov, Float zNear, Float zFar, bool bRadian/*=false*/) {
-    //这里的透视矩阵没有aspect参数，暂时不知道具体原因，等待后续了解
+    //这里的透视矩阵没有aspect参数，是因为把光栅空间的变换分离出来了
     fov = bRadian ? fov : degree2radian(fov);
     Float invTanAng = 1 / std::tan(fov / 2);
     Float a[16] = {
