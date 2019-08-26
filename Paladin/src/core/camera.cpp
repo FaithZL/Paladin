@@ -25,18 +25,18 @@ medium(medium) {
 }
 
 Float Camera::generateRayDifferential(const CameraSample &sample, RayDifferential *rd) const {
-    Float ret = generateRay(sample, rd);
-    if (ret == 0) {
-        return ret;
+    Float weight = generateRay(sample, rd);
+    if (weight == 0) {
+        return weight;
     }
 
     // 生成x方向辅助光线
     CameraSample sshift = sample;
     ++sshift.pFilm.x;
     Ray rx;
-    Float retx = generateRay(sshift, &rx);
+    Float weightX = generateRay(sshift, &rx);
     // todo 暂时不理解为何要这样要返回0
-    if (retx == 0) {
+    if (weightX == 0) {
         return 0;
     }
     rd->rxOrigin = rx.ori;
@@ -46,14 +46,14 @@ Float Camera::generateRayDifferential(const CameraSample &sample, RayDifferentia
     --sshift.pFilm.x;
     ++sshift.pFilm.y;
     Ray ry;
-    Float rety = generateRay(sshift, &ry);
+    Float weightY = generateRay(sshift, &ry);
     rd->ryOrigin = ry.ori;
     rd->ryDirection = ry.dir;
-    if (rety == 0) {
+    if (weightY == 0) {
         return 0;
     }
     
-    return ret;
+    return weight;
 }
 
 
