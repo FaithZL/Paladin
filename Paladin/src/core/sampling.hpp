@@ -228,6 +228,9 @@ Point2f uniformSampleDisk(const Point2f &u);
  但随机数序列生成的样本差别不明显
  用python实现了同样的算法，测试耗时uniformSampleDisk要少一些，
  所以暂时打算使用uniformSampleDisk作为圆盘采样函数
+
+ 其实这点很容易理解，如果用一个100 * 100均匀点阵采样一个长宽比为10:1的矩形
+ 显然，效果不会很好
  */
 Point2f concentricSampleDisk(const Point2f &u);
 
