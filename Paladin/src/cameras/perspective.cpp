@@ -33,8 +33,7 @@ screenWindow, shutterOpen, shutterClose, lensRadius,
     _area = std::abs((pMax.x - pMin.x) * (pMax.y - pMin.y));
 }
 
-Float PerspectiveCamera::generateRay(const CameraSample &sample,
-                                     Ray *ray) const {
+Float PerspectiveCamera::generateRay(const CameraSample &sample, Ray *ray) const {
     // 在胶片上采样的点
     Point3f pFilm = Point3f(sample.pFilm.x, sample.pFilm.y, 0);
     // 把光栅空间转到相机空间
@@ -47,7 +46,8 @@ Float PerspectiveCamera::generateRay(const CameraSample &sample,
         Point2f pLens = _lensRadius * uniformSampleDisk(sample.pLens);
         
         /*
-         焦平面上的样本点，发出的所有光线通过透镜之后都会聚焦在film的一个点上
+         焦平面上的样本点，发出的所有光线通过透镜之后都会聚焦在film的一个点上，
+         但如果光线通过透镜中心，方向不会改变，我们可以以此来确定焦平面上的样本点pFocus
         */
         Float ft = _focalDistance / ray->dir.z;
         Point3f pFocus = ray->at(ft);
