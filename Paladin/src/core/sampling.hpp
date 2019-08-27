@@ -220,8 +220,14 @@ Point2f uniformSampleDisk(const Point2f &u);
  整个映射方式相当于把一个边长为2的正方形的采样点通过上述方式
  映射到一个直径为2的圆盘
  知道以上思路之后，代码就很简单了
- 至于为何这个方式比uniformSampleDisk要常用，目前还没有搞懂，todo
- 明天生成一批样本对比一下
+ 至于为何这个方式比uniformSampleDisk要常用，目前还没有搞懂，
+
+ 用python生成了一波数据与uniformSampleDisk对比
+ 序列采用[0,1]的2维均匀点阵，concentricSampleDisk的均匀程度明显
+ 优于uniformSampleDisk采样
+ 但随机数序列生成的样本差别不明显
+ 用python实现了同样的算法，测试耗时uniformSampleDisk要少一些，
+ 所以暂时打算使用uniformSampleDisk作为圆盘采样函数
  */
 Point2f concentricSampleDisk(const Point2f &u);
 
