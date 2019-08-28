@@ -54,8 +54,7 @@ PALADIN_BEGIN
   个人理解
   透视相机其实是对真实相机的简化，但是比小孔相机要真实一些，因为可以模拟失焦产生的景深效果
 
-  相机的焦距与两个参数有关，一个是透镜的形状，还有就是透镜与film的距离
-  透视相机已经弱化了这两个概念，只提供了焦距这个成员变量
+  透镜相机的焦距为透镜中心到film的距离，焦距决定了焦平面的位置
  */
 class PerspectiveCamera : public ProjectiveCamera {
 public:
