@@ -133,27 +133,48 @@ public:
     
     void clear();
     
+    // 图片分辨率，原点在左上角
     const Point2i fullResolution;
+
+    // 对角线长度，单位为米
     const Float diagonal;
+
+    // 过滤器
     std::unique_ptr<Filter> filter;
+
+    // 文件名
     const std::string filename;
+
+    // 需要渲染的子区域
     AABB2i croppedPixelBounds;
     
 private:
     // 像素数据
     struct Pixel {
-        Pixel() { xyz[0] = xyz[1] = xyz[2] = filterWeightSum = 0; }
+        Pixel() { 
+            xyz[0] = xyz[1] = xyz[2] = filterWeightSum = 0; 
+        }
+        // xyz颜色空间，与设备无关
         Float xyz[3];
+        // 所有样本的filter权重之和
         Float filterWeightSum;
+        // 保存（未加权）样本splats总和
         AtomicFloat splatXYZ[3];
-        Float pad; // 占位，凑够32字节
+        // 占位，凑够32字节,为了避免一个对象横跨两个cache line，从而提高缓存命中率
+        Float pad; 
     };
     
+    // 像素列表
     std::unique_ptr<Pixel[]> _pixels;
+
     static CONSTEXPR int _filterTableWidth = 16;
+
     Float filterTable[_filterTableWidth * _filterTableWidth];
+
     std::mutex _mutex; // 64字节
+
     const Float _scale;
+
     const Float _maxSampleLuminance;
     
     Pixel &getPixel(const Point2i &p) {
