@@ -89,13 +89,13 @@ public:
     ProjectiveCamera(const AnimatedTransform &CameraToWorld,
                      const Transform &cameraToScreen,
                      const AABB2f &screenWindow, Float shutterOpen,
-                     Float shutterClose, Float lensr, Float focald, Film *film,
+                     Float shutterClose, Float lensr, Float imageDistance, Film *film,
                      const Medium *medium)
     : Camera(CameraToWorld, shutterOpen, shutterClose, film, medium),
     _cameraToScreen(cameraToScreen) {
 
         _lensRadius = lensr;
-        _focalDistance = focald;
+        _imageDistance = imageDistance;
         
         // 屏幕空间(0,0)为胶片平面矩形的中点
         _screenToRaster = Transform::scale(film->fullResolution.x, film->fullResolution.y, 1) 
@@ -113,8 +113,10 @@ protected:
     
     // 透镜半径
     Float _lensRadius;
-    // 焦距
-    Float _focalDistance;
+    
+    // 像距：pbrt里的这个变量名为focalDistance，很容易引起歧义，今天跟幽玄讨论之后才意识到自己也被误导了
+    // 反省一下自己，看书不仔细导致踩坑
+    Float _imageDistance;
 };
 
 PALADIN_END
