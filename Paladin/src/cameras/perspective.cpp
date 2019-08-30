@@ -50,7 +50,7 @@ Float PerspectiveCamera::generateRay(const CameraSample &sample, Ray *ray) const
           但如果光线通过透镜中心，方向不会改变，我们可以以此来确定焦平面上的样本点pFocus
           可以通过相似三角形来推导出以下表达式
          */
-        Float ft = _imageDistance / ray->dir.z;
+        Float ft = _focalDistance / ray->dir.z;
         // 计算焦平面上的点
         Point3f pFocus = ray->at(ft);
         
@@ -76,7 +76,7 @@ Float PerspectiveCamera::generateRayDifferential(const CameraSample &sample, Ray
         Point2f pLens = _lensRadius * uniformSampleDisk(sample.pLens);
         
         // 计算焦平面
-        Float ft = _imageDistance / ray->dir.z;
+        Float ft = _focalDistance / ray->dir.z;
         Point3f pFocus = ray->at(ft);
         // 由于透镜的影响，更新ray属性
         ray->ori = Point3f(pLens.x, pLens.y, 0);
@@ -87,13 +87,13 @@ Float PerspectiveCamera::generateRayDifferential(const CameraSample &sample, Ray
     if (_lensRadius > 0) {
         Point2f pLens = _lensRadius * uniformSampleDisk(sample.pLens);
         Vector3f dx = normalize(Vector3f(pCamera + _dxCamera));
-        Float ft = _imageDistance / dx.z;
+        Float ft = _focalDistance / dx.z;
         Point3f pFocus = Point3f(0, 0, 0) + (ft * dx);
         ray->rxOrigin = Point3f(pLens.x, pLens.y, 0);
         ray->rxDirection = normalize(pFocus - ray->rxOrigin);
         
         Vector3f dy = normalize(Vector3f(pCamera + _dyCamera));
-        ft = _imageDistance / dy.z;
+        ft = _focalDistance / dy.z;
         pFocus = Point3f(0, 0, 0) + (ft * dy);
         ray->ryOrigin = Point3f(pLens.x, pLens.y, 0);
         ray->ryDirection = normalize(pFocus - ray->ryOrigin);
