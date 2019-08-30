@@ -89,13 +89,13 @@ public:
     ProjectiveCamera(const AnimatedTransform &CameraToWorld,
                      const Transform &cameraToScreen,
                      const AABB2f &screenWindow, Float shutterOpen,
-                     Float shutterClose, Float lensr, Float imageDistance, Film *film,
+                     Float shutterClose, Float lensr, Float focalDistance, Film *film,
                      const Medium *medium)
     : Camera(CameraToWorld, shutterOpen, shutterClose, film, medium),
     _cameraToScreen(cameraToScreen) {
 
         _lensRadius = lensr;
-        _imageDistance = imageDistance;
+        _focalDistance = focalDistance;
         
         // 屏幕空间(0,0)为胶片平面矩形的中点
         _screenToRaster = Transform::scale(film->fullResolution.x, film->fullResolution.y, 1) 
@@ -114,9 +114,12 @@ protected:
     // 透镜半径
     Float _lensRadius;
     
-    // 像距：pbrt里的这个变量名为focalDistance，很容易引起歧义，今天跟幽玄讨论之后才意识到自己也被误导了
-    // 反省一下自己，看书不仔细导致踩坑
-    Float _imageDistance;
+    // 存在一个平面，如果一个点在该平面上
+    // 无论透镜的样本点在哪里，点在film上呈的像都不会模糊
+    // 我暂时把该平面称为F平面，F平面与透镜中心的距离定义为 _focalDistance
+    // 通常 _focalDistance 由两个参数决定，透镜的焦距，以及film到透镜的实际距离
+    // 为了方便计算，我们省略了以上两个中间参数，直接定义了_focalDistance
+    Float _focalDistance;
 };
 
 PALADIN_END
