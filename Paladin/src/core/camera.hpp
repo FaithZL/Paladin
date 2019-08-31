@@ -116,7 +116,7 @@ protected:
     
     // 存在一个平面，如果一个点在该平面上
     // 无论透镜的样本点在哪里，点在film上呈的像都不会模糊
-    // 我暂时把该平面称为F平面，F平面与透镜中心的距离定义为 _focalDistance
+    // 我暂时把该平面称为film所对应的聚焦平面（简称聚焦平面），聚焦平面与透镜中心的距离定义为 _focalDistance
     // 通常 _focalDistance 由两个参数决定，透镜的焦距，以及film到透镜的实际距离
     // 为了方便计算，我们省略了以上两个中间参数，直接定义了_focalDistance
     Float _focalDistance;
