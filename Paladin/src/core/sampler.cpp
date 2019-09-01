@@ -71,7 +71,108 @@ bool Sampler::setSampleNumber(int64_t sampleNum) {
     return _currentPixelSampleIndex < samplesPerPixel;
 }
 
+// PixelSampler
+PixelSampler::PixelSampler(int64_t samplesPerPixel, int nSampledDimensions)
+: Sampler(samplesPerPixel) {
+    for (int i = 0; i < nSampledDimensions; ++i) {
+        _samples1D.push_back(std::vector<Float>(samplesPerPixel));
+        _samples2D.push_back(std::vector<Point2f>(samplesPerPixel));
+    }
+}
+
+bool PixelSampler::startNextSample() {
+    _curDimension1D = _curDimension2D = 0;
+    return Sampler::startNextSample();
+}
+
+bool PixelSampler::setSampleNumber(int64_t sampleNum) {
+    _curDimension1D = _curDimension2D = 0;
+    return Sampler::setSampleNumber(sampleNum);
+}
+
+Float PixelSampler::get1D() {
+    CHECK_LT(_currentPixelSampleIndex, samplesPerPixel);
+    if (_curDimension1D < _samples1D.size()) {
+        return _samples1D[_curDimension1D++][_currentPixelSampleIndex];
+    } else {
+        return _rng.uniformFloat();
+    }
+}
+
+Point2f PixelSampler::get2D() {
+    CHECK_LT(_currentPixelSampleIndex, samplesPerPixel);
+    if (_curDimension2D < _samples2D.size()) {
+        return _samples2D[_curDimension2D++][_currentPixelSampleIndex];
+    } else {
+        return Point2f(_rng.uniformFloat(), _rng.uniformFloat());
+    }
+}
+
+// GlobalSampler
+void GlobalSampler::startPixel(const Point2i &p) {
+    Sampler::startPixel(p);
+    _dimension = 0;
+    _globalIndex = getIndexForSample(0);
+    _arrayEndDim = _arrayStartDim + _sampleArray1D.size() + 2 * _sampleArray2D.size();
+    
+    // 生成一维样本数组
+    for (size_t i = 0; i < _samples1DArraySizes.size(); ++i) {
+        int nSamples = _samples1DArraySizes[i] * samplesPerPixel;
+        for (int j = 0; j < nSamples; ++j) {
+            int64_t index = getIndexForSample(j);
+            _sampleArray1D[i][j] = sampleDimension(index, _arrayStartDim + i);
+        }
+    }
+    
+    // 生成二维样本数组
+    int dim = _arrayStartDim + _samples1DArraySizes.size();
+    for (size_t i = 0; i < _samples2DArraySizes.size(); ++i) {
+        int nSamples = _samples2DArraySizes[i] * samplesPerPixel;
+        for (int j = 0; j < nSamples; ++j) {
+            int64_t idx = getIndexForSample(j);
+            _sampleArray2D[i][j].x = sampleDimension(idx, dim);
+            _sampleArray2D[i][j].y = sampleDimension(idx, dim + 1);
+        }
+        dim += 2;
+    }
+    CHECK_EQ(_arrayEndDim, dim);
+}
+
+bool GlobalSampler::startNextSample() {
+    _dimension = 0;
+    _globalIndex = getIndexForSample(_currentPixelSampleIndex + 1);
+    return Sampler::startNextSample();
+}
+
+bool GlobalSampler::setSampleNumber(int64_t sampleNum) {
+    _dimension = 0;
+    _globalIndex = getIndexForSample(sampleNum);
+    return Sampler::setSampleNumber(sampleNum);
+}
+
+Float GlobalSampler::get1D() {
+    if (_dimension >= _arrayStartDim && _dimension < _arrayEndDim) {
+        _dimension = _arrayEndDim;
+    }
+    return sampleDimension(_globalIndex, _dimension++);
+}
+
+Point2f GlobalSampler::get2D() {
+    if (_dimension + 1 >= _arrayStartDim && _dimension < _arrayEndDim) {
+        _dimension = _arrayEndDim;
+    }
+    Point2f p(sampleDimension(_globalIndex, _dimension),
+              sampleDimension(_globalIndex, _dimension + 1));
+    _dimension += 2;
+    return p;
+}
+
 PALADIN_END
+
+
+
+
+
 
 
 
