@@ -13,8 +13,17 @@
 
 PALADIN_BEGIN
 
-// Low Discrepancy Declarations
+// 质数表大小
+static CONSTEXPR int PrimeTableSize = 1000;
+// 质数表
+extern const int Primes[PrimeTableSize];
+// 质数和，i与v的关系为前i个质数相加，值为v
+extern const int PrimeSums[PrimeTableSize];
+
+
 Float RadicalInverse(int baseIndex, uint64_t a);
+
+Float ScrambledRadicalInverse(int baseIndex, uint64_t a, const uint16_t *perm);
 
 inline uint32_t ReverseBits32(uint32_t n) {
     n = (n << 16) | (n >> 16);

@@ -201,6 +201,12 @@ inline double nextFloatDown(double v, int delta = 1) {
     return bitsToFloat(ui);
 }
 
+template <typename T>
+inline T Mod(T a, T b) {
+    T result = a - (a / b) * b;
+    return (T)((result < 0) ? result + b : result);
+}
+
 inline Float gammaCorrect(Float value) {
     if (value <= 0.0031308f) return 12.92f * value;
     return 1.055f * std::pow(value, (Float)(1.f / 2.4f)) - 0.055f;
