@@ -11,6 +11,8 @@
 
 #include "header.h"
 
+#include "sampling.hpp"
+
 PALADIN_BEGIN
 
 // 质数表大小
@@ -20,10 +22,12 @@ extern const int Primes[PrimeTableSize];
 // 质数和，i与v的关系为前i个质数相加，值为v
 extern const int PrimeSums[PrimeTableSize];
 
-
+// 逐位反转
 Float RadicalInverse(int baseIndex, uint64_t a);
 
 Float ScrambledRadicalInverse(int baseIndex, uint64_t a, const uint16_t *perm);
+
+std::vector<uint16_t> ComputeRadicalInversePermutations(RNG &rng);
 
 inline uint32_t ReverseBits32(uint32_t n) {
     n = (n << 16) | (n >> 16);

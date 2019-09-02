@@ -7,6 +7,7 @@
 //
 
 #include "lowdiscrepancy.hpp"
+
 PALADIN_BEGIN
 
 const int Primes[PrimeTableSize] = {
@@ -210,6 +211,23 @@ const int PrimeSums[PrimeTableSize] = {
     3611954, 3619807, 3627674, 3635547, 3643424, 3651303, 3659186, 3667087,
     3674994,
 };
+
+std::vector<uint16_t> ComputeRadicalInversePermutations(RNG &rng) {
+    std::vector<uint16_t> perms;
+    // Allocate space in _perms_ for radical inverse permutations
+    int permArraySize = 0;
+    for (int i = 0; i < PrimeTableSize; ++i) permArraySize += Primes[i];
+    perms.resize(permArraySize);
+    uint16_t *p = &perms[0];
+    for (int i = 0; i < PrimeTableSize; ++i) {
+        // Generate random permutation for $i$th prime base
+        for (int j = 0; j < Primes[i]; ++j) p[j] = j;
+        Shuffle(p, Primes[i], 1, rng);
+        p += Primes[i];
+    }
+    return perms;
+}
+
 
 template <int base>
 PALADIN_NO_INLINE static Float ScrambledRadicalInverseSpecialized(const uint16_t *perm, uint64_t a) {
@@ -2290,6 +2308,13 @@ Float ScrambledRadicalInverse(int baseIndex, uint64_t a, const uint16_t *perm) {
     }
 }
 
+/**
+ * 根据指定的进制数跟参数左右反转
+ * 这里为何会用模板，而不是用两个参数？
+ * 这将避免为每个base生成单独的代码路径(这句话我不是很理解)
+ * 也可以在编译期就计算好invBase的值，提高运行效率
+ *
+ */
 template <int base>
 PALADIN_NO_INLINE static Float RadicalInverseSpecialized(uint64_t a) {
     const Float invBase = (Float)1 / (Float)base;

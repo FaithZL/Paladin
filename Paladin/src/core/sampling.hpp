@@ -10,7 +10,7 @@
 #define sampling_hpp
 
 #include "header.h"
-
+#include "rng.h"
 /*
 P为累积分布函数(cdf)，p为概率密度函数(pdf)，cdf求导得到pdf
 常用概率论基础公式
@@ -302,6 +302,20 @@ Point2f uniformSamplePartialSector(const Point2f &u, Float thetaMax, Float rMin)
  v = b * √a
  */
 Point2f uniformSampleTriangle(const Point2f &u);
+
+
+/**
+ * 随机打乱一个数组
+ */
+template <typename T>
+void Shuffle(T *samp, int count, int nDimensions, RNG &rng) {
+    for (int i = 0; i < count; ++i) {
+        int other = i + rng.uniformUInt32(count - i);
+        for (int j = 0; j < nDimensions; ++j) {
+            std::swap(samp[nDimensions * i + j], samp[nDimensions * other + j]);
+        }
+    }
+}
 
 PALADIN_END
 
