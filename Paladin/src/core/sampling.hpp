@@ -307,10 +307,24 @@ Point2f uniformSampleTriangle(const Point2f &u);
 /**
  * 随机打乱一个数组
  */
+
+/*
+
+    0   1   2   3   4   5   count
+0   e   e   e   e   e   e
+1   e   e   e   e   e   e
+2   e   e   e   e   e   e
+dim
+
+i = 0, other = 
+
+*/
 template <typename T>
 void Shuffle(T *samp, int count, int nDimensions, RNG &rng) {
     for (int i = 0; i < count; ++i) {
+        // 随机选择一个i右侧的索引
         int other = i + rng.uniformUInt32(count - i);
+        // 交换i与other之间两个样本的所有维度
         for (int j = 0; j < nDimensions; ++j) {
             std::swap(samp[nDimensions * i + j], samp[nDimensions * other + j]);
         }
