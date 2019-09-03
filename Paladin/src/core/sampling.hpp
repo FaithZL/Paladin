@@ -285,51 +285,87 @@ Point2f uniformSampleSector(const Point2f &u, Float thetaMax);
 */
 Point2f uniformSamplePartialSector(const Point2f &u, Float thetaMax, Float rMin);
 
-/*
- 均匀采样三角形
- 转换为均匀采样直角三角形，直角边分别为uv，长度为1
- 三角形面积为s = 1/2
- p(u, v) = 2
- p(u) = ∫[0, 1-u]p(u, v)dv = 2(1 - u)
- p(u|v) = p(u,v)/p(u) = 1/(1 - u)
- 积分得
- P(u) = ∫[0, u]p(u')du' = 2u - u^2
- P(v) = ∫[0, v]p(u|v')dv' = v/(1 - u)
- 
- ab为均匀分布的随机数
- 对P(u) P(v)求反函数，得
- u = 1 - √a
- v = b * √a
+/**
+ *  均匀采样三角形
+ * 转换为均匀采样直角三角形，直角边分别为uv，长度为1
+ * 三角形面积为s = 1/2
+ * p(u, v) = 2
+ * p(u) = ∫[0, 1-u]p(u, v)dv = 2(1 - u)
+ * p(u|v) = p(u,v)/p(u) = 1/(1 - u)
+ * 积分得
+ * P(u) = ∫[0, u]p(u')du' = 2u - u^2
+ * P(v) = ∫[0, v]p(u|v')dv' = v/(1 - u)
+ *
+ * ab为均匀分布的随机数
+ * 对P(u) P(v)求反函数，得
+ * u = 1 - √a
+ * v = b * √a
+ * @param  u 均匀二维随机变量
+ * @return   三角形内部uv坐标
  */
 Point2f uniformSampleTriangle(const Point2f &u);
 
 
 /**
  * 随机打乱一个数组
+ * 流程大体如下
+ *
+ *     0     1     2     3     4     5   count
+ * 0   s0    s1    s2    s3    s4    s5
+ * 1   s6    s7    s8    s9    s10   s11
+ * 2   s12   s13   s14   s15   s16   s17
+ * dim
+ * 
+ *   i = 0, other = randomInt(5 - 0) + 0 = 2
+ *
+ *   j=0, swap(s[3*0 + 0], s[3*2 + 0]) swap(s[0], s[6])
+ *   j=1, swap(s[3*0 + 1], s[3*2 + 1]) swap(s[1], s[7])
+ *   j=0, swap(s[3*0 + 2], s[3*2 + 2]) swap(s[2], s[8])
+ *   ......
+ *   i = 1, other = randomInt(5 - 1) + 1 = 3
+ *
+ *   j=0, swap(s[3*1 + 0], s[3*3 + 0]) swap(s[3], s[9])
+ *   j=1, swap(s[3*1 + 1], s[3*3 + 1]) swap(s[4], s[10])
+ *   j=0, swap(s[3*1 + 2], s[3*3 + 2]) swap(s[5], s[11])
+ *   ......
+ *
+ *   i = 2, other = randomInt(5 - 2) + 2 = 3
+ *
+ *   j=0, swap(s[3*2 + 0], s[3*3 + 0]) swap(s[6], s[9])
+ *   j=1, swap(s[3*2 + 1], s[3*3 + 1]) swap(s[7], s[10])
+ *   j=0, swap(s[3*2 + 2], s[3*3 + 2]) swap(s[8], s[11])
+ *   ......
+ *   
  */
-
-/*
-
-    0   1   2   3   4   5   count
-0   e   e   e   e   e   e
-1   e   e   e   e   e   e
-2   e   e   e   e   e   e
-dim
-
-i = 0, other = 
-
-*/
 template <typename T>
-void Shuffle(T *samp, int count, int nDimensions, RNG &rng) {
+void shuffle(T *samp, int count, int nDimensions, RNG &rng) {
     for (int i = 0; i < count; ++i) {
         // 随机选择一个i右侧的索引
         int other = i + rng.uniformUInt32(count - i);
-        // 交换i与other之间两个样本的所有维度
         for (int j = 0; j < nDimensions; ++j) {
             std::swap(samp[nDimensions * i + j], samp[nDimensions * other + j]);
         }
     }
 }
+
+/**
+ * 一维分层采样
+ * @param samples  样本数组指针
+ * @param nsamples 样本个数
+ * @param rng      随机生成器
+ * @param jitter   是否扰动
+ */
+void stratifiedSample1D(Float *samples, int nsamples, RNG &rng, bool jitter = true);
+
+/**
+ * 二维分层采样
+ * @param samples 样本数组指针
+ * @param nx      x方向上样本个数
+ * @param ny      y方向上样本个数
+ * @param rng     随机数生成器
+ * @param jitter  是否扰动
+ */
+void stratifiedSample2D(Point2f *samples, int nx, int ny, RNG &rng, bool jitter = true);
 
 PALADIN_END
 
