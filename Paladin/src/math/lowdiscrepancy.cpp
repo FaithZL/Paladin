@@ -222,7 +222,7 @@ std::vector<uint16_t> ComputeRadicalInversePermutations(RNG &rng) {
     for (int i = 0; i < PrimeTableSize; ++i) {
         // Generate random permutation for $i$th prime base
         for (int j = 0; j < Primes[i]; ++j) p[j] = j;
-        Shuffle(p, Primes[i], 1, rng);
+        shuffle(p, Primes[i], 1, rng);
         p += Primes[i];
     }
     return perms;

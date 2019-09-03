@@ -96,4 +96,25 @@ Point2f uniformSampleTriangle(const Point2f &u) {
     return Point2f(1 - su0, u[1] * su0);
 }
 
+void stratifiedSample1D(Float *samp, int nSamples, RNG &rng, bool jitter) {
+    Float invNSamples = (Float)1 / nSamples;
+    for (int i = 0; i < nSamples; ++i) {
+        Float delta = jitter ? rng.uniformFloat() : 0.5f;
+        samp[i] = std::min((i + delta) * invNSamples, OneMinusEpsilon);
+    }
+}
+
+void stratifiedSample2D(Point2f *samp, int nx, int ny, RNG &rng, bool jitter) {
+    Float dx = (Float)1 / nx, dy = (Float)1 / ny;
+    for (int y = 0; y < ny; ++y) {
+        for (int x = 0; x < nx; ++x) {
+            Float jx = jitter ? rng.uniformFloat() : 0.5f;
+            Float jy = jitter ? rng.uniformFloat() : 0.5f;
+            samp->x = std::min((x + jx) * dx, OneMinusEpsilon);
+            samp->y = std::min((y + jy) * dy, OneMinusEpsilon);
+            ++samp;
+        }
+    }
+}
+
 PALADIN_END
