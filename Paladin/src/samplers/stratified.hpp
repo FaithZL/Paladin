@@ -24,12 +24,13 @@ public:
     _jitterSamples(jitterSamples) {
         
     }
-    void StartPixel(const Point2i &);
     
-    std::unique_ptr<Sampler> clone(int seed);
+    virtual void startPixel(const Point2i &);
+    
+    virtual std::unique_ptr<Sampler> clone(int seed);
     
 private:
-    
+
     const int _xPixelSamples, _yPixelSamples;
     
     const bool _jitterSamples;
