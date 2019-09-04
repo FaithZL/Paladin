@@ -350,6 +350,8 @@ void shuffle(T *samp, int count, int nDimensions, RNG &rng) {
 
 /**
  * 一维分层采样
+ * 代码中比较明显了，其实就是给一维均匀分布添加了一个扰动
+ * 使得不序列不那么均匀
  * @param samples  样本数组指针
  * @param nsamples 样本个数
  * @param rng      随机生成器
@@ -359,6 +361,7 @@ void stratifiedSample1D(Float *samples, int nsamples, RNG &rng, bool jitter = tr
 
 /**
  * 二维分层采样
+ * 原理同上
  * @param samples 样本数组指针
  * @param nx      x方向上样本个数
  * @param ny      y方向上样本个数
@@ -366,6 +369,18 @@ void stratifiedSample1D(Float *samples, int nsamples, RNG &rng, bool jitter = tr
  * @param jitter  是否扰动
  */
 void stratifiedSample2D(Point2f *samples, int nx, int ny, RNG &rng, bool jitter = true);
+
+/**
+ * 基本思路：
+ * 先把一个二维空间分成n * n个子区域
+ * 然后在对角线上依次放置样本点，相当于每一行只有一个样本点，每一列也只有一个样本点
+ * 随机打乱每一行的顺序，然后对子区域内的样本点进行扰动
+ * @param samples  样本列表首地址
+ * @param nSamples 样本数量
+ * @param nDim     维数
+ * @param rng      随机数生成器
+ */
+void latinHypercube(Float *samples, int nSamples, int nDim, RNG &rng);
 
 PALADIN_END
 

@@ -13,10 +13,26 @@
 
 PALADIN_BEGIN
 
-class StratifiedSampler : public Sampler {
+class StratifiedSampler : public PixelSampler {
     
 public:
+    StratifiedSampler(int xPixelSamples, int yPixelSamples, bool jitterSamples,
+                      int nSampledDimensions)
+    : PixelSampler(xPixelSamples * yPixelSamples, nSampledDimensions),
+    _xPixelSamples(xPixelSamples),
+    _yPixelSamples(yPixelSamples),
+    _jitterSamples(jitterSamples) {
+        
+    }
+    void StartPixel(const Point2i &);
     
+    std::unique_ptr<Sampler> clone(int seed);
+    
+private:
+    
+    const int _xPixelSamples, _yPixelSamples;
+    
+    const bool _jitterSamples;
 };
 
 PALADIN_END
