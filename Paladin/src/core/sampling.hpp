@@ -142,7 +142,12 @@ Vector3f uniformSampleSphere(const Point2f &u);
  * x = sinθcosφ = sinθcos(b * φmax)
  * y = sinθsinφ = sinθsin(b * φmax)
  * z = cosθ = cosθmin - a(cosθmin - cosθmax)
- * 
+ *    
+ * @param  u           [均匀随机变量]
+ * @param  phiMax      
+ * @param  cosThetaMin [description]
+ * @param  cosThetaMax [description]
+ * @return             单位向量
  */
 Vector3f uniformSamplePartialSphere(const Point2f &u, Float phiMax, Float cosThetaMin, Float cosThetaMax);
 
