@@ -314,9 +314,9 @@ Point2f uniformSampleTriangle(const Point2f &u);
  * 流程大体如下
  *
  *     0     1     2     3     4     5   count
- * 0   s0    s1    s2    s3    s4    s5
- * 1   s6    s7    s8    s9    s10   s11
- * 2   s12   s13   s14   s15   s16   s17
+ * 0   s0    s3    s6    s9    s12   s15
+ * 1   s1    s4    s7    s10   s13   s16
+ * 2   s2    s5    s8    s11   s14   s17
  * dim
  * 
  *   i = 0, other = randomInt(5 - 0) + 0 = 2
@@ -338,7 +338,8 @@ Point2f uniformSampleTriangle(const Point2f &u);
  *   j=1, swap(s[3*2 + 1], s[3*3 + 1]) swap(s[7], s[10])
  *   j=0, swap(s[3*2 + 2], s[3*3 + 2]) swap(s[8], s[11])
  *   ......
- *   
+ * 上述过程可以看做有count个dim维的向量，进行重排，对于向量是整体重排  
+ * 
  */
 template <typename T>
 void shuffle(T *samp, int count, int nDimensions, RNG &rng) {
@@ -375,9 +376,10 @@ void stratifiedSample2D(Point2f *samples, int nx, int ny, RNG &rng, bool jitter 
 
 /**
  * 基本思路：
- * 先把一个二维空间分成n * n个子区域
- * 然后在对角线上依次放置样本点，相当于每一行只有一个样本点，每一列也只有一个样本点
- * 随机打乱每一行的顺序，然后对子区域内的样本点进行扰动
+ * 可以理解为有个nDim维向量，每个维度采样nSamples个样本
+ * 之后对每个维度的样本进行随机重排列
+ * 注意重排的方式与shuffle不同，shuffle是样本点直接的重排列
+ * 而拉丁超立方体采样的重排列是针对每个维度分量的重排
  * @param samples  样本列表首地址
  * @param nSamples 样本数量
  * @param nDim     维数

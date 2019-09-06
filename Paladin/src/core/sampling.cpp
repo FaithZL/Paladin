@@ -118,15 +118,16 @@ void stratifiedSample2D(Point2f *samp, int nx, int ny, RNG &rng, bool jitter) {
 }
 
 void latinHypercube(Float *samples, int nSamples, int nDim, RNG &rng) {
-    // 沿着对角线生成样本
+    // nDim维向量，每个维度采样nSamples个样本
     Float invNSamples = (Float)1 / nSamples;
-    for (int i = 0; i < nSamples; ++i)
+    for (int i = 0; i < nSamples; ++i) {
         for (int j = 0; j < nDim; ++j) {
             Float sj = (i + (rng.uniformFloat())) * invNSamples;
             samples[nDim * i + j] = std::min(sj, OneMinusEpsilon);
         }
+    }
     
-    // 打乱每行样本顺序，并扰动样本
+    // 打乱每个维度样本顺序
     for (int i = 0; i < nDim; ++i) {
         for (int j = 0; j < nSamples; ++j) {
             int other = j + rng.uniformUInt32(nSamples - j);
