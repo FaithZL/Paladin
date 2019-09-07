@@ -27,6 +27,13 @@ Float RadicalInverse(int baseIndex, uint64_t a);
 
 Float ScrambledRadicalInverse(int baseIndex, uint64_t a, const uint16_t *perm);
 
+
+/**
+ * 
+ * @param  inverse [description]
+ * @param  nDigits [description]
+ * @return         [description]
+ */
 template <int base>
 inline uint64_t InverseRadicalInverse(uint64_t inverse, int nDigits) {
     uint64_t index = 0;

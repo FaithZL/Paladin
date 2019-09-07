@@ -60,7 +60,6 @@ _sampleAtPixelCenter(sampleAtPixelCenter) {
 std::vector<uint16_t> HaltonSampler::_radicalInversePermutations;
 int64_t HaltonSampler::getIndexForSample(int64_t sampleNum) const {
     if (_currentPixel != _pixelForOffset) {
-        // Compute Halton sample offset for _currentPixel_
         _offsetForCurrentPixel = 0;
         if (_sampleStride > 1) {
             Point2i pm(Mod(_currentPixel[0], kMaxResolution),
