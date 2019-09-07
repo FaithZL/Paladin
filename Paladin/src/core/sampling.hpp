@@ -309,6 +309,7 @@ Point2f uniformSamplePartialSector(const Point2f &u, Float thetaMax, Float rMin)
 Point2f uniformSampleTriangle(const Point2f &u);
 
 
+
 /**
  * 随机打乱一个数组
  * 流程大体如下
@@ -340,8 +341,12 @@ Point2f uniformSampleTriangle(const Point2f &u);
  *   ......
  * 上述过程可以看做有count个dim维的向量，进行重排，对于向量是整体重排  
  * 
+ * @param samp        样本列表首地址 
+ * @param count       样本个数
+ * @param nDimensions 样本向量的维度
+ * @param rng         随机数生成器
  */
-template <typename T>
+template <typename T> 
 void shuffle(T *samp, int count, int nDimensions, RNG &rng) {
     for (int i = 0; i < count; ++i) {
         // 随机选择一个i右侧的索引

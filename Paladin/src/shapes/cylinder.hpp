@@ -15,13 +15,13 @@
 PALADIN_BEGIN
 
 
-/*
-圆柱参数方程如下
-φ = u φmax
-x = r cos φ
-y = r sin φ
-z = zmin + v(zmax − zmin).
-*/
+/**
+ * 圆柱参数方程如下
+ * φ = u φmax
+ * x = r cos φ
+ * y = r sin φ
+ * z = zmin + v(zmax − zmin).
+ */
 class Cylinder : public Shape {
 public:
     
@@ -41,11 +41,11 @@ public:
                     Point3f(_radius, _radius, _zMax));
     }
     
-    /*
-     1.求解直线与圆柱的交点
-     2.判断交点是否在ray的范围内
-     3.判断交点是否在圆柱的有效范围内
-    */
+    /**
+     * 1.求解直线与圆柱的交点
+     * 2.判断交点是否在ray的范围内
+     * 3.判断交点是否在圆柱的有效范围内
+     */
     virtual bool intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect, bool testAlphaTexture) const;
 
     virtual bool intersectP(const Ray &ray, bool testAlphaTexture) const;

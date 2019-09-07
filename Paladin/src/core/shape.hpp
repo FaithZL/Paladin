@@ -14,12 +14,13 @@
 #include "interaction.hpp"
 
 PALADIN_BEGIN
-/*
-所有图形的基类，假设读者已经掌握概率论基础知识
-科普一下，pdf为概率密度函数，pdf在定义域上积分为1，且恒不小于零
-如果没有读过概率密度函数，建议阅读浙大的概率密度函数，经典
-shape类只是一个形状，不是一个具体的物体，具体的物体是primitive的子类，有材质，形状，是否发光等属性
-*/
+
+/**
+ * 所有图形的基类，假设读者已经掌握概率论基础知识
+ * 科普一下，pdf为概率密度函数，pdf在定义域上积分为1，且恒不小于零
+ * 如果没有读过概率密度函数，建议阅读浙大的概率密度函数，经典
+ * shape类只是一个形状，不是一个具体的物体，具体的物体是primitive的子类，有材质，形状，是否发光等属性
+ */
 class Shape {
 public:
 	Shape(const Transform *ObjectToWorld, const Transform *WorldToObject,
@@ -52,11 +53,11 @@ public:
     // 表面积
     virtual Float area() const = 0;
 
-    /*
-	在图形表面采样一个点，返回该点的基于面积的概率密度函数值，与世界坐标中interaction结构
-	u为表面参数坐标，u ∈ [0, 1]^2，通常为外部通过某种算法生成，最简单就是随机数
-	基于面积的采样
-    */
+    /**
+     * 在图形表面采样一个点，返回该点的基于面积的概率密度函数值，与世界坐标中interaction结构
+     * u为表面参数坐标，u ∈ [0, 1]^2，通常为外部通过某种算法生成，最简单就是随机数
+     * 基于面积的采样
+     */
     virtual Interaction sampleA(const Point2f &u, Float *pdf) const = 0;
 
     // 概率密度函数，表面某点的pdf，函数空间为表面参数空间
@@ -69,21 +70,21 @@ public:
     	return 1 / area();
     }
 
-    /*
-	 在场景的某处ref处，随机采样shape，返回世界坐标中interaction结构
-	 以及在ref处采样到对应shape表面点的概率密度函数
-	 基于立体角的采样
-    */
+    /**
+	 * 在场景的某处ref处，随机采样shape，返回世界坐标中interaction结构
+	 * 以及在ref处采样到对应shape表面点的概率密度函数
+	 * 基于立体角的采样
+     */
     virtual Interaction sampleW(const Interaction &ref, const Point2f &u, Float *pdf) const;
 
-	/*
-	在场景中某处ref处沿着wi方向采样图形上某点的概率密度函数
-	函数空间为向量空间
-	*/
+	/**
+	 * 在场景中某处ref处沿着wi方向采样图形上某点的概率密度函数
+	 *函数空间为向量空间
+	 */
     virtual Float pdfW(const Interaction &ref, const Vector3f &wi) const;
     
-    /*
-      返回shape对于某个点的立体角大小
+    /**
+     * 返回shape对于某个点的立体角大小
      */
     virtual Float solidAngle(const Point3f &p, int nSamples = 512) const;
 

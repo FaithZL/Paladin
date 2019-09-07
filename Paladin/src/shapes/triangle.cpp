@@ -148,24 +148,24 @@ bool Triangle::intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
     return true;
 }
 
-/*
- 基本思路
- 三角形的参数方程如下
- u * p0 + v * p1 + (1 - u - v) * p2;
- 其中p0，p1和p2是三角形的三个点，u, v是p1和p2的权重，1-u-v是p0的权重，并且满足u>=0, v >= 0,u+v<=1
- ray的方程为o + td
- 联合以上两个方程得
- u(p1 - p0) + v(p2 - p0) - td = o - p0
- e1 = p1 - p0
- e2 = p2 - p0
- ue1 + ve2 - td = o - p0
- 改写成如下形式
-                 t
- [-d  e1  e2] * [u] = T
-                 v
- 求解上述方程组
- 求得u>=0, v >= 0,u+v<=1，t <= tMax则有交点
-*/
+/**
+ * 基本思路
+ * 三角形的参数方程如下
+ * u * p0 + v * p1 + (1 - u - v) * p2;
+ * 其中p0，p1和p2是三角形的三个点，u, v是p1和p2的权重，1-u-v是p0的权重，并且满足u>=0, v >= 0,u+v<=1
+ * ray的方程为o + td
+ * 联合以上两个方程得
+ * u(p1 - p0) + v(p2 - p0) - td = o - p0
+ * e1 = p1 - p0
+ * e2 = p2 - p0
+ * ue1 + ve2 - td = o - p0
+ * 改写成如下形式
+ *                t
+ * [-d  e1  e2] * [u] = T
+ *                 v
+ * 求解上述方程组
+ * 求得u>=0, v >= 0,u+v<=1，t <= tMax则有交点
+ */
 bool Triangle::intersectP(const Ray &ray, bool testAlphaTexture) const {
     const Point3f &p0 = _mesh->points[_vertexIdx[0]];
     const Point3f &p1 = _mesh->points[_vertexIdx[1]];

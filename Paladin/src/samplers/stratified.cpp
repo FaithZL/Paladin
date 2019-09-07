@@ -11,10 +11,11 @@
 PALADIN_BEGIN
 
 void StratifiedSampler::startPixel(const Point2i &p) {
-    // 为每个像素生成一系列单独的样本
+    // 为每个像素生成一系列单独的样本，然后乱序
     size_t count = _xPixelSamples * _xPixelSamples;
     for (size_t i = 0; i < _samples1D.size(); ++i) {
         stratifiedSample1D(&_samples1D[i][0], count, _rng, _jitterSamples);
+        // 下标i代表维度
         shuffle(&_samples1D[i][0], count, 1, _rng);
     }
     for (size_t i = 0; i < _samples2D.size(); ++i) {

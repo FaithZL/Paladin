@@ -14,8 +14,8 @@
 
 PALADIN_BEGIN
 
-/*
- 圆盘，可以是扇形(不完整的圆盘)，有内径跟外径
+/**
+ * 圆盘，可以是扇形(不完整的圆盘)，有内径跟外径
  */
 class Disk : public Shape {
 public:

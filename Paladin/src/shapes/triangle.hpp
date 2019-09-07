@@ -78,11 +78,11 @@ public:
     
     virtual Interaction sampleA(const Point2f &u, Float *pdf) const;
     
-    /*
-      先把三角形三个顶点投影到单位球上
-      球面三角形定理
-      球面三角形的三个球面角大小分别为ABC，球面三角形的面积为(A+B+C-π)/r^2
-      所以对应的立体角为(A+B+C-π)
+    /**
+     * 先把三角形三个顶点投影到单位球上
+     * 球面三角形定理
+     * 球面三角形的三个球面角大小分别为ABC，球面三角形的面积为(A+B+C-π)/r^2
+     * 所以对应的立体角为(A+B+C-π)
      */
     Float solidAngle(const Point3f &p, int nSamples = 0) const {
         std::vector<Vector3f> pSphere = {

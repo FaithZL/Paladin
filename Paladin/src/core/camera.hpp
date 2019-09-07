@@ -15,18 +15,18 @@
 
 PALADIN_BEGIN
 
-/*
- 相机空间（camera space）：以相机在世界空间中的位置为原点，相机面朝的方向为 z 轴正方向展开的三维空间。
-
- 屏幕空间（screen space）：屏幕空间定义在像平面（也可以说是近平面,胶片平面）上，屏幕空间中近平面所在矩形中点的坐标为 (0,0)
- ，坐标轴单位长度由长和宽中较短的边决定。相机空间物体将被投射到像平面上，而在屏幕窗口内可见的部分最终会出现在图像中。
- 在屏幕空间下，深度值 z的范围是 [0,1] ，0和1分别对应了近平面和远平面上的物体。
- 尽管屏幕空间是定义在像平面上的，但它仍然是一个三维空间，因为在该空间下坐标分量 z 仍然是有意义的
- 如果是正方形的图片屏幕空间中xy的范围均为[-1,1]，如果是长方形的图片，则较短的一个维度映射到[-1,1]
-
- 标准化设备坐标空间（normalized device coordinate space，NDC space）:xyz三个维度都在[0,1]范围内，(0,0)为左上角
-
- 光栅空间（raster space）：该空间与NDC空间基本相同，z范围是[0,1]，唯一的区别 x范围是[0,res.x]，y范围是[0,res.y]
+/**
+ * 相机空间（camera space）：以相机在世界空间中的位置为原点，相机面朝的方向为 z 轴正方向展开的三维空间。
+ *
+ * 屏幕空间（screen space）：屏幕空间定义在像平面（也可以说是近平面,胶片平面）上，屏幕空间中近平面所在矩形中点的坐标为 (0,0)
+ * ，坐标轴单位长度由长和宽中较短的边决定。相机空间物体将被投射到像平面上，而在屏幕窗口内可见的部分最终会出现在图像中。
+ * 在屏幕空间下，深度值 z的范围是 [0,1] ，0和1分别对应了近平面和远平面上的物体。
+ * 尽管屏幕空间是定义在像平面上的，但它仍然是一个三维空间，因为在该空间下坐标分量 z 仍然是有意义的
+ * 如果是正方形的图片屏幕空间中xy的范围均为[-1,1]，如果是长方形的图片，则较短的一个维度映射到[-1,1]
+ * 
+ * 标准化设备坐标空间（normalized device coordinate space，NDC space）:xyz三个维度都在[0,1]范围内，(0,0)为左上角 
+ *
+ * 光栅空间（raster space）：该空间与NDC空间基本相同，z范围是[0,1]，唯一的区别 x范围是[0,res.x]，y范围是[0,res.y]
  */
 class Camera {
 public:
@@ -37,16 +37,16 @@ public:
         delete film;
     }
     
-    /*
-     生成的ray中dir分量为单位向量
-     返回值为一个浮点数，表示有多少沿着该光线有多少radiance到达相平面上
-     一般返回值为0或1，真实相机中可能返回其他值
+    /**
+     * 生成的ray中dir分量为单位向量
+     * 返回值为一个浮点数，表示有多少沿着该光线有多少radiance到达相平面上
+     * 一般返回值为0或1，真实相机中可能返回其他值
      */
     virtual Float generateRay(const CameraSample &sample, Ray *ray) const = 0;
     
-    /*
-     返回值为一个浮点数，表示有多少沿着该光线有多少radiance到达相平面上
-     一般返回值为0或1，真实相机中可能返回其他值
+    /**
+     * 返回值为一个浮点数，表示有多少沿着该光线有多少radiance到达相平面上
+     * 一般返回值为0或1，真实相机中可能返回其他值
      */
     virtual Float generateRayDifferential(const CameraSample &sample,
                                           RayDifferential *rd) const;
@@ -79,9 +79,9 @@ struct CameraSample {
     Float time;
 };
 
-/*
-关于screenWindow，可以参考pbrt源码src/cameras/perspective.cpp第240-254行，
-首先计算宽高比，然后将长和宽中较短的一边映射到 [-1,1] 并保持整个矩形的宽高比不变
+/**
+ * 关于screenWindow，可以参考pbrt源码src/cameras/perspective.cpp第240-254行，
+ * 首先计算宽高比，然后将长和宽中较短的一边映射到 [-1,1] 并保持整个矩形的宽高比不变
  */
 class ProjectiveCamera : public Camera {
 public:

@@ -208,17 +208,18 @@ public:
             return Point3<T>(xp, yp, zp) / wp;
     }
 
-    /*
-    计算误差的点的变换
-    x′ = ((m0,0 ⊗ x) ⊕ (m0,1 ⊗ y)) ⊕ ((m0,2 ⊗ z) ⊕ m0,3)
-        ⊂ m0,0x(1± εm)^3 + m0,1y(1 ± εm)^3 + m0,2z(1± εm)^3 + m0,3(1± εm)^2 
-        ⊂(m0,0x+m0,1y+m0,2z+m0,3) + γ3(±m0,0x± m0,1y± m0,2z± m0,3) 
-        ⊂(m0,0x+m0,1y+m0,2z+m0,3) ± γ3(|m0,0x|+|m0,1y|+|m0,2z|+|m0,3|).
-    以上表达式来自pbrt,自己经过亲自推导之后发现略有不同，如下
-    m0,0x(1± εm)^3 + m0,1y(1 ± εm)^3 + m0,2z(1± εm)^2 + m0,3(1± εm)^2 
-    更加保守的估计误差为  γ3(|m0,0x|+|m0,1y|+|m0,2z|+|m0,3|)
-    以上的推导过程均来自errfloat.h中的基本误差推导公式
-    y与z同理
+    /**
+     * 计算误差的点的变换
+     * x′ = ((m0,0 ⊗ x) ⊕ (m0,1 ⊗ y)) ⊕ ((m0,2 ⊗ z) ⊕ m0,3)
+     *   ⊂ m0,0x(1± εm)^3 + m0,1y(1 ± εm)^3 + m0,2z(1± εm)^3 + m0,3(1± εm)^2 
+     *   ⊂(m0,0x+m0,1y+m0,2z+m0,3) + γ3(±m0,0x± m0,1y± m0,2z± m0,3) 
+     *   ⊂(m0,0x+m0,1y+m0,2z+m0,3) ± γ3(|m0,0x|+|m0,1y|+|m0,2z|+|m0,3|).
+     *   
+     * 以上表达式来自pbrt,自己经过亲自推导之后发现略有不同，如下
+     * m0,0x(1± εm)^3 + m0,1y(1 ± εm)^3 + m0,2z(1± εm)^2 + m0,3(1± εm)^2 
+     * 更加保守的估计误差为  γ3(|m0,0x|+|m0,1y|+|m0,2z|+|m0,3|)
+     * 以上的推导过程均来自errfloat.h中的基本误差推导公式
+     * y与z同理
      */
     template <typename T>
     inline Point3<T> exec(const Point3<T> &point, Vector3<T> *absError) const {
@@ -244,13 +245,13 @@ public:
             return Point3<T>(xp, yp, zp) / wp;
     }
     
-    /*
-    上面的转换假设转换点是准确的，但如果被转换的点本身就有误差，则表达式如下
-     x′ = (m0,0 ⊗ (x ± δx) ⊕ m0,1 ⊗ (y ± δy)) ⊕ (m0,2 ⊗ (z ± δz) ⊕ m0,3).
-     x′ = m0,0(x ± δx)(1± εm)^3 + m0,1(y ± δy)(1± εm)^3 + m0,2(z± δz)(1± εm)^3 + m0,3(1± εm)^2.
-     用γ替换高次项，得出
-     xError = (γ3 + 1)(|m0,0|δx + |m0,1|δy + |m0,2|δz) 
-            + γ3(|m0,0 * x| + |m0,1 * y| + |m0,2 * z| + |m0,3|).
+    /**
+     * 上面的转换假设转换点是准确的，但如果被转换的点本身就有误差，则表达式如下
+     * x′ = (m0,0 ⊗ (x ± δx) ⊕ m0,1 ⊗ (y ± δy)) ⊕ (m0,2 ⊗ (z ± δz) ⊕ m0,3).
+     * x′ = m0,0(x ± δx)(1± εm)^3 + m0,1(y ± δy)(1± εm)^3 + m0,2(z± δz)(1± εm)^3 + m0,3(1± εm)^2.
+     * 用γ替换高次项，得出
+     * xError = (γ3 + 1)(|m0,0|δx + |m0,1|δy + |m0,2|δz) 
+     *      + γ3(|m0,0 * x| + |m0,1 * y| + |m0,2 * z| + |m0,3|).
      */
     template <typename T>
     inline Point3<T> exec(const Point3<T> &point, const Vector3<T> &ptError, Vector3<T> *pTransError) const {
@@ -286,9 +287,9 @@ public:
         
     }
 
-    /*
-     以下三个函数是对向量执行转换，误差分析方式跟点的转换类似，因此不再赘述
-    */
+    /**
+     *以下三个函数是对向量执行转换，误差分析方式跟点的转换类似，因此不再赘述
+     */
     template<typename T>
     inline Vector3<T> exec(const Vector3<T> &vec) const {
         T x = vec.x, y = vec.y, z = vec.z;
@@ -344,18 +345,19 @@ public:
                       _mat._m[2][0] * x + _mat._m[2][1] * y + _mat._m[2][2] * z);
     }
 
+
+    /**
+     * 法线的转换跟向量的转换所有不同，如果有非比例缩放法线就不能套用向量的转换了
+     * 法线转换矩阵与原转换矩阵的关系如下t为切线向量,S为法线转换矩阵，M为切线转换矩阵
+     * dot(n, t) = 0
+     * transpose(n) * t = 0
+     * transpose(S * n) * (M * t) = 0
+     * transpose(n) * transpose(S) * M * t = 0 
+     * 只要满足这个表达式的S矩阵，就是我们的目标矩阵
+     * 我们可以假设 transpose(S) * M = I , 可得 S = transpose(inverse(M))
+     */    
     template<typename T>
     inline Normal3<T> exec(const Normal3<T> &normal) const {
-        /*
-        法线的转换跟向量的转换所有不同，如果有非比例缩放法线就不能套用向量的转换了
-        法线转换矩阵与原转换矩阵的关系如下t为切线向量,S为法线转换矩阵，M为切线转换矩阵
-        dot(n, t) = 0
-        transpose(n) * t = 0
-        transpose(S * n) * (M * t) = 0
-        transpose(n) * transpose(S) * M * t = 0 
-        只要满足这个表达式的S矩阵，就是我们的目标矩阵
-        我们可以假设 transpose(S) * M = I , 可得 S = transpose(inverse(M))
-        */
         T x = normal.x, y = normal.y, z = normal.z;
         x = _matInv._m[0][0] * x + _matInv._m[1][0] * y + _matInv._m[2][0] * z;
         y = _matInv._m[0][1] * x + _matInv._m[1][1] * y + _matInv._m[2][1] * z;
@@ -363,9 +365,9 @@ public:
         return Normal3<T>(x, y, z);
     }
     
-    /*
-      为了避免一个从物体表面外部发出的光线经过变换之后由于浮点误差导致光线起点变为物体内部
-      要把光线的起点沿着光线方向偏移，偏移到误差范围以外，保证经过转换之后，起点依然在物体外部
+    /**
+     * 为了避免一个从物体表面外部发出的光线经过变换之后由于浮点误差导致光线起点变为物体内部
+     * 要把光线的起点沿着光线方向偏移，偏移到误差范围以外，保证经过转换之后，起点依然在物体外部
      */
     inline Ray exec(const Ray &ray) const {
         // 用于记录光线起点由于变换引起的误差
@@ -435,9 +437,9 @@ public:
         return ret;
     }
     
-    /*
-    个人理解：todo
-    对于表面交点的transform变换，只有空间之间的转换，而没有模型变换
+    /**
+     * 个人理解：todo
+     * 对于表面交点的transform变换，只有空间之间的转换，而没有模型变换
      */
     SurfaceInteraction exec(const SurfaceInteraction &isect) const;
 
@@ -452,17 +454,17 @@ public:
        // ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMin.y, b.pMax.z)));
        // ret = unionSet(ret, exec(Point3f(b.pMax.x, b.pMax.y, b.pMax.z)));
 
-        /*
-        优化思路如下：
-        假设矩阵第一行元素为为abcd, 原始点p(x,y,z)
-        则 x' = ax + by + cz + d
-        x'的最小值为
-        min(ax + by + cz + d) = min(ax) + min(by) + min(cz) + min(d)
-        x'的最大值为
-        max(ax + by + cz + d) = max(ax) + max(by) + max(cz) + max(d)
-        立方体xyz三个维度各自只有两个值，最大值跟最小值，组成了8个顶点(2^3 = 8)
-        所以ax只有这两个值，最大值跟最小值，以下代码中，遍历到较大值的时候加在max上，较小值加在min上
-        y跟z同理
+        /**
+         * 优化思路如下：
+         * 假设矩阵第一行元素为为abcd, 原始点p(x,y,z)
+         * 则 x' = ax + by + cz + d
+         * x'的最小值为
+         * min(ax + by + cz + d) = min(ax) + min(by) + min(cz) + min(d)
+         * x'的最大值为
+         * max(ax + by + cz + d) = max(ax) + max(by) + max(cz) + max(d)
+         * 立方体xyz三个维度各自只有两个值，最大值跟最小值，组成了8个顶点(2^3 = 8)
+         * 所以ax只有这两个值，最大值跟最小值，以下代码中，遍历到较大值的时候加在max上，较小值加在min上
+         * y跟z同理
          */
         const Matrix4x4& mat = _mat;
         Point3f minPoint = Point3f(mat._m[0][3], mat._m[1][3], mat._m[2][3]);

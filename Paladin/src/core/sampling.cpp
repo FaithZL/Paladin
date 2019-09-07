@@ -58,9 +58,9 @@ Point2f concentricSampleDisk(const Point2f &u) {
         return Point2f(0, 0);
     }
     
-    /*
-     r = x
-     θ = y/x * π/4
+    /**
+     * r = x
+     * θ = y/x * π/4
      */
     Float theta, r;
 
