@@ -27,6 +27,17 @@ Float RadicalInverse(int baseIndex, uint64_t a);
 
 Float ScrambledRadicalInverse(int baseIndex, uint64_t a, const uint16_t *perm);
 
+template <int base>
+inline uint64_t InverseRadicalInverse(uint64_t inverse, int nDigits) {
+    uint64_t index = 0;
+    for (int i = 0; i < nDigits; ++i) {
+        uint64_t digit = inverse % base;
+        inverse /= base;
+        index = index * base + digit;
+    }
+    return index;
+}
+
 std::vector<uint16_t> ComputeRadicalInversePermutations(RNG &rng);
 
 inline uint32_t ReverseBits32(uint32_t n) {
