@@ -29,10 +29,12 @@ Float ScrambledRadicalInverse(int baseIndex, uint64_t a, const uint16_t *perm);
 
 
 /**
- * 
- * @param  inverse [description]
- * @param  nDigits [description]
- * @return         [description]
+ * 反转函数
+ * base 为进制数
+ * @param  inverse 需要反转的数字
+ * @param  nDigits 需要反转的前nDigits位
+ * @return         返回 base进制数 inverse 的前 nDigits 位反转之后的数字
+ * 例如，InverseRadicalInverse<10>(1234567, 3)的返回值为765
  */
 template <int base>
 inline uint64_t InverseRadicalInverse(uint64_t inverse, int nDigits) {
@@ -45,6 +47,10 @@ inline uint64_t InverseRadicalInverse(uint64_t inverse, int nDigits) {
     return index;
 }
 
+/**
+ * 计算随机排列表
+ * 为排列表初始化一个连续的数组
+ */
 std::vector<uint16_t> ComputeRadicalInversePermutations(RNG &rng);
 
 inline uint32_t ReverseBits32(uint32_t n) {

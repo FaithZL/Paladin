@@ -24,7 +24,7 @@ int main(int argc, const char * argv[]) {
     Paladin pld;
     
 //    test_lua_main();
-    cout << InverseRadicalInverse<2>(16, 7);
+    cout << InverseRadicalInverse<10>(123456, 3) << endl;
 
 #ifdef _MSC_VER
     //让VS运行debug时不至于黑屏一闪而过
