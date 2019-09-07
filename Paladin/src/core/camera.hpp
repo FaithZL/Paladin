@@ -27,6 +27,9 @@ PALADIN_BEGIN
  * 标准化设备坐标空间（normalized device coordinate space，NDC space）:xyz三个维度都在[0,1]范围内，(0,0)为左上角 
  *
  * 光栅空间（raster space）：该空间与NDC空间基本相同，z范围是[0,1]，唯一的区别 x范围是[0,res.x]，y范围是[0,res.y]
+ * 
+ * 刚开始接触到这个概念的时候有些疑惑，不知道为何要定义这么一个空间，为何要定义一个投影矩阵
+ * 仔细看来pbrt代码之后，发现为了方便生成光线，并且统一不同坐标系之间的转换，确实定义一个投影矩阵会比较好
  */
 class Camera {
 public:

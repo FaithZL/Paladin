@@ -45,10 +45,10 @@ Float PerspectiveCamera::generateRay(const CameraSample &sample, Ray *ray) const
     if (_lensRadius > 0) {
         Point2f pLens = _lensRadius * uniformSampleDisk(sample.pLens);
         
-        /*
-          聚焦平面上的样本点，发出的所有光线通过透镜之后都会聚焦在film的一个点上，
-          但如果光线通过透镜中心，方向不会改变，我们可以以此来确定聚焦平面上的样本点pFocus
-          可以通过相似三角形来推导出以下表达式
+        /**
+         * 聚焦平面上的样本点，发出的所有光线通过透镜之后都会聚焦在film的一个点上，
+         * 但如果光线通过透镜中心，方向不会改变，我们可以以此来确定聚焦平面上的样本点pFocus
+         * 可以通过相似三角形来推导出以下表达式
          */
         Float ft = _focalDistance / ray->dir.z;
         // 计算聚焦平面上的点
