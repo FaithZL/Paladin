@@ -33,6 +33,7 @@ PALADIN_BEGIN
  * 
  * 所以采样方式会有很多种，以便于应对各种不同的场景
  * 目前在初学阶段，暂时只实现随机采样，分层采样，霍尔顿采样
+ *
  */
 class Sampler {
 
@@ -160,6 +161,11 @@ protected:
 
 /**
  * 全局采样器不是基于像素的，是针对整个图像空间进行采样
+ * 对每个像素采样时，要通过当前像素以及当前像素的样本索引计算出全局的样本索引
+ * 然后通过全局的样本索引以及样本维度获取样本值，所以多了两个函数
+ * getIndexForSample
+ * sampleDimension
+ * 这两个函数需要重点理解一下
  *
  * 如下例子，霍尔顿序列
  *
@@ -178,6 +184,7 @@ protected:
  * 10                (0.312500, 0.370370)              (0.625000, 1.111111)
  * 11                (0.812500, 0.703704)              (1.625000, 2.111111)
  * 12                (0.187500, 0.148148)              (0.375000, 0.444444)
+ *
  * 
  */
 class GlobalSampler : public Sampler {
@@ -203,8 +210,8 @@ public:
      * getIndexForSample(0)应该返回2，返回第一个出现在该像素样本上的索引
      * getIndexForSample(1)应该返回8，返回第二个出现在该像素上的样本索引
      * 
-     * @param  sampleNum 样本索引号
-     * @return           [description]
+     * @param  sampleNum 出现在当前像素的第sampleNum个样本
+     * @return           样本在全局中的索引
      */
     virtual int64_t getIndexForSample(int64_t sampleNum) const = 0;
     
@@ -213,6 +220,10 @@ public:
      * 是指像素内的偏移值，而不是初始的[0,1)^2空间的样本值
      * 以上图表为例 sampleDimension(4,1)，返回0.3333333
      * 先根据索引4找到(0.250000, 1.333333)，根据维度找出1.333333，然后算出偏移值0.3333333
+     * 
+     * @param  index     样本索引
+     * @param  dimension 对应维度
+     * @return           样本值
      */
     virtual Float sampleDimension(int64_t index, int dimension) const = 0;
     

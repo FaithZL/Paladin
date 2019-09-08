@@ -40,7 +40,7 @@ _sampleAtPixelCenter(sampleAtPixelCenter) {
     }
     
     /**
-     * kMaxResolution = 128(todo 了解一下kMaxResolution为何定位128)
+     * kMaxResolution = 128(todo 了解一下kMaxResolution为何定为128)
      * 将halton序列的前两个维度映射到[0,1)^2中，并且超过kMaxResolution的部分用重复的halton序列
      * 没有超过kMaxResolution的维度不做处理
      * 又由halton的质数基底的性质可得
@@ -55,6 +55,7 @@ _sampleAtPixelCenter(sampleAtPixelCenter) {
      * 为何要有如上的操作？
      */
     Vector2i res = sampleBounds.pMax - sampleBounds.pMin;
+    
     // 如果分辨率有一个或两个维度大于kMaxResolution
     // 则在图像上使用重复的halton样本点
     for (int i = 0; i < 2; ++i) {
@@ -75,6 +76,7 @@ _sampleAtPixelCenter(sampleAtPixelCenter) {
 }
 
 std::vector<uint16_t> HaltonSampler::_radicalInversePermutations;
+
 int64_t HaltonSampler::getIndexForSample(int64_t sampleNum) const {
     if (_currentPixel != _pixelForOffset) {
         _offsetForCurrentPixel = 0;

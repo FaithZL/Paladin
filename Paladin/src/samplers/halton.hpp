@@ -16,6 +16,8 @@ PALADIN_BEGIN
 
 /**
  * 霍尔顿采样器
+ * 继承GlobalSampler，针对整个图像空间进行采样
+ * 
  * 在介绍霍尔顿采样器之前我们先介绍一下低差异序列
  * 
  * 低差异序列可以生成更加均匀的样本，从而提高采样效率
@@ -81,6 +83,7 @@ private:
     // 在构造函数中有详细注释
     Point2i _baseScales, _baseExponents;
     
+    // _sampleStride = _baseScales[0] * _baseScales[1];
     int _sampleStride;
     
     int _multInverse[2];
@@ -88,9 +91,11 @@ private:
     mutable Point2i _pixelForOffset = Point2i(std::numeric_limits<int>::max(),
                                              std::numeric_limits<int>::max());
     
+    // 用于储存第一个落在该像素上的样本点的全局样本索引
     mutable int64_t _offsetForCurrentPixel;
-    // Added after book publication: force all image samples to be at the
-    // center of the pixel area.
+    
+    // 是否强制采样像素中心，如果为true，
+    // 则生成的高维变量的前两个维度为0.5，采样像素中心
     bool _sampleAtPixelCenter;
     
     /**
