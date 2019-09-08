@@ -64,10 +64,24 @@ public:
         return n;
     }
     
-    // 获取包含n个样本的一维数组，需要根据之前request的值做校验
+    /**
+     * 获取包含n个样本的一维数组，需要根据之前request的值做校验
+     * 返回一个数组，数组元素都为同一个分布的生成的变量，
+     * 通常，通过此接口生成的样本数组要比多次调用get1D函数生成的样本更加均匀
+     * 但对于halton这样的确定性的采样，没什么区别
+     * @param  n 
+     * @return   数组首地址
+     */
     const Float *get1DArray(int n);
     
-    // 获取包含n个样本的二维数组，需要根据之前request的值做校验
+    /**
+     * 获取包含n个样本的一维数组，需要根据之前request的值做校验
+     * 返回一个数组，数组元素都为同一个分布的生成的变量，
+     * 通常，通过此接口生成的样本数组要比多次调用get2D函数生成的样本更加均匀
+     * 但对于halton这样的确定性的采样，没什么区别
+     * @param  n 
+     * @return   数组首地址
+     */
     const Point2f *get2DArray(int n);
     
     // 开始下一个样本，返回值为该像素是否采样完毕
@@ -82,7 +96,7 @@ public:
                             _currentPixel.y, _currentPixelSampleIndex);
     }
 
-    int64_t currentSampleNumber() const { 
+    int64_t currentSampleIndex() const { 
         return _currentPixelSampleIndex; 
     }
     
