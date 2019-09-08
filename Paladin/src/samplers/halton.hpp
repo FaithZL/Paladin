@@ -61,9 +61,11 @@ class HaltonSampler : public GlobalSampler {
     
 public:
     
-    // 渲染时会把图片分割为若干个块(tile)，每个tile使用一个采样器
-    // 所以构造函数会接收一个AABB参数
-    HaltonSampler(int nsamp, const AABB2i &sampleBounds, bool sampleAtCenter = false);
+    /**
+     * 渲染时会把图片分割为若干个块(tile)，每个tile使用一个采样器
+     * 所以构造函数会接收一个AABB参数
+     */
+    HaltonSampler(int spp, const AABB2i &sampleBounds, bool sampleAtCenter = false);
     
     virtual int64_t getIndexForSample(int64_t sampleNum) const;
     
@@ -73,8 +75,10 @@ public:
     
 private:
     
+    // 质数进制的随机重排表
     static std::vector<uint16_t> _radicalInversePermutations;
     
+    // 在构造函数中有详细注释
     Point2i _baseScales, _baseExponents;
     
     int _sampleStride;
@@ -89,7 +93,11 @@ private:
     // center of the pixel area.
     bool _sampleAtPixelCenter;
     
-    // HaltonSampler Private Methods
+    /**
+     * 返回对应维度重排之后的数组
+     * @param  dim 维度
+     * @return     [description]
+     */
     const uint16_t *permutationForDimension(int dim) const {
         if (dim >= PrimeTableSize)
             COUT << StringPrintf("HaltonSampler can only sample %d "
