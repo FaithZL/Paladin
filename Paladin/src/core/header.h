@@ -27,6 +27,10 @@
     #include <string.h>
     //fix 'shared_ptr' is not a member of 'std' for linux
     #include <memory>
+    //fix 'atomic' is not a member of 'std' for linux
+    #include <atomic>
+    //fix 'partition' is not a member of 'std' for linux
+    #include <algorithm>
 #endif
 
 #ifdef _MSC_VER
@@ -37,6 +41,8 @@
     #include <algorithm>
     //fix “shared_ptr”: 不是“std”的成员 for vs2015
     #include <memory>
+    //fix “atomic”: 不是“std”的成员 for vs2015
+    #include <atomic>
     
 #endif
 
