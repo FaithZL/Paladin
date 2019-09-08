@@ -74,7 +74,7 @@ public:
 
     virtual std::unique_ptr<Sampler> clone(int seed) = 0;
 
-    virtual bool setSampleNumber(int64_t sampleNum);
+    virtual bool setSampleIndex(int64_t sampleNum);
 
     std::string stateString() const {
         return StringPrintf("(%d,%d), sample %", _currentPixel.x,
@@ -137,7 +137,7 @@ public:
     
     virtual bool startNextSample();
     
-    virtual bool setSampleNumber(int64_t num);
+    virtual bool setSampleIndex(int64_t num);
     
     // 当预先申请的一维随机变量数组数据完全消耗之后使用该函数
     virtual Float get1D();
@@ -191,7 +191,7 @@ public:
     
     virtual void startPixel(const Point2i &p);
     
-    virtual bool setSampleNumber(int64_t sampleNum);
+    virtual bool setSampleIndex(int64_t sampleNum);
     
     virtual Float get1D();
     

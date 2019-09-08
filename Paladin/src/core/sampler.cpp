@@ -65,7 +65,7 @@ bool Sampler::startNextSample() {
     return ++_currentPixelSampleIndex < samplesPerPixel;
 }
 
-bool Sampler::setSampleNumber(int64_t sampleNum) {
+bool Sampler::setSampleIndex(int64_t sampleNum) {
     _array1DOffset = _array2DOffset = 0;
     _currentPixelSampleIndex = sampleNum;
     return _currentPixelSampleIndex < samplesPerPixel;
@@ -85,9 +85,9 @@ bool PixelSampler::startNextSample() {
     return Sampler::startNextSample();
 }
 
-bool PixelSampler::setSampleNumber(int64_t sampleNum) {
+bool PixelSampler::setSampleIndex(int64_t sampleNum) {
     _curDimension1D = _curDimension2D = 0;
-    return Sampler::setSampleNumber(sampleNum);
+    return Sampler::setSampleIndex(sampleNum);
 }
 
 Float PixelSampler::get1D() {
@@ -144,10 +144,10 @@ bool GlobalSampler::startNextSample() {
     return Sampler::startNextSample();
 }
 
-bool GlobalSampler::setSampleNumber(int64_t sampleNum) {
+bool GlobalSampler::setSampleIndex(int64_t sampleNum) {
     _dimension = 0;
     _globalIndex = getIndexForSample(sampleNum);
-    return Sampler::setSampleNumber(sampleNum);
+    return Sampler::setSampleIndex(sampleNum);
 }
 
 Float GlobalSampler::get1D() {
