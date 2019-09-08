@@ -71,8 +71,8 @@ Float Shape::pdfW(const Interaction &ref, const Vector3f &wi) const {
     return pdf;
 }
 
-/*
- 基类获取立体角的方式，暴力低差异采样，三角形跟球体有简单的方式
+/**
+ * 基类获取立体角的方式，暴力低差异采样，三角形跟球体有简单的方式
  */
 Float Shape::solidAngle(const Point3f &p, int nSamples) const {
     Interaction ref(p, Normal3f(), Vector3f(), Vector3f(0, 0, 1), 0,

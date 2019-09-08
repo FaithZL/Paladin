@@ -200,8 +200,11 @@ public:
     /**
      * 以上图表为例，如果当前像素为(0,2)，
      * 则该函数返回该第一个出现在该像素上的样本索引
-     * getIndexForSample(0)应该返回2
-     * getIndexForSample(1)应该返回8
+     * getIndexForSample(0)应该返回2，返回第一个出现在该像素样本上的索引
+     * getIndexForSample(1)应该返回8，返回第二个出现在该像素上的样本索引
+     * 
+     * @param  sampleNum 样本索引号
+     * @return           [description]
      */
     virtual int64_t getIndexForSample(int64_t sampleNum) const = 0;
     

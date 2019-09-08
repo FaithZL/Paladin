@@ -214,7 +214,8 @@ const int PrimeSums[PrimeTableSize] = {
 
 std::vector<uint16_t> ComputeRadicalInversePermutations(RNG &rng) {
     std::vector<uint16_t> perms;
-    // Allocate space in _perms_ for radical inverse permutations
+    // PrimeTableSize = 1000
+    // 分配空间，todo循环可优化
     int permArraySize = 0;
     for (int i = 0; i < PrimeTableSize; ++i) {
         permArraySize += Primes[i];
@@ -222,8 +223,9 @@ std::vector<uint16_t> ComputeRadicalInversePermutations(RNG &rng) {
     perms.resize(permArraySize);
     uint16_t *p = &perms[0];
     for (int i = 0; i < PrimeTableSize; ++i) {
-        // Generate random permutation for $i$th prime base
-        for (int j = 0; j < Primes[i]; ++j) p[j] = j;
+        for (int j = 0; j < Primes[i]; ++j) {
+            p[j] = j;
+        }
         shuffle(p, Primes[i], 1, rng);
         p += Primes[i];
     }
@@ -237,7 +239,7 @@ PALADIN_NO_INLINE static Float ScrambledRadicalInverseSpecialized(const uint16_t
     uint64_t reversedDigits = 0;
     Float invBaseN = 1;
     while (a) {
-        uint64_t next = a / base;
+        uint64_t next = a * invBase;
         uint64_t digit = a - next * base;
         CHECK_LT(perm[digit], base);
         reversedDigits = reversedDigits * base + perm[digit];
@@ -251,6 +253,32 @@ PALADIN_NO_INLINE static Float ScrambledRadicalInverseSpecialized(const uint16_t
                     OneMinusEpsilon);
 }
 
+/**
+ * 流程大体上跟RadicalInverse函数没什么区别
+ * 
+ * 只是添加对base添加一个随机扰动
+ * 例如
+ *
+ * 2进制  0 1 
+ * 3进制  0 1 2 
+ * 5进制  0 1 2 3 4
+ * 7进制  0 1 2 3 4 5 6
+ * 11进制 0 1 2 3 4 5 6 7 8 9 10
+ * 以上每行都是对应质数进制的perm数组(稍后解释)
+ *
+ * 在RadicalInverseSpecialized函数中
+ * reversedDigits = reversedDigits * base + digit;
+ *
+ * 在ScrambledRadicalInverseSpecialized函数中则是
+ * reversedDigits = reversedDigits * base + perm[digit];
+ * 在执行ComputeRadicalInversePermutations函数时，对每个进制的perm数组进行了随机重排
+ * 所以生成每位reversedDigits时有一定的随机性
+ * 
+ * @param  baseIndex 进制索引
+ * @param  a         需要反转的int数
+ * @param  perm      随机重排数组
+ * @return           
+ */
 Float ScrambledRadicalInverse(int baseIndex, uint64_t a, const uint16_t *perm) {
     switch (baseIndex) {
         case 0:
@@ -2323,7 +2351,7 @@ PALADIN_NO_INLINE static Float RadicalInverseSpecialized(uint64_t a) {
     uint64_t reversedDigits = 0;
     Float invBaseN = 1;
     while (a) {
-        uint64_t next = a / base;
+        uint64_t next = a * invBase;
         uint64_t digit = a - next * base;
         reversedDigits = reversedDigits * base + digit;
         invBaseN *= invBase;

@@ -22,8 +22,14 @@ extern const int Primes[PrimeTableSize];
 // 质数和，i与v的关系为前i个质数相加，值为v
 extern const int PrimeSums[PrimeTableSize];
 
-// 逐位反转
+/**
+ * 逐位反转
+ * @param  baseIndex 进制的索引
+ * @param  a         同一个维度的第a个样本
+ * @return           反转之后的值
+ */
 Float RadicalInverse(int baseIndex, uint64_t a);
+
 
 Float ScrambledRadicalInverse(int baseIndex, uint64_t a, const uint16_t *perm);
 
@@ -48,10 +54,19 @@ inline uint64_t InverseRadicalInverse(uint64_t inverse, int nDigits) {
 }
 
 /**
- * 计算随机排列表
- * 为排列表初始化一个连续的数组
+ * 本质上是对如下质数每一行进行重排
+ * 2进制  0 1 
+ * 3进制  0 1 2 
+ * 5进制  0 1 2 3 4
+ * 7进制  0 1 2 3 4 5 6
+ * 11进制 0 1 2 3 4 5 6 7 8 9 10
+ * .....
+ *
+ * 返回以上每个数组重排之后连接成的列表
  */
 std::vector<uint16_t> ComputeRadicalInversePermutations(RNG &rng);
+
+
 
 inline uint32_t ReverseBits32(uint32_t n) {
     n = (n << 16) | (n >> 16);
