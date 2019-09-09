@@ -2368,6 +2368,8 @@ Float RadicalInverse(int baseIndex, uint64_t a) {
             // Compute base-2 radical inverse
 #ifndef PALADIN_HAVE_HEX_FP_CONSTANTS
             return ReverseBits64(a) * 5.4210108624275222e-20;
+#elif _MSC_VER
+			return ReverseBits64(a) * 5.4210108624275222e-20;
 #else
             return ReverseBits64(a) * 0x1p-64;
 #endif

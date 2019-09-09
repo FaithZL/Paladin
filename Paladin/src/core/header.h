@@ -31,6 +31,8 @@
     #include <atomic>
     //fix 'partition' is not a member of 'std' for linux
     #include <algorithm>
+    //fix 'mutex' is not a member of 'std' for linux
+    #include <mutex>
 #endif
 
 #ifdef _MSC_VER
@@ -43,7 +45,8 @@
     #include <memory>
     //fix “atomic”: 不是“std”的成员 for vs2015
     #include <atomic>
-    
+    //fix “mutex”: 不是“std”的成员 for vs2015
+    #include <mutex>
 #endif
 
 #include "stringprint.hpp"
