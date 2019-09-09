@@ -58,6 +58,10 @@ PALADIN_BEGIN
  * 在样本矢量的较高维度中，样本值的投影开始呈现规则结构，太过于规则了，对于渲染效果来说不好
  * 
  * 这可以通过添加一个轻微的扰动，解决这个问题
+ *
+ * halton序列理论知识已经理解，根据当前像素样本索引获取样本全局索引的方式还没搞懂todo
+ *
+ *
  */
 class HaltonSampler : public GlobalSampler {
     

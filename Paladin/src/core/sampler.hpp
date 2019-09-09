@@ -48,8 +48,18 @@ public:
     // 对某个像素点开始采样
     virtual void startPixel(const Point2i &p);
     
+    /**
+     * 返回一维随机变量，每次调用之后，维度下标都会自增
+     * 下次调用时，获取下个维度的随机变量
+     * @return   一维随机变量
+     */
     virtual Float get1D() = 0;
     
+    /**
+     * 返回二维随机变量，每次调用之后，维度下标都会自增
+     * 下次调用时，获取下个维度的随机变量
+     * @return   二维随机变量
+     */
     virtual Point2f get2D() = 0;
     
     CameraSample getCameraSample(const Point2i &pRaster);
@@ -66,9 +76,7 @@ public:
     
     /**
      * 获取包含n个样本的一维数组，需要根据之前request的值做校验
-     * 返回一个数组，数组元素都为同一个分布的生成的变量，
-     * 通常，通过此接口生成的样本数组要比多次调用get1D函数生成的样本更加均匀
-     * 但对于halton这样的确定性的采样，没什么区别
+     * 返回一个数组，数组元素都为同一个分布，同一个维度的不同样本
      * @param  n 
      * @return   数组首地址
      */
@@ -76,9 +84,10 @@ public:
     
     /**
      * 获取包含n个样本的一维数组，需要根据之前request的值做校验
-     * 返回一个数组，数组元素都为同一个分布的生成的变量，
-     * 通常，通过此接口生成的样本数组要比多次调用get2D函数生成的样本更加均匀
-     * 但对于halton这样的确定性的采样，没什么区别
+     * 返回一个数组，数组元素都为同一个分布，同一个维度的不同样本
+     * 这点需要跟get2D函数区分开
+     * 例如，如果要对一个光源表面进行采样
+     * 则最好调用该函数获取一系列同一个维度的样本
      * @param  n 
      * @return   数组首地址
      */
@@ -154,10 +163,8 @@ public:
     
     virtual bool setSampleIndex(int64_t num);
     
-    // 当预先申请的一维随机变量数组数据完全消耗之后使用该函数
     virtual Float get1D();
     
-    // 当预先申请的二维随机变量数组数据完全消耗之后使用该函数
     virtual Point2f get2D();
     
 protected:
