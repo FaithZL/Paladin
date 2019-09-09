@@ -49,7 +49,11 @@
 
 #define PALADIN_HAVE_CONSTEXPR
 
+#ifdef _MSC_VER
+#define PALADIN_NO_INLINE __declspec(noinline)
+#else
 #define PALADIN_NO_INLINE __attribute__((noinline))
+#endif
 
 #define PALADIN_INLINE __attribute__((always_inline))
 
@@ -68,6 +72,9 @@
 #define PALADIN_HAVE_HEX_FP_CONSTANTS
 
 #ifndef PALADIN_HAVE_HEX_FP_CONSTANTS
+static const double DoubleOneMinusEpsilon = 0.99999999999999989;
+static const float FloatOneMinusEpsilon = 0.99999994;
+#elif _MSC_VER
 static const double DoubleOneMinusEpsilon = 0.99999999999999989;
 static const float FloatOneMinusEpsilon = 0.99999994;
 #else
