@@ -169,7 +169,10 @@ public:
     
 protected:
     
+    // 用于储存一维样本列表，索引为维度
     std::vector<std::vector<Float>> _samples1D;
+    
+    // 用于储存二维样本列表，索引为维度
     std::vector<std::vector<Point2f>> _samples2D;
     
     int _curDimension1D;
