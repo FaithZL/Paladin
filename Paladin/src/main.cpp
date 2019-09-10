@@ -25,6 +25,9 @@ int main(int argc, const char * argv[]) {
     
 //    test_lua_main();
     cout << InverseRadicalInverse<10>(123456, 3) << endl;
+    
+    RNG r;
+    ComputeRadicalInversePermutations(r);
 
 #ifdef _MSC_VER
     //让VS运行debug时不至于黑屏一闪而过

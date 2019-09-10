@@ -41,22 +41,34 @@ _sampleAtPixelCenter(sampleAtPixelCenter) {
     
     /**
      * kMaxResolution = 128(todo 了解一下kMaxResolution为何定为128)
-     * 将halton序列的前两个维度映射到[0,1)^2中，并且超过kMaxResolution的部分用重复的halton序列
-     * 没有超过kMaxResolution的维度不做处理
+     * 定义 a = std::min(res[idx], kMaxResolution) （res[idx]为第idx个维度的分辨率）
+     * 将halton序列的前两个维度映射从[0,1)^2中，并且超过a的部分用重复的halton序列
+     * 没有超过 a 的维度不做处理
      * 又由halton的质数基底的性质可得
-     * 我们需要找到i与j满足(2^i, 3^j)向量两个维度均大于std::min(res[idx], kMaxResolution) （res[idx]为第idx个维度的分辨率）
+     * 我们需要找到i与j满足(2^i, 3^j)向量两个维度均大于 a
      * 由以下代码可以看出
      * 
      * _baseExponents[0]就是i
      * _baseExponents[1]就是j
-     * _baseScales[0]就是2^i
-     * _baseScales[1]就是3^j
+     * _baseScales[0]就是2^i  128  (a = 128)
+     * _baseScales[1]就是3^j  243  (a = 128)
+     *
+     * 将 [0,1)^2 空间中的样本映射到 [0,128) * [0,243) 空间中
+     * 以第一维度x方向为例x[i]代表，x方向上第i个样本，inverse函数表示逐位反转，10变为0.01
+     * x[0] = 0, 
+     * x[1] = inverse(1)(base2) = 0.1(base2) = 1/2(base10)
+     * x[2] = inverse(10)(base2) = 0.01(base2) = 1/4(base10)
+     *
+     * 为了将x从 [0,1) 映射到 [0,128) 区间
+     * 各个x[i]的值需要乘以一个128(2^7)，对应_baseExponents[0]为7
      *
      * 为何要有如上的操作？
+     * 这个分辨率的限制，可以使浮点精度控制在一个可以接受的范围内（数字越大，浮点精度会越低）
+     * 
      */
     Vector2i res = sampleBounds.pMax - sampleBounds.pMin;
     
-    // 如果分辨率有一个或两个维度大于kMaxResolution
+    // 如果分辨率有一个或两个维度大于a
     // 则在图像上使用重复的halton样本点
     for (int i = 0; i < 2; ++i) {
         int base = (i == 0) ? 2 : 3;
@@ -68,7 +80,7 @@ _sampleAtPixelCenter(sampleAtPixelCenter) {
         _baseScales[i] = scale;
         _baseExponents[i] = exp;
     }
-
+    // 这个变量可以理解为采样_sampleStride个像素
     _sampleStride = _baseScales[0] * _baseScales[1];
     
     _multInverse[0] = multiplicativeInverse(_baseScales[1], _baseScales[0]);
