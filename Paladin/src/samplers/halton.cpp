@@ -89,6 +89,16 @@ _sampleAtPixelCenter(sampleAtPixelCenter) {
 
 std::vector<uint16_t> HaltonSampler::_radicalInversePermutations;
 
+/**
+ * 通过当前像素的样本局部索引，计算出样本的全局索引
+ * 如上所述，我们将将 [0,1)^2 空间中的样本映射到 [0,2^i) * [0,3^j) 空间中
+ * 相当于每个样本的x乘以2^i,y乘以3^j
+ * 以x为例，原始值为 x1 = 0.d1(x1)d2(x1)...dn(x1) 二进制
+ * 乘以2^i之后，相当于小数点向右移动i位，去掉小数点后的尾数取整，就得到像素的x坐标(y坐标同理)
+ * 
+ * @param  sampleNum 样本的局部索引
+ * @return           样本的全局索引
+ */
 int64_t HaltonSampler::getIndexForSample(int64_t sampleNum) const {
     if (_currentPixel != _pixelForOffset) {
         _offsetForCurrentPixel = 0;
