@@ -87,6 +87,10 @@ private:
     // 在构造函数中有详细注释
     Point2i _baseScales, _baseExponents;
     
+    // 暂时称为采样步长
+    // 步长的定义为假设当前像素第一个样本的全局索引为idx，那么第二个样本的全局索引
+    // 为idx + _sampleStride * 1，每次在该像素采样时，都是上一个样本的索引加上一个步长
+    // 相关信息在getIndexForSample函数的注释中详细说明
     // _sampleStride = _baseScales[0] * _baseScales[1];
     int _sampleStride;
     
