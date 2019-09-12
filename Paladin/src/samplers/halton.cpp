@@ -124,15 +124,23 @@ std::vector<uint16_t> HaltonSampler::_radicalInversePermutations;
  * 相当于每个样本的x乘以2^i,y乘以3^j,可以将以上我们归纳的信息应用起来了
  * 同样以x轴为例，原始值为 x1 = 0.d1(x1)d2(x1)...dn(x1) 二进制
  * 乘以2^i之后，相当于小数点向右移动i位，去掉小数点后的尾数取整，就得到像素的x坐标
- * 此时
- * 
+ * 以上描述可以简化为表达式
+ * inverse_in_2(x) = idx mod 2^i,
+ * inverse_in_3(y) = idx mod 3^j,
+ * inverse_in_2(x)为2进制下x的反转(例如，1011-> 1101),y不再赘述
+ * 其中idx为第一个落在当前像素的样本的全局索引
+ * todo 这个函数的计算过程还是没有完全搞懂，甚至pbrbook中都略过了，
+ * multiplicativeInverse函数是真jb看不懂，先搞完主线在回头搞搞
+ *
  * @param  sampleNum 样本的局部索引
  * @return           样本的全局索引
  */
 int64_t HaltonSampler::getIndexForSample(int64_t sampleNum) const {
+    // 如果采样器切换了需要采样的像素，重新计算_offsetForCurrentPixel
     if (_currentPixel != _pixelForOffset) {
         _offsetForCurrentPixel = 0;
         if (_sampleStride > 1) {
+            // 超过kMaxResolution的部分进行重新映射
             Point2i pm(Mod(_currentPixel[0], kMaxResolution),
                        Mod(_currentPixel[1], kMaxResolution));
             for (int i = 0; i < 2; ++i) {

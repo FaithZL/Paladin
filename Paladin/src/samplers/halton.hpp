@@ -96,6 +96,9 @@ private:
     
     int _multInverse[2];
     
+    // 用于储存当前采样的像素，这跟_currentPixel区别的一点
+    // 主要在于，每次切换像素的时候需要_offsetForCurrentPixel
+    // 之后就_sampleStride的步长进行采样，这个变量主要是为了记录之后计算了_offsetForCurrentPixel
     mutable Point2i _pixelForOffset = Point2i(std::numeric_limits<int>::max(),
                                              std::numeric_limits<int>::max());
     

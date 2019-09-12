@@ -216,6 +216,11 @@ inline T Mod(T a, T b) {
     return (T)((result < 0) ? result + b : result);
 }
 
+template <>
+inline Float Mod(Float a, Float b) {
+    return std::fmod(a, b);
+}
+
 inline Float gammaCorrect(Float value) {
     if (value <= 0.0031308f) return 12.92f * value;
     return 1.055f * std::pow(value, (Float)(1.f / 2.4f)) - 0.055f;
