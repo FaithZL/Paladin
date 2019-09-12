@@ -125,12 +125,16 @@ std::vector<uint16_t> HaltonSampler::_radicalInversePermutations;
  * 同样以x轴为例，原始值为 x1 = 0.d1(x1)d2(x1)...dn(x1) 二进制
  * 乘以2^i之后，相当于小数点向右移动i位，去掉小数点后的尾数取整，就得到像素的x坐标
  * 以上描述可以简化为表达式
- * inverse_in_2(x) = idx mod 2^i,
- * inverse_in_3(y) = idx mod 3^j,
- * inverse_in_2(x)为2进制下x的反转(例如，1011-> 1101),y不再赘述
+ * inverse_in_2(x,i) = idx mod 2^i,
+ * inverse_in_3(y,j) = idx mod 3^j,
+ * inverse_in_2(x)为2进制下x的最后i位的反转(例如i=4，1011001-> 1101),y不再赘述
  * 其中idx为第一个落在当前像素的样本的全局索引
+ * 
+ * 联立以上表达式求出idx，查了一些相关资料，需要用到余数定理
+ *
  * todo 这个函数的计算过程还是没有完全搞懂，甚至pbrbook中都略过了，
  * multiplicativeInverse函数是真jb看不懂，先搞完主线在回头搞搞
+ * 论文链接http://gruenschloss.org/sample-enum/sample-enum.pdf
  *
  * @param  sampleNum 样本的局部索引
  * @return           样本的全局索引
