@@ -6,8 +6,8 @@
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#include "disk.hpp"
-#include "sampling.hpp"
+#include "shapes/disk.hpp"
+#include "core/sampling.hpp"
 
 PALADIN_BEGIN
 

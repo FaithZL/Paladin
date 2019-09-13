@@ -7,11 +7,11 @@
 //
 
 #include <iostream>
-#include "paladin.hpp"
+#include "core/paladin.hpp"
 
-#include "test_lua.hpp"
+#include "alltest/test_lua.hpp"
 
-#include "lowdiscrepancy.hpp"
+#include "math/lowdiscrepancy.hpp"
 
 USING_PALADIN
 

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#include "shape.hpp"
-#include "lowdiscrepancy.hpp"
+#include "core/shape.hpp"
+#include "math/lowdiscrepancy.hpp"
 
 PALADIN_BEGIN
 

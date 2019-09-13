@@ -9,7 +9,7 @@
 #ifndef interaction_hpp
 #define interaction_hpp
 
-#include "header.h"
+#include "core/header.h"
 #include "medium.hpp"
 
 PALADIN_BEGIN

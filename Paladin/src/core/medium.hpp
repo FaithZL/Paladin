@@ -9,7 +9,7 @@
 #ifndef medium_hpp
 #define medium_hpp
 
-#include "header.h"
+#include "core/header.h"
 
 PALADIN_BEGIN
 

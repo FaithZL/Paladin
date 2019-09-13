@@ -8,7 +8,7 @@
 #ifndef parallel_hpp
 #define parallel_hpp
 
-#include "header.h"
+#include "core/header.h"
 
 PALADIN_BEGIN
 

@@ -9,8 +9,8 @@
 #ifndef kdtree_hpp
 #define kdtree_hpp
 
-#include "header.h"
-#include "primitive.hpp"
+#include "core/header.h"
+#include "core/primitive.hpp"
 
 PALADIN_BEGIN
 

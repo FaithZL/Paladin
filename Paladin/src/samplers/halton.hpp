@@ -8,9 +8,9 @@
 #ifndef halton_hpp
 #define halton_hpp
 
-#include "header.h"
-#include "sampler.hpp"
-#include "lowdiscrepancy.hpp"
+#include "core/header.h"
+#include "core/sampler.hpp"
+#include "math/lowdiscrepancy.hpp"
 
 PALADIN_BEGIN
 

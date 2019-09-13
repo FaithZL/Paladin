@@ -9,9 +9,9 @@
 #ifndef shape_hpp
 #define shape_hpp
 
-#include "header.h"
-#include "transform.hpp"
-#include "interaction.hpp"
+#include "core/header.h"
+#include "math/transform.hpp"
+#include "core/interaction.hpp"
 
 PALADIN_BEGIN
 

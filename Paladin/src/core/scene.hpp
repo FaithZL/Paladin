@@ -9,7 +9,7 @@
 #ifndef scene_hpp
 #define scene_hpp
 
-#include "header.h"
+#include "core/header.h"
 
 PALADIN_BEGIN
 

@@ -9,7 +9,7 @@
 #ifndef ray_h
 #define ray_h
 
-#include "header.h"
+#include "core/header.h"
 
 PALADIN_BEGIN
 

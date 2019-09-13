@@ -9,9 +9,9 @@
 #ifndef light_hpp
 #define light_hpp
 
-#include "header.h"
-#include "interaction.hpp"
-#include "transform.hpp"
+#include "core/header.h"
+#include "core/interaction.hpp"
+#include "math/transform.hpp"
 
 PALADIN_BEGIN
 

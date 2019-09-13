@@ -9,9 +9,9 @@
 #ifndef lowdiscrepancy_hpp
 #define lowdiscrepancy_hpp
 
-#include "header.h"
+#include "core/header.h"
 
-#include "sampling.hpp"
+#include "core/sampling.hpp"
 
 PALADIN_BEGIN
 

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#include "perspective.hpp"
-#include "sampling.hpp"
+#include "cameras/perspective.hpp"
+#include "core/sampling.hpp"
 
 PALADIN_BEGIN
 

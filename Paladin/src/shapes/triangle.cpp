@@ -6,8 +6,8 @@
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#include "triangle.hpp"
-#include "sampling.hpp"
+#include "shapes/triangle.hpp"
+#include "core/sampling.hpp"
 
 PALADIN_BEGIN
 

@@ -9,11 +9,11 @@
 #ifndef triangle_hpp
 #define triangle_hpp
 
-#include "header.h"
-#include "shape.hpp"
-#include "texture.hpp"
+#include "core/header.h"
+#include "core/shape.hpp"
+#include "core/texture.hpp"
 #include <vector>
-#include "model.h"
+#include "ext/model.h"
 
 PALADIN_BEGIN
 

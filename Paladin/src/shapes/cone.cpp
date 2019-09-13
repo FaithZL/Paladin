@@ -7,7 +7,7 @@
 //
 
 #include "cone.hpp"
-#include "sampling.hpp"
+#include "core/sampling.hpp"
 
 PALADIN_BEGIN
 

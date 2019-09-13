@@ -9,8 +9,8 @@
 #ifndef model_h
 #define model_h
 
-#include "header.h"
-#include "triangle.hpp"
+#include "core/header.h"
+#include "shapes/triangle.hpp"
 #include "tiny_obj_loader.h"
 
 PALADIN_BEGIN

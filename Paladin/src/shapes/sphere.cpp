@@ -6,8 +6,8 @@
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#include "sphere.hpp"
-#include "sampling.hpp"
+#include "shapes/sphere.hpp"
+#include "core/sampling.hpp"
 
 PALADIN_BEGIN
 

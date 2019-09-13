@@ -9,7 +9,7 @@
 #ifndef model_h
 #define model_h
 
-#include "header.h"
+#include "core/header.h"
 #include "triangle.hpp"
 #include "tiny_obj_loader.h"
 

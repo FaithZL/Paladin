@@ -9,7 +9,7 @@
 #ifndef vector_h
 #define vector_h
 
-#include "header.h"
+#include "core/header.h"
 
 PALADIN_BEGIN
 

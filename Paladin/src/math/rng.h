@@ -9,7 +9,7 @@
 #ifndef rng_h
 #define rng_h
 
-#include "header.h"
+#include "core/header.h"
 
 PALADIN_BEGIN
 

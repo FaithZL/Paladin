@@ -8,10 +8,10 @@
 #ifndef primitive_hpp
 #define primitive_hpp
 
-#include "header.h"
-#include "interaction.hpp"
-#include "material.hpp"
-#include "animatedtransform.hpp"
+#include "core/header.h"
+#include "core/interaction.hpp"
+#include "core/material.hpp"
+#include "math/animatedtransform.hpp"
 
 PALADIN_BEGIN
 

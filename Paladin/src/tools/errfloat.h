@@ -9,7 +9,7 @@
 #ifndef errfloat_h
 #define errfloat_h
 
-#include "header.h"
+#include "core/header.h"
 
 PALADIN_BEGIN
 

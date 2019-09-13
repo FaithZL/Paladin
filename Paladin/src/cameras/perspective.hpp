@@ -9,8 +9,8 @@
 #ifndef perspective_hpp
 #define perspective_hpp
 
-#include "header.h"
-#include "camera.hpp"
+#include "core/header.h"
+#include "core/camera.hpp"
 
 PALADIN_BEGIN
 

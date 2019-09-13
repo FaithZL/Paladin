@@ -9,9 +9,9 @@
 #ifndef camera_hpp
 #define camera_hpp
 
-#include "header.h"
-#include "film.hpp"
-#include "animatedtransform.hpp"
+#include "core/header.h"
+#include "core/film.hpp"
+#include "math/animatedtransform.hpp"
 
 PALADIN_BEGIN
 

@@ -9,7 +9,7 @@
 #ifndef spectrum_hpp
 #define spectrum_hpp
 
-#include "header.h"
+#include "core/header.h"
 
 PALADIN_BEGIN
 // 光谱类，太特么复杂了，代码照抄 pbrt-v3

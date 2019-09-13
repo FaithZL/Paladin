@@ -9,8 +9,8 @@
 #ifndef cone_hpp
 #define cone_hpp
 
-#include "header.h"
-#include "shape.hpp"
+#include "core/header.h"
+#include "core/shape.hpp"
 
 PALADIN_BEGIN
 

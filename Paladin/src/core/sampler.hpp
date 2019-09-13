@@ -9,8 +9,8 @@
 #ifndef sampler_hpp
 #define sampler_hpp
 
-#include "header.h"
-#include "rng.h"
+#include "core/header.h"
+#include "math/rng.h"
 PALADIN_BEGIN
 
 /**

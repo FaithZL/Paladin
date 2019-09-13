@@ -8,10 +8,10 @@
 #ifndef film_hpp
 #define film_hpp
 
-#include "header.h"
-#include "spectrum.hpp"
-#include "filter.h"
-#include "parallel.hpp"
+#include "core/header.h"
+#include "core/spectrum.hpp"
+#include "core/filter.h"
+#include "parallel/parallel.hpp"
 
 PALADIN_BEGIN
 

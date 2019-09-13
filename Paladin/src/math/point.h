@@ -9,7 +9,7 @@
 #ifndef point_h
 #define point_h
 
-#include "header.h"
+#include "core/header.h"
 
 
 PALADIN_BEGIN

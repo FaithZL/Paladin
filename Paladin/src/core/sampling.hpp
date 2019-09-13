@@ -9,8 +9,8 @@
 #ifndef sampling_hpp
 #define sampling_hpp
 
-#include "header.h"
-#include "rng.h"
+#include "core/header.h"
+#include "math/rng.h"
 /*
 P为累积分布函数(cdf)，p为概率密度函数(pdf)，cdf求导得到pdf
 常用概率论基础公式

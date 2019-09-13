@@ -9,7 +9,7 @@
 #ifndef cube_hpp
 #define cube_hpp
 
-#include "header.h"
+#include "core/header.h"
 
 PALADIN_BEGIN
 

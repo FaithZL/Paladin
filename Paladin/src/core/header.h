@@ -49,8 +49,8 @@
     #include <mutex>
 #endif
 
-#include "stringprint.hpp"
-#include "macro.h"
+#include "tools/stringprint.hpp"
+#include "tools/macro.h"
 
 
 PALADIN_BEGIN
@@ -255,7 +255,7 @@ inline CONSTEXPR bool isPowerOf2(T v) {
 
 #define ALLOCA(TYPE, COUNT) (TYPE *) alloca((COUNT) * sizeof(TYPE))
 
-#include "mathutil.h"
+#include "math/mathutil.h"
 
 template <typename Predicate>
 int findInterval(int size, const Predicate &pred) {
@@ -272,12 +272,12 @@ int findInterval(int size, const Predicate &pred) {
     return paladin::clamp(first - 1, 0, size - 2);
 }
 
-#include "vector.h"
-#include "point.h"
-#include "ray.h"
-#include "bounds.h"
-#include "memory.hpp"
-#include "errfloat.h"
+#include "math/vector.h"
+#include "math/point.h"
+#include "math/ray.h"
+#include "math/bounds.h"
+#include "tools/memory.hpp"
+#include "tools/errfloat.h"
 
 #endif /* header_h */
 

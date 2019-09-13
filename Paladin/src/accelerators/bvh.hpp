@@ -9,8 +9,8 @@
 #ifndef bvh_hpp
 #define bvh_hpp
 
-#include "header.h"
-#include "primitive.hpp"
+#include "core/header.h"
+#include "core/primitive.hpp"
 PALADIN_BEGIN
 
 //代表一个图元的部分信息

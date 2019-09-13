@@ -9,8 +9,8 @@
 #ifndef random_hpp
 #define random_hpp
 
-#include "header.h"
-#include "sampler.hpp"
+#include "core/header.h"
+#include "core/sampler.hpp"
 
 PALADIN_BEGIN
 

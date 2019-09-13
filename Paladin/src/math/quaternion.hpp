@@ -9,7 +9,7 @@
 #ifndef quaternion_hpp
 #define quaternion_hpp
 
-#include "header.h"
+#include "core/header.h"
 PALADIN_BEGIN
 
 struct Quaternion {

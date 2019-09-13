@@ -9,8 +9,8 @@
 #ifndef sphere_hpp
 #define sphere_hpp
 
-#include "header.h"
-#include "shape.hpp"
+#include "core/header.h"
+#include "core/shape.hpp"
 
 PALADIN_BEGIN
 
