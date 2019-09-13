@@ -1,0 +1,36 @@
+//
+//  triangle.h
+//  Paladin
+//
+//  Created by SATAN_Z on 2019/9/13.
+//
+
+#ifndef filters_triangle_h
+#define filters_triangle_h
+
+#include "core/filter.h"
+
+PALADIN_BEGIN
+
+/**
+ * 三角滤波器，比盒式滤波器效果略好
+ * 函数值随着像素中心线性衰减
+ */
+class TriangleFilter : public Filter {
+    
+public:
+    
+    TriangleFilter(const Vector2f &radius) : Filter(radius) {
+        
+    }
+    
+    virtual Float evaluate(const Point2f &p) const {
+        return std::max((Float)0, radius.x - std::abs(p.x)) *
+                std::max((Float)0, radius.y - std::abs(p.y));
+    }
+};
+
+PALADIN_END
+
+#endif /* filters_triangle_h */
+
