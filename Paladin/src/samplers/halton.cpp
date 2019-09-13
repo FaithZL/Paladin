@@ -11,6 +11,7 @@ PALADIN_BEGIN
 
 static CONSTEXPR int kMaxResolution = 128;
 
+// 碾转相除法，又称欧几里得算法，细节就不搞
 static void extendedGCD(uint64_t a, uint64_t b, int64_t *x, int64_t *y) {
     if (b == 0) {
         *x = 1;
@@ -23,6 +24,10 @@ static void extendedGCD(uint64_t a, uint64_t b, int64_t *x, int64_t *y) {
     *y = xp - (d * yp);
 }
 
+/**
+ * 计算a关于n的数论倒数，也就是说
+ * 找到一个返回值ret，使得 a * ret mod n = 1
+ */
 static uint64_t multiplicativeInverse(int64_t a, int64_t n) {
     int64_t x, y;
     extendedGCD(a, n, &x, &y);
@@ -83,6 +88,7 @@ _sampleAtPixelCenter(sampleAtPixelCenter) {
 
     _sampleStride = _baseScales[0] * _baseScales[1];
     
+    // 计算数论倒数
     _multInverse[0] = multiplicativeInverse(_baseScales[1], _baseScales[0]);
     _multInverse[1] = multiplicativeInverse(_baseScales[0], _baseScales[1]);
 }
@@ -131,11 +137,19 @@ std::vector<uint16_t> HaltonSampler::_radicalInversePermutations;
  * 其中idx为第一个落在当前像素的样本的全局索引
  * 
  * 联立以上表达式求出idx，查了一些相关资料，需要用到余数定理
- *
- * todo 这个函数的计算过程还是没有完全搞懂，甚至pbrbook中都略过了，
- * multiplicativeInverse函数是真jb看不懂，先搞完主线在回头搞搞
  * 论文链接http://gruenschloss.org/sample-enum/sample-enum.pdf
+ * 
+ * mx = (2^i * 3^j)/(2^i)
+ * my = (2^i * 3^j)/(3^j)
  *
+ * mulInvX 为 mx 对 2^i的数论倒数
+ * mulInvY 为 my 对 3^j的数论倒数
+ * x,y为像素点
+ * 综合余数定理的表达式简化之后，第一个落在像素点内的样本索引idx的表达式如下
+ *
+ * idx = (x * mx * mulInvX + y * mx * mulInvY) mod (2^i * 3^j)
+ * todo 至于上述表达式如何得到，这需要学习一下数论，余数定理，暂时放着
+ * 
  * @param  sampleNum 样本的局部索引
  * @return           样本的全局索引
  */
@@ -152,6 +166,7 @@ int64_t HaltonSampler::getIndexForSample(int64_t sampleNum) const {
                     (i == 0)
                     ? InverseRadicalInverse<2>(pm[i], _baseExponents[i])
                     : InverseRadicalInverse<3>(pm[i], _baseExponents[i]);
+                // 计算第一个落在当前像素上的样本索引
                 _offsetForCurrentPixel +=
                     dimOffset * (_sampleStride / _baseScales[i]) * _multInverse[i];
             }

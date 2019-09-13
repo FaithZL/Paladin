@@ -94,6 +94,10 @@ private:
     // _sampleStride = _baseScales[0] * _baseScales[1];
     int _sampleStride;
     
+    // 储存数论倒数
+    // 数论倒数的定义
+    // 如果两个数a和b，它们的乘积关于模m余1，那么我们称它们互为关于模m的数论倒数
+    // 2*3 mod 5 = 1，所以3是2关于5的数论倒数
     int _multInverse[2];
     
     // 用于储存当前采样的像素，这跟_currentPixel区别的一点
