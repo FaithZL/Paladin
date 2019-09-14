@@ -33,7 +33,7 @@ public:
     }
     
     Vector2<T> diagonal() const { return pMax - pMin; }
-    T Area() const {
+    T area() const {
         Vector2<T> d = pMax - pMin;
         return (d.x * d.y);
     }

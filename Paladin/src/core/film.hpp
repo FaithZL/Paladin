@@ -15,6 +15,9 @@
 
 PALADIN_BEGIN
 
+/**
+ * 用于储存像素的radiance值跟filter函数权重
+ */
 struct FilmTilePixel {
     Spectrum contribSum = 0.f;
     Float filterWeightSum = 0.f;
@@ -35,38 +38,57 @@ public:
     _filterTable(filterTable),
     _filterTableSize(filterTableSize),
     _maxSampleLuminance(maxSampleLuminance) {
-        _pixels = std::vector<FilmTilePixel>(std::max(0, _pixelBounds.Area()));
+        _pixels = std::vector<FilmTilePixel>(std::max(0, _pixelBounds.area()));
     }
     
-    void addSample(const Point2f &pFilm, Spectrum L,
-                   Float sampleWeight = 1.) {
+    /**
+     * 添加样本值，每次计算一次样本值的时候调用一次
+     * @param pFilm        胶片像素上的点
+     * @param L            radiance值
+     * @param sampleWeight 采样权重(来自于相机)
+     */
+    void addSample(const Point2f &pFilm, Spectrum L, Float sampleWeight = 1.) {
 
+        // todo 这里没有理解，为何要这样限制亮度，这样限制亮度会不会造成原有数据的改变？
+        // 为何不是所有像素按照整体比例去缩放？
         if (L.y() > _maxSampleLuminance) {
             L *= _maxSampleLuminance / L.y();
         }
+
+        // 找到受此样本影响范围内的像素
         Point2f pFilmDiscrete = pFilm - Vector2f(0.5f, 0.5f);
         Point2i p0 = (Point2i)ceil(pFilmDiscrete - _filterRadius);
+        // 这里不知道为何向下取整再+1，为何不是直接向上取整todo
         Point2i p1 = (Point2i)floor(pFilmDiscrete + _filterRadius) + Point2i(1, 1);
         p0 = max(p0, _pixelBounds.pMin);
         p1 = min(p1, _pixelBounds.pMax);
         
+        // todo这里有点奇怪，如果一个filter的xy方向上的过滤半径都为1，
+        // 那么如果一个样本在落在一个像素内，那么这个样本点影响的像素个数应该是多少
+        // 我觉得应该是3*3，九个像素，但pbrt代码上只影响两个像素，不符合预期
         int *ifx = ALLOCA(int, p1.x - p0.x);
         for (int x = p0.x; x < p1.x; ++x) {
-            Float fx = std::abs((x - pFilmDiscrete.x) * _invFilterRadius.x *
+            Float offsetX = std::abs((x - pFilmDiscrete.x) * _invFilterRadius.x *
                                 _filterTableSize);
-            ifx[x - p0.x] = std::min((int)std::floor(fx), _filterTableSize - 1);
+            ifx[x - p0.x] = std::min((int)std::floor(offsetX), _filterTableSize - 1);
         }
         int *ify = ALLOCA(int, p1.y - p0.y);
         for (int y = p0.y; y < p1.y; ++y) {
-            Float fy = std::abs((y - pFilmDiscrete.y) * _invFilterRadius.y * _filterTableSize);
-            ify[y - p0.y] = std::min((int)std::floor(fy), _filterTableSize - 1);
+            Float offsetY = std::abs((y - pFilmDiscrete.y) * _invFilterRadius.y * _filterTableSize);
+            ify[y - p0.y] = std::min((int)std::floor(offsetY), _filterTableSize - 1);
         }
+
+        // I(x,y) = (∑f(x-xi,y-yi)w(xi,yi)L(xi,yi)) / (∑f(x-xi,y-yi))
         for (int y = p0.y; y < p1.y; ++y) {
             for (int x = p0.x; x < p1.x; ++x) {
-                
+                // 计算坐标点对应filter表的偏移量
                 int offset = ify[y - p0.y] * _filterTableSize + ifx[x - p0.x];
+                // filterWeight = filter->evaluate(Point2i(x - pFilmDiscrete.x,
+                //                             y - pFilmDiscrete.y));
+                // 由于已经预计算好了，直接查表取值
                 Float filterWeight = _filterTable[offset];
                 
+                // 更新像素值的贡献和以及过滤权重
                 FilmTilePixel &pixel = getPixel(Point2i(x, y));
                 pixel.contribSum += L * sampleWeight * filterWeight;
                 pixel.filterWeightSum += filterWeight;
@@ -109,7 +131,15 @@ private:
     friend class Film;
 };
 
+/**
+ * 可以理解为胶片类，相当于相机中接收光子 传感器
+ * 将样本的贡献记录在film中有三种方式
+ *     1.由采样器直接写入film中，但这种方式不适合并行，因为多个线程可能会同时操作一个像素
+ * 因此，可以把film分为若干个tile，每个线程渲染一个tile，这样就可以很好的避免上述情况
+ * 
+ */
 class Film {
+
 public:
     
     Film(const Point2i &resolution, const AABB2f &cropWindow,
@@ -117,10 +147,21 @@ public:
          const std::string &filename, Float scale,
          Float maxSampleLuminance = Infinity);
     
+    /**
+     * 返回样本范围
+     * @return [description]
+     */
     AABB2i getSampleBounds() const;
     
+    /**
+     * 返回以(0,0)为中心的屏幕范围
+     * @return [description]
+     */
     AABB2f getPhysicalExtent() const;
     
+    /**
+     * 根据范围获取tile
+     */
     std::unique_ptr<FilmTile> getFilmTile(const AABB2i &sampleBounds);
     
     void mergeFilmTile(std::unique_ptr<FilmTile> tile);
@@ -168,8 +209,15 @@ private:
     std::unique_ptr<Pixel[]> _pixels;
 
     static CONSTEXPR int _filterTableWidth = 16;
-
-    Float filterTable[_filterTableWidth * _filterTableWidth];
+    
+    // 把filter过滤的范围xy维度上各平均分割为_filterTableWidth个子区间
+    // 在构造film的时候就预先计算好了filter范围内的每个子区间中点的值
+    // 避免了在渲染过程中计算每个样本点的filter值的大计算量
+    // 由过滤函数性质可知f(x,y) = f(|x|,|y|)
+    // 所以只需要储存filter函数第一象限的值，
+    // 也就是说只需要256的数组就能储存1024个filter函数的值
+    // 这个精度基本很够用了
+    Float _filterTable[_filterTableWidth * _filterTableWidth];
 
     std::mutex _mutex; // 64字节
 

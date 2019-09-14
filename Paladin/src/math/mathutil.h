@@ -433,8 +433,8 @@ AABB2<T> intersect(const AABB2<T> &b1, const AABB2<T> &b2) {
     // turn, that breaks returning an invalid bound for the case where we
     // intersect non-overlapping bounds (as we'd like to happen).
     AABB2<T> ret;
-    ret.pMin = Max(b1.pMin, b2.pMin);
-    ret.pMax = Min(b1.pMax, b2.pMax);
+    ret.pMin = max(b1.pMin, b2.pMin);
+    ret.pMax = min(b1.pMax, b2.pMax);
     return ret;
 }
 
