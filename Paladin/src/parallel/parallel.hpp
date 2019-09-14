@@ -29,13 +29,15 @@ public:
     }
     void add(Float v) {
 #ifdef PALADIN_FLOAT_AS_DOUBLE
-        uint64_t oldBits = bits, newBits;
+        uint64_t oldBits = _bits, newBits;
 #else
         uint32_t oldBits = _bits, newBits;
 #endif
         do {
             newBits = floatToBits(bitsToFloat(oldBits) + v);
         } while (!_bits.compare_exchange_weak(oldBits, newBits));
+        // 当前值与期望值相等时，修改当前值为设定值，返回true
+        // 当前值与期望值不等时，将期望值修改为当前值，返回false
     }
     
 private:

@@ -71,18 +71,79 @@ std::unique_ptr<FilmTile> Film::getFilmTile(const AABB2i &sampleBounds) {
 }
 
 void Film::mergeFilmTile(std::unique_ptr<FilmTile> tile) {
-    
+    std::lock_guard<std::mutex> lock(_mutex);
+    for (Point2i pixel : tile->getPixelBounds()) {
+        const FilmTilePixel &tilePixel = tile->getPixel(pixel);
+        Pixel &mergePixel = getPixel(pixel);
+        Float xyz[3];
+        tilePixel.contribSum.ToXYZ(xyz);
+        for (int i = 0; i < 3; ++i) {
+            mergePixel.xyz[i] += xyz[i];
+        }
+        mergePixel.filterWeightSum += tilePixel.filterWeightSum;
+    }
 }
 
 void Film::setImage(const Spectrum *img) const {
-    
+    int nPixels = croppedPixelBounds.area();
+    for (int i = 0; i < nPixels; ++i) {
+        Pixel &p = _pixels[i];
+        img[i].ToXYZ(p.xyz);
+        p.filterWeightSum = 1;
+        p.splatXYZ[0] = p.splatXYZ[1] = p.splatXYZ[2] = 0;
+    }
+}
+
+void Film::addSplat(const Point2f &p, Spectrum v) {
+    if (!insideExclusive((Point2i)p, croppedPixelBounds)) {
+        return;
+    }
+    if (v.y() > _maxSampleLuminance) {
+        v *= _maxSampleLuminance / v.y();
+    }
+    Float xyz[3];
+    v.ToXYZ(xyz);
+    Pixel &pixel = getPixel((Point2i)p);
+    for (int i = 0; i < 3; ++i) {
+        pixel.splatXYZ[i].add(xyz[i]);
+    }
 }
 
 void Film::writeImage(Float splatScale) {
+    std::unique_ptr<Float[]> rgb(new Float[3 * croppedPixelBounds.area()]);
     int offset = 0;
     for (Point2i p : croppedPixelBounds) {
+        // 将xyz转成rgb
+        Pixel &pixel = getPixel(p);
+        XYZToRGB(pixel.xyz, &rgb[3 * offset]);
         
+        // I(x,y) = (∑f(x-xi,y-yi)w(xi,yi)L(xi,yi)) / (∑f(x-xi,y-yi))
+        // 再列一遍过滤表达式
+        Float filterWeightNum = pixel.filterWeightSum;
+        if (filterWeightNum != 0) {
+            Float invWeight = (Float)1 / filterWeightNum;
+            rgb[3 * offset] = std::max((Float)0, rgb[3 * offset] * invWeight);
+            rgb[3 * offset + 1] = std::max((Float)0, rgb[3 * offset + 1] * invWeight);
+            rgb[3 * offset + 2] = std::max((Float)0, rgb[3 * offset + 2] * invWeight);
+        }
+        
+        // 这里splat是双向方法用的，暂时不理
+        Float splatRGB[3];
+        Float splatXYZ[3] = {pixel.splatXYZ[0],
+                            pixel.splatXYZ[1],
+                            pixel.splatXYZ[2]};
+        XYZToRGB(splatXYZ, splatRGB);
+
+        rgb[3 * offset] += splatScale * splatRGB[0];
+        rgb[3 * offset + 1] += splatScale * splatRGB[1];
+        rgb[3 * offset + 2] += splatScale * splatRGB[2];
+        
+        rgb[3 * offset] *= _scale;
+        rgb[3 * offset + 1] *= _scale;
+        rgb[3 * offset + 2] *= _scale;
+        ++offset;
     }
+    
 }
 
 void Film::clear() {

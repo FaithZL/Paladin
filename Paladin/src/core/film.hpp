@@ -66,23 +66,25 @@ public:
         // todo这里有点奇怪，如果一个filter的xy方向上的过滤半径都为1，
         // 那么如果一个样本在落在一个像素内，那么这个样本点影响的像素个数应该是多少
         // 我觉得应该是3*3，九个像素，但pbrt代码上只影响两个像素，不符合预期
-        int *ifx = ALLOCA(int, p1.x - p0.x);
+        
+        int *offsetXList = ALLOCA(int, p1.x - p0.x);
         for (int x = p0.x; x < p1.x; ++x) {
             Float offsetX = std::abs((x - pFilmDiscrete.x) * _invFilterRadius.x *
                                 _filterTableSize);
-            ifx[x - p0.x] = std::min((int)std::floor(offsetX), _filterTableSize - 1);
+            offsetXList[x - p0.x] = std::min((int)std::floor(offsetX), _filterTableSize - 1);
         }
-        int *ify = ALLOCA(int, p1.y - p0.y);
+        int *offsetYList = ALLOCA(int, p1.y - p0.y);
         for (int y = p0.y; y < p1.y; ++y) {
             Float offsetY = std::abs((y - pFilmDiscrete.y) * _invFilterRadius.y * _filterTableSize);
-            ify[y - p0.y] = std::min((int)std::floor(offsetY), _filterTableSize - 1);
+            offsetYList[y - p0.y] = std::min((int)std::floor(offsetY), _filterTableSize - 1);
         }
 
         // I(x,y) = (∑f(x-xi,y-yi)w(xi,yi)L(xi,yi)) / (∑f(x-xi,y-yi))
+        // 分别计算受该样本点影响的所有像素的滤波函数值并更新
         for (int y = p0.y; y < p1.y; ++y) {
             for (int x = p0.x; x < p1.x; ++x) {
                 // 计算坐标点对应filter表的偏移量
-                int offset = ify[y - p0.y] * _filterTableSize + ifx[x - p0.x];
+                int offset = offsetYList[y - p0.y] * _filterTableSize + offsetXList[x - p0.x];
                 // filterWeight = filter->evaluate(Point2i(x - pFilmDiscrete.x,
                 //                             y - pFilmDiscrete.y));
                 // 由于已经预计算好了，直接查表取值
@@ -168,6 +170,13 @@ public:
     
     void setImage(const Spectrum *img) const;
     
+    /**
+     * 双向方法中计算像素值的方式可能跟单向方法有所不同
+     * 似乎不用filter这种加权的方式？还没看到双向方法，todo
+     * 先把函数抄了再说，日后补上详解
+     * @param p [description]
+     * @param v [description]
+     */
     void addSplat(const Point2f &p, Spectrum v);
     
     void writeImage(Float splatScale = 1);
@@ -202,7 +211,7 @@ private:
         // 保存（未加权）样本splats总和
         AtomicFloat splatXYZ[3];
         // 占位，凑够32字节,为了避免一个对象横跨两个cache line，从而提高缓存命中率
-        Float pad; 
+        Float pad;
     };
     
     // 像素列表
