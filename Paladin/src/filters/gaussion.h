@@ -42,6 +42,7 @@ public:
         
     }
     
+    // todo 看看这里是否需要优化
     virtual Float evaluate(const Point2f &p) const {
         return gaussian(p.x, _expX) * gaussian(p.y, _expY);
     }

@@ -10,7 +10,7 @@
 #include "core/paladin.hpp"
 
 #include "alltest/test_lua.hpp"
-#include "filters/gaussion.h"
+#include "filters/sinc.h"
 #include "math/lowdiscrepancy.hpp"
 
 USING_PALADIN
