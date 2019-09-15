@@ -14,6 +14,16 @@
 
 PALADIN_BEGIN
 
+/**
+ * 描述如何反射或折射的模块
+ *
+ * 折射率的定义如下:
+ * 介质的折射率描述了光在该介质中速度与真空中速度之比，由希腊字母η表示，读作eta
+ * 斯涅耳定律可得 ηi * sinθi = ηt * sinθt，θ表示对应的入射角(出射角)
+ * 
+ * 
+ */
+
 // 以下函数都默认一个条件，w为单位向量
 // 比较简单，就不写推导过程了
 inline Float cosTheta(const Vector3f &w) {
@@ -69,10 +79,53 @@ inline Float cosDPhi(const Vector3f &wa, const Vector3f &wb) {
                  -1, 1);
 }
 
+/**
+ * 
+ * @param  cosThetaI [description]
+ * @param  etaI      [description]
+ * @param  etaT      [description]
+ * @return           [description]
+ */
+Float frDielectric(Float cosThetaI, Float etaI, Float etaT);
+
+Spectrum frConductor(Float cosThetaI, const Spectrum &etaI,
+                     const Spectrum &etaT, const Spectrum &k);
+
+/**
+ * 返回的是入射光线的反方向
+ * 简单说一下推导过程，注释画图不方便   
+ * 这里隐含的假设是n与wo都是单位向量
+ *
+ * 在草稿纸上画图，wi + wo = OC，OC为wi与wo角平分线，与法线n方向一致
+ * θ为OC与wo夹角
+ * OC/2 = |wo| * cosθ * n/|n|
+ * cosθ = dot(wo,n)/|n||wo|
+ *
+ * wi = OC - wi = 2(dot(wo,n) * n/|n|) - wi
+ * 
+ * 又因为n为单位向量
+ *
+ * 则wi = 2(dot(wo,n) * n) - wi
+ * 
+ * @param  wo 出射光线方向，单位向量
+ * @param  n  法线方向，单位向量
+ * @return    注意这里返回的是入射光线的反方向wi
+ */
 inline Vector3f reflect(const Vector3f &wo, const Vector3f &n) {
-    return -wo + 2 * dot(wo, n) * n;
+    return 2 * dot(wo, n) * n - wo;
 }
 
+/**
+ * 折射函数，根据入射方向(入射光方向的反方向)wi计算折射方向
+ * 推导过程就不写了，比较麻烦，
+ * 大概思路就是画一个单位圆，入射光线与出射光线还有法线都是单位向量，圆心就是光线折射的位置
+ * .....应该不难推
+ * @param  wi  入射方向(入射光方向的反方向)
+ * @param  n   法线方向
+ * @param  eta 入射介质与传播介质的折射率之比
+ * @param  wt  出射方向
+ * @return     是否有光线射出
+ */
 inline bool refract(const Vector3f &wi, const Normal3f &n, Float eta,
                     Vector3f *wt) {
 
@@ -212,6 +265,8 @@ public:
      */
     virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const;
     
+    virtual std::string toString() const = 0;
+    
     const BxDFType type;
 };
 
@@ -251,10 +306,60 @@ public:
         return _scale * f;
     }
     
-private:
+    virtual std::string toString() const {
+        return std::string("[ ScaledBxDF bxdf: ") + _bxdf->toString() +
+        std::string(" scale: ") + _scale.ToString() + std::string(" ]");
+    }
     
+private:
     BxDF *_bxdf;
     Spectrum _scale;
+};
+
+class Fresnel {
+public:
+    virtual ~Fresnel() {
+        
+    }
+    
+    virtual Spectrum evaluate(Float cosI) const = 0;
+    
+    virtual std::string toString() const = 0;
+};
+
+inline std::ostream &operator<<(std::ostream &os, const Fresnel &f) {
+    os << f.toString();
+    return os;
+}
+
+class FresnelConductor : public Fresnel {
+public:
+    Spectrum Evaluate(Float cosThetaI) const;
+    
+    FresnelConductor(const Spectrum &etaI, const Spectrum &etaT,
+                     const Spectrum &k)
+    : _etaI(etaI), _etaT(etaT), _k(k) {
+        
+    }
+    
+    std::string toString() const;
+    
+private:
+    Spectrum _etaI, _etaT, _k;
+};
+
+class FresnelDielectric : public Fresnel {
+public:
+    virtual Spectrum evaluate(Float cosThetaI) const;
+    
+    FresnelDielectric(Float etaI, Float etaT) : _etaI(etaI), _etaT(etaT) {
+        
+    }
+    
+    virtual std::string toString() const;
+    
+private:
+    Float _etaI, _etaT;
 };
 
 PALADIN_END

@@ -409,7 +409,7 @@ inline Vector3f cosineSampleHemisphere(const Point2f &u) {
  * 半球的表面积2π
  * 概率密度函数值为1/2π
  */
-Float UniformHemispherePdf() {
+inline Float uniformHemispherePdf() {
     return Inv2Pi;
 }
 
