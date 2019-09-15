@@ -6,7 +6,7 @@
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#include "spectrum.hpp"
+#include "core/spectrum.hpp"
 #include <algorithm>
 
 PALADIN_BEGIN

@@ -392,6 +392,27 @@ void stratifiedSample2D(Point2f *samples, int nx, int ny, RNG &rng, bool jitter 
  */
 void latinHypercube(Float *samples, int nSamples, int nDim, RNG &rng);
 
+
+/**
+ * cosine采样半球表面
+ * 思路非常简单
+ * 先均匀采样圆盘，然后通过圆盘映射到半球表面
+ * @param  u 均匀样本点
+ */
+inline Vector3f cosineSampleHemisphere(const Point2f &u) {
+    Point2f d = uniformSampleDisk(u);
+    Float z = std::sqrt(std::max((Float)0, 1 - d.x * d.x - d.y * d.y));
+    return Vector3f(d.x, d.y, z);
+}
+
+/**
+ * 半球的表面积2π
+ * 概率密度函数值为1/2π
+ */
+Float UniformHemispherePdf() {
+    return Inv2Pi;
+}
+
 PALADIN_END
 
 

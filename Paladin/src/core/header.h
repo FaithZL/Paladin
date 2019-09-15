@@ -106,6 +106,8 @@ class Primitive;
 
 class BSDF;
 
+class BxDF;
+
 class VisibilityTester;
 
 class Sampler;
@@ -229,17 +231,6 @@ inline Float gammaCorrect(Float value) {
 inline Float inverseGammaCorrect(Float value) {
     if (value <= 0.04045f) return value * 1.f / 12.92f;
     return std::pow((value + 0.055f) * 1.f / 1.055f, (Float)2.4f);
-}
-
-template <typename T>
-inline T mod(T a, T b) {
-    T result = a - (a / b) * b;
-    return (T)((result < 0) ? result + b : result);
-}
-
-template <>
-inline Float mod(Float a, Float b) {
-    return std::fmod(a, b);
 }
 
 // std的log是以e为底数 log2(x) = lnx / ln2
