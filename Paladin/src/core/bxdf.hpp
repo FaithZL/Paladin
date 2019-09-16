@@ -22,6 +22,26 @@ PALADIN_BEGIN
  * 斯涅耳定律可得 ηi * sinθi = ηt * sinθt，θ表示对应的入射角(出射角)
  * 
  * 
+ * 简述一下菲涅尔定律
+ * 比如说一张纸的表面，一看就知道是漫反射
+ * 但如果观察的角度很接近零度，那就有比较明显的反射效果了，可以实践一下
+ * 总而言之，高光反射率是跟入射光的角度有关的
+ *
+ * 			ηt * cosθi - ηi * cosθt
+ * r∥ = -------------------------------
+ * 			ηt * cosθi + ηi * cosθt
+ *
+ * 			ηi * cosθi - ηt * cosθt
+ * r⊥ = ------------------------------
+ * 			ηi * cosθi + ηt * cosθt
+ * 
+ * r∥平行偏振光的反射率，r⊥为垂直偏振光的反射率
+ * Fr = 1/2(r∥^2 + r⊥^2)
+ * 由于能量守恒，光线传输的能量为反射之前的 1 - Fr
+ * 以上公式是著名物理学家菲涅尔由电磁场边值关系出发的理论推演得出的
+ * 至于推导过程我们就不用纠结了
+ * 
+ * 
  */
 
 // 以下函数都默认一个条件，w为单位向量
@@ -80,11 +100,11 @@ inline Float cosDPhi(const Vector3f &wa, const Vector3f &wb) {
 }
 
 /**
- * 
- * @param  cosThetaI [description]
- * @param  etaI      [description]
- * @param  etaT      [description]
- * @return           [description]
+ * 绝缘体菲涅尔函数
+ * @param  cosThetaI 入射角的余弦值
+ * @param  etaI      入射介质的折射率
+ * @param  etaT      传播介质的折射率
+ * @return           绝缘体的菲涅尔函数值
  */
 Float frDielectric(Float cosThetaI, Float etaI, Float etaT);
 
