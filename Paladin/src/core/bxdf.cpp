@@ -40,10 +40,10 @@ Float frDielectric(Float cosThetaI, Float etaI, Float etaT) {
 }
 
 Spectrum frConductor(Float cosThetaI, const Spectrum &etai,
-                     const Spectrum &etat, const Spectrum &k) {
+                     const Spectrum &etat, const Spectrum &kt) {
     cosThetaI = clamp(cosThetaI, -1, 1);
     Spectrum eta = etat / etai;
-    Spectrum etak = k / etai;
+    Spectrum etak = kt / etai;
     
     Float cosThetaI2 = cosThetaI * cosThetaI;
     Float sinThetaI2 = 1. - cosThetaI2;
