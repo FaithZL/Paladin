@@ -15,6 +15,8 @@ Float frDielectric(Float cosThetaI, Float etaI, Float etaT) {
     cosThetaI = clamp(cosThetaI, -1, 1);
 
     bool entering = cosThetaI > 0.f;
+    // 如果如果入射角大于90° 
+    // 则法线方向反了，cosThetaI取绝对值，对换两个折射率
     if (!entering) {
         std::swap(etaI, etaT);
         cosThetaI = std::abs(cosThetaI);
@@ -24,10 +26,11 @@ Float frDielectric(Float cosThetaI, Float etaI, Float etaT) {
     Float sinThetaI = std::sqrt(std::max((Float)0, 1 - cosThetaI * cosThetaI));
     Float sinThetaT = etaI / etaT * sinThetaI;
     
-    // Handle total internal reflection
+    // 全内部反射情况
     if (sinThetaT >= 1) {
         return 1;
     }
+    // 套公式
     Float cosThetaT = std::sqrt(std::max((Float)0, 1 - sinThetaT * sinThetaT));
     Float Rparl = ((etaT * cosThetaI) - (etaI * cosThetaT))
                 / ((etaT * cosThetaI) + (etaI * cosThetaT));
