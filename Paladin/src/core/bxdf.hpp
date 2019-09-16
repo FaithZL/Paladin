@@ -449,30 +449,44 @@ inline std::ostream &operator<<(std::ostream &os, const Fresnel &f) {
 }
 
 class FresnelConductor : public Fresnel {
+    
 public:
-    Spectrum Evaluate(Float cosThetaI) const;
+    
+    Spectrum Evaluate(Float cosThetaI) const {
+        return frConductor(std::abs(cosThetaI), _etaI, _etaT, _kt);
+    }
     
     FresnelConductor(const Spectrum &etaI, const Spectrum &etaT,
-                     const Spectrum &k)
-    : _etaI(etaI), _etaT(etaT), _k(k) {
+                     const Spectrum &kt)
+    : _etaI(etaI), _etaT(etaT), _kt(kt) {
         
     }
     
-    std::string toString() const;
+    std::string toString() const {
+        return std::string("[ FresnelConductor etaI: ") + _etaI.ToString() +
+        std::string(" etaT: ") + _etaT.ToString() + std::string(" k: ") +
+        _kt.ToString() + std::string(" ]");
+    }
     
 private:
-    Spectrum _etaI, _etaT, _k;
+    Spectrum _etaI, _etaT, _kt;
 };
 
 class FresnelDielectric : public Fresnel {
+    
 public:
-    virtual Spectrum evaluate(Float cosThetaI) const;
+    
+    virtual Spectrum evaluate(Float cosThetaI) const {
+        return frDielectric(cosThetaI, _etaI, _etaT);
+    }
     
     FresnelDielectric(Float etaI, Float etaT) : _etaI(etaI), _etaT(etaT) {
         
     }
     
-    virtual std::string toString() const;
+    virtual std::string toString() const {
+        return StringPrintf("[ FrenselDielectric etaI: %f etaT: %f ]", _etaI, _etaT);
+    }
     
 private:
     Float _etaI, _etaT;
