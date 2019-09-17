@@ -11,6 +11,7 @@
 
 #include "core/header.h"
 #include "core/spectrum.hpp"
+#include "core/material.hpp"
 
 PALADIN_BEGIN
 
@@ -105,12 +106,32 @@ PALADIN_BEGIN
  * 注意！！！！！工程中所有wr都是是入射光方向的反方向，也就是从入射点指向光源位置的方向
  * θo = θr，所以Fr(wo) = Fr(wr)
  * 这类的BRDF可以用狄拉克函数来构造，同样，我们会利用狄拉克函数的如下特性
- * 			∫f(x)δ(x - x0)dx = f(x0)
- *  
  * 
+ * 			∫f(x)δ(x - x0)dx = f(x0)      1式
+ *             
+ * 直观的感觉，我们可以得出如下表达式 (只有wi等于wr时，BRDF函数值才不为零)
  * 
+ *         f(wo, wi) = δ(wi - wr)Fr(wi)
+ *         
+ * 虽然这看起来是正确的，但带入渲染方程之后得到
+ *
+ *          Lo(wo) = ∫δ(wi - wr)Fr(wi)Li(wi)|cosθi|dwi
+ *
+ * 带入联合1式可得
+ *
+ *          Lo(wo) = Fr(wr)Li(wr)|cosθr|
+ *
+ * 观察上式，卧槽？？？居然多了一个|cosθr|，这是不对的
+ * 所以，综合来如下表达式看才是正确的
  * 
+ *         Lo(wo) = Fr(wr)Li(wr)
+ *         
+ * 我们推导出菲涅尔函数与BRDF的关系如下
  * 
+ *                 δ(wi - wr)Fr(wi)
+ * f(wo, wi) = -----------------------
+ *                     |cosθr|
+ *              
  */
 
 // 以下函数都默认一个条件，w为单位向量
@@ -404,6 +425,11 @@ public:
     const BxDFType type;
 };
 
+inline std::ostream &operator<<(std::ostream &os, const BxDF &f) {
+    os << f.toString();
+    return os;
+}
+
 /**
  * 如果想针对一个特定的BxDF执行缩放
  * ScaledBxDF是个很好的选择，对外接口就这些，跟BxDF差不多
@@ -543,6 +569,140 @@ public:
     }
 };
 
+/**
+ * 理想镜面反射
+ */
+class SpecularReflection : public BxDF {
+    
+public:
+    SpecularReflection(const Spectrum &R, Fresnel *fresnel)
+    : BxDF(BxDFType(BSDF_REFLECTION | BSDF_SPECULAR)),
+    _R(R),
+    _fresnel(fresnel) {
+        
+    }
+    
+    /**
+     * 由于是理想镜面反射，狄拉克函数，需要特殊处理
+     * @param  wo 出射方向
+     * @param  wi 入射方向
+     * @return    0
+     */
+    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const {
+        return Spectrum(0.f);
+    }
+    
+    /**
+     * 理想镜面反射的采样函数，是固定方向采样，首先要计算合适的入射方向
+     * 
+     *                 δ(wi - wr)Fr(wi)
+     * f(wo, wi) = -----------------------
+     *                     |cosθr|
+     *                     
+     * @param  wo          [description]
+     * @param  wi          [description]
+     * @param  sample      [description]
+     * @param  pdf         [description]
+     * @param  sampledType [description]
+     * @return             [description]
+     */
+    virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample,
+                      Float *pdf, BxDFType *sampledType) const {
+        *wi = Vector3f(-wo.x, -wo.y, wo.z);
+        *pdf = 1;
+        return _fresnel->evaluate(cosTheta(*wi)) * _R / absCosTheta(*wi);
+    }
+    
+    /**
+     * 由于是理想镜面反射，狄拉克函数，pdf需要特殊处理
+     * @param  wo 出射方向
+     * @param  wi 入射方向
+     * @return    0
+     */
+    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const {
+        return 0;
+    }
+    
+    virtual std::string toString() const {
+        return std::string("[ SpecularReflection R: ") + _R.ToString() +
+        std::string(" fresnel: ") + _fresnel->toString() + std::string(" ]");
+    }
+    
+private:
+
+    const Spectrum _R;
+    const Fresnel *_fresnel;
+};
+
+/**
+ * 
+ */
+class SpecularTransmission : public BxDF {
+public:
+    SpecularTransmission(const Spectrum &T, Float etaA, Float etaB,
+                         TransportMode mode)
+    : BxDF(BxDFType(BSDF_TRANSMISSION | BSDF_SPECULAR)),
+    _T(T),
+    _etaA(etaA),
+    _etaB(etaB),
+    _fresnel(etaA, etaB),
+    _mode(mode) {
+        
+    }
+    
+    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const {
+        return Spectrum(0.f);
+    }
+    
+    /**
+     * [sample_f description]
+     * @param  wo          [description]
+     * @param  wi          [description]
+     * @param  sample      [description]
+     * @param  pdf         [description]
+     * @param  sampledType [description]
+     * @return             [description]
+     */
+    virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample,
+                      Float *pdf, BxDFType *sampledType) const {
+        bool entering = cosTheta(wo) > 0;
+        Float etaI = entering ? _etaA : _etaB;
+        Float etaT = entering ? _etaB : _etaA;
+        
+        if (!refract(wo, faceforward(Normal3f(0, 0, 1), wo), etaI / etaT, wi)) {
+            return 0;
+        }
+        
+        *pdf = 1;
+        Spectrum ft = _T * (Spectrum(1.) - _fresnel.evaluate(cosTheta(*wi)));
+
+        if (_mode == TransportMode::Radiance) {
+            ft *= (etaI * etaI) / (etaT * etaT);
+        }
+        return ft / absCosTheta(*wi);
+    }
+    
+    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const {
+        return 0; 
+    }
+    
+    virtual std::string toString() const {
+        return std::string("[ SpecularTransmission: T: ") + _T.ToString() +
+        StringPrintf(" etaA: %f etaB: %f ", _etaA, _etaB) +
+        std::string(" fresnel: ") + _fresnel.toString() +
+        std::string(" mode : ") +
+        (_mode == TransportMode::Radiance ? std::string("RADIANCE")
+         : std::string("IMPORTANCE")) +
+        std::string(" ]");
+    }
+    
+private:
+
+    const Spectrum _T;
+    const Float _etaA, _etaB;
+    const FresnelDielectric _fresnel;
+    const TransportMode _mode;
+};
 
 
 PALADIN_END
