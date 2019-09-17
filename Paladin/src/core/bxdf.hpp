@@ -15,8 +15,11 @@
 PALADIN_BEGIN
 
 /**
+ * 依次有斯涅尔定律，菲涅尔定律，镜面反射，镜面折射的内容讲解
+ * 
  * 描述如何反射或折射的模块
  * -----------------------------------------------------------
+ * 	斯涅尔定律
  * 折射率的定义如下:
  * 介质的折射率描述了光在 真空中速度 与 该介质中速度 之比，由希腊字母η表示，读作eta
  * 斯涅尔定律可得 ηi * sinθi = ηt * sinθt，θ表示对应的入射角(出射角)
@@ -91,6 +94,21 @@ PALADIN_BEGIN
  * 以上公式是著名物理学家菲涅尔由电磁场边值关系出发的理论推演得出的
  * 这表达式太特么复杂了
  * 至于推导过程我也就不凑热闹了......
+ * 
+ * -----------------------------------------
+ * 镜面反射
+ * 由BRDF定义可得
+ * Lo(wo) = ∫f(wo, wi)Li(wi)|cosθi|dwi
+ * 又因为我们可以用菲涅尔函数计算反射部分
+ * Lo(wo) = ∫f(wo, wi)Li(wi)|cosθi|dwi = Fr(wr)Li(wr)
+ * wr = R(wo,n)  R为反射函数，n为法线，
+ * 注意！！！！！工程中所有wr都是是入射光方向的反方向，也就是从入射点指向光源位置的方向
+ * θo = θr，所以Fr(wo) = Fr(wr)
+ * 这类的BRDF可以用狄拉克函数来构造，同样，我们会利用狄拉克函数的如下特性
+ * 			∫f(x)δ(x - x0)dx = f(x0)
+ *  
+ * 
+ * 
  * 
  * 
  */
@@ -432,12 +450,20 @@ private:
     Spectrum _scale;
 };
 
+/**
+ * 菲涅尔基类
+ */
 class Fresnel {
 public:
+
     virtual ~Fresnel() {
         
     }
-    
+
+    /**
+     * @param  cosThetaI 入射角余弦值
+     * @return    		 返回对应入射角的菲涅尔函数值
+     */    
     virtual Spectrum evaluate(Float cosI) const = 0;
     
     virtual std::string toString() const = 0;
@@ -448,11 +474,18 @@ inline std::ostream &operator<<(std::ostream &os, const Fresnel &f) {
     return os;
 }
 
+/**
+ * 导体菲涅尔类
+ * evaluate函数将返回对应入射角的菲涅尔函数值
+ */
 class FresnelConductor : public Fresnel {
     
 public:
-    
-    Spectrum Evaluate(Float cosThetaI) const {
+    /**
+     * @param  cosThetaI 入射角余弦值
+     * @return    		 返回对应入射角的菲涅尔函数值
+     */
+    virtual Spectrum evaluate(Float cosThetaI) const {
         return frConductor(std::abs(cosThetaI), _etaI, _etaT, _kt);
     }
     
@@ -462,7 +495,7 @@ public:
         
     }
     
-    std::string toString() const {
+    virtual std::string toString() const {
         return std::string("[ FresnelConductor etaI: ") + _etaI.ToString() +
         std::string(" etaT: ") + _etaT.ToString() + std::string(" k: ") +
         _kt.ToString() + std::string(" ]");
@@ -472,10 +505,17 @@ private:
     Spectrum _etaI, _etaT, _kt;
 };
 
+/**
+ * 绝缘体菲涅尔类
+ * evaluate函数将返回对应入射角的菲涅尔函数值
+ */
 class FresnelDielectric : public Fresnel {
     
 public:
-    
+    /**
+     * @param  cosThetaI 入射角余弦值
+     * @return    		 返回对应入射角的菲涅尔函数值
+     */
     virtual Spectrum evaluate(Float cosThetaI) const {
         return frDielectric(cosThetaI, _etaI, _etaT);
     }
@@ -491,6 +531,19 @@ public:
 private:
     Float _etaI, _etaT;
 };
+
+/**
+ * 100%反射所有入射光
+ * 尽管这是在物理上不可能的，但确实可以明显减少计算量
+ */
+class FresnelNoOp : public Fresnel {
+public:
+    virtual Spectrum evaluate(Float) const { 
+    	return Spectrum(1.); 
+    }
+};
+
+
 
 PALADIN_END
 

@@ -143,7 +143,7 @@ void Film::writeImage(Float splatScale) {
         rgb[3 * offset + 2] *= _scale;
         ++offset;
     }
-    
+    // 最后保存文件，todo
 }
 
 void Film::clear() {

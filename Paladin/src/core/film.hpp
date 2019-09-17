@@ -23,8 +23,9 @@ struct FilmTilePixel {
     Float filterWeightSum = 0.f;
 };
 
-/*
- 把整个胶片分为若干个块
+/**
+ * 把整个胶片分为若干个块
+ * 每个块就是一个FilmTile对象
  */
 class FilmTile {
 public:
@@ -137,7 +138,8 @@ private:
  * 可以理解为胶片类，相当于相机中接收光子 传感器
  * 将样本的贡献记录在film中有三种方式
  *     1.由采样器直接写入film中，但这种方式不适合并行，因为多个线程可能会同时操作一个像素
- * 因此，可以把film分为若干个tile，每个线程渲染一个tile，这样就可以很好的避免上述情况
+ * 因此，可以把film分为若干个tile，每个线程渲染一个tile，渲染一个tile的渲染之后，将像素值写入film中
+ * 这样就可以很好的避免上述情况
  * 
  */
 class Film {
@@ -228,10 +230,13 @@ private:
     // 这个精度基本很够用了
     Float _filterTable[_filterTableWidth * _filterTableWidth];
 
+    // 互斥锁
     std::mutex _mutex; // 64字节
 
+    // 双向方法用到的，暂时不知道什么东西
     const Float _scale;
 
+    // 传感器能采样到的最大亮度
     const Float _maxSampleLuminance;
     
     Pixel &getPixel(const Point2i &p) {
