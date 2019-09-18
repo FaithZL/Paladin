@@ -64,6 +64,8 @@ Spectrum frConductor(Float cosThetaI, const Spectrum &etai,
     return 0.5 * (Rp + Rs);
 }
 
+
+// BXDF 实现
 Spectrum BxDF::sample_f(const Vector3f &wo,
                         Vector3f *wi,
                         const Point2f &sample,

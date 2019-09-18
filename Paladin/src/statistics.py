@@ -21,8 +21,10 @@ for root,dirs,files in os.walk(os.getcwd()):
 			if "//" in line or inCom:
 				com += 1
 			if "/*" in line:
+				com += 1
 				inCom = True
-			if "*/":
+			if "*/" in line:
+				com += 1
 				inCom = False
 
 		num = len(lines)
