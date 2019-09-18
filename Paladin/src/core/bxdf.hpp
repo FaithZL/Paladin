@@ -675,15 +675,30 @@ private:
  * 
  * dΦo = τ * dΦi
  * 将radiance带入，得
- * Lo * cosθo * dA * dωo = τ(Li * cosθi * dA * dωi)
- * 将微分立体角展开，得
- * Lo * cosθo * dA * sinθodθodφo = τLi * cosθi * dA * sinθidθidφi
  * 
- * ηo * cosθodθo = ηi * cosθidθi
+ * Lo * cosθo * dA * dωo = τ(Li * cosθi * dA * dωi)
+ * 
+ * 将微分立体角展开，得
+ * 
+ * Lo * cosθo * dA * sinθodθodφo = τ * Li * cosθi * dA * sinθidθidφi   2式
+ * 
+ * 对斯涅尔定律ηi * sinθi = ηo * sinθo 求导，得
+ * 
+ * ηo * cosθodθo = ηi * cosθidθi  3式
+ *
+ * 联合2，3式，得
  * 
  * Lo * ηi^2 * dφo = τLi * ηo^2 * dφi
+ *
+ * 整理之后，如下
  * 
  * Lo = τ * Li * (ηo/ηi)^2
+ *
+ * BTDF的表达式如下
+ *                ηo                          δ(wi - T(wo,n))
+ * fr(wo, wi) = (----)^2 * (1 - Fr(wi)) * ----------------------     (T为折射函数，n为法线)
+ *                ηi                            |cosθi|
+ * 
  */
 class SpecularTransmission : public BxDF {
 public:
@@ -703,21 +718,25 @@ public:
     }
     
     /**
-     * [sample_f description]
-     * @param  wo          [description]
-     * @param  wi          [description]
-     * @param  sample      [description]
-     * @param  pdf         [description]
-     * @param  sampledType [description]
-     * @return             [description]
+     * 采样理想镜面散射
+     * BTDF的表达式如下
+     *                ηo                          δ(wi - T(wo,n))
+     * fr(wo, wi) = (----)^2 * (1 - Fr(wi)) * ----------------------
+     *                ηi                            |cosθi|
+     * 
+     * 跟镜面反射一样，无法用常规方式采样处理
+     * pdf直接赋值为1，原理与上面的理想镜面反射相同，不再赘述
+     * 
      */
     virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample,
                       Float *pdf, BxDFType *sampledType) const {
-    	// 首先计算
+    	// 首先确定光线是进入或离开折射介质
+        // 对象的法线都是向外的
+        // 如果wo.z > 0，则说明，ray trace工作流的光线从物体外部射入物体
         bool entering = cosTheta(wo) > 0;
         Float etaI = entering ? _etaA : _etaB;
         Float etaT = entering ? _etaB : _etaA;
-        
+        // todo，这里代码可以优化一下
         if (!refract(wo, faceforward(Normal3f(0, 0, 1), wo), etaI / etaT, wi)) {
             return 0;
         }
@@ -725,6 +744,7 @@ public:
         *pdf = 1;
         Spectrum ft = _T * (Spectrum(1.) - _fresnel.evaluate(cosTheta(*wi)));
 
+        // 用于处理双向方法的情况，只有从光源射出的光线才需要乘以这个缩放因子
         if (_mode == TransportMode::Radiance) {
             ft *= (etaI * etaI) / (etaT * etaT);
         }
@@ -748,9 +768,12 @@ public:
 private:
 	// 用于缩放颜色频谱
     const Spectrum _T;
-    // 两种介质的折射率
+
+    // _etaA是表面以上介质的折射率 (above)
+    // _etaB是物体表面以下介质的折射率 (below)
     const Float _etaA, _etaB;
     const FresnelDielectric _fresnel;
+    // 记录传输模式(从光源发出or从相机发出)
     const TransportMode _mode;
 };
 
