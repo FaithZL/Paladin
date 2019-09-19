@@ -803,7 +803,7 @@ public:
 
     virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
                       Float *pdf, BxDFType *sampledType) const {
-    	Float F = frDielectric(CosTheta(wo), _etaA, _etaB);
+    	Float F = frDielectric(cosTheta(wo), _etaA, _etaB);
 	    if (u[0] < F) {
 	        *wi = Vector3f(-wo.x, -wo.y, wo.z);
 	        if (sampledType)
@@ -817,7 +817,7 @@ public:
 
 	        if (!refract(wo, faceforward(Normal3f(0, 0, 1), wo), etaI / etaT, wi))
 	            return 0;
-	        Spectrum ft = T * (1 - F);
+	        Spectrum ft = _T * (1 - F);
 
 	        if (_mode == TransportMode::Radiance) {
 	            ft *= (etaI * etaI) / (etaT * etaT);
@@ -839,7 +839,7 @@ public:
            std::string(" T: ") + _T.ToString() +
            StringPrintf(" etaA: %f etaB: %f ", _etaA, _etaB) +
            std::string(" mode : ") +
-           (mode == TransportMode::Radiance ? std::string("RADIANCE")
+           (_mode == TransportMode::Radiance ? std::string("RADIANCE")
                                             : std::string("IMPORTANCE")) +
            std::string(" ]");
     }
