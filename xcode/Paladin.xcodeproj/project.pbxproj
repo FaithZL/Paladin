@@ -124,6 +124,7 @@
 		F01CB5C319394B6C946C6A8A /* lfunc.c in Sources */ = {isa = PBXBuildFile; fileRef = 16E7EAD48B974554B8665AB0 /* lfunc.c */; };
 		F131F803342142F4A0C63FBE /* triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C07C5E958954F21B0731435 /* triangle.cpp */; };
 		F14CD7C35DBA4237A7604425 /* lstring.c in Sources */ = {isa = PBXBuildFile; fileRef = A79CCE1427344784ACF1B11A /* lstring.c */; };
+		F650CA952333E30D0040F410 /* microfacet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F650CA932333E30D0040F410 /* microfacet.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -352,6 +353,8 @@
 		F152B127CEB24635BEECCE00 /* errfloat.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = errfloat.h; path = src/tools/errfloat.h; sourceTree = SOURCE_ROOT; };
 		F435FB59CDB34098B36B9DF9 /* lstrlib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lstrlib.c; path = third/lua53/lua/lstrlib.c; sourceTree = SOURCE_ROOT; };
 		F4D97354A71149B587EC86EE /* lcode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lcode.h; path = third/lua53/lua/lcode.h; sourceTree = SOURCE_ROOT; };
+		F650CA932333E30D0040F410 /* microfacet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = microfacet.cpp; path = src/core/microfacet.cpp; sourceTree = "<group>"; };
+		F650CA942333E30D0040F410 /* microfacet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = microfacet.hpp; path = src/core/microfacet.hpp; sourceTree = "<group>"; };
 		F680CC37232BFCA000A18F6E /* triangle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = triangle.h; path = src/filters/triangle.h; sourceTree = "<group>"; };
 		F6BB9EF35DE24B4A9B039F10 /* loadlib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = loadlib.c; path = third/lua53/lua/loadlib.c; sourceTree = SOURCE_ROOT; };
 		F75560CA44AB40829BCA463F /* ltm.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ltm.h; path = third/lua53/lua/ltm.h; sourceTree = SOURCE_ROOT; };
@@ -541,6 +544,8 @@
 				64F8F649E569486BB8AE1CC7 /* spectrum.hpp */,
 				B5F1AC6D5A4243B8AA503580 /* texture.cpp */,
 				44B9AA8F178E4F0586157971 /* texture.hpp */,
+				F650CA932333E30D0040F410 /* microfacet.cpp */,
+				F650CA942333E30D0040F410 /* microfacet.hpp */,
 			);
 			name = core;
 			sourceTree = "<group>";
@@ -985,6 +990,7 @@
 				96BEBF9EC4FD46E8ACA66CBF /* cube.cpp in Sources */,
 				04ECBB57231846F38C16B9C5 /* curve.cpp in Sources */,
 				644E7F0F00B946A0A545A939 /* cylinder.cpp in Sources */,
+				F650CA952333E30D0040F410 /* microfacet.cpp in Sources */,
 				C14CF0D2705A45658C0B426D /* disk.cpp in Sources */,
 				481CD2A099E640B596F8368E /* sphere.cpp in Sources */,
 				F131F803342142F4A0C63FBE /* triangle.cpp in Sources */,

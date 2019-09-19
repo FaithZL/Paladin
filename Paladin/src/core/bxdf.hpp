@@ -12,6 +12,7 @@
 #include "core/header.h"
 #include "core/spectrum.hpp"
 #include "core/material.hpp"
+#include "core/sampling.hpp"
 
 PALADIN_BEGIN
 
@@ -140,7 +141,7 @@ PALADIN_BEGIN
  * 参考资料http://www.pbr-book.org/3ed-2018/Reflection_Models/Microfacet_Models.html
  * 许多基于几何光学的方法来建模表面反射和透射是将粗糙表面建模为一系列朝向各异的微观小平面的集合
  * 表面的朝向分布用统计学方式去描述
- * 基于microfacet的BRDF模型的工作原理是对来自大量的microfacet的光散射进行统计建模
+ * 基于microfacet的BRDF模型的工作原理是对来自大量的microfacet的光透射进行统计建模
  * 虽然镜面投射对于模拟半透明材料很有用， Oren–Nayar模型把微面元当成漫反射表面。
  * 但BRDF最常用的方式还是把微面元的反射当成是理想镜面反射处理
  * 
@@ -686,7 +687,7 @@ private:
 };
 
 /**
- * 理想镜面散射
+ * 理想镜面透射
  * 用于建立光线照射在水面上的数学模型
  * 
  * 先来简单推导一下所用到的表达式
@@ -743,7 +744,7 @@ public:
     }
     
     /**
-     * 采样理想镜面散射
+     * 采样理想镜面透射
      * BTDF的表达式如下
      *                ηo                          δ(wi - T(wo,n))
      * fr(wo, wi) = (----)^2 * (1 - Fr(wi)) * ----------------------
@@ -937,7 +938,7 @@ private:
 
 
 /**
- * 朗伯散射
+ * 朗伯透射
  * 原理跟朗伯反射相同，具体推导过程参见朗伯反射
  * 不再赘述
  */
@@ -945,7 +946,7 @@ class LambertianTransmission : public BxDF {
 public:
     LambertianTransmission(const Spectrum &T)
     : BxDF(BxDFType(BSDF_TRANSMISSION | BSDF_DIFFUSE)), 
-    T(T) {
+    _T(T) {
 
     }
 
@@ -981,7 +982,7 @@ public:
     }
 
 private:
-  	// 散射系数
+  	// 透射系数
     Spectrum _T;
 };
 
@@ -992,7 +993,7 @@ public:
     OrenNayar(const Spectrum &R, Float sigma)
 	: BxDF(BxDFType(BSDF_REFLECTION | BSDF_DIFFUSE)), 
 	_R(R) {
-        sigma = Radians(sigma);
+        sigma = degree2radian(sigma);
         Float sigma2 = sigma * sigma;
         _A = 1.f - (sigma2 / (2.f * (sigma2 + 0.33f)));
         _B = 0.45f * sigma2 / (sigma2 + 0.09f);
@@ -1007,26 +1008,26 @@ public:
 	 *		β = min(θi,θo)
      */
     virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const {
-    	Float sinThetaI = SinTheta(wi);
-	    Float sinThetaO = SinTheta(wo);
+    	Float sinThetaI = sinTheta(wi);
+	    Float sinThetaO = sinTheta(wo);
 	    // 计算max(0,cos(φi-φo))项
 	    // 由于三角函数耗时比较高，这里可以用三角恒等变换展开
 	    // cos(φi-φo) = cosφi * cosφo + sinφi * sinφo
 	    Float maxCos = 0;
 	    if (sinThetaI > 1e-4 && sinThetaO > 1e-4) {
-	        Float sinPhiI = SinPhi(wi), cosPhiI = CosPhi(wi);
-	        Float sinPhiO = SinPhi(wo), cosPhiO = CosPhi(wo);
+	        Float sinPhiI = sinPhi(wi), cosPhiI = cosPhi(wi);
+	        Float sinPhiO = sinPhi(wo), cosPhiO = cosPhi(wo);
 	        Float dCos = cosPhiI * cosPhiO + sinPhiI * sinPhiO;
 	        maxCos = std::max((Float)0, dCos);
 	    }
 
 	    Float sinAlpha, tanBeta;
-	    if (AbsCosTheta(wi) > AbsCosTheta(wo)) {
+	    if (absCosTheta(wi) > absCosTheta(wo)) {
 	        sinAlpha = sinThetaO;
-	        tanBeta = sinThetaI / AbsCosTheta(wi);
+	        tanBeta = sinThetaI / absCosTheta(wi);
 	    } else {
 	        sinAlpha = sinThetaI;
-	        tanBeta = sinThetaO / AbsCosTheta(wo);
+	        tanBeta = sinThetaO / absCosTheta(wo);
 	    }
 	    return _R * InvPi * (_A + _B * maxCos * sinAlpha * tanBeta);
     }
