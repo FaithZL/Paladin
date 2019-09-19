@@ -777,6 +777,78 @@ private:
     const TransportMode _mode;
 };
 
+/**
+ * 菲涅尔镜面
+ * 其实就是镜面反射与镜面折射的组合
+ * 采样时根据随机样本点去选择，采样折射还是反射
+ * 具体推导过程不再赘述
+ */
+class FresnelSpecular : public BxDF {
+public:
+
+    FresnelSpecular(const Spectrum &R, const Spectrum &T, Float etaA,
+                    Float etaB, TransportMode mode)
+    : BxDF(BxDFType(BSDF_REFLECTION | BSDF_TRANSMISSION | BSDF_SPECULAR)),
+      _R(R),
+      _T(T),
+      _etaA(etaA),
+      _etaB(etaB),
+      _mode(mode) {
+
+    }
+
+    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const {
+        return Spectrum(0.f);
+    }
+
+    virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
+                      Float *pdf, BxDFType *sampledType) const {
+    	Float F = frDielectric(CosTheta(wo), _etaA, _etaB);
+	    if (u[0] < F) {
+	        *wi = Vector3f(-wo.x, -wo.y, wo.z);
+	        if (sampledType)
+	            *sampledType = BxDFType(BSDF_SPECULAR | BSDF_REFLECTION);
+	        *pdf = F;
+	        return F * _R / absCosTheta(*wi);
+	    } else {
+	        bool entering = cosTheta(wo) > 0;
+	        Float etaI = entering ? _etaA : _etaB;
+	        Float etaT = entering ? _etaB : _etaA;
+
+	        if (!refract(wo, faceforward(Normal3f(0, 0, 1), wo), etaI / etaT, wi))
+	            return 0;
+	        Spectrum ft = T * (1 - F);
+
+	        if (_mode == TransportMode::Radiance) {
+	            ft *= (etaI * etaI) / (etaT * etaT);
+	        }
+	        if (sampledType) {
+	            *sampledType = BxDFType(BSDF_SPECULAR | BSDF_TRANSMISSION);
+	        }
+	        *pdf = 1 - F;
+	        return ft / absCosTheta(*wi);
+	    }
+    }
+
+    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const { 
+    	return 0; 
+    }
+
+    virtual std::string toString() const {
+    	return std::string("[ FresnelSpecular R: ") + _R.ToString() +
+           std::string(" T: ") + _T.ToString() +
+           StringPrintf(" etaA: %f etaB: %f ", _etaA, _etaB) +
+           std::string(" mode : ") +
+           (mode == TransportMode::Radiance ? std::string("RADIANCE")
+                                            : std::string("IMPORTANCE")) +
+           std::string(" ]");
+    }
+
+private:
+    const Spectrum _R, _T;
+    const Float _etaA, _etaB;
+    const TransportMode _mode;
+};
 
 PALADIN_END
 
