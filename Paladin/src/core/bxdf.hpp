@@ -137,12 +137,29 @@ PALADIN_BEGIN
  *   
  * -----------------------------------------------------------------------------
  * 接下来开始讲解Microfacet Models(微面元模型)
+ * 参考资料http://www.pbr-book.org/3ed-2018/Reflection_Models/Microfacet_Models.html
+ * 许多基于几何光学的方法来建模表面反射和透射是将粗糙表面建模为一系列朝向各异的微观小平面的集合
+ * 表面的朝向分布用统计学方式去描述
+ * 基于microfacet的BRDF模型的工作原理是对来自大量的microfacet的光散射进行统计建模
+ * 虽然镜面投射对于模拟半透明材料很有用， Oren–Nayar模型把微面元当成漫反射表面。
+ * 但BRDF最常用的方式还是把微面元的反射当成是理想镜面反射处理
  * 
+ * 先简单介绍一下Oren–Nayar模型
+ * Oren和Nayar观察到自然界中不存在理想的漫反射，尤其是当光照方向接近观察方向时，粗糙表面通常会显得更亮。
+ * 他们建立了一个反射模型，用一个参数σ的球面高斯分布所描述的 v 形微平面来描述粗糙表面，
+ * σ为微平面朝向角的标准差。
+ * 在 v 形假设下，仅考虑相邻的微面即可考虑互反射;
+ * 奥伦和纳亚尔利用这一点推导出了一个BRDF模型，该模型对凹槽集合的总反射进行了建模
  * 
+ * 所得到的模型考虑了微观平面之间的阴影、掩蔽和相互反射，但没有封闭形式的方程(todo，这段翻译的不好)
+ * 他们找到了如下方程去近似
  * 
- * 
- * 
- * 
+ * fr(wi,wo) = R/π(A + Bmax(0,cos(φi-φo))sinαtanβ)
+ * 其中 A = 1 - σ^2 / (2 * σ^2 + 0.33)
+ * 	    B = 0.45σ^2 / (σ^2 + 0.09)
+ *   	α = max(θi,θo)
+ *		β = min(θi,θo)
+ * 这个方程如何来的我也就不凑热闹了，水平有限
  */
 
 // 以下函数都默认一个条件，w为单位向量
@@ -966,6 +983,64 @@ public:
 private:
   	// 散射系数
     Spectrum _T;
+};
+
+
+
+class OrenNayar : public BxDF {
+public:
+    OrenNayar(const Spectrum &R, Float sigma)
+	: BxDF(BxDFType(BSDF_REFLECTION | BSDF_DIFFUSE)), 
+	_R(R) {
+        sigma = Radians(sigma);
+        Float sigma2 = sigma * sigma;
+        _A = 1.f - (sigma2 / (2.f * (sigma2 + 0.33f)));
+        _B = 0.45f * sigma2 / (sigma2 + 0.09f);
+    }
+
+    /**
+     * 表达式如下，代码照着表达式实现就好
+     * fr(wi,wo) = R/π(A + Bmax(0,cos(φi-φo))sinαtanβ)
+	 * 其中 A = 1 - σ^2 / (2 * σ^2 + 0.33)
+	 * 	    B = 0.45σ^2 / (σ^2 + 0.09)
+	 *   	α = max(θi,θo)
+	 *		β = min(θi,θo)
+     */
+    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const {
+    	Float sinThetaI = SinTheta(wi);
+	    Float sinThetaO = SinTheta(wo);
+	    // 计算max(0,cos(φi-φo))项
+	    // 由于三角函数耗时比较高，这里可以用三角恒等变换展开
+	    // cos(φi-φo) = cosφi * cosφo + sinφi * sinφo
+	    Float maxCos = 0;
+	    if (sinThetaI > 1e-4 && sinThetaO > 1e-4) {
+	        Float sinPhiI = SinPhi(wi), cosPhiI = CosPhi(wi);
+	        Float sinPhiO = SinPhi(wo), cosPhiO = CosPhi(wo);
+	        Float dCos = cosPhiI * cosPhiO + sinPhiI * sinPhiO;
+	        maxCos = std::max((Float)0, dCos);
+	    }
+
+	    Float sinAlpha, tanBeta;
+	    if (AbsCosTheta(wi) > AbsCosTheta(wo)) {
+	        sinAlpha = sinThetaO;
+	        tanBeta = sinThetaI / AbsCosTheta(wi);
+	    } else {
+	        sinAlpha = sinThetaI;
+	        tanBeta = sinThetaO / AbsCosTheta(wo);
+	    }
+	    return _R * InvPi * (_A + _B * maxCos * sinAlpha * tanBeta);
+    }
+
+    virtual std::string toString() const {
+    	return std::string("[ OrenNayar R: ") + _R.ToString() +
+           StringPrintf(" A: %f B: %f ]", _A, _B);
+    }
+
+private:
+	// 反射系数
+    const Spectrum _R;
+    // 表达式中的常数
+    Float _A, _B;
 };
 
 PALADIN_END
