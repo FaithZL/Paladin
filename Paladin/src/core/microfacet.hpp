@@ -9,7 +9,6 @@
 #define microfacet_hpp
 
 #include "header.h"
-#include "bxdf.hpp"
 
 PALADIN_BEGIN
 
@@ -137,20 +136,7 @@ public:
      * @param  wh 微平面法向量
      * @return    
      */
-    Float pdfW(const Vector3f &wo, const Vector3f &wh) const {
-        if (_sampleVisibleArea) {
-            // 如果只计算wo视角可见部分，则需要乘以史密斯遮挡函数再归一化
-            // 归一化方式如下，利用以上3式
-            // cosθo = ∫[hemisphere]G1(ωo,ωh) max(0, ωo · ωh) D(ωh)dωh
-            // 将cos项移到右边，得
-            // 1 = ∫[hemisphere]G1(ωo,ωh) max(0, ωo · ωh) D(ωh) / (cosθo) dωh
-            // 则概率密度函数为 G1(ωo,ωh) max(0, ωo · ωh) D(ωh) / (cosθo) ,代码如下
-            return D(wh) * G1(wo) * absDot(wo, wh) / absCosTheta(wo);
-        } else {
-            // 如果忽略几何遮挡，则概率密度函数值就是D(ωh) * cosθh 
-            return D(wh) * absCosTheta(wh);
-        }
-    }
+    Float pdfW(const Vector3f &wo, const Vector3f &wh) const;
 
     virtual std::string toString() const = 0;
 
@@ -232,23 +218,14 @@ public:
      * @param  wh 微平面法线方向
      * @return    [description]
      */
-    virtual Float D(const Vector3f &wh) const {
-        Float _tan2Theta = tan2Theta(wh);
-        if (std::isinf(_tan2Theta)) {
-            // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
-            // 我们返回0
-            return 0.;
-        }
-        Float cos4Theta = cos2Theta(wh) * cos2Theta(wh);
-        Float ret = std::exp(-_tan2Theta * (cos2Phi(wh) / (_alphax * _alphax) +
-                                      sin2Phi(wh) / (_alphay * _alphay))) /
-               (Pi * _alphax * _alphay * cos4Theta);
-        return ret;
-    }
+    virtual Float D(const Vector3f &wh) const;
 
     virtual Vector3f sample_wh(const Vector3f &wo, const Point2f &u) const;
 
-    virtual std::string toString() const;
+    virtual std::string toString() const {
+        return StringPrintf("[ BeckmannDistribution alphax: %f alphay: %f ]",
+                            _alphax, _alphay);
+    }
 
 private:
 
@@ -266,21 +243,7 @@ private:
      * @param  w 
      * @return   
      */
-    virtual Float lambda(const Vector3f &w) const {
-        Float absTanTheta = std::abs(tanTheta(w));
-        if (std::isinf(absTanTheta)) {
-            // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
-            // 我们返回0            
-            return 0.;
-        }
-        // α^2 = (cosθh)^2/αx^2 + (sinθh)^2/αy^2)
-        Float alpha = std::sqrt(cos2Phi(w) * _alphax * _alphax + sin2Phi(w) * _alphay * _alphay);
-        Float a = 1 / (alpha * absTanTheta);
-        if (a >= 1.6f) {
-            return 0;
-        }
-        return (1 - 1.259f * a + 0.396f * a * a) / (3.535f * a + 2.181f * a * a);
-    }
+    virtual Float lambda(const Vector3f &w) const;
 
     const Float _alphax, _alphay;
 };
@@ -326,23 +289,14 @@ public:
      * @param  wh 微平面法向量
      * @return    [description]
      */
-    virtual Float D(const Vector3f &wh) const {
-        Float _tan2Theta = tan2Theta(wh);
-        if (std::isinf(_tan2Theta)) {
-            // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
-            // 我们返回0            
-            return 0.;
-        }
-        const Float cos4Theta = cos2Theta(wh) * cos2Theta(wh);
-        Float e =
-        (cos2Phi(wh) / (_alphax * _alphax) + sin2Phi(wh) / (_alphay * _alphay)) *
-        _tan2Theta;
-        return 1 / (Pi * _alphax * _alphay * cos4Theta * (1 + e) * (1 + e));
-    }
+    virtual Float D(const Vector3f &wh) const;
     
     virtual Vector3f sample_wh(const Vector3f &wo, const Point2f &u) const;
     
-    virtual std::string toString() const;
+    virtual std::string toString() const {
+        return StringPrintf("[ TrowbridgeReitzDistribution alphax: %f alphay: %f ]",
+                            _alphax, _alphay);
+    }
     
 private:
 
@@ -352,18 +306,7 @@ private:
      * @param  w [description]
      * @return   [description]
      */
-    virtual Float lambda(const Vector3f &w) const {
-        Float absTanTheta = std::abs(tanTheta(w));
-        if (std::isinf(absTanTheta)) {
-            // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
-            // 我们返回0               
-            return 0.;
-        }
-        // α^2 = (cosθh)^2/αx^2 + (sinθh)^2/αy^2)
-        Float alpha = std::sqrt(cos2Phi(w) * _alphax * _alphax + sin2Phi(w) * _alphay * _alphay);
-        Float alpha2Tan2Theta = (alpha * absTanTheta) * (alpha * absTanTheta);
-        return (-1 + std::sqrt(1.f + alpha2Tan2Theta)) / 2;
-    }
+    virtual Float lambda(const Vector3f &w) const;
     
     // todo 这里也是可以优化的
     const Float _alphax, _alphay;

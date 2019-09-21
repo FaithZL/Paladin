@@ -135,19 +135,6 @@ inline void coordinateSystem(const Vector3<T> &v1, Vector3<T> *v2,
     *v3 = cross(v1, *v2);
 }
 
-template <typename T>
-inline Vector3<T> SphericalDirection(Float sinTheta, Float cosTheta, Float phi) {
-    return Vector3<T>(sinTheta * std::cos(phi), sinTheta * std::sin(phi),
-                    cosTheta);
-}
-
-template <typename T>
-inline Vector3<T> sphericalDirection(Float sinTheta, Float cosTheta, Float phi,
-                                   const Vector3<T> &x, const Vector3<T> &y,
-                                   const Vector3<T> &z) {
-    return sinTheta * std::cos(phi) * x + sinTheta * std::sin(phi) * y + cosTheta * z;
-}
-
 template <typename T, typename U>
 inline Vector2<T> operator*(U f, const Vector2<T> &v) {
     return v * f;

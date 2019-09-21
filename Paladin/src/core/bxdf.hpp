@@ -9,10 +9,11 @@
 #ifndef bxdf_hpp
 #define bxdf_hpp
 
-#include "core/header.h"
-#include "core/spectrum.hpp"
-#include "core/material.hpp"
-#include "core/sampling.hpp"
+#include "header.h"
+#include "spectrum.hpp"
+#include "material.hpp"
+#include "sampling.hpp"
+#include "microfacet.hpp"
 
 PALADIN_BEGIN
 
@@ -1042,6 +1043,33 @@ private:
     const Spectrum _R;
     // 表达式中的常数
     Float _A, _B;
+};
+
+class MicrofacetReflection : public BxDF {
+public:
+    MicrofacetReflection(const Spectrum &R,
+                         MicrofacetDistribution *distribution, Fresnel *fresnel)
+    : BxDF(BxDFType(BSDF_REFLECTION | BSDF_GLOSSY)),
+    R(R),
+    distribution(distribution),
+    fresnel(fresnel) {
+        
+    }
+    
+    Spectrum f(const Vector3f &wo, const Vector3f &wi) const;
+    
+    Spectrum Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
+                      Float *pdf, BxDFType *sampledType) const;
+    
+    Float pdfW(const Vector3f &wo, const Vector3f &wi) const;
+    
+    std::string toString() const;
+    
+private:
+
+    const Spectrum R;
+    const MicrofacetDistribution *distribution;
+    const Fresnel *fresnel;
 };
 
 PALADIN_END
