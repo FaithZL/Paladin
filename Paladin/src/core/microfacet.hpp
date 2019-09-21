@@ -79,6 +79,11 @@ public:
      */
     virtual Float lambda(const Vector3f &w) const = 0;
 
+    /**
+     * 史密斯遮挡函数
+     * @param  w [description]
+     * @return   [description]
+     */
     Float G1(const Vector3f &w) const {
         //    if (Dot(w, wh) * CosTheta(w) < 0.) return 0.;
         return 1 / (1 + lambda(w));
@@ -124,7 +129,12 @@ protected:
     const bool _sampleVisibleArea;
 };
 
-
+/**
+ *
+ *
+ *
+ * 
+ */
 class BeckmannDistribution : public MicrofacetDistribution {
 public:
     static Float RoughnessToAlpha(Float roughness) {
@@ -141,6 +151,11 @@ public:
 
     }
 
+    /**
+     * 
+     * @param  wh [description]
+     * @return    [description]
+     */
     virtual Float D(const Vector3f &wh) const {
         Float _tan2Theta = tan2Theta(wh);
         if (std::isinf(_tan2Theta)) {
