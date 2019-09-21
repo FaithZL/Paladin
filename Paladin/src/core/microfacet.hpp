@@ -139,7 +139,7 @@ public:
      */
     Float pdfW(const Vector3f &wo, const Vector3f &wh) const {
         if (_sampleVisibleArea) {
-            // 如果只计算wo视角可见部分，则需要乘以几何遮挡函数再归一化
+            // 如果只计算wo视角可见部分，则需要乘以史密斯遮挡函数再归一化
             // 归一化方式如下，利用以上3式
             // cosθo = ∫[hemisphere]G1(ωo,ωh) max(0, ωo · ωh) D(ωh)dωh
             // 将cos项移到右边，得
@@ -166,9 +166,46 @@ protected:
 };
 
 /**
+ * Beckmann与Spizzichino在1963年提出的一个模型
+ * 传统的法线分布函数如下
+ * 
+ *             e^(-(tanθh)^2 / α^2)
+ * D(ωh) = ----------------------------
+ *                π α^2 (cosθh)^4
+ * σ为标准差，则 α = √2 * σ
+ * 以上为各向同性的法线分布函数
+ * 各项同性的意思是，θh不变，φh改变，D函数值不变
+ * 各项异性θh不变，D函数值随着φh改变，而改变
  *
+ * 下面来介绍一下各项异性的法线分布函数
  *
+ *             e^(-(tanθh)^2 ((cosθh)^2/αx^2 + (sinθh)^2/αy^2))
+ * D(ωh) = -------------------------------------------------------
+ *                        π αx αy (cosθh)^4
  *
+ * 可以看到，当αx与αy相等时，法线分布函数退化为各向同性
+ *
+ * 现在讲解一下Beckmann分布的几何遮挡函数
+ *
+ * 在上面的类的注释中，我们定义了一个辅助函数
+ * 
+ *       Λ(ω) = A-(ω) / (A+(ω) - A-(ω))
+ *       用来度量微平面中每个可见面积中有多少是被遮挡的面积
+ * 
+ * Beckmann的对应Λ(ω)如下
+ *
+ *  Λ(ω) = 1/2 (erf(a) - 1 + e^(-a*a) / (a * √π))
+ *                                  
+ * 其中 a = 1/(αtanθ)， 
+ * 
+ *                         2
+ * erf(x) = ----------------------------------    
+ *             √π ∫[0,x] e^(- x' * x') dx'
+ *
+ * 我们为了避免调用std::erf() 与 std::exp()两个消耗较高的函数
+ * 而采用有理多项式去逼近Λ(ω)函数
+ *
+ * 
  * 
  */
 class BeckmannDistribution : public MicrofacetDistribution {
@@ -188,13 +225,18 @@ public:
     }
 
     /**
-     * 
-     * @param  wh [description]
+     * 各向异性法线分布函数
+     *             e^[-(tanθh)^2 ((cosθh)^2/αx^2 + (sinθh)^2/αy^2)]
+     * D(ωh) = -------------------------------------------------------
+     *                        π αx αy (cosθh)^4
+     * @param  wh 微平面法线方向
      * @return    [description]
      */
     virtual Float D(const Vector3f &wh) const {
         Float _tan2Theta = tan2Theta(wh);
         if (std::isinf(_tan2Theta)) {
+            // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
+            // 我们返回0
             return 0.;
         }
         Float cos4Theta = cos2Theta(wh) * cos2Theta(wh);
@@ -210,11 +252,28 @@ public:
 
 private:
 
-    Float lambda(const Vector3f &w) const {
+    /**
+     * 原始表达式如下
+     *  Λ(ω) = 1/2 (erf(a) - 1 + e^(-a*a) / (a * √π))
+     *                                  
+     * 其中 a = 1/(αtanθ)， 
+     *                         2
+     * erf(x) = ----------------------------------    
+     *             √π ∫[0,x] e^(- x' * x') dx'
+     * 为了避免调用std::erf() 与 std::exp()两个消耗较高的函数
+     * 我们采用有理多项式去逼近
+     * 至于如何去逼近的，暂时没有搞懂推导，todo欠着，啃完主线再来
+     * @param  w 
+     * @return   
+     */
+    virtual Float lambda(const Vector3f &w) const {
         Float absTanTheta = std::abs(tanTheta(w));
         if (std::isinf(absTanTheta)) {
+            // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
+            // 我们返回0            
             return 0.;
         }
+        // α^2 = (cosθh)^2/αx^2 + (sinθh)^2/αy^2)
         Float alpha = std::sqrt(cos2Phi(w) * _alphax * _alphax + sin2Phi(w) * _alphay * _alphay);
         Float a = 1 / (alpha * absTanTheta);
         if (a >= 1.6f) {
@@ -223,6 +282,90 @@ private:
         return (1 - 1.259f * a + 0.396f * a * a) / (3.535f * a + 2.181f * a * a);
     }
 
+    const Float _alphax, _alphay;
+};
+
+/**
+ * Trowbridge 与 Reitz在 1975年提出的微平面模型
+ * 各向异性的法线分布函数为
+ *                                             1
+ * D(ωh) = ----------------------------------------------------------------------------
+ *             π αx αy (cosθh)^4 [1 + (tanθh)^2 ((cosθh)^2/αx^2 + (sinθh)^2/αy^2)]^2
+ *
+ * Trowbridge模型与Beckmann的模型相比有什么不同？
+ * http://www.pbr-book.org/3ed-2018/Reflection_Models/Microfacet_Models.html
+ * 中有图例介绍
+ * 大概就是Trowbridge图像在两端的拖尾比较长，在接近π/2的时候还明显大于零
+ * 而Beckmann在π/4就很接近0了  (两个分布都取α=0.5)
+ *
+ * 至于这个函数是如何推导的，我也就不凑热闹了，能用好就不错了
+ *
+ * 现在来介绍一下Trowbridge的辅助函数Λ(ω)，相比Beckmann的辅助函数，TrowbridgeReitz就简单很多了
+ *
+ * Λ(ω) = [-1 + √(1 + (α tanθ)^2)] / 2
+ * 
+ */
+class TrowbridgeReitzDistribution : public MicrofacetDistribution {
+public:
+    static inline Float RoughnessToAlpha(Float roughness);
+    
+    TrowbridgeReitzDistribution(Float alphax, Float alphay,
+                                bool samplevis = true)
+    : MicrofacetDistribution(samplevis),
+    _alphax(alphax),
+    _alphay(alphay) {
+        
+    }
+    
+    /**
+     * 法线分布函数
+     *                                             1
+     * D(ωh) = -----------------------------------------------------------------------------
+     *             π αx αy (cosθh)^4 [1 + (tanθh)^2 ((cosθh)^2/αx^2 + (sinθh)^2/αy^2)]^2
+     *             
+     * @param  wh 微平面法向量
+     * @return    [description]
+     */
+    virtual Float D(const Vector3f &wh) const {
+        Float _tan2Theta = tan2Theta(wh);
+        if (std::isinf(_tan2Theta)) {
+            // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
+            // 我们返回0            
+            return 0.;
+        }
+        const Float cos4Theta = cos2Theta(wh) * cos2Theta(wh);
+        Float e =
+        (cos2Phi(wh) / (_alphax * _alphax) + sin2Phi(wh) / (_alphay * _alphay)) *
+        _tan2Theta;
+        return 1 / (Pi * _alphax * _alphay * cos4Theta * (1 + e) * (1 + e));
+    }
+    
+    virtual Vector3f sample_wh(const Vector3f &wo, const Point2f &u) const;
+    
+    virtual std::string toString() const;
+    
+private:
+
+    /**
+     * Λ(ω) = [-1 + √(1 + (α tanθ)^2)] / 2
+     * 
+     * @param  w [description]
+     * @return   [description]
+     */
+    virtual Float lambda(const Vector3f &w) const {
+        Float absTanTheta = std::abs(tanTheta(w));
+        if (std::isinf(absTanTheta)) {
+            // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
+            // 我们返回0               
+            return 0.;
+        }
+        // α^2 = (cosθh)^2/αx^2 + (sinθh)^2/αy^2)
+        Float alpha = std::sqrt(cos2Phi(w) * _alphax * _alphax + sin2Phi(w) * _alphay * _alphay);
+        Float alpha2Tan2Theta = (alpha * absTanTheta) * (alpha * absTanTheta);
+        return (-1 + std::sqrt(1.f + alpha2Tan2Theta)) / 2;
+    }
+    
+    // todo 这里也是可以优化的
     const Float _alphax, _alphay;
 };
 
