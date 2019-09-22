@@ -650,12 +650,7 @@ public:
      * @return             [description]
      */
     virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample,
-                      Float *pdf, BxDFType *sampledType) const {
-        *wi = Vector3f(-wo.x, -wo.y, wo.z);
-        *pdf = 1;
-        return _fresnel->evaluate(cosTheta(*wi)) * _R / absCosTheta(*wi);
-    }
-    
+                              Float *pdf, BxDFType *sampledType) const ;
     /**
      * 由于是理想镜面反射，狄拉克函数
      * 用常规方式无法采样，需要特殊处理
@@ -667,10 +662,7 @@ public:
         return 0;
     }
     
-    virtual std::string toString() const {
-        return std::string("[ SpecularReflection R: ") + _R.ToString() +
-        std::string(" fresnel: ") + _fresnel->toString() + std::string(" ]");
-    }
+    virtual std::string toString() const;
     
 private:
 	// 用于缩放颜色频谱
@@ -748,41 +740,13 @@ public:
      * 
      */
     virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample,
-                      Float *pdf, BxDFType *sampledType) const {
-    	// 首先确定光线是进入或离开折射介质
-        // 对象的法线都是向外的
-        // 如果wo.z > 0，则说明，ray trace工作流的光线从物体外部射入物体
-        bool entering = cosTheta(wo) > 0;
-        Float etaI = entering ? _etaA : _etaB;
-        Float etaT = entering ? _etaB : _etaA;
-        // todo，这里代码可以优化一下
-        if (!refract(wo, faceforward(Normal3f(0, 0, 1), wo), etaI / etaT, wi)) {
-            return 0;
-        }
-        
-        *pdf = 1;
-        Spectrum ft = _T * (Spectrum(1.) - _fresnel.evaluate(cosTheta(*wi)));
-
-        // 用于处理双向方法的情况，只有从光源射出的光线才需要乘以这个缩放因子
-        if (_mode == TransportMode::Radiance) {
-            ft *= (etaI * etaI) / (etaT * etaT);
-        }
-        return ft / absCosTheta(*wi);
-    }
+                              Float *pdf, BxDFType *sampledType) const;
     
     virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const {
         return 0; 
     }
     
-    virtual std::string toString() const {
-        return std::string("[ SpecularTransmission: T: ") + _T.ToString() +
-        StringPrintf(" etaA: %f etaB: %f ", _etaA, _etaB) +
-        std::string(" fresnel: ") + _fresnel.toString() +
-        std::string(" mode : ") +
-        (_mode == TransportMode::Radiance ? std::string("RADIANCE")
-         : std::string("IMPORTANCE")) +
-        std::string(" ]");
-    }
+    virtual std::string toString() const;
     
 private:
 	// 用于缩放颜色频谱
@@ -821,47 +785,13 @@ public:
     }
 
     virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
-                      Float *pdf, BxDFType *sampledType) const {
-    	Float F = frDielectric(cosTheta(wo), _etaA, _etaB);
-	    if (u[0] < F) {
-	        *wi = Vector3f(-wo.x, -wo.y, wo.z);
-	        if (sampledType)
-	            *sampledType = BxDFType(BSDF_SPECULAR | BSDF_REFLECTION);
-	        *pdf = F;
-	        return F * _R / absCosTheta(*wi);
-	    } else {
-	        bool entering = cosTheta(wo) > 0;
-	        Float etaI = entering ? _etaA : _etaB;
-	        Float etaT = entering ? _etaB : _etaA;
-
-	        if (!refract(wo, faceforward(Normal3f(0, 0, 1), wo), etaI / etaT, wi))
-	            return 0;
-	        Spectrum ft = _T * (1 - F);
-
-	        if (_mode == TransportMode::Radiance) {
-	            ft *= (etaI * etaI) / (etaT * etaT);
-	        }
-	        if (sampledType) {
-	            *sampledType = BxDFType(BSDF_SPECULAR | BSDF_TRANSMISSION);
-	        }
-	        *pdf = 1 - F;
-	        return ft / absCosTheta(*wi);
-	    }
-    }
+                              Float *pdf, BxDFType *sampledType) const;
 
     virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const { 
     	return 0; 
     }
 
-    virtual std::string toString() const {
-    	return std::string("[ FresnelSpecular R: ") + _R.ToString() +
-           std::string(" T: ") + _T.ToString() +
-           StringPrintf(" etaA: %f etaB: %f ", _etaA, _etaB) +
-           std::string(" mode : ") +
-           (_mode == TransportMode::Radiance ? std::string("RADIANCE")
-                                            : std::string("IMPORTANCE")) +
-           std::string(" ]");
-    }
+    virtual std::string toString() const;
 
 private:
     const Spectrum _R, _T;
@@ -956,23 +886,11 @@ public:
     }
 
     virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
-                      Float *pdf, BxDFType *sampledType) const {
-    	*wi = cosineSampleHemisphere(u);
-	    if (wo.z > 0) {
-	    	wi->z *= -1;
-	    }
-	    *pdf = pdfW(wo, *wi);
-	    return f(wo, *wi);
-    }
+                              Float *pdf, BxDFType *sampledType) const;
 
-    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const {
-    	return sameHemisphere(wo, wi) ? 0 : absCosTheta(wi) * InvPi;
-    }
+    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const;
 
-    virtual std::string toString() const {
-    	return std::string("[ LambertianTransmission T: ") + _T.ToString() +
-           std::string(" ]");
-    }
+    virtual std::string toString() const;
 
 private:
   	// 透射系数
@@ -1020,35 +938,9 @@ public:
 	 *   	α = max(θi,θo)
 	 *		β = min(θi,θo)
      */
-    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const {
-    	Float sinThetaI = sinTheta(wi);
-	    Float sinThetaO = sinTheta(wo);
-	    // 计算max(0,cos(φi-φo))项
-	    // 由于三角函数耗时比较高，这里可以用三角恒等变换展开
-	    // cos(φi-φo) = cosφi * cosφo + sinφi * sinφo
-	    Float maxCos = 0;
-	    if (sinThetaI > 1e-4 && sinThetaO > 1e-4) {
-	        Float sinPhiI = sinPhi(wi), cosPhiI = cosPhi(wi);
-	        Float sinPhiO = sinPhi(wo), cosPhiO = cosPhi(wo);
-	        Float dCos = cosPhiI * cosPhiO + sinPhiI * sinPhiO;
-	        maxCos = std::max((Float)0, dCos);
-	    }
-
-	    Float sinAlpha, tanBeta;
-	    if (absCosTheta(wi) > absCosTheta(wo)) {
-	        sinAlpha = sinThetaO;
-	        tanBeta = sinThetaI / absCosTheta(wi);
-	    } else {
-	        sinAlpha = sinThetaI;
-	        tanBeta = sinThetaO / absCosTheta(wo);
-	    }
-	    return _R * InvPi * (_A + _B * maxCos * sinAlpha * tanBeta);
-    }
-
-    virtual std::string toString() const {
-    	return std::string("[ OrenNayar R: ") + _R.ToString() +
-           StringPrintf(" A: %f B: %f ]", _A, _B);
-    }
+    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const ;
+    
+    virtual std::string toString() const;
 
 private:
 	// 反射系数
@@ -1157,20 +1049,7 @@ public:
      * @param  wi 入射方向
      * @return    [description]
      */
-    Spectrum f(const Vector3f &wo, const Vector3f &wi) const {
-        Float cosThetaO = absCosTheta(wo), cosThetaI = absCosTheta(wi);
-        if (cosThetaI == 0 || cosThetaO == 0) {
-            return Spectrum(0.);
-        }
-        Vector3f wh = wi + wo;
-        if (wh.x == 0 && wh.y == 0 && wh.z == 0) {
-            return Spectrum(0.);
-        }
-        wh = normalize(wh);
-        Spectrum F = _fresnel->evaluate(dot(wi, wh));
-        return _R * _distribution->D(wh) * _distribution->G(wo, wi) * F /
-               (4 * cosThetaI * cosThetaO);
-    }
+    Spectrum f(const Vector3f &wo, const Vector3f &wi) const;
     
     /**
      * 函数的样本值，并返回该样本的概率密度函数值
@@ -1182,19 +1061,7 @@ public:
      * @return             [description]
      */
     Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
-                      Float *pdf, BxDFType *sampledType) const {
-        if (wo.z == 0) {
-            return 0.;
-        }
-        Vector3f wh = _distribution->sample_wh(wo, u);
-        *wi = reflect(wo, wh);
-        if (!sameHemisphere(wo, *wi)) {
-            return Spectrum(0.f);
-        }
-
-        *pdf = _distribution->pdfW(wo, wh) / (4 * dot(wo, wh));
-        return f(wo, *wi);
-    }
+                      Float *pdf, BxDFType *sampledType) const;
     
     /**
      * 采样wi概率密度函数，
@@ -1221,19 +1088,9 @@ public:
      * @param  wi 入射方向
      * @return    [description]
      */
-    Float pdfW(const Vector3f &wo, const Vector3f &wi) const {
-        if (!sameHemisphere(wo, wi)) {
-            return 0;
-        }
-        Vector3f wh = normalize(wo + wi);
-        return _distribution->pdfW(wo, wh) / (4 * dot(wo, wh));
-    }
+    Float pdfW(const Vector3f &wo, const Vector3f &wi) const;
     
-    std::string toString() const {
-        return std::string("[ MicrofacetReflection R: ") + _R.ToString() +
-        std::string(" distribution: ") + _distribution->toString() +
-        std::string(" fresnel: ") + _fresnel->toString() + std::string(" ]");
-    }
+    std::string toString() const;
     
 private:
     // 反射率
@@ -1259,68 +1116,14 @@ public:
         
     }
     
-    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const {
-        if (sameHemisphere(wo, wi)) {
-            return 0;
-        }
-        
-        Float cosThetaO = cosTheta(wo);
-        Float cosThetaI = cosTheta(wi);
-        if (cosThetaI == 0 || cosThetaO == 0) {
-            return Spectrum(0);
-        }
-        
-        Float eta = cosTheta(wo) > 0 ? (_etaB / _etaA) : (_etaA / _etaB);
-        Vector3f wh = normalize(wo + wi * eta);
-        if (wh.z < 0) {
-            wh = -wh;
-        }
-        
-        Spectrum F = _fresnel.evaluate(dot(wo, wh));
-        
-        Float sqrtDenom = dot(wo, wh) + eta * dot(wi, wh);
-        Float factor = (_mode == TransportMode::Radiance) ? (1 / eta) : 1;
-        
-        return (Spectrum(1.f) - F) * _T *
-                std::abs(_distribution->D(wh) * _distribution->G(wo, wi) * eta * eta *
-                 absDot(wi, wh) * absDot(wo, wh) * factor * factor /
-                 (cosThetaI * cosThetaO * sqrtDenom * sqrtDenom));
-    }
+    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const;
     
     virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
-                              Float *pdf, BxDFType *sampledType) const {
-        if (wo.z == 0) {
-            return 0.;
-        }
-        Vector3f wh = _distribution->sample_wh(wo, u);
-        Float eta = cosTheta(wo) > 0 ? (_etaA / _etaB) : (_etaB / _etaA);
-        if (!refract(wo, (Normal3f)wh, eta, wi)) return 0;
-        *pdf = pdfW(wo, *wi);
-        return f(wo, *wi);
-    }
+                              Float *pdf, BxDFType *sampledType) const;
     
-    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const {
-        if (sameHemisphere(wo, wi)) {
-            return 0;
-        }
-        Float eta = cosTheta(wo) > 0 ? (_etaB / _etaA) : (_etaA / _etaB);
-        Vector3f wh = normalize(wo + wi * eta);
-        
-        Float sqrtDenom = dot(wo, wh) + eta * dot(wi, wh);
-        Float dwh_dwi = std::abs((eta * eta * dot(wi, wh)) / (sqrtDenom * sqrtDenom));
-        return _distribution->pdfW(wo, wh) * dwh_dwi;
-    }
+    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const;
     
-    virtual std::string toString() const {
-        return std::string("[ MicrofacetTransmission T: ") + _T.ToString() +
-        std::string(" distribution: ") + _distribution->toString() +
-        StringPrintf(" etaA: %f etaB: %f", _etaA, _etaB) +
-        std::string(" fresnel: ") + _fresnel.toString() +
-        std::string(" mode : ") +
-        (_mode == TransportMode::Radiance ? std::string("RADIANCE")
-         : std::string("IMPORTANCE")) +
-        std::string(" ]");
-    }
+    virtual std::string toString() const;
     
 private:
 
@@ -1343,61 +1146,17 @@ public:
         
     }
 
-    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const {
-        auto pow5 = [](Float v) { return (v * v) * (v * v) * v; };
-        Spectrum diffuse = (28.f / (23.f * Pi)) * _Rd * (Spectrum(1.f) - _Rs) *
-            (1 - pow5(1 - .5f * absCosTheta(wi))) *
-            (1 - pow5(1 - .5f * absCosTheta(wo)));
-        Vector3f wh = wi + wo;
-        if (wh.x == 0 && wh.y == 0 && wh.z == 0) return Spectrum(0);
-        wh = normalize(wh);
-        Spectrum specular =
-        _distribution->D(wh) /
-            (4 * absDot(wi, wh) * std::max(absCosTheta(wi), absCosTheta(wo))) *
-        schlickFresnel(dot(wi, wh));
-        return diffuse + specular;
-    }
-
-    Spectrum schlickFresnel(Float _cosTheta) const {
-        auto pow5 = [](Float v) { return (v * v) * (v * v) * v; };
-        return _Rs + pow5(1 - _cosTheta) * (Spectrum(1.) - _Rs);
-    }
-
+    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const;
+    
+    Spectrum schlickFresnel(Float _cosTheta) const;
+    
     virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi,
                               const Point2f &uOrig, Float *pdf,
-                              BxDFType *sampledType) const {
-        Point2f u = uOrig;
-        if (u[0] < .5) {
-            u[0] = std::min(2 * u[0], OneMinusEpsilon);
-            *wi = cosineSampleHemisphere(u);
-            if (wo.z < 0) {
-                wi->z *= -1;
-            }
-        } else {
-            u[0] = std::min(2 * (u[0] - .5f), OneMinusEpsilon);
-            Vector3f wh = _distribution->sample_wh(wo, u);
-            *wi = reflect(wo, wh);
-            if (!sameHemisphere(wo, *wi)) {
-                return Spectrum(0.f);
-            }
-        }
-        *pdf = pdfW(wo, *wi);
-        return f(wo, *wi);
-    }
+                              BxDFType *sampledType) const;
 
-    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const {
-        if (!sameHemisphere(wo, wi)) return 0;
-        Vector3f wh = normalize(wo + wi);
-        Float pdf_wh = _distribution->pdfW(wo, wh);
-        return .5f * (absCosTheta(wi) * InvPi + pdf_wh / (4 * dot(wo, wh)));
-    }
+    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const;
     
-    virtual std::string toString() const {
-        return std::string("[ FresnelBlend Rd: ") + _Rd.ToString() +
-        std::string(" Rs: ") + _Rs.ToString() +
-        std::string(" distribution: ") + _distribution->toString() +
-        std::string(" ]");
-    }
+    virtual std::string toString() const;
     
 private:
     const Spectrum _Rd, _Rs;
