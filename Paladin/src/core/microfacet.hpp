@@ -196,6 +196,12 @@ protected:
  */
 class BeckmannDistribution : public MicrofacetDistribution {
 public:
+
+    /**
+     * 粗糙度转α参数，代码直接照搬pbrt
+     * @param  roughness 粗糙度
+     * @return           α值
+     */
     static Float RoughnessToAlpha(Float roughness) {
         roughness = std::max(roughness, (Float)1e-3);
         Float x = std::log(roughness);
@@ -334,7 +340,17 @@ private:
  */
 class TrowbridgeReitzDistribution : public MicrofacetDistribution {
 public:
-    static inline Float RoughnessToAlpha(Float roughness);
+    /**
+     * 粗糙度转α参数，代码直接照搬pbrt
+     * @param  roughness 粗糙度
+     * @return           α值
+     */    
+    static inline Float RoughnessToAlpha(Float roughness) {
+        roughness = std::max(roughness, (Float)1e-3);
+        Float x = std::log(roughness);
+        return 1.62142f + 0.819955f * x + 0.1734f * x * x + 0.0171201f * x * x * x +
+        0.000640711f * x * x * x * x;
+    }
     
     TrowbridgeReitzDistribution(Float alphax, Float alphay,
                                 bool samplevis = true)
