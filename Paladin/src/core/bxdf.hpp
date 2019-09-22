@@ -972,11 +972,11 @@ private:
  *
  * 将3式带入2式
  *
- *      d􏰀Φh = Li(ωi) dω cosθh D(ωh) dωh dA     4式
+ *      dΦh = Li(ωi) dω cosθh D(ωh) dωh dA     4式
  *      
  * 我们假设各个微平面根据菲涅尔定律独立反射光线，则出射辐射通量flux为
  *
- *      d􏰀Φo = Fr(ωo) d􏰀Φh   5式    (这里理解得不是很好，菲涅尔函数表示的就是有多少能量没被吸收，直接反射出来了)
+ *      dΦo = Fr(ωo) dΦh   5式    (这里理解得不是很好，菲涅尔函数表示的就是有多少能量没被吸收，直接反射出来了)
  *
  * 再由radiance的定义
  *                     dΦo
@@ -1101,6 +1101,35 @@ private:
     const Fresnel *_fresnel;
 };
 
+/**
+ * 微面元透射 BTDF MicrofacetTransmission
+ * 我们在实现 MicrofacetReflection类的时候已经推导过dωo与dωh的关系式
+ *           dωo
+ * dωh = ----------
+ *         4cosθh
+ * 但在 MicrofacetTransmission中，这两者的关系式是不同的
+ * 关系式如下
+ *                 ηo^2 |ωo · ωi| dωo
+ *    dωh = --------------------------------            1式   (这个没有手动推过，比较羞耻，todo，有空一定要搞搞)
+ *            [ηi(ωh · ωi) + ηo(ωo · ωh)]^2
+ *
+ *                 (1 - Fr(ωo)) Li(ωi) dωi D(ωh) dωh dA cosθh 
+ *    Lo(ωo) = ------------------------------------------------   2式 (MicrofacetReflection中的7式修改而来)
+ *                          cosθo dωo dA
+ *
+ *                             dLo(p, ωo)               dLo(p, ωo) 
+ * 由BTDF定义 fr(p, ωo, ωi) = ------------------ = ------------------------   3式(MicrofacetReflection中的10式)
+ *                              dE(p, ωi)           Li(p, ωi) cosθi dωi
+ *                          
+ * 联合1，2，3式，再加入几何遮挡函数
+ *
+ *                 η^2 (1 - Fr(ωo)) D(ωh) G(ωi,ωo)   |ωi · ωh||ωo · ωh|
+ * fr(ωo, ωi) = ---------------------------------------------------------
+ *                   [(ωh · ωo) + η(ωi · ωh)]^2   cosθo cosθi
+ *                   
+ * 其中 η = ηi/ηo , ωh = ωo + ηωi
+ * 
+ */
 class MicrofacetTransmission : public BxDF {
 public:
     MicrofacetTransmission(const Spectrum &T,
@@ -1116,6 +1145,15 @@ public:
         
     }
     
+    /**
+     * BTDF 函数值
+     *                η^2 (1 - Fr(ωo)) D(ωh) G(ωi,ωo)   |ωi · ωh||ωo · ωh|
+     * fr(ωo, ωi) = ---------------------------------------------------------
+     *                   [(ωh · ωo) + η(ωi · ωh)]^2    cosθo cosθi
+     * @param  wo 出射向量
+     * @param  wi 入射向量
+     * @return    BTDF函数值
+     */
     virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const;
     
     virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,

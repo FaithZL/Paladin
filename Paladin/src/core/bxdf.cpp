@@ -311,7 +311,7 @@ Spectrum MicrofacetTransmission::f(const Vector3f &wo, const Vector3f &wi) const
     if (cosThetaI == 0 || cosThetaO == 0) {
         return Spectrum(0);
     }
-    
+    // 确定入射光是从介质进入物体还是从物体离开进入介质
     Float eta = cosTheta(wo) > 0 ? (_etaB / _etaA) : (_etaA / _etaB);
     Vector3f wh = normalize(wo + wi * eta);
     if (wh.z < 0) {
@@ -321,6 +321,7 @@ Spectrum MicrofacetTransmission::f(const Vector3f &wo, const Vector3f &wi) const
     Spectrum F = _fresnel.evaluate(dot(wo, wh));
     
     Float sqrtDenom = dot(wo, wh) + eta * dot(wi, wh);
+    // 双向方法用于区分传输方向
     Float factor = (_mode == TransportMode::Radiance) ? (1 / eta) : 1;
     
     return (Spectrum(1.f) - F) * _T *
@@ -335,8 +336,11 @@ Spectrum MicrofacetTransmission::sample_f(const Vector3f &wo, Vector3f *wi, cons
         return 0.;
     }
     Vector3f wh = _distribution->sample_wh(wo, u);
+    // 确定入射光是从介质进入物体还是从物体离开进入介质
     Float eta = cosTheta(wo) > 0 ? (_etaA / _etaB) : (_etaB / _etaA);
-    if (!refract(wo, (Normal3f)wh, eta, wi)) return 0;
+    if (!refract(wo, (Normal3f)wh, eta, wi)) {
+        return 0;
+    }
     *pdf = pdfW(wo, *wi);
     return f(wo, *wi);
 }
