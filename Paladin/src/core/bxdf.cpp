@@ -372,14 +372,16 @@ std::string MicrofacetTransmission::toString() const {
 Spectrum FresnelBlend::f(const Vector3f &wo, const Vector3f &wi) const {
     auto pow5 = [](Float v) { return (v * v) * (v * v) * v; };
     Spectrum diffuse = (28.f / (23.f * Pi)) * _Rd * (Spectrum(1.f) - _Rs) *
-    (1 - pow5(1 - .5f * absCosTheta(wi))) *
-    (1 - pow5(1 - .5f * absCosTheta(wo)));
+					    (1 - pow5(1 - .5f * absCosTheta(wi))) *
+					    (1 - pow5(1 - .5f * absCosTheta(wo)));
     Vector3f wh = wi + wo;
-    if (wh.x == 0 && wh.y == 0 && wh.z == 0) return Spectrum(0);
+    if (wh.x == 0 && wh.y == 0 && wh.z == 0) {
+    	return Spectrum(0);
+    }
     wh = normalize(wh);
     Spectrum specular =
-    _distribution->D(wh) /
-    (4 * absDot(wi, wh) * std::max(absCosTheta(wi), absCosTheta(wo))) *
+    	_distribution->D(wh) /
+    	(4 * absDot(wi, wh) * std::max(absCosTheta(wi), absCosTheta(wo))) *
     schlickFresnel(dot(wi, wh));
     return diffuse + specular;
 }
@@ -412,7 +414,9 @@ Spectrum FresnelBlend::sample_f(const Vector3f &wo, Vector3f *wi,
 }
 
 Float FresnelBlend::pdfW(const Vector3f &wo, const Vector3f &wi) const {
-    if (!sameHemisphere(wo, wi)) return 0;
+    if (!sameHemisphere(wo, wi)) {
+    	return 0;
+    }
     Vector3f wh = normalize(wo + wi);
     Float pdf_wh = _distribution->pdfW(wo, wh);
     return .5f * (absCosTheta(wi) * InvPi + pdf_wh / (4 * dot(wo, wh)));
