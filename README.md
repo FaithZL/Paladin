@@ -4,7 +4,7 @@ Paladin is a pbrt style renderer
 代码内附带详细注释以及各种表达式推导过程，尽管来看，看不懂算我输😂
 
 # 获取仓库
-	git clone --recursive 仓库地址
+	git clone --recursive https://github.com/FaithZL/Paladin.git
 
 # 跨平台编译相关说明
 Windows
