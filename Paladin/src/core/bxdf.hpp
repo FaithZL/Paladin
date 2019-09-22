@@ -127,13 +127,13 @@ PALADIN_BEGIN
  *          Lo(wo) = Fr(wr)Li(wr)|cosθr|
  *
  * 观察上式，卧槽？？？居然多了一个|cosθr|，这是不对的
- * 所以，综合来如下表达式看才是正确的
+ * 所以，综合来如下表达式才是正确的
  * 
- *         Lo(wo) = Fr(wr)Li(wr)
+ *          Lo(wo) = Fr(wr)Li(wr)
  *         
  * 我们推导出菲涅尔函数与BRDF的关系如下
  * 
- *                 δ(wi - wr)Fr(wi)
+ *                 δ(wi - wr)Fr(wr)
  * f(wo, wi) = -----------------------
  *                     |cosθr|
  *   
@@ -146,22 +146,9 @@ PALADIN_BEGIN
  * 虽然镜面投射对于模拟半透明材料很有用， Oren–Nayar模型把微面元当成漫反射表面。
  * 但BRDF最常用的方式还是把微面元的反射当成是理想镜面反射处理
  * 
- * 先简单介绍一下Oren–Nayar模型
- * Oren和Nayar观察到自然界中不存在理想的漫反射，尤其是当光照方向接近观察方向时，粗糙表面通常会显得更亮。
- * 他们建立了一个反射模型，用一个参数σ的球面高斯分布所描述的 v 形微平面来描述粗糙表面，
- * σ为微平面朝向角的标准差。
- * 在 v 形假设下，仅考虑相邻的微面即可考虑互反射;
- * 奥伦和纳亚尔利用这一点推导出了一个BRDF模型，该模型对凹槽集合的总反射进行了建模
+ * Oren–Nayar模型
+ * 简单说明在在Oren–Nayar类的注释中
  * 
- * 所得到的模型考虑了微观平面之间的阴影、掩蔽和相互反射，但没有封闭形式的方程(todo，这段翻译的不好)
- * 他们找到了如下方程去近似
- * 
- * fr(wi,wo) = R/π(A + Bmax(0,cos(φi-φo))sinαtanβ)
- * 其中 A = 1 - σ^2 / (2 * σ^2 + 0.33)
- * 	    B = 0.45σ^2 / (σ^2 + 0.09)
- *   	α = max(θi,θo)
- *		β = min(θi,θo)
- * 这个方程如何来的我也就不凑热闹了，水平有限
  */
 
 // 以下函数都默认一个条件，w为单位向量
@@ -334,6 +321,11 @@ inline bool sameHemisphere(const Vector3f &w, const Normal3f &wp) {
     return w.z * wp.z > 0;
 }
 
+/**
+ * 反射类型
+ * 一个bxdf的类型至少要有一个BSDF_REFLECTION 或 BSDF_TRANSMISSION
+ * 用于表明是投射还是反射
+ */
 enum BxDFType {
     BSDF_REFLECTION = 1 << 0,
     BSDF_TRANSMISSION = 1 << 1,
@@ -988,7 +980,27 @@ private:
 };
 
 
-
+/**
+ *
+ * 先简单介绍一下Oren–Nayar模型
+ * Oren和Nayar观察到自然界中不存在理想的漫反射，尤其是当光照方向接近观察方向时，粗糙表面通常会显得更亮。
+ * 他们建立了一个反射模型，用一个参数σ的球面高斯分布所描述的 v 形微平面来描述粗糙表面，
+ * σ为微平面朝向角的标准差。
+ * 在 v 形假设下，仅考虑相邻的微面即可考虑互反射;
+ * 奥伦和纳亚尔利用这一点推导出了一个BRDF模型，该模型对凹槽集合的总反射进行了建模
+ * 
+ * 所得到的模型考虑了微观平面之间的阴影、掩蔽和相互反射，但没有解析解
+ * 他们找到了一个高效又接近的方式，如下方程去近似
+ * 
+ * fr(wi,wo) = R/π(A + Bmax(0,cos(φi-φo))sinαtanβ)
+ * 其中 A = 1 - σ^2 / (2 * σ^2 + 0.33)
+ *      B = 0.45σ^2 / (σ^2 + 0.09)
+ *      α = max(θi,θo)
+ *      β = min(θi,θo)
+ * 这个方程如何来的我也就不凑热闹了，水平有限
+ *
+ * 
+ */
 class OrenNayar : public BxDF {
 public:
     OrenNayar(const Spectrum &R, Float sigma)
@@ -1045,31 +1057,194 @@ private:
     Float _A, _B;
 };
 
+/**
+ * 
+ * 微面元反射DRDF
+ * 关于微面元的法线分布函数介绍在microfacet.hpp文件中
+ * 一个较早的微平面模型在1967年 Torrance 和 Sparrow用于模拟金属表面
+ * 假设一个宏观平面有若干个微平面构成，微平面的法向量为ωh
+ * ωh与ωo的夹角为θh   ωh与ωi夹角为θh
+ * 观察光线出射方向为ωo，入射方向为ωi则满足，
+ * 
+ *     ωh = ωo + ωi   1式
+ *      
+ * 现在我们来推导一下微面元反射的BRDF表达式
+ *
+ * 先来看看h方向上的微分辐射通量的表达式，根据flux与radiance的关系，可得
+ * 
+ *      dΦh = Li(ωi) dω dA⊥(ωh) = Li(ωi) dω cosθh dA(ωh)    2式
+ *
+ * ωh方向上的微平面面积如下
+ *
+ *      dA(ωh) = D(ωh) dωh dA       3式      (由法线分布函数的定义可得)
+ *
+ * 将3式带入2式
+ *
+ *      d􏰀Φh = Li(ωi) dω cosθh D(ωh) dωh dA     4式
+ *      
+ * 我们假设各个微平面根据菲涅尔定律独立反射光线，则出射辐射通量flux为
+ *
+ *      d􏰀Φo = Fr(ωo) d􏰀Φh   5式    (这里理解得不是很好，菲涅尔函数表示的就是有多少能量没被吸收，直接反射出来了)
+ *
+ * 再由radiance的定义
+ *                     dΦo
+ *      Lo(ωo) = ------------------     6式
+ *                 cosθo dωo dA
+ *
+ * 联合4，5，6式，可得
+ *
+ *                  Fr(ωo) Li(ωi) dωi D(ωh) dωh dA cosθh 
+ *      Lo(ωo) = ---------------------------------------------          7式
+ *                              cosθo dωo dA
+ *
+ * 这里直接使用一个结论表达式(在文末给出推导过程)
+ *
+ *      dωo = 4 cosθh dωh       8式
+ *
+ * 联合7，8式
+ *                 Fr(ωo) Li(ωi) D(ωh) dωi 
+ *      Lo(ωo) = -----------------------------           9式
+ *                       4 cosθo
+ *
+ *                             dLo(p, ωo)               dLo(p, ωo) 
+ * 由BRDF定义 fr(p, ωo, ωi) = ------------------ = ------------------------   10式
+ *                              dE(p, ωi)           Li(p, ωi) cosθi dωi
+ *
+ * 10式定义了fr，用人话来说就是fr(p, ωo, ωi)表示的是：
+ * ωi方向辐照度(irradiance)变化时，ωo方向的辐射度(radiance)的变化率
+ * 
+ * 联合9，10两式，再加入几何遮挡项
+ *
+ *                   D(ωh) G(ωi,ωo) Fr(ωo)
+ * fr(p, ωo, ωi) = ------------------------     11式
+ *                     4 cosθo cosθi
+ *
+ * 到此，BRDF就这样推导完毕
+ *
+ * 顺便说一下，为何BRDF的定义为辐射度比辐照度，量纲为1/sr（sr为立体角）
+ * 说一下我的个人理解
+ *
+ * 我们观察到一个物体的表面的点，被无数个方向的光照射到，然后向我们眼睛的方向反射了一部分光
+ * 所以我们才能看到该点
+ *
+ * 我们需要定义一个分布函数，用来表示每个入射方向的光线的贡献大小
+ * 
+ * Lo(wo) = ∫[hemisphere]fr(ωo,ωi)Li(ωi)|cosθi|dωi      12式
+ *
+ * 12式表达了半空间上所有方向的入射辐射度乘以fr之后再相加，得到的是出射辐射度
+ *
+ * 由以上表达式，自然可以得出一个结论fr的量纲为1/sr（sr为立体角）
+ * 感觉自己说得也不清晰
+ *
+ * 来来来，推导一下8式
+ *
+ * 
+ * 
+ */
 class MicrofacetReflection : public BxDF {
 public:
     MicrofacetReflection(const Spectrum &R,
                          MicrofacetDistribution *distribution, Fresnel *fresnel)
     : BxDF(BxDFType(BSDF_REFLECTION | BSDF_GLOSSY)),
-    R(R),
-    distribution(distribution),
-    fresnel(fresnel) {
+    _R(R),
+    _distribution(distribution),
+    _fresnel(fresnel) {
         
     }
     
-    Spectrum f(const Vector3f &wo, const Vector3f &wi) const;
+    /**
+     * 函数值，原始表达式如下
+     *                   D(ωh) G(ωi,ωo) Fr(ωo)
+     * fr(p, ωo, ωi) = ------------------------   
+     *                     4 cosθo cosθi
+     * @param  wo 出射方向
+     * @param  wi 入射方向
+     * @return    [description]
+     */
+    Spectrum f(const Vector3f &wo, const Vector3f &wi) const {
+        Float cosThetaO = absCosTheta(wo), cosThetaI = absCosTheta(wi);
+        if (cosThetaI == 0 || cosThetaO == 0) {
+            return Spectrum(0.);
+        }
+        Vector3f wh = wi + wo;
+        if (wh.x == 0 && wh.y == 0 && wh.z == 0) {
+            return Spectrum(0.);
+        }
+        wh = normalize(wh);
+        Spectrum F = _fresnel->evaluate(dot(wi, wh));
+        return _R * _distribution->D(wh) * _distribution->G(wo, wi) * F /
+               (4 * cosThetaI * cosThetaO);
+    }
     
-    Spectrum Sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
-                      Float *pdf, BxDFType *sampledType) const;
+    /**
+     * 函数的样本值，并返回该样本的概率密度函数值
+     * @param  wo          出射方向
+     * @param  wi          输出的入射方向
+     * @param  u           决定入射方向的样本点
+     * @param  pdf         输出的概率密度函数值
+     * @param  sampledType 采样类型
+     * @return             [description]
+     */
+    Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
+                      Float *pdf, BxDFType *sampledType) const {
+        if (wo.z == 0) {
+            return 0.;
+        }
+        Vector3f wh = _distribution->sample_wh(wo, u);
+        *wi = reflect(wo, wh);
+        if (!sameHemisphere(wo, *wi)) {
+            return Spectrum(0.f);
+        }
+
+        *pdf = _distribution->pdfW(wo, wh) / (4 * dot(wo, wh));
+        return f(wo, *wi);
+    }
     
-    Float pdfW(const Vector3f &wo, const Vector3f &wi) const;
+    /**
+     * 采样wi概率密度函数，
+     * 在MicrofacetDistribution中我们只实现了wh的概率密度函数
+     * 这里要将wh的分布转换到wi的分布
+     * θi为ωi与ωo的夹角，θh为ωh与ωo的夹角，可以开始推导了
+     *
+     *      θi = 2θh,  φi = φh
+     *      
+     *                 sinθh dθh dφh
+     * dωh / dωi = -------------------- = 
+     *                 sinθi dθi dφi
+     *
+     *                 sinθh dθh            sinθh           1
+     * dωh / dωi = -------------------- = ---------- = ----------
+     *                sin2θh d2θh          2sin2θh       4cosθh
+     * 
+     * 又由sampling.hpp 中 1 式 py(y) * dy/dx = px(x) 可得
+     *
+     * pωi(ωi) = dωh / dωi * pωh(ωh) = pωh(ωh) / 4cosθh
+     *                 
+     * @param  wo 出射方向
+     * @param  wi 入射方向
+     * @return    [description]
+     */
+    Float pdfW(const Vector3f &wo, const Vector3f &wi) const {
+        if (!sameHemisphere(wo, wi)) {
+            return 0;
+        }
+        Vector3f wh = normalize(wo + wi);
+        return _distribution->pdfW(wo, wh) / (4 * dot(wo, wh));
+    }
     
-    std::string toString() const;
+    std::string toString() const {
+        return std::string("[ MicrofacetReflection R: ") + _R.ToString() +
+        std::string(" distribution: ") + _distribution->toString() +
+        std::string(" fresnel: ") + _fresnel->toString() + std::string(" ]");
+    }
     
 private:
-
-    const Spectrum R;
-    const MicrofacetDistribution *distribution;
-    const Fresnel *fresnel;
+    // 反射率
+    const Spectrum _R;
+    // 微平面分布
+    const MicrofacetDistribution *_distribution;
+    // 菲涅尔
+    const Fresnel *_fresnel;
 };
 
 PALADIN_END

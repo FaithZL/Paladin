@@ -130,8 +130,18 @@ static Vector3f BeckmannSample(const Vector3f &wi, Float alpha_x, Float alpha_y,
 
 Vector3f BeckmannDistribution::sample_wh(const Vector3f &wo,
                                          const Point2f &u) const {
-    if (!_sampleVisibleArea) {
-        // 不忽略遮挡
+    if (_sampleVisibleArea) {
+        // 不忽略几何遮挡
+        // 这个不忽略阻挡的采样太TMD复杂了，暂时不管推导过程了，暂时认怂，搞完主线再说todo
+        Vector3f wh;
+        bool flip = wo.z < 0;
+        wh = BeckmannSample(flip ? -wo : wo, _alphax, _alphay, u[0], u[1]);
+        if (flip) {
+            wh = -wh;
+        }
+        return wh;        
+    } else {
+        // 忽略遮挡
         Float tan2Theta, phi;
         if (_alphax == _alphay) {
             // 计算各项同性
@@ -140,7 +150,7 @@ Vector3f BeckmannDistribution::sample_wh(const Vector3f &wo,
             tan2Theta = -_alphax * _alphax * logSample;
             phi = u[1] * 2 * Pi;
         } else {
-
+            // 计算各向异性
             Float logSample = std::log(1 - u[0]);
             DCHECK(!std::isinf(logSample));
             phi = std::atan(_alphay / _alphax *
@@ -149,24 +159,16 @@ Vector3f BeckmannDistribution::sample_wh(const Vector3f &wo,
             Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
             Float alphax2 = _alphax * _alphax, alphay2 = _alphay * _alphay;
             tan2Theta = -logSample /
-            (cosPhi * cosPhi / alphax2 + sinPhi * sinPhi / alphay2);
+                    (cosPhi * cosPhi / alphax2 + sinPhi * sinPhi / alphay2);
         }
-        
         
         Float cosTheta = 1 / std::sqrt(1 + tan2Theta);
         Float sinTheta = std::sqrt(std::max((Float)0, 1 - cosTheta * cosTheta));
         Vector3f wh = sphericalDirection(sinTheta, cosTheta, phi);
-        if (!sameHemisphere(wo, wh)) wh = -wh;
-        return wh;
-    } else {
-        // 忽略几何遮挡
-        Vector3f wh;
-        bool flip = wo.z < 0;
-        wh = BeckmannSample(flip ? -wo : wo, _alphax, _alphay, u[0], u[1]);
-        if (flip) {
+        if (!sameHemisphere(wo, wh)) {
             wh = -wh;
         }
-        return wh;
+        return wh;        
     }
 }
 
@@ -189,17 +191,24 @@ Float BeckmannDistribution::lambda(const Vector3f &w) const {
 
 //TrowbridgeReitzDistribution
 Float TrowbridgeReitzDistribution::D(const Vector3f &wh) const {
-    Float _tan2Theta = tan2Theta(wh);
-    if (std::isinf(_tan2Theta)) {
+    Float _cosTheta = absCosTheta(wh);
+    if (_cosTheta == 1) {
         // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
         // 我们返回0
         return 0.;
     }
-    const Float cos4Theta = cos2Theta(wh) * cos2Theta(wh);
-    Float e =
-    (cos2Phi(wh) / (_alphax * _alphax) + sin2Phi(wh) / (_alphay * _alphay)) *
-    _tan2Theta;
-    return 1 / (Pi * _alphax * _alphay * cos4Theta * (1 + e) * (1 + e));
+    Float cosTheta4 = (_cosTheta * _cosTheta) * (_cosTheta * _cosTheta);
+    Float _tanTheta2 = tan2Theta(wh);
+
+    Float sinPhi2 = sin2Phi(wh);
+    Float cosPhi2 = cos2Phi(wh);
+
+    Float alphax2 = _alphax * _alphax;
+    Float alphay2 = _alphay * _alphay;
+
+    Float term1 = 1 + (cosPhi2 / alphax2 + sinPhi2 / alphay2) * _tanTheta2;
+    Float term2 = term1 * term1;
+    return 1.0 / (Pi * _alphax * _alphay * cosTheta4 * term2);    
 }
 
 static void TrowbridgeReitzSample11(Float cosTheta, Float U1, Float U2,
@@ -279,32 +288,39 @@ Float TrowbridgeReitzDistribution::lambda(const Vector3f &w) const {
 Vector3f TrowbridgeReitzDistribution::sample_wh(const Vector3f &wo,
                                                 const Point2f &u) const {
     Vector3f wh;
-    if (!_sampleVisibleArea) {
+    if (_sampleVisibleArea) {
+        // 不忽略几何遮挡
+        // 这个不忽略阻挡的采样太TMD复杂了，暂时不管推导过程了，暂时认怂，搞完主线再说todo        
+        bool flip = wo.z < 0;
+        wh = TrowbridgeReitzSample(flip ? -wo : wo, _alphax, _alphay, u[0], u[1]);
+        if (flip) {
+            wh = -wh;        
+        }
+    } else {
         Float cosTheta = 0, phi = (2 * Pi) * u[1];
         if (_alphax == _alphay) {
+            // 计算各向同性
             Float tanTheta2 = _alphax * _alphax * u[0] / (1.0f - u[0]);
             cosTheta = 1 / std::sqrt(1 + tanTheta2);
         } else {
-            phi =
-            std::atan(_alphay / _alphax * std::tan(2 * Pi * u[1] + .5f * Pi));
-            if (u[1] > .5f) phi += Pi;
+            // 计算各向异性
+            phi = std::atan(_alphay / _alphax * std::tan(2 * Pi * u[1] + .5f * Pi));
+            if (u[1] > .5f) {
+                phi += Pi;
+            }
             Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
             const Float alphax2 = _alphax * _alphax, alphay2 = _alphay * _alphay;
-            const Float alpha2 =
-            1 / (cosPhi * cosPhi / alphax2 + sinPhi * sinPhi / alphay2);
+            const Float alpha2 = 1 / (cosPhi * cosPhi / alphax2 + sinPhi * sinPhi / alphay2);
             Float tanTheta2 = alpha2 * u[0] / (1 - u[0]);
             cosTheta = 1 / std::sqrt(1 + tanTheta2);
         }
-        Float sinTheta =
-        std::sqrt(std::max((Float)0., (Float)1. - cosTheta * cosTheta));
+        Float sinTheta = std::sqrt(std::max((Float)0., (Float)1. - cosTheta * cosTheta));
         wh = sphericalDirection(sinTheta, cosTheta, phi);
-        if (!sameHemisphere(wo, wh)) wh = -wh;
-    } else {
-        bool flip = wo.z < 0;
-        wh = TrowbridgeReitzSample(flip ? -wo : wo, _alphax, _alphay, u[0], u[1]);
-        if (flip) wh = -wh;
+        if (!sameHemisphere(wo, wh)) {
+            wh = -wh;        
+        }
     }
-    return wh;
+    return wh;    
 }
 
 PALADIN_END
