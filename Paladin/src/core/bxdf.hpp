@@ -1097,7 +1097,7 @@ private:
  *      Lo(ωo) = ---------------------------------------------          7式
  *                              cosθo dωo dA
  *
- * 这里直接使用一个结论表达式(在文末给出推导过程)
+ * 这里直接使用一个结论表达式(在pdfW方法的注释中给出推导过程)
  *
  *      dωo = 4 cosθh dωh       8式
  *
@@ -1136,10 +1136,6 @@ private:
  * 由以上表达式，自然可以得出一个结论fr的量纲为1/sr（sr为立体角）
  * 感觉自己说得也不清晰
  *
- * 来来来，推导一下8式
- *
- * 
- * 
  */
 class MicrofacetReflection : public BxDF {
 public:
@@ -1204,16 +1200,17 @@ public:
      * 采样wi概率密度函数，
      * 在MicrofacetDistribution中我们只实现了wh的概率密度函数
      * 这里要将wh的分布转换到wi的分布
-     * θi为ωi与ωo的夹角，θh为ωh与ωo的夹角，可以开始推导了
+     * θi为ωi与ωo的夹角，θh为ωh与ωo的夹角，ωo方向不变，ωh的改变会引起ωi的变换，
+     * 知道以上信息之后，可以开始推导了
      *
-     *      θi = 2θh,  φi = φh
+     *      θi = 2θh,  dφi = dφh
      *      
      *                 sinθh dθh dφh
-     * dωh / dωi = -------------------- = 
+     * dωh / dωi = -------------------- 
      *                 sinθi dθi dφi
      *
      *                 sinθh dθh            sinθh           1
-     * dωh / dωi = -------------------- = ---------- = ----------
+     * dωh / dωi = -------------------- = ---------- = ---------- = dωh / dωo
      *                sin2θh d2θh          2sin2θh       4cosθh
      * 
      * 又由sampling.hpp 中 1 式 py(y) * dy/dx = px(x) 可得
@@ -1245,6 +1242,166 @@ private:
     const MicrofacetDistribution *_distribution;
     // 菲涅尔
     const Fresnel *_fresnel;
+};
+
+class MicrofacetTransmission : public BxDF {
+public:
+    MicrofacetTransmission(const Spectrum &T,
+                           MicrofacetDistribution *distribution, Float etaA,
+                           Float etaB, TransportMode mode)
+    : BxDF(BxDFType(BSDF_TRANSMISSION | BSDF_GLOSSY)),
+    _T(T),
+    _distribution(distribution),
+    _etaA(etaA),
+    _etaB(etaB),
+    _fresnel(etaA, etaB),
+    _mode(mode) {
+        
+    }
+    
+    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const {
+        if (sameHemisphere(wo, wi)) {
+            return 0;
+        }
+        
+        Float cosThetaO = cosTheta(wo);
+        Float cosThetaI = cosTheta(wi);
+        if (cosThetaI == 0 || cosThetaO == 0) {
+            return Spectrum(0);
+        }
+        
+        Float eta = cosTheta(wo) > 0 ? (_etaB / _etaA) : (_etaA / _etaB);
+        Vector3f wh = normalize(wo + wi * eta);
+        if (wh.z < 0) {
+            wh = -wh;
+        }
+        
+        Spectrum F = _fresnel.evaluate(dot(wo, wh));
+        
+        Float sqrtDenom = dot(wo, wh) + eta * dot(wi, wh);
+        Float factor = (_mode == TransportMode::Radiance) ? (1 / eta) : 1;
+        
+        return (Spectrum(1.f) - F) * _T *
+                std::abs(_distribution->D(wh) * _distribution->G(wo, wi) * eta * eta *
+                 absDot(wi, wh) * absDot(wo, wh) * factor * factor /
+                 (cosThetaI * cosThetaO * sqrtDenom * sqrtDenom));
+    }
+    
+    virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
+                              Float *pdf, BxDFType *sampledType) const {
+        if (wo.z == 0) {
+            return 0.;
+        }
+        Vector3f wh = _distribution->sample_wh(wo, u);
+        Float eta = cosTheta(wo) > 0 ? (_etaA / _etaB) : (_etaB / _etaA);
+        if (!refract(wo, (Normal3f)wh, eta, wi)) return 0;
+        *pdf = pdfW(wo, *wi);
+        return f(wo, *wi);
+    }
+    
+    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const {
+        if (sameHemisphere(wo, wi)) {
+            return 0;
+        }
+        Float eta = cosTheta(wo) > 0 ? (_etaB / _etaA) : (_etaA / _etaB);
+        Vector3f wh = normalize(wo + wi * eta);
+        
+        Float sqrtDenom = dot(wo, wh) + eta * dot(wi, wh);
+        Float dwh_dwi = std::abs((eta * eta * dot(wi, wh)) / (sqrtDenom * sqrtDenom));
+        return _distribution->pdfW(wo, wh) * dwh_dwi;
+    }
+    
+    virtual std::string toString() const {
+        return std::string("[ MicrofacetTransmission T: ") + _T.ToString() +
+        std::string(" distribution: ") + _distribution->toString() +
+        StringPrintf(" etaA: %f etaB: %f", _etaA, _etaB) +
+        std::string(" fresnel: ") + _fresnel.toString() +
+        std::string(" mode : ") +
+        (_mode == TransportMode::Radiance ? std::string("RADIANCE")
+         : std::string("IMPORTANCE")) +
+        std::string(" ]");
+    }
+    
+private:
+
+    const Spectrum _T;
+    const MicrofacetDistribution *_distribution;
+    const Float _etaA, _etaB;
+    const FresnelDielectric _fresnel;
+    const TransportMode _mode;
+};
+
+
+class FresnelBlend : public BxDF {
+public:
+    FresnelBlend(const Spectrum &Rd, const Spectrum &Rs,
+                 MicrofacetDistribution *distrib)
+    : BxDF(BxDFType(BSDF_REFLECTION | BSDF_GLOSSY)),
+    _Rd(Rd),
+    _Rs(Rs),
+    _distribution(distrib) {
+        
+    }
+
+    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const {
+        auto pow5 = [](Float v) { return (v * v) * (v * v) * v; };
+        Spectrum diffuse = (28.f / (23.f * Pi)) * _Rd * (Spectrum(1.f) - _Rs) *
+            (1 - pow5(1 - .5f * absCosTheta(wi))) *
+            (1 - pow5(1 - .5f * absCosTheta(wo)));
+        Vector3f wh = wi + wo;
+        if (wh.x == 0 && wh.y == 0 && wh.z == 0) return Spectrum(0);
+        wh = normalize(wh);
+        Spectrum specular =
+        _distribution->D(wh) /
+            (4 * absDot(wi, wh) * std::max(absCosTheta(wi), absCosTheta(wo))) *
+        schlickFresnel(dot(wi, wh));
+        return diffuse + specular;
+    }
+
+    Spectrum schlickFresnel(Float _cosTheta) const {
+        auto pow5 = [](Float v) { return (v * v) * (v * v) * v; };
+        return _Rs + pow5(1 - _cosTheta) * (Spectrum(1.) - _Rs);
+    }
+
+    virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi,
+                              const Point2f &uOrig, Float *pdf,
+                              BxDFType *sampledType) const {
+        Point2f u = uOrig;
+        if (u[0] < .5) {
+            u[0] = std::min(2 * u[0], OneMinusEpsilon);
+            *wi = cosineSampleHemisphere(u);
+            if (wo.z < 0) {
+                wi->z *= -1;
+            }
+        } else {
+            u[0] = std::min(2 * (u[0] - .5f), OneMinusEpsilon);
+            Vector3f wh = _distribution->sample_wh(wo, u);
+            *wi = reflect(wo, wh);
+            if (!sameHemisphere(wo, *wi)) {
+                return Spectrum(0.f);
+            }
+        }
+        *pdf = pdfW(wo, *wi);
+        return f(wo, *wi);
+    }
+
+    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const {
+        if (!sameHemisphere(wo, wi)) return 0;
+        Vector3f wh = normalize(wo + wi);
+        Float pdf_wh = _distribution->pdfW(wo, wh);
+        return .5f * (absCosTheta(wi) * InvPi + pdf_wh / (4 * dot(wo, wh)));
+    }
+    
+    virtual std::string toString() const {
+        return std::string("[ FresnelBlend Rd: ") + _Rd.ToString() +
+        std::string(" Rs: ") + _Rs.ToString() +
+        std::string(" distribution: ") + _distribution->toString() +
+        std::string(" ]");
+    }
+    
+private:
+    const Spectrum _Rd, _Rs;
+    MicrofacetDistribution *_distribution;
 };
 
 PALADIN_END
