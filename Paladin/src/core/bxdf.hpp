@@ -339,21 +339,6 @@ enum BxDFType {
             | BSDF_TRANSMISSION,
 };
 
-class BSDF {
-    
-public:
-    
-private:
-    ~BSDF() {}
-    
-    const Normal3f ns, ng;
-    const Vector3f ss, ts;
-    int nBxDFs = 0;
-    static CONSTEXPR int MaxBxDFs = 8;
-    BxDF *bxdfs[MaxBxDFs];
-    friend class MixMaterial;
-};
-
 /**
  * BRDF(Bidirectional Reflectance Distribution Function)
  * 双向反射分布函数，定义给定入射方向上的辐射照度（irradiance）如何影响给定出射方向上的辐射率（radiance）
@@ -361,9 +346,9 @@ private:
  *                                          dLr(wr)
  * f(wi,wr) = dLr(wr) / dEi(wi)  = --------------------------
  *                                   Li(wi) * cosθi * dwi
- *                                   
+ *
  * 表示反射方向上的radiance与入射方向上的irradiance的变化率的比例
- * 
+ *
  * BTDF函数(Bidirectional transmission Distribution Function)
  * 其实BTDF的定义与BRDF差不多，只是BRDF用于描述反射，BTDF用于描述折射，就不再赘述了
  *
@@ -380,7 +365,7 @@ public:
         
     }
     
-    bool MatchesFlags(BxDFType t) const {
+    bool matchesFlags(BxDFType t) const {
         return (type & t) == type;
     }
     
@@ -422,7 +407,7 @@ public:
      * @return          ρhd(wo)
      */
     virtual Spectrum rho_hd(const Vector3f &wo, int nSamples,
-                         const Point2f *samples) const;
+                            const Point2f *samples) const;
     
     /**
      * ρhh(wo) = (1/π)∫[hemisphere]∫[hemisphere]f(p,wi,wo)|cosθo * cosθi|dwidwo
@@ -434,13 +419,13 @@ public:
      * @return           ρhh(wo)
      */
     virtual Spectrum rho_hh(int nSamples, const Point2f *samplesWo,
-                         const Point2f *samplesWi) const;
+                            const Point2f *samplesWi) const;
     
     /**
      * 返回入射方向为wi，出射方向为wo对应的概率密度函数值(立体角空间)
      * @param  wi [入射方向]
      * @param  wo [出射方向]
-     * @return    
+     * @return
      */
     virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const;
     
@@ -453,6 +438,100 @@ inline std::ostream &operator<<(std::ostream &os, const BxDF &f) {
     os << f.toString();
     return os;
 }
+
+/**
+ * BSDF类
+ * 通常物体表面都不止一种反射属性，所以需要一个类把各种BRDF，BTDF管理起来
+ * 于是，就有了BSDF
+ * 除了储存各种BXDF组件，还有该点微分几何信息
+ * 
+ */
+class BSDF {
+public:
+    BSDF(const SurfaceInteraction &si, Float eta = 1)
+    : eta(eta),
+    ns(si.shading.normal),
+    ng(si.normal),
+    ss(normalize(si.shading.dpdu)),
+    ts(cross(ns, ss)) {
+
+    }
+
+    void add(BxDF *b) {
+        CHECK_LT(nBxDFs, MaxBxDFs);
+        bxdfs[nBxDFs++] = b;
+    }
+
+    int numComponents(BxDFType flags = BSDF_ALL) const {
+        int num = 0;
+        for (int i = 0; i < nBxDFs; ++i) {
+            if (bxdfs[i]->matchesFlags(flags)) ++num;
+        }
+        return num;
+    }
+
+    Vector3f worldToLocal(const Vector3f &v) const {
+        return Vector3f(dot(v, ss), dot(v, ts), dot(v, ns));
+    }
+
+    Vector3f localToWorld(const Vector3f &v) const {
+        return Vector3f(ss.x * v.x + ts.x * v.y + ns.x * v.z,
+                        ss.y * v.x + ts.y * v.y + ns.y * v.z,
+                        ss.z * v.x + ts.z * v.y + ns.z * v.z);
+    }
+
+    Spectrum f(const Vector3f &woW, const Vector3f &wiW,
+               BxDFType flags = BSDF_ALL) const;
+
+    /**
+     * 跟BXDF的rho_hh函数相同，不再赘述
+     */
+    Spectrum rho_hh(int nSamples, const Point2f *samples1, const Point2f *samples2,
+                 BxDFType flags = BSDF_ALL) const;
+
+    /**
+     * 跟BXDF的rho_hd函数相同，不再赘述
+     */    
+    Spectrum rho_hd(const Vector3f &wo, int nSamples, const Point2f *samples,
+                 BxDFType flags = BSDF_ALL) const;
+
+    Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
+                      Float *pdf, BxDFType type = BSDF_ALL,
+                      BxDFType *sampledType = nullptr) const;
+    
+    /**
+     * 跟BXDF的pdfW函数相同，不再赘述
+     */ 
+    Float pdfW(const Vector3f &wo, const Vector3f &wi,
+              BxDFType flags = BSDF_ALL) const;
+
+    std::string toString() const;
+    
+    // 折射率，对于不透明物体，这是不用的
+    const Float eta;
+    
+private:
+
+    ~BSDF() {
+
+    }
+    // 几何法线
+    const Normal3f ns;
+    // 着色法线，bump贴图，法线贴图之类的
+    const Normal3f ng;
+    // 着色切线(s方向，u方向)
+    const Vector3f ss;
+    // 着色切线(t方向，v方向)
+    const Vector3f ts;
+    // BXDF组件的数量
+    int nBxDFs = 0;
+    // BXDF组件的最大数量
+    static CONSTEXPR int MaxBxDFs = 8;
+    // BXDF列表
+    BxDF *bxdfs[MaxBxDFs];
+
+    friend class MixMaterial;
+};
 
 /**
  * 如果想针对一个特定的BxDF执行缩放

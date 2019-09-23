@@ -116,6 +116,151 @@ Float BxDF::pdfW(const Vector3f &wo, const Vector3f &wi) const {
 }
 
 
+// BSDF
+Spectrum BSDF::f(const Vector3f &woW, const Vector3f &wiW, BxDFType flags) const {
+    Vector3f wi = worldToLocal(wiW);
+    Vector3f wo = worldToLocal(woW);
+    if (wo.z == 0) {
+        return 0.;
+    }
+    bool reflect = dot(wiW, ng) * dot(woW, ng) > 0;
+    Spectrum f(0.f);
+    for (int i = 0; i < nBxDFs; ++i) {
+        if (bxdfs[i]->matchesFlags(flags) &&
+            ((reflect && (bxdfs[i]->type & BSDF_REFLECTION)) ||
+             (!reflect && (bxdfs[i]->type & BSDF_TRANSMISSION)))) {
+            f += bxdfs[i]->f(wo, wi);
+        }
+    }
+    return f;
+}
+
+Spectrum BSDF::rho_hh(int nSamples, const Point2f *samples1,
+                   const Point2f *samples2, BxDFType flags) const {
+    Spectrum ret(0.f);
+    for (int i = 0; i < nBxDFs; ++i) {
+        if (bxdfs[i]->matchesFlags(flags)) {
+            ret += bxdfs[i]->rho_hh(nSamples, samples1, samples2);
+        }
+    }
+    return ret;
+}
+
+Spectrum BSDF::rho_hd(const Vector3f &wo, int nSamples, const Point2f *samples,
+                   BxDFType flags) const {
+    Spectrum ret(0.f);
+    for (int i = 0; i < nBxDFs; ++i) {
+        if (bxdfs[i]->matchesFlags(flags)) {
+            ret += bxdfs[i]->rho_hd(wo, nSamples, samples);
+        }
+    }
+    return ret;
+}
+
+Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
+                        const Point2f &u, Float *pdf, BxDFType type,
+                        BxDFType *sampledType) const {
+
+    int matchingComps = numComponents(type);
+    if (matchingComps == 0) {
+        *pdf = 0;
+        if (sampledType) {
+        	*sampledType = BxDFType(0);
+        }
+        return Spectrum(0);
+    }
+    int comp = std::min((int)std::floor(u[0] * matchingComps), matchingComps - 1);
+    
+    BxDF *bxdf = nullptr;
+    int count = comp;
+    for (int i = 0; i < nBxDFs; ++i) {
+        if (bxdfs[i]->matchesFlags(type) && count-- == 0) {
+            bxdf = bxdfs[i];
+            break;
+        }
+    }
+    DCHECK(bxdf != nullptr);
+    COUT << "BSDF::Sample_f chose comp = " << comp << " / matching = " <<
+    matchingComps << ", bxdf: " << bxdf->toString();
+    
+    Point2f uRemapped(std::min(u[0] * matchingComps - comp, OneMinusEpsilon), u[1]);
+    
+    Vector3f wi, wo = worldToLocal(woWorld);
+    if (wo.z == 0) {
+    	return 0.;
+    }
+    *pdf = 0;
+    if (sampledType) {
+    	*sampledType = bxdf->type;
+    }
+    Spectrum f = bxdf->sample_f(wo, &wi, uRemapped, pdf, sampledType);
+    COUT << "For wo = " << wo << ", sampled f = " << f << ", pdf = "
+    << *pdf << ", ratio = " << ((*pdf > 0) ? (f / *pdf) : Spectrum(0.))
+    << ", wi = " << wi;
+    if (*pdf == 0) {
+        if (sampledType) {
+        	*sampledType = BxDFType(0);
+        }
+        return 0;
+    }
+    *wiWorld = localToWorld(wi);
+    
+    if (!(bxdf->type & BSDF_SPECULAR) && matchingComps > 1) {
+        for (int i = 0; i < nBxDFs; ++i) {
+            if (bxdfs[i] != bxdf && bxdfs[i]->matchesFlags(type)) {
+                *pdf += bxdfs[i]->pdfW(wo, wi);
+            }
+        }
+    }
+
+    if (matchingComps > 1) {
+    	*pdf /= matchingComps;
+    }
+    
+    if (!(bxdf->type & BSDF_SPECULAR)) {
+        bool reflect = dot(*wiWorld, ng) * dot(woWorld, ng) > 0;
+        f = 0.;
+        for (int i = 0; i < nBxDFs; ++i) {
+            if (bxdfs[i]->matchesFlags(type) &&
+                ((reflect && (bxdfs[i]->type & BSDF_REFLECTION)) ||
+                (!reflect && (bxdfs[i]->type & BSDF_TRANSMISSION)))) {
+                f += bxdfs[i]->f(wo, wi);
+            }
+        }
+    }
+    COUT << "Overall f = " << f << ", pdf = " << *pdf << ", ratio = "
+    << ((*pdf > 0) ? (f / *pdf) : Spectrum(0.));
+    return f;
+}
+
+Float BSDF::pdfW(const Vector3f &woWorld, const Vector3f &wiWorld,
+                BxDFType flags) const {
+
+    if (nBxDFs == 0.f) {
+    	return 0.f;
+    }
+    Vector3f wo = worldToLocal(woWorld);
+    Vector3f wi = worldToLocal(wiWorld);
+    if (wo.z == 0) return 0.;
+    Float pdf = 0.f;
+    int matchingComps = 0;
+    for (int i = 0; i < nBxDFs; ++i) {
+        if (bxdfs[i]->matchesFlags(flags)) {
+            ++matchingComps;
+            pdf += bxdfs[i]->pdfW(wo, wi);
+        }
+    }
+    Float v = matchingComps > 0 ? pdf / matchingComps : 0.f;
+    return v;
+}
+
+std::string BSDF::toString() const {
+    std::string s = StringPrintf("[ BSDF eta: %f nBxDFs: %d", eta, nBxDFs);
+    for (int i = 0; i < nBxDFs; ++i)
+        s += StringPrintf("\n  bxdfs[%d]: ", i) + bxdfs[i]->toString();
+    return s + std::string(" ]");
+}
+
 //  SpecularReflection
 Spectrum SpecularReflection::sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample,
                   Float *pdf, BxDFType *sampledType) const {
