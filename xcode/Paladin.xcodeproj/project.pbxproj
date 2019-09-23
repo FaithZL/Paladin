@@ -124,6 +124,10 @@
 		F01CB5C319394B6C946C6A8A /* lfunc.c in Sources */ = {isa = PBXBuildFile; fileRef = 16E7EAD48B974554B8665AB0 /* lfunc.c */; };
 		F131F803342142F4A0C63FBE /* triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C07C5E958954F21B0731435 /* triangle.cpp */; };
 		F14CD7C35DBA4237A7604425 /* lstring.c in Sources */ = {isa = PBXBuildFile; fileRef = A79CCE1427344784ACF1B11A /* lstring.c */; };
+		F63848AB23392C0F000B853B /* glass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63848A923392C0F000B853B /* glass.cpp */; };
+		F63848AE23392C20000B853B /* mirror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63848AC23392C20000B853B /* mirror.cpp */; };
+		F63848B123392C31000B853B /* metal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63848AF23392C31000B853B /* metal.cpp */; };
+		F63848B423392C60000B853B /* plastic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63848B223392C60000B853B /* plastic.cpp */; };
 		F650CA952333E30D0040F410 /* microfacet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F650CA932333E30D0040F410 /* microfacet.cpp */; };
 /* End PBXBuildFile section */
 
@@ -353,6 +357,14 @@
 		F152B127CEB24635BEECCE00 /* errfloat.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = errfloat.h; path = src/tools/errfloat.h; sourceTree = SOURCE_ROOT; };
 		F435FB59CDB34098B36B9DF9 /* lstrlib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lstrlib.c; path = third/lua53/lua/lstrlib.c; sourceTree = SOURCE_ROOT; };
 		F4D97354A71149B587EC86EE /* lcode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lcode.h; path = third/lua53/lua/lcode.h; sourceTree = SOURCE_ROOT; };
+		F63848A923392C0F000B853B /* glass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = glass.cpp; path = src/materials/glass.cpp; sourceTree = "<group>"; };
+		F63848AA23392C0F000B853B /* glass.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = glass.hpp; path = src/materials/glass.hpp; sourceTree = "<group>"; };
+		F63848AC23392C20000B853B /* mirror.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mirror.cpp; path = src/materials/mirror.cpp; sourceTree = "<group>"; };
+		F63848AD23392C20000B853B /* mirror.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = mirror.hpp; path = src/materials/mirror.hpp; sourceTree = "<group>"; };
+		F63848AF23392C31000B853B /* metal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = metal.cpp; path = src/materials/metal.cpp; sourceTree = "<group>"; };
+		F63848B023392C31000B853B /* metal.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = metal.hpp; path = src/materials/metal.hpp; sourceTree = "<group>"; };
+		F63848B223392C60000B853B /* plastic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = plastic.cpp; path = src/materials/plastic.cpp; sourceTree = "<group>"; };
+		F63848B323392C60000B853B /* plastic.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = plastic.hpp; path = src/materials/plastic.hpp; sourceTree = "<group>"; };
 		F650CA932333E30D0040F410 /* microfacet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = microfacet.cpp; path = src/core/microfacet.cpp; sourceTree = "<group>"; };
 		F650CA942333E30D0040F410 /* microfacet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = microfacet.hpp; path = src/core/microfacet.hpp; sourceTree = "<group>"; };
 		F680CC37232BFCA000A18F6E /* triangle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = triangle.h; path = src/filters/triangle.h; sourceTree = "<group>"; };
@@ -693,6 +705,14 @@
 			children = (
 				67819BE5F3D24D8A883F334B /* matte.cpp */,
 				185A0DBA042F4A64979A2675 /* matte.hpp */,
+				F63848A923392C0F000B853B /* glass.cpp */,
+				F63848AA23392C0F000B853B /* glass.hpp */,
+				F63848AC23392C20000B853B /* mirror.cpp */,
+				F63848AD23392C20000B853B /* mirror.hpp */,
+				F63848AF23392C31000B853B /* metal.cpp */,
+				F63848B023392C31000B853B /* metal.hpp */,
+				F63848B223392C60000B853B /* plastic.cpp */,
+				F63848B323392C60000B853B /* plastic.hpp */,
 			);
 			name = materials;
 			sourceTree = "<group>";
@@ -969,9 +989,11 @@
 				395CC82A10E147C69FD6471F /* primitive.cpp in Sources */,
 				C727AC90736A4A80978A4B24 /* sampler.cpp in Sources */,
 				51B18280A1704B97A2D74DFE /* sampling.cpp in Sources */,
+				F63848B123392C31000B853B /* metal.cpp in Sources */,
 				572368A0DD3D412683D35629 /* scene.cpp in Sources */,
 				8C57CA3DA22F489893FD4B11 /* shape.cpp in Sources */,
 				5E164D6FF71D475BB41B2666 /* spectrum.cpp in Sources */,
+				F63848B423392C60000B853B /* plastic.cpp in Sources */,
 				BAD318688AC64D3CAFBBD9EF /* texture.cpp in Sources */,
 				83C984C34444464499B3F07E /* luaparser.cpp in Sources */,
 				C08D8DDA49B244D78374AD4C /* path.cpp in Sources */,
@@ -979,9 +1001,11 @@
 				7E162610410D4B838D6F2CD7 /* main.cpp in Sources */,
 				CE8588B24AF2409A862C120F /* matte.cpp in Sources */,
 				38C2CE5573314CC0B31414FD /* animatedtransform.cpp in Sources */,
+				F63848AE23392C20000B853B /* mirror.cpp in Sources */,
 				AB3A1A31FD484F0CB0999FCC /* lowdiscrepancy.cpp in Sources */,
 				3FB111EC94D646E58AA87AFA /* quaternion.cpp in Sources */,
 				5E4915E205EB4B3F8B952FEB /* transform.cpp in Sources */,
+				F63848AB23392C0F000B853B /* glass.cpp in Sources */,
 				D9D5854C25044FFA847D93CD /* parallel.cpp in Sources */,
 				52FFF4E1D7B64290BC9B37CF /* halton.cpp in Sources */,
 				2B86BA7319A64343B74C2B56 /* random.cpp in Sources */,
