@@ -470,6 +470,11 @@ public:
         return num;
     }
 
+    /**
+     * 根据法线方向，切线向量，付切线向量确定正交基 
+     * @param  v [description]
+     * @return   [description]
+     */
     Vector3f worldToLocal(const Vector3f &v) const {
         return Vector3f(dot(v, ss), dot(v, ts), dot(v, ns));
     }

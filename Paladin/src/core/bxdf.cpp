@@ -160,7 +160,7 @@ Spectrum BSDF::rho_hd(const Vector3f &wo, int nSamples, const Point2f *samples,
 Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
                         const Point2f &u, Float *pdf, BxDFType type,
                         BxDFType *sampledType) const {
-
+	// 计算符合type反射类型的组件数量
     int matchingComps = numComponents(type);
     if (matchingComps == 0) {
         *pdf = 0;
@@ -169,10 +169,12 @@ Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
         }
         return Spectrum(0);
     }
+    // 根据随机变量随机选择bxdf组件
     int comp = std::min((int)std::floor(u[0] * matchingComps), matchingComps - 1);
     
     BxDF *bxdf = nullptr;
     int count = comp;
+    // 找到第comp个目标组件
     for (int i = 0; i < nBxDFs; ++i) {
         if (bxdfs[i]->matchesFlags(type) && count-- == 0) {
             bxdf = bxdfs[i];
@@ -182,7 +184,7 @@ Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
     DCHECK(bxdf != nullptr);
     COUT << "BSDF::Sample_f chose comp = " << comp << " / matching = " <<
     matchingComps << ", bxdf: " << bxdf->toString();
-    
+    // 重新映射二维随机变量
     Point2f uRemapped(std::min(u[0] * matchingComps - comp, OneMinusEpsilon), u[1]);
     
     Vector3f wi, wo = worldToLocal(woWorld);
@@ -193,7 +195,10 @@ Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
     if (sampledType) {
     	*sampledType = bxdf->type;
     }
+
+    // 对选中的bxdf采样
     Spectrum f = bxdf->sample_f(wo, &wi, uRemapped, pdf, sampledType);
+
     COUT << "For wo = " << wo << ", sampled f = " << f << ", pdf = "
     << *pdf << ", ratio = " << ((*pdf > 0) ? (f / *pdf) : Spectrum(0.))
     << ", wi = " << wi;
@@ -205,6 +210,8 @@ Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
     }
     *wiWorld = localToWorld(wi);
     
+    // 如果不包含高光反射，并且匹配的组件数大于1，才会累加pdf
+    // 因为高光反射不能使用常规方法采样
     if (!(bxdf->type & BSDF_SPECULAR) && matchingComps > 1) {
         for (int i = 0; i < nBxDFs; ++i) {
             if (bxdfs[i] != bxdf && bxdfs[i]->matchesFlags(type)) {
