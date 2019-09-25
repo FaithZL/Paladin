@@ -450,10 +450,10 @@ class BSDF {
 public:
     BSDF(const SurfaceInteraction &si, Float eta = 1)
     : eta(eta),
-    ns(si.shading.normal),
-    ng(si.normal),
-    ss(normalize(si.shading.dpdu)),
-    ts(cross(ns, ss)) {
+    _sNormal(si.shading.normal),
+    _gNormal(si.normal),
+    _sTangent(normalize(si.shading.dpdu)),
+    _tTangent(cross(_sNormal, _sTangent)) {
 
     }
 
@@ -476,13 +476,13 @@ public:
      * @return   [description]
      */
     Vector3f worldToLocal(const Vector3f &v) const {
-        return Vector3f(dot(v, ss), dot(v, ts), dot(v, ns));
+        return Vector3f(dot(v, _sTangent), dot(v, _tTangent), dot(v, _sNormal));
     }
 
     Vector3f localToWorld(const Vector3f &v) const {
-        return Vector3f(ss.x * v.x + ts.x * v.y + ns.x * v.z,
-                        ss.y * v.x + ts.y * v.y + ns.y * v.z,
-                        ss.z * v.x + ts.z * v.y + ns.z * v.z);
+        return Vector3f(_sTangent.x * v.x + _tTangent.x * v.y + _sNormal.x * v.z,
+                        _sTangent.y * v.x + _tTangent.y * v.y + _sNormal.y * v.z,
+                        _sTangent.z * v.x + _tTangent.z * v.y + _sNormal.z * v.z);
     }
 
     Spectrum f(const Vector3f &woW, const Vector3f &wiW,
@@ -521,13 +521,13 @@ private:
 
     }
     // 几何法线
-    const Normal3f ns;
+    const Normal3f _gNormal;
     // 着色法线，bump贴图，法线贴图之类的
-    const Normal3f ng;
+    const Normal3f _sNormal;
     // 着色切线(s方向，u方向)
-    const Vector3f ss;
+    const Vector3f _sTangent;
     // 着色切线(t方向，v方向)
-    const Vector3f ts;
+    const Vector3f _tTangent;
     // BXDF组件的数量
     int nBxDFs = 0;
     // BXDF组件的最大数量

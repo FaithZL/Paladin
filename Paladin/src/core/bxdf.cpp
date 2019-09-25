@@ -123,7 +123,7 @@ Spectrum BSDF::f(const Vector3f &woW, const Vector3f &wiW, BxDFType flags) const
     if (wo.z == 0) {
         return 0.;
     }
-    bool reflect = dot(wiW, ng) * dot(woW, ng) > 0;
+    bool reflect = dot(wiW, _gNormal) * dot(woW, _gNormal) > 0;
     Spectrum f(0.f);
     for (int i = 0; i < nBxDFs; ++i) {
         if (bxdfs[i]->matchesFlags(flags) &&
@@ -225,7 +225,7 @@ Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
     }
     
     if (!(bxdf->type & BSDF_SPECULAR)) {
-        bool reflect = dot(*wiWorld, ng) * dot(woWorld, ng) > 0;
+        bool reflect = dot(*wiWorld, _gNormal) * dot(woWorld, _gNormal) > 0;
         f = 0.;
         for (int i = 0; i < nBxDFs; ++i) {
             if (bxdfs[i]->matchesFlags(type) &&
