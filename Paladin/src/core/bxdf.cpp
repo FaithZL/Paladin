@@ -534,7 +534,7 @@ Spectrum FresnelBlend::f(const Vector3f &wo, const Vector3f &wi) const {
     Spectrum specular =
     	_distribution->D(wh) /
     	(4 * absDot(wi, wh) * std::max(absCosTheta(wi), absCosTheta(wo))) *
-    schlickFresnel(dot(wi, wh));
+    	schlickFresnel(dot(wi, wh));
     return diffuse + specular;
 }
 
@@ -571,6 +571,7 @@ Float FresnelBlend::pdfW(const Vector3f &wo, const Vector3f &wi) const {
     }
     Vector3f wh = normalize(wo + wi);
     Float pdf_wh = _distribution->pdfW(wo, wh);
+    // 漫反射的pdf与菲涅尔反射的pdf取平均值
     return .5f * (absCosTheta(wi) * InvPi + pdf_wh / (4 * dot(wo, wh)));
 }
 
