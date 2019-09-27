@@ -22,7 +22,11 @@ public:
                                             MemoryArena &arena,
                                             TransportMode mode,
                                             bool allowMultipleLobes) const = 0;
-    virtual ~Material();
+
+    virtual ~Material() {
+    	
+    }
+
     static void bump(const std::shared_ptr<Texture<Float>> &d,
                      SurfaceInteraction *si);
 };
