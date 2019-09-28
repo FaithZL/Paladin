@@ -15,19 +15,7 @@
 
 PALADIN_BEGIN
 
-/**
- * 
- *  dp'(u,v)	dp(u,v)	   db(u+△u,v) - db(u,v)				     dn(u,v)
- * --------- ≈ --------- + --------------------- n(u,v) + b(u,v) ------
- *     du		  du		      △u				               du
- *     
- *  dp'(u,v)	dp(u,v)	   db(u,v)				   dn(u,v)
- * --------- = --------- + ------- n(u,v) + b(u,v) ------
- *     du		  du		 du					     du
- *     
- * @param d  [description]
- * @param si [description]
- */
+
 void Material::bump(const std::shared_ptr<Texture<Float>> &d, SurfaceInteraction *si) {
 	SurfaceInteraction siEval = *si;
 
@@ -62,9 +50,9 @@ void Material::bump(const std::shared_ptr<Texture<Float>> &d, SurfaceInteraction
 	Float diplace = d->evaluate(*si);
 	/**
 	 * 计算微分几何信息，其实就是用这个表达式
-	 *  dp'(u,v)	dp(u,v)	   db(u+△u,v) - db(u,v)				     dn(u,v)
+	 *  dp'(u,v)	dp(u,v)	   db(u+△u,v) - db(u,v)                  dn(u,v)
 	 * --------- ≈ --------- + --------------------- n(u,v) + b(u,v) ------
-	 *     du		  du		      △u				               du
+	 *     du		  du              △u                               du
 	 */
     Vector3f dpdu = si->shading.dpdu
                 + (uDisplace - diplace) / du * Vector3f(si->shading.normal)
