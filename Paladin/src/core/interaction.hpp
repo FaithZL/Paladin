@@ -113,12 +113,19 @@ struct Interaction {
 
 class MediumInteraction : public Interaction {
 public:
-    // MediumInteraction Public Methods
-    MediumInteraction() : phase(nullptr) {}
+    MediumInteraction() : phase(nullptr) {
+
+    }
+
     MediumInteraction(const Point3f &p, const Vector3f &wo, Float time,
                       const Medium *medium, const PhaseFunction *phase)
-    : Interaction(p, wo, time, medium), phase(phase) {}
-    bool isValid() const { return phase != nullptr; }
+    : Interaction(p, wo, time, medium), phase(phase) {
+
+    }
+
+    bool isValid() const { 
+        return phase != nullptr; 
+    }
     
     const PhaseFunction *phase;
 };

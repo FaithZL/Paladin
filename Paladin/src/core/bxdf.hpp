@@ -450,8 +450,8 @@ class BSDF {
 public:
     BSDF(const SurfaceInteraction &si, Float eta = 1)
     : eta(eta),
-    _sNormal(si.shading.normal),
     _gNormal(si.normal),
+    _sNormal(si.shading.normal),
     _sTangent(normalize(si.shading.dpdu)),
     _tTangent(cross(_sNormal, _sTangent)) {
 

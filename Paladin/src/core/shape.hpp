@@ -79,7 +79,7 @@ public:
 
 	/**
 	 * 在场景中某处ref处沿着wi方向采样图形上某点的概率密度函数
-	 *函数空间为向量空间
+	 * 函数空间为向量空间
 	 */
     virtual Float pdfW(const Interaction &ref, const Vector3f &wi) const;
     
@@ -90,6 +90,7 @@ public:
 
 	const Transform * objectToWorld;
 	const Transform * worldToObject;
+    // 通常是模型文件指定的属性
 	const bool reverseOrientation;
 	const bool transformSwapsHandedness;
 protected:
