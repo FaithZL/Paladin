@@ -14,10 +14,10 @@
 
 PALADIN_BEGIN
 
-/*
-Interaction为光线与物体作用的点
-该结构储存着各种数据
-*/
+/**
+ * Interaction为光线与物体作用的点
+ * 该结构储存着各种数据
+ */
 struct Interaction {
     
 	Interaction(): time(0) {}
@@ -68,16 +68,16 @@ struct Interaction {
 		return !isSurfaceInteraction(); 
 	}
 
-    /*
-     一般用于在指定交点处根据序列生成ray找到下一个交点
+    /**
+     * 一般用于在指定交点处根据序列生成ray找到下一个交点
      */
     Ray spawnRay(const Vector3f &d) const {
         Point3f o = offsetRayOrigin(pos, pError, normal, d);
         return Ray(o, d, Infinity, time, getMedium(d));
     }
     
-    /*
-     一般用于生成shadow ray，判断两个点之间是否有阻挡
+    /**
+     * 一般用于生成shadow ray，判断两个点之间是否有阻挡
      */
     Ray spawnRayTo(const Point3f &p2) const {
         Point3f origin = offsetRayOrigin(pos, pError, normal, p2 - pos);
@@ -86,8 +86,8 @@ struct Interaction {
         return Ray(origin, d, 1 - ShadowEpsilon, time, getMedium(d));
     }
     
-    /*
-     一般用于生成shadow ray，判断两个点之间是否有阻挡
+    /**
+     * 一般用于生成shadow ray，判断两个点之间是否有阻挡
      */    
     Ray spawnRayTo(const Interaction &it) const {
         Point3f origin = offsetRayOrigin(pos, pError, normal, it.pos - pos);
@@ -139,7 +139,10 @@ class SurfaceInteraction : public Interaction {
     };
     
 public:
-	SurfaceInteraction() {}
+	SurfaceInteraction() {
+        
+    }
+    
 	SurfaceInteraction(const Point3f &p, const Vector3f &pError,
                        const Point2f &uv, const Vector3f &wo,
                        const Vector3f &dpdu, const Vector3f &dpdv,
@@ -150,6 +153,8 @@ public:
 	void setShadingGeometry(const Vector3f &dpdu, const Vector3f &dpdv,
                             const Normal3f &dndu, const Normal3f &dndv,
                             bool orientationIsAuthoritative);
+    
+    void computeDifferentials(const RayDifferential &ray) const;
 	
     // 表面坐标
 	Point2f uv;
