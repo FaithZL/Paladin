@@ -493,8 +493,11 @@ public:
     Transform operator * (const Transform &other) const;
 
     inline bool swapsHandedness() const {
-        /*
-         如果左上角3x3的矩阵行列式小于零，则说明这个变换是换了手的，至于为何是这样，暂时没有了解太深，搞完主线再说todo
+        /**
+         * 如果左上角3x3的矩阵行列式小于零，则说明这个变换是换了手的，
+         * 至于为何是这样，补充一下说明，加深一下理解
+         * 行列式det(A)的大小，就是一个物体经过A矩阵进行线性变换之后，体积的缩放比
+         * 行列式都小于零了，说明体积变为了负数，那就说明坐标系换手啦！
          */
         return _mat.det3x3() < 0;
     }
