@@ -55,8 +55,8 @@ void SurfaceInteraction::computeDifferentials(const RayDifferential &ray) const 
         Float ty = (d - dot(normal, Vector3f(ray.ryOrigin))) / dot(normal, ray.ryDirection);
         Point3f py = ray.ryOrigin + ty * ray.ryDirection;
 
-        dpdx = px - p;
-        dpdy = py - p;
+        dpdx = px - pos;
+        dpdy = py - pos;
 
         /**
          * p' = p + △u dp/du + △v dp/dv
@@ -102,8 +102,8 @@ void SurfaceInteraction::computeDifferentials(const RayDifferential &ray) const 
         }
         Float A[2][2] = {{dpdu[dim[0]], dpdv[dim[0]]},
                          {dpdu[dim[1]], dpdv[dim[1]]}};
-        Float Bx[2] = {px[dim[0]] - p[dim[0]], px[dim[1]] - p[dim[1]]};
-        Float By[2] = {py[dim[0]] - p[dim[0]], py[dim[1]] - p[dim[1]]};
+        Float Bx[2] = {px[dim[0]] - pos[dim[0]], px[dim[1]] - pos[dim[1]]};
+        Float By[2] = {py[dim[0]] - pos[dim[0]], py[dim[1]] - pos[dim[1]]};
         if (!solveLinearSystem2x2(A, Bx, &dudx, &dvdx)) {
             dudx = dvdx = 0;
         }
