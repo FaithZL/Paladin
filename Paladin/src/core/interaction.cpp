@@ -40,7 +40,11 @@ faceIndex(faceIndex) {
 
 void SurfaceInteraction::computeDifferentials(const RayDifferential &ray) const {
     if (ray.hasDifferentials) {
-        
+        // 平面方程为 ax + by + cz = d
+        // 法向量为n(a,b,c),平面上的点p(x,y,z)
+        // d = n · p
+        Float d = dot(normal, pos);
+
     } else {
         dudx = dvdx = 0;
         dudy = dvdy = 0;
