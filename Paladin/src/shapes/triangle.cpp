@@ -160,7 +160,7 @@ bool Triangle::intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
  * e2 = p2 - p0
  * ue1 + ve2 - td = o - p0
  * 改写成如下形式
- *                t
+ *                 t
  * [-d  e1  e2] * [u] = T
  *                 v
  * 求解上述方程组

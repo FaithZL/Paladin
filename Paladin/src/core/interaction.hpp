@@ -154,6 +154,15 @@ public:
                             const Normal3f &dndu, const Normal3f &dndv,
                             bool orientationIsAuthoritative);
     
+    /**
+     * 计算偏导数 du/dx, du/dy, dv/dx, dv/dy
+     * 光线在x方向变化时，对应纹理的u，v坐标的变化率
+     * x，y方向偏移值通常为1/√(spp)，这还是比较容易理解的
+     * 一个像素采spp个样本，相当于把一个像素平均分为spp份，xy方向各为√(spp)
+     * 
+     * 这些数据主要用于纹理反走样，把相邻两个采样点之间的变化值过滤掉
+     * @param ray [description]
+     */
     void computeDifferentials(const RayDifferential &ray) const;
 	
     // 表面坐标

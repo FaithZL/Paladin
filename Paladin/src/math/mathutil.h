@@ -454,18 +454,22 @@ inline Float lerp(Float t, Float v1, Float v2) {
     return (1 - t) * v1 + t * v2;
 }
 
+/**
+ *  求解2元线性方程组
+ *  a00 a01     x0     b0
+ *           *      =
+ *  a10 a11     x1     b1
+ */
 inline bool solveLinearSystem2x2(const Float A[2][2], const Float B[2], Float *x0, Float *x1) {
-    /*
-    求解2元线性方程组
-    a00 a01     x0     b0
-             *      =
-    a10 a11     x1     b1
-    */
     Float det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
-    if (std::abs(det) < 1e-10f) return false;
+    if (std::abs(det) < 1e-10f) {
+        return false;
+    }
     *x0 = (A[1][1] * B[0] - A[0][1] * B[1]) / det;
     *x1 = (A[0][0] * B[1] - A[1][0] * B[0]) / det;
-    if (std::isnan(*x0) || std::isnan(*x1)) return false;
+    if (std::isnan(*x0) || std::isnan(*x1)) {
+        return false;
+    }
     return true;
 }
 
