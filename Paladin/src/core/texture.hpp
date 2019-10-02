@@ -71,6 +71,46 @@ private:
 	const Transform _worldToTexture;
 };
 
+class CylindricalMapping2D : public TextureMapping2D {
+
+public:
+    CylindricalMapping2D(const Transform &worldToTexture)
+    : _worldToTexture(worldToTexture) {
+        
+    }
+    
+    Point2f Map(const SurfaceInteraction &si, Vector2f *dstdx,
+                Vector2f *dstdy) const;
+    
+private:
+
+    Point2f pointToCylinderToST(const Point3f &p) const {
+        Vector3f vec = normalize(_worldToTexture.exec(p) - Point3f(0, 0, 0));
+        return Point2f((Pi + std::atan2(vec.y, vec.x)) * Inv2Pi, vec.z);
+    }
+
+    const Transform _worldToTexture;
+};
+
+class PlanarMapping2D : public TextureMapping2D {
+public:
+    Point2f Map(const SurfaceInteraction &si, Vector2f *dstdx,
+                Vector2f *dstdy) const;
+
+    PlanarMapping2D(const Vector3f &vs, const Vector3f &vt, Float ds = 0,
+                    Float dt = 0)
+    : _vs(vs), 
+    _vt(vt), 
+    _ds(ds), 
+    _dt(dt) {
+
+    }
+
+private:
+    const Vector3f _vs, _vt;
+    const Float _ds, _dt;
+};
+
 /**
  * 纹理基类
  * 图像坐标为(x,y)，纹理坐标为(s,t)

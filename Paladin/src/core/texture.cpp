@@ -52,33 +52,30 @@ Point2f SphericalMapping2D::map(const paladin::SurfaceInteraction &si, Vector2f 
     const Float delta = 0.1f;
     Point2f stDeltaX = pointToSphereToST(si.pos + delta * si.dpdx);
     *dstdx = (stDeltaX - st) / delta;
-	Point2f stDeltaY = pointToSphereToST(si.pos + delta * si.dpdy);
-    *dstdy = (stDeltaY - st) / delta;
+	
     
     // 正向差分法会带来一个问题
     // 考虑φ在0和2π之间的间断点情况
     // 如果φ在2π处，此时t = 1，φ进行正向偏移△之后，此时t = △/(2π)，接近于0
     // 这显然不是我们希望看到的
-    // 这是pbrt代码，我觉得有点问题，先标注上
-    // 
-    // s经过正向偏移之后得到s'，s' 与 s 均属于 [0,1] 范围
-    // 
-    // 我们暂时把 
-    // 值接近1的s值，正向偏移之后，s‘略大于1，重新映射到0到1之间，这种情况称为越界
-    // 
-    // 如果不考虑越界s'越界的情况，s'比s略大一点点，两者差值应该很小
-    // 
-    // 如果考虑越界情况 s略小于1，s'略大于0，两者差值接近1,
-    // 除以delta之后，应该是接近10，
-    // 所以判断是否越界的标准应该是 偏导数是否大于5
-    // 
+    // 如何解决这个问题？
+    // 先说结论，dt/dx不可能大于0.5，如果dt/dx大于0.5，一定是出现了跳跃点
+    // 为何？？？
+    // 我们把屏幕空间的dx定为单位1，光线经过dx偏移之后，
+    // φ所对应的偏移值一定是小于π的，所以t也是小于0.5的
+    // 因为球是圆的嘛，光线偏移也不可能照到球的背面去
+    // 接下来的圆柱映射也同理
+
 	if ((*dstdx)[1] > 0.5f) {
-		// 
+		// 0到2π
         (*dstdx)[1] = 1 - (*dstdx)[1];
 	} else if ((*dstdx)[1] < -0.5f) {
+		// 2π到0
         (*dstdx)[1] = -((*dstdx)[1] + 1);
     } 
 
+	Point2f stDeltaY = pointToSphereToST(si.pos + delta * si.dpdy);
+    *dstdy = (stDeltaY - st) / delta;    
     if ((*dstdy)[1] > 0.5f) {
         (*dstdy)[1] = 1 - (*dstdy)[1];
     } else if ((*dstdy)[1] < -0.5f) {
@@ -93,6 +90,41 @@ Point2f SphericalMapping2D::pointToSphereToST(const Point3f &p) const {
     Float theta = sphericalTheta(vec);
     Float phi = sphericalPhi(vec);
     return Point2f(theta * InvPi, phi * Inv2Pi);
+}
+
+// CylindricalMapping2D
+Point2f CylindricalMapping2D::Map(const SurfaceInteraction &si, Vector2f *dstdx,
+                                  Vector2f *dstdy) const {
+	// 这个版本跟SphericalMapping2D的没太大区别，
+	// 用同样的方式处理正向差分产生的问题
+    Point2f st = pointToCylinderToST(si.pos);
+
+    const Float delta = .01f;
+    Point2f stDeltaX = pointToCylinderToST(si.pos + delta * si.dpdx);
+    *dstdx = (stDeltaX - st) / delta;
+    if ((*dstdx)[1] > .5) {
+        (*dstdx)[1] = 1.f - (*dstdx)[1];
+    } else if ((*dstdx)[1] < -.5f) {
+        (*dstdx)[1] = -((*dstdx)[1] + 1);
+    }
+
+    Point2f stDeltaY = pointToCylinderToST(si.pos + delta * si.dpdy);
+    *dstdy = (stDeltaY - st) / delta;
+    if ((*dstdy)[1] > .5) {
+        (*dstdy)[1] = 1.f - (*dstdy)[1];
+    } else if ((*dstdy)[1] < -.5f) {
+        (*dstdy)[1] = -((*dstdy)[1] + 1);
+    }
+    return st;
+}
+
+// PlanarMapping2D
+Point2f PlanarMapping2D::Map(const SurfaceInteraction &si, Vector2f *dstdx,
+                             Vector2f *dstdy) const {
+    Vector3f vec(si.pos);
+    *dstdx = Vector2f(dot(si.dpdx, _vs), dot(si.dpdx, _vt));
+    *dstdy = Vector2f(dot(si.dpdy, _vs), dot(si.dpdy, _vt));
+    return Point2f(_ds + dot(vec, _vs), _dt + dot(vec, _vt));
 }
 
 PALADIN_END
