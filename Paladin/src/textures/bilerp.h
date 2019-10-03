@@ -26,8 +26,10 @@ public:
     virtual T evaluate(const SurfaceInteraction &si) const {
         Vector2f dstdx, dstdy;
         Point2f st = _mapping->map(si, &dstdx, &dstdy);
-        return (1 - st[0]) * (1 - st[1]) * _v00 + (1 - st[0]) * (st[1]) * _v01 +
-        (st[0]) * (1 - st[1]) * _v10 + (st[0]) * (st[1]) * _v11;
+        return (1 - st[0]) * (1 - st[1]) * _v00
+                + (1 - st[0]) * (st[1]) * _v01
+                + (st[0]) * (1 - st[1]) * _v10
+                + (st[0]) * (st[1]) * _v11;
     }
     
 private:
