@@ -5,9 +5,9 @@
 //  Created by SATAN_Z on 2019/10/2.
 //
 
-#ifndef mix_hpp
-#define mix_hpp
+#ifndef material_mix_hpp
+#define material_mix_hpp
 
 #include <stdio.h>
 
-#endif /* mix_hpp */
+#endif /* material_mix_hpp */

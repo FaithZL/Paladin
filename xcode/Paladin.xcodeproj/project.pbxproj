@@ -360,7 +360,6 @@
 		F636D5802343AE7D007ECB48 /* scale.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = scale.h; path = src/textures/scale.h; sourceTree = "<group>"; };
 		F636D5822343AF42007ECB48 /* imagemap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagemap.cpp; path = src/textures/imagemap.cpp; sourceTree = "<group>"; };
 		F636D5832343AF42007ECB48 /* imagemap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = imagemap.hpp; path = src/textures/imagemap.hpp; sourceTree = "<group>"; };
-		F636D5852343AFAF007ECB48 /* bilerp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bilerp.h; sourceTree = "<group>"; };
 		F636D5862343AFD4007ECB48 /* mix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mix.cpp; path = src/materials/mix.cpp; sourceTree = "<group>"; };
 		F636D5872343AFD4007ECB48 /* mix.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = mix.hpp; path = src/materials/mix.hpp; sourceTree = "<group>"; };
 		F63848A923392C0F000B853B /* glass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = glass.cpp; path = src/materials/glass.cpp; sourceTree = "<group>"; };
@@ -371,6 +370,8 @@
 		F63848B023392C31000B853B /* metal.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = metal.hpp; path = src/materials/metal.hpp; sourceTree = "<group>"; };
 		F63848B223392C60000B853B /* plastic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = plastic.cpp; path = src/materials/plastic.cpp; sourceTree = "<group>"; };
 		F63848B323392C60000B853B /* plastic.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = plastic.hpp; path = src/materials/plastic.hpp; sourceTree = "<group>"; };
+		F63BDDAA2345C5C100E9B08F /* mix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = mix.h; path = src/textures/mix.h; sourceTree = "<group>"; };
+		F63BDDAB2345C6D000E9B08F /* bilerp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bilerp.h; path = src/textures/bilerp.h; sourceTree = "<group>"; };
 		F650CA932333E30D0040F410 /* microfacet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = microfacet.cpp; path = src/core/microfacet.cpp; sourceTree = "<group>"; };
 		F650CA942333E30D0040F410 /* microfacet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = microfacet.hpp; path = src/core/microfacet.hpp; sourceTree = "<group>"; };
 		F680CC37232BFCA000A18F6E /* triangle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = triangle.h; path = src/filters/triangle.h; sourceTree = "<group>"; };
@@ -507,11 +508,12 @@
 		46D18E357FCE4F378416E31D /* textures */ = {
 			isa = PBXGroup;
 			children = (
+				F63BDDAB2345C6D000E9B08F /* bilerp.h */,
 				29383EC9F56F4AFBB0AEC752 /* constant.h */,
 				F636D5802343AE7D007ECB48 /* scale.h */,
 				F636D5822343AF42007ECB48 /* imagemap.cpp */,
 				F636D5832343AF42007ECB48 /* imagemap.hpp */,
-				F636D5852343AFAF007ECB48 /* bilerp.h */,
+				F63BDDAA2345C5C100E9B08F /* mix.h */,
 			);
 			name = textures;
 			sourceTree = "<group>";
