@@ -56,6 +56,9 @@ private:
 	const Float _su, _sv, _du, _dv;
 };
 
+/**
+ * 球面映射
+ */
 class SphericalMapping2D : public TextureMapping2D {
 public:
 	SphericalMapping2D(const Transform &worldToTexture)
@@ -71,6 +74,10 @@ private:
 	const Transform _worldToTexture;
 };
 
+/**
+ * 圆柱映射
+ * 计算方式与球面差不多
+ */
 class CylindricalMapping2D : public TextureMapping2D {
 
 public:
@@ -79,7 +86,7 @@ public:
         
     }
     
-    Point2f Map(const SurfaceInteraction &si, Vector2f *dstdx,
+    virtual Point2f map(const SurfaceInteraction &si, Vector2f *dstdx,
                 Vector2f *dstdy) const;
     
 private:
@@ -92,9 +99,12 @@ private:
     const Transform _worldToTexture;
 };
 
+/**
+ * 平面映射
+ */
 class PlanarMapping2D : public TextureMapping2D {
 public:
-    Point2f Map(const SurfaceInteraction &si, Vector2f *dstdx,
+    virtual Point2f map(const SurfaceInteraction &si, Vector2f *dstdx,
                 Vector2f *dstdy) const;
 
     PlanarMapping2D(const Vector3f &vs, const Vector3f &vt, Float ds = 0,
@@ -109,6 +119,34 @@ public:
 private:
     const Vector3f _vs, _vt;
     const Float _ds, _dt;
+};
+
+class TextureMapping3D {
+public:
+    virtual ~TextureMapping3D() {
+
+    }
+
+    virtual Point3f map(const SurfaceInteraction &si, Vector3f *dpdx,
+                        Vector3f *dpdy) const = 0;
+};
+
+/**
+ * 3D纹理映射，代码比较直观，就不写多余的注释了
+ */
+class IdentityMapping3D : public TextureMapping3D {
+public:
+
+    IdentityMapping3D(const Transform &worldToTexture)
+    : _worldToTexture(worldToTexture) {
+
+    }
+
+    virtual Point3f map(const SurfaceInteraction &si, Vector3f *dpdx,
+                Vector3f *dpdy) const;
+
+private:
+    const Transform _worldToTexture;
 };
 
 /**

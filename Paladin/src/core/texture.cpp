@@ -93,7 +93,7 @@ Point2f SphericalMapping2D::pointToSphereToST(const Point3f &p) const {
 }
 
 // CylindricalMapping2D
-Point2f CylindricalMapping2D::Map(const SurfaceInteraction &si, Vector2f *dstdx,
+Point2f CylindricalMapping2D::map(const SurfaceInteraction &si, Vector2f *dstdx,
                                   Vector2f *dstdy) const {
 	// 这个版本跟SphericalMapping2D的没太大区别，
 	// 用同样的方式处理正向差分产生的问题
@@ -119,12 +119,35 @@ Point2f CylindricalMapping2D::Map(const SurfaceInteraction &si, Vector2f *dstdx,
 }
 
 // PlanarMapping2D
-Point2f PlanarMapping2D::Map(const SurfaceInteraction &si, Vector2f *dstdx,
+Point2f PlanarMapping2D::map(const SurfaceInteraction &si, Vector2f *dstdx,
                              Vector2f *dstdy) const {
     Vector3f vec(si.pos);
+    // 由向量函数求导的链式法则可得
+    // ds/dx = ds/dp dp/dx
+    // 
+    // s = vec · _vs + _ds
+    // s = vec.x * _vs.x + vec.y * _vs.y + vec.z * _vs.z + _ds
+    // 
+    // 			 ds/dp的雅克比矩阵     dp/dx的雅克比矩阵
+    // 			  
+    //                                 | (dp/dx)x |
+    // ds/dx = |_vs.x, _vs.y, _vs.z| * | (dp/dx)y |
+    //                                 | (dp/dx)z |
+    // 
+    // ∴ ds/dx 数值上与 dp/dx 点乘 _vs 相等。
+    // 在标量对标量的导函数也一定是标量，确实可以解释上面的表达式
     *dstdx = Vector2f(dot(si.dpdx, _vs), dot(si.dpdx, _vt));
     *dstdy = Vector2f(dot(si.dpdy, _vs), dot(si.dpdy, _vt));
     return Point2f(_ds + dot(vec, _vs), _dt + dot(vec, _vt));
 }
+
+// IdentityMapping3D
+Point3f IdentityMapping3D::map(const SurfaceInteraction &si, Vector3f *dpdx,
+                               Vector3f *dpdy) const {
+    *dpdx = _worldToTexture.exec(si.dpdx);
+    *dpdy = _worldToTexture.exec(si.dpdy);
+    return _worldToTexture.exec(si.pos);
+}
+
 
 PALADIN_END
