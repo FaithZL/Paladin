@@ -370,6 +370,7 @@
 		F63848B023392C31000B853B /* metal.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = metal.hpp; path = src/materials/metal.hpp; sourceTree = "<group>"; };
 		F63848B223392C60000B853B /* plastic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = plastic.cpp; path = src/materials/plastic.cpp; sourceTree = "<group>"; };
 		F63848B323392C60000B853B /* plastic.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = plastic.hpp; path = src/materials/plastic.hpp; sourceTree = "<group>"; };
+		F6388ED12348BA4300C80EC9 /* mipmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mipmap.h; path = src/core/mipmap.h; sourceTree = "<group>"; };
 		F63BDDAA2345C5C100E9B08F /* mix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = mix.h; path = src/textures/mix.h; sourceTree = "<group>"; };
 		F63BDDAB2345C6D000E9B08F /* bilerp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bilerp.h; path = src/textures/bilerp.h; sourceTree = "<group>"; };
 		F650CA932333E30D0040F410 /* microfacet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = microfacet.cpp; path = src/core/microfacet.cpp; sourceTree = "<group>"; };
@@ -533,6 +534,7 @@
 		52169020C9184B30B600763D /* core */ = {
 			isa = PBXGroup;
 			children = (
+				F6388ED12348BA4300C80EC9 /* mipmap.h */,
 				70C9A5883777443097E3CC60 /* bxdf.cpp */,
 				C786AB01AB0B4A1E8CD4AC93 /* bxdf.hpp */,
 				4CE71B716B004038B3DCAE3B /* camera.cpp */,

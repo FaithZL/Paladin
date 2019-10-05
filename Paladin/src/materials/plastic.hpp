@@ -12,6 +12,12 @@
 
 PALADIN_BEGIN
 
+/**
+ * 塑料材质
+ * 由高光反射与漫反射构成
+ * 漫反射部分为Lambertian
+ * 高光反射为MicrofacetReflection
+ */
 class PlasticMaterial : public Material {
 public:
     PlasticMaterial(const std::shared_ptr<Texture<Spectrum>> &Kd,
