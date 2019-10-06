@@ -24,10 +24,10 @@ public:
                   bool remapRoughness)
     :_eta(eta),
     _k(k),
-    _roughness(roughness),
-    _uRoughness(uRoughness),
-    _vRoughness(vRoughness),
-    _bumpMap(bumpMap),
+    _roughness(rough),
+    _uRoughness(urough),
+    _vRoughness(vrough),
+    _bumpMap(bump),
     _remapRoughness(remapRoughness) {
         
     }
@@ -37,6 +37,7 @@ public:
                                     bool allowMultipleLobes) const;
     
 private:
+    // eta折射率，k吸收系数，详见bxdf.hpp文件
     std::shared_ptr<Texture<Spectrum>> _eta, _k;
     std::shared_ptr<Texture<Float>> _roughness, _uRoughness, _vRoughness;
     std::shared_ptr<Texture<Float>> _bumpMap;
