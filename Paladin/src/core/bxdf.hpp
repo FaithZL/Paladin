@@ -12,7 +12,7 @@
 #include "header.h"
 #include "spectrum.hpp"
 #include "material.hpp"
-#include "sampling.hpp"
+#include "math/sampling.hpp"
 #include "microfacet.hpp"
 
 PALADIN_BEGIN

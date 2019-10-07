@@ -41,12 +41,34 @@ public:
     }
     
 private:
-    // AtomicFloat Private Data
 #ifdef PALADIN_FLOAT_AS_DOUBLE
     std::atomic<uint64_t> _bits;
 #else
     std::atomic<uint32_t> _bits;
 #endif
+};
+
+class Barrier {
+public:
+    Barrier(int count) 
+    : _count(count) { 
+        CHECK_GT(_count, 0);
+    }
+
+    ~Barrier() { 
+        CHECK_EQ(_count, 0); 
+    }
+
+    void wait();
+    
+private:
+    // 互斥锁
+    std::mutex _mutex;
+    // 当 std::condition_variable 对象的某个 wait 函数被调用的时候，
+    // 它使用 std::unique_lock(通过 std::mutex) 来锁住当前线程。当前线程会一直被阻塞，
+    // 直到另外一个线程在相同的 std::condition_variable 对象上调用了 notification 函数来唤醒当前线程。
+    std::condition_variable _cv;
+    int _count;
 };
 
 PALADIN_END

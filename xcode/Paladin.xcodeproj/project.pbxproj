@@ -71,7 +71,6 @@
 		4322A5EF3F1049F6BE511595 /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CE1DB4CCBC948BBA30DBFE8 /* material.cpp */; };
 		481CD2A099E640B596F8368E /* sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88992C52D83649FD924FB5F1 /* sphere.cpp */; };
 		4C6977A4D81043D698975073 /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = 317F639EC7DE4B7FA4FB0394 /* lzio.c */; };
-		51B18280A1704B97A2D74DFE /* sampling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 808315EF93E648B391BBEB5D /* sampling.cpp */; };
 		51C49807431F453CA928BBB0 /* ldblib.c in Sources */ = {isa = PBXBuildFile; fileRef = E29F50B3F7F34606B057698A /* ldblib.c */; };
 		52FFF4E1D7B64290BC9B37CF /* halton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F4E4F95A4E340F182C7CD7D /* halton.cpp */; };
 		572368A0DD3D412683D35629 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C665933126CF4691BD12BD3A /* scene.cpp */; };
@@ -123,6 +122,7 @@
 		F01CB5C319394B6C946C6A8A /* lfunc.c in Sources */ = {isa = PBXBuildFile; fileRef = 16E7EAD48B974554B8665AB0 /* lfunc.c */; };
 		F131F803342142F4A0C63FBE /* triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C07C5E958954F21B0731435 /* triangle.cpp */; };
 		F14CD7C35DBA4237A7604425 /* lstring.c in Sources */ = {isa = PBXBuildFile; fileRef = A79CCE1427344784ACF1B11A /* lstring.c */; };
+		F6349F3C234AC3B80099AD48 /* sampling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6349F3B234AC32A0099AD48 /* sampling.cpp */; };
 		F636D5842343AF42007ECB48 /* imagemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F636D5822343AF42007ECB48 /* imagemap.cpp */; };
 		F636D5882343AFD4007ECB48 /* mix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F636D5862343AFD4007ECB48 /* mix.cpp */; };
 		F63848AB23392C0F000B853B /* glass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63848A923392C0F000B853B /* glass.cpp */; };
@@ -254,7 +254,6 @@
 		5419CC8191D0457892F07DDF /* mathutil.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = mathutil.h; path = src/math/mathutil.h; sourceTree = SOURCE_ROOT; };
 		54E4A01903A146BAB86D1585 /* lauxlib.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lauxlib.h; path = third/lua53/lua/lauxlib.h; sourceTree = SOURCE_ROOT; };
 		5947EB6349E148F7AC40DE44 /* lowdiscrepancy.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = lowdiscrepancy.hpp; path = src/math/lowdiscrepancy.hpp; sourceTree = SOURCE_ROOT; };
-		59EEC9F85B8946328F07B389 /* sampling.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = sampling.hpp; path = src/core/sampling.hpp; sourceTree = SOURCE_ROOT; };
 		5DFD839D577748829BFEE895 /* lcode.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lcode.c; path = third/lua53/lua/lcode.c; sourceTree = SOURCE_ROOT; };
 		63324F80CA2241CA82081ED9 /* quaternion.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = quaternion.cpp; path = src/math/quaternion.cpp; sourceTree = SOURCE_ROOT; };
 		64E3E323906C4FF3A477455E /* cube.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = cube.cpp; path = src/shapes/cube.cpp; sourceTree = SOURCE_ROOT; };
@@ -284,7 +283,6 @@
 		7CFFF27C6F7447138E0094E1 /* curve.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = curve.cpp; path = src/shapes/curve.cpp; sourceTree = SOURCE_ROOT; };
 		7ECFF4DA98EE48559F985695 /* sampler.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = sampler.hpp; path = src/core/sampler.hpp; sourceTree = SOURCE_ROOT; };
 		7FCFA380194C4FF688F0B096 /* stratified.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = stratified.hpp; path = src/samplers/stratified.hpp; sourceTree = SOURCE_ROOT; };
-		808315EF93E648B391BBEB5D /* sampling.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = sampling.cpp; path = src/core/sampling.cpp; sourceTree = SOURCE_ROOT; };
 		8096B588B6E24E54932318BA /* lmathlib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lmathlib.c; path = third/lua53/lua/lmathlib.c; sourceTree = SOURCE_ROOT; };
 		80EF1E6F6C964C44B1642E30 /* lopnames.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lopnames.h; path = third/lua53/lua/lopnames.h; sourceTree = SOURCE_ROOT; };
 		84E21ED9B5704920999DE6D6 /* luaparser.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = luaparser.cpp; path = src/ext/luaparser.cpp; sourceTree = SOURCE_ROOT; };
@@ -357,6 +355,8 @@
 		F152B127CEB24635BEECCE00 /* errfloat.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = errfloat.h; path = src/tools/errfloat.h; sourceTree = SOURCE_ROOT; };
 		F435FB59CDB34098B36B9DF9 /* lstrlib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lstrlib.c; path = third/lua53/lua/lstrlib.c; sourceTree = SOURCE_ROOT; };
 		F4D97354A71149B587EC86EE /* lcode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lcode.h; path = third/lua53/lua/lcode.h; sourceTree = SOURCE_ROOT; };
+		F6349F3A234AC3290099AD48 /* sampling.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = sampling.hpp; path = src/math/sampling.hpp; sourceTree = "<group>"; };
+		F6349F3B234AC32A0099AD48 /* sampling.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sampling.cpp; path = src/math/sampling.cpp; sourceTree = "<group>"; };
 		F636D5802343AE7D007ECB48 /* scale.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = scale.h; path = src/textures/scale.h; sourceTree = "<group>"; };
 		F636D5822343AF42007ECB48 /* imagemap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagemap.cpp; path = src/textures/imagemap.cpp; sourceTree = "<group>"; };
 		F636D5832343AF42007ECB48 /* imagemap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = imagemap.hpp; path = src/textures/imagemap.hpp; sourceTree = "<group>"; };
@@ -403,6 +403,8 @@
 		0D0024B930D54518BD66EC17 /* math */ = {
 			isa = PBXGroup;
 			children = (
+				F6349F3B234AC32A0099AD48 /* sampling.cpp */,
+				F6349F3A234AC3290099AD48 /* sampling.hpp */,
 				AA89320FBC4E4985871F95B6 /* animatedtransform.cpp */,
 				F8975A85DD5D49669DBDA2AD /* animatedtransform.hpp */,
 				657F2C10B6644F0FBB299E15 /* bounds.h */,
@@ -559,8 +561,6 @@
 				73E545808F0B4456829E321F /* primitive.hpp */,
 				73787C3F2F31441B9F417AF0 /* sampler.cpp */,
 				7ECFF4DA98EE48559F985695 /* sampler.hpp */,
-				808315EF93E648B391BBEB5D /* sampling.cpp */,
-				59EEC9F85B8946328F07B389 /* sampling.hpp */,
 				C665933126CF4691BD12BD3A /* scene.cpp */,
 				7C0B6783248E4B7B96C8FF1A /* scene.hpp */,
 				3AA18ABB451C46A1B57C1589 /* shape.cpp */,
@@ -989,6 +989,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6349F3C234AC3B80099AD48 /* sampling.cpp in Sources */,
 				DEFB37AB94E247BCACE2EDF6 /* bvh.cpp in Sources */,
 				297BC94F251546EE89BFE9BD /* kdtree.cpp in Sources */,
 				A216C56484154700BD4BF17D /* perspective.cpp in Sources */,
@@ -1004,7 +1005,6 @@
 				804B9774EE75432A990E2670 /* paladin.cpp in Sources */,
 				395CC82A10E147C69FD6471F /* primitive.cpp in Sources */,
 				C727AC90736A4A80978A4B24 /* sampler.cpp in Sources */,
-				51B18280A1704B97A2D74DFE /* sampling.cpp in Sources */,
 				F63848B123392C31000B853B /* metal.cpp in Sources */,
 				572368A0DD3D412683D35629 /* scene.cpp in Sources */,
 				8C57CA3DA22F489893FD4B11 /* shape.cpp in Sources */,

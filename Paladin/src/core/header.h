@@ -265,6 +265,27 @@ int findInterval(int size, const Predicate &pred) {
     return paladin::clamp(first - 1, 0, size - 2);
 }
 
+inline int32_t roundUpPow2(int32_t v) {
+    v--;
+    v |= v >> 1;
+    v |= v >> 2;
+    v |= v >> 4;
+    v |= v >> 8;
+    v |= v >> 16;
+    return v + 1;
+}
+
+inline int64_t roundUpPow2(int64_t v) {
+    v--;
+    v |= v >> 1;
+    v |= v >> 2;
+    v |= v >> 4;
+    v |= v >> 8;
+    v |= v >> 16;
+    v |= v >> 32;
+    return v + 1;
+}
+
 inline Float ErfInv(Float x) {
     Float w, p;
     x = paladin::clamp(x, -.99999f, .99999f);

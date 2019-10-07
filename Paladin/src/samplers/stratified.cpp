@@ -6,7 +6,7 @@
 //
 
 #include "stratified.hpp"
-#include "core/sampling.hpp"
+#include "math/sampling.hpp"
 
 PALADIN_BEGIN
 

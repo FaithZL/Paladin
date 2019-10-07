@@ -11,7 +11,7 @@
 
 #include "core/header.h"
 
-#include "core/sampling.hpp"
+#include "math/sampling.hpp"
 
 PALADIN_BEGIN
 
