@@ -42,9 +42,9 @@ public:
      * 
      * p'(u,v)对于u的偏导数，直接带入1式，用乘法求导法则展开
      *
-     *  dp'(u,v)	dp(u,v)	   db(u,v)				   dn(u,v)
-     * --------- = --------- + ------- n(u,v) + b(u,v) ------
-     *     du		  du		 du					     du
+     *  dp'(u,v)    dp(u,v)     db(u,v)                  dn(u,v)
+     * --------- = --------- + -------- n(u,v) + b(u,v) ---------
+     *     du         du          du                       du
      *
      * dp(u,v)/du我们在surfaceinteraction中已经计算过了
      * dn(u,v)/du，n(u,v)也已经在计算好了，就还差个 db(u,v)/du
@@ -56,15 +56,15 @@ public:
      *
      * 回顾导数的定义
      *
-     *  db(u,v)				  b(u + △u, v) - b(u, v)
+     *  db(u,v)               b(u + △u, v) - b(u, v)
      * --------- = lim[△u→0]--------------------------
      *    du                          △u
      *
      * 用有限小量去近似
      * 
-     *  dp'(u,v)	dp(u,v)	   db(u+△u,v) - db(u,v)				     dn(u,v)
+     *  dp'(u,v)	dp(u,v)	   db(u+△u,v) - db(u,v)	                dn(u,v)
      * --------- ≈ --------- + --------------------- n(u,v) + b(u,v) ------
-     *     du		  du		      △u				               du
+     *     du		  du                △u                             du
      *
      * 大多数纹理的实现都忽略最后一项，因为b(u,v)本来就是一个微小的偏移，所以这个方式很合理
      * 很多渲染器是不计算dn/du, dn/dv，可能是因为做了上述的近似

@@ -675,6 +675,10 @@ public:
     virtual Spectrum evaluate(Float) const { 
     	return Spectrum(1.); 
     }
+    
+    virtual std::string toString() const {
+        return "[ FresnelNoOp ]";
+    }
 };
 
 /**
@@ -705,13 +709,13 @@ public:
     /**
      * 理想镜面反射的采样函数，是固定方向采样，首先要计算合适的入射方向
      * Lo的蒙特卡洛估计表达式如下
-     * 		      1	             fr(p,wo,wi)Li(p,wi)|cosθi|
+     * 		    1	          fr(p,wo,wi)Li(p,wi)|cosθi|
      * Lo(wo) = ----- * Σ[i,N] ------------------------------
-     * 		      N 					  p(wi)
+     * 		    N                       p(wi)
      * 
-     * 		      1	             (ρhd(wo)δ(wi-wr)/|cosθi|)Li(p,wi)|cosθi|
+     * 		    1	          (ρhd(wo)δ(wi-wr)/|cosθi|)Li(p,wi)|cosθi|
      * Lo(wo) = ----- * Σ[i,N] --------------------------------------------
-     * 		      N 					  		  p(wi) 
+     * 		    N 					 	  p(wi)
      * 
      * p(wi)为狄拉克函数，p(wi) = δ(wi-wr)，两个狄拉克函数可以抵消，
      * 
