@@ -12,6 +12,7 @@
 #include "core/light.hpp"
 #include "core/shape.hpp"
 
+
 PALADIN_BEGIN
 
 class PointLight : public Light {
@@ -19,13 +20,15 @@ public:
 	PointLight(const Transform &LightToWorld,
                const MediumInterface &mediumInterface, const Spectrum &I)
 	:Light((int)LightFlags::DeltaPosition, LightToWorld, mediumInterface),
-	_pLight(LightToWorld(Point3f(0, 0, 0))),
+	_pLight(LightToWorld.exec(Point3f(0, 0, 0))),
 	_I(I) {
 
 	}
 
 private:
+    // 光源位置
     const Point3f _pLight;
+    // 辐射强度
     const Spectrum _I;
 };
 

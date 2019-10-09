@@ -12,6 +12,7 @@
 #include "core/header.h"
 #include "core/interaction.hpp"
 #include "math/transform.hpp"
+#include "core/spectrum.hpp"
 
 PALADIN_BEGIN
 
@@ -57,7 +58,9 @@ public:
 
     }
 
-    virtual Spectrum le(const RayDifferential &r) const;
+    virtual Spectrum le(const RayDifferential &r) const {
+        return Spectrum(0.f);
+    }
 
     virtual Float pdfLi(const Interaction &ref, const Vector3f &wi) const = 0;
 
@@ -91,12 +94,25 @@ public:
 
 class VisibilityTester {
 public:
-    VisibilityTester() {}
+    VisibilityTester() {
+        
+    }
+    
     VisibilityTester(const Interaction &p0, const Interaction &p1)
-    : _p0(p0), _p1(p1) {}
-    const Interaction &P0() const { return _p0; }
-    const Interaction &P1() const { return _p1; }
+    : _p0(p0), _p1(p1) {
+        
+    }
+    
+    const Interaction &P0() const {
+        return _p0;
+    }
+    
+    const Interaction &P1() const {
+        return _p1;
+    }
+    
     bool Unoccluded(const Scene &scene) const;
+    
     Spectrum Tr(const Scene &scene, Sampler &sampler) const;
     
 private:
