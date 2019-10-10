@@ -105,6 +105,10 @@ private:
 #endif
 };
 
+/**
+ * 可以理解为栅栏
+ * 保证一切准备就绪之后，所有子线程尽可能的同时开始工作
+ */
 class Barrier {
 public:
     Barrier(int count) 
@@ -154,7 +158,7 @@ public:
     maxIndex(count.x * count.y),
     chunkSize(1),
     profilerState(profilerState) {
-        nX = count.x;
+        numX = count.x;
     }
     
 public:
@@ -164,7 +168,10 @@ public:
     std::function<void(Point2i)> func2D;
     // 最大迭代次数
     const int64_t maxIndex;
-    // 单次迭代执行的最大迭代次数
+
+    // 每次迭代的循环次数
+    // 把n个任务分成若干块，每块的大小为chunkSize
+    // 把n个任务分配给子线程也是按块分配
     const int chunkSize;
 
     uint64_t profilerState;
@@ -174,8 +181,8 @@ public:
     int activeWorkers = 0;
 
     ParallelForLoop *next = nullptr;
-
-    int nX = -1;
+    // 二维函数需要用到的属性
+    int numX = -1;
     
     bool finished() const {
         return nextIndex >= maxIndex && activeWorkers == 0;

@@ -10,7 +10,9 @@
 
 PALADIN_BEGIN
 
+// 线程列表
 static std::vector<std::thread> threads;
+// 
 static bool shutdownThreads = false;
 
 static ParallelForLoop *workList = nullptr;
@@ -24,6 +26,8 @@ static std::condition_variable reportDoneCondition;
 static std::mutex reportDoneMutex;
 thread_local int ThreadIndex = 0;
 
+static std::condition_variable workListCondition;
+
 void parallelFor(std::function<void(int64_t)> func, int64_t count, int chunkSize) {
 	DCHECK(threads.size() > 0 || maxThreadIndex() == 1);
 
@@ -31,21 +35,89 @@ void parallelFor(std::function<void(int64_t)> func, int64_t count, int chunkSize
 		for (int64_t i = 0; i < count; ++i) {
 			func(i);
 		}
-		return
+        return;
 	}
 
 	ParallelForLoop loop(std::move(func), count, chunkSize, 0);
-	workListMutex.lock();
-	loop.next = workList;
-	workList = &loop;
-	workListMutex.unlock();
+	{
+        std::lock_guard<std::mutex> lock(workListMutex);
+        loop.next = workList;
+        workList = &loop;
+    }
 
 	std::unique_lock<std::mutex> lock(workListMutex);
     workListCondition.notify_all();
+
+    while (!loop.finished()) {
+    	int64_t indexStart = loop.nextIndex;
+    	int64_t indexEnd = std::min(indexStart + loop.chunkSize, loop.maxIndex);
+
+    	loop.nextIndex = indexEnd;
+
+    	if (loop.nextIndex == loop.maxIndex) {
+    		workList = loop.next;
+    	}
+
+    	++loop.activeWorkers;
+    	lock.unlock();
+		// 执行[indexStart, indexEnd)区间内的索引
+		for (int64_t index = indexStart; index < indexEnd; ++index) {
+			if (loop.func1D) {
+				loop.func1D(index);
+			} else {
+				loop.func2D(Point2i(index % loop.numX, index / loop.numX));
+			}
+		}
+		lock.lock();
+		--loop.activeWorkers;    	
+    }
 }
 
 void parallelFor2D(std::function<void(Point2i)> func, const Point2i &count) {
+	DCHECK(threads.size() > 0 || maxThreadIndex() == 1);
 
+	if (threads.empty() || count.x * count.y <= 1) {
+		for (int64_t y = 0; y < count.y; ++y) {
+			for (int64_t x = 0; x < count.x; ++x) {
+				func(Point2i(x, y));
+			}
+		}
+		return;
+	}
+
+	ParallelForLoop loop(std::move(func), count, 0);
+	{
+        std::lock_guard<std::mutex> lock(workListMutex);
+        loop.next = workList;
+        workList = &loop;
+    }
+
+	std::unique_lock<std::mutex> lock(workListMutex);
+    workListCondition.notify_all();
+
+	while (!loop.finished()) {
+    	int64_t indexStart = loop.nextIndex;
+    	int64_t indexEnd = std::min(indexStart + loop.chunkSize, loop.maxIndex);
+
+    	loop.nextIndex = indexEnd;
+
+    	if (loop.nextIndex == loop.maxIndex) {
+    		workList = loop.next;
+    	}
+
+    	++loop.activeWorkers;
+    	lock.unlock();
+		// 执行[indexStart, indexEnd)区间内的索引
+		for (int64_t index = indexStart; index < indexEnd; ++index) {
+			if (loop.func1D) {
+				loop.func1D(index);
+			} else {
+				loop.func2D(Point2i(index % loop.numX, index / loop.numX));
+			}
+		}
+		lock.lock();
+		--loop.activeWorkers;    	
+    }    
 }
 
 static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
@@ -55,13 +127,13 @@ static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
 	barrier->wait();
 
 	//每个线程各自释放掉barrier对象
-	barrier->reset();
+	barrier.reset();
 
 	// 以下逻辑涉及线程同步问题，上锁
 	std::unique_lock<std::mutex> lock(workListMutex);
 	while (!shutdownThreads) {
 		if (reportWorkerStats) {
-			if (--reporterCount ==) {
+			if (--reporterCount == 0) {
 				reportDoneCondition.notify_one();
 			}
 			workListCondition.wait(lock);
@@ -88,7 +160,7 @@ static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
 				if (loop.func1D) {
 					loop.func1D(index);
 				} else {
-					loop.func2D(Point2i(index % loop.nX, index / loop.nX));
+					loop.func2D(Point2i(index % loop.numX, index / loop.numX));
 				}
 			}
 			lock.lock();
