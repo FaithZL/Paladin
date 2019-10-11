@@ -54,12 +54,46 @@ public:
                         }
                         if (origS >= 0 && origS < (int)resolution[0]) {
                             resampledImage[t * resPow2[0] + s] +=
-                            sWeights[s].weight[j] *
-                            img[t * resolution[0] + origS];
+                                sWeights[s].weight[j] *
+                                img[t * resolution[0] + origS];
                         }
                     }
                 }
             }, resolution[1], 16);
+            
+            std::unique_ptr<ResampleWeight[]> tWeights = resampleWeights(resolution[1], resPow2[1]);
+            std::vector<T *> resampleBufs;
+            // 处理t方向上的时候需要一些临时缓存来防止污染resampledImage中的数据
+            // 临时空间需要手动删除            
+            int nThreads = maxThreadIndex();
+            for (int i = 0; i < nThreads; ++i) {
+                resampleBufs.push_back(new T[resPow2[1]]);
+            }
+            parallelFor([&](int s) {
+                T *workData = resampleBufs[ThreadIndex];
+                for (int t = 0; t < resPow2[1]; ++t) {
+                    workData[t] = 0.f;
+                    for (int j = 0; j < 4; ++j) {
+                        int offset = tWeights[t].firstTexel + j;
+                        if (wrapMode == ImageWrap::Repeat) {
+                            offset = Mod(offset, resolution[1]);
+                        } else if (wrapMode == ImageWrap::Clamp) {
+                            offset = clamp(offset, 0, (int)resolution[1] - 1);
+                        }
+                        if (offset >= 0 && offset < (int)resolution[1]) {
+                            workData[t] += tWeights[t].weight[j] *
+                                resampledImage[offset * resPow2[0] + s];
+                        }
+                    }
+                }
+                for (int t = 0; t < resPow2[1]; ++t) {
+                    resampledImage[t * resPow2[0] + s] = clamp(workData[t]);
+                }
+            }, resPow2[0], 32);
+            for (auto ptr : resampleBufs) {
+                delete[] ptr;
+            }
+            _resolution = resPow2;
         }
     }
     

@@ -11,7 +11,7 @@
 #include "core/header.h"
 #include "core/spectrum.hpp"
 #include "core/filter.h"
-#include "parallel/parallel.hpp"
+#include "tools/parallel.hpp"
 
 PALADIN_BEGIN
 
