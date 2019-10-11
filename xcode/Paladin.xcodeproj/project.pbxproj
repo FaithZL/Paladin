@@ -116,7 +116,6 @@
 		D4F8EA1AA77D449C9D32CF65 /* ldump.c in Sources */ = {isa = PBXBuildFile; fileRef = 0EA6724F09174A17867A047A /* ldump.c */; };
 		D4FC7BBF81374BF6A0519409 /* medium.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC8B8CFB61554F9CAAACAE78 /* medium.cpp */; };
 		D6BEA1F4E1164B2495DBCBC4 /* lundump.c in Sources */ = {isa = PBXBuildFile; fileRef = 6BFEE849AF1C4A8F9DA60859 /* lundump.c */; };
-		D9D5854C25044FFA847D93CD /* parallel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 230B390BCD61414AAC5C1296 /* parallel.cpp */; };
 		DEFB37AB94E247BCACE2EDF6 /* bvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 192CA46F753047159440F0BB /* bvh.cpp */; };
 		E513BED946914DF6A584BC56 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE71B716B004038B3DCAE3B /* camera.cpp */; };
 		F01CB5C319394B6C946C6A8A /* lfunc.c in Sources */ = {isa = PBXBuildFile; fileRef = 16E7EAD48B974554B8665AB0 /* lfunc.c */; };
@@ -129,6 +128,7 @@
 		F63848AE23392C20000B853B /* mirror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63848AC23392C20000B853B /* mirror.cpp */; };
 		F63848B123392C31000B853B /* metal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63848AF23392C31000B853B /* metal.cpp */; };
 		F63848B423392C60000B853B /* plastic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63848B223392C60000B853B /* plastic.cpp */; };
+		F639C5FE2350D60C005C099F /* parallel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F639C5FD2350D5A8005C099F /* parallel.cpp */; };
 		F650CA952333E30D0040F410 /* microfacet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F650CA932333E30D0040F410 /* microfacet.cpp */; };
 /* End PBXBuildFile section */
 
@@ -222,7 +222,6 @@
 		1FA5A20BBA264F77BD63FCE9 /* bvh.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = bvh.hpp; path = src/accelerators/bvh.hpp; sourceTree = SOURCE_ROOT; };
 		2165FF1DED0646FA806D123F /* ltable.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ltable.h; path = third/lua53/lua/ltable.h; sourceTree = SOURCE_ROOT; };
 		21BC9B9418E24FF192CACDC3 /* integrator.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = integrator.hpp; path = src/core/integrator.hpp; sourceTree = SOURCE_ROOT; };
-		230B390BCD61414AAC5C1296 /* parallel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = parallel.cpp; path = src/parallel/parallel.cpp; sourceTree = SOURCE_ROOT; };
 		29383EC9F56F4AFBB0AEC752 /* constant.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = constant.h; path = src/textures/constant.h; sourceTree = SOURCE_ROOT; };
 		2950FCBFAF224F71AE0D193D /* random.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = random.cpp; path = src/samplers/random.cpp; sourceTree = SOURCE_ROOT; };
 		2B8A5EA955854766A980A01A /* sphere.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = sphere.hpp; path = src/shapes/sphere.hpp; sourceTree = SOURCE_ROOT; };
@@ -337,7 +336,6 @@
 		CB875C7B0FA748069333E7E6 /* spectrum.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = spectrum.cpp; path = src/core/spectrum.cpp; sourceTree = SOURCE_ROOT; };
 		CBA7BAAB5B7B4194B5C15D92 /* fileio.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = fileio.hpp; path = src/tools/fileio.hpp; sourceTree = SOURCE_ROOT; };
 		CC3351D8A21A4775A458FE96 /* kdtree.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = kdtree.hpp; path = src/accelerators/kdtree.hpp; sourceTree = SOURCE_ROOT; };
-		CCB448A93E924D12B11AF12A /* parallel.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = parallel.hpp; path = src/parallel/parallel.hpp; sourceTree = SOURCE_ROOT; };
 		CE2279BA467048D9859BDE1B /* random.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = random.hpp; path = src/samplers/random.hpp; sourceTree = SOURCE_ROOT; };
 		D201E6FC22064A72B46C93E0 /* ljumptab.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ljumptab.h; path = third/lua53/lua/ljumptab.h; sourceTree = SOURCE_ROOT; };
 		D99F6375AF6D4AD4913CAEBD /* gaussion.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = gaussion.h; path = src/filters/gaussion.h; sourceTree = SOURCE_ROOT; };
@@ -371,6 +369,8 @@
 		F63848B223392C60000B853B /* plastic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = plastic.cpp; path = src/materials/plastic.cpp; sourceTree = "<group>"; };
 		F63848B323392C60000B853B /* plastic.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = plastic.hpp; path = src/materials/plastic.hpp; sourceTree = "<group>"; };
 		F6388ED12348BA4300C80EC9 /* mipmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mipmap.h; path = src/core/mipmap.h; sourceTree = "<group>"; };
+		F639C5FC2350D5A8005C099F /* parallel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = parallel.hpp; path = src/tools/parallel.hpp; sourceTree = "<group>"; };
+		F639C5FD2350D5A8005C099F /* parallel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = parallel.cpp; path = src/tools/parallel.cpp; sourceTree = "<group>"; };
 		F63BDDAA2345C5C100E9B08F /* mix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = mix.h; path = src/textures/mix.h; sourceTree = "<group>"; };
 		F63BDDAB2345C6D000E9B08F /* bilerp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bilerp.h; path = src/textures/bilerp.h; sourceTree = "<group>"; };
 		F650CA932333E30D0040F410 /* microfacet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = microfacet.cpp; path = src/core/microfacet.cpp; sourceTree = "<group>"; };
@@ -388,6 +388,8 @@
 		09ED2A3C9BEA4F54AD14FF25 /* tools */ = {
 			isa = PBXGroup;
 			children = (
+				F639C5FD2350D5A8005C099F /* parallel.cpp */,
+				F639C5FC2350D5A8005C099F /* parallel.hpp */,
 				F152B127CEB24635BEECCE00 /* errfloat.h */,
 				8F2224EC8B414A0C943066C1 /* fileio.cpp */,
 				CBA7BAAB5B7B4194B5C15D92 /* fileio.hpp */,
@@ -588,7 +590,6 @@
 				EA3C57866911468D938EE413 /* lights */,
 				D5B009A507DE4471928DB7F3 /* materials */,
 				0D0024B930D54518BD66EC17 /* math */,
-				ECB5EB3578C641D389715D03 /* parallel */,
 				61F73C96C25D4970BD472FDE /* samplers */,
 				64416BE5861546D192B389FD /* shapes */,
 				46D18E357FCE4F378416E31D /* textures */,
@@ -763,15 +764,6 @@
 				3B120BCDEB4A4DE8B763CC71 /* pointlight.hpp */,
 			);
 			name = lights;
-			sourceTree = "<group>";
-		};
-		ECB5EB3578C641D389715D03 /* parallel */ = {
-			isa = PBXGroup;
-			children = (
-				230B390BCD61414AAC5C1296 /* parallel.cpp */,
-				CCB448A93E924D12B11AF12A /* parallel.hpp */,
-			);
-			name = parallel;
 			sourceTree = "<group>";
 		};
 		EF47E802BB8B425489241993 /* Products */ = {
@@ -989,6 +981,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F639C5FE2350D60C005C099F /* parallel.cpp in Sources */,
 				F6349F3C234AC3B80099AD48 /* sampling.cpp in Sources */,
 				DEFB37AB94E247BCACE2EDF6 /* bvh.cpp in Sources */,
 				297BC94F251546EE89BFE9BD /* kdtree.cpp in Sources */,
@@ -1022,7 +1015,6 @@
 				3FB111EC94D646E58AA87AFA /* quaternion.cpp in Sources */,
 				5E4915E205EB4B3F8B952FEB /* transform.cpp in Sources */,
 				F63848AB23392C0F000B853B /* glass.cpp in Sources */,
-				D9D5854C25044FFA847D93CD /* parallel.cpp in Sources */,
 				52FFF4E1D7B64290BC9B37CF /* halton.cpp in Sources */,
 				2B86BA7319A64343B74C2B56 /* random.cpp in Sources */,
 				35858383B6D64B99B2C4B5FF /* stratified.cpp in Sources */,

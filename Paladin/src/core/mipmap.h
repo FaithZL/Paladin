@@ -9,12 +9,16 @@
 #define mipmap_h
 
 #include "header.h"
+#include "tools/parallel.hpp"
+#include "core/spectrum.hpp"
 
 PALADIN_BEGIN
 
 enum class ImageWrap { Repeat, Black, Clamp };
 
+// 重采样的权重
 struct ResampleWeight {
+    // 第一个纹理像素的索引
     int firstTexel;
     Float weight[4];
 };
@@ -22,7 +26,7 @@ struct ResampleWeight {
 template <typename T>
 class MIPMap {
 public:
-    MIPMap(const Point2i &resolution, const T *data, bool doTri = false,
+    MIPMap(const Point2i &resolution, const T *img, bool doTri = false,
            Float maxAniso = 8.f, ImageWrap wrapMode = ImageWrap::Repeat)
     : _doTrilinear(doTri),
     _maxAnisotropy(maxAniso),
@@ -33,8 +37,29 @@ public:
         if (!isPowerOf2(_resolution[0]) || !isPowerOf2(_resolution[1])) {
             Point2i resPow2(roundUpPow2(_resolution[0]), roundUpPow2(_resolution[1]));
             // 在s方向重采样
+            // 获取到一系列的sWeights对象之后，重建出新的分辨率
             std::unique_ptr<ResampleWeight[]> sWeights = resampleWeights(_resolution[0], resPow2[0]);
             resampledImage.reset(new T[resPow2[0] * resPow2[1]]);
+            
+            parallelFor([&](int t) {
+                for (int s = 0; s < resPow2[0]; ++s) {
+                    
+                    resampledImage[t * resPow2[0] + s] = 0.f;
+                    for (int j = 0; j < 4; ++j) {
+                        int origS = sWeights[s].firstTexel + j;
+                        if (wrapMode == ImageWrap::Repeat) {
+                            origS = Mod(origS, resolution[0]);
+                        } else if (wrapMode == ImageWrap::Clamp) {
+                            origS = clamp(origS, 0, resolution[0] - 1);
+                        }
+                        if (origS >= 0 && origS < (int)resolution[0]) {
+                            resampledImage[t * resPow2[0] + s] +=
+                            sWeights[s].weight[j] *
+                            img[t * resolution[0] + origS];
+                        }
+                    }
+                }
+            }, resolution[1], 16);
         }
     }
     
@@ -58,15 +83,61 @@ public:
     
 private:
     
+    /**
+     * 重采样函数，返回newRes个ResampleWeight对象
+     * @param oldRes 旧分辨率
+     * @param newRes 新分辨率
+     */
+    std::unique_ptr<ResampleWeight[]> resampleWeights(int oldRes, int newRes) {
+        CHECK_GE(newRes, oldRes);
+        std::unique_ptr<ResampleWeight[]> ret(new ResampleWeight[newRes]);
+        // 过滤宽度，默认2.0
+        Float filterwidth = 2.0f;
+        for (int i = 0; i < newRes; ++i) {
+            // 离散坐标转化为连续坐标，都取像素中点，所以加上0.5
+            Float center = (i + 0.5f) * oldRes / newRes;
+            // todo添加图示
+            ret[i].firstTexel = std::floor((center - filterwidth) + 0.5);
+            Float weightSum = 0;
+            for (int j = 0; j < 4; ++j) {
+                Float pos = ret[i].firstTexel + j + 0.5;
+                ret[i].weight[j] = lanczos((pos - center) / filterwidth, 2);
+                weightSum += ret[i].weight[j];
+            }
+            // 四个权重值之和可能不为1，为了确保新的样本不比原始样本更加亮或暗，则需要归一化
+            Float invSumWts = 1 / weightSum;
+            for (int j = 0; j < 4; ++j) {
+                ret[i].weight[j] *= invSumWts;
+            }
+        }
+        return ret;
+    }
+    
+    Float clamp(Float v) {
+        return clamp(v, 0.f, Infinity);
+    }
+    
+    RGBSpectrum clamp(const RGBSpectrum &v) {
+        return v.Clamp(0.f, Infinity);
+    }
+    
+    SampledSpectrum clamp(const SampledSpectrum &v) {
+        return v.Clamp(0.f, Infinity);
+    }
+    
+    T triangle(int level, const Point2f &st) const;
+    
+    T EWA(int level, Point2f st, Vector2f dst0, Vector2f dst1) const;
+    
     // 是否为三线性插值
     const bool _doTrilinear;
-    //
+    // 各向异性的最大比例
     const Float _maxAnisotropy;
     // 环绕方式
     const ImageWrap _wrapMode;
     // 分辨率
     Point2i _resolution;
-    //
+    // 多级纹理金字塔
     std::vector<std::unique_ptr<BlockedArray<T>>> _pyramid;
     static CONSTEXPR int WeightLUTSize = 128;
     static Float _weightLut[WeightLUTSize];

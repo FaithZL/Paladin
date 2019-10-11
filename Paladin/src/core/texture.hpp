@@ -170,6 +170,9 @@ public:
     }
 };
 
+// 过滤函数
+Float lanczos(Float x, Float tau);
+
 PALADIN_END
 
 #endif /* texture_hpp */

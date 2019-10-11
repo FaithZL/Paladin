@@ -167,6 +167,7 @@ static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
 			--loop.activeWorkers;
 			if (loop.finished()) {
 				// 如果loop执行完毕，则唤醒所有线程
+				// 因为其他线程可能处于wait状态
 				workListCondition.notify_all();
 			}
 		}
