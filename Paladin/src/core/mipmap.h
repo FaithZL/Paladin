@@ -62,14 +62,15 @@ public:
             }, resolution[1], 16);
             
             std::unique_ptr<ResampleWeight[]> tWeights = resampleWeights(resolution[1], resPow2[1]);
-            std::vector<T *> resampleBufs;
             // 处理t方向上的时候需要一些临时缓存来防止污染resampledImage中的数据
             // 临时空间需要手动删除            
+            std::vector<T *> resampleBufs;
             int nThreads = maxThreadIndex();
             for (int i = 0; i < nThreads; ++i) {
                 resampleBufs.push_back(new T[resPow2[1]]);
             }
             parallelFor([&](int s) {
+                // 保存临时列数据
                 T *workData = resampleBufs[ThreadIndex];
                 for (int t = 0; t < resPow2[1]; ++t) {
                     workData[t] = 0.f;
@@ -86,6 +87,7 @@ public:
                         }
                     }
                 }
+                // 把最新数据填充到resampledImage中
                 for (int t = 0; t < resPow2[1]; ++t) {
                     resampledImage[t * resPow2[0] + s] = clamp(workData[t]);
                 }
@@ -94,6 +96,30 @@ public:
                 delete[] ptr;
             }
             _resolution = resPow2;
+        }
+
+        int nLevels = 1 + Log2Int(std::max(resolution[0], resolution[1]));
+        _pyramid.resize(nLevels);
+
+        pyramid[0].reset(
+            new BlockedArray<T>(resolution[0], resolution[1],
+                            resampledImage ? resampledImage.get() : img));
+
+        for (int i = 1; i < nLevels; ++i) {
+            int sRes = std::max(1, _pyramid[i - 1]->uSize() / 2);
+            int tRes = std::max(1, _pyramid[i - 1]->vSize() / 2);
+            pyramid[i].reset(new BlockedArray<T>(sRes, tRes));
+            // 并行处理，逐行执行
+            parallelFor([&](int t) {
+                for (int s = 0; s < sRes; ++s) {
+                    // 对应位置的四个像素取平均值
+                    (*_pyramid[i])(s, t) = .25f * 
+                            (texel(i - 1, 2 * s, 2 * t) +
+                            texel(i - 1, 2 * s + 1, 2 * t) +
+                            texel(i - 1, 2 * s, 2 * t + 1) +
+                            texel(i - 1, 2 * s + 1, 2 * t + 1));
+                }
+            }, tRes, 16);
         }
     }
     
@@ -109,7 +135,27 @@ public:
         return _pyramid.size();
     }
     
-    const T &texel(int level, int s, int t) const;
+    const T &texel(int level, int s, int t) const {
+        CHECK_LT(level, _pyramid.size());
+        const BlockedArray<T> &l = *_pyramid[level];
+        switch (_wrapMode) {
+        case Repeat:
+            s = Mod(s, l.uSize());
+            t = Mod(t, l.vSize());
+            break;
+        case Clamp:
+            s = clamp(s, 0, l.uSize() - 1);
+            t = clamp(t, 0, l.vSize() - 1);
+            break;
+        case Black:
+            static const T black(0.0f);
+            if (s < 0 || s >= l.uSize() || t < 0 || t > l.vSize()) {
+                return black;
+            }
+            break;
+        }
+        return l(s, t);
+    }
     
     T lookup(const Point2f &st, Float width = 0.f) const;
     

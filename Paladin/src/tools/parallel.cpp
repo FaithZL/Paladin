@@ -95,6 +95,8 @@ void parallelFor2D(std::function<void(Point2i)> func, const Point2i &count) {
 	std::unique_lock<std::mutex> lock(workListMutex);
     workListCondition.notify_all();
 
+    // 一直循环，直到所有线程都执行完毕之后才结束
+    // 保证了线程的同步
 	while (!loop.finished()) {
     	int64_t indexStart = loop.nextIndex;
     	int64_t indexEnd = std::min(indexStart + loop.chunkSize, loop.maxIndex);
@@ -166,8 +168,8 @@ static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
 			lock.lock();
 			--loop.activeWorkers;
 			if (loop.finished()) {
-				// 如果loop执行完毕，则唤醒所有线程
 				// 因为其他线程可能处于wait状态
+				// 如果loop执行完毕，则唤醒所有线程
 				workListCondition.notify_all();
 			}
 		}

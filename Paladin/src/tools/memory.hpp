@@ -226,8 +226,8 @@ private:
 template <typename T, int logBlockSize>
 class BlockedArray {
 public:
-    /*
-    分配一段连续的内存块，用uv参数重排二维数组的索引
+    /**
+     * 分配一段连续的内存块，用uv参数重排二维数组的索引
      */
     BlockedArray(int uRes, int vRes, const T *d = nullptr)
     : _uRes(uRes), 
@@ -237,7 +237,8 @@ public:
         int nAlloc = roundUp(_uRes) * roundUp(_vRes);
         _data = allocAligned<T>(nAlloc);
         for (int i = 0; i < nAlloc; ++i) {
- * new (&_data[i]) T();
+            // placement new，在指定地址上调用构造函数
+            * new (&_data[i]) T();
         }
         if (d) {
             for (int v = 0; v < _vRes; ++v){
@@ -288,6 +289,11 @@ public:
         return (a & (blockSize() - 1)); 
     }
 
+    /**
+     * 通过uv参数找到指定内存的思路
+     * 1.先找到指定内存在哪个块中(bu,bv)
+     * 2.然后找到块中的偏移量 (ou, ov)
+     */
     inline int getTotalOffset(int u, int v) {
         int bu = block(u); 
         int bv = block(v);
@@ -300,11 +306,6 @@ public:
         return offset;
     }
 
-    /**
-     * 通过uv参数找到指定内存的思路
-     * 1.先找到指定内存在哪个块中(bu,bv)
-     * 2.然后找到块中的偏移量 (ou, ov)
-     */
     T &operator()(int u, int v) {
         int offset = getTotalOffset(u, v);
         return _data[offset];
