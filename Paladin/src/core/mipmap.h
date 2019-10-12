@@ -26,7 +26,7 @@ struct ResampleWeight {
 template <typename T>
 class MIPMap {
 public:
-    MIPMap(const Point2i &resolution, const T *img, bool doTri = false,
+    MIPMap(const Point2i &resolution, const T *img, bool doTri = true,
            Float maxAniso = 8.f, ImageWrap wrapMode = ImageWrap::Repeat)
     : _doTrilinear(doTri),
     _maxAnisotropy(maxAniso),
@@ -101,14 +101,14 @@ public:
         int nLevels = 1 + Log2Int(std::max(resolution[0], resolution[1]));
         _pyramid.resize(nLevels);
 
-        pyramid[0].reset(
+        _pyramid[0].reset(
             new BlockedArray<T>(resolution[0], resolution[1],
                             resampledImage ? resampledImage.get() : img));
 
         for (int i = 1; i < nLevels; ++i) {
             int sRes = std::max(1, _pyramid[i - 1]->uSize() / 2);
             int tRes = std::max(1, _pyramid[i - 1]->vSize() / 2);
-            pyramid[i].reset(new BlockedArray<T>(sRes, tRes));
+            _pyramid[i].reset(new BlockedArray<T>(sRes, tRes));
             // 并行处理，逐行执行
             parallelFor([&](int t) {
                 for (int s = 0; s < sRes; ++s) {
@@ -139,27 +139,59 @@ public:
         CHECK_LT(level, _pyramid.size());
         const BlockedArray<T> &l = *_pyramid[level];
         switch (_wrapMode) {
-        case Repeat:
-            s = Mod(s, l.uSize());
-            t = Mod(t, l.vSize());
-            break;
-        case Clamp:
-            s = clamp(s, 0, l.uSize() - 1);
-            t = clamp(t, 0, l.vSize() - 1);
-            break;
-        case Black:
-            static const T black(0.0f);
-            if (s < 0 || s >= l.uSize() || t < 0 || t > l.vSize()) {
-                return black;
-            }
-            break;
+            case ImageWrap::Repeat:
+                s = Mod(s, l.uSize());
+                t = Mod(t, l.vSize());
+                break;
+            case ImageWrap::Clamp:
+                s = clamp(s, 0, l.uSize() - 1);
+                t = clamp(t, 0, l.vSize() - 1);
+                break;
+            case ImageWrap::Black:
+                static const T black(0.0f);
+                if (s < 0 || s >= l.uSize() || t < 0 || t > l.vSize()) {
+                    return black;
+                }
+                break;
         }
         return l(s, t);
     }
+
+    /**
+     * 根据宽度纹理值  
+     * @param  st    纹理坐标
+     * @param  width 过滤宽度
+     * @return       [description]
+     */
+    T lookup(const Point2f &st, Float width = 0.f) const {
+        // 根据宽度找到对应的mipmap级别
+        // width越大，对应的纹理级别越高，分辨率越低
+        // 1/width = 2^(nLevels - 1 - level)
+        Float level = levels() - 1 + Log2(std::max(width, (Float)1e-8));
+
+        if (level < 0) {
+            // 如果分辨率最大的纹理也不能满足需求
+            return triangle(0, st);
+        } else if (level >= levels() - 1) {
+            // 如果已经取到了金字塔顶端的纹理，则直接取值
+            return texel(levels() - 1, 0, 0);
+        } else {
+            // 如果level范围在纹理金字塔的范围内
+            int iLevel = std::floor(level);
+            Float delta = level - iLevel;
+            // 对相邻两个级别的纹理取插值
+            return lerp(delta, triangle(iLevel, st), triangle(iLevel + 1, st));
+        }
+    }
     
-    T lookup(const Point2f &st, Float width = 0.f) const;
-    
-    T lookup(const Point2f &st, Vector2f dstdx, Vector2f dstdy) const;
+    T lookup(const Point2f &st, Vector2f dstdx, Vector2f dstdy) const {
+        using namespace std;
+        if (_doTrilinear) {
+            Float width = std::max(std::max(dstdx[0], dstdx[1]), std::max(dstdy[0], dstdy[1]));
+            return lookup(st, width);
+        }
+        // todo ewa
+    }
     
 private:
     
@@ -205,7 +237,21 @@ private:
         return v.Clamp(0.f, Infinity);
     }
     
-    T triangle(int level, const Point2f &st) const;
+    T triangle(int level, const Point2f &st) const {
+        level = clamp(level, 0, levels() - 1);
+        // 离散坐标转为连续坐标
+        Float s = st.s * _pyramid[level]->uSize() - 0.5f;
+        Float t = st.t * _pyramid[level]->vSize() - 0.5f;
+        int s0 = std::floor(s);
+        int t0 = std::floor(t);
+        Float ds = s - s0;
+        Float dt = t - t0;
+        // 相当于双线性插值
+        return (1 - ds) * (1 - dt) * texel(level, s0,   t0) +
+               (1 - ds) * dt       * texel(level, s0,   t0+1) +
+               ds       * (1 - dt) * texel(level, s0+1, t0) +
+               ds       * dt       * texel(level, s0+1, t0+1);
+    }
     
     T EWA(int level, Point2f st, Vector2f dst0, Vector2f dst1) const;
     

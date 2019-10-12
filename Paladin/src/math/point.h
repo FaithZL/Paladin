@@ -148,8 +148,17 @@ public:
         return x == 0 && y == 0;
     }
     
-    // Point2 Public Data
-    T x, y;
+    union {
+        T x;
+        T u;
+        T s;
+    };
+    
+    union {
+        T y;
+        T v;
+        T t;
+    };
 };
 
 template <typename T>

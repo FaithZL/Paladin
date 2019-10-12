@@ -19,6 +19,7 @@
 #include <cmath>
 #include <stdlib.h>
 #include <vector>
+#include <algorithm>
 
 #ifdef __GNUC__
     //fix 'numeric_limits' is not a member of 'std' for linux
@@ -337,6 +338,43 @@ inline Float Erf(Float x) {
     (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * std::exp(-x * x);
     
     return sign * y;
+}
+
+inline int Log2Int(uint32_t v) {
+#if defined(_MSC_VER)
+    unsigned long lz = 0;
+    if (_BitScanReverse(&lz, v)) {
+        return lz;
+    }
+    return 0;
+#else
+    return 31 - __builtin_clz(v);
+#endif
+}
+
+inline int Log2Int(int32_t v) {
+    return Log2Int((uint32_t)v);
+}
+
+inline int Log2Int(uint64_t v) {
+#if defined(_MSC_VER)
+    unsigned long lz = 0;
+#if defined(_WIN64)
+    _BitScanReverse64(&lz, v);
+#else
+    if  (_BitScanReverse(&lz, v >> 32))
+        lz += 32;
+    else
+        _BitScanReverse(&lz, v & 0xffffffff);
+#endif 
+    return lz;
+#else
+    return 63 - __builtin_clzll(v);
+#endif
+}
+
+inline int Log2Int(int64_t v) {
+    return Log2Int((uint64_t)v);
 }
 
 #include "math/vector.h"
