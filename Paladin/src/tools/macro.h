@@ -50,9 +50,9 @@
 #define PALADIN_HAVE_CONSTEXPR
 
 #ifdef _MSC_VER
-#define PALADIN_NO_INLINE __declspec(noinline)
+    #define PALADIN_NO_INLINE __declspec(noinline)
 #else
-#define PALADIN_NO_INLINE __attribute__((noinline))
+    #define PALADIN_NO_INLINE __attribute__((noinline))
 #endif
 
 #define PALADIN_INLINE __attribute__((always_inline))
@@ -62,11 +62,15 @@
 #endif
 
 #ifndef PALADIN_L1_CACHE_LINE_SIZE
-#define PALADIN_L1_CACHE_LINE_SIZE 64
+    #define PALADIN_L1_CACHE_LINE_SIZE 64
 #endif
 
 #ifndef PALADIN_HAVE_ALIGNOF
-#define PALADIN_HAVE_ALIGNOF 16
+    #define PALADIN_HAVE_ALIGNOF 16
+#endif
+
+#if defined(_WIN32) || defined(_WIN64)
+    #define PALADIN_IS_WINDOWS
 #endif
 
 #define PALADIN_HAVE_HEX_FP_CONSTANTS

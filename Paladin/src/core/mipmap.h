@@ -34,6 +34,7 @@ public:
     _resolution(resolution) {
         
         std::unique_ptr<T[]> resampledImage = nullptr;
+        // 如果s，t两个方向有一个方向的分辨率不是2的整数次幂，则重采样，增加采样率提高到2的整数次幂
         if (!isPowerOf2(_resolution[0]) || !isPowerOf2(_resolution[1])) {
             Point2i resPow2(roundUpPow2(_resolution[0]), roundUpPow2(_resolution[1]));
             // 在s方向重采样
@@ -122,6 +123,7 @@ public:
             }, tRes, 16);
         }
         // 如果没有初始化过ewa权重查询表的话，则初始化
+        // 按照正态分布计算权重查询表
         if (_weightLut[0] == 0.) {
             for (int i = 0; i < WeightLUTSize; ++i) {
                 Float alpha = 2;
@@ -311,7 +313,10 @@ private:
     
     /**
      * 椭圆加权平均函数，基本思路如下
-     * 构造一个以st坐标为原点，dst0为长半轴，dst1向量为短半轴的椭圆
+     * 1.构造一个以st坐标为原点，dst0为长半轴，dst1向量为短半轴的椭圆
+     * 2.计算出椭圆在纹理空间中的AABB
+     * 3.遍历AABB中的所有纹理像素点，对椭圆范围内的所有像素进行过滤
+     * 相当于在椭圆范围内按照对应权重进行高斯过滤
      * @param  level 纹理级别
      * @param  st    st坐标
      * @param  dst0  可以认为是椭圆长半轴向量

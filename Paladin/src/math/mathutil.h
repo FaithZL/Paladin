@@ -494,6 +494,7 @@ inline bool quadratic(Float a, Float b, Float c, Float *t0, Float *t1) {
     return true;
 }
 
+// 误差管理使用的gamma，不是gamma校正
 inline Float gamma(int n) {
     return (n * MachineEpsilon) / (1 - n * MachineEpsilon);
 }
