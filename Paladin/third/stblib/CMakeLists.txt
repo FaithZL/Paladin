@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 GET_FILENAME_COMPONENT(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 project(${PROJECT_NAME})
 
-file(GLOB ALL_SRC "*.h" "*.c*")
-
+file(GLOB ALL_SRC "stb/*.h*" "stb/*.c*" "stblib.cpp")
+INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/stb")
 
 ADD_LIBRARY(${PROJECT_NAME} ${ALL_SRC})
