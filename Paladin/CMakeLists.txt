@@ -33,14 +33,14 @@ endforeach()
 # 添加各个库目录
 add_subdirectory(third/lua53)
 add_subdirectory(third/tinyobjloader)
-add_subdirectory(third/stb_image)
-set(EXTRA_LIBS ${EXTRA_LIBS} lua53 tinyobjloader stb_image)
+add_subdirectory(third/stblib)
+set(EXTRA_LIBS ${EXTRA_LIBS} lua53 tinyobjloader stblib)
 
 # 设置头文件目录
 include_directories ("${PROJECT_SOURCE_DIR}/src")
 include_directories ("${PROJECT_SOURCE_DIR}/third/lua53/lua")
 include_directories ("${PROJECT_SOURCE_DIR}/third/tinyobjloader")
-include_directories ("${PROJECT_SOURCE_DIR}/third/stb_image")
+include_directories ("${PROJECT_SOURCE_DIR}/third/stblib/stb")
 
 # 指定生成目标
 add_executable (${APP_NAME} ${ALL_FILES})

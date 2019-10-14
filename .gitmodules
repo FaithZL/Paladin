@@ -6,3 +6,7 @@
 	path = Paladin/third/tinyobjloader
 	url = https://github.com/syoyo/tinyobjloader.git
 	branch = master
+[submodule "Paladin/third/stblib/stb"]
+	path = Paladin/third/stblib/stb
+	url = git@github.com:nothings/stb.git
+	branch = master
