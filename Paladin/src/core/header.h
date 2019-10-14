@@ -35,6 +35,8 @@
     #include <algorithm>
     //fix 'mutex' is not a member of 'std' for linux
     #include <mutex>
+    //fix 'condition_variable' is not a member of 'std' for linux
+    #include <condition_variable>
 #endif
 
 #ifdef _MSC_VER
@@ -49,6 +51,8 @@
     #include <atomic>
     //fix “mutex”: 不是“std”的成员 for vs2015
     #include <mutex>
+    //fix “tolower”: 不是“std”的成员 for vs2015
+    #include <cctype>
 #endif
 
 #include "tools/stringprint.hpp"
