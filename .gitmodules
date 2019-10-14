@@ -8,5 +8,5 @@
 	branch = master
 [submodule "Paladin/third/stblib/stb"]
 	path = Paladin/third/stblib/stb
-	url = git@github.com:nothings/stb.git
+	url = https://github.com/nothings/stb.git
 	branch = master
