@@ -16,7 +16,7 @@ PALADIN_BEGIN
 
 static std::string searchDirectory;
 
-#ifdef PBRT_IS_WINDOWS
+#ifdef PALADIN_IS_WINDOWS
 bool isAbsolutePath(const std::string &filename) {
     if (filename.empty()) return false;
     return (filename[0] == '\\' || filename[0] == '/' ||
@@ -34,7 +34,7 @@ std::string absolutePath(const std::string &filename) {
 std::string resolveFilename(const std::string &filename) {
     if (searchDirectory.empty() || filename.empty())
         return filename;
-    else if (IsAbsolutePath(filename))
+    else if (isAbsolutePath(filename))
         return filename;
     
     char searchDirectoryEnd = searchDirectory[searchDirectory.size() - 1];
