@@ -10,6 +10,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 # 收集所有头文件源文件，存入 ALL_FILES 变量中
 file(GLOB_RECURSE ALL_FILES "src/*.h*" "src/*.cpp" "third/rapidxml-1.13/*.hpp")
+file(GLOB MORE_FILES "third/stblib/stb/*.h" "third/stblib/stb/*.c" "third/tinyobjloader/*.h")
+foreach(_file IN ITEMS ${MORE_FILES})
+    list(APPEND ALL_FILES ${_file})
+endforeach()
 
 # 定义按目录结构归类的方法
 function(assign_source_group)
