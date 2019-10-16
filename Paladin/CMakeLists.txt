@@ -9,7 +9,7 @@ project(${APP_NAME})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 # 收集所有头文件源文件，存入 ALL_FILES 变量中
-file(GLOB_RECURSE ALL_FILES "src/*.h*" "src/*.cpp")
+file(GLOB_RECURSE ALL_FILES "src/*.h*" "src/*.cpp" "third/rapidxml-1.13/*.hpp")
 
 # 定义按目录结构归类的方法
 function(assign_source_group)
@@ -41,6 +41,7 @@ include_directories ("${PROJECT_SOURCE_DIR}/src")
 include_directories ("${PROJECT_SOURCE_DIR}/third/lua53/lua")
 include_directories ("${PROJECT_SOURCE_DIR}/third/tinyobjloader")
 include_directories ("${PROJECT_SOURCE_DIR}/third/stblib/stb")
+include_directories ("${PROJECT_SOURCE_DIR}/third/rapidxml-1.13")
 
 # 指定生成目标
 add_executable (${APP_NAME} ${ALL_FILES})

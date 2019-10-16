@@ -10,6 +10,7 @@
 #include "core/paladin.hpp"
 
 #include "alltest/test_lua.hpp"
+#include "alltest/test_rapidxml.hpp"
 #include "textures/bilerp.h"
 #include "math/lowdiscrepancy.hpp"
 
@@ -24,6 +25,7 @@ int main(int argc, const char * argv[]) {
     Paladin pld;
     
 //    test_lua_main();
+	test_rapidxml_main();
     cout << InverseRadicalInverse<10>(123456, 3) << endl;
     
     RNG r;
