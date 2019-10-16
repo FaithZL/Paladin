@@ -25,7 +25,7 @@ int main(int argc, const char * argv[]) {
     Paladin pld;
     
 //    test_lua_main();
-	test_rapidxml_main();
+    test_rapidxml_main();
     cout << InverseRadicalInverse<10>(123456, 3) << endl;
     
     RNG r;
