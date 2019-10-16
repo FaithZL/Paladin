@@ -25,16 +25,14 @@ function(assign_source_group)
     endforeach()
 endfunction(assign_source_group)
 
-
 foreach(_source IN ITEMS ${ALL_FILES})
     assign_source_group(${_source})
 endforeach()
 
+
 # 添加各个库目录
 add_subdirectory(third/lua53)
-add_subdirectory(third/tinyobjloader)
-add_subdirectory(third/stblib)
-set(EXTRA_LIBS ${EXTRA_LIBS} lua53 tinyobjloader stblib)
+set(EXTRA_LIBS ${EXTRA_LIBS} lua53)
 
 # 设置头文件目录
 include_directories ("${PROJECT_SOURCE_DIR}/src")
