@@ -69,8 +69,11 @@ PALADIN_BEGIN
 
 
 enum class LightFlags {
+    // 点光源
     DeltaPosition = 1,
+    // 方向光，只有一个方向
     DeltaDirection = 2,
+    // 面光源
     Area = 4,
     Infinite = 8
 };
@@ -99,10 +102,20 @@ public:
 
     }
     
+    /**
+     * 返回从指定位置ref随机采样光源得到的辐射度
+     * @param  ref 指定位置
+     * @param  u   2维随机变量
+     * @param  wi  返回：光线射向ref的方向向量
+     * @param  pdf 返回：对应随机变量的pdf值
+     * @param  vis 可见测试器
+     * @return     辐射度
+     */
     virtual Spectrum sampleLi(const Interaction &ref, const Point2f &u,
                                Vector3f *wi, Float *pdf,
                                VisibilityTester *vis) const = 0;
 
+    // 功率
     virtual Spectrum power() const = 0;
 
     virtual void preprocess(const Scene &scene) {
@@ -121,9 +134,11 @@ public:
 
     virtual void pdfLe(const Ray &ray, const Normal3f &nLight, Float *pdfPos,
                         Float *pdfDir) const = 0;
-    
+    // LightFlags
     const int flags;
+    // 为了计算soft shadow的采样数量
     const int nSamples;
+
     const MediumInterface mediumInterface;
     
 protected:
@@ -162,9 +177,9 @@ public:
         return _p1;
     }
     
-    bool Unoccluded(const Scene &scene) const;
+    bool unoccluded(const Scene &scene) const;
     
-    Spectrum Tr(const Scene &scene, Sampler &sampler) const;
+    Spectrum tr(const Scene &scene, Sampler &sampler) const;
     
 private:
     Interaction _p0, _p1;
