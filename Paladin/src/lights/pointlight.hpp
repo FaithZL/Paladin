@@ -25,6 +25,20 @@ public:
 
 	}
 
+	virtual Spectrum sampleLi(const Interaction &ref, const Point2f &u, Vector3f *wi,
+                       Float *pdf, VisibilityTester *vis) const;
+
+	Spectrum power() const;
+
+    Float pdfLi(const Interaction &, const Vector3f &) const;
+
+    Spectrum sampleLe(const Point2f &u1, const Point2f &u2, Float time,
+                       Ray *ray, Normal3f *nLight, Float *pdfPos,
+                       Float *pdfDir) const;
+
+    void pdfLe(const Ray &, const Normal3f &, Float *pdfPos,
+                Float *pdfDir) const;	
+
 private:
     // 光源位置
     const Point3f _pLight;

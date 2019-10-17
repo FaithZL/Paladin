@@ -8,3 +8,8 @@
 
 #include "scene.hpp"
 
+PALADIN_BEGIN
+
+
+
+PALADIN_END

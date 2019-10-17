@@ -66,8 +66,6 @@ PALADIN_BEGIN
  */
 
 
-
-
 enum class LightFlags {
     // 点光源
     DeltaPosition = 1,
@@ -127,7 +125,7 @@ public:
     }
 
     virtual Float pdfLi(const Interaction &ref, const Vector3f &wi) const = 0;
-
+    
     virtual Spectrum sampleLe(const Point2f &u1, const Point2f &u2, Float time,
                                Ray *ray, Normal3f *nLight, Float *pdfPos,
                                Float *pdfDir) const = 0;
@@ -158,6 +156,10 @@ public:
     virtual Spectrum L(const Interaction &intr, const Vector3f &w) const = 0;
 };
 
+/**
+ * 可见测试器
+ * 测试两个指定位置之间有没有阻挡
+ */
 class VisibilityTester {
 public:
     VisibilityTester() {
@@ -177,8 +179,9 @@ public:
         return _p1;
     }
     
+    // 用于测试有无遮挡
     bool unoccluded(const Scene &scene) const;
-    
+    // 用于体积渲染，暂时不理
     Spectrum tr(const Scene &scene, Sampler &sampler) const;
     
 private:

@@ -21,29 +21,40 @@ public:
     Scene(std::shared_ptr<Primitive> aggregate,
           const std::vector<std::shared_ptr<Light>> &lights)
     : lights(lights), _aggregate(aggregate) {
-        // Scene Constructor Implementation
         _worldBound = _aggregate->worldBound();
         for (const auto &light : lights) {
             light->preprocess(*this);
-            if (light->flags & (int)LightFlags::Infinite)
+            if (light->flags & (int)LightFlags::Infinite) {
                 infiniteLights.push_back(light);
+            }
         }
     }
-    const AABB3f &worldBound() const { return _worldBound; }
-    bool intersect(const Ray &ray, SurfaceInteraction *isect) const;
-    bool intersectP(const Ray &ray) const;
+
+    const AABB3f &worldBound() const { 
+        return _worldBound;
+    }
+
+    bool intersect(const Ray &ray, SurfaceInteraction *isect) const {
+        CHECK_NE(ray.dir, Vector3f(0,0,0));
+        return _aggregate->intersect(ray, isect);
+    }
+
+    bool intersectP(const Ray &ray) const {
+        CHECK_NE(ray.dir, Vector3f(0,0,0));
+        return _aggregate->intersectP(ray);
+    }
+
     bool intersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
                      Spectrum *transmittance) const;
     
-    // Scene Public Data
     std::vector<std::shared_ptr<Light>> lights;
-    // Store infinite light sources separately for cases where we only want
-    // to loop over them.
+
     std::vector<std::shared_ptr<Light>> infiniteLights;
     
 private:
-    // Scene Private Data
+    // 片段的集合
     std::shared_ptr<Primitive> _aggregate;
+    // 整个场景的包围盒
     AABB3f _worldBound;
 };
 
