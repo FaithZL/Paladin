@@ -126,14 +126,14 @@ public:
 
     virtual Float pdfLi(const Interaction &ref, const Vector3f &wi) const = 0;
     
-    // 双向方法需要用的函数，暂时不理
-    virtual Spectrum sampleLe(const Point2f &u1, const Point2f &u2, Float time,
-                               Ray *ray, Normal3f *nLight, Float *pdfPos,
-                               Float *pdfDir) const = 0;
+    // // 双向方法需要用的函数，暂时不理
+    // virtual Spectrum sampleLe(const Point2f &u1, const Point2f &u2, Float time,
+    //                            Ray *ray, Normal3f *nLight, Float *pdfPos,
+    //                            Float *pdfDir) const = 0;
     
-    // 双向方法用的函数，暂时不理
-    virtual void pdfLe(const Ray &ray, const Normal3f &nLight, Float *pdfPos,
-                        Float *pdfDir) const = 0;
+    // // 双向方法用的函数，暂时不理
+    // virtual void pdfLe(const Ray &ray, const Normal3f &nLight, Float *pdfPos,
+    //                     Float *pdfDir) const = 0;
     // LightFlags
     const int flags;
     // 为了计算soft shadow的采样数量
