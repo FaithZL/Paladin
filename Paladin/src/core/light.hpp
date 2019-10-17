@@ -113,7 +113,7 @@ public:
                                Vector3f *wi, Float *pdf,
                                VisibilityTester *vis) const = 0;
 
-    // 功率
+    // 辐射通量，也就是功率
     virtual Spectrum power() const = 0;
 
     virtual void preprocess(const Scene &scene) {
@@ -126,10 +126,12 @@ public:
 
     virtual Float pdfLi(const Interaction &ref, const Vector3f &wi) const = 0;
     
+    // 双向方法需要用的函数，暂时不理
     virtual Spectrum sampleLe(const Point2f &u1, const Point2f &u2, Float time,
                                Ray *ray, Normal3f *nLight, Float *pdfPos,
                                Float *pdfDir) const = 0;
-
+    
+    // 双向方法用的函数，暂时不理
     virtual void pdfLe(const Ray &ray, const Normal3f &nLight, Float *pdfPos,
                         Float *pdfDir) const = 0;
     // LightFlags

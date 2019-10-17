@@ -28,7 +28,9 @@ public:
 	virtual Spectrum sampleLi(const Interaction &ref, const Point2f &u, Vector3f *wi,
                        Float *pdf, VisibilityTester *vis) const;
 
-	Spectrum power() const;
+	Spectrum power() const {
+        return 4 * Pi * _I;
+    }
 
     Float pdfLi(const Interaction &, const Vector3f &) const;
 
