@@ -12,11 +12,11 @@ PALADIN_BEGIN
 
 DiffuseAreaLight::DiffuseAreaLight(const Transform &LightToWorld,
                                    const MediumInterface &mediumInterface,
-                                   const Spectrum &Lemit, int nSamples,
+                                   const Spectrum &L, int nSamples,
                                    const std::shared_ptr<Shape> &shape,
                                    bool twoSided)
 : AreaLight(LightToWorld, mediumInterface, nSamples),
-_Lemit(Lemit),
+_L(L),
 _shape(shape),
 _twoSided(twoSided),
 _area(_shape->area()) {
@@ -24,7 +24,7 @@ _area(_shape->area()) {
 }
 
 Spectrum DiffuseAreaLight::power() const {
-    return (_twoSided ? _2Pi : Pi) * _Lemit * _area;
+    return (_twoSided ? _2Pi : Pi) * _L * _area;
 }
 
 Spectrum DiffuseAreaLight::sampleLi(const Interaction &ref, const Point2f &u,

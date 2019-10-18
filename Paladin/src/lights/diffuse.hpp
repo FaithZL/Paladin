@@ -21,7 +21,7 @@ public:
                      bool twoSided = false);
     
     Spectrum L(const Interaction &intr, const Vector3f &w) const {
-        return (_twoSided || dot(intr.normal, w) > 0) ? _Lemit : Spectrum(0.f);
+        return (_twoSided || dot(intr.normal, w) > 0) ? _L : Spectrum(0.f);
     }
     
     Spectrum power() const;
@@ -32,8 +32,8 @@ public:
     Float pdfLi(const Interaction &, const Vector3f &) const;
     
 private:
-    
-    const Spectrum _Lemit;
+    // 面光源才有的，发射的辐射度
+    const Spectrum _L;
     std::shared_ptr<Shape> _shape;
     const bool _twoSided;
     const Float _area;
