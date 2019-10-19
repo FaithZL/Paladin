@@ -16,6 +16,7 @@
 
 PALADIN_BEGIN
 
+// 测试正常
 static RGBSpectrum *readImagePNG(const std::string &name, int *width,
                                  int *height) {
     unsigned char *rgb;
@@ -53,13 +54,12 @@ std::unique_ptr<RGBSpectrum[]> readImage(const std::string &name, Point2i *resol
     return nullptr;
 }
 
-// 待测试
+// 测试正常
 void writeImage(const std::string &name, const Float *rgb,
                 const AABB2i &outputBounds, const Point2i &totalResolution) {
     if (hasExtension(name, "png")) {
         Vector2i resolution = outputBounds.diagonal();
-        std::unique_ptr<uint8_t[]> rgb8(
-                                        new uint8_t[3 * resolution.x * resolution.y]);
+        std::unique_ptr<uint8_t[]> rgb8(new uint8_t[3 * resolution.x * resolution.y]);
         uint8_t *dst = rgb8.get();
         for (int y = 0; y < resolution.y; ++y) {
             for (int x = 0; x < resolution.x; ++x) {
@@ -71,7 +71,7 @@ void writeImage(const std::string &name, const Float *rgb,
                 dst += 3;
             }
         }
-        stbi_write_png(name.c_str(), resolution.x, resolution.y, 3, rgb8.get(), 3);
+        stbi_write_png(name.c_str(), resolution.x, resolution.y, 3, rgb8.get(), 3 * resolution.x);
     }
     // todo
 }
