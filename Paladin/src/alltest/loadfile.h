@@ -13,7 +13,7 @@
 PALADIN_BEGIN
 
 void loadfile() {
-    auto pt = "res/HelloWorld.png";
+    auto pt = "res/derelict_overpass_1k.hdr";
     Point2i res;
     
     std::unique_ptr<RGBSpectrum[]> ret = readImage(pt, &res);
@@ -22,7 +22,7 @@ void loadfile() {
     for (int i = 0; i < res.x * res.y; ++i) {
         ret[i].ToRGB(&cp[i * 3]);
     }
-    auto p2 = "res/skeleton222.png";
+    auto p2 = "res/test_hdr999.hdr";
     writeImage(p2, &cp[0],crop , res);
 }
 
