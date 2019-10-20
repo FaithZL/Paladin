@@ -150,6 +150,8 @@ class Texture;
 
 class MixMaterial;
 
+class Distribution1D;
+
 PALADIN_END
 
 inline uint32_t floatToBits(float f) {
