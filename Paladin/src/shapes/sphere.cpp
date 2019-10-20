@@ -239,19 +239,20 @@ Interaction Sphere::sampleA(const Point2f &u, Float *pdf) const {
     // 由于uniformSampleSphere函数使用了cos与sin函数
     // pObj的误差取决于这些函数的精度，所以pObj需要被重新投影到球面上
     pObj *= _radius / distance(pObj, Point3f(0, 0, 0));
-    /*
-     x' = x * (r / sqrt(x^2 + y^2 + z^2))
-     x' = x ⊗ r ⊘ sqrt((x ⊗ x) ⊕ (y ⊗ y) ⊕ (z ⊗ z))
-     ∈ xr(1± ε)^2 / sqrt(x^2*(1 ± ε)^3 + y^2*(1 ± ε)^3 + z^2*(1 ± ε)^2)(1 ± ε)
-     ∈ xr(1± γ2) / sqrt(x^2*(1 ± γ3) + y^2*(1 ± γ3) + z^2*(1 ± γ2))(1 ± γ1)
-     个人理解，这里是扩大范围保守估计γ3变成了γ4，开方之后得γ2
-     ∈ xr(1± γ2) / sqrt((x^2 + y^2 + z^2)*(1 ± γ4))(1 ± γ1)
-     开方之后得γ2
-     ∈ xr(1± γ2) / sqrt((x^2 + y^2 + z^2))(1 ± γ2)(1 ± γ1)
-     保守估计，两个下标相加得5
-     ∈ (xr / sqrt(x2 + y2 + z2)) * (1 ± γ5)
-     y与z同理
-    */
+    
+    /**
+     * x' = x * (r / sqrt(x^2 + y^2 + z^2))
+     * x' = x ⊗ r ⊘ sqrt((x ⊗ x) ⊕ (y ⊗ y) ⊕ (z ⊗ z))
+     * ∈ xr(1± ε)^2 / sqrt(x^2*(1 ± ε)^3 + y^2*(1 ± ε)^3 + z^2*(1 ± ε)^2)(1 ± ε)
+     * ∈ xr(1± γ2) / sqrt(x^2*(1 ± γ3) + y^2*(1 ± γ3) + z^2*(1 ± γ2))(1 ± γ1)
+     * 个人理解，这里是扩大范围保守估计γ3变成了γ4，开方之后得γ2
+     * ∈ xr(1± γ2) / sqrt((x^2 + y^2 + z^2)*(1 ± γ4))(1 ± γ1)
+     * 开方之后得γ2
+     * ∈ xr(1± γ2) / sqrt((x^2 + y^2 + z^2))(1 ± γ2)(1 ± γ1)
+     * 保守估计，两个下标相加得5
+     * ∈ (xr / sqrt(x2 + y2 + z2)) * (1 ± γ5)
+     * y与z同理
+     */
     Vector3f pObjError = gamma(5) * abs(Vector3f(pObj));
     ret.pos = objectToWorld->exec(pObj, pObjError, &ret.pError);
     *pdf = pdfA(ret);
@@ -261,7 +262,6 @@ Interaction Sphere::sampleA(const Point2f &u, Float *pdf) const {
 Interaction Sphere::sampleW(const paladin::Interaction &ref, const Point2f &u, Float *pdf) const {
     Interaction ret;
     Point3f pCenter = objectToWorld->exec(Point3f(0,0,0));
-    // todo 为何要偏移？
     Point3f pOrigin = offsetRayOrigin(ref.pos, ref.pError, ref.normal, pCenter - ref.pos);
     if (distanceSquared(pOrigin, pCenter) < _radius * _radius) {
         // ref点在球内

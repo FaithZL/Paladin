@@ -42,7 +42,7 @@ RGBSpectrum * _readImage(const std::string &name,
         }
     }
     free(rgb);
-    COUT << StringPrintf("Read PNG image %s (%d x %d)", name.c_str(), *width, *height);
+    COUT << StringPrintf("Read image %s (%d x %d)", name.c_str(), *width, *height);
     return ret;
 }
 
@@ -67,7 +67,7 @@ RGBSpectrum * _readImageHDR(const std::string &name, int *width, int *height) {
         }
     }
     free(rgb);
-    COUT << StringPrintf("Read PNG image %s (%d x %d)", name.c_str(), *width, *height);
+    COUT << StringPrintf("Read HDR image %s (%d x %d)", name.c_str(), *width, *height);
     return ret;
 }
 
@@ -102,6 +102,9 @@ void writeImage(const std::string &name,
     }
     
     // 只有保存png，jpg，tga格式时，才需要clamp
+    // 由于可能有clamp，可能导致hdr部分细节丢失
+    // 如果需要保留hdr细节，直接保存hdr格式文件
+    // 由于现在支持hdr的格式很多，直接保存就好了，所以就不实现tone mapping了
     Vector2i resolution = outputBounds.diagonal();
     std::unique_ptr<uint8_t[]> rgb8(new uint8_t[3 * resolution.x * resolution.y]);
     uint8_t *dst = rgb8.get();

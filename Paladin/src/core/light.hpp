@@ -101,7 +101,7 @@ public:
     }
     
     /**
-     * 返回从指定位置ref随机采样光源得到的辐射度
+     * 返回从指定位置ref随机采样光源表面的点得到的辐射度
      * @param  ref 指定位置
      * @param  u   2维随机变量
      * @param  wi  返回：光线射向ref的方向向量
@@ -124,6 +124,8 @@ public:
         return Spectrum(0.f);
     }
 
+    // 返回在ref处采样光源时，对应的pdf函数值
+    // 用于估计直接光照时，采样bsdf时生成的wi方向，对应的pdf函数值
     virtual Float pdfLi(const Interaction &ref, const Vector3f &wi) const = 0;
     
     // // 双向方法需要用的函数，暂时不理

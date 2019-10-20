@@ -26,6 +26,16 @@ public:
     
     Spectrum power() const;
     
+    /**
+     * 在场景中某处ref，采样光源，生成入射方向，
+     * 得到该点的入射辐射度，并得到对应的立体角空间的pdf
+     * @param  ref 场景中的点
+     * @param  u   二维随机变量
+     * @param  wi  生成的入射方向
+     * @param  pdf 对应方向上的概率密度函数
+     * @param  vis 可见测试器
+     * @return     ref在wi方向上的入射辐射度
+     */
     Spectrum sampleLi(const Interaction &ref, const Point2f &u, Vector3f *wo,
                        Float *pdf, VisibilityTester *vis) const;
     

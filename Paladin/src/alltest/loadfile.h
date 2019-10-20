@@ -22,7 +22,7 @@ void loadfile() {
     for (int i = 0; i < res.x * res.y; ++i) {
         ret[i].ToRGB(&cp[i * 3]);
     }
-    auto p2 = "res/test_hdr999.hdr";
+    auto p2 = "res/test_hdr999.png";
     writeImage(p2, &cp[0],crop , res);
 }
 

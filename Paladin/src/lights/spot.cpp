@@ -43,6 +43,7 @@ Float SpotLight::falloff(const Vector3f &w) const {
     return (delta * delta) * (delta * delta);
 }
 
+// todo待推导
 Spectrum SpotLight::power() const {
     return _I * _2Pi * (1 - .5f * (_cosFalloffStart + _cosTotalWidth));
 }

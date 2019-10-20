@@ -120,6 +120,7 @@
 		F6358B262358CC330070FCC3 /* distant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6358B242358CC320070FCC3 /* distant.cpp */; };
 		F6358B292358CC4F0070FCC3 /* projection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6358B272358CC4F0070FCC3 /* projection.cpp */; };
 		F63696975D474B02A903B137 /* sampling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B092EE853CC4A4780131858 /* sampling.cpp */; };
+		F6385698235C76A9003D4002 /* directlighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6385696235C76A9003D4002 /* directlighting.cpp */; };
 		FC6784F81B2A41B2A77A3FB2 /* lopcodes.c in Sources */ = {isa = PBXBuildFile; fileRef = F84CF758403F46BCBDE6FBAC /* lopcodes.c */; };
 		FD4C3108677B4363B8E97744 /* ldebug.c in Sources */ = {isa = PBXBuildFile; fileRef = 67BD492FD5474178AD9B1BAD /* ldebug.c */; };
 /* End PBXBuildFile section */
@@ -379,6 +380,8 @@
 		F6358B252358CC330070FCC3 /* distant.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = distant.hpp; path = src/lights/distant.hpp; sourceTree = "<group>"; };
 		F6358B272358CC4F0070FCC3 /* projection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = projection.cpp; path = src/lights/projection.cpp; sourceTree = "<group>"; };
 		F6358B282358CC4F0070FCC3 /* projection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = projection.hpp; path = src/lights/projection.hpp; sourceTree = "<group>"; };
+		F6385696235C76A9003D4002 /* directlighting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = directlighting.cpp; sourceTree = "<group>"; };
+		F6385697235C76A9003D4002 /* directlighting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = directlighting.hpp; sourceTree = "<group>"; };
 		F63877D723593A650049C19D /* loadfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = loadfile.h; path = src/alltest/loadfile.h; sourceTree = "<group>"; };
 		F6C28607AE6C458BAEC733A8 /* lbaselib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lbaselib.c; path = third/lua53/lua/lbaselib.c; sourceTree = SOURCE_ROOT; };
 		F84CF758403F46BCBDE6FBAC /* lopcodes.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lopcodes.c; path = third/lua53/lua/lopcodes.c; sourceTree = SOURCE_ROOT; };
@@ -705,6 +708,8 @@
 			children = (
 				ACBAF0F9DC454BA2B2ED8EF3 /* path.cpp */,
 				09CEE09464CA483C92AD4088 /* path.hpp */,
+				F6385696235C76A9003D4002 /* directlighting.cpp */,
+				F6385697235C76A9003D4002 /* directlighting.hpp */,
 			);
 			name = integrators;
 			sourceTree = "<group>";
@@ -1051,6 +1056,7 @@
 				E2152126B8244BF89C77A3EF /* cube.cpp in Sources */,
 				9E987B7B7E0044668DFBAE6F /* curve.cpp in Sources */,
 				8600C131F0EC4A37BFF51889 /* cylinder.cpp in Sources */,
+				F6385698235C76A9003D4002 /* directlighting.cpp in Sources */,
 				97185353EB494889BD36FC18 /* disk.cpp in Sources */,
 				C02315E3EAAE47089D15A4BE /* sphere.cpp in Sources */,
 				6DD2814C7AD24E3AADFCBFDC /* triangle.cpp in Sources */,
