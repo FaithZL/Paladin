@@ -120,7 +120,9 @@
 		F6358B262358CC330070FCC3 /* distant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6358B242358CC320070FCC3 /* distant.cpp */; };
 		F6358B292358CC4F0070FCC3 /* projection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6358B272358CC4F0070FCC3 /* projection.cpp */; };
 		F63696975D474B02A903B137 /* sampling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B092EE853CC4A4780131858 /* sampling.cpp */; };
-		F6385698235C76A9003D4002 /* directlighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6385696235C76A9003D4002 /* directlighting.cpp */; };
+		F639167A235DF99D005DB32F /* volpath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6391678235DF99D005DB32F /* volpath.cpp */; };
+		F639167D235DF9B2005DB32F /* whitted.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F639167B235DF9B2005DB32F /* whitted.cpp */; };
+		F6391680235DF9DB005DB32F /* bssrdf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F639167E235DF9DB005DB32F /* bssrdf.cpp */; };
 		FC6784F81B2A41B2A77A3FB2 /* lopcodes.c in Sources */ = {isa = PBXBuildFile; fileRef = F84CF758403F46BCBDE6FBAC /* lopcodes.c */; };
 		FD4C3108677B4363B8E97744 /* ldebug.c in Sources */ = {isa = PBXBuildFile; fileRef = 67BD492FD5474178AD9B1BAD /* ldebug.c */; };
 /* End PBXBuildFile section */
@@ -380,9 +382,15 @@
 		F6358B252358CC330070FCC3 /* distant.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = distant.hpp; path = src/lights/distant.hpp; sourceTree = "<group>"; };
 		F6358B272358CC4F0070FCC3 /* projection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = projection.cpp; path = src/lights/projection.cpp; sourceTree = "<group>"; };
 		F6358B282358CC4F0070FCC3 /* projection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = projection.hpp; path = src/lights/projection.hpp; sourceTree = "<group>"; };
-		F6385696235C76A9003D4002 /* directlighting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = directlighting.cpp; sourceTree = "<group>"; };
-		F6385697235C76A9003D4002 /* directlighting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = directlighting.hpp; sourceTree = "<group>"; };
 		F63877D723593A650049C19D /* loadfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = loadfile.h; path = src/alltest/loadfile.h; sourceTree = "<group>"; };
+		F6391676235DF973005DB32F /* directlighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = directlighting.cpp; path = src/integrators/directlighting.cpp; sourceTree = "<group>"; };
+		F6391677235DF974005DB32F /* directlighting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = directlighting.hpp; path = src/integrators/directlighting.hpp; sourceTree = "<group>"; };
+		F6391678235DF99D005DB32F /* volpath.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = volpath.cpp; path = src/integrators/volpath.cpp; sourceTree = "<group>"; };
+		F6391679235DF99D005DB32F /* volpath.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = volpath.hpp; path = src/integrators/volpath.hpp; sourceTree = "<group>"; };
+		F639167B235DF9B2005DB32F /* whitted.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = whitted.cpp; path = src/integrators/whitted.cpp; sourceTree = "<group>"; };
+		F639167C235DF9B2005DB32F /* whitted.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = whitted.hpp; path = src/integrators/whitted.hpp; sourceTree = "<group>"; };
+		F639167E235DF9DB005DB32F /* bssrdf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bssrdf.cpp; path = src/core/bssrdf.cpp; sourceTree = "<group>"; };
+		F639167F235DF9DB005DB32F /* bssrdf.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = bssrdf.hpp; path = src/core/bssrdf.hpp; sourceTree = "<group>"; };
 		F6C28607AE6C458BAEC733A8 /* lbaselib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lbaselib.c; path = third/lua53/lua/lbaselib.c; sourceTree = SOURCE_ROOT; };
 		F84CF758403F46BCBDE6FBAC /* lopcodes.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lopcodes.c; path = third/lua53/lua/lopcodes.c; sourceTree = SOURCE_ROOT; };
 		F90A700B556B444CA3EF8364 /* stb_voxel_render.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_voxel_render.h; path = third/stblib/stb/stb_voxel_render.h; sourceTree = SOURCE_ROOT; };
@@ -625,6 +633,8 @@
 				E5BF309A2A714A818C374AB5 /* spectrum.hpp */,
 				7C822ED6028D454AABE9A08D /* texture.cpp */,
 				26BD870C13754F1097A6AE99 /* texture.hpp */,
+				F639167E235DF9DB005DB32F /* bssrdf.cpp */,
+				F639167F235DF9DB005DB32F /* bssrdf.hpp */,
 			);
 			name = core;
 			sourceTree = "<group>";
@@ -706,10 +716,14 @@
 		619C087B299541A588F960BF /* integrators */ = {
 			isa = PBXGroup;
 			children = (
+				F6391676235DF973005DB32F /* directlighting.cpp */,
+				F6391677235DF974005DB32F /* directlighting.hpp */,
 				ACBAF0F9DC454BA2B2ED8EF3 /* path.cpp */,
 				09CEE09464CA483C92AD4088 /* path.hpp */,
-				F6385696235C76A9003D4002 /* directlighting.cpp */,
-				F6385697235C76A9003D4002 /* directlighting.hpp */,
+				F6391678235DF99D005DB32F /* volpath.cpp */,
+				F6391679235DF99D005DB32F /* volpath.hpp */,
+				F639167B235DF9B2005DB32F /* whitted.cpp */,
+				F639167C235DF9B2005DB32F /* whitted.hpp */,
 			);
 			name = integrators;
 			sourceTree = "<group>";
@@ -1043,8 +1057,10 @@
 				6D0AB13ED6EB4F6CAB25805B /* metal.cpp in Sources */,
 				1F80FC103817436D8EB00D90 /* mirror.cpp in Sources */,
 				156EBE76C185435EB8437174 /* mix.cpp in Sources */,
+				F639167A235DF99D005DB32F /* volpath.cpp in Sources */,
 				140CFE785AFE4C2EA3FE4235 /* plastic.cpp in Sources */,
 				984B0A7430E44B87BAB1F487 /* animatedtransform.cpp in Sources */,
+				F6391680235DF9DB005DB32F /* bssrdf.cpp in Sources */,
 				1135272F10F8446D99B3C9A9 /* lowdiscrepancy.cpp in Sources */,
 				E79A4626B2714AE6A6CF0FF8 /* quaternion.cpp in Sources */,
 				F63696975D474B02A903B137 /* sampling.cpp in Sources */,
@@ -1056,7 +1072,6 @@
 				E2152126B8244BF89C77A3EF /* cube.cpp in Sources */,
 				9E987B7B7E0044668DFBAE6F /* curve.cpp in Sources */,
 				8600C131F0EC4A37BFF51889 /* cylinder.cpp in Sources */,
-				F6385698235C76A9003D4002 /* directlighting.cpp in Sources */,
 				97185353EB494889BD36FC18 /* disk.cpp in Sources */,
 				C02315E3EAAE47089D15A4BE /* sphere.cpp in Sources */,
 				6DD2814C7AD24E3AADFCBFDC /* triangle.cpp in Sources */,
@@ -1065,6 +1080,7 @@
 				7DBE7B17D1A7461691DB5D2C /* fileutil.cpp in Sources */,
 				F6358B202358CBEC0070FCC3 /* diffuse.cpp in Sources */,
 				8CF4549E44C642E7A56C3DE2 /* memory.cpp in Sources */,
+				F639167D235DF9B2005DB32F /* whitted.cpp in Sources */,
 				033A406A1FAC4E88AC20CE3B /* parallel.cpp in Sources */,
 				DDC16C9F1FB84235A5F76E1D /* stb_vorbis.c in Sources */,
 			);
