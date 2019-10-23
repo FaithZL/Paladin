@@ -421,6 +421,114 @@ inline Float uniformSpherePdf() {
     return Inv4Pi;
 }
 
+/**
+ * 一维分布结构
+ * 由一个定义域为[0,1]的分段函数构造而来
+ * 理论上func函数应该恒大于零
+ */
+struct Distribution1D {
+    Distribution1D(const Float *f, int num)
+    :func(f, f + num),
+    cdf(num + 1) {
+        cdf[0] = 0;
+        for (int i = 1; i < num + 1; ++i) {
+            // todo 这里可以优化
+            cdf[i] = cdf[i - 1] + func[i - 1] / num;
+        }
+        
+        // 将cdf归一化
+        funcInt = cdf[num];
+        if (funcInt == 0) {
+            // 如果func全为零，则均匀分布
+            for (int i = 1; i < num + 1; ++i) {
+                // todo 这里可以优化
+                cdf[i] = Float(i) / Float(num);
+            }
+        } else {
+            for (int i = 1; i < num + 1; ++i) {
+                // todo 这里可以优化
+                cdf[i] = cdf[i] / funcInt;
+            }
+        }
+    }
+
+    int count() const {
+        return (int)func.size();
+    }
+
+    /**
+     * 采样连续的cdf
+     * @param  u   随机变量
+     * @param  pdf 返回的概率密度函数值
+     * @param  off x轴偏移量
+     * @return     返回[0,1]之间的浮点数
+     */
+    Float sampleContinuous(Float u, Float *pdf, int *off = nullptr) const {
+        auto predicate = [&](int index) { 
+            return cdf[index] <= u; 
+        };
+        int offset = findInterval((int)cdf.size(), predicate);
+        if (off) {
+            *off = offset;
+        }
+        Float du = u - cdf[offset];
+        if ((cdf[offset + 1] - cdf[offset]) > 0) {
+            CHECK_GT(cdf[offset + 1], cdf[offset]);
+            du /= (cdf[offset + 1] - cdf[offset]);
+        }
+        DCHECK(!std::isnan(du));
+
+        if (pdf) {
+            *pdf = (funcInt > 0) ? func[offset] / funcInt : 0;
+        }
+        return (offset + du) / count();        
+    }
+
+    /**
+     * 离散采样
+     * @param  u         随机变量
+     * @param  pdf       对应的概率密度函数值
+     * @param  uRemapped 
+     * @return           返回偏移量
+     */
+    int sampleDiscrete(Float u, Float *pdf = nullptr, Float *uRemapped = nullptr) const {
+        auto predicate = [&](int index) { 
+            return cdf[index] <= u; 
+        };
+        int offset = findInterval((int)cdf.size(), predicate);
+        if (pdf) {
+            // 保证pdf积分为1，所以比连续形式的pdf多除了一个count
+            *pdf = (funcInt > 0) ? func[offset] / (funcInt * count()) : 0;
+        }
+        if (uRemapped) {
+            *uRemapped = (u - cdf[offset]) / (cdf[offset + 1] - cdf[offset]);
+        }
+        if (uRemapped) {
+            DCHECK(*uRemapped >= 0.f && *uRemapped <= 1.f);
+        }
+        return offset;        
+    }
+
+    /**
+     * 获取离散形式的pdf
+     * @param  index 索引
+     * @return       pdf
+     */
+    Float discretePDF(int index) const {
+        DCHECK(index >= 0 && index < count());
+        return func[index] / (funcInt * count());
+    }
+
+    // 指定分布的函数
+    std::vector<Float> func;
+    // 指定函数的累积分布函数
+    std::vector<Float> cdf;
+    // 分段函数的积分值
+    Float funcInt;
+};
+
+
+
 PALADIN_END
 
 

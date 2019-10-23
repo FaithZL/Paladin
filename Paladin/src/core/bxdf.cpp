@@ -170,6 +170,7 @@ Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
         return Spectrum(0);
     }
     // 根据随机变量随机选择bxdf组件
+    // 目前的BSDF的各个bxdf组件是均匀分布，todo改为加权形式
     int comp = std::min((int)std::floor(u[0] * matchingComps), matchingComps - 1);
     
     BxDF *bxdf = nullptr;
