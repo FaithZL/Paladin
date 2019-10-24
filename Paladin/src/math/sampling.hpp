@@ -423,63 +423,68 @@ inline Float uniformSpherePdf() {
 
 /**
  * 一维分布结构
+ * 用分段直线函数取逼近曲线
+ * 如果一个分布没有明确的表达式，则可以使用该类
  * 由一个定义域为[0,1]的分段函数构造而来
- * 理论上func函数应该恒大于零
+ * 理论上_func函数应该恒大于零
  */
 struct Distribution1D {
     Distribution1D(const Float *f, int num)
-    :func(f, f + num),
-    cdf(num + 1) {
-        cdf[0] = 0;
+    :_func(f, f + num),
+    _cdf(num + 1) {
+        _cdf[0] = 0;
         for (int i = 1; i < num + 1; ++i) {
             // todo 这里可以优化
-            cdf[i] = cdf[i - 1] + func[i - 1] / num;
+            _cdf[i] = _cdf[i - 1] + _func[i - 1] / num;
         }
-        
-        // 将cdf归一化
-        funcInt = cdf[num];
-        if (funcInt == 0) {
-            // 如果func全为零，则均匀分布
+
+        // 由于func积分值不一定为1
+        // 所以需要将_cdf归一化
+        _funcInt = _cdf[num];
+        if (_funcInt == 0) {
+            // 如果_func全为零，则均匀分布
             for (int i = 1; i < num + 1; ++i) {
                 // todo 这里可以优化
-                cdf[i] = Float(i) / Float(num);
+                _cdf[i] = Float(i) / Float(num);
             }
         } else {
             for (int i = 1; i < num + 1; ++i) {
                 // todo 这里可以优化
-                cdf[i] = cdf[i] / funcInt;
+                _cdf[i] = _cdf[i] / _funcInt;
             }
         }
     }
 
     int count() const {
-        return (int)func.size();
+        return (int)_func.size();
     }
 
     /**
-     * 采样连续的cdf
+     * 根据均匀随机变量u
+     * 生成符合func分布的随机变量
+     * 用逆变换算法，过程就不赘述了
      * @param  u   随机变量
      * @param  pdf 返回的概率密度函数值
      * @param  off x轴偏移量
      * @return     返回[0,1]之间的浮点数
      */
-    Float sampleContinuous(Float u, Float *pdf, int *off = nullptr) const {
+    Float sampleContinuous(Float u, Float *pdf = nullptr, int *off = nullptr) const {
         auto predicate = [&](int index) { 
-            return cdf[index] <= u; 
+            return _cdf[index] <= u; 
         };
-        int offset = findInterval((int)cdf.size(), predicate);
+        int offset = findInterval((int)_cdf.size(), predicate);
         if (off) {
             *off = offset;
         }
-        Float du = u - cdf[offset];
-        if ((cdf[offset + 1] - cdf[offset]) > 0) {
-            CHECK_GT(cdf[offset + 1], cdf[offset]);
-            du /= (cdf[offset + 1] - cdf[offset]);
+        Float du = u - _cdf[offset];
+        if ((_cdf[offset + 1] - _cdf[offset]) > 0) {
+            CHECK_GT(_cdf[offset + 1], _cdf[offset]);
+            du /= (_cdf[offset + 1] - _cdf[offset]);
         }
         DCHECK(!std::isnan(du));
 
         if (pdf) {
-            *pdf = (funcInt > 0) ? func[offset] / funcInt : 0;
+            *pdf = (_funcInt > 0) ? _func[offset] / _funcInt : 0;
         }
         return (offset + du) / count();        
     }
@@ -488,20 +493,20 @@ struct Distribution1D {
      * 离散采样
      * @param  u         随机变量
      * @param  pdf       对应的概率密度函数值
-     * @param  uRemapped 
+     * @param  uRemapped 重新映射的u变量
      * @return           返回偏移量
      */
     int sampleDiscrete(Float u, Float *pdf = nullptr, Float *uRemapped = nullptr) const {
         auto predicate = [&](int index) { 
-            return cdf[index] <= u; 
+            return _cdf[index] <= u; 
         };
-        int offset = findInterval((int)cdf.size(), predicate);
+        int offset = findInterval((int)_cdf.size(), predicate);
         if (pdf) {
             // 保证pdf积分为1，所以比连续形式的pdf多除了一个count
-            *pdf = (funcInt > 0) ? func[offset] / (funcInt * count()) : 0;
+            *pdf = (_funcInt > 0) ? _func[offset] / (_funcInt * count()) : 0;
         }
         if (uRemapped) {
-            *uRemapped = (u - cdf[offset]) / (cdf[offset + 1] - cdf[offset]);
+            *uRemapped = (u - _cdf[offset]) / (_cdf[offset + 1] - _cdf[offset]);
         }
         if (uRemapped) {
             DCHECK(*uRemapped >= 0.f && *uRemapped <= 1.f);
@@ -516,18 +521,64 @@ struct Distribution1D {
      */
     Float discretePDF(int index) const {
         DCHECK(index >= 0 && index < count());
-        return func[index] / (funcInt * count());
+        return _func[index] / (_funcInt * count());
     }
 
+private:
     // 指定分布的函数
-    std::vector<Float> func;
+    std::vector<Float> _func;
     // 指定函数的累积分布函数
-    std::vector<Float> cdf;
-    // 分段函数的积分值
-    Float funcInt;
+    std::vector<Float> _cdf;
+    // func函数的积分值
+    Float _funcInt;
+
+    friend struct Distribution2D;
 };
 
+/**
+ * 2维分布
+ * 分为uv两个维度
+ * 个人觉得这个知识点比较简单，就不细说了
+ *
+ */
+struct Distribution2D {
+public:
+    Distribution2D(const Float *data, int nu, int nv) {
+        _pConditionalV.reserve(nv);
+        // 创建v个长度为u的一维分布，存入列表中
+        for (int v = 0; v < nv; ++v) {
+            _pConditionalV.emplace_back(new Distribution1D(&data[v * nu], nu));
+        }
+        std::vector<Float> _marginalFunc;
+        _marginalFunc.reserve(nv);
+        // 将每个一维分布的积分值存入_pMarginal中作为边缘概率密度
+        for (int v = 0; v < nv; ++v) {
+            _marginalFunc.push_back(_pConditionalV[v]->funcInt);
+        }
+        pMarginal.reset(new Distribution1D(&_marginalFunc[0], nv));
+    }
 
+    Point2f sampleContinuous(const Point2f &u, Float *pdf) const {
+        Float pdfs[2];
+        int v;
+        Float d1 = _pMarginal->sampleContinuous(u[1], &pdfs[1], &v);
+        Float d0 = _pConditionalV[v]->sampleContinuous(u[0], &pdfs[0]);
+        *pdf = pdfs[0] * pdfs[1];
+        return Point2f(d0, d1);
+    }
+
+    Float pdf(const Point2f &p) const {
+        int iu = clamp(int(p[0] * _pConditionalV[0]->count()), 0, _pConditionalV[0]->count() - 1);
+        int iv = clamp(int(p[1] * _pMarginal->count()), 0, _pMarginal->count() - 1);
+        return _pConditionalV[iv]->_func[iu] / _pMarginal->_funcInt;
+    }
+
+private:
+    // 长度为v的列表，每个列表储存一个样本数量为u的一维分布对象
+    std::vector<std::unique_ptr<Distribution1D>> _pConditionalV;
+    // u趋向于1时，v的边缘概率密度函数
+    std::unique_ptr<Distribution1D> _pMarginal;
+};
 
 PALADIN_END
 

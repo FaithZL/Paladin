@@ -152,6 +152,8 @@ class MixMaterial;
 
 struct Distribution1D;
 
+struct Distribution2D;
+
 PALADIN_END
 
 inline uint32_t floatToBits(float f) {
