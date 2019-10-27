@@ -17,9 +17,11 @@ Spectrum uniformSampleAllLights(const Interaction &it, const Scene &scene,
                                 const std::vector<int> &lightSamples,
                                 bool handleMedia) {
     Spectrum L(0.0f);
+    // 逐个光源遍历，估计直接光照
     for (size_t i = 0; i < scene.lights.size(); ++i) {
     	const std::shared_ptr<Light> &light = scene.lights[i];
     	int nSamples = lightSamples[i];
+        // get2DArray获取的是同一维度的nSamples个样本
     	const Point2f *uLightArray = sampler.get2DArray(nSamples);
     	const Point2f *uScatteringArray = sampler.get2DArray(nSamples);
     	if (!uLightArray || !uScatteringArray) {
@@ -29,10 +31,12 @@ Spectrum uniformSampleAllLights(const Interaction &it, const Scene &scene,
                                 arena, handleMedia);
     	} else {
 			Spectrum Ld(0.f);
-            for (int j = 0; j < nSamples; ++j)
+            // 用get2DArray获取到的一系列样本来采样光源
+            for (int j = 0; j < nSamples; ++j) {
                 Ld += estimateDirectLighting(it, uScatteringArray[j], *light,
                                      uLightArray[j], scene, sampler, arena,
                                      handleMedia);
+            }
             L += Ld / nSamples;    		
     	}
     }
@@ -43,11 +47,14 @@ Spectrum uniformSampleOneLight(const Interaction &it, const Scene &scene,
                                MemoryArena &arena, Sampler &sampler,
                                bool handleMedia,
                                const Distribution1D *lightDistrib) {
+    // 与uniformSampleAllLights不同的是，
+    // 该函数会按照对应分布随机采样一个光源，这个接口会比较常用，也比较科学
     int nLights = int(scene.lights.size());
     if (nLights == 0) {
     	return Spectrum(0.0f);
     }
     int lightIndex;
+    // 用于储存选中的光源的概率密度函数值
     Float lightPdf;
     if (lightDistrib) {
     	lightIndex = lightDistrib->sampleDiscrete(sampler.get1D(), &lightPdf);
@@ -63,7 +70,11 @@ Spectrum uniformSampleOneLight(const Interaction &it, const Scene &scene,
     Point2f uLight = sampler.get2D();
     // 均匀采样bsdf函数
     Point2f uScattering = sampler.get2D();
-    return estimateDirectLighting(it, uScattering, *light, uLight, scene, sampler, arena, handleMedia) / lightPdf;
+    // 估计当前选中的光源对该点的辐射度
+    Spectrum dl = estimateDirectLighting(it, uScattering, *light, uLight, scene, sampler, arena, handleMedia)
+    // 需要注意的是！返回值为dl / lightPdf
+    // 表示对整个场景中的所有光源对it的直接光照估计
+    return  dl / lightPdf;
 }
 
 Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uShading,
@@ -163,7 +174,54 @@ Spectrum MonteCarloIntegrator::specularReflect(const RayDifferential &ray,
 								Sampler &sampler, 
 								MemoryArena &arena, 
 								int depth) const {
-    
+    Vector3f wo = isect.wo;
+    Vector3f wi;
+    Float pdf;
+    BxDFType type = BxDFType(BSDF_REFLECTION | BSDF_SPECULAR);
+    // 随机采样与type类型符合的bxdf，生成对应方向，返回该方向上的bsdf函数值
+    Spectrum f = isect.bsdf->sample_f(wo, &wi, _sampler.get2D(), &pdf, type);
+    const Normal3f &shadingNormal = isect.shading.normal;
+
+    if (pdf > 0.0f && !f.IsBlack() && absDot(wi, shadingNormal) != 0.0f) {
+        // 生成wi方向的主光线
+        RayDifferential rd = isect.spawnRay(wi);
+        if (ray.hasDifferentials) {
+            rd.hasDifferentials = true;
+            // 计算反射差分光线的起点，这还是比较简单的
+            rd.rxOrigin = isect.pos + isect.dpdx;
+            rd.ryOrigin = isect.pos + isect.dpdy;
+            // 计算反射差分光线的方向
+            // 用正向差分法去近似，表达式如下
+            // ω ≈ ωi + dωi/dx     0式
+            // 由反射向量公式 ωi = 2(ωo · n)n - ωo
+            // 
+            //  dωi     d(2(ωo · n)n - ωo)
+            // ----- = --------------------     1式
+            //  dx             dx
+            // 
+            //                dn     d(ωo · n)          dωo
+            // = 2 [(ωo · n) ---- + ----------- n]  -  -----  2式
+            //                dx        dx              dx
+            // 其中 
+            //  d(ωo · n)     dωo              dn
+            // ----------- = ----- · n + ωo · ----  3式
+            //     dx         dx               dx
+            // 以上表达式的推导只用到了高中数学学过的乘法法则，很容易推导出来
+            // 以后如果实在不想动手，推荐一个工具wolframalpha，堪称神器！
+            // 复合函数求导，链式法则不解释！
+            Normal3f dndx = isect.shading.dndu * isect.dudx
+                          + isect.shading.dndv * isect.dvdx;
+            // 注意出射方向的定义ray.rxDirection要乘以-1
+            Vector3f dwodx = -ray.rxDirection - wo;
+            // 3式
+            Float dDNdx = dot(dwodx, shadingNormal) + dot(wo, dndx);
+            // 2式结合0式
+            rd.rxDirection = wi + 2.f * Vector3f(dot(wo, shadingNormal) * dndx + dDNdx * shadingNormal) - dwodx;
+            // y方向的差分光线的方向求法同上
+            Normal3f dndy = isect.shading.dndu * isect.dudy
+                          + isect.shading.dndv * isect.dvdy;
+        }
+    }
 }
 
 Spectrum MonteCarloIntegrator::specularTransmit(const RayDifferential &ray, 

@@ -266,22 +266,22 @@ Spectrum frConductor(Float cosThetaI, const Spectrum &etaI,
 /**
  * 返回的是入射光线的反方向
  * 简单说一下推导过程，注释画图不方便   
- * 这里隐含的假设是n与wo都是单位向量
+ * 这里隐含的假设是n与ωo都是单位向量
  *
- * 在草稿纸上画图，wi + wo = OC，OC为wi与wo角平分线，与法线n方向一致
- * θ为OC与wo夹角
- * OC/2 = |wo| * cosθ * n/|n|
- * cosθ = dot(wo,n)/|n||wo|
+ * 在草稿纸上画图，ωi + ωo = OC，OC为ωi与ωo角平分线，与法线n方向一致
+ * θ为OC与ωo夹角
+ * OC/2 = |ωo| * cosθ * n/|n|
+ * cosθ = dot(ωo,n)/|n||ωo|
  *
- * wi = OC - wi = 2(dot(wo,n) * n/|n|) - wi
+ * ωi = OC - ωo = 2(dot(ωo,n) * n/|n|) - ωo
  * 
  * 又因为n为单位向量
  *
- * 则wi = 2(dot(wo,n) * n) - wi
+ * 则ωi = 2(ωo · n)n - ωo
  * 
- * @param  wo 出射光线方向，单位向量
+ * @param  ωo 出射光线方向，单位向量
  * @param  n  法线方向，单位向量
- * @return    注意这里返回的是入射光线的反方向wi
+ * @return    注意这里返回的是入射光线的反方向ωi
  */
 inline Vector3f reflect(const Vector3f &wo, const Vector3f &n) {
     return 2 * dot(wo, n) * n - wo;
