@@ -43,7 +43,7 @@ Spectrum uniformSampleAllLights(const Interaction &it, const Scene &scene,
     return L;
 }
 
-Spectrum uniformSampleOneLight(const Interaction &it, const Scene &scene,
+Spectrum sampleOneLight(const Interaction &it, const Scene &scene,
                                MemoryArena &arena, Sampler &sampler,
                                bool handleMedia,
                                const Distribution1D *lightDistrib) {
@@ -71,18 +71,73 @@ Spectrum uniformSampleOneLight(const Interaction &it, const Scene &scene,
     // 均匀采样bsdf函数
     Point2f uScattering = sampler.get2D();
     // 估计当前选中的光源对该点的辐射度
-    Spectrum dl = estimateDirectLighting(it, uScattering, *light, uLight, scene, sampler, arena, handleMedia)
+    Spectrum dl = estimateDirectLighting(it, uScattering, *light, uLight, scene, sampler, arena, handleMedia);
     // 需要注意的是！返回值为dl / lightPdf
     // 表示对整个场景中的所有光源对it的直接光照估计
     return  dl / lightPdf;
 }
 
-Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uShading,
+Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScattering,
                                 const Light &light, const Point2f &uLight,
                                 const Scene &scene, Sampler &sampler,
                                 MemoryArena &arena, bool handleMedia,
                                 bool specular) {
-    
+    BxDFType bsdfFlags = specular ?
+    					BSDF_ALL : 
+    					BxDFType(BSDF_ALL & ~BSDF_SPECULAR);
+    Spectrum Ld(0.0f);
+    Float lightPdf = 0;
+    Vector3f wi;
+    Float scatteringPdf = 0;
+    VisibilityTester visibility;
+    // 先采样光源表面
+    Spectrum Li = light.sampleLi(it, uLight, &wi, &lightPdf, &visibility);
+    if (lightPdf > 0 && !Li.IsBlack()) {
+    	Spectrum f;
+    	// 为当前光源的样本计算bsdf
+    	if (it.isSurfaceInteraction()) {
+    		const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
+    		f = isect.bsdf->f(isect.wo, wi, bsdfFlags) * absDot(wi, isect.shading.normal);
+            scatteringPdf = isect.bsdf->pdfW(isect.wo, wi, bsdfFlags);
+    	} else {
+    		// todo 处理参与介质的phase函数
+    	}
+    	if (!f.IsBlack()) {
+    		// 计算可见性
+    		if (handleMedia) {
+    			// 处理参与介质todo
+    		} else {
+    			if (!visibility.unoccluded(scene)) {
+    				Li = Spectrum(0.0f);
+    			}
+    		}
+			if (!Li.IsBlack()) {
+				// 如果是delta分布，直接计算辐射度
+	    		if (light.isDelta()) {
+	    			Ld += f * Li / lightPdf;
+	    		} else {
+	    			// 非delta分布，用复合重要性采样
+	    			Float weight = powerHeuristic(1, lightPdf, 1, scatteringPdf);
+	    			Ld += f * Li * weight / lightPdf;
+	    		}
+	    	}
+    	}
+    }
+
+    // 对bsdf进行随机采样
+    if (!light.isDelta()) {
+    	Spectrum f;
+    	bool sampledSpecular = false;
+    	if (it.isSurfaceInteraction()) {
+    		BxDFType sampledType;
+    		const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
+            f = isect.bsdf->sample_f(isect.wo, &wi, uScattering, 
+            			&scatteringPdf, bsdfFlags, &sampledType);
+    		sampledSpecular = (sampledType & BSDF_SPECULAR) != 0;
+    	} else {
+    		// todo 处理参与介质
+    	}
+    }
 }
 
 void MonteCarloIntegrator::render(const Scene &scene) {
@@ -179,10 +234,10 @@ Spectrum MonteCarloIntegrator::specularReflect(const RayDifferential &ray,
     Float pdf;
     BxDFType type = BxDFType(BSDF_REFLECTION | BSDF_SPECULAR);
     // 随机采样与type类型符合的bxdf，生成对应方向，返回该方向上的bsdf函数值
-    Spectrum f = isect.bsdf->sample_f(wo, &wi, _sampler.get2D(), &pdf, type);
-    const Normal3f &shadingNormal = isect.shading.normal;
+    Spectrum f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(), &pdf, type);
+    const Normal3f &ns = isect.shading.normal;
 
-    if (pdf > 0.0f && !f.IsBlack() && absDot(wi, shadingNormal) != 0.0f) {
+    if (pdf > 0.0f && !f.IsBlack() && absDot(wi, ns) != 0.0f) {
         // 生成wi方向的主光线
         RayDifferential rd = isect.spawnRay(wi);
         if (ray.hasDifferentials) {
@@ -190,37 +245,47 @@ Spectrum MonteCarloIntegrator::specularReflect(const RayDifferential &ray,
             // 计算反射差分光线的起点，这还是比较简单的
             rd.rxOrigin = isect.pos + isect.dpdx;
             rd.ryOrigin = isect.pos + isect.dpdy;
-            // 计算反射差分光线的方向
-            // 用正向差分法去近似，表达式如下
-            // ω ≈ ωi + dωi/dx     0式
-            // 由反射向量公式 ωi = 2(ωo · n)n - ωo
-            // 
-            //  dωi     d(2(ωo · n)n - ωo)
-            // ----- = --------------------     1式
-            //  dx             dx
-            // 
-            //                dn     d(ωo · n)          dωo
-            // = 2 [(ωo · n) ---- + ----------- n]  -  -----  2式
-            //                dx        dx              dx
-            // 其中 
-            //  d(ωo · n)     dωo              dn
-            // ----------- = ----- · n + ωo · ----  3式
-            //     dx         dx               dx
-            // 以上表达式的推导只用到了高中数学学过的乘法法则，很容易推导出来
-            // 以后如果实在不想动手，推荐一个工具wolframalpha，堪称神器！
+            /**
+             * 计算反射差分光线的方向
+             * 用正向差分法去近似，表达式如下
+             * ω ≈ ωi + dωi/dx     0式
+             * 由反射向量公式 ωi = 2(ωo · n)n - ωo
+             * 
+             *  dωi     d(2(ωo · n)n - ωo)
+             * ----- = --------------------     1式
+             *  dx             dx
+             * 
+             *                dn     d(ωo · n)          dωo
+             * = 2 [(ωo · n) ---- + ----------- n]  -  -----  2式
+             *                dx        dx              dx
+             * 其中 
+             *  d(ωo · n)     dωo              dn
+             * ----------- = ----- · n + ωo · ----  3式
+             *     dx         dx               dx
+             * 以上表达式的推导只用到了高中数学学过的乘法法则，很容易推导出来
+             * 以后如果实在不想动手，推荐一个工具wolframalpha，堪称神器！
+             */
             // 复合函数求导，链式法则不解释！
             Normal3f dndx = isect.shading.dndu * isect.dudx
                           + isect.shading.dndv * isect.dvdx;
             // 注意出射方向的定义ray.rxDirection要乘以-1
             Vector3f dwodx = -ray.rxDirection - wo;
             // 3式
-            Float dDNdx = dot(dwodx, shadingNormal) + dot(wo, dndx);
+            Float dDNdx = dot(dwodx, ns) + dot(wo, dndx);
             // 2式结合0式
-            rd.rxDirection = wi + 2.f * Vector3f(dot(wo, shadingNormal) * dndx + dDNdx * shadingNormal) - dwodx;
+            rd.rxDirection = wi - dwodx 
+            		+ 2.f * Vector3f(dot(wo, ns) * dndx + dDNdx * ns);
             // y方向的差分光线的方向求法同上
             Normal3f dndy = isect.shading.dndu * isect.dudy
                           + isect.shading.dndv * isect.dvdy;
+            Vector3f dwody = -ray.ryDirection - wo;
+            Float dDNdy = dot(dwody, ns) + dot(wo, dndy);
+			rd.ryDirection = wi - dwody
+				    + 2.f * Vector3f(dot(wo, ns) * dndy + dDNdy * ns);
         }
+        return f * Li(rd, scene, sampler, arena, depth + 1) * absDot(wi, ns) / pdf;
+    } else {
+    	return Spectrum(0.0f);
     }
 }
 
@@ -230,7 +295,68 @@ Spectrum MonteCarloIntegrator::specularTransmit(const RayDifferential &ray,
 								Sampler &sampler, 
 								MemoryArena &arena, 
 								int depth) const {
-    
+    Vector3f wo = isect.wo;
+    Vector3f wi;
+    Float pdf;
+    const Point3f pos;
+    const BSDF &bsdf = *isect.bsdf;
+    BxDFType type = BxDFType(BSDF_TRANSMISSION | BSDF_SPECULAR);
+    Spectrum f = bsdf.sample_f(wo, &wi, sampler.get2D(), &pdf, type);
+    Spectrum L(0.0f);
+    Normal3f ns = isect.shading.normal;
+
+    if (pdf > 0.0f && !f.IsBlack() && absDot(wi, ns) != 0) {
+    	RayDifferential rd = isect.spawnRay(wi);
+    	if (ray.hasDifferentials) {
+    		rd.hasDifferentials = true;
+    		rd.rxOrigin = pos + isect.dpdx;
+    		rd.ryOrigin = pos + isect.dpdy;
+
+			Normal3f dndx = isect.shading.dndu * isect.dudx +
+                            isect.shading.dndv * isect.dvdx;
+            Normal3f dndy = isect.shading.dndu * isect.dudy +
+                            isect.shading.dndv * isect.dvdy;
+            // 假设光线进入物体
+            Float eta = 1 / bsdf.eta;
+            if (dot(wo, ns) < 0) {
+            	eta = 1 / eta;
+            	ns = -ns;
+            	dndx = -dndx;
+            	dndy = -dndy;
+            }
+
+            /**
+             * 由折射公式
+             * η = ηi/ηt
+             * ωt = -η ωi + [η (ωi · n) - cosθt] n
+             *
+             *  dωt		d(-η ωi + [η (ωi · n) - cosθt] n)
+             * ----- = ----------------------------------
+             *  dx                   dx
+             *
+             *     d(-η ωi)     d(η (ωi · n) n)     d(n cosθt)
+             * = ----------- + ---------------- - ------------
+             *       dx            dx                 dx
+             */
+			Vector3f dwodx = -ray.rxDirection - wo,
+                     dwody = -ray.ryDirection - wo;
+            Float dDNdx = dot(dwodx, ns) + dot(wo, dndx);
+            Float dDNdy = dot(dwody, ns) + dot(wo, dndy);
+
+            Float mu = eta * dot(wo, ns) - absDot(wi, ns);
+            Float dmudx =
+                (eta - (eta * eta * dot(wo, ns)) / absDot(wi, ns)) * dDNdx;
+            Float dmudy =
+                (eta - (eta * eta * dot(wo, ns)) / absDot(wi, ns)) * dDNdy;
+
+            rd.rxDirection =
+                wi - eta * dwodx + Vector3f(mu * dndx + dmudx * ns);
+            rd.ryDirection =
+                wi - eta * dwody + Vector3f(mu * dndy + dmudy * ns);            
+    	}
+    	L = f * Li(rd, scene, sampler, arena, depth + 1) * absDot(wi, ns) / pdf;
+    }
+    return L;
 }
 
 PALADIN_END

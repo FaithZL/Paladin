@@ -421,6 +421,15 @@ inline Float uniformSpherePdf() {
     return Inv4Pi;
 }
 
+inline Float balanceHeuristic(int nf, Float fPdf, int ng, Float gPdf) {
+    return (nf * fPdf) / (nf * fPdf + ng * gPdf);
+}
+
+inline Float powerHeuristic(int nf, Float fPdf, int ng, Float gPdf) {
+    Float f = nf * fPdf, g = ng * gPdf;
+    return (f * f) / (f * f + g * g);
+}
+
 /**
  * 一维分布结构
  * 用分段直线函数取逼近曲线

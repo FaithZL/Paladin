@@ -104,7 +104,7 @@
 		CFFAC22CCB954B5CAD76D72C /* ldblib.c in Sources */ = {isa = PBXBuildFile; fileRef = C4DAAC9B89E648D696EA5CC3 /* ldblib.c */; };
 		D0243C9B958842CAB2789E99 /* lparser.c in Sources */ = {isa = PBXBuildFile; fileRef = 4737AF39A13C4DD8B6CF7BAC /* lparser.c */; };
 		DCB0575221594AAD98CB4723 /* fileio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 968974518ED44F34BBF86766 /* fileio.cpp */; };
-		DDB1E01B74874EE5A0F1D036 /* path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACBAF0F9DC454BA2B2ED8EF3 /* path.cpp */; };
+		DDB1E01B74874EE5A0F1D036 /* pathtracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACBAF0F9DC454BA2B2ED8EF3 /* pathtracer.cpp */; };
 		DDC16C9F1FB84235A5F76E1D /* stb_vorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 200B12821AE047EA914A0496 /* stb_vorbis.c */; };
 		DDFF0F35E578477CBFF90251 /* ltm.c in Sources */ = {isa = PBXBuildFile; fileRef = A47587192B3A41D9A6B7F5AE /* ltm.c */; };
 		E2152126B8244BF89C77A3EF /* cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D6485FC9B20408AAB42B805 /* cube.cpp */; };
@@ -169,7 +169,7 @@
 		0165EEA7944747BA94C2A8AE /* cone.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = cone.hpp; path = src/shapes/cone.hpp; sourceTree = SOURCE_ROOT; };
 		031CE682971E4356A15E0646 /* cylinder.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = cylinder.cpp; path = src/shapes/cylinder.cpp; sourceTree = SOURCE_ROOT; };
 		0801229437BC485CA5E550FA /* lauxlib.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lauxlib.h; path = third/lua53/lua/lauxlib.h; sourceTree = SOURCE_ROOT; };
-		09CEE09464CA483C92AD4088 /* path.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = path.hpp; path = src/integrators/path.hpp; sourceTree = SOURCE_ROOT; };
+		09CEE09464CA483C92AD4088 /* pathtracer.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = pathtracer.hpp; path = src/integrators/pathtracer.hpp; sourceTree = SOURCE_ROOT; };
 		0B7772F849144FEF9038BDAE /* matte.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = matte.hpp; path = src/materials/matte.hpp; sourceTree = SOURCE_ROOT; };
 		0BA48E30689B4281B72BFCBD /* lstring.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lstring.h; path = third/lua53/lua/lstring.h; sourceTree = SOURCE_ROOT; };
 		0CD1C6A7AA454EA78FB98668 /* disk.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = disk.cpp; path = src/shapes/disk.cpp; sourceTree = SOURCE_ROOT; };
@@ -308,7 +308,7 @@
 		A7CF4749464348C780F02BBA /* stretchy_buffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stretchy_buffer.h; path = third/stblib/stb/stretchy_buffer.h; sourceTree = SOURCE_ROOT; };
 		AB0AAF0A8BAB4858A571A522 /* curve.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = curve.hpp; path = src/shapes/curve.hpp; sourceTree = SOURCE_ROOT; };
 		ABBCCDD08E924CF59EF3FE04 /* stb_c_lexer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_c_lexer.h; path = third/stblib/stb/stb_c_lexer.h; sourceTree = SOURCE_ROOT; };
-		ACBAF0F9DC454BA2B2ED8EF3 /* path.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = path.cpp; path = src/integrators/path.cpp; sourceTree = SOURCE_ROOT; };
+		ACBAF0F9DC454BA2B2ED8EF3 /* pathtracer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = pathtracer.cpp; path = src/integrators/pathtracer.cpp; sourceTree = SOURCE_ROOT; };
 		AD2AE647AC1249688D1E340A /* lundump.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lundump.h; path = third/lua53/lua/lundump.h; sourceTree = SOURCE_ROOT; };
 		ADD34C791BA7483E9E64417C /* microfacet.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = microfacet.cpp; path = src/core/microfacet.cpp; sourceTree = SOURCE_ROOT; };
 		AF96BB987DB647E3A9DFA5D0 /* ldump.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ldump.c; path = third/lua53/lua/ldump.c; sourceTree = SOURCE_ROOT; };
@@ -720,8 +720,8 @@
 			children = (
 				F6391676235DF973005DB32F /* directlighting.cpp */,
 				F6391677235DF974005DB32F /* directlighting.hpp */,
-				ACBAF0F9DC454BA2B2ED8EF3 /* path.cpp */,
-				09CEE09464CA483C92AD4088 /* path.hpp */,
+				ACBAF0F9DC454BA2B2ED8EF3 /* pathtracer.cpp */,
+				09CEE09464CA483C92AD4088 /* pathtracer.hpp */,
 				F6391678235DF99D005DB32F /* volpath.cpp */,
 				F6391679235DF99D005DB32F /* volpath.hpp */,
 				F639167B235DF9B2005DB32F /* whitted.cpp */,
@@ -1050,7 +1050,7 @@
 				86DF5192D1BF410EA8817322 /* spectrum.cpp in Sources */,
 				0EA1EEC354B34AC984F66418 /* texture.cpp in Sources */,
 				76940729DCCC40FCA5900706 /* luaparser.cpp in Sources */,
-				DDB1E01B74874EE5A0F1D036 /* path.cpp in Sources */,
+				DDB1E01B74874EE5A0F1D036 /* pathtracer.cpp in Sources */,
 				38B0AD541CF34FAC8D792C16 /* pointlight.cpp in Sources */,
 				C75811F7A05546BA9E31C0FD /* main.cpp in Sources */,
 				F6358B232358CC010070FCC3 /* spot.cpp in Sources */,

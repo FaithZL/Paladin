@@ -116,6 +116,10 @@ public:
     // 辐射通量，也就是功率
     virtual Spectrum power() const = 0;
 
+    inline bool isDelta() const {
+        return isDeltaLight(flags);
+    }
+
     virtual void preprocess(const Scene &scene) {
 
     }
@@ -183,7 +187,11 @@ public:
         return _p1;
     }
     
-    // 用于测试有无遮挡
+    /**
+     * 用于测试有无遮挡
+     * @param  scene 场景对象
+     * @return       无遮挡时返回true
+     */
     bool unoccluded(const Scene &scene) const;
     // 用于体积渲染，暂时不理
     Spectrum tr(const Scene &scene, Sampler &sampler) const;

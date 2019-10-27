@@ -189,7 +189,7 @@ Spectrum uniformSampleAllLights(const Interaction &it, const Scene &scene,
  * @param  lightDistrib 光源分布
  * @return              辐射度
  */
-Spectrum uniformSampleOneLight(const Interaction &it, const Scene &scene,
+Spectrum sampleOneLight(const Interaction &it, const Scene &scene,
                                MemoryArena &arena, Sampler &sampler,
                                bool handleMedia = false,
                                const Distribution1D *lightDistrib = nullptr);
@@ -204,7 +204,7 @@ Spectrum uniformSampleOneLight(const Interaction &it, const Scene &scene,
  * @param  sampler     采样器
  * @param  arena       内存池
  * @param  handleMedia 是否处理参与介质
- * @param  specular    是否为高光
+ * @param  specular    是否考虑高光反射
  * @return             返回直接光照辐射度
  */
 Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uShading,
