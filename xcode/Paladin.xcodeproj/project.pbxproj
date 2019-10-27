@@ -391,6 +391,7 @@
 		F639167C235DF9B2005DB32F /* whitted.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = whitted.hpp; path = src/integrators/whitted.hpp; sourceTree = "<group>"; };
 		F639167E235DF9DB005DB32F /* bssrdf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bssrdf.cpp; path = src/core/bssrdf.cpp; sourceTree = "<group>"; };
 		F639167F235DF9DB005DB32F /* bssrdf.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = bssrdf.hpp; path = src/core/bssrdf.hpp; sourceTree = "<group>"; };
+		F6A1E99C2365479B00AAB463 /* testrender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testrender.h; path = src/alltest/testrender.h; sourceTree = "<group>"; };
 		F6C28607AE6C458BAEC733A8 /* lbaselib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lbaselib.c; path = third/lua53/lua/lbaselib.c; sourceTree = SOURCE_ROOT; };
 		F84CF758403F46BCBDE6FBAC /* lopcodes.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lopcodes.c; path = third/lua53/lua/lopcodes.c; sourceTree = SOURCE_ROOT; };
 		F90A700B556B444CA3EF8364 /* stb_voxel_render.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_voxel_render.h; path = third/stblib/stb/stb_voxel_render.h; sourceTree = SOURCE_ROOT; };
@@ -655,6 +656,7 @@
 				FA10185FD16D418BAA5E32BA /* test_lua.hpp */,
 				BDE3EFA5260A4123A0956BA7 /* test_rapidxml.hpp */,
 				F63877D723593A650049C19D /* loadfile.h */,
+				F6A1E99C2365479B00AAB463 /* testrender.h */,
 			);
 			name = alltest;
 			sourceTree = "<group>";

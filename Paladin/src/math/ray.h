@@ -86,7 +86,7 @@ public:
                   rxDirection.hasNaNs() || ryDirection.hasNaNs()));
     }
 
-    void ScaleDifferentials(Float s) {
+    void scaleDifferentials(Float s) {
         rxOrigin = ori + (rxOrigin - ori) * s;
         ryOrigin = ori + (ryOrigin - ori) * s;
         rxDirection = dir + (rxDirection - dir) * s;

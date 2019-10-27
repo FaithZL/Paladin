@@ -553,9 +553,9 @@ public:
         _marginalFunc.reserve(nv);
         // 将每个一维分布的积分值存入_pMarginal中作为边缘概率密度
         for (int v = 0; v < nv; ++v) {
-            _marginalFunc.push_back(_pConditionalV[v]->funcInt);
+            _marginalFunc.push_back(_pConditionalV[v]->_funcInt);
         }
-        pMarginal.reset(new Distribution1D(&_marginalFunc[0], nv));
+        _pMarginal.reset(new Distribution1D(&_marginalFunc[0], nv));
     }
 
     Point2f sampleContinuous(const Point2f &u, Float *pdf) const {

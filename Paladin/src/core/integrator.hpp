@@ -108,7 +108,11 @@ PALADIN_BEGIN
  *
  * 在推导之前，首先明确一点，各个服从独立同分布的的样本随机变量，
  * 它们的方差都相等啊，都等于它们服从的总体分布的方差啊，有了这一点，就可以推了!
- *
+ * 
+ * 根据方差基本公式  V[X + Y] = V[X] + V[Y]  (X Y相互独立)
+ *                V[aX] = a^2 * V[X]
+ * 可得
+ * 
  * V[IN] = V[1/N ∑[i=1,N] f(Xi)/p(Xi)]
  * 
  *       = 1/(N*N) V[∑[i=1,N] f(Xi)/p(Xi)]
@@ -166,13 +170,13 @@ public:
  * @param  scene         场景对象
  * @param  arena         内存池
  * @param  sampler       采样器
- * @param  nLightSamples 光源样本数量列表
+ * @param  lightSamples  光源样本索引列表
  * @param  handleMedia   是否处理参与介质
  * @return               辐射度
  */
 Spectrum uniformSampleAllLights(const Interaction &it, const Scene &scene,
                                 MemoryArena &arena, Sampler &sampler,
-                                const std::vector<int> &nLightSamples,
+                                const std::vector<int> &lightSamples,
                                 bool handleMedia = false);
 
 /**
@@ -208,6 +212,51 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uShading,
                         const Scene &scene, Sampler &sampler,
                         MemoryArena &arena, bool handleMedia = false,
                         bool specular = false);
+
+class MonteCarloIntegrator : public Integrator {
+    
+public:
+    MonteCarloIntegrator(const std::shared_ptr<Camera> camera,
+                         std::shared_ptr<Sampler> sampler,
+                         const AABB2i &pixelBound) {
+        
+    }
+    
+    virtual void preprocess(const Scene &scene, Sampler &sampler) {
+        
+    }
+    
+    virtual void render(const Scene &scene);
+    
+    /**
+     * 返回当前ray采样到的辐射度       
+     */
+    virtual Spectrum Li(const RayDifferential &ray, const Scene &scene,
+                        Sampler &sampler, MemoryArena &arena,
+                        int depth = 0) const = 0;
+    
+    // 高光反射
+    Spectrum specularReflect(const RayDifferential &ray,
+                             const SurfaceInteraction &isect,
+                             const Scene &scene, Sampler &sampler,
+                             MemoryArena &arena, int depth) const;
+    
+    // 高光投射
+    Spectrum specularTransmit(const RayDifferential &ray,
+                              const SurfaceInteraction &isect,
+                              const Scene &scene, Sampler &sampler,
+                              MemoryArena &arena, int depth) const;
+    
+    
+    
+protected:
+    // 相机
+    std::shared_ptr<const Camera> _camera;
+    // 采样器
+    std::shared_ptr<Sampler> _sampler;
+    // 像素范围
+    const AABB2i _pixelBounds;
+};
 
 PALADIN_END
 
