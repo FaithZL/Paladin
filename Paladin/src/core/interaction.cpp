@@ -8,6 +8,8 @@
 
 #include "interaction.hpp"
 #include "shape.hpp"
+#include "light.hpp"
+#include "primitive.hpp"
 
 PALADIN_BEGIN
 

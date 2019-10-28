@@ -88,7 +88,7 @@ PALADIN_BEGIN
  * 给定一组均匀随机变量 Xi ∈ [a,b]，则蒙特卡洛估计器的期望值为
  * 
  *          b - a  N
- *    FN = ------- ∑ f(Xi)
+ *    FN = ------- ∑ f(Xi)               6式
  *            N   i=1
  *
  * 实际上，FN的期望等于积分值I，证明如下
@@ -123,7 +123,7 @@ PALADIN_BEGIN
  *
  *       = 1/N * ∫((x - E[X])^2)f(x)dx
  *
- *       = 1/N * ∫((f(x)/p(x) - I)^2)f(x)dx
+ *       = 1/N * ∫((f(x)/p(x) - I)^2)f(x)dx         7式
  *
  * 可以看出如果 f(x)/p(x) 为一个常数时，这个常数必然等于I，此时方差为零，该估计为完美估计
  * 但完美估计是不存在的，我们只能尽可能的减少方差，就是使pdf函数与原函数的形状尽可能接近！
@@ -135,24 +135,71 @@ PALADIN_BEGIN
  * 这跟黎曼和求积分的方式比，好在哪？好处在于蒙特卡洛积分不需要因为维数的增长而采更多样本
  * 举个例子，我们需要求解三元函数的积分
  *
- *      I = ∫[x1,x2]∫[y1,y2]∫[z1,z2]f(x,y,z)dxdydz
+ *      I = ∫[x1,x2]∫[y1,y2]∫[z1,z2]f(x,y,z)dxdydz        8式
  *      
  * 我们可以在xyz三个变量对应的范围之内随机采样[x1,x2] [y1,y2] [z1,z2]
  * 假设三维随机变量Xi = (xi,yi,zi)
  * 如果每个维度都是均匀分布，则
  * 
  *                   1
- * p(X) = -----------------------
+ * p(X) = -----------------------               9式
  *         (x2-x1)(y2-y1)(z2-z1)
  *
  *       (x2-x1)(y2-y1)(z2-z1)
- * EN = ----------------------- ∑ f(Xi)
+ * EN = ----------------------- ∑ f(Xi)           10式
  *                N
  *
  * 可以看出，样本的数量N可以任意选择，而不考虑被积函数的维数
  * 从而避免了维数爆炸
  * 参考资料
  * http://www.pbr-book.org/3ed-2018/Monte_Carlo_Integration/The_Monte_Carlo_Estimator.html
+ *
+ * 上文已经说了减少方差的方式就是使pdf与被估计的函数形状比较接近，对于bsdf的表达式
+ * 我们通常可以求出解析解，从而可以找到一个接近bsdf形状的pdf(通常是使用对应的NDF，法线分布函数)
+ * 但要估计光照方程
+ *
+ * Lo(p, ωo) = Le(p, ωo) + ∫[hemisphere]f(p, ωi, ωo)Lo(t(p, ωi), -ωi)|cosθi|dωi
+ *
+ * 方程中右半部分的积分简化来看可以替换成  ∫f(x)g(x)dx
+ *
+ * 我们是要估计f(x)g(x)函数的积分，我们只能找到与f(x)接近的pdf，也可以找到与g(x)接近的pdf
+ * 但我们不知道f(x)g(x)函数接近的pdf，怎么办？？？？？？
+ * 
+ * 现在就要介绍一下复合重要性采样(MIS，Multiple Importance Sampling)
+ * 假设f(x)的pdf为p1，g(x)的pdf为p2
+ *
+ * 则 ∫f(x)g(x)dx 的蒙特卡洛估计形式的表达式如下
+ *
+ *   1  nf   f(Xi)g(Xi)wf(Xi)     1  nf   f(Xi)g(Xi)wg(Xi)
+ * ----  ∑ ------------------ + ----  ∑ ------------------     11式
+ *  nf  i=1      p1(Xi)          nf  i=1      p2(Xi)  
+ *
+ * 其中wf，wg分别为f与g的权重函数，形式如下
+ * 
+ *           nf * pf(x)
+ * wf(x) = --------------    (wg类似)    12式
+ *           ∑ ni pi(x)
+ *
+ * 带入f(x)g(x)之后得到  
+ *
+ *                nf * pf(x)
+ * wf(x) = ------------------------    13式  (wg同理)
+ *          nf * pf(x) + ng * pg(x)
+ *
+ * 这个方法称为平衡式启发 (balance heuristic)
+ * 将12式带入11式之后就可以得到一个低方差的估计样本了 
+ * 
+ * 实际上，还有一个更好的权重函数(power heuristic)
+ *
+ *
+ *           (nf * pf(x))^β
+ * wf(x) = ------------------       14式
+ *           ∑ (ni pi(x))^β
+ *           
+ * paladin渲染器中提供了这两个权重函数，以便作对比
+ * 
+ * 参考资料
+ * http://www.pbr-book.org/3ed-2018/Monte_Carlo_Integration/Importance_Sampling.html#MultipleImportanceSampling
  * 
  */
 class Integrator {
