@@ -164,6 +164,9 @@ public:
      * @param ray [description]
      */
     void computeDifferentials(const RayDifferential &ray) const;
+
+
+    Spectrum Le(const Vector3f &w) const;
 	
     // 表面坐标
 	Point2f uv;

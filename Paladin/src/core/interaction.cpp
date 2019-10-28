@@ -119,6 +119,11 @@ void SurfaceInteraction::computeDifferentials(const RayDifferential &ray) const 
     }
 }
 
+Spectrum SurfaceInteraction::Le(const Vector3f &w) const {
+    const AreaLight *area = primitive->getAreaLight();
+    return area ? area->L(*this, w) : Spectrum(0.f);
+}
+
 void SurfaceInteraction::setShadingGeometry(const Vector3f &dpdus,
                                             const Vector3f &dpdvs,
                                             const Normal3f &dndus,

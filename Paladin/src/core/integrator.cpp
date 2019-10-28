@@ -137,7 +137,35 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
     	} else {
     		// todo 处理参与介质
     	}
+
+        if (!f.IsBlack() && scatteringPdf > 0) {
+            Float weight = 1;
+            if (!sampledSpecular) {
+                lightPdf = light.pdfLi(it, wi);
+                if (lightPdf == 0) {
+                    return Ld;
+                }
+                weight = powerHeuristic(1, scatteringPdf, 1, lightPdf);
+            }
+
+            SurfaceInteraction lightIsect;
+            Ray ray = it.spawnRay(wi);
+            Spectrum Tr(1.0f);
+            bool foundSurfaceInteraction = scene.intersect(ray, &lightIsect);
+            Spectrum Li(0.0f);
+            if (foundSurfaceInteraction) {
+                if (lightIsect.primitive->getAreaLight() == &light) {
+                    Li = lightIsect.Le(-wi);
+                }
+            } else {
+                Li = light.Le(ray);
+            }
+            if (!Li.IsBlack()) {
+                Ld += f * Li * Tr * weight / scatteringPdf;
+            }
+        }
     }
+    return Ld;
 }
 
 void MonteCarloIntegrator::render(const Scene &scene) {

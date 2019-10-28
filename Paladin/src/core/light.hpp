@@ -124,7 +124,7 @@ public:
 
     }
 
-    virtual Spectrum le(const RayDifferential &r) const {
+    virtual Spectrum Le(const RayDifferential &r) const {
         return Spectrum(0.f);
     }
 
@@ -194,7 +194,7 @@ public:
      */
     bool unoccluded(const Scene &scene) const;
     // 用于体积渲染，暂时不理
-    Spectrum tr(const Scene &scene, Sampler &sampler) const;
+    Spectrum Tr(const Scene &scene, Sampler &sampler) const;
     
 private:
     Interaction _p0, _p1;
