@@ -1,5 +1,5 @@
 //
-//  path.cpp
+//  pathtracer.cpp
 //  Paladin
 //
 //  Created by SATAN_Z on 2019/6/30.

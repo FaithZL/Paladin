@@ -8,6 +8,13 @@
 #ifndef whitted_hpp
 #define whitted_hpp
 
-#include <stdio.h>
+#include "core/integrator.hpp"
+
+PALADIN_BEGIN
+
+
+
+PALADIN_END
+
 
 #endif /* whitted_hpp */

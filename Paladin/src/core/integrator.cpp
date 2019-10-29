@@ -82,6 +82,13 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
                                 const Scene &scene, Sampler &sampler,
                                 MemoryArena &arena, bool handleMedia,
                                 bool specular) {
+    // 这个函数比较长，简述一下基本思路
+    // 先随机采样光源表面，生成light光源表面点P1，计算从P1发射的光在it点产生的辐射度L1
+    // 再随机采样it处的bsdf，生成一个ray，如果顺着ray方向能找到光P1点所在的光源
+    // 则计算出ray与光源表面的交点P2，计算从P2发射的光线在it点产生的辐射度L2
+    // 根据复合重要性采样的公式，估计出it受到light的直接光照
+    // 如果没有采样bsdf时生成的ray不与light相交，则返回对L1加权之后的辐射度
+    // 具体逻辑，看代码
     BxDFType bsdfFlags = specular ?
     					BSDF_ALL : 
     					BxDFType(BSDF_ALL & ~BSDF_SPECULAR);
@@ -133,13 +140,19 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
     		const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
             f = isect.bsdf->sample_f(isect.wo, &wi, uScattering, 
             			&scatteringPdf, bsdfFlags, &sampledType);
+            f *= absDot(wi, isect.shading.normal);
     		sampledSpecular = (sampledType & BSDF_SPECULAR) != 0;
     	} else {
     		// todo 处理参与介质
     	}
 
         if (!f.IsBlack() && scatteringPdf > 0) {
+            // 为何高光采样权重就是1？
+            // 因为如果是高光，scatteringPdf实际上应为正无穷
+            // weight自然也是正无穷
+            // 所以特殊处理之后weight与scatteringPdf都取1
             Float weight = 1;
+            // 如果采集到的样本不是高光反射，则修改权重
             if (!sampledSpecular) {
                 lightPdf = light.pdfLi(it, wi);
                 if (lightPdf == 0) {
@@ -154,10 +167,12 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
             bool foundSurfaceInteraction = scene.intersect(ray, &lightIsect);
             Spectrum Li(0.0f);
             if (foundSurfaceInteraction) {
+                // 如果找到的交点是light光源上的点，则计算光照
                 if (lightIsect.primitive->getAreaLight() == &light) {
                     Li = lightIsect.Le(-wi);
                 }
             } else {
+                // 如果没有交点，Li为0，这里写得不是很好todo
                 Li = light.Le(ray);
             }
             if (!Li.IsBlack()) {
