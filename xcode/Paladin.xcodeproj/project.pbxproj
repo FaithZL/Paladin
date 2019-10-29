@@ -123,6 +123,7 @@
 		F639167A235DF99D005DB32F /* volpath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6391678235DF99D005DB32F /* volpath.cpp */; };
 		F639167D235DF9B2005DB32F /* whitted.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F639167B235DF9B2005DB32F /* whitted.cpp */; };
 		F6391680235DF9DB005DB32F /* bssrdf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F639167E235DF9DB005DB32F /* bssrdf.cpp */; };
+		F63FA13923689E340023F5DD /* lightdistribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63FA13723689E340023F5DD /* lightdistribute.cpp */; };
 		FC6784F81B2A41B2A77A3FB2 /* lopcodes.c in Sources */ = {isa = PBXBuildFile; fileRef = F84CF758403F46BCBDE6FBAC /* lopcodes.c */; };
 		FD4C3108677B4363B8E97744 /* ldebug.c in Sources */ = {isa = PBXBuildFile; fileRef = 67BD492FD5474178AD9B1BAD /* ldebug.c */; };
 /* End PBXBuildFile section */
@@ -391,6 +392,8 @@
 		F639167C235DF9B2005DB32F /* whitted.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = whitted.hpp; path = src/integrators/whitted.hpp; sourceTree = "<group>"; };
 		F639167E235DF9DB005DB32F /* bssrdf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bssrdf.cpp; path = src/core/bssrdf.cpp; sourceTree = "<group>"; };
 		F639167F235DF9DB005DB32F /* bssrdf.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = bssrdf.hpp; path = src/core/bssrdf.hpp; sourceTree = "<group>"; };
+		F63FA13723689E340023F5DD /* lightdistribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lightdistribute.cpp; path = src/math/lightdistribute.cpp; sourceTree = "<group>"; };
+		F63FA13823689E340023F5DD /* lightdistribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = lightdistribute.hpp; path = src/math/lightdistribute.hpp; sourceTree = "<group>"; };
 		F6A1E99C2365479B00AAB463 /* testrender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testrender.h; path = src/alltest/testrender.h; sourceTree = "<group>"; };
 		F6C28607AE6C458BAEC733A8 /* lbaselib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lbaselib.c; path = third/lua53/lua/lbaselib.c; sourceTree = SOURCE_ROOT; };
 		F84CF758403F46BCBDE6FBAC /* lopcodes.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lopcodes.c; path = third/lua53/lua/lopcodes.c; sourceTree = SOURCE_ROOT; };
@@ -680,6 +683,8 @@
 				A6883C821275438C9853DD26 /* transform.cpp */,
 				40B1038F2A264605AA0DE22B /* transform.hpp */,
 				8075858351D4438EB5DE37AB /* vector.h */,
+				F63FA13723689E340023F5DD /* lightdistribute.cpp */,
+				F63FA13823689E340023F5DD /* lightdistribute.hpp */,
 			);
 			name = math;
 			sourceTree = "<group>";
@@ -1033,6 +1038,7 @@
 				2C1F9510E52E4E02B21D7381 /* perspective.cpp in Sources */,
 				12FE7EF3F51E4CE89D3E2E6C /* bxdf.cpp in Sources */,
 				8D83DFB74382419995C9CB84 /* camera.cpp in Sources */,
+				F63FA13923689E340023F5DD /* lightdistribute.cpp in Sources */,
 				E8001154A134430F9D3E736F /* film.cpp in Sources */,
 				F1458F9C461449198830A8FE /* integrator.cpp in Sources */,
 				F23F3B778E0D445482DA1B6A /* interaction.cpp in Sources */,
