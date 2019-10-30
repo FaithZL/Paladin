@@ -288,7 +288,7 @@ public:
                              const Scene &scene, Sampler &sampler,
                              MemoryArena &arena, int depth) const;
     
-    // 高光投射
+    // 高光透射
     Spectrum specularTransmit(const RayDifferential &ray,
                               const SurfaceInteraction &isect,
                               const Scene &scene, Sampler &sampler,
