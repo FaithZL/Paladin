@@ -184,6 +184,8 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
 }
 
 void MonteCarloIntegrator::render(const Scene &scene) {
+    preprocess(scene, *_sampler);
+    
 	// 由于是并行计算，先把屏幕分割成m * n块
     AABB2i samplerBounds = _camera->film->getSampleBounds();
     Vector2i sampleExtent = samplerBounds.diagonal();
@@ -191,9 +193,10 @@ void MonteCarloIntegrator::render(const Scene &scene) {
 
     // 把屏幕x方向分为nTile.x部分，y方向分为nTile.y部分
     Point2i nTile((sampleExtent.x + tileSize - 1) / tileSize,
-    			(sampleExtent.x + tileSize - 1) / tileSize);
+    			(sampleExtent.y + tileSize - 1) / tileSize);
 
     auto renderTile = [&](Point2i tile) {
+        COUT << tile << std::endl;
     	// 内存池对象，预先申请一大段连续内存
     	// 之后所有内存全都通过arena分配
     	MemoryArena arena;
@@ -257,8 +260,8 @@ void MonteCarloIntegrator::render(const Scene &scene) {
     			}
                 // 将像素样本值与权重保存到pixel像素数据中
     			filmTile->addSample(cameraSample.pFilm, L, rayWeight);
-
-            } while(tileSampler->startNextSample());
+                arena.reset();
+            } while (tileSampler->startNextSample());
     	}
     	_camera->film->mergeFilmTile(std::move(filmTile));
     };

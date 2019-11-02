@@ -37,6 +37,7 @@ void StratifiedSampler::startPixel(const Point2i &p) {
             latinHypercube(&_sampleArray2D[i][j * count].x, count, 2, _rng);
         }
     }
+    PixelSampler::startPixel(p);
 }
 
 std::unique_ptr<Sampler> StratifiedSampler::clone(int seed) {

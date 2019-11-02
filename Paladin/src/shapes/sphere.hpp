@@ -61,8 +61,9 @@ public:
     
     virtual AABB3f objectBound() const {
         // 这里似乎可以优化一下，bound的范围可以再小些，todo
-        return AABB3f(Point3f(-_radius, -_radius, _zMin),
-                    Point3f(_radius, _radius, _zMax));
+        auto ret = AABB3f(Point3f(-_radius, -_radius, _zMin),
+                        Point3f(_radius, _radius, _zMax));
+        return ret;
     }
     
     /**

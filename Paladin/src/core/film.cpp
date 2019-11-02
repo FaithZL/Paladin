@@ -6,16 +6,17 @@
 //
 
 #include "film.hpp"
+#include "tools/fileio.hpp"
 
 PALADIN_BEGIN
 
 Film::Film(const Point2i &resolution, const AABB2f &cropWindow,
-           std::unique_ptr<Filter> filter, Float diagonal,
+           std::unique_ptr<Filter> filt, Float diagonal,
            const std::string &filename, Float scale,
            Float maxSampleLuminance):
 fullResolution(resolution),
 diagonal(diagonal * .001),
-filter(std::move(filter)),
+filter(std::move(filt)),
 filename(filename),
 _scale(scale),
 _maxSampleLuminance(maxSampleLuminance) {
@@ -144,6 +145,7 @@ void Film::writeImage(Float splatScale) {
         ++offset;
     }
     // 最后保存文件，todo
+    paladin::writeImage(filename, rgb.get(), croppedPixelBounds, fullResolution);
 }
 
 void Film::clear() {

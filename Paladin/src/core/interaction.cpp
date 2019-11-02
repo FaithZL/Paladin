@@ -125,7 +125,8 @@ void SurfaceInteraction::computeScatteringFunctions(const RayDifferential &ray,
                                                     MemoryArena &arena,
                                                     bool allowMultipleLobes,/* = false*/
                                                     TransportMode mode/* = TransportMode::Radiance*/) {
-    
+    computeDifferentials(ray);
+    primitive->computeScatteringFunctions(this, arena, mode, allowMultipleLobes);
 }
 
 Spectrum SurfaceInteraction::Le(const Vector3f &w) const {

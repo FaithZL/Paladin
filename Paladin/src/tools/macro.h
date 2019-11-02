@@ -21,7 +21,6 @@
 #define COUT std::cout
 #endif
 
-
 #define TINYOBJLOADER_IMPLEMENTATION
 
 #define USING_PALADIN using namespace paladin;

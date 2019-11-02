@@ -272,10 +272,6 @@ public:
         
     }
     
-    MonteCarloIntegrator() {
-        
-    }
-    
     virtual void preprocess(const Scene &scene, Sampler &sampler) {
         
     }

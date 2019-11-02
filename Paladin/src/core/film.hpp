@@ -55,6 +55,11 @@ public:
         if (L.y() > _maxSampleLuminance) {
             L *= _maxSampleLuminance / L.y();
         }
+        
+        if (L.MaxComponentValue() > 0.01) {
+            int a;
+            a = 1;
+        }
 
         // 找到受此样本影响范围内的像素
         Point2f pFilmDiscrete = pFilm - Vector2f(0.5f, 0.5f);

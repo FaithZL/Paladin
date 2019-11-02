@@ -209,7 +209,7 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
     for (int i = start; i < end; ++ i) {
         bounds = unionSet(bounds, primitiveInfo[i].bounds);
     }
-    
+    (*totalNodes)++;
     int numPrimitives = end - start;
     if (numPrimitives == 1) {
         // 生成叶子节点

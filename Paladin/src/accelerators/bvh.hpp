@@ -93,7 +93,7 @@ struct LinearBVHNode {
  根据对象划分
  */
 class BVHAccel : public Aggregate {
-    
+public:
     enum SplitMethod { SAH, HLBVH, Middle, EqualCounts };
     
     BVHAccel(std::vector<std::shared_ptr<Primitive>> p,
