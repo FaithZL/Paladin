@@ -23,20 +23,37 @@ std::unique_ptr<Distribution1D> computeLightPowerDistribution(const Scene &scene
 
 UniformLightDistribution::UniformLightDistribution(const Scene &scene) {
     std::vector<Float> prob(scene.lights.size(), Float(1));
-    _distribute.reset(new Distribution1D(&prob[0], int(prob.size())));
+    _distribution.reset(new Distribution1D(&prob[0], int(prob.size())));
 }
 
 const Distribution1D * UniformLightDistribution::lookup(const Point3f &p) const {
-    return _distribute.get();
+    return _distribution.get();
 }
 
 PowerLightDistribution::PowerLightDistribution(const Scene &scene)
-: _distribute(computeLightPowerDistribution(scene)) {
+: _distribution(computeLightPowerDistribution(scene)) {
     
 }
 
 const Distribution1D *PowerLightDistribution::lookup(const Point3f &p) const {
-    return _distribute.get();
+    return _distribution.get();
+}
+
+std::unique_ptr<LightDistribution> createLightSampleDistribution(
+    const std::string &name, const Scene &scene) {
+    if (name == "uniform" || scene.lights.size() == 1)
+        return std::unique_ptr<LightDistribution>{
+            new UniformLightDistribution(scene)};
+    else if (name == "power")
+        return std::unique_ptr<LightDistribution>{
+            new PowerLightDistribution(scene)};
+    else {
+        COUT << (
+            "Light sample distribution type \"%s\" unknown. Using \"power\".",
+            name.c_str());
+        return std::unique_ptr<LightDistribution>{
+            new PowerLightDistribution(scene)};
+    }
 }
 
 PALADIN_END

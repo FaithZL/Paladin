@@ -10,7 +10,7 @@
 #define material_hpp
 
 #include "core/header.h"
-#include "interaction.hpp"
+//#include "interaction.hpp"
 
 PALADIN_BEGIN
 

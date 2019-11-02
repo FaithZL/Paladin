@@ -242,9 +242,15 @@ public:
 	PathTracer(int maxDepth, std::shared_ptr<const Camera> camera,
                    std::shared_ptr<Sampler> sampler,
                    const AABB2i &pixelBounds, Float rrThreshold = 1,
-                   const std::string &lightSampleStrategy = "Power");
+               const std::string &lightSampleStrategy = "power");
 
+	/**
+	 * 预处理阶段，先构造好光源分布对象
+	 * @param scene   场景对象
+	 * @param sampler 采样器
+	 */
 	virtual void preprocess(const Scene &scene, Sampler &sampler);
+	
 	
 	virtual Spectrum Li(const RayDifferential &ray, const Scene &scene,
                 Sampler &sampler, MemoryArena &arena, int depth) const;
@@ -254,8 +260,10 @@ private:
 	const int _maxDepth;
 	// 俄罗斯轮盘结束的阈值
     const Float _rrThreshold;
-    // 官员采样策略
+    // 光源采样策略
     const std::string _lightSampleStrategy;
+    // 光源分布
+    std::unique_ptr<LightDistribution> _lightDistribution;
 };
 
 

@@ -10,6 +10,7 @@
 
 
 #include "sampling.hpp"
+#include "core/scene.hpp"
 
 PALADIN_BEGIN
 
@@ -33,7 +34,7 @@ public:
     virtual const Distribution1D * lookup(const Point3f &p) const;
 private:
     
-    std::unique_ptr<Distribution1D> _distribute;
+    std::unique_ptr<Distribution1D> _distribution;
 };
 
 class PowerLightDistribution : public LightDistribution {
@@ -42,8 +43,11 @@ public:
     
     virtual const Distribution1D * lookup(const Point3f &p) const;
 private:
-    std::unique_ptr<Distribution1D> _distribute;
+    std::unique_ptr<Distribution1D> _distribution;
 };
+
+std::unique_ptr<LightDistribution> createLightSampleDistribution(
+                                                                 const std::string &name, const Scene &scene);
 
 PALADIN_END
 

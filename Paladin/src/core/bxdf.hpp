@@ -448,14 +448,7 @@ inline std::ostream &operator<<(std::ostream &os, const BxDF &f) {
  */
 class BSDF {
 public:
-    BSDF(const SurfaceInteraction &si, Float eta = 1)
-    : eta(eta),
-    _gNormal(si.normal),
-    _sNormal(si.shading.normal),
-    _sTangent(normalize(si.shading.dpdu)),
-    _tTangent(cross(_sNormal, _sTangent)) {
-
-    }
+    BSDF(const SurfaceInteraction &si, Float eta = 1);
 
     void add(BxDF *b) {
         CHECK_LT(nBxDFs, MaxBxDFs);

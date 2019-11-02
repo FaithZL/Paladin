@@ -8,6 +8,7 @@
 
 #include "core/bxdf.hpp"
 #include "math/sampling.hpp"
+#include "core/interaction.hpp"
 
 PALADIN_BEGIN
 
@@ -117,6 +118,15 @@ Float BxDF::pdfW(const Vector3f &wo, const Vector3f &wi) const {
 
 
 // BSDF
+BSDF::BSDF(const SurfaceInteraction &si, Float eta/* = 1*/)
+: eta(eta),
+_gNormal(si.normal),
+_sNormal(si.shading.normal),
+_sTangent(normalize(si.shading.dpdu)),
+_tTangent(cross(_sNormal, _sTangent)) {
+
+}
+
 Spectrum BSDF::f(const Vector3f &woW, const Vector3f &wiW, BxDFType flags) const {
     Vector3f wi = worldToLocal(wiW);
     Vector3f wo = worldToLocal(woW);

@@ -90,6 +90,8 @@ class RGBSpectrum;
 
 class SampledSpectrum;
 
+class Serializable;
+
 #ifdef PALADIN_SAMPLED_SPECTRUM
 typedef SampledSpectrum Spectrum;
 #else
@@ -125,6 +127,8 @@ class BSSRDF;
 struct Quaternion;
 
 struct Interaction;
+
+class SurfaceInteraction;
 
 struct MediumInterface;
 

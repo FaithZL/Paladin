@@ -263,9 +263,16 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uShading,
 class MonteCarloIntegrator : public Integrator {
     
 public:
-    MonteCarloIntegrator(const std::shared_ptr<Camera> camera,
+    MonteCarloIntegrator(std::shared_ptr<const Camera> camera,
                          std::shared_ptr<Sampler> sampler,
-                         const AABB2i &pixelBound) {
+                         const AABB2i &pixelBound)
+    : _camera(camera),
+    _sampler(sampler),
+    _pixelBounds(pixelBound) {
+        
+    }
+    
+    MonteCarloIntegrator() {
         
     }
     
@@ -299,6 +306,7 @@ public:
 protected:
     // 相机
     std::shared_ptr<const Camera> _camera;
+//private:
     // 采样器
     std::shared_ptr<Sampler> _sampler;
     // 像素范围

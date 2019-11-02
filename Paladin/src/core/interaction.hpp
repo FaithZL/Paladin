@@ -11,6 +11,7 @@
 
 #include "core/header.h"
 #include "medium.hpp"
+#include "core/material.hpp"
 
 PALADIN_BEGIN
 
@@ -165,7 +166,11 @@ public:
      */
     void computeDifferentials(const RayDifferential &ray) const;
 
-
+    void computeScatteringFunctions(const RayDifferential &ray,
+                                    MemoryArena &arena,
+                                    bool allowMultipleLobes = false,
+                                    TransportMode mode = TransportMode::Radiance);
+    
     Spectrum Le(const Vector3f &w) const;
 	
     // 表面坐标
