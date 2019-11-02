@@ -76,7 +76,7 @@ Spectrum BxDF::sample_f(const Vector3f &wo,
     if (wi->z < 0) {
         wi->z *= -1;
     }
-    *pdf = pdfW(wo, *wi);
+    *pdf = pdfDir(wo, *wi);
     return f(wo, *wi);
 }
 
@@ -112,7 +112,7 @@ Spectrum BxDF::rho_hh(int nSamples, const Point2f *samplesWo, const Point2f *sam
     return ret / (Pi * nSamples);
 }
 
-Float BxDF::pdfW(const Vector3f &wo, const Vector3f &wi) const {
+Float BxDF::pdfDir(const Vector3f &wo, const Vector3f &wi) const {
     return sameHemisphere(wo, wi) ? absCosTheta(wi) * InvPi : 0;
 }
 
@@ -226,7 +226,7 @@ Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
     if (!(bxdf->type & BSDF_SPECULAR) && matchingComps > 1) {
         for (int i = 0; i < nBxDFs; ++i) {
             if (bxdfs[i] != bxdf && bxdfs[i]->matchesFlags(type)) {
-                *pdf += bxdfs[i]->pdfW(wo, wi);
+                *pdf += bxdfs[i]->pdfDir(wo, wi);
             }
         }
     }
@@ -251,7 +251,7 @@ Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
     return f;
 }
 
-Float BSDF::pdfW(const Vector3f &woWorld, const Vector3f &wiWorld,
+Float BSDF::pdfDir(const Vector3f &woWorld, const Vector3f &wiWorld,
                 BxDFType flags) const {
 
     if (nBxDFs == 0.f) {
@@ -265,7 +265,7 @@ Float BSDF::pdfW(const Vector3f &woWorld, const Vector3f &wiWorld,
     for (int i = 0; i < nBxDFs; ++i) {
         if (bxdfs[i]->matchesFlags(flags)) {
             ++matchingComps;
-            pdf += bxdfs[i]->pdfW(wo, wi);
+            pdf += bxdfs[i]->pdfDir(wo, wi);
         }
     }
     Float v = matchingComps > 0 ? pdf / matchingComps : 0.f;
@@ -373,11 +373,11 @@ Spectrum LambertianTransmission::sample_f(const Vector3f &wo, Vector3f *wi, cons
     if (wo.z > 0) {
         wi->z *= -1;
     }
-    *pdf = pdfW(wo, *wi);
+    *pdf = pdfDir(wo, *wi);
     return f(wo, *wi);
 }
 
-Float LambertianTransmission::pdfW(const Vector3f &wo, const Vector3f &wi) const {
+Float LambertianTransmission::pdfDir(const Vector3f &wo, const Vector3f &wi) const {
     return sameHemisphere(wo, wi) ? 0 : absCosTheta(wi) * InvPi;
 }
 
@@ -445,16 +445,16 @@ Spectrum MicrofacetReflection::sample_f(const Vector3f &wo, Vector3f *wi, const 
         return Spectrum(0.f);
     }
     
-    *pdf = _distribution->pdfW(wo, wh) / (4 * dot(wo, wh));
+    *pdf = _distribution->pdfDir(wo, wh) / (4 * dot(wo, wh));
     return f(wo, *wi);
 }
 
-Float MicrofacetReflection::pdfW(const Vector3f &wo, const Vector3f &wi) const {
+Float MicrofacetReflection::pdfDir(const Vector3f &wo, const Vector3f &wi) const {
     if (!sameHemisphere(wo, wi)) {
         return 0;
     }
     Vector3f wh = normalize(wo + wi);
-    return _distribution->pdfW(wo, wh) / (4 * dot(wo, wh));
+    return _distribution->pdfDir(wo, wh) / (4 * dot(wo, wh));
 }
 
 std::string MicrofacetReflection::toString() const {
@@ -504,11 +504,11 @@ Spectrum MicrofacetTransmission::sample_f(const Vector3f &wo, Vector3f *wi, cons
     if (!refract(wo, (Normal3f)wh, eta, wi)) {
         return 0;
     }
-    *pdf = pdfW(wo, *wi);
+    *pdf = pdfDir(wo, *wi);
     return f(wo, *wi);
 }
 
-Float MicrofacetTransmission::pdfW(const Vector3f &wo, const Vector3f &wi) const {
+Float MicrofacetTransmission::pdfDir(const Vector3f &wo, const Vector3f &wi) const {
     if (sameHemisphere(wo, wi)) {
         return 0;
     }
@@ -517,7 +517,7 @@ Float MicrofacetTransmission::pdfW(const Vector3f &wo, const Vector3f &wi) const
     
     Float sqrtDenom = dot(wo, wh) + eta * dot(wi, wh);
     Float dwh_dwi = std::abs((eta * eta * dot(wi, wh)) / (sqrtDenom * sqrtDenom));
-    return _distribution->pdfW(wo, wh) * dwh_dwi;
+    return _distribution->pdfDir(wo, wh) * dwh_dwi;
 }
 
 std::string MicrofacetTransmission::toString() const {
@@ -572,16 +572,16 @@ Spectrum FresnelBlend::sample_f(const Vector3f &wo, Vector3f *wi,
             return Spectrum(0.f);
         }
     }
-    *pdf = pdfW(wo, *wi);
+    *pdf = pdfDir(wo, *wi);
     return f(wo, *wi);
 }
 
-Float FresnelBlend::pdfW(const Vector3f &wo, const Vector3f &wi) const {
+Float FresnelBlend::pdfDir(const Vector3f &wo, const Vector3f &wi) const {
     if (!sameHemisphere(wo, wi)) {
     	return 0;
     }
     Vector3f wh = normalize(wo + wi);
-    Float pdf_wh = _distribution->pdfW(wo, wh);
+    Float pdf_wh = _distribution->pdfDir(wo, wh);
     // 漫反射的pdf与菲涅尔反射的pdf取平均值
     return .5f * (absCosTheta(wi) * InvPi + pdf_wh / (4 * dot(wo, wh)));
 }

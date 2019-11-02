@@ -92,7 +92,7 @@ public:
     
     virtual Interaction sampleW(const Interaction &ref, const Point2f &u, Float *pdf) const;
     
-    virtual Float pdfW(const Interaction &ref, const Vector3f &wi) const;
+    virtual Float pdfDir(const Interaction &ref, const Vector3f &wi) const;
     
     virtual Float solidAngle(const Point3f &p, int nSamples = 512) const {
         Point3f pCenter = objectToWorld->exec(Point3f(0, 0, 0));

@@ -214,7 +214,7 @@ Interaction Cylinder::sampleA(const Point2f &u, Float *pdf) const {
     // 推导过程在intersect函数中如上所示
     Vector3f pObjError = gamma(4) * abs(Vector3f(pObj.x, pObj.y, 0));
     ret.pos = objectToWorld->exec(pObj, pObjError, &ret.pError);
-    *pdf = pdfA();
+    *pdf = pdfPos();
     return ret;
 }
 

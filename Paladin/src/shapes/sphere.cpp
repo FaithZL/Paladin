@@ -255,7 +255,7 @@ Interaction Sphere::sampleA(const Point2f &u, Float *pdf) const {
      */
     Vector3f pObjError = gamma(5) * abs(Vector3f(pObj));
     ret.pos = objectToWorld->exec(pObj, pObjError, &ret.pError);
-    *pdf = pdfA(ret);
+    *pdf = pdfPos(ret);
     return ret;
 }
 
@@ -312,13 +312,13 @@ Interaction Sphere::sampleW(const paladin::Interaction &ref, const Point2f &u, F
     return ret;
 }
 
-Float Sphere::pdfW(const paladin::Interaction &ref, const Vector3f &wi) const {
+Float Sphere::pdfDir(const paladin::Interaction &ref, const Vector3f &wi) const {
     Point3f pCenter = objectToWorld->exec(Point3f(0,0,0));
     // Point3f origin = ref.pos; todo
     Point3f origin = offsetRayOrigin(ref.pos, ref.pError, ref.normal, wi);
     if (distanceSquared(pCenter, origin) <= _radius * _radius) {
         // 如果在球内
-        return Shape::pdfW(ref, wi);
+        return Shape::pdfDir(ref, wi);
     }
     
     // 如果在球外，则进行圆锥采样

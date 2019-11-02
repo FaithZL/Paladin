@@ -233,7 +233,7 @@ Interaction Triangle::sampleA(const Point2f &u, Float *pdf) const {
     Point3f pAbsSum = abs(b[0] * p0) + abs(b[1] * p1) + abs((1 - b[0] - b[1]) * p2);
     //todo 推导过程后续补上
     ret.pError = gamma(6) * Vector3f(pAbsSum.x, pAbsSum.y, pAbsSum.z);
-    *pdf = pdfA();
+    *pdf = pdfPos();
     return ret;
 }
 

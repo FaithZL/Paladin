@@ -61,12 +61,12 @@ public:
     virtual Interaction sampleA(const Point2f &u, Float *pdf) const = 0;
 
     // 概率密度函数，表面某点的pdf，函数空间为表面参数空间
-    virtual Float pdfA(const Interaction &isect) const {
+    virtual Float pdfPos(const Interaction &isect) const {
     	return 1 / area();
     }
 
     // 概率密度函数，表面某点的pdf，函数空间为表面参数空间
-    virtual Float pdfA() const {
+    virtual Float pdfPos() const {
     	return 1 / area();
     }
 
@@ -81,7 +81,7 @@ public:
 	 * 在场景中某处ref处沿着wi方向采样图形上某点的概率密度函数
 	 * 函数空间为向量空间
 	 */
-    virtual Float pdfW(const Interaction &ref, const Vector3f &wi) const;
+    virtual Float pdfDir(const Interaction &ref, const Vector3f &wi) const;
     
     /**
      * 返回shape对于某个点的立体角大小

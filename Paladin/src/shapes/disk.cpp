@@ -95,7 +95,7 @@ Interaction Disk::sampleA(const Point2f &u, Float *pdf) const {
         ret.normal *= -1;
     }
     ret.pos = objectToWorld->exec(pObj, Vector3f(0,0,0), &ret.pError);
-    *pdf = pdfA();
+    *pdf = pdfPos();
     return ret;
 }
 

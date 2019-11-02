@@ -427,7 +427,7 @@ public:
      * @param  wo [出射方向]
      * @return
      */
-    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const;
+    virtual Float pdfDir(const Vector3f &wo, const Vector3f &wi) const;
     
     virtual std::string toString() const = 0;
     
@@ -500,7 +500,7 @@ public:
     /**
      * 跟BXDF的pdfW函数相同，不再赘述
      */ 
-    Float pdfW(const Vector3f &wo, const Vector3f &wi,
+    Float pdfDir(const Vector3f &wo, const Vector3f &wi,
               BxDFType flags = BSDF_ALL) const;
 
     std::string toString() const;
@@ -739,7 +739,7 @@ public:
      * @param  wi 入射方向
      * @return    0
      */
-    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const {
+    virtual Float pdfDir(const Vector3f &wo, const Vector3f &wi) const {
         return 0;
     }
     
@@ -823,7 +823,7 @@ public:
     virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &sample,
                               Float *pdf, BxDFType *sampledType) const;
     
-    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const {
+    virtual Float pdfDir(const Vector3f &wo, const Vector3f &wi) const {
         return 0; 
     }
     
@@ -868,7 +868,7 @@ public:
     virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
                               Float *pdf, BxDFType *sampledType) const;
 
-    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const { 
+    virtual Float pdfDir(const Vector3f &wo, const Vector3f &wi) const { 
     	return 0; 
     }
 
@@ -969,7 +969,7 @@ public:
     virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
                               Float *pdf, BxDFType *sampledType) const;
 
-    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const;
+    virtual Float pdfDir(const Vector3f &wo, const Vector3f &wi) const;
 
     virtual std::string toString() const;
 
@@ -1169,7 +1169,7 @@ public:
      * @param  wi 入射方向
      * @return    [description]
      */
-    Float pdfW(const Vector3f &wo, const Vector3f &wi) const;
+    Float pdfDir(const Vector3f &wo, const Vector3f &wi) const;
     
     std::string toString() const;
     
@@ -1270,7 +1270,7 @@ public:
      * @param  wi [description]
      * @return    [description]
      */
-    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const;
+    virtual Float pdfDir(const Vector3f &wo, const Vector3f &wi) const;
     
     virtual std::string toString() const;
     
@@ -1335,7 +1335,7 @@ public:
                               const Point2f &uOrig, Float *pdf,
                               BxDFType *sampledType) const;
 
-    virtual Float pdfW(const Vector3f &wo, const Vector3f &wi) const;
+    virtual Float pdfDir(const Vector3f &wo, const Vector3f &wi) const;
     
     virtual std::string toString() const;
     

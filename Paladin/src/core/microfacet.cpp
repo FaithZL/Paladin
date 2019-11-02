@@ -11,7 +11,7 @@
 PALADIN_BEGIN
 
 //MicrofacetDistribution
-Float MicrofacetDistribution::pdfW(const Vector3f &wo, const Vector3f &wh) const {
+Float MicrofacetDistribution::pdfDir(const Vector3f &wo, const Vector3f &wh) const {
     if (_sampleVisibleArea) {
         // 如果只计算wo视角可见部分，则需要乘以史密斯遮挡函数再归一化
         // 归一化方式如下，利用以上3式

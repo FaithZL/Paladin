@@ -136,7 +136,7 @@ public:
      * @param  wh 微平面法向量
      * @return    
      */
-    Float pdfW(const Vector3f &wo, const Vector3f &wh) const;
+    Float pdfDir(const Vector3f &wo, const Vector3f &wh) const;
 
     virtual std::string toString() const = 0;
 

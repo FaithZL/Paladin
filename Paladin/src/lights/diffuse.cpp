@@ -43,7 +43,7 @@ Spectrum DiffuseAreaLight::sampleLi(const Interaction &ref, const Point2f &u,
 
 Float DiffuseAreaLight::pdfLi(const Interaction &ref,
                                const Vector3f &wi) const {
-    return _shape->pdfW(ref, wi);
+    return _shape->pdfDir(ref, wi);
 }
 
 PALADIN_END

@@ -222,7 +222,7 @@ Interaction Cone::sampleA(const Point2f &u, Float *pdf) const {
 	if (reverseOrientation) {
 		ret.normal *= -1;
 	}
-	*pdf = pdfA();
+	*pdf = pdfPos();
     return ret;
 }
 

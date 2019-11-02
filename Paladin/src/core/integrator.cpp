@@ -105,7 +105,7 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
     	if (it.isSurfaceInteraction()) {
     		const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
     		f = isect.bsdf->f(isect.wo, wi, bsdfFlags) * absDot(wi, isect.shading.normal);
-            scatteringPdf = isect.bsdf->pdfW(isect.wo, wi, bsdfFlags);
+            scatteringPdf = isect.bsdf->pdfDir(isect.wo, wi, bsdfFlags);
     	} else {
     		// todo 处理参与介质的phase函数
     	}
