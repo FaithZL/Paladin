@@ -49,16 +49,10 @@ public:
      * @param sampleWeight 采样权重(来自于相机)
      */
     void addSample(const Point2f &pFilm, Spectrum L, Float sampleWeight = 1.) {
-
         // todo 这里没有理解，为何要这样限制亮度，这样限制亮度会不会造成原有数据的改变？
         // 为何不是所有像素按照整体比例去缩放？
         if (L.y() > _maxSampleLuminance) {
             L *= _maxSampleLuminance / L.y();
-        }
-        
-        if (L.MaxComponentValue() > 0.01) {
-            int a;
-            a = 1;
         }
 
         // 找到受此样本影响范围内的像素
@@ -248,6 +242,10 @@ private:
         DCHECK(insideExclusive(p, croppedPixelBounds));
         int width = croppedPixelBounds.pMax.x - croppedPixelBounds.pMin.x;
         int offset = (p.x - croppedPixelBounds.pMin.x) + (p.y - croppedPixelBounds.pMin.y) * width;
+        if (offset > 125000) {
+            int a;
+            a = 1;
+        }
         return _pixels[offset];
     }
 };

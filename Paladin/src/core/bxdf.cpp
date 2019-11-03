@@ -193,8 +193,8 @@ Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
         }
     }
     DCHECK(bxdf != nullptr);
-    COUT << "BSDF::Sample_f chose comp = " << comp << " / matching = " <<
-    matchingComps << ", bxdf: " << bxdf->toString();
+    // COUT << "BSDF::Sample_f chose comp = " << comp << " / matching = " <<
+    // matchingComps << ", bxdf: " << bxdf->toString();
     // 重新映射二维随机变量
     Point2f uRemapped(std::min(u[0] * matchingComps - comp, OneMinusEpsilon), u[1]);
     
@@ -210,9 +210,9 @@ Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
     // 对选中的bxdf采样
     Spectrum f = bxdf->sample_f(wo, &wi, uRemapped, pdf, sampledType);
 
-    COUT << "For wo = " << wo << ", sampled f = " << f << ", pdf = "
-    << *pdf << ", ratio = " << ((*pdf > 0) ? (f / *pdf) : Spectrum(0.))
-    << ", wi = " << wi;
+    // COUT << "For wo = " << wo << ", sampled f = " << f << ", pdf = "
+    // << *pdf << ", ratio = " << ((*pdf > 0) ? (f / *pdf) : Spectrum(0.))
+    // << ", wi = " << wi;
     if (*pdf == 0) {
         if (sampledType) {
         	*sampledType = BxDFType(0);
@@ -246,8 +246,8 @@ Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
             }
         }
     }
-    COUT << "Overall f = " << f << ", pdf = " << *pdf << ", ratio = "
-    << ((*pdf > 0) ? (f / *pdf) : Spectrum(0.));
+    // COUT << "Overall f = " << f << ", pdf = " << *pdf << ", ratio = "
+    // << ((*pdf > 0) ? (f / *pdf) : Spectrum(0.));
     return f;
 }
 

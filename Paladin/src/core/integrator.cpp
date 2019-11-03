@@ -207,7 +207,7 @@ void MonteCarloIntegrator::render(const Scene &scene) {
     	// 计算当前tile的起始点与结束点
     	int x0 = samplerBounds.pMin.x + tile.x * tileSize;
     	int x1 = std::min(x0 + tileSize, samplerBounds.pMax.x);
-    	int y0 = samplerBounds.pMin.y + tile.y + tileSize;
+    	int y0 = samplerBounds.pMin.y + tile.y * tileSize;
     	int y1 = std::min(y0 + tileSize, samplerBounds.pMax.y);
     	AABB2i tileBounds(Point2i(x0, y0), Point2i(x1, y1));
 
@@ -242,6 +242,7 @@ void MonteCarloIntegrator::render(const Scene &scene) {
                             "for pixel (%d, %d), sample %d. Setting to black.",
                             pixel.x, pixel.y,
                             (int)tileSampler->currentSampleIndex());
+                    DCHECK(false);
     				L = Spectrum(0.0f);
     			} else if (L.y() < -1e-5) {
     				COUT << StringPrintf(
@@ -249,6 +250,7 @@ void MonteCarloIntegrator::render(const Scene &scene) {
                             "for pixel (%d, %d), sample %d. Setting to black.",
                             L.y(), pixel.x, pixel.y,
                             (int)tileSampler->currentSampleIndex());
+                    DCHECK(false);
     				L = Spectrum(0.0f);
     			} else if (std::isinf(L.y())) {
 					COUT << StringPrintf(
@@ -256,6 +258,7 @@ void MonteCarloIntegrator::render(const Scene &scene) {
                             "for pixel (%d, %d), sample %d. Setting to black.",
                             pixel.x, pixel.y,
                             (int)tileSampler->currentSampleIndex());
+                    DCHECK(false);
     				L = Spectrum(0.0f);
     			}
                 // 将像素样本值与权重保存到pixel像素数据中

@@ -82,6 +82,7 @@ public:
         COUT <<
         "TransformedPrimitive::ComputeScatteringFunctions() shouldn't be "
         "called";
+        DCHECK(false);
     }
     
     virtual AABB3f WorldBound() const {

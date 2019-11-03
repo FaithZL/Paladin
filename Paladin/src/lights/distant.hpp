@@ -32,6 +32,7 @@ public:
     
 private:
     const Spectrum _L;
+    // 光源方向，指的是光源在物体的_wLight方向
     const Vector3f _wLight;
     Point3f _worldCenter;
     Float _worldRadius;
