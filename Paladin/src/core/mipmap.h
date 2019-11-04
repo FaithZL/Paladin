@@ -11,6 +11,8 @@
 #include "header.h"
 #include "tools/parallel.hpp"
 #include "core/spectrum.hpp"
+#include "core/texture.hpp"
+#include "math/bounds.h"
 
 PALADIN_BEGIN
 
