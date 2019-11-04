@@ -1,15 +1,15 @@
-#include <iostream>
+ #include <iostream>
 
-#include <glog/logging.h>
+ #include <glog/logging.h>
 
-int test_glog_main(const char* argv) {
-    FLAGS_alsologtostderr = 1;
-    google::InitGoogleLogging(argv);
+ int test_glog_main(const char* argv) {
+     FLAGS_alsologtostderr = 1;
+     google::InitGoogleLogging(argv);
 
-    LOG(INFO) << "I am INFO!";
-    LOG(WARNING) << "I am WARNING!";
-    LOG(ERROR) << "I am ERROR!";
-    // LOG(FATAL) << "I am FATAL!";
+     LOG(INFO) << "I am INFO!";
+     LOG(WARNING) << "I am WARNING!";
+     LOG(ERROR) << "I am ERROR!";
+     // LOG(FATAL) << "I am FATAL!";
 
-    return 0;
-}
+     return 0;
+ }

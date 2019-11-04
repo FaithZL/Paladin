@@ -29,7 +29,7 @@ int main(int argc, const char * argv[]) {
 //    test_lua_main();
 //    test_rapidxml_main();
 //    loadfile();
-    testscene();
+//    testscene();
     test_glog_main(argv[0]);
 #ifdef _MSC_VER
     //让VS运行debug时不至于黑屏一闪而过

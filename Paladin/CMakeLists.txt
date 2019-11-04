@@ -9,7 +9,7 @@ project(${APP_NAME})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 # 收集所有头文件源文件，存入 ALL_FILES 变量中
-file(GLOB_RECURSE ALL_FILES "src/*.h*" "src/*.cpp" "third/rapidxml-1.13/*.hpp")
+file(GLOB_RECURSE ALL_FILES "src/*.h*" "src/*.cpp" "third/rapidxml/*.hpp")
 file(GLOB MORE_FILES "third/stblib/stb/*.h" "third/stblib/stb/*.c" "third/tinyobjloader/*.h")
 foreach(_file IN ITEMS ${MORE_FILES})
     list(APPEND ALL_FILES ${_file})
@@ -42,7 +42,7 @@ include_directories ("${PROJECT_SOURCE_DIR}/src")
 include_directories ("${PROJECT_SOURCE_DIR}/third/lua53/lua")
 include_directories ("${PROJECT_SOURCE_DIR}/third/tinyobjloader")
 include_directories ("${PROJECT_SOURCE_DIR}/third/stblib/stb")
-include_directories ("${PROJECT_SOURCE_DIR}/third/rapidxml-1.13")
+include_directories ("${PROJECT_SOURCE_DIR}/third/rapidxml")
 include_directories ("${PROJECT_SOURCE_DIR}/third/glog/src")
 
 # 开启工程虚拟目录
