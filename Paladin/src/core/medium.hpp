@@ -13,13 +13,27 @@
 
 PALADIN_BEGIN
 
+// 正如描述表面散射的BSDF模型种类繁多，许多相函数也得到了发展。
+// 这些模型从参数化模型(可用于将具有少量参数的函数拟合到测量数据)
+// 到基于从具有已知形状和材料的粒子(如球形水滴)推导出散射辐射分布的分析模型。
+// 相函数是一个一维函数，参数为cosθ，其中θ为入射方向与出射方向的夹角
+// 相函数有互换性，任意交换两个向量，函数值保持不变
+// 相函数满足以下表达式
+//       ∫[sphere]p(ωo,ωi) = 1
+// 所以各向同性的相函数满足
+// p(ωo,ωi) = 1/4π
 class PhaseFunction {
 public:
-    // PhaseFunction Interface
-    virtual ~PhaseFunction();
+   
+    virtual ~PhaseFunction() {
+
+    }
+
     virtual Float p(const Vector3f &wo, const Vector3f &wi) const = 0;
+
     virtual Float sample_p(const Vector3f &wo, Vector3f *wi,
                            const Point2f &u) const = 0;
+
     virtual std::string toString() const = 0;
 };
 
