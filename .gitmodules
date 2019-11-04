@@ -10,3 +10,7 @@
 	path = Paladin/third/stblib/stb
 	url = https://github.com/nothings/stb.git
 	branch = master
+[submodule "Paladin/third/glog"]
+	path = Paladin/third/glog
+	url = git@github.com:google/glog.git
+	branch = master
