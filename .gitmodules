@@ -12,5 +12,5 @@
 	branch = master
 [submodule "Paladin/third/glog"]
 	path = Paladin/third/glog
-	url = git@github.com:google/glog.git
+	url = https://github.com/google/glog.git
 	branch = master

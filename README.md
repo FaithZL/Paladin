@@ -30,7 +30,7 @@ Windows
 Linux:
 
 	CentOS 6.5
-	CMake 2.8.12.2
+	CMake 3.9.0-rc6
 	GNU Make 3.81
 	GCC 4.8.0
 
