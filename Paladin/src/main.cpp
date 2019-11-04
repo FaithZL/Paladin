@@ -11,6 +11,7 @@
 
 #include "alltest/test_lua.hpp"
 #include "alltest/test_rapidxml.hpp"
+#include "alltest/test_glog.hpp"
 #include "alltest/loadfile.h"
 #include "alltest/testrender.h"
 #include "math/lowdiscrepancy.hpp"
@@ -29,8 +30,7 @@ int main(int argc, const char * argv[]) {
 //    test_rapidxml_main();
 //    loadfile();
     testscene();
-
-
+    test_glog_main(argv[0]);
 #ifdef _MSC_VER
     //让VS运行debug时不至于黑屏一闪而过
     system("pause");

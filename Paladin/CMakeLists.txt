@@ -33,17 +33,30 @@ foreach(_source IN ITEMS ${ALL_FILES})
     assign_source_group(${_source})
 endforeach()
 
-
 # 添加各个库目录
 add_subdirectory(third/lua53)
-set(EXTRA_LIBS ${EXTRA_LIBS} lua53)
-
+add_subdirectory(third/glog)
+set(EXTRA_LIBS ${EXTRA_LIBS} lua53 glog)
 # 设置头文件目录
 include_directories ("${PROJECT_SOURCE_DIR}/src")
 include_directories ("${PROJECT_SOURCE_DIR}/third/lua53/lua")
 include_directories ("${PROJECT_SOURCE_DIR}/third/tinyobjloader")
 include_directories ("${PROJECT_SOURCE_DIR}/third/stblib/stb")
 include_directories ("${PROJECT_SOURCE_DIR}/third/rapidxml-1.13")
+include_directories ("${PROJECT_SOURCE_DIR}/third/glog/src")
+
+# 开启工程虚拟目录
+SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
+# 设置glog库相关单元测试的虚拟目录
+SET_PROPERTY(TARGET glog 
+                    logging_unittest 
+                    demangle_unittest 
+                    utilities_unittest 
+                    stl_logging_unittest 
+                    symbolize_unittest 
+                    stacktrace_unittest 
+                    signalhandler_unittest
+            PROPERTY FOLDER "glog")
 
 # 指定生成目标
 add_executable (${APP_NAME} ${ALL_FILES})
