@@ -140,7 +140,7 @@ SampledSpectrum SampledSpectrum::FromRGB(const Float rgb[3],
         }
         r *= .86445f;
     }
-    return r.Clamp();
+    return r.clamp();
 }
 
 SampledSpectrum::SampledSpectrum(const RGBSpectrum &r, SpectrumType t) {

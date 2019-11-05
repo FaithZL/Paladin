@@ -92,7 +92,7 @@ public:
                 }
                 // 把最新数据填充到resampledImage中
                 for (int t = 0; t < resPow2[1]; ++t) {
-                    resampledImage[t * resPow2[0] + s] = clamp(workData[t]);
+                    resampledImage[t * resPow2[0] + s] = Clamp(workData[t]);
                 }
             }, resPow2[0], 32);
             for (auto ptr : resampleBufs) {
@@ -285,16 +285,16 @@ private:
         return ret;
     }
     
-    Float clamp(Float v) {
+    Float Clamp(Float v) {
         return clamp(v, 0.f, Infinity);
     }
     
-    RGBSpectrum clamp(const RGBSpectrum &v) {
-        return v.Clamp(0.f, Infinity);
+    RGBSpectrum Clamp(const RGBSpectrum &v) {
+        return v.clamp(0.f, Infinity);
     }
     
-    SampledSpectrum clamp(const SampledSpectrum &v) {
-        return v.Clamp(0.f, Infinity);
+    SampledSpectrum Clamp(const SampledSpectrum &v) {
+        return v.clamp(0.f, Infinity);
     }
     
     T triangle(int level, const Point2f &st) const {

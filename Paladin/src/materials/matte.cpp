@@ -22,7 +22,7 @@ void MatteMaterial::computeScatteringFunctions(SurfaceInteraction *si,
 	}
 
 	si->bsdf = ARENA_ALLOC(arena, BSDF)(*si);
-	Spectrum r = _Kd->evaluate(*si).Clamp();
+	Spectrum r = _Kd->evaluate(*si).clamp();
 	Float sig = clamp(_sigma->evaluate(*si), 0, 90);
 	if (!r.IsBlack()) {
 		if (sig == 0) {

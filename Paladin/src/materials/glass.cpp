@@ -22,8 +22,8 @@ void GlassMaterial::computeScatteringFunctions(SurfaceInteraction *si,
     Float eta = _eta->evaluate(*si);
     Float urough = _uRoughness->evaluate(*si);
     Float vrough = _vRoughness->evaluate(*si);
-    Spectrum R = _Kr->evaluate(*si).Clamp();
-    Spectrum T = _Kt->evaluate(*si).Clamp();
+    Spectrum R = _Kr->evaluate(*si).clamp();
+    Spectrum T = _Kt->evaluate(*si).clamp();
     
     si->bsdf = ARENA_ALLOC(arena, BSDF)(*si,eta);
     

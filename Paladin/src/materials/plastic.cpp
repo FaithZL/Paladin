@@ -20,12 +20,12 @@ void PlasticMaterial::computeScatteringFunctions(
     	bump(_bumpMap, si);
     }
     si->bsdf = ARENA_ALLOC(arena, BSDF)(*si);
-    Spectrum kd = _Kd->evaluate(*si).Clamp();
+    Spectrum kd = _Kd->evaluate(*si).clamp();
     if (!kd.IsBlack()) {
         si->bsdf->add(ARENA_ALLOC(arena, LambertianReflection)(kd));
     }
 
-    Spectrum ks = _Ks->evaluate(*si).Clamp();
+    Spectrum ks = _Ks->evaluate(*si).clamp();
     if (!ks.IsBlack()) {
         Fresnel *fresnel = ARENA_ALLOC(arena, FresnelDielectric)(1.5f, 1.f);
         

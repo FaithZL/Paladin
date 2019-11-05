@@ -14,8 +14,8 @@ void MixMaterial::computeScatteringFunctions(SurfaceInteraction *si,
                                              MemoryArena &arena,
                                              TransportMode mode,
                                              bool allowMultipleLobes) const {
-    Spectrum s1 = _scale->evaluate(*si).Clamp();
-    Spectrum s2 = (Spectrum(1.f) - s1).Clamp();
+    Spectrum s1 = _scale->evaluate(*si).clamp();
+    Spectrum s2 = (Spectrum(1.f) - s1).clamp();
     SurfaceInteraction si2 = *si;
     _m1->computeScatteringFunctions(si, arena, mode, allowMultipleLobes);
     _m2->computeScatteringFunctions(&si2, arena, mode, allowMultipleLobes);

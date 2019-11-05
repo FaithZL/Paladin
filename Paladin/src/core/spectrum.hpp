@@ -208,10 +208,10 @@ public:
         str += " ]";
         return str;
     }
-    CoefficientSpectrum Clamp(Float low = 0, Float high = Infinity) const {
+    CoefficientSpectrum clamp(Float low = 0, Float high = Infinity) const {
         CoefficientSpectrum ret;
         for (int i = 0; i < nSpectrumSamples; ++i)
-            ret.c[i] = clamp(c[i], low, high);
+            ret.c[i] = paladin::clamp(c[i], low, high);
         DCHECK(!ret.HasNaNs());
         return ret;
     }
@@ -473,11 +473,11 @@ inline CoefficientSpectrum<nSpectrumSamples> Pow(
     return ret;
 }
 
-inline RGBSpectrum Lerp(Float t, const RGBSpectrum &s1, const RGBSpectrum &s2) {
+inline RGBSpectrum lerp(Float t, const RGBSpectrum &s1, const RGBSpectrum &s2) {
     return (1 - t) * s1 + t * s2;
 }
 
-inline SampledSpectrum Lerp(Float t, const SampledSpectrum &s1,
+inline SampledSpectrum lerp(Float t, const SampledSpectrum &s1,
                             const SampledSpectrum &s2) {
     return (1 - t) * s1 + t * s2;
 }

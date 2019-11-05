@@ -35,6 +35,7 @@ Spectrum EnvironmentMap::sampleLi(const Interaction &ref, const Point2f &u,
                                       Vector3f *wi, Float *pdf,
                                       VisibilityTester *vis) const {
     Float mapPdf;
+    // todo 球面坐标映射到平面会有扭曲，需要优化
     Point2f uv = _distribution->sampleContinuous(u, &mapPdf);
     if (mapPdf == 0) {
         return Spectrum(0.f);
@@ -55,6 +56,18 @@ Spectrum EnvironmentMap::sampleLi(const Interaction &ref, const Point2f &u,
     *vis = VisibilityTester(ref, Interaction(ref.pos + *wi * (2 * _worldRadius),
                                              ref.time, mediumInterface));
     return Spectrum(_Lmap->lookup(uv), SpectrumType::Illuminant);
+}
+
+Float EnvironmentMap::pdfLi(const Interaction &, const Vector3f &w) const {
+    Vector3f wi = _worldToLight.exec(w);
+    Float theta = sphericalTheta(wi), phi = sphericalPhi(wi);
+    Float sinTheta = std::sin(theta);
+    if (sinTheta == 0) {
+        return 0;
+    }
+    // todo 球面坐标映射到平面会有扭曲，需要优化
+    return _distribution->pdf(Point2f(phi * Inv2Pi, theta * InvPi)) /
+           (2 * Pi * Pi * sinTheta);
 }
 
 PALADIN_END

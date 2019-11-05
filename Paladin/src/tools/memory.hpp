@@ -295,7 +295,7 @@ public:
      * 1.先找到指定内存在哪个块中(bu,bv)
      * 2.然后找到块中的偏移量 (ou, ov)
      */
-    inline int getTotalOffset(int u, int v) {
+    inline int getTotalOffset(int u, int v) const {
         int bu = block(u); 
         int bv = block(v);
         int ou = offset(u);
