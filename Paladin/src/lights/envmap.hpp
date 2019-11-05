@@ -17,7 +17,7 @@ PALADIN_BEGIN
 class EnvironmentMap : public Light {
     
 public:
-    EnvironmentMap(const Transform &LightToWorld, const Spectrum &power,
+    EnvironmentMap(const Transform &LightToWorld, const Spectrum &L,
                    int nSamples, const std::string &texmap);
     
     void preprocess(const Scene &scene) {
@@ -38,6 +38,7 @@ private:
     std::unique_ptr<MIPMap<RGBSpectrum>> _Lmap;
     Point3f _worldCenter;
     Float _worldRadius;
+    // 贴图对应的二维分布，用于重要性采样
     std::unique_ptr<Distribution2D> _distribution;
 };
 

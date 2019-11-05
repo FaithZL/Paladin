@@ -7,15 +7,50 @@
 
 #include "envmap.hpp"
 #include "math/sampling.hpp"
+#include "tools/fileio.hpp"
 
 PALADIN_BEGIN
 
 EnvironmentMap::EnvironmentMap(const Transform &LightToWorld,
-                               const Spectrum &power,
+                               const Spectrum &L,
                                int nSamples, const std::string &texmap)
 :Light((int)LightFlags::Infinite, LightToWorld, MediumInterface(),
 nSamples) {
+    // 先初始化纹理贴图
+    Point2i resolution;
+    std::unique_ptr<RGBSpectrum[]> texels(nullptr);
+    if (texmap != "") {
+        texels = readImage(texmap, &resolution);
+        if (texels) {
+            for (int i = 0; resolution.x * resolution.y; ++i) {
+                texels[i] = texels[i] * L.ToRGBSpectrum();
+            }
+        }
+    }
+    if (!texels) {
+        resolution.x = 1;
+        resolution.y = 1;
+        texels = std::unique_ptr<RGBSpectrum[]>(new RGBSpectrum[1]);
+        texels[0] = L.ToRGBSpectrum();
+    }
+    _Lmap.reset(new MIPMap<RGBSpectrum>(resolution, texels.get()));
     
+    // 生成对应的二维分布
+    int width = _Lmap->width();
+    int height = _Lmap->height();
+    std::unique_ptr<Float[]> img(new Float[width * height]);
+    float fwidth = 0.5f / std::min(width, height);
+    parallelFor([&](int64_t v) {
+            Float vp = (v + 0.5f) / (Float)height;
+            Float sinTheta = std::sin(Pi * (v + 0.5f) / height);
+            for (int u = 0; u < width; ++u) {
+                Float up = (u + 0.5f) / (Float)width;
+                img[u + v * width] = _Lmap->lookup(Point2f(up, vp), fwidth).y();
+                img[u + v * width] *= sinTheta;
+            }
+        },
+        height, 32);
+    _distribution.reset(new Distribution2D(img.get(), width, height));
 }
 
 Spectrum EnvironmentMap::power() const {
