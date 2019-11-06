@@ -31,6 +31,19 @@ public:
     Spectrum sampleLi(const Interaction &ref, const Point2f &u, Vector3f *wi,
                        Float *pdf, VisibilityTester *vis) const;
     
+    /**
+     * 求基于方向的pdf，要把uv空间的pdf转为立体角空间的pdf
+     * 推导过程如下所示
+     * 
+     * u = φ / 2π
+     * v = θ / π
+     * p(u, v) du dv = p(ω) dω
+     * 
+     * p(u, v) / p(ω) = dω / dudv = (sinθ dθ dφ) / dudv
+     * 
+     * p(u, v) / p(ω) = sinθ 2π^2
+     * 
+     */
     Float pdfLi(const Interaction &, const Vector3f &) const;
     
 private:

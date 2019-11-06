@@ -42,6 +42,7 @@ nSamples) {
     float fwidth = 0.5f / std::min(width, height);
     parallelFor([&](int64_t v) {
             Float vp = (v + 0.5f) / (Float)height;
+            // 注意！需要计算sinθ，作为权重，因为平面映射到球面，θ越偏离90°，权重越低
             Float sinTheta = std::sin(Pi * (v + 0.5f) / height);
             for (int u = 0; u < width; ++u) {
                 Float up = (u + 0.5f) / (Float)width;
@@ -70,7 +71,6 @@ Spectrum EnvironmentMap::sampleLi(const Interaction &ref, const Point2f &u,
                                       Vector3f *wi, Float *pdf,
                                       VisibilityTester *vis) const {
     Float mapPdf;
-    // todo 球面坐标映射到平面会有扭曲，需要优化
     Point2f uv = _distribution->sampleContinuous(u, &mapPdf);
     if (mapPdf == 0) {
         return Spectrum(0.f);
@@ -82,7 +82,8 @@ Spectrum EnvironmentMap::sampleLi(const Interaction &ref, const Point2f &u,
                                 sinTheta * sinPhi,
                                 cosTheta);
     *wi = _lightToWorld.exec(wiLight);
-
+    
+    // p(u, v) / p(ω) = sinθ 2π^2
     *pdf = mapPdf / (2 * Pi * Pi * sinTheta);
     if (sinTheta == 0) {
         *pdf = 0;
@@ -100,7 +101,6 @@ Float EnvironmentMap::pdfLi(const Interaction &, const Vector3f &w) const {
     if (sinTheta == 0) {
         return 0;
     }
-    // todo 球面坐标映射到平面会有扭曲，需要优化
     return _distribution->pdf(Point2f(phi * Inv2Pi, theta * InvPi)) /
            (2 * Pi * Pi * sinTheta);
 }
