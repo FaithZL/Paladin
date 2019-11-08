@@ -79,10 +79,9 @@ public:
     virtual void computeScatteringFunctions(SurfaceInteraction *isect,
                                     MemoryArena &arena, TransportMode mode,
                                     bool allowMultipleLobes) const {
-        COUT <<
+        LOG(FATAL) <<
         "TransformedPrimitive::ComputeScatteringFunctions() shouldn't be "
         "called";
-        DCHECK(false);
     }
     
     virtual AABB3f WorldBound() const {

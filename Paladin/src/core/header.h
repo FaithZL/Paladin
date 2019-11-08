@@ -21,6 +21,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <glog/logging.h>
 
 #ifdef __GNUC__
     //fix 'numeric_limits' is not a member of 'std' for linux
