@@ -50,8 +50,8 @@ public:
     _zMin(clamp(std::min(zMax, zMin), -radius, radius)),
     _zMax(clamp(std::max(zMax, zMin), -radius, radius)),
     _phiMax(degree2radian(clamp(phiMax, 0, 360))),
-    _thetaMin(std::acos(clamp(zMin / radius, -1, 1))),
-    _thetaMax(std::acos(clamp(zMax / radius, -1, 1))) {
+    _thetaMin(std::acos(clamp(_zMax / radius, -1, 1))),
+    _thetaMax(std::acos(clamp(_zMin / radius, -1, 1))) {
         init();
     }
     
@@ -89,9 +89,9 @@ public:
         return _phiMax * _radius * (_zMax - _zMin);
     }
     
-    virtual Interaction sampleA(const Point2f &u, Float *pdf) const;
+    virtual Interaction samplePos(const Point2f &u, Float *pdf) const;
     
-    virtual Interaction sampleW(const Interaction &ref, const Point2f &u, Float *pdf) const;
+    virtual Interaction sampleDir(const Interaction &ref, const Point2f &u, Float *pdf) const;
     
     virtual Float pdfDir(const Interaction &ref, const Vector3f &wi) const;
     

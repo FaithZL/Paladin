@@ -176,7 +176,7 @@ bool Cone::intersectP(const paladin::Ray &r, bool testAlphaTexture) const {
 }
 
 // 暂时只实现完整圆锥的采样 ，后续优化 todo
-Interaction Cone::sampleA(const Point2f &u, Float *pdf) const {
+Interaction Cone::samplePos(const Point2f &u, Float *pdf) const {
 	Interaction ret;
 	// R = sqrt(h^2 + r^2)
 	// θmax = r/R * 2π

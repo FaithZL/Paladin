@@ -35,8 +35,8 @@ AABB3f Shape::worldBound() const {
  p(A) = 1/A
  p(w) = r^2 / (A cosθ)
  */
-Interaction Shape::sampleW(const Interaction &ref, const Point2f &u, Float *pdf) const {
-    Interaction intr = sampleA(u, pdf);
+Interaction Shape::sampleDir(const Interaction &ref, const Point2f &u, Float *pdf) const {
+    Interaction intr = samplePos(u, pdf);
     Vector3f wi = intr.pos - ref.pos;
     if (wi.lengthSquared() == 0) {
         *pdf = 0.f;
@@ -81,7 +81,7 @@ Float Shape::solidAngle(const Point3f &p, int nSamples) const {
     for (int i = 0; i < nSamples; ++i) {
         Point2f u{RadicalInverse(0, i), RadicalInverse(1, i)};
         Float pdf;
-        Interaction pShape = sampleW(ref, u, &pdf);
+        Interaction pShape = sampleDir(ref, u, &pdf);
         if (pdf > 0 && !intersectP(Ray(p, pShape.pos - p, .999f))) {
             solidAngle += 1 / pdf;
         }

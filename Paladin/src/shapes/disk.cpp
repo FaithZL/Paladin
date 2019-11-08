@@ -86,7 +86,7 @@ bool Disk::intersect(const paladin::Ray &r, Float *tHit, paladin::SurfaceInterac
     return false;
 }
 
-Interaction Disk::sampleA(const Point2f &u, Float *pdf) const {
+Interaction Disk::samplePos(const Point2f &u, Float *pdf) const {
     Interaction ret;
     Point2f p2 = uniformSampleDisk(u);
     Point3f pObj = Point3f(p2.x * _radius, p2.y * _radius, _height);

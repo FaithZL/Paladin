@@ -58,7 +58,7 @@ public:
      * u为表面参数坐标，u ∈ [0, 1]^2，通常为外部通过某种算法生成，最简单就是随机数
      * 基于面积的采样
      */
-    virtual Interaction sampleA(const Point2f &u, Float *pdf) const = 0;
+    virtual Interaction samplePos(const Point2f &u, Float *pdf) const = 0;
 
     // 概率密度函数，表面某点的pdf，函数空间为表面参数空间
     virtual Float pdfPos(const Interaction &isect) const {
@@ -75,7 +75,7 @@ public:
 	 * 以及在ref处采样到对应shape表面点的概率密度函数
 	 * 基于立体角的采样
      */
-    virtual Interaction sampleW(const Interaction &ref, const Point2f &u, Float *pdf) const;
+    virtual Interaction sampleDir(const Interaction &ref, const Point2f &u, Float *pdf) const;
 
 	/**
 	 * 在场景中某处ref处沿着wi方向采样图形上某点的概率密度函数

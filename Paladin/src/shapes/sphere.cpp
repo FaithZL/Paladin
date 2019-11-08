@@ -229,7 +229,7 @@ bool Sphere::intersectP(const Ray &r, bool testAlphaTexture) const {
     return true;
 }
 
-Interaction Sphere::sampleA(const Point2f &u, Float *pdf) const {
+Interaction Sphere::samplePos(const Point2f &u, Float *pdf) const {
     Point3f pObj = Point3f(0, 0, 0) + _radius * uniformSampleSphere(u);
     Interaction ret;
     ret.normal = normalize(objectToWorld->exec(Normal3f(pObj.x, pObj.y, pObj.z)));
@@ -259,7 +259,7 @@ Interaction Sphere::sampleA(const Point2f &u, Float *pdf) const {
     return ret;
 }
 
-Interaction Sphere::sampleW(const paladin::Interaction &ref, const Point2f &u, Float *pdf) const {
+Interaction Sphere::sampleDir(const paladin::Interaction &ref, const Point2f &u, Float *pdf) const {
     Interaction ret;
     Point3f pCenter = objectToWorld->exec(Point3f(0,0,0));
     Point3f pOrigin = offsetRayOrigin(ref.pos, ref.pError, ref.normal, pCenter - ref.pos);
@@ -267,7 +267,7 @@ Interaction Sphere::sampleW(const paladin::Interaction &ref, const Point2f &u, F
         // ref点在球内
         // p(w) = r^2 / cosθ * p(A)
         Float pdfA = 0;
-        ret = sampleA(u, &pdfA);
+        ret = samplePos(u, &pdfA);
         Vector3f wi = ret.pos - ref.pos;
         if (wi.lengthSquared() == 0) {
             *pdf = 0;

@@ -76,7 +76,7 @@ public:
         return 0.5 * cross(p1 - p0, p2 - p0).length();
     }
     
-    virtual Interaction sampleA(const Point2f &u, Float *pdf) const;
+    virtual Interaction samplePos(const Point2f &u, Float *pdf) const;
     
     /**
      * 先把三角形三个顶点投影到单位球上

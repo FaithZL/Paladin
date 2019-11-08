@@ -56,7 +56,7 @@ public:
     /**
      * 均匀采样圆锥，可以将圆锥展开成扇形，均匀采样扇形
      */
-    virtual Interaction sampleA(const Point2f &u, Float *pdf) const;
+    virtual Interaction samplePos(const Point2f &u, Float *pdf) const;
     
 protected:
 

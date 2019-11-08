@@ -49,7 +49,7 @@ public:
         return _phiMax * 0.5 * (_radius * _radius - _innerRadius * _innerRadius);
     }
     
-    virtual Interaction sampleA(const Point2f &u, Float *pdf) const;
+    virtual Interaction samplePos(const Point2f &u, Float *pdf) const;
     
 private:
 

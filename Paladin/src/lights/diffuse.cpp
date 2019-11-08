@@ -30,7 +30,7 @@ Spectrum DiffuseAreaLight::power() const {
 Spectrum DiffuseAreaLight::sampleLi(const Interaction &ref, const Point2f &u,
                                      Vector3f *wi, Float *pdf,
                                      VisibilityTester *vis) const {
-    Interaction pShape = _shape->sampleW(ref, u, pdf);
+    Interaction pShape = _shape->sampleDir(ref, u, pdf);
     pShape.mediumInterface = mediumInterface;
     if (*pdf == 0 || (pShape.pos - ref.pos).lengthSquared() == 0) {
         *pdf = 0;

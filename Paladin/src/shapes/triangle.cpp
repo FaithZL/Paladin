@@ -212,7 +212,7 @@ AABB3f Triangle::worldBound() const {
     return unionSet(b1, p2);
 }
 
-Interaction Triangle::sampleA(const Point2f &u, Float *pdf) const {
+Interaction Triangle::samplePos(const Point2f &u, Float *pdf) const {
     Interaction ret;
     Point2f b = uniformSampleTriangle(u);
     const Point3f &p0 = _mesh->points[_vertexIdx[0]];

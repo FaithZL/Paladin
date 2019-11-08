@@ -197,7 +197,7 @@ bool Cylinder::intersectP(const Ray &r, bool testAlphaTexture) const {
     return true;
 }
 
-Interaction Cylinder::sampleA(const Point2f &u, Float *pdf) const {
+Interaction Cylinder::samplePos(const Point2f &u, Float *pdf) const {
 	Float z = lerp(u[0], _zMin, _zMax);
 	Float phi = u[1] * _phiMax;
 
