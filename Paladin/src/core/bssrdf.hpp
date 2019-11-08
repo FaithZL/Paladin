@@ -14,6 +14,8 @@
 PALADIN_BEGIN
 
 /**
+ * 参考资料
+ * http://www.pbr-book.org/3ed-2018/Volume_Scattering/The_BSSRDF.html
  * 之前介绍了BRDF
  * 现在介绍一下BSSRDF
  * 两者有何区别？
@@ -30,8 +32,7 @@ PALADIN_BEGIN
  * 给定的一对点和方向之间的这些散射过程的结果进行建模的总结表示。
  *  
  */
-class BSSRDF
-{
+class BSSRDF {
 public:
 	BSSRDF(const SurfaceInteraction &po, Float eta) 
 	: _po(po), 
@@ -54,6 +55,47 @@ protected:
 	const SurfaceInteraction &_po;
 	// 折射率
 	Float _eta;
+};
+
+/**
+ * BSSRDF的通用性比较差
+ * 即使在比较简单的几何图形下求解光照传输的解决方案已经非常的困难了
+ * 例如球体，平面等等，而BSSRDF可以附加到任何一个几何体上，导致求解
+ * BSSRDF的积分是不现实的，接下来要介绍一种简单的表示
+ * 
+ * 我们可以做如下简化
+ * 
+ *     S(po, ωo, pi, ωi) ≈ (1 - Fr(cosθo)) Sp(po, pi) Sω(ωi)
+ * 
+ * 
+ * 
+ */
+class SeparableBSSRDF : public BSSRDF {
+public:
+	SeparableBSSRDF(const SurfaceInteraction &po, Float eta,
+					const Material *material, TransportMode mode)
+	: BSSRDF(po, eta),
+	_sNormal(po.shading.normal),
+	_sTangent(normalize(po.shading.dpdu)),
+	_tTangent(cross(_sNormal, _sTangent)),
+	_mode(mode){
+
+	}
+
+
+
+private:
+	// 着色法线
+    const Normal3f _sNormal;
+    // 着色切线(s方向，u方向)
+    const Vector3f _sTangent;
+    // 着色切线(t方向，v方向)
+    const Vector3f _tTangent;
+    // 材质
+    const Material * _material;
+    // 光照传输模式
+    const TransportMode _mode;
+	
 };
 
 PALADIN_END
