@@ -14,3 +14,7 @@
 	path = Paladin/third/glog
 	url = https://github.com/google/glog.git
 	branch = master
+[submodule "Paladin/third/openexr"]
+	path = Paladin/third/openexr
+	url = https://github.com/openexr/openexr.git
+	branch = master
