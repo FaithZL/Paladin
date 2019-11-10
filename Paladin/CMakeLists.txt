@@ -93,15 +93,7 @@ SET_PROPERTY(TARGET IexMath
                     Imath 
                     IlmImf 
                     CopyIlmBaseLibs 
-                    exrenvmap 
-                    exrheader 
-                    exrmakepreview 
-                    exrmaketiled 
-                    exrmultipart 
-                    exrmultiview 
-                    exrstdattr 
-                    IlmImf-obj 
-                    IlmImfUtil
+                    IlmImf-obj
             PROPERTY FOLDER "openexr")
 
 IF(WIN32)
