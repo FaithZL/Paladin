@@ -12,6 +12,7 @@
 #include "alltest/test_lua.hpp"
 #include "alltest/test_rapidxml.hpp"
 #include "alltest/test_glog.hpp"
+#include "alltest/test_openexr.hpp"
 #include "alltest/loadfile.h"
 #include "alltest/testrender.h"
 #include "math/lowdiscrepancy.hpp"

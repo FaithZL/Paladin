@@ -16,5 +16,9 @@
 	branch = master
 [submodule "Paladin/third/openexr"]
 	path = Paladin/third/openexr
-	url = https://github.com/openexr/openexr.git
+	url = https://github.com/wjakob/openexr
+	branch = master
+[submodule "Paladin/third/zlib"]
+	path = Paladin/third/zlib
+	url = https://github.com/mitsuba-renderer/zlib
 	branch = master

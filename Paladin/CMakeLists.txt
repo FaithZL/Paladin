@@ -8,6 +8,9 @@ project(${APP_NAME})
 # 使用C++11特性
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
+# 开启工程虚拟目录
+SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
+
 # 收集所有头文件源文件，存入 ALL_FILES 变量中
 file(GLOB_RECURSE ALL_FILES "src/*.h*" "src/*.cpp" "third/rapidxml/*.hpp")
 file(GLOB MORE_FILES "third/stblib/stb/*.h" "third/stblib/stb/*.c" "third/tinyobjloader/*.h")
@@ -33,10 +36,26 @@ foreach(_source IN ITEMS ${ALL_FILES})
     assign_source_group(${_source})
 endforeach()
 
+FIND_PACKAGE ( ZLIB )
+IF(NOT ZLIB_FOUND)
+    # Build zlib
+    SET(ZLIB_BUILD_STATIC_LIBS ON CACHE BOOL " " FORCE)
+    SET(ZLIB_BUILD_SHARED_LIBS OFF CACHE BOOL " " FORCE)
+    add_subdirectory(third/zlib)
+
+    SET(ZLIB_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third/zlib")
+    SET(ZLIB_LIBRARY zlibstatic)
+    SET_PROPERTY(TARGET zlibstatic 
+            PROPERTY FOLDER "zlib")
+    include_directories(${ZLIB_INCLUDE_DIR} "${CMAKE_CURRENT_BINARY_DIR}/src/ext/zlib")
+ENDIF()
+include_directories(${ZLIB_INCLUDE_DIRS})
+
 # 添加各个库目录
 add_subdirectory(third/lua53)
 add_subdirectory(third/glog)
-set(EXTRA_LIBS ${EXTRA_LIBS} lua53 glog)
+add_subdirectory(third/openexr)
+set(EXTRA_LIBS ${EXTRA_LIBS} lua53 glog ${OPENEXR_LIBS})
 # 设置头文件目录
 include_directories ("${PROJECT_SOURCE_DIR}/src")
 include_directories ("${PROJECT_SOURCE_DIR}/third/lua53/lua")
@@ -44,10 +63,15 @@ include_directories ("${PROJECT_SOURCE_DIR}/third/tinyobjloader")
 include_directories ("${PROJECT_SOURCE_DIR}/third/stblib/stb")
 include_directories ("${PROJECT_SOURCE_DIR}/third/rapidxml")
 include_directories ("${PROJECT_SOURCE_DIR}/third/glog/src")
+include_directories ("${PROJECT_SOURCE_DIR}/third/openexr/IlmBase/Imath")
+include_directories ("${PROJECT_SOURCE_DIR}/third/openexr/IlmBase/Half")
+include_directories ("${PROJECT_SOURCE_DIR}/third/openexr/IlmBase/Iex")
+include_directories ("${PROJECT_SOURCE_DIR}/third/openexr/OpenEXR/IlmImf")
+include_directories ("${CMAKE_BINARY_DIR}/third/openexr/IlmBase/config")
+include_directories ("${CMAKE_BINARY_DIR}/third/openexr/OpenEXR/config")
 
-# 开启工程虚拟目录
-SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
-# 设置glog库相关单元测试的虚拟目录
+
+# 设置glog库及相关单元测试的虚拟目录
 SET_PROPERTY(TARGET glog 
                     logging_unittest 
                     demangle_unittest 
@@ -57,6 +81,35 @@ SET_PROPERTY(TARGET glog
                     stacktrace_unittest 
                     signalhandler_unittest
             PROPERTY FOLDER "glog")
+# 设置openexr相关库的虚拟目录
+SET_PROPERTY(TARGET IexMath 
+                    eLut 
+                    toFloat 
+                    b44ExpLogTable 
+                    dwaLookups 
+                    IlmThread 
+                    Half 
+                    Iex 
+                    Imath 
+                    IlmImf 
+                    CopyIlmBaseLibs 
+                    exrenvmap 
+                    exrheader 
+                    exrmakepreview 
+                    exrmaketiled 
+                    exrmultipart 
+                    exrmultiview 
+                    exrstdattr 
+                    IlmImf-obj 
+                    IlmImfUtil
+            PROPERTY FOLDER "openexr")
+
+IF(WIN32)
+  SET(OPENEXR_LIBS IlmImf Imath Half ${ZLIB_LIBRARY})
+ELSE()
+  SET(OPENEXR_LIBS IlmImf Imath Half)
+ENDIF()
+
 
 # 指定生成目标
 add_executable (${APP_NAME} ${ALL_FILES})
