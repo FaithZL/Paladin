@@ -29,24 +29,26 @@
 #include "core/scene.hpp"
 
 #include "tools/parallel.hpp"
+#include "lights/envmap.hpp"
+
 
 using namespace paladin;
 
 void testscene() {
     parallelInit();
-    auto pos = Point3f(1,1,10);
-    auto target = Point3f(0,0,-1);
+    auto pos = Point3f(-10,0,-10);
+    auto target = Point3f(5,0,0);
     auto up = Vector3f(0,1,0);
-    auto lookat = Transform::lookAt(pos,target,up);
-    auto aniTrans = AnimatedTransform(&lookat, 0, &lookat, 0);
+    auto c2w = Transform::lookAt(pos,target,up).getInverse();
+    auto aniTrans = AnimatedTransform(&c2w, 0, &c2w, 0);
     
     auto res = Point2i(400,400);
     auto windows = AABB2f(Point2f(0,0), Point2f(1,1));
-    std::string fn = "pathtracing.png";
+    std::string fn = "pathtracing.hdr";
     auto filter = std::unique_ptr<Filter>(new BoxFilter(Vector2f(2,2)));
     auto pFilm = new Film(res, windows, std::move(filter), 35, fn, 1);
     
-    auto camera = std::shared_ptr<Camera>(new PerspectiveCamera(aniTrans, AABB2f(Point2f(-1,-1), Point2f(1,1)), 0, 0, 0, 1e6, 30, pFilm, nullptr));
+    auto camera = std::shared_ptr<Camera>(new PerspectiveCamera(aniTrans, AABB2f(Point2f(-1,-1), Point2f(1,1)), 0, 0, 0, 1e6, 45, pFilm, nullptr));
     
     auto sampler = std::shared_ptr<Sampler>(new StratifiedSampler(1, 1, true, 20));
     
@@ -59,8 +61,13 @@ void testscene() {
     auto sig = std::shared_ptr<ConstantTexture<Float>>(new ConstantTexture<Float>(0));
     auto matte = std::shared_ptr<Material>(new MatteMaterial(colorKd, sig, nullptr));
     
-    auto tralst = Transform::translate(Vector3f(-1,.75, -1.5));
+    auto tralst = Transform::translate(Vector3f(0,0, 0));
     auto scale = Transform::scale(1.2, 1, 1);
+    
+    auto envpath = "res/derelict_overpass_1k.hdr";
+    auto el = Spectrum(1.0f);
+    auto env2w = Transform::rotateX(-90);
+    auto env = std::shared_ptr<Light>(new EnvironmentMap(env2w, el,10, envpath));
     
     auto inverse = tralst.getInverse();
     auto sphere = std::shared_ptr<Shape>(new Sphere(&tralst, &inverse, false, 0.75, 0.75, -0.75, 360));
@@ -70,11 +77,12 @@ void testscene() {
     auto areaL = std::shared_ptr<Light>(new DiffuseAreaLight(tralst, mi, Spectrum(1), 10, sphere));
     
     std::vector<std::shared_ptr<Primitive>> lst;
-    lst.push_back(gSphere);
+//    lst.push_back(gSphere);
     
     auto bvh = std::shared_ptr<Primitive>(new BVHAccel(lst));
     std::vector<std::shared_ptr<Light>> lights;
     lights.push_back(pLight);
+    lights.push_back(env);
 //    lights.push_back(areaL);
     auto scene = paladin::Scene(bvh, lights);
     
