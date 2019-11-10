@@ -135,7 +135,8 @@ class Transform {
 // 比之前在写OpenGL程序时，需要用齐次坐标来区分点与向量要清晰
 public:
     Transform() {
-
+        _mat = Matrix4x4();
+        _matInv = Matrix4x4();
     }
 
     Transform(const Float mat[4][4]) {

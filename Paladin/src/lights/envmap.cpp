@@ -22,7 +22,7 @@ nSamples) {
     if (texmap != "") {
         texels = readImage(texmap, &resolution);
         if (texels) {
-            for (int i = 0; resolution.x * resolution.y; ++i) {
+            for (int i = 0; i < resolution.x * resolution.y; ++i) {
                 texels[i] = texels[i] * L.ToRGBSpectrum();
             }
         }

@@ -358,6 +358,7 @@ Transform Transform::lookAt(const Point3f &pos, const Point3f &look, const Vecto
     Vector3f right = cross(normalize(up), dir);
     if (right.lengthSquared() == 0) {
         // dir与up向量共线不合法
+        DCHECK(false);
         return Transform();
     }
     right = normalize(right);
