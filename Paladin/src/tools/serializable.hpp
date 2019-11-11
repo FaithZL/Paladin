@@ -13,7 +13,7 @@
 class Serializable {
     
 public:
-    
+    virtual void fromXML() = 0;
     
 };
 

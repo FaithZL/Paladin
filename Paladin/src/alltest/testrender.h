@@ -36,15 +36,15 @@ using namespace paladin;
 
 void testscene() {
     parallelInit();
-    auto pos = Point3f(-10,0,-10);
-    auto target = Point3f(5,0,0);
+    auto pos = Point3f(0,0,-10);
+    auto target = Point3f(0,0,0);
     auto up = Vector3f(0,1,0);
     auto c2w = Transform::lookAt(pos,target,up).getInverse();
     auto aniTrans = AnimatedTransform(&c2w, 0, &c2w, 0);
     
     auto res = Point2i(400,400);
     auto windows = AABB2f(Point2f(0,0), Point2f(1,1));
-    std::string fn = "pathtracing.hdr";
+    std::string fn = "pathtracing.png";
     auto filter = std::unique_ptr<Filter>(new BoxFilter(Vector2f(2,2)));
     auto pFilm = new Film(res, windows, std::move(filter), 35, fn, 1);
     
@@ -55,7 +55,8 @@ void testscene() {
     auto pt = new PathTracer(6, camera, sampler, AABB2i(Point2i(0,0), res));
     
     auto lightTrans = Transform(Matrix4x4::identity());
-    auto pLight = std::shared_ptr<Light>(new DistantLight(lightTrans,Spectrum(3),Vector3f(1,1,0)));
+    Float srgb[3] = {1, 0.2, 0.5};
+    auto pLight = std::shared_ptr<Light>(new DistantLight(lightTrans,Spectrum::FromRGB(srgb),Vector3f(1,1,0)));
     Float color[3] = {0.1, 0.9, 0.1};
     auto colorKd = std::shared_ptr<ConstantTexture<Spectrum>>(new ConstantTexture<Spectrum>(Spectrum::FromRGB(color, SpectrumType::Illuminant)));
     auto sig = std::shared_ptr<ConstantTexture<Float>>(new ConstantTexture<Float>(0));
@@ -74,16 +75,24 @@ void testscene() {
     
     auto gSphere = std::shared_ptr<Primitive>(new GeometricPrimitive(sphere, matte, nullptr, nullptr));
     auto mi = MediumInterface(nullptr);
-    auto areaL = std::shared_ptr<Light>(new DiffuseAreaLight(tralst, mi, Spectrum(1), 10, sphere));
     
+    auto t2 = Transform::translate(Vector3f(-2,0,0));
+    auto int2 = t2.getInverse();
+    auto lsphere = std::shared_ptr<Shape>(new Sphere(&t2, &int2, false, 0.75, 0.75, -0.75, 360));
+    auto areaL = std::shared_ptr<AreaLight>(new DiffuseAreaLight(tralst, mi, Spectrum(1), 10, lsphere));
+    auto l2 = std::shared_ptr<Primitive>(new GeometricPrimitive
+                                         (lsphere, nullptr, areaL, nullptr));
     std::vector<std::shared_ptr<Primitive>> lst;
-//    lst.push_back(gSphere);
+    lst.push_back(l2);
+    lst.push_back(gSphere);
     
     auto bvh = std::shared_ptr<Primitive>(new BVHAccel(lst));
     std::vector<std::shared_ptr<Light>> lights;
+    lights.push_back(areaL);
     lights.push_back(pLight);
-    lights.push_back(env);
-//    lights.push_back(areaL);
+    
+//    lights.push_back(env);
+    
     auto scene = paladin::Scene(bvh, lights);
     
     pt->render(scene);

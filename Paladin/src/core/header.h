@@ -22,6 +22,9 @@
 #include <map>
 #include <algorithm>
 #include <glog/logging.h>
+#include "rapidxml.hpp"
+#include "rapidxml_utils.hpp"
+#include "rapidxml_print.hpp"
 
 #ifdef __GNUC__
     //fix 'numeric_limits' is not a member of 'std' for linux

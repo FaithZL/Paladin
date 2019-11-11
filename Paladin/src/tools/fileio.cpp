@@ -14,6 +14,13 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
+//#include "ImfRgba.h"
+//#include "ImfRgbaFile.h"
+
+#include <ImfRgba.h>
+#include <ImfRgbaFile.h>
+
+
 PALADIN_BEGIN
 
 RGBSpectrum * _readImage(const std::string &name,
@@ -46,6 +53,76 @@ RGBSpectrum * _readImage(const std::string &name,
     return ret;
 }
 
+
+static void _writeImageEXR(const std::string &name, const Float *pixels,
+                          int xRes, int yRes, int totalXRes, int totalYRes,
+                          int xOffset, int yOffset) {
+    using namespace Imf;
+    using namespace Imath;
+
+    Rgba *hrgba = new Rgba[xRes * yRes];
+    for (int i = 0; i < xRes * yRes; ++i)
+        hrgba[i] = Rgba(pixels[3 * i], pixels[3 * i + 1], pixels[3 * i + 2]);
+
+    // OpenEXR uses inclusive pixel bounds.
+    Box2i displayWindow(V2i(0, 0), V2i(totalXRes - 1, totalYRes - 1));
+    Box2i dataWindow(V2i(xOffset, yOffset),
+                     V2i(xOffset + xRes - 1, yOffset + yRes - 1));
+
+    try {
+        RgbaOutputFile file(name.c_str(), displayWindow, dataWindow,
+                            WRITE_RGB);
+        file.setFrameBuffer(hrgba - xOffset - yOffset * xRes, 1, xRes);
+        file.writePixels(yRes);
+    } catch (const std::exception &exc) {
+        LOG(ERROR) << ("Error writing \"%s\": %s", name.c_str(), exc.what());
+    }
+
+    delete[] hrgba;
+}
+
+
+static RGBSpectrum * _readImageEXR(const std::string &name, int *width,
+                          int *height, AABB2i *dataWindow = nullptr,
+                          AABB2i *displayWindow = nullptr) {
+    using namespace Imf;
+    using namespace Imath;
+    try {
+//        RgbaInputFile file(name.c_str());
+//        Box2i dw = file.dataWindow();
+//
+//        // OpenEXR uses inclusive pixel bounds; adjust to non-inclusive
+//        // (the convention pbrt uses) in the values returned.
+//        if (dataWindow)
+//            *dataWindow = {{dw.min.x, dw.min.y}, {dw.max.x + 1, dw.max.y + 1}};
+//        if (displayWindow) {
+//            Box2i dispw = file.displayWindow();
+//            *displayWindow = {{dispw.min.x, dispw.min.y},
+//                              {dispw.max.x + 1, dispw.max.y + 1}};
+//        }
+//        *width = dw.max.x - dw.min.x + 1;
+//        *height = dw.max.y - dw.min.y + 1;
+//
+//        std::vector<Rgba> pixels(*width * *height);
+//        file.setFrameBuffer(&pixels[0] - dw.min.x - dw.min.y * *width, 1,
+//                            *width);
+//        file.readPixels(dw.min.y, dw.max.y);
+//
+//        RGBSpectrum *ret = new RGBSpectrum[*width * *height];
+//        for (int i = 0; i < *width * *height; ++i) {
+//            Float frgb[3] = {pixels[i].r, pixels[i].g, pixels[i].b};
+//            ret[i] = RGBSpectrum::FromRGB(frgb);
+//        }
+//        LOG(INFO) << StringPrintf("Read EXR image %s (%d x %d)",
+//                                  name.c_str(), *width, *height);
+//        return ret;
+    } catch (const std::exception &e) {
+        LOG(ERROR) << ("Unable to read image file \"%s\": %s", name.c_str(), e.what());
+    }
+
+    return NULL;
+}
+
 RGBSpectrum * _readImageHDR(const std::string &name, int *width, int *height) {
     int w,h;
     int comp;
@@ -74,6 +151,8 @@ RGBSpectrum * _readImageHDR(const std::string &name, int *width, int *height) {
 std::unique_ptr<RGBSpectrum[]> readImage(const std::string &name, Point2i *resolution) {
     if (hasExtension(name, "hdr")) {
         return std::unique_ptr<RGBSpectrum []>(_readImageHDR(name, &resolution->x, &resolution->y));
+    } else if (hasExtension(name, "exr")) {
+        return std::unique_ptr<RGBSpectrum []>(_readImageEXR(name, &resolution->x, &resolution->y));
     }
     // 暂时支持png，jpg，tga
     return std::unique_ptr<RGBSpectrum []>(_readImage(name, &resolution->x, &resolution->y));
@@ -124,6 +203,10 @@ void writeImage(const std::string &name,
         stbi_write_jpg(name.c_str(), resolution.x, resolution.y, 3, rgb8.get(), 100);
     } else if (hasExtension(name, "tga")) {
         stbi_write_tga(name.c_str(), resolution.x, resolution.y, 3, rgb8.get());
+    } else if (hasExtension(name, "exr")) {
+//        _writeImageEXR(name, rgb, resolution.x, resolution.y, totalResolution.x,
+//        totalResolution.y, outputBounds.pMin.x,
+//        outputBounds.pMin.y);
     }
 }
 

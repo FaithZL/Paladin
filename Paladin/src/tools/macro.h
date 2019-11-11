@@ -29,14 +29,14 @@
 #define PALADIN_BEGIN namespace paladin {
 #define PALADIN_END }
 
-#define DCHECK(args) assert(args)
-#define CHECK_OP(op, a, b) DCHECK((a) op (b))
-#define CHECK_NE(a, b) DCHECK((a) != (b))
-#define CHECK_LE(a, b) DCHECK((a) <= (b))
-#define CHECK_LT(a, b) DCHECK((a) < (b))
-#define CHECK_GE(a, b) DCHECK((a) >= (b))
-#define CHECK_GT(a, b) DCHECK((a) > (b))
-#define CHECK_EQ(a, b) CHECK_OP(==, (a), (b))
+//#define DCHECK(args) assert(args)
+//#define CHECK_OP(op, a, b) DCHECK((a) op (b))
+//#define CHECK_NE(a, b) DCHECK((a) != (b))
+//#define CHECK_LE(a, b) DCHECK((a) <= (b))
+//#define CHECK_LT(a, b) DCHECK((a) < (b))
+//#define CHECK_GE(a, b) DCHECK((a) >= (b))
+//#define CHECK_GT(a, b) DCHECK((a) > (b))
+//#define CHECK_EQ(a, b) CHECK_OP(==, (a), (b))
 
 #ifdef FLOAT_AS_DOUBLE
     typedef double Float;

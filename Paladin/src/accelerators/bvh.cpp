@@ -37,7 +37,7 @@ inline uint32_t LeftShift3(uint32_t x) {
 }
 
 AABB3f BVHAccel::worldBound() const {
-    return AABB3f();
+    return _nodes ? _nodes[0].bounds : AABB3f();
 }
 
 bool BVHAccel::intersect(const paladin::Ray &ray, paladin::SurfaceInteraction *isect) const {

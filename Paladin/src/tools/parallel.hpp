@@ -210,7 +210,7 @@ inline int numSystemCores() {
 }
 
 inline int maxThreadIndex() {
-    return 1;
+    return numSystemCores();
 }
 
 void parallelInit();

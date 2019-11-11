@@ -19,7 +19,7 @@ public:
     DistantLight(const Transform &LightToWorld, const Spectrum &L,
                  const Vector3f &w);
     
-    virtual void Preprocess(const Scene &scene) {
+    virtual void preprocess(const Scene &scene) {
         scene.worldBound().boundingSphere(&_worldCenter, &_worldRadius);
     }
     
