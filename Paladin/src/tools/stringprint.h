@@ -6,8 +6,8 @@
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#ifndef stringprint_hpp
-#define stringprint_hpp
+#ifndef stringprint_h
+#define stringprint_h
 
 inline void stringPrintfRecursive(std::string *s, const char *fmt) {
     const char *c = fmt;

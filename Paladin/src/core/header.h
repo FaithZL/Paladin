@@ -24,6 +24,8 @@
 #include <glog/logging.h>
 #include "ext/json/CJsonObject.hpp"
 
+typedef void * (*createObject)(const neb::CJsonObject &);
+
 #ifdef __GNUC__
     //fix 'numeric_limits' is not a member of 'std' for linux
     #include <limits>
@@ -57,9 +59,8 @@
     #include <cctype>
 #endif
 
-#include "tools/stringprint.hpp"
+#include "tools/stringprint.h"
 #include "tools/macro.h"
-
 
 PALADIN_BEGIN
 template<typename T>
@@ -123,6 +124,8 @@ class VisibilityTester;
 class Sampler;
 
 class Scene;
+
+class Integrator;
 
 class BSSRDF;
 

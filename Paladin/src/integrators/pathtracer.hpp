@@ -11,6 +11,7 @@
 
 #include "core/integrator.hpp"
 #include "math/lightdistribute.hpp"
+#include "tools/classfactory.hpp"
 
 PALADIN_BEGIN
 
@@ -266,7 +267,7 @@ private:
     std::unique_ptr<LightDistribution> _lightDistribution;
 };
 
-
+PathTracer * createPathTracer(const neb::CJsonObject &param);
 
 PALADIN_END
 

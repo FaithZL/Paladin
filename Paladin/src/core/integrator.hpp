@@ -17,6 +17,7 @@
 #include "bxdf.hpp"
 #include "sampler.hpp"
 #include "material.hpp"
+#include "tools/serializable.h"
 
 PALADIN_BEGIN
 
@@ -202,7 +203,7 @@ PALADIN_BEGIN
  * http://www.pbr-book.org/3ed-2018/Monte_Carlo_Integration/Importance_Sampling.html#MultipleImportanceSampling
  * 
  */
-class Integrator {
+class Integrator : public Serializable {
     
 public:
     virtual ~Integrator() {

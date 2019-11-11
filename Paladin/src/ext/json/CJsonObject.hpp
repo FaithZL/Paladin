@@ -39,6 +39,7 @@ public:     // method of ordinary json object or json array
     CJsonObject(const std::string& strJson);
     CJsonObject(const CJsonObject* pJsonObject);
     CJsonObject(const CJsonObject& oJsonObject);
+    
     virtual ~CJsonObject();
 
     CJsonObject& operator=(const CJsonObject& oJsonObject);
@@ -70,6 +71,17 @@ public:     // method of ordinary json object
     bool Get(const std::string& strKey, bool& bValue) const;
     bool Get(const std::string& strKey, float& fValue) const;
     bool Get(const std::string& strKey, double& dValue) const;
+    
+    template <typename T, typename U>
+    T getValue(const U &keyOrIdx, T defaultValue) const {
+        T temp = defaultValue;
+        bool ret = Get(keyOrIdx, temp);
+        if (ret) {
+            return temp;
+        }
+        return defaultValue;
+    }
+    
     bool IsNull(const std::string& strKey) const;
     bool Add(const std::string& strKey, const CJsonObject& oJsonObject);
     bool Add(const std::string& strKey, const std::string& strValue);
@@ -151,11 +163,6 @@ private:
     std::map<std::string, CJsonObject*> m_mapJsonObjectRef;
 };
 
-}
-
-inline std::ostream &operator<<(std::ostream &os, const neb::CJsonObject &f) {
-    os << f.ToString();
-    return os;
 }
 
 #endif /* CJSONHELPER_HPP_ */

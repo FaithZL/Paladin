@@ -121,4 +121,11 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
     return L;
 }
 
+PathTracer * createPathTracer(const neb::CJsonObject &param) {
+    std::cout << "pathtracer iiiii" << std::endl;
+    return nullptr;
+}
+
+REGISTER("pathtracer", createPathTracer);
+
 PALADIN_END

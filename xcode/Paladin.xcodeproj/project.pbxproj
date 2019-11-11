@@ -354,6 +354,7 @@
 		F63983E623791A12004E15FA /* CJsonObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63983E3237919D8004E15FA /* CJsonObject.cpp */; };
 		F63983E723791A12004E15FA /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = F63983E4237919D8004E15FA /* cJSON.c */; };
 		F63983EC2379226E004E15FA /* sceneparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63983EA2379226D004E15FA /* sceneparser.cpp */; };
+		F6E231E523797D0500B68F58 /* classfactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6E231E323797D0500B68F58 /* classfactory.cpp */; };
 		F70F9C7884EF48F182485ACC /* ImfConvert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE1E927D1C17402495DF1687 /* ImfConvert.cpp */; };
 		F98FDFD25A234A0F8D9DD088 /* ImfLineOrderAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F8366FEBB4966A40A21CD /* ImfLineOrderAttribute.cpp */; };
 		FA6D289600F94B6B9A27EF9C /* ImfTileDescriptionAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13518B783DA74A0EB5326AB0 /* ImfTileDescriptionAttribute.cpp */; };
@@ -1069,7 +1070,7 @@
 		9CC4AE56A9394B24881EDB50 /* lvm.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lvm.c; path = third/lua53/lua/lvm.c; sourceTree = SOURCE_ROOT; };
 		9D8D8B9D0BE24737A5918794 /* lstring.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lstring.c; path = third/lua53/lua/lstring.c; sourceTree = SOURCE_ROOT; };
 		A02C30C823A04A8CADBF909E /* parallel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = parallel.cpp; path = src/tools/parallel.cpp; sourceTree = SOURCE_ROOT; };
-		A0B6B38E085F4663901EA44B /* stringprint.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = stringprint.hpp; path = src/tools/stringprint.hpp; sourceTree = SOURCE_ROOT; };
+		A0B6B38E085F4663901EA44B /* stringprint.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = stringprint.h; path = src/tools/stringprint.h; sourceTree = SOURCE_ROOT; };
 		A0C75DF21AE24A24A2493E00 /* parallel.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = parallel.hpp; path = src/tools/parallel.hpp; sourceTree = SOURCE_ROOT; };
 		A0F7A7E55AF040BF8C856C19 /* gaussion.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = gaussion.h; path = src/filters/gaussion.h; sourceTree = SOURCE_ROOT; };
 		A11D1BF5DD5C4F7CAF9DBB58 /* stb_include.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_include.h; path = third/stblib/stb/stb_include.h; sourceTree = SOURCE_ROOT; };
@@ -1132,7 +1133,7 @@
 		C348BB53EE69423D9506AFD2 /* sampler.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = sampler.cpp; path = src/core/sampler.cpp; sourceTree = SOURCE_ROOT; };
 		C397F6967E134FC3953C3B0A /* quaternion.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = quaternion.hpp; path = src/math/quaternion.hpp; sourceTree = SOURCE_ROOT; };
 		C40F910A774A46CA84E20969 /* shape.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = shape.hpp; path = src/core/shape.hpp; sourceTree = SOURCE_ROOT; };
-		C4A5E82143704AB5B5EB1DC4 /* serializable.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = serializable.hpp; path = src/tools/serializable.hpp; sourceTree = SOURCE_ROOT; };
+		C4A5E82143704AB5B5EB1DC4 /* serializable.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = serializable.h; path = src/tools/serializable.h; sourceTree = SOURCE_ROOT; };
 		C6494BE1D21A44C49E20B7DB /* lutf8lib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lutf8lib.c; path = third/lua53/lua/lutf8lib.c; sourceTree = SOURCE_ROOT; };
 		C71C3325938B4E2194569EDD /* ImfChromaticitiesAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfChromaticitiesAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfChromaticitiesAttribute.cpp; sourceTree = SOURCE_ROOT; };
 		C7B333090DF2454F985C4058 /* light.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = light.cpp; path = src/core/light.cpp; sourceTree = SOURCE_ROOT; };
@@ -1222,6 +1223,8 @@
 		F63983ED23792D4A004E15FA /* transformcache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = transformcache.h; path = src/parser/transformcache.h; sourceTree = SOURCE_ROOT; };
 		F641677B6FF641ADA7C4DB41 /* ImfCRgbaFile.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfCRgbaFile.cpp; path = third/openexr/OpenEXR/IlmImf/ImfCRgbaFile.cpp; sourceTree = SOURCE_ROOT; };
 		F6D0613144E44DCABDBF89B9 /* ltable.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ltable.c; path = third/lua53/lua/ltable.c; sourceTree = SOURCE_ROOT; };
+		F6E231E323797D0500B68F58 /* classfactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = classfactory.cpp; path = src/tools/classfactory.cpp; sourceTree = "<group>"; };
+		F6E231E423797D0500B68F58 /* classfactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = classfactory.hpp; path = src/tools/classfactory.hpp; sourceTree = "<group>"; };
 		F7CE0164B98B4E53BF128557 /* stb_sprintf.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_sprintf.h; path = third/stblib/stb/stb_sprintf.h; sourceTree = SOURCE_ROOT; };
 		F8847D1410524F258FC9D1B6 /* stb_rect_pack.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_rect_pack.h; path = third/stblib/stb/stb_rect_pack.h; sourceTree = SOURCE_ROOT; };
 		F95091A504D2485F9DC11523 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = third/glog/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
@@ -1720,8 +1723,10 @@
 				F1B3FAF4C3D442F1AB6A48D8 /* model.h */,
 				A02C30C823A04A8CADBF909E /* parallel.cpp */,
 				A0C75DF21AE24A24A2493E00 /* parallel.hpp */,
-				C4A5E82143704AB5B5EB1DC4 /* serializable.hpp */,
-				A0B6B38E085F4663901EA44B /* stringprint.hpp */,
+				C4A5E82143704AB5B5EB1DC4 /* serializable.h */,
+				A0B6B38E085F4663901EA44B /* stringprint.h */,
+				F6E231E323797D0500B68F58 /* classfactory.cpp */,
+				F6E231E423797D0500B68F58 /* classfactory.hpp */,
 			);
 			name = tools;
 			sourceTree = "<group>";
@@ -3131,6 +3136,7 @@
 				DC824E68AEC149E2B95301D1 /* light.cpp in Sources */,
 				48D3D3F5393E4B32B971EBCF /* material.cpp in Sources */,
 				72F986DB37824F589015B26F /* medium.cpp in Sources */,
+				F6E231E523797D0500B68F58 /* classfactory.cpp in Sources */,
 				A3124FE394644361A59CE972 /* microfacet.cpp in Sources */,
 				5B719F0F36B24788A8ECB104 /* paladin.cpp in Sources */,
 				2E578A4C1F5B40F7A5CBE21E /* primitive.cpp in Sources */,
