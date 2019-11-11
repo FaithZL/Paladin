@@ -9,7 +9,6 @@
 #ifndef transform_hpp
 #define transform_hpp
 
-#include "core/paladin.hpp"
 #include "core/interaction.hpp"
 PALADIN_BEGIN
 

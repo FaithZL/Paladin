@@ -110,15 +110,6 @@ private:
     MemoryArena arena;
 };
 
-inline void testCache() {
-    TransformCache tc;
-    
-    auto t1 = Transform::scale(1, 2, 1);
-    auto t2 = Transform::scale(1, 2, 1);
-    Transform * t3 = tc.Lookup(t1);
-    tc.Lookup(t2);
-    COUT << *t3 << std::endl;
-}
 
 PALADIN_END
 

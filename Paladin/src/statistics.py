@@ -11,7 +11,7 @@ inCom = False
 
 for root,dirs,files in os.walk(os.getcwd()):
 	for file in files:
-		if "alltest" in root:
+		if "alltest" in root or "ext" in root:
 			continue
 		fn = os.path.join(root,file)
 		if fn.endswith(".py"):

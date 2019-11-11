@@ -1,0 +1,58 @@
+{
+	"lights" : [
+
+	],
+	"primitives" : [
+		{
+			"type" : "sphere",
+			"param" : {
+
+			}
+		}
+	],
+	"integrator" : {
+        "type" : "pathtracer",
+        "param" : {
+        	"maxBounce" : 5
+        }
+    },
+    "sampler" : {
+    	"type" : "stratified",
+    	"param" : {
+    		"xPixelSamples" : 2,
+    		"yPixelSamples" : 2,
+    		"jitterSamples" : true,
+    		"nSampledDimensions" : 10
+    	}
+    },
+    "camera" : {
+    	"type" : "perspective",
+    	"param" : {
+    		"shutterOpen" : 0,
+    		"shutterClose" : 1,
+    		"lensRadius" : 0,
+    		"focalDistance" : 100,
+    		"fov" : 45
+    	}
+    },
+    "film" : {
+    	"resolution" : [400, 400],
+    	"cropWindow" : null,
+    	"fileName" : "conelbox.png",
+    	"diagonal" : null,
+    	"scale" : 1
+    },
+    "filter" : {
+    	"type" : "box",
+    	"param" : {
+    		"radius" : [2,2]
+    	}
+    },
+    "accelerator" : {
+    	"type" : "bvh",
+    	"param" : {
+    		"maxPrimsInNode" : 1,
+    		"splitMethod" : "SAH"
+    	}
+    }
+}

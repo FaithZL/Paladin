@@ -8,9 +8,10 @@
 #ifndef jsontest_h
 #define jsontest_h
 
-#include "ext/json/CJsonObject.hpp"
+
 #include "core/header.h"
 
+PALADIN_BEGIN
 
 void testjson() {
 //    FILE * f = open(
@@ -23,7 +24,10 @@ void testjson() {
 //    std::cout << str;
     
     neb::CJsonObject j(str);
-    COUT << j["bsdfs"][0];
+    neb::CJsonObject j2;
+
 }
+
+PALADIN_END
 
 #endif /* jsontest_h */
