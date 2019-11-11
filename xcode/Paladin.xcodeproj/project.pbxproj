@@ -353,6 +353,8 @@
 		F4F9AFDC204747338C91C720 /* linit.c in Sources */ = {isa = PBXBuildFile; fileRef = BDE49B0E72704ADDAB013CE8 /* linit.c */; };
 		F5612AEBBE0C44BFA39EC83E /* ImfInputPart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8D2ED2B582D64F51B4FF0FFC /* ImfInputPart.cpp */; };
 		F5BC44147DCD4C5FB184D17E /* ImfOutputPart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B7AFF225EDF2443F914BE22D /* ImfOutputPart.cpp */; };
+		F63983E623791A12004E15FA /* CJsonObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63983E3237919D8004E15FA /* CJsonObject.cpp */; };
+		F63983E723791A12004E15FA /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = F63983E4237919D8004E15FA /* cJSON.c */; };
 		F70F9C7884EF48F182485ACC /* ImfConvert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE1E927D1C17402495DF1687 /* ImfConvert.cpp */; };
 		F98FDFD25A234A0F8D9DD088 /* ImfLineOrderAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F8366FEBB4966A40A21CD /* ImfLineOrderAttribute.cpp */; };
 		FA6D289600F94B6B9A27EF9C /* ImfTileDescriptionAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13518B783DA74A0EB5326AB0 /* ImfTileDescriptionAttribute.cpp */; };
@@ -1214,6 +1216,11 @@
 		F4CC7E55569C4411892E5439 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = third/glog/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
 		F5362CCC0BE34F16819D9B29 /* model.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = model.h; path = src/ext/model.h; sourceTree = SOURCE_ROOT; };
 		F58DDF6FBCCE466CA26FA10D /* lzio.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lzio.c; path = third/lua53/lua/lzio.c; sourceTree = SOURCE_ROOT; };
+		F63983DC23790D1F004E15FA /* jsontest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = jsontest.h; path = src/alltest/jsontest.h; sourceTree = "<group>"; };
+		F63983E2237919D8004E15FA /* cJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cJSON.h; sourceTree = "<group>"; };
+		F63983E3237919D8004E15FA /* CJsonObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CJsonObject.cpp; sourceTree = "<group>"; };
+		F63983E4237919D8004E15FA /* cJSON.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cJSON.c; sourceTree = "<group>"; };
+		F63983E5237919D8004E15FA /* CJsonObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CJsonObject.hpp; sourceTree = "<group>"; };
 		F641677B6FF641ADA7C4DB41 /* ImfCRgbaFile.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfCRgbaFile.cpp; path = third/openexr/OpenEXR/IlmImf/ImfCRgbaFile.cpp; sourceTree = SOURCE_ROOT; };
 		F6D0613144E44DCABDBF89B9 /* ltable.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ltable.c; path = third/lua53/lua/ltable.c; sourceTree = SOURCE_ROOT; };
 		F7CE0164B98B4E53BF128557 /* stb_sprintf.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_sprintf.h; path = third/stblib/stb/stb_sprintf.h; sourceTree = SOURCE_ROOT; };
@@ -1574,6 +1581,7 @@
 		705ED833F69F48D3A3E25D83 /* ext */ = {
 			isa = PBXGroup;
 			children = (
+				F63983E1237919D8004E15FA /* json */,
 				D7B6A487F04747E8B49770C1 /* luaparser.cpp */,
 				8DDA3C9C9A9049FB8BFA369C /* luaparser.hpp */,
 				F5362CCC0BE34F16819D9B29 /* model.h */,
@@ -1731,6 +1739,7 @@
 				416D31589427471190463275 /* test_openexr.hpp */,
 				4DB717E72652455F98F9B4A3 /* test_rapidxml.hpp */,
 				401F123DBC2741C2A1B3F4F5 /* testrender.h */,
+				F63983DC23790D1F004E15FA /* jsontest.h */,
 			);
 			name = alltest;
 			sourceTree = "<group>";
@@ -2263,6 +2272,18 @@
 				7E2A2ABF7BC64BC5A458E37B /* b44ExpLogTable */,
 			);
 			name = openexr;
+			sourceTree = "<group>";
+		};
+		F63983E1237919D8004E15FA /* json */ = {
+			isa = PBXGroup;
+			children = (
+				F63983E2237919D8004E15FA /* cJSON.h */,
+				F63983E3237919D8004E15FA /* CJsonObject.cpp */,
+				F63983E4237919D8004E15FA /* cJSON.c */,
+				F63983E5237919D8004E15FA /* CJsonObject.hpp */,
+			);
+			name = json;
+			path = src/ext/json;
 			sourceTree = "<group>";
 		};
 		F8CB2B3834A84BB594D109DB /* shapes */ = {
@@ -3089,6 +3110,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F63983E623791A12004E15FA /* CJsonObject.cpp in Sources */,
+				F63983E723791A12004E15FA /* cJSON.c in Sources */,
 				5A5586CA2196489BB1351B6D /* bvh.cpp in Sources */,
 				D5F03767F6B042F2BF06ACA7 /* kdtree.cpp in Sources */,
 				F47025374F80466BAAC9C8E3 /* perspective.cpp in Sources */,
