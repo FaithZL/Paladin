@@ -168,7 +168,6 @@
 		2DADF00D630B44838C97FD71 /* utilities.cc in Sources */ = {isa = PBXBuildFile; fileRef = 931BED04DEBA41B98D154D5D /* utilities.cc */; };
 		2E578A4C1F5B40F7A5CBE21E /* primitive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84502391C6194C47BDA6AE0D /* primitive.cpp */; };
 		2E9976B86F9C44899C11B1A9 /* stacktrace_unittest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6BB256E118954A79AC69520E /* stacktrace_unittest.cc */; };
-		2F60E9ABC7674E00B5D24A75 /* serializable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 415C53AE18B948FAB70BFA6B /* serializable.cpp */; };
 		34793E462D3F4487AC24E71B /* glass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17472AB4DB16402DA63495F2 /* glass.cpp */; };
 		347C3D7C533C45829A9ADEA3 /* IexBaseExc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659495FD88D44D37B990471B /* IexBaseExc.cpp */; };
 		351009ACDB444E919D529D82 /* ImfDeepTiledInputPart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18B0BFE9523D432C830C9FB5 /* ImfDeepTiledInputPart.cpp */; };
@@ -184,7 +183,6 @@
 		4031515E6870477691E05069 /* ImfCompressionAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8FE56B04418B4071A0F7BF38 /* ImfCompressionAttribute.cpp */; };
 		4092EDABEDF2494FBA6CBF01 /* ImfCompositeDeepScanLine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 551551CE6F344D649A616393 /* ImfCompositeDeepScanLine.cpp */; };
 		41D8F9B6C73844F3AC59046E /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = F58DDF6FBCCE466CA26FA10D /* lzio.c */; };
-		41DB96AAC0204B238CA510A0 /* luaparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B6A487F04747E8B49770C1 /* luaparser.cpp */; };
 		42274D8820DA49CDA4D19F05 /* liolib.c in Sources */ = {isa = PBXBuildFile; fileRef = D8DBBDA1B5B74A79BF693B25 /* liolib.c */; };
 		44C53A839393494BA4D82EE4 /* plastic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 234186476EDC4DDBAD048656 /* plastic.cpp */; };
 		45349F966E684990B515EA39 /* ImfVecAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6350695BB137404D823478D4 /* ImfVecAttribute.cpp */; };
@@ -355,6 +353,7 @@
 		F5BC44147DCD4C5FB184D17E /* ImfOutputPart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B7AFF225EDF2443F914BE22D /* ImfOutputPart.cpp */; };
 		F63983E623791A12004E15FA /* CJsonObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63983E3237919D8004E15FA /* CJsonObject.cpp */; };
 		F63983E723791A12004E15FA /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = F63983E4237919D8004E15FA /* cJSON.c */; };
+		F63983EC2379226E004E15FA /* sceneparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63983EA2379226D004E15FA /* sceneparser.cpp */; };
 		F70F9C7884EF48F182485ACC /* ImfConvert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE1E927D1C17402495DF1687 /* ImfConvert.cpp */; };
 		F98FDFD25A234A0F8D9DD088 /* ImfLineOrderAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F8366FEBB4966A40A21CD /* ImfLineOrderAttribute.cpp */; };
 		FA6D289600F94B6B9A27EF9C /* ImfTileDescriptionAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13518B783DA74A0EB5326AB0 /* ImfTileDescriptionAttribute.cpp */; };
@@ -914,7 +913,6 @@
 		402ADA3144DB40A6A49BC6C8 /* bounds.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = bounds.h; path = src/math/bounds.h; sourceTree = SOURCE_ROOT; };
 		411988272FAC4A1BA7D659E3 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = third/glog/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
 		4151E14F9CC9433F93844127 /* lstate.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lstate.h; path = third/lua53/lua/lstate.h; sourceTree = SOURCE_ROOT; };
-		415C53AE18B948FAB70BFA6B /* serializable.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = serializable.cpp; path = src/tools/serializable.cpp; sourceTree = SOURCE_ROOT; };
 		416D31589427471190463275 /* test_openexr.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = test_openexr.hpp; path = src/alltest/test_openexr.hpp; sourceTree = SOURCE_ROOT; };
 		42450AC4ADBB4B15AA673D26 /* ImfZipCompressor.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfZipCompressor.cpp; path = third/openexr/OpenEXR/IlmImf/ImfZipCompressor.cpp; sourceTree = SOURCE_ROOT; };
 		431A9EC8D0E54B0BB7BA23B3 /* ImfGenericInputFile.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfGenericInputFile.cpp; path = third/openexr/OpenEXR/IlmImf/ImfGenericInputFile.cpp; sourceTree = SOURCE_ROOT; };
@@ -1038,7 +1036,6 @@
 		8D00620D67E74779886A2458 /* projection.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = projection.cpp; path = src/lights/projection.cpp; sourceTree = SOURCE_ROOT; };
 		8D2ED2B582D64F51B4FF0FFC /* ImfInputPart.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfInputPart.cpp; path = third/openexr/OpenEXR/IlmImf/ImfInputPart.cpp; sourceTree = SOURCE_ROOT; };
 		8D9D7E14F4224D38B3000853 /* ImfChannelListAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfChannelListAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfChannelListAttribute.cpp; sourceTree = SOURCE_ROOT; };
-		8DDA3C9C9A9049FB8BFA369C /* luaparser.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = luaparser.hpp; path = src/ext/luaparser.hpp; sourceTree = SOURCE_ROOT; };
 		8E646E87317A498DB72FAA15 /* ImathShear.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImathShear.cpp; path = third/openexr/IlmBase/Imath/ImathShear.cpp; sourceTree = SOURCE_ROOT; };
 		8E8EDB7A100F410983166A6F /* ImfFloatVectorAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfFloatVectorAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfFloatVectorAttribute.cpp; sourceTree = SOURCE_ROOT; };
 		8F1A71BA0BA14FEAB9E59543 /* dwaLookups */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = dwaLookups; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1167,7 +1164,6 @@
 		D6B3715B85864477A68D442D /* ltests.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ltests.c; path = third/lua53/lua/ltests.c; sourceTree = SOURCE_ROOT; };
 		D725C93492AE45BA9594FF84 /* cone.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = cone.cpp; path = src/shapes/cone.cpp; sourceTree = SOURCE_ROOT; };
 		D76DAF0449704152BF03548E /* ImfTiledOutputPart.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfTiledOutputPart.cpp; path = third/openexr/OpenEXR/IlmImf/ImfTiledOutputPart.cpp; sourceTree = SOURCE_ROOT; };
-		D7B6A487F04747E8B49770C1 /* luaparser.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = luaparser.cpp; path = src/ext/luaparser.cpp; sourceTree = SOURCE_ROOT; };
 		D801C5A439FF4FD19F88B468 /* triangle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = triangle.cpp; path = src/shapes/triangle.cpp; sourceTree = SOURCE_ROOT; };
 		D81DB899B3D14B37AA529E49 /* b44ExpLogTable.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = b44ExpLogTable.cpp; path = third/openexr/OpenEXR/IlmImf/b44ExpLogTable.cpp; sourceTree = SOURCE_ROOT; };
 		D840878923FE48A9B238182B /* ImfDeepTiledInputFile.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfDeepTiledInputFile.cpp; path = third/openexr/OpenEXR/IlmImf/ImfDeepTiledInputFile.cpp; sourceTree = SOURCE_ROOT; };
@@ -1214,13 +1210,16 @@
 		F364C4D09C3747FC8E2D816D /* ImfTileOffsets.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfTileOffsets.cpp; path = third/openexr/OpenEXR/IlmImf/ImfTileOffsets.cpp; sourceTree = SOURCE_ROOT; };
 		F3C612DF34FF412680E559F0 /* mirror.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = mirror.cpp; path = src/materials/mirror.cpp; sourceTree = SOURCE_ROOT; };
 		F4CC7E55569C4411892E5439 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = third/glog/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
-		F5362CCC0BE34F16819D9B29 /* model.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = model.h; path = src/ext/model.h; sourceTree = SOURCE_ROOT; };
 		F58DDF6FBCCE466CA26FA10D /* lzio.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lzio.c; path = third/lua53/lua/lzio.c; sourceTree = SOURCE_ROOT; };
 		F63983DC23790D1F004E15FA /* jsontest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = jsontest.h; path = src/alltest/jsontest.h; sourceTree = "<group>"; };
 		F63983E2237919D8004E15FA /* cJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cJSON.h; sourceTree = "<group>"; };
 		F63983E3237919D8004E15FA /* CJsonObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CJsonObject.cpp; sourceTree = "<group>"; };
 		F63983E4237919D8004E15FA /* cJSON.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cJSON.c; sourceTree = "<group>"; };
 		F63983E5237919D8004E15FA /* CJsonObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CJsonObject.hpp; sourceTree = "<group>"; };
+		F63983E923792218004E15FA /* renderoption.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = renderoption.h; path = src/parser/renderoption.h; sourceTree = SOURCE_ROOT; };
+		F63983EA2379226D004E15FA /* sceneparser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sceneparser.cpp; path = src/parser/sceneparser.cpp; sourceTree = SOURCE_ROOT; };
+		F63983EB2379226D004E15FA /* sceneparser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = sceneparser.hpp; path = src/parser/sceneparser.hpp; sourceTree = SOURCE_ROOT; };
+		F63983ED23792D4A004E15FA /* transformcache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = transformcache.h; path = src/parser/transformcache.h; sourceTree = SOURCE_ROOT; };
 		F641677B6FF641ADA7C4DB41 /* ImfCRgbaFile.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfCRgbaFile.cpp; path = third/openexr/OpenEXR/IlmImf/ImfCRgbaFile.cpp; sourceTree = SOURCE_ROOT; };
 		F6D0613144E44DCABDBF89B9 /* ltable.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ltable.c; path = third/lua53/lua/ltable.c; sourceTree = SOURCE_ROOT; };
 		F7CE0164B98B4E53BF128557 /* stb_sprintf.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_sprintf.h; path = third/stblib/stb/stb_sprintf.h; sourceTree = SOURCE_ROOT; };
@@ -1387,6 +1386,7 @@
 		44B1D59A40FF4653BDB53643 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				F63983E823792175004E15FA /* parser */,
 				B4A63B2D703A46B5995D191A /* accelerators */,
 				9701D04D9CB7483BA0F1F525 /* alltest */,
 				E822505496AC416C9042B331 /* cameras */,
@@ -1582,9 +1582,6 @@
 			isa = PBXGroup;
 			children = (
 				F63983E1237919D8004E15FA /* json */,
-				D7B6A487F04747E8B49770C1 /* luaparser.cpp */,
-				8DDA3C9C9A9049FB8BFA369C /* luaparser.hpp */,
-				F5362CCC0BE34F16819D9B29 /* model.h */,
 			);
 			name = ext;
 			sourceTree = "<group>";
@@ -1723,7 +1720,6 @@
 				F1B3FAF4C3D442F1AB6A48D8 /* model.h */,
 				A02C30C823A04A8CADBF909E /* parallel.cpp */,
 				A0C75DF21AE24A24A2493E00 /* parallel.hpp */,
-				415C53AE18B948FAB70BFA6B /* serializable.cpp */,
 				C4A5E82143704AB5B5EB1DC4 /* serializable.hpp */,
 				A0B6B38E085F4663901EA44B /* stringprint.hpp */,
 			);
@@ -2284,6 +2280,17 @@
 			);
 			name = json;
 			path = src/ext/json;
+			sourceTree = "<group>";
+		};
+		F63983E823792175004E15FA /* parser */ = {
+			isa = PBXGroup;
+			children = (
+				F63983E923792218004E15FA /* renderoption.h */,
+				F63983EA2379226D004E15FA /* sceneparser.cpp */,
+				F63983EB2379226D004E15FA /* sceneparser.hpp */,
+				F63983ED23792D4A004E15FA /* transformcache.h */,
+			);
+			path = parser;
 			sourceTree = "<group>";
 		};
 		F8CB2B3834A84BB594D109DB /* shapes */ = {
@@ -3127,12 +3134,12 @@
 				A3124FE394644361A59CE972 /* microfacet.cpp in Sources */,
 				5B719F0F36B24788A8ECB104 /* paladin.cpp in Sources */,
 				2E578A4C1F5B40F7A5CBE21E /* primitive.cpp in Sources */,
+				F63983EC2379226E004E15FA /* sceneparser.cpp in Sources */,
 				E524AD29E5904553A8B76108 /* sampler.cpp in Sources */,
 				396DA8F69DE64D199E5389E9 /* scene.cpp in Sources */,
 				A83B1C8426CD45009AACAC19 /* shape.cpp in Sources */,
 				266D3D95990E4FE58D99AFCC /* spectrum.cpp in Sources */,
 				BF42F9B4CFBC4CFA838A4568 /* texture.cpp in Sources */,
-				41DB96AAC0204B238CA510A0 /* luaparser.cpp in Sources */,
 				DCDF39D112A44F0B94E3D962 /* directlighting.cpp in Sources */,
 				CBDF20C7969B4890B4A65893 /* pathtracer.cpp in Sources */,
 				7CDF96F0E90E425A99756DF9 /* volpath.cpp in Sources */,
@@ -3171,7 +3178,6 @@
 				7CE8F87524334846846F9A33 /* fileutil.cpp in Sources */,
 				731289819DDC42869EE02D02 /* memory.cpp in Sources */,
 				98A96A4D011A44B1807163B9 /* parallel.cpp in Sources */,
-				2F60E9ABC7674E00B5D24A75 /* serializable.cpp in Sources */,
 				EA7ECDD590674820B4A1B1EE /* stb_vorbis.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

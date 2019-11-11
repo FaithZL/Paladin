@@ -487,6 +487,11 @@ public:
         ret.pMax = maxPoint;
         return ret;
     }
+    
+    friend std::ostream &operator<<(std::ostream &os, const Transform &t) {
+        os << "t=" << t._mat << ", inv=" << t._matInv;
+        return os;
+    }
 
     Transform operator * (const Transform &other) const;
 

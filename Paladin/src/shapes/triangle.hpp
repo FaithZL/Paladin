@@ -13,7 +13,6 @@
 #include "core/shape.hpp"
 #include "core/texture.hpp"
 #include <vector>
-#include "ext/model.h"
 
 PALADIN_BEGIN
 

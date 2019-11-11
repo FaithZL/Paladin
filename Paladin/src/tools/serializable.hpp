@@ -13,8 +13,7 @@
 class Serializable {
     
 public:
-    virtual void fromXML() = 0;
-    
+    virtual neb::CJsonObject toJson() = 0;
 };
 
 #endif /* serializable_hpp */
