@@ -25,6 +25,12 @@ public:
         stringstream buffer;
         buffer << fst.rdbuf();
         string str = buffer.str();
+        neb::CJsonObject json(str);
+        auto errstr = json.GetErrMsg();
+        if (errstr != "") {
+            COUT << errstr;
+            DCHECK(false);
+        }
         parse(str);
     }
     
@@ -36,13 +42,19 @@ public:
         return _renderOption;
     }
     
-    void parse(const neb::CJsonObject &jsonObj) {
-        auto errstr = jsonObj.GetErrMsg();
-        if (errstr != "") {
-            COUT << errstr;
-            DCHECK(false);
-        }
-    }
+    void parse(const neb::CJsonObject &jsonObj);
+    
+    void parseSampler(const neb::CJsonObject &jsonObj);
+    
+    void parseCamera(const neb::CJsonObject &jsonObj);
+    
+    void parseIntegrator(const neb::CJsonObject &jsonObj);
+    
+    void parseFilter(const neb::CJsonObject &jsonObj);
+    
+    void parseAccelerator(const neb::CJsonObject &jsonObj);
+    
+    void parseFilm(const neb::CJsonObject &jsonObj);
     
 private:
     

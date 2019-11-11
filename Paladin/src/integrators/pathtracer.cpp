@@ -8,17 +8,29 @@
 
 #include "pathtracer.hpp"
 #include "core/camera.hpp"
+#include <stdarg.h>
 
 PALADIN_BEGIN
 
 PathTracer::PathTracer(int maxDepth, std::shared_ptr<const Camera> camera,
                        std::shared_ptr<Sampler> sampler,
                        const AABB2i &pixelBounds, Float rrThreshold /* = 1*/,
-                       const std::string &lightSampleStrategy /*= "Power"*/)
+                       const std::string &lightSampleStrategy /*= "power"*/)
 : MonteCarloIntegrator(camera, sampler, pixelBounds),
 _maxDepth(maxDepth),
 _rrThreshold(rrThreshold),
 _lightSampleStrategy(lightSampleStrategy) {
+    
+}
+
+PathTracer::PathTracer(int maxDepth,
+                       const AABB2i &pixelBounds,
+                       Float rrThreshold /*= 1*/,
+                       const std::string &lightSampleStrategy/*( = "power"*/)
+: MonteCarloIntegrator(pixelBounds),
+_maxDepth(maxDepth),
+_rrThreshold(rrThreshold),
+_lightSampleStrategy(lightSampleStrategy){
     
 }
 
@@ -121,11 +133,13 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
     return L;
 }
 
-PathTracer * createPathTracer(const neb::CJsonObject &param) {
-    std::cout << "pathtracer iiiii" << std::endl;
-    return nullptr;
+PathTracer * createPathTracer(const ParamSet &paramSet) {
+    neb::CJsonObject json = paramSet.json;
+    
 }
 
 REGISTER("pathtracer", createPathTracer);
+
+
 
 PALADIN_END

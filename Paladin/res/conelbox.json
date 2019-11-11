@@ -13,7 +13,9 @@
 	"integrator" : {
         "type" : "pathtracer",
         "param" : {
-        	"maxBounce" : 5
+        	"maxBounce" : 5,
+        	"rrThreshold" : 1,
+        	"lightSampleStrategy" : "power"
         }
     },
     "sampler" : {

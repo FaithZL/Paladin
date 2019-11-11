@@ -25,12 +25,7 @@ public:
     }
     
     void render(const std::string fileName) {
-        auto p = ClassFactory::getInstance()->getCreatorByName("pathtracer");
-//        auto f = (createObject)p;
-        neb::CJsonObject j;
-        
-        p(j);
-//        _sceneParser.loadFromJson(fileName);
+        _sceneParser.loadFromJson(fileName);
     }
     
 private:

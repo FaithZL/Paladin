@@ -12,6 +12,21 @@
 
 PALADIN_BEGIN
 
+
+struct ParamSet {
+    ParamSet(const neb::CJsonObject &j, void * p1 = nullptr, void * p2 = nullptr)
+    :json(j),
+    ext1(p1),
+    ext2(p2) {
+        
+    }
+    const neb::CJsonObject &json;
+    const void * ext1;
+    const void * ext2;
+};
+
+typedef void * (*createObject)(const ParamSet &param);
+
 class ClassFactory {
     
 public:
@@ -53,6 +68,7 @@ public:
         ClassFactory::getInstance()->registClass(className, creator);
     }
 };
+
 
 #define REGISTER(className, creatorName)                            \
 RegisterAction g_Register##creatorName(className,(createObject)creatorName);
