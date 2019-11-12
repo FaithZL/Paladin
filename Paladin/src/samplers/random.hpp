@@ -28,6 +28,10 @@ public:
     
     virtual Point2f get2D();
     
+    virtual neb::CJsonObject toJson() const {
+        
+    }
+    
     virtual std::unique_ptr<Sampler> clone(int seed);
     
 private:

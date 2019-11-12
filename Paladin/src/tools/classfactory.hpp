@@ -9,23 +9,12 @@
 #define classfactory_hpp
 
 #include "core/header.h"
+#include "tools/serializable.h"
+#include <stdarg.h>
 
 PALADIN_BEGIN
 
-
-struct ParamSet {
-    ParamSet(const neb::CJsonObject &j, void * p1 = nullptr, void * p2 = nullptr)
-    :json(j),
-    ext1(p1),
-    ext2(p2) {
-        
-    }
-    const neb::CJsonObject &json;
-    const void * ext1;
-    const void * ext2;
-};
-
-typedef void * (*createObject)(const ParamSet &param);
+typedef void * (*createObject)(const neb::CJsonObject &, std::initializer_list<Serializable *>);
 
 class ClassFactory {
     
@@ -59,9 +48,6 @@ private:
 class RegisterAction {
     
 public:
-    RegisterAction() {
-        
-    }
     
     RegisterAction(const std::string &className, createObject creator) {
         COUT << "haha" << std::endl;
@@ -73,6 +59,7 @@ public:
 #define REGISTER(className, creatorName)                            \
 RegisterAction g_Register##creatorName(className,(createObject)creatorName);
 
+#define GET_CREATOR(className) ClassFactory::getInstance()->getCreatorByName(className);
 
 PALADIN_END
 

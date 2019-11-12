@@ -79,6 +79,10 @@ public:
     
     virtual std::unique_ptr<Sampler> clone(int seed);
     
+    virtual neb::CJsonObject toJson() const {
+        
+    }
+    
 private:
     
     // 质数进制的随机重排表

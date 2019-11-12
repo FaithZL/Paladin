@@ -6,11 +6,12 @@
 //
 
 #include "sceneparser.hpp"
-
+#include "tools/classfactory.hpp"
 PALADIN_BEGIN
 
 void SceneParser::parse(const neb::CJsonObject &jsonObj) {
-    
+    auto p = GET_CREATOR("pathtracer");
+    p(jsonObj,{});
 }
 
 void SceneParser::parseSampler(const neb::CJsonObject &jsonObj) {

@@ -15,9 +15,7 @@ PALADIN_BEGIN
 class Serializable {
     
 public:
-    virtual neb::CJsonObject toJson() {
-        return neb::CJsonObject();
-    }
+    virtual neb::CJsonObject toJson() const = 0;
 };
 
 PALADIN_END

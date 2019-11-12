@@ -11,6 +11,7 @@
 
 #include "core/header.h"
 #include "math/rng.h"
+#include "tools/serializable.h"
 PALADIN_BEGIN
 
 /**
@@ -35,7 +36,7 @@ PALADIN_BEGIN
  * 目前在初学阶段，暂时只实现随机采样，分层采样，霍尔顿采样
  *
  */
-class Sampler {
+class Sampler : public Serializable {
 
 public:
 

@@ -256,6 +256,10 @@ public:
 	 * @param sampler 采样器
 	 */
 	virtual void preprocess(const Scene &scene, Sampler &sampler);
+    
+    virtual neb::CJsonObject toJson() const {
+        
+    }
 	
 	
 	virtual Spectrum Li(const RayDifferential &ray, const Scene &scene,
@@ -272,7 +276,7 @@ private:
     std::unique_ptr<LightDistribution> _lightDistribution;
 };
 
-PathTracer * createPathTracer(const ParamSet &paramSet);
+PathTracer * createPathTracer(const neb::CJsonObject &param, std::initializer_list<Serializable*> ls);
 
 PALADIN_END
 

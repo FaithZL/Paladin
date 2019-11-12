@@ -37,6 +37,10 @@ public:
         
     }
     
+    virtual neb::CJsonObject toJson() const {
+        
+    }
+    
     virtual void startPixel(const Point2i &);
     
     virtual std::unique_ptr<Sampler> clone(int seed);
