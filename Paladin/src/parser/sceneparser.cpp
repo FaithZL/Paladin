@@ -7,34 +7,43 @@
 
 #include "sceneparser.hpp"
 #include "tools/classfactory.hpp"
+#include "core/film.hpp"
+
 PALADIN_BEGIN
 
-void SceneParser::parse(const neb::CJsonObject &jsonObj) {
-    auto p = GET_CREATOR("pathtracer");
-    p(jsonObj,{});
-}
+using namespace neb;
+USING_STD;
 
-void SceneParser::parseSampler(const neb::CJsonObject &jsonObj) {
+void SceneParser::parse(const neb::CJsonObject &param) {
+    CJsonObject filmParam;
+    filmParam = param.getValue("film", filmParam);
+    Film * film = parseFilm(filmParam);
+    CJsonObject cameraParam;
+    cameraParam = param.getValue("camera", cameraParam);
     
 }
 
-void SceneParser::parseCamera(const neb::CJsonObject &jsonObj) {
+Sampler * SceneParser::parseSampler(const neb::CJsonObject &param) {
     
 }
 
-void SceneParser::parseIntegrator(const neb::CJsonObject &jsonObj) {
+Camera * SceneParser::parseCamera(const neb::CJsonObject &param) {
     
 }
 
-void SceneParser::parseFilter(const neb::CJsonObject &jsonObj) {
+Integrator * SceneParser::parseIntegrator(const neb::CJsonObject &param) {
     
 }
 
-void SceneParser::parseAccelerator(const neb::CJsonObject &jsonObj) {
+Filter * SceneParser::parseFilter(const neb::CJsonObject &param) {
     
 }
 
-void SceneParser::parseFilm(const neb::CJsonObject &jsonObj) {
+Aggregate * SceneParser::parseAccelerator(const neb::CJsonObject &param) {
+    
+}
+
+Film * SceneParser::parseFilm(const neb::CJsonObject &param) {
     
 }
 

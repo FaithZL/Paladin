@@ -8,12 +8,12 @@
 #ifndef sceneparser_hpp
 #define sceneparser_hpp
 
-#include "renderoption.h"
+//#include "renderoption.h"
 #include "transformcache.h"
 #include <fstream>
 PALADIN_BEGIN
 
-
+USING_STD
 
 class SceneParser {
     
@@ -38,29 +38,45 @@ public:
         return _transformCache;
     }
     
-    const RenderOption &getRenderOption() const {
-        return _renderOption;
-    }
+    void parse(const neb::CJsonObject &param);
     
-    void parse(const neb::CJsonObject &jsonObj);
+    Sampler * parseSampler(const neb::CJsonObject &param);
     
-    void parseSampler(const neb::CJsonObject &jsonObj);
+    Camera * parseCamera(const neb::CJsonObject &param);
     
-    void parseCamera(const neb::CJsonObject &jsonObj);
+    Integrator * parseIntegrator(const neb::CJsonObject &param);
     
-    void parseIntegrator(const neb::CJsonObject &jsonObj);
+    Filter * parseFilter(const neb::CJsonObject &param);
     
-    void parseFilter(const neb::CJsonObject &jsonObj);
+    Aggregate * parseAccelerator(const neb::CJsonObject &param);
     
-    void parseAccelerator(const neb::CJsonObject &jsonObj);
-    
-    void parseFilm(const neb::CJsonObject &jsonObj);
+    Film * parseFilm(const neb::CJsonObject &param);
     
 private:
     
     TransformCache _transformCache;
     
-    RenderOption _renderOption;
+    Float _transformStartTime = 0;
+    
+    Float _transformEndTime = 0;
+    
+    string _samplerName = "stratified";
+    
+    string _integratorName = "pathtracer";
+    
+    string _filterName = "box";
+    
+    string _acceleratorName = "bvh";
+    
+    string _filmName = "image.png";
+    
+    string _cameraName = "perspective";
+    
+    vector<shared_ptr<Light>> lights;
+    
+    vector<shared_ptr<Primitive>> primitives;
+    
+    shared_ptr<Transform *> cameraToWorld;
 };
 
 

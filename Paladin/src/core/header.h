@@ -121,6 +121,12 @@ class VisibilityTester;
 
 class Sampler;
 
+class Film;
+
+class Filter;
+
+class Aggregate;
+
 class Scene;
 
 class Integrator;
