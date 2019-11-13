@@ -1,13 +1,39 @@
 {
+    "transforms" :{
+        "name1" : [
+            {
+                "tpye" : "translate",
+                "param" :[0,0,0]
+            }
+        ]
+    },
 	"lights" : [
+        {
+            "type" : "pointlight",
+            "param" : {
 
+            }
+        }
 	],
+    "materials" : {
+        "metal1" : {
+            "type" : "metal",
+            "param" : {
+
+            },
+        }
+    },
 	"primitives" : [
 		{
 			"type" : "sphere",
 			"param" : {
-
-			}
+                "worldToLocal" : {
+                    "type" : "translate",
+                    "param" : [1,1,1]
+                },
+                "radius" : 0.75
+			},
+            "emission" : null
 		}
 	],
 	"integrator" : {
@@ -24,7 +50,7 @@
     		"xPixelSamples" : 2,
     		"yPixelSamples" : 2,
     		"jitterSamples" : true,
-    		"nSampledDimensions" : 10
+    		"sampledDimensions" : 10
     	}
     },
     "camera" : {
@@ -34,7 +60,8 @@
     		"shutterClose" : 1,
     		"lensRadius" : 0,
     		"focalDistance" : 100,
-    		"fov" : 45
+    		"fov" : 45,
+            "lookAt" : []
     	}
     },
     "film" : {
