@@ -40,6 +40,10 @@ void StratifiedSampler::startPixel(const Point2i &p) {
     PixelSampler::startPixel(p);
 }
 
+neb::CJsonObject StratifiedSampler::toJson() const {
+    
+}
+
 std::unique_ptr<Sampler> StratifiedSampler::clone(int seed) {
     StratifiedSampler * ret = new StratifiedSampler(*this);
     ret->_rng.setSequence(seed);

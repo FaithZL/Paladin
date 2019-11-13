@@ -190,6 +190,10 @@ Float HaltonSampler::sampleDimension(int64_t index, int dim) const {
     }
 }
 
+neb::CJsonObject HaltonSampler::toJson() const {
+    
+}
+
 std::unique_ptr<Sampler> HaltonSampler::clone(int seed) {
     return std::unique_ptr<Sampler>(new HaltonSampler(*this));
 }

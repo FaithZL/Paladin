@@ -83,11 +83,11 @@ public:     // method of ordinary json object
     }
     
     template <typename U>
-    std::string getValue(const U &keyOrIdx, char * defaultValue) const {
+    std::string getValue(const U &keyOrIdx, const char * defaultValue) const {
         std::string temp = defaultValue;
         bool ret = Get(keyOrIdx, temp);
         if (ret) {
-            return std::move(temp);
+            return temp;
         }
         return std::string(defaultValue);
     }

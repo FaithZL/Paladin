@@ -11,7 +11,7 @@
 #include "math/transform.hpp"
 #include "math/animatedtransform.hpp"
 #include "core/film.hpp"
-#include "filters/box.h"
+#include "filters/box.hpp"
 #include "cameras/perspective.hpp"
 #include "integrators/pathtracer.hpp"
 #include "samplers/stratified.hpp"

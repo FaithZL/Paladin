@@ -20,7 +20,7 @@
             "type" : "metal",
             "param" : {
 
-            },
+            }
         }
     },
 	"primitives" : [
@@ -65,11 +65,13 @@
     	}
     },
     "film" : {
-    	"resolution" : [400, 400],
-    	"cropWindow" : null,
-    	"fileName" : "conelbox.png",
-    	"diagonal" : null,
-    	"scale" : 1
+    	"param" : {
+			"resolution" : [400, 400],
+	    	"cropWindow" : null,
+	    	"fileName" : "conelbox.png",
+	    	"diagonal" : null,
+	    	"scale" : 1
+    	}
     },
     "filter" : {
     	"type" : "box",

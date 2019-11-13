@@ -1,12 +1,12 @@
 //
-//  sinc.h
+//  sinc.hpp
 //  Paladin
 //
 //  Created by SATAN_Z on 2019/9/13.
 //
 
-#ifndef sinc_h
-#define sinc_h
+#ifndef sinc_hpp
+#define sinc_hpp
 
 #include "core/filter.h"
 
@@ -62,4 +62,4 @@ private:
 
 PALADIN_END
 
-#endif /* sinc_h */
+#endif /* sinc_hpp */

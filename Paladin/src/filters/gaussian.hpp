@@ -1,12 +1,14 @@
 //
-//  gaussion.h
+//  gaussian.hpp
 //  Paladin
 //
-//  Created by SATAN_Z on 2019/9/13.
+//  Created by SATAN_Z on 2019/11/14.
 //
 
-#ifndef gaussion_h
-#define gaussion_h
+#ifndef gaussian_hpp
+#define gaussian_hpp
+
+#include <stdio.h>
 
 #include "core/filter.h"
 
@@ -23,7 +25,7 @@ PALADIN_BEGIN
  * 显然，x = r, f(x) = 0，可以看出常量c = e^(-α * r * r)
  *
  * 可以得出高斯滤波函数为
- * 
+ *
  * f(x) = g(x) - c = e^(-α * x * x) - e^(-α * r * r)
  * α越小，函数变化得越缓慢
  * 可以看出，当x=0时，f(x) = 1，符合我们的预期
@@ -59,6 +61,8 @@ private:
     
 };
 
+
+
 PALADIN_END
 
-#endif /* gaussion_h */
+#endif /* gaussian_hpp */

@@ -257,9 +257,7 @@ public:
 	 */
 	virtual void preprocess(const Scene &scene, Sampler &sampler);
     
-    virtual neb::CJsonObject toJson() const {
-        
-    }
+    virtual neb::CJsonObject toJson() const override;
 	
 	
 	virtual Spectrum Li(const RayDifferential &ray, const Scene &scene,
@@ -276,7 +274,9 @@ private:
     std::unique_ptr<LightDistribution> _lightDistribution;
 };
 
-PathTracer * createPathTracer(const neb::CJsonObject &param, std::initializer_list<Serializable*> ls);
+USING_STD;
+
+shared_ptr<Serializable> createPathTracer(const neb::CJsonObject &param, const initializer_list<shared_ptr<Serializable>> &ls);
 
 PALADIN_END
 

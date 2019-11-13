@@ -8,7 +8,7 @@
 
 #include "pathtracer.hpp"
 #include "core/camera.hpp"
-#include <stdarg.h>
+#include "filters/box.hpp"
 
 PALADIN_BEGIN
 
@@ -133,7 +133,13 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
     return L;
 }
 
-PathTracer * createPathTracer(const neb::CJsonObject &param, std::initializer_list<Serializable*> ls) {
+neb::CJsonObject PathTracer::toJson() const {
+    
+}
+
+USING_STD;
+
+shared_ptr<Serializable> createPathTracer(const neb::CJsonObject &param, const initializer_list<shared_ptr<Serializable>> &ls) {
     
     COUT << param.ToString();
 }

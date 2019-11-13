@@ -1,12 +1,12 @@
 //
-//  triangle.h
+//  triangle.hpp
 //  Paladin
 //
 //  Created by SATAN_Z on 2019/9/13.
 //
 
-#ifndef filters_triangle_h
-#define filters_triangle_h
+#ifndef filters_triangle_hpp
+#define filters_triangle_hpp
 
 #include "core/filter.h"
 
@@ -32,5 +32,5 @@ public:
 
 PALADIN_END
 
-#endif /* filters_triangle_h */
+#endif /* filters_triangle_hpp */
 

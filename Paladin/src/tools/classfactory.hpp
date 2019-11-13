@@ -14,7 +14,9 @@
 
 PALADIN_BEGIN
 
-typedef void * (*createObject)(const neb::CJsonObject &, std::initializer_list<Serializable *>);
+USING_STD;
+
+typedef shared_ptr<Serializable> (*createObject)(const neb::CJsonObject &, const initializer_list<shared_ptr<Serializable>> &);
 
 class ClassFactory {
     

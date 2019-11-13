@@ -1,12 +1,12 @@
 //
-//  mitchell.h
+//  mitchell.hpp
 //  Paladin
 //
 //  Created by SATAN_Z on 2019/9/13.
 //
 
-#ifndef mitchell_h
-#define mitchell_h
+#ifndef mitchell_hpp
+#define mitchell_hpp
 
 #include "core/filter.h"
 
@@ -58,4 +58,4 @@ private:
 
 PALADIN_END
 
-#endif /* mitchell_h */
+#endif /* mitchell_hpp */

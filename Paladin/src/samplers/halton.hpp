@@ -79,9 +79,7 @@ public:
     
     virtual std::unique_ptr<Sampler> clone(int seed);
     
-    virtual neb::CJsonObject toJson() const {
-        
-    }
+    virtual neb::CJsonObject toJson() const override;
     
 private:
     

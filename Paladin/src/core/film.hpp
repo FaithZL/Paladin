@@ -12,6 +12,7 @@
 #include "core/spectrum.hpp"
 #include "core/filter.h"
 #include "tools/parallel.hpp"
+#include "tools/serializable.h"
 
 PALADIN_BEGIN
 
@@ -141,7 +142,7 @@ private:
  * 这样就可以很好的避免上述情况
  * 
  */
-class Film {
+class Film : public Serializable {
 
 public:
     
@@ -183,6 +184,8 @@ public:
     void writeImage(Float splatScale = 1);
     
     void clear();
+    
+    virtual neb::CJsonObject toJson() const override;
     
     // 图片分辨率，原点在左上角
     const Point2i fullResolution;
@@ -249,6 +252,7 @@ private:
         return _pixels[offset];
     }
 };
+
 
 
 PALADIN_END

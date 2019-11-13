@@ -9,6 +9,7 @@
 #define filter_h
 
 #include "core/header.h"
+#include "tools/serializable.h"
 
 PALADIN_BEGIN
 
@@ -44,7 +45,7 @@ PALADIN_BEGIN
  * 		f为滤波函数，返回值也可以理解为权重
  * 
  */
-class Filter {
+class Filter : public Serializable {
     
 public:
     virtual ~Filter() {
@@ -54,6 +55,10 @@ public:
     Filter(const Vector2f &radius)
     : radius(radius),
     invRadius(Vector2f(1 / radius.x, 1 / radius.y)) {
+        
+    }
+    
+    virtual neb::CJsonObject toJson() const {
         
     }
     

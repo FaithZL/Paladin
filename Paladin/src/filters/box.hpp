@@ -1,14 +1,15 @@
 //
-//  box.h
+//  box.hpp
 //  Paladin
 //
 //  Created by SATAN_Z on 2019/9/13.
 //
 
-#ifndef box_h
-#define box_h
+#ifndef box_hpp
+#define box_hpp
 
 #include "core/filter.h"
+#include "tools/classfactory.hpp"
 
 PALADIN_BEGIN
 
@@ -32,6 +33,9 @@ public:
     }
 };
 
+shared_ptr<Serializable> createBoxFilter(const neb::CJsonObject &);
+
 PALADIN_END
 
-#endif /* box_h */
+
+#endif /* box_hpp */

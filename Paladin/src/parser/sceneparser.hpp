@@ -8,7 +8,6 @@
 #ifndef sceneparser_hpp
 #define sceneparser_hpp
 
-//#include "renderoption.h"
 #include "transformcache.h"
 #include <fstream>
 PALADIN_BEGIN
@@ -38,45 +37,43 @@ public:
         return _transformCache;
     }
     
-    void parse(const neb::CJsonObject &param);
+    void parse(const neb::CJsonObject &);
     
-    Sampler * parseSampler(const neb::CJsonObject &param);
+    shared_ptr<Sampler> parseSampler(const neb::CJsonObject &param);
     
-    Camera * parseCamera(const neb::CJsonObject &param);
+    shared_ptr<Camera> parseCamera(const neb::CJsonObject &param);
     
-    Integrator * parseIntegrator(const neb::CJsonObject &param);
+    shared_ptr<Integrator> parseIntegrator(const neb::CJsonObject &param);
     
-    Filter * parseFilter(const neb::CJsonObject &param);
+    shared_ptr<Filter> parseFilter(const neb::CJsonObject &);
     
-    Aggregate * parseAccelerator(const neb::CJsonObject &param);
+    shared_ptr<Aggregate> parseAccelerator(const neb::CJsonObject &param);
     
-    Film * parseFilm(const neb::CJsonObject &param);
+    shared_ptr<Film> parseFilm(const neb::CJsonObject &param);
     
 private:
     
     TransformCache _transformCache;
     
-    Float _transformStartTime = 0;
+    shared_ptr<Camera> _camera;
     
-    Float _transformEndTime = 0;
+    shared_ptr<Filter> _filter;
+
+    shared_ptr<Sampler> _sampler;
     
-    string _samplerName = "stratified";
+    shared_ptr<Film> _film;
     
-    string _integratorName = "pathtracer";
+    shared_ptr<Aggregate> _aggregate;
     
-    string _filterName = "box";
+    unique_ptr<Integrator> _integrator;
     
-    string _acceleratorName = "bvh";
-    
-    string _filmName = "image.png";
-    
-    string _cameraName = "perspective";
+    unique_ptr<Scene> _scene;
     
     vector<shared_ptr<Light>> lights;
     
     vector<shared_ptr<Primitive>> primitives;
     
-    shared_ptr<Transform *> cameraToWorld;
+    Transform _cameraToWorld;
 };
 
 
