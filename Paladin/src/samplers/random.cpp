@@ -41,4 +41,12 @@ neb::CJsonObject RandomSampler::toJson() const {
     
 }
 
+Serialize_ptr createRandomSampler(const nebJson &param) {
+    int spp = param.getValue("spp", 8);
+    Serialize_ptr ret = make_shared<RandomSampler>(spp);
+    return ret;
+}
+
+REGISTER("random", createRandomSampler);
+
 PALADIN_END

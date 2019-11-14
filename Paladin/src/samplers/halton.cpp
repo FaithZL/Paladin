@@ -208,6 +208,6 @@ Serialize_ptr createHaltonSampler(const nebJson &param, Arguments lst) {
     return ret;
 }
 
-REGISTER("stratified", createHaltonSampler);
+REGISTER("halton", createHaltonSampler);
 
 PALADIN_END

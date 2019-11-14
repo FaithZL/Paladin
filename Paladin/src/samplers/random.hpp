@@ -36,6 +36,10 @@ private:
     RNG _rng;
 };
 
+USING_STD
+
+Serialize_ptr createRandomSampler(const nebJson &param);
+
 PALADIN_END
 
 #endif /* random_hpp */
