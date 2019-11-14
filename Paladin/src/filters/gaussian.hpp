@@ -9,7 +9,7 @@
 #define gaussian_hpp
 
 #include <stdio.h>
-
+#include "tools/classfactory.hpp"
 #include "core/filter.h"
 
 PALADIN_BEGIN

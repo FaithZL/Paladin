@@ -20,6 +20,6 @@ shared_ptr<Serializable> createSincFilter(const nebJson &param) {
     return ret;
 }
 
-REGISTER("sinc", createSincFilter);
+//REGISTER("sinc", createSincFilter);
 
 PALADIN_END

@@ -6,10 +6,11 @@
 //
 
 #include "triangle.hpp"
+#include "tools/classfactory.hpp"
 
 PALADIN_BEGIN
 
-shared_ptr<Serializable> createTriangleFilter(const neb::CJsonObject &) {
+shared_ptr<Serializable> createTriangleFilter(const neb::CJsonObject &param) {
 	nebJson radius = param.getValue("radius", radius);
     Float rx = radius.getValue(0, 2.f);
     Float ry = radius.getValue(1, 2.f);

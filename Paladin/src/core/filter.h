@@ -10,7 +10,7 @@
 
 #include "core/header.h"
 #include "tools/serializable.h"
-
+#include "tools/classfactory.hpp"
 PALADIN_BEGIN
 
 /**

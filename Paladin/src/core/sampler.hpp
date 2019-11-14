@@ -12,6 +12,8 @@
 #include "core/header.h"
 #include "math/rng.h"
 #include "tools/serializable.h"
+#include "tools/classfactory.hpp"
+
 PALADIN_BEGIN
 
 /**

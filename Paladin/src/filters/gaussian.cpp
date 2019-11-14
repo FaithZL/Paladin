@@ -16,7 +16,7 @@ shared_ptr<Serializable> createGaussianFilter(const nebJson &param) {
     Float rx = radius.getValue(0, 2.f);
     Float ry = radius.getValue(1, 2.f);
     Float alpha = param.getValue("alpha", 2.f);
-    shared_ptr<Serializable> ret = make_shard<GaussianFilter>(Vector2f(rx, ry), alpha);
+    shared_ptr<Serializable> ret = make_shared<GaussianFilter>(Vector2f(rx, ry), alpha);
     return ret;
 }
 

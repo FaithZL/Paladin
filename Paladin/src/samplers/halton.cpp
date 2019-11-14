@@ -6,6 +6,8 @@
 //
 
 #include "halton.hpp"
+#include "core/film.hpp"
+
 
 PALADIN_BEGIN
 
@@ -203,7 +205,7 @@ Serialize_ptr createHaltonSampler(const nebJson &param, Arguments lst) {
     int spp = param.getValue("spp", 16);
     auto iter = lst.begin();
     shared_ptr<Film> film = dynamic_pointer_cast<Film>(*iter);
-    AABB2i bound = film.getSampleBounds();
+    AABB2i bound = film->getSampleBounds();
     Serialize_ptr ret = make_shared<HaltonSampler>(spp, bound, sampleAtPixelCenter);
     return ret;
 }

@@ -11,6 +11,7 @@
 #include "core/header.h"
 #include "core/sampler.hpp"
 #include "math/lowdiscrepancy.hpp"
+#include "tools/classfactory.hpp"
 
 PALADIN_BEGIN
 
@@ -73,11 +74,11 @@ public:
      */
     HaltonSampler(int spp, const AABB2i &sampleBounds, bool sampleAtCenter = false);
     
-    virtual int64_t getIndexForSample(int64_t sampleNum) const;
+    virtual int64_t getIndexForSample(int64_t sampleNum) const override;
     
-    virtual Float sampleDimension(int64_t index, int dimension) const;
+    virtual Float sampleDimension(int64_t index, int dimension) const override;
     
-    virtual std::unique_ptr<Sampler> clone(int seed);
+    virtual std::unique_ptr<Sampler> clone(int seed) override;
     
     virtual neb::CJsonObject toJson() const override;
     
@@ -130,7 +131,7 @@ private:
 
 USING_STD
 
-Serialize_ptr createHaltonSampler(const nebJson &param);
+Serialize_ptr createHaltonSampler(const nebJson &param, Arguments lst);
 
 PALADIN_END
 
