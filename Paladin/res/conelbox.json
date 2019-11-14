@@ -47,10 +47,10 @@
     "sampler" : {
     	"type" : "stratified",
     	"param" : {
-    		"xPixelSamples" : 2,
-    		"yPixelSamples" : 2,
-    		"jitterSamples" : true,
-    		"sampledDimensions" : 10
+    		"xSamples" : 2,
+    		"ySamples" : 2,
+    		"jitter" : true,
+    		"dimensions" : 10
     	}
     },
     "camera" : {

@@ -198,4 +198,16 @@ std::unique_ptr<Sampler> HaltonSampler::clone(int seed) {
     return std::unique_ptr<Sampler>(new HaltonSampler(*this));
 }
 
+Serialize_ptr createHaltonSampler(const nebJson &param, Arguments lst) {
+    bool sampleAtPixelCenter = param.getValue("sampleAtPixelCenter", false);
+    int spp = param.getValue("spp", 16);
+    auto iter = lst.begin();
+    shared_ptr<Film> film = dynamic_pointer_cast<Film>(*iter);
+    AABB2i bound = film.getSampleBounds();
+    Serialize_ptr ret = make_shared<HaltonSampler>(spp, bound, sampleAtPixelCenter);
+    return ret;
+}
+
+REGISTER("stratified", createHaltonSampler);
+
 PALADIN_END

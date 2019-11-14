@@ -60,6 +60,10 @@ private:
     const Float _tau;
 };
 
+USING_STD
+
+shared_ptr<Serializable> createSincFilter(const nebJson &param);
+
 PALADIN_END
 
 #endif /* sinc_hpp */

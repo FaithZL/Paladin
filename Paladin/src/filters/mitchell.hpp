@@ -56,6 +56,10 @@ private:
     const Float _C;
 };
 
+USING_STD
+
+shared_ptr<Serializable> createMitchellFilter(const nebJson &param);
+
 PALADIN_END
 
 #endif /* mitchell_hpp */

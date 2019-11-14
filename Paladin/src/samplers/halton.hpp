@@ -128,6 +128,10 @@ private:
     }
 };
 
+USING_STD
+
+Serialize_ptr createHaltonSampler(const nebJson &param);
+
 PALADIN_END
 
 #endif /* halton_hpp */
