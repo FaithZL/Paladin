@@ -37,11 +37,10 @@ shared_ptr<Integrator> SceneParser::parseIntegrator(const neb::CJsonObject &filt
 
 shared_ptr<Filter> SceneParser::parseFilter(const neb::CJsonObject &data) {
     string filterType = data.getValue("type", "box");
-    neb::CJsonObject param;
-    param = data.getValue("param", param);
+    nebJson param = data.getValue("param", "{}");
     auto creator = GET_CREATOR(filterType.c_str());
-    shared_ptr<Serializable> ret = creator(param, {});
-    return nullptr;
+    shared_ptr<Filter> ret = dynamic_pointer_cast<Filter>(creator(param, {}));
+    return ret;
 }
 
 shared_ptr<Aggregate> SceneParser::parseAccelerator(const neb::CJsonObject &param) {
