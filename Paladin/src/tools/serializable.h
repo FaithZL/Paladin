@@ -16,6 +16,10 @@ class Serializable {
     
 public:
     virtual neb::CJsonObject toJson() const = 0;
+    
+    virtual ~Serializable() {
+        
+    }
 };
 
 PALADIN_END

@@ -159,7 +159,7 @@ void Film::clear() {
 }
 
 neb::CJsonObject Film::toJson() const {
-    
+    return nebJson();
 }
 
 PALADIN_END

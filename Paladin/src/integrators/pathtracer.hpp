@@ -11,7 +11,7 @@
 
 #include "core/integrator.hpp"
 #include "math/lightdistribute.hpp"
-#include "tools/classfactory.hpp"
+
 
 PALADIN_BEGIN
 
@@ -255,13 +255,13 @@ public:
 	 * @param scene   场景对象
 	 * @param sampler 采样器
 	 */
-	virtual void preprocess(const Scene &scene, Sampler &sampler);
+	virtual void preprocess(const Scene &scene, Sampler &sampler) override;
     
     virtual neb::CJsonObject toJson() const override;
 	
 	
 	virtual Spectrum Li(const RayDifferential &ray, const Scene &scene,
-                Sampler &sampler, MemoryArena &arena, int depth) const;
+                Sampler &sampler, MemoryArena &arena, int depth) const override;
 
 private:
 	// 最大反射次数

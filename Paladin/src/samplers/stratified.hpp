@@ -39,9 +39,9 @@ public:
     
     virtual neb::CJsonObject toJson() const override;
     
-    virtual void startPixel(const Point2i &);
+    virtual void startPixel(const Point2i &) override;
     
-    virtual std::unique_ptr<Sampler> clone(int seed);
+    virtual std::unique_ptr<Sampler> clone(int seed) override;
     
 private:
 

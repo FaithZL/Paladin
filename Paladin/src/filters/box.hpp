@@ -9,7 +9,6 @@
 #define box_hpp
 
 #include "core/filter.h"
-#include "tools/classfactory.hpp"
 
 PALADIN_BEGIN
 

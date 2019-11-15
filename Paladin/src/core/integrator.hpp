@@ -18,6 +18,7 @@
 #include "sampler.hpp"
 #include "material.hpp"
 #include "tools/serializable.h"
+#include "tools/classfactory.hpp"
 
 PALADIN_BEGIN
 
@@ -290,7 +291,7 @@ public:
         
     }
     
-    virtual void render(const Scene &scene);
+    virtual void render(const Scene &scene) override;
     
     /**
      * 返回当前ray采样到的辐射度       

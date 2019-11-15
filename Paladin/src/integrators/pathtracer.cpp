@@ -7,8 +7,6 @@
 //
 
 #include "pathtracer.hpp"
-#include "core/camera.hpp"
-#include "filters/box.hpp"
 
 PALADIN_BEGIN
 
@@ -134,7 +132,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
 }
 
 neb::CJsonObject PathTracer::toJson() const {
-    
+    return nebJson();
 }
 
 USING_STD;

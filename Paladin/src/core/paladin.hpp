@@ -10,8 +10,7 @@
 #define paladin_hpp
 
 #include "parser/sceneparser.hpp"
-#include "tools/classfactory.hpp"
-#include "integrators/pathtracer.hpp"
+
 PALADIN_BEGIN
 
 class Paladin {

@@ -6,7 +6,7 @@
 //
 
 #include "parallel.hpp"
-#include <thread>
+
 
 PALADIN_BEGIN
 

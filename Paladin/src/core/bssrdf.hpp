@@ -9,7 +9,6 @@
 #define bssrdf_hpp
 
 #include "interaction.hpp"
-#include "bxdf.hpp"
 
 PALADIN_BEGIN
 

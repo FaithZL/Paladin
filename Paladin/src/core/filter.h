@@ -59,7 +59,7 @@ public:
     }
     
     virtual neb::CJsonObject toJson() const {
-        
+        return nebJson();
     }
     
     /**
