@@ -38,13 +38,12 @@ void RandomSampler::startPixel(const Point2i &p) {
 }
 
 neb::CJsonObject RandomSampler::toJson() const {
-    
+    return nebJson();
 }
 
 Serialize_ptr createRandomSampler(const nebJson &param) {
     int spp = param.getValue("spp", 8);
-    Serialize_ptr ret = make_shared<RandomSampler>(spp);
-    return ret;
+    return make_shared<RandomSampler>(spp);
 }
 
 REGISTER("random", createRandomSampler);

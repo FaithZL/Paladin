@@ -14,8 +14,7 @@ shared_ptr<Serializable> createTriangleFilter(const neb::CJsonObject &param) {
 	nebJson radius = param.getValue("radius", radius);
     Float rx = radius.getValue(0, 2.f);
     Float ry = radius.getValue(1, 2.f);
-    shared_ptr<Serializable> ret = make_shared<TriangleFilter>(Vector2f(rx, ry));
-    return ret;
+    return make_shared<TriangleFilter>(Vector2f(rx, ry));
 }
 
 REGISTER("triangle", createTriangleFilter);

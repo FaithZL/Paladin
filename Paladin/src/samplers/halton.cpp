@@ -206,8 +206,7 @@ Serialize_ptr createHaltonSampler(const nebJson &param, Arguments lst) {
     auto iter = lst.begin();
     shared_ptr<Film> film = dynamic_pointer_cast<Film>(*iter);
     AABB2i bound = film->getSampleBounds();
-    Serialize_ptr ret = make_shared<HaltonSampler>(spp, bound, sampleAtPixelCenter);
-    return ret;
+    return make_shared<HaltonSampler>(spp, bound, sampleAtPixelCenter);
 }
 
 REGISTER("halton", createHaltonSampler);

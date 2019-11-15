@@ -10,6 +10,7 @@
 
 #include "transformcache.h"
 #include <fstream>
+
 PALADIN_BEGIN
 
 USING_STD
@@ -65,9 +66,9 @@ private:
     
     shared_ptr<Aggregate> _aggregate;
     
-    unique_ptr<Integrator> _integrator;
+    shared_ptr<Integrator> _integrator;
     
-    unique_ptr<Scene> _scene;
+    shared_ptr<Scene> _scene;
     
     vector<shared_ptr<Light>> lights;
     

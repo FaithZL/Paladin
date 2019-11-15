@@ -55,8 +55,7 @@ Serialize_ptr createStratifiedSampler(const nebJson &param) {
     int xsamp = param.getValue("xsamples", 4);
     int ysamp = param.getValue("ysamples", 4);
     int sd = param.getValue("dimensions", 4);
-    Serialize_ptr ret = make_shared<StratifiedSampler>(xsamp, ysamp, jitter, sd);
-    return ret;
+    return make_shared<StratifiedSampler>(xsamp, ysamp, jitter, sd);
 }
 
 REGISTER("stratified", createStratifiedSampler);
