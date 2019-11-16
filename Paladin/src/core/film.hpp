@@ -253,7 +253,7 @@ private:
     }
 };
 
-
+Serialize_ptr createFilm(const nebJson &, const Arguments &);
 
 PALADIN_END
 

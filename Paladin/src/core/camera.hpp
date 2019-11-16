@@ -12,6 +12,7 @@
 #include "core/header.h"
 #include "core/film.hpp"
 #include "math/animatedtransform.hpp"
+#include "tools/serializable.h"
 
 PALADIN_BEGIN
 
@@ -31,7 +32,7 @@ PALADIN_BEGIN
  * 刚开始接触到这个概念的时候有些疑惑，不知道为何要定义这么一个空间，为何要定义一个投影矩阵
  * 仔细看来pbrt代码之后，发现为了方便生成光线，并且统一不同坐标系之间的转换，确实定义一个投影矩阵会比较好
  */
-class Camera {
+class Camera : public Serializable {
 public:
     Camera(const AnimatedTransform &CameraToWorld, Float shutterOpen,
            Float shutterClose, Film *film, const Medium *medium);

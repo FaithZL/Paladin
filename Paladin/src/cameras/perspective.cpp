@@ -109,6 +109,10 @@ Float PerspectiveCamera::generateRayDifferential(const CameraSample &sample, Ray
     return 1;
 }
 
+nebJson PerspectiveCamera::toJson() const {
+    return nebJson();
+}
+
 Spectrum PerspectiveCamera::we(const paladin::Ray &ray, Point2f *pRaster2) const {
     // todo 双向方法里用到，暂时不实现
     return Spectrum(0);

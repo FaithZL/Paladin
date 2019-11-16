@@ -85,6 +85,8 @@ public:
     virtual Spectrum sampleWi(const Interaction &ref, const Point2f &sample,
                        Vector3f *wi, Float *pdf, Point2f *pRaster,
                        VisibilityTester *vis) const;
+
+    virtual nebJson toJson() const override;
     
 private:
     // 向x轴移动一个像素，对应相机空间的变化率
@@ -94,6 +96,8 @@ private:
     // z=1的情况下的film的面积
     Float _area;
 };
+
+Serialize_ptr createScale(const nebJson &, const Arguments &);
 
 PALADIN_END
 

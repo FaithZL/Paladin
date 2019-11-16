@@ -95,7 +95,8 @@ public:
     
     static Matrix4x4 identity();
     
-    std::shared_ptr<Transform> Rotate(Float theta, const Vector3f &axis, bool bRadian=false);
+    friend std::shared_ptr<Transform> Rotate(Float theta, 
+                        const Vector3f &axis, bool bRadian=false);
 
     friend std::ostream &operator<<(std::ostream &os, const Matrix4x4 &mat) {
         // clang-format off
@@ -560,6 +561,22 @@ Transform_ptr Rotate(Float theta, const Vector3f &axis, bool bRadian=false);
 Transform_ptr LookAt(const Point3f &pos, const Point3f &look, const Vector3f &up);
 
 Transform_ptr Perspective(Float fov, Float zNear, Float zFar, bool bRadian=false);
+
+
+// 反射机制工厂函数
+Serialize_ptr createScale(const nebJson &, const Arguments &);
+
+Serialize_ptr createTranslate(const nebJson &, const Arguments &);
+
+Serialize_ptr createRotateX(const nebJson &, const Arguments &);
+
+Serialize_ptr createRotateY(const nebJson &, const Arguments &);
+
+Serialize_ptr createRotateZ(const nebJson &, const Arguments &);
+
+Serialize_ptr createRotate(const nebJson &, const Arguments &);
+
+Serialize_ptr createLookAt(const nebJson &, const Arguments &);
 
 
 PALADIN_END
