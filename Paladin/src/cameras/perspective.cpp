@@ -113,17 +113,17 @@ nebJson PerspectiveCamera::toJson() const {
     return nebJson();
 }
 
-Spectrum PerspectiveCamera::we(const paladin::Ray &ray, Point2f *pRaster2) const {
+Spectrum PerspectiveCamera::We(const paladin::Ray &ray, Point2f *pRaster2) const {
     // todo 双向方法里用到，暂时不实现
     return Spectrum(0);
 }
 
 
-void PerspectiveCamera::pdfWe(const Ray &ray, Float *pdfPos, Float *pdfDir) const {
+void PerspectiveCamera::pdf_We(const Ray &ray, Float *pdfPos, Float *pdfDir) const {
     // todo 双向方法里用到，暂时不实现
 }
 
-Spectrum PerspectiveCamera::sampleWi(const Interaction &ref, const Point2f &u,
+Spectrum PerspectiveCamera::sample_Wi(const Interaction &ref, const Point2f &u,
                           Vector3f *wi, Float *pdf, Point2f *pRaster,
                           VisibilityTester *vis) const {
     // todo 双向方法里用到，暂时不实现

@@ -17,7 +17,7 @@ _wLight(normalize(LightToWorld.exec(wLight))) {
     
 }
 
-Spectrum DistantLight::sampleLi(const Interaction &ref, const Point2f &u,
+Spectrum DistantLight::sample_Li(const Interaction &ref, const Point2f &u,
                                  Vector3f *wi, Float *pdf,
                                  VisibilityTester *vis) const {
     *wi = _wLight;
@@ -36,7 +36,7 @@ Spectrum DistantLight::power() const {
     return _L * Pi * _worldRadius * _worldRadius;
 }
 
-Float DistantLight::pdfLi(const Interaction &, const Vector3f &) const {
+Float DistantLight::pdf_Li(const Interaction &, const Vector3f &) const {
     return 0.f;
 }
 

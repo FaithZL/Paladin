@@ -20,7 +20,7 @@ _cosFalloffStart(std::cos(degree2radian(falloffStart))) {
     
 }
 
-Spectrum SpotLight::sampleLi(const Interaction &ref, const Point2f &u,
+Spectrum SpotLight::sample_Li(const Interaction &ref, const Point2f &u,
                               Vector3f *wi, Float *pdf,
                               VisibilityTester *vis) const {
     *wi = normalize(_pos - ref.pos);
@@ -48,7 +48,7 @@ Spectrum SpotLight::power() const {
     return _I * _2Pi * (1 - .5f * (_cosFalloffStart + _cosTotalWidth));
 }
 
-Float SpotLight::pdfLi(const Interaction &, const Vector3f &) const {
+Float SpotLight::pdf_Li(const Interaction &, const Vector3f &) const {
     return 0.f;
 }
 

@@ -98,7 +98,7 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
     Float scatteringPdf = 0;
     VisibilityTester visibility;
     // 先采样光源表面
-    Spectrum Li = light.sampleLi(it, uLight, &wi, &lightPdf, &visibility);
+    Spectrum Li = light.sample_Li(it, uLight, &wi, &lightPdf, &visibility);
     if (lightPdf > 0 && !Li.IsBlack()) {
     	Spectrum f;
     	// 为当前光源的样本计算bsdf
@@ -154,7 +154,7 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
             Float weight = 1;
             // 如果采集到的样本不是高光反射，则修改权重
             if (!sampledSpecular) {
-                lightPdf = light.pdfLi(it, wi);
+                lightPdf = light.pdf_Li(it, wi);
                 if (lightPdf == 0) {
                     return Ld;
                 }

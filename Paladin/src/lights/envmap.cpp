@@ -67,7 +67,7 @@ Spectrum EnvironmentMap::Le(const RayDifferential &ray) const {
     return Spectrum(_Lmap->lookup(st), SpectrumType::Illuminant);
 }
 
-Spectrum EnvironmentMap::sampleLi(const Interaction &ref, const Point2f &u,
+Spectrum EnvironmentMap::sample_Li(const Interaction &ref, const Point2f &u,
                                       Vector3f *wi, Float *pdf,
                                       VisibilityTester *vis) const {
     Float mapPdf;
@@ -94,7 +94,7 @@ Spectrum EnvironmentMap::sampleLi(const Interaction &ref, const Point2f &u,
     return Spectrum(_Lmap->lookup(uv), SpectrumType::Illuminant);
 }
 
-Float EnvironmentMap::pdfLi(const Interaction &, const Vector3f &w) const {
+Float EnvironmentMap::pdf_Li(const Interaction &, const Vector3f &w) const {
     Vector3f wi = _worldToLight.exec(w);
     Float theta = sphericalTheta(wi), phi = sphericalPhi(wi);
     Float sinTheta = std::sin(theta);

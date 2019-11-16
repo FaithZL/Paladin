@@ -11,7 +11,7 @@
 
 PALADIN_BEGIN
 
-Spectrum PointLight::sampleLi(const Interaction &ref, const Point2f &u,
+Spectrum PointLight::sample_Li(const Interaction &ref, const Point2f &u,
                                Vector3f *wi, Float *pdf,
                                VisibilityTester *vis) const {
     *wi = normalize(_pos - ref.pos);
@@ -26,7 +26,7 @@ Spectrum PointLight::sampleLi(const Interaction &ref, const Point2f &u,
 
 // 狄拉克函数
 // 特殊处理
-Float PointLight::pdfLi(const Interaction &, const Vector3f &) const {
+Float PointLight::pdf_Li(const Interaction &, const Vector3f &) const {
     return 0;
 }
 

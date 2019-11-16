@@ -36,10 +36,10 @@ public:
      * @param  vis 可见测试器
      * @return     ref在wi方向上的入射辐射度
      */
-    Spectrum sampleLi(const Interaction &ref, const Point2f &u, Vector3f *wo,
+    Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wo,
                        Float *pdf, VisibilityTester *vis) const;
     
-    Float pdfLi(const Interaction &, const Vector3f &) const;
+    Float pdf_Li(const Interaction &, const Vector3f &) const;
     
 private:
     // 面光源才有的，发射的辐射度

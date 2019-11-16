@@ -109,7 +109,7 @@ public:
      * @param  vis 可见测试器
      * @return     辐射度
      */
-    virtual Spectrum sampleLi(const Interaction &ref, const Point2f &u,
+    virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u,
                                Vector3f *wi, Float *pdf,
                                VisibilityTester *vis) const = 0;
 
@@ -130,7 +130,7 @@ public:
 
     // 返回在ref处采样光源时，对应的pdf函数值
     // 用于估计直接光照时，采样bsdf时生成的wi方向，对应的pdf函数值
-    virtual Float pdfLi(const Interaction &ref, const Vector3f &wi) const = 0;
+    virtual Float pdf_Li(const Interaction &ref, const Vector3f &wi) const = 0;
     
     // // 双向方法需要用的函数，暂时不理
     // virtual Spectrum sampleLe(const Point2f &u1, const Point2f &u2, Float time,

@@ -28,7 +28,7 @@ public:
     
     Spectrum Le(const RayDifferential &ray) const;
     
-    Spectrum sampleLi(const Interaction &ref, const Point2f &u, Vector3f *wi,
+    Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
                        Float *pdf, VisibilityTester *vis) const;
     
     /**
@@ -44,7 +44,7 @@ public:
      * p(u, v) / p(ω) = sinθ 2π^2
      * 
      */
-    Float pdfLi(const Interaction &, const Vector3f &) const;
+    Float pdf_Li(const Interaction &, const Vector3f &) const;
     
 private:
     // 环境贴图的纹理

@@ -57,18 +57,18 @@ Float Camera::generateRayDifferential(const CameraSample &sample, RayDifferentia
 }
 
 
-Spectrum Camera::we(const Ray &ray, Point2f *raster) const {
+Spectrum Camera::We(const Ray &ray, Point2f *raster) const {
     COUT << "amera::We is not implemented.";
     assert(false);
     return Spectrum(0.f);
 }
 
-void Camera::pdfWe(const Ray &ray, Float *pdfPos, Float *pdfDir) const {
+void Camera::pdf_We(const Ray &ray, Float *pdfPos, Float *pdfDir) const {
     COUT << "Camera::Pdf_We() is not implemented!";
     assert(false);
 }
 
-Spectrum Camera::sampleWi(const Interaction &ref, const Point2f &u,
+Spectrum Camera::sample_Wi(const Interaction &ref, const Point2f &u,
                            Vector3f *wi, Float *pdf, Point2f *pRaster,
                            VisibilityTester *vis) const {
     COUT << "Camera::Sample_Wi() is not implemented!";

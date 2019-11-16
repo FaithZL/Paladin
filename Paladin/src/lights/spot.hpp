@@ -18,14 +18,14 @@ public:
     SpotLight(const Transform &LightToWorld, const MediumInterface &m,
               const Spectrum &I, Float totalWidth, Float falloffStart);
     
-    virtual Spectrum sampleLi(const Interaction &ref, const Point2f &u, Vector3f *wi,
+    virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
                        Float *pdf, VisibilityTester *vis) const;
     
     Float falloff(const Vector3f &w) const;
     
     virtual Spectrum power() const;
     
-    virtual Float pdfLi(const Interaction &, const Vector3f &) const;
+    virtual Float pdf_Li(const Interaction &, const Vector3f &) const;
     
 private:
     const Point3f _pos;

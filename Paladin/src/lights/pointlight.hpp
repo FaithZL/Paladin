@@ -25,14 +25,14 @@ public:
 
     }
 
-    virtual Spectrum sampleLi(const Interaction &ref, const Point2f &u, Vector3f *wi,
+    virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
                        Float *pdf, VisibilityTester *vis) const;
 
     virtual Spectrum power() const {
         return 4 * Pi * _I;
     }
 
-    virtual Float pdfLi(const Interaction &, const Vector3f &) const;
+    virtual Float pdf_Li(const Interaction &, const Vector3f &) const;
 
 
 private:

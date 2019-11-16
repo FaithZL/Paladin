@@ -78,11 +78,11 @@ public:
     virtual Float generateRayDifferential(const CameraSample &sample,
                                   RayDifferential *ray) const;
     
-    virtual Spectrum we(const Ray &ray, Point2f *pRaster2 = nullptr) const;
+    virtual Spectrum We(const Ray &ray, Point2f *pRaster2 = nullptr) const;
     
-    virtual void pdfWe(const Ray &ray, Float *pdfPos, Float *pdfDir) const;
+    virtual void pdf_We(const Ray &ray, Float *pdfPos, Float *pdfDir) const;
     
-    virtual Spectrum sampleWi(const Interaction &ref, const Point2f &sample,
+    virtual Spectrum sample_Wi(const Interaction &ref, const Point2f &sample,
                        Vector3f *wi, Float *pdf, Point2f *pRaster,
                        VisibilityTester *vis) const;
 

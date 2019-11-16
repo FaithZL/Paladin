@@ -27,7 +27,7 @@ Spectrum DiffuseAreaLight::power() const {
     return (_twoSided ? _2Pi : Pi) * _L * _area;
 }
 
-Spectrum DiffuseAreaLight::sampleLi(const Interaction &ref, const Point2f &u,
+Spectrum DiffuseAreaLight::sample_Li(const Interaction &ref, const Point2f &u,
                                      Vector3f *wi, Float *pdf,
                                      VisibilityTester *vis) const {
     Interaction pShape = _shape->sampleDir(ref, u, pdf);
@@ -41,7 +41,7 @@ Spectrum DiffuseAreaLight::sampleLi(const Interaction &ref, const Point2f &u,
     return L(pShape, -*wi);
 }
 
-Float DiffuseAreaLight::pdfLi(const Interaction &ref,
+Float DiffuseAreaLight::pdf_Li(const Interaction &ref,
                                const Vector3f &wi) const {
     return _shape->pdfDir(ref, wi);
 }
