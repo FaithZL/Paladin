@@ -10,6 +10,7 @@
 #define transform_hpp
 
 #include "core/interaction.hpp"
+#include "tools/classfactory.hpp"
 PALADIN_BEGIN
 
 
@@ -94,9 +95,6 @@ public:
     bool isIdentity() const;
     
     static Matrix4x4 identity();
-    
-    friend std::shared_ptr<Transform> Rotate(Float theta, 
-                        const Vector3f &axis, bool bRadian=false);
 
     friend std::ostream &operator<<(std::ostream &os, const Matrix4x4 &mat) {
         // clang-format off
@@ -131,7 +129,8 @@ private:
     friend class AnimatedTransform;
 };
 
-
+typedef shared_ptr<Transform> Transform_ptr;
+        
 class Transform : public Serializable {
 // 参考pbrt设计变换类，包装了矩阵对象，只留变换接口，这样设计的好处在于，代码可读性高，
 // 比之前在写OpenGL程序时，需要用齐次坐标来区分点与向量要清晰
@@ -530,6 +529,26 @@ public:
     static Transform orthographic(Float zNear, Float zFar);
 
     static Transform perspective(Float fov, Float zNear, Float zFar, bool bRadian=false);
+        
+    static Transform_ptr Scale(Float s);
+
+    static Transform_ptr Scale(const Vector3f &);
+            
+    static Transform_ptr Scale(Float, Float, Float);
+            
+    static Transform_ptr Translate(const Vector3f &delta);
+        
+    static Transform_ptr RotateX(Float theta, bool bRadian=false);
+
+    static Transform_ptr RotateY(Float theta, bool bRadian=false);
+
+    static Transform_ptr RotateZ(Float theta, bool bRadian=false);
+
+    static Transform_ptr Rotate(Float theta, const Vector3f &axis, bool bRadian=false);
+
+    static Transform_ptr LookAt(const Point3f &pos, const Point3f &look, const Vector3f &up);
+
+    static Transform_ptr Perspective(Float fov, Float zNear, Float zFar, bool bRadian=false);
 
 private:
 
@@ -540,27 +559,7 @@ private:
         
 USING_STD
 
-typedef shared_ptr<Transform> Transform_ptr;
 
-Transform_ptr Scale(Float s);
-
-Transform_ptr Scale(const Vector3f &);
-        
-Transform_ptr Scale(Float, Float, Float);
-        
-Transform_ptr Translate(const Vector3f &delta);
-
-Transform_ptr RotateX(Float theta, bool bRadian=false);
-
-Transform_ptr RotateY(Float theta, bool bRadian=false);
-
-Transform_ptr RotateZ(Float theta, bool bRadian=false);
-
-Transform_ptr Rotate(Float theta, const Vector3f &axis, bool bRadian=false);
-
-Transform_ptr LookAt(const Point3f &pos, const Point3f &look, const Vector3f &up);
-
-Transform_ptr Perspective(Float fov, Float zNear, Float zFar, bool bRadian=false);
 
 
 // 反射机制工厂函数

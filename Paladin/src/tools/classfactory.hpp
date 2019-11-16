@@ -56,7 +56,7 @@ class RegisterAction {
 public:
     
     RegisterAction(const std::string &className, createObject creator) {
-        COUT << "haha" << std::endl;
+        COUT << "register " << className << std::endl;
         ClassFactory::getInstance()->registClass(className, creator);
     }
 };

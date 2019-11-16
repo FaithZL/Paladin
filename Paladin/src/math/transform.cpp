@@ -425,7 +425,7 @@ Transform Transform::perspective(Float fov, Float zNear, Float zFar, bool bRadia
     return Transform(mat);
 }
 
-Transform_ptr Scale(Float x, Float y, Float z) {
+Transform_ptr Transform::Scale(Float x, Float y, Float z) {
     Float a[16] = {
         x, 0, 0, 0,
         0, y, 0, 0,
@@ -444,15 +444,15 @@ Transform_ptr Scale(Float x, Float y, Float z) {
 }
 
 
-Transform_ptr Scale(Float s) {
-    return Scale(s, s, s);
+Transform_ptr Transform::Scale(Float s) {
+    return Transform::Scale(s, s, s);
 }
 
-Transform_ptr Scale(const Vector3f &s) {
-    return Scale(s.x, s.y, s.z);
+Transform_ptr Transform::Scale(const Vector3f &s) {
+    return Transform::Scale(s.x, s.y, s.z);
 }
 
-Transform_ptr Translate(const Vector3f &delta) {
+Transform_ptr Transform::Translate(const Vector3f &delta) {
     Float a[16] = {
         1, 0, 0, delta.x,
         0, 1, 0, delta.y,
@@ -470,7 +470,7 @@ Transform_ptr Translate(const Vector3f &delta) {
     return make_shared<Transform>(mat, matInv);
 }
 
-Transform_ptr RotateX(Float theta, bool bRadian/*=false*/) {
+Transform_ptr Transform::RotateX(Float theta, bool bRadian/*=false*/) {
     theta = bRadian ? theta : degree2radian(theta);
     Float sinTheta = std::sin(theta);
     Float cosTheta = std::cos(theta);
@@ -485,7 +485,7 @@ Transform_ptr RotateX(Float theta, bool bRadian/*=false*/) {
     return make_shared<Transform>(mat, mat.getTransposeMat());
 }
 
-Transform_ptr RotateY(Float theta, bool bRadian/*=false*/) {
+Transform_ptr Transform::RotateY(Float theta, bool bRadian/*=false*/) {
     theta = bRadian ? theta : degree2radian(theta);
     Float sinTheta = std::sin(theta);
     Float cosTheta = std::cos(theta);
@@ -500,7 +500,7 @@ Transform_ptr RotateY(Float theta, bool bRadian/*=false*/) {
     return make_shared<Transform>(mat, mat.getTransposeMat());
 }
 
-Transform_ptr RotateZ(Float theta, bool bRadian/*=false*/) {
+Transform_ptr Transform::RotateZ(Float theta, bool bRadian/*=false*/) {
     theta = bRadian ? theta : degree2radian(theta);
     Float sinTheta = std::sin(theta);
     Float cosTheta = std::cos(theta);
@@ -515,7 +515,7 @@ Transform_ptr RotateZ(Float theta, bool bRadian/*=false*/) {
     return make_shared<Transform>(mat, mat.getTransposeMat());
 }
 
-Transform_ptr Rotate(Float theta, const Vector3f &axis, bool bRadian/*=false*/) {
+Transform_ptr Transform::Rotate(Float theta, const Vector3f &axis, bool bRadian/*=false*/) {
    Vector3f a = paladin::normalize(axis);
    theta = bRadian ? theta : degree2radian(theta);
    Float sinTheta = std::sin(theta);
@@ -540,7 +540,7 @@ Transform_ptr Rotate(Float theta, const Vector3f &axis, bool bRadian/*=false*/) 
    return make_shared<Transform>(mat, mat.getTransposeMat());
 }
 
-Transform_ptr LookAt(const Point3f &pos, const Point3f &look, const Vector3f &up) {
+Transform_ptr Transform::LookAt(const Point3f &pos, const Point3f &look, const Vector3f &up) {
     //基本思路，先用up向量与dir向量确定right向量
     // right向量与dir向量互相垂直，由此可以确定新的up向量
     // right，dir，newUp向量两两垂直，可以构成直角坐标系，也就是视图空间
@@ -563,7 +563,7 @@ Transform_ptr LookAt(const Point3f &pos, const Point3f &look, const Vector3f &up
     return make_shared<Transform>(cameraToWorld.getInverseMat(), cameraToWorld);
 }
 
-Transform_ptr Perspective(Float fov, Float zNear, Float zFar, bool bRadian/*=false*/) {
+Transform_ptr Transform::Perspective(Float fov, Float zNear, Float zFar, bool bRadian/*=false*/) {
     //这里的透视矩阵没有aspect参数，是因为把光栅空间的变换分离出来了
     fov = bRadian ? fov : degree2radian(fov);
     Float invTanAng = 1 / std::tan(fov / 2);
@@ -583,43 +583,43 @@ Serialize_ptr createScale(const nebJson &param, const Arguments &lst) {
     Float sx = param.getValue(0, 1.f);
     Float sy = param.getValue(1, 1.f);
     Float sz = param.getValue(2, 1.f);
-    return Scale(sx, sy, sz);
+    return Transform::Scale(sx, sy, sz);
 }
 
 Serialize_ptr createTranslate(const nebJson &param, const Arguments &lst) {
     Float x = param.getValue(0, 0.f);
     Float y = param.getValue(1, 0.f);
     Float z = param.getValue(2, 0.f);
-    return Translate(x, y, z);
+    return Transform::Translate(Vector3f(x, y, z));
 }
 
 Serialize_ptr createRotateX(const nebJson &param, const Arguments &lst) {
     Float theta = param.getValue(0, 0);
     bool bRadian = param.getValue(1, false);
-    return RotateX(theta, bRadian);
+    return Transform::RotateX(theta, bRadian);
 }
 
 Serialize_ptr createRotateY(const nebJson &param, const Arguments &lst) {
     Float theta = param.getValue(0, 0);
     bool bRadian = param.getValue(1, false);
-    return RotateY(theta, bRadian);
+    return Transform::RotateY(theta, bRadian);
 }
 
 Serialize_ptr createRotateZ(const nebJson &param, const Arguments &lst) {
     Float theta = param.getValue(0, 0);
     bool bRadian = param.getValue(1, false);
-    return RotateZ(theta, bRadian);
+    return Transform::RotateZ(theta, bRadian);
 }
 
 Serialize_ptr createRotate(const nebJson &param, const Arguments &lst) {
-    Float theta = param.getValue(0, 0);
-    nebJson vec = param.getValue(1, vec);
-    Float ax = vec.getValue(0, 1);
-    Float ay = vec.getValue(1, 1);
-    Float az = vec.getValue(2, 1);
-    bool bRadian = param.getValue(2, false);
-    Vector3f axis(ax, ay, az);
-    return Rotate(theta, axis, bRadian);
+   Float theta = param.getValue(0, 0);
+   nebJson vec = param.getValue(1, vec);
+   Float ax = vec.getValue(0, 1);
+   Float ay = vec.getValue(1, 1);
+   Float az = vec.getValue(2, 1);
+   bool bRadian = param.getValue(2, false);
+   Vector3f axis(ax, ay, az);
+   return Transform::Rotate(theta, axis, bRadian);
 }
 
 Serialize_ptr createLookAt(const nebJson &param, const Arguments &lst) {
@@ -642,7 +642,7 @@ Serialize_ptr createLookAt(const nebJson &param, const Arguments &lst) {
     z = _up.getValue(2, 0);
     Vector3f up(x, y, z);
 
-    return LookAt(pos, target, up);
+    return Transform::LookAt(pos, target, up);
 }
 
 REGISTER("Scale", createScale);
