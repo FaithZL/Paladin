@@ -62,7 +62,7 @@ private:
 };
 
 USING_STD
-shared_ptr<Serializable> createGaussianFilter(const nebJson &);
+CObject_ptr createGaussianFilter(const nebJson &);
 
 PALADIN_END
 

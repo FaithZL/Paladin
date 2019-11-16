@@ -9,7 +9,7 @@
 
 PALADIN_BEGIN
 
-shared_ptr<Serializable> createBoxFilter(const nebJson &param) {
+CObject_ptr createBoxFilter(const nebJson &param) {
     nebJson radius = param.getValue("radius", radius);
     Float rx = radius.getValue(0, 2.f);
     Float ry = radius.getValue(1, 2.f);

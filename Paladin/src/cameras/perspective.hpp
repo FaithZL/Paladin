@@ -97,7 +97,7 @@ private:
     Float _area;
 };
 
-Serialize_ptr createScale(const nebJson &, const Arguments &);
+CObject_ptr createScale(const nebJson &, const Arguments &);
 
 PALADIN_END
 

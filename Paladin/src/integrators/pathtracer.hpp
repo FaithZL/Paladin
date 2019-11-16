@@ -276,7 +276,7 @@ private:
 
 USING_STD;
 
-shared_ptr<Serializable> createPathTracer(const neb::CJsonObject &param, const initializer_list<shared_ptr<Serializable>> &ls);
+CObject_ptr createPathTracer(const nebJson &param, const Arguments &ls);
 
 PALADIN_END
 

@@ -32,7 +32,7 @@ public:
 
 USING_STD
 
-shared_ptr<Serializable> createTriangleFilter(const neb::CJsonObject &);
+CObject_ptr createTriangleFilter(const neb::CJsonObject &);
 
 PALADIN_END
 

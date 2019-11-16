@@ -62,7 +62,7 @@ private:
 
 USING_STD
 
-shared_ptr<Serializable> createSincFilter(const nebJson &param);
+CObject_ptr createSincFilter(const nebJson &param);
 
 PALADIN_END
 

@@ -38,7 +38,7 @@ private:
 
 USING_STD
 
-Serialize_ptr createRandomSampler(const nebJson &param);
+CObject_ptr createRandomSampler(const nebJson &param);
 
 PALADIN_END
 

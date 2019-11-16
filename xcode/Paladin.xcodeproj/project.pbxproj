@@ -1137,7 +1137,7 @@
 		C348BB53EE69423D9506AFD2 /* sampler.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = sampler.cpp; path = src/core/sampler.cpp; sourceTree = SOURCE_ROOT; };
 		C397F6967E134FC3953C3B0A /* quaternion.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = quaternion.hpp; path = src/math/quaternion.hpp; sourceTree = SOURCE_ROOT; };
 		C40F910A774A46CA84E20969 /* shape.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = shape.hpp; path = src/core/shape.hpp; sourceTree = SOURCE_ROOT; };
-		C4A5E82143704AB5B5EB1DC4 /* serializable.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = serializable.h; path = src/tools/serializable.h; sourceTree = SOURCE_ROOT; };
+		C4A5E82143704AB5B5EB1DC4 /* cobject.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = cobject.h; path = src/tools/cobject.h; sourceTree = SOURCE_ROOT; };
 		C6494BE1D21A44C49E20B7DB /* lutf8lib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lutf8lib.c; path = third/lua53/lua/lutf8lib.c; sourceTree = SOURCE_ROOT; };
 		C71C3325938B4E2194569EDD /* ImfChromaticitiesAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfChromaticitiesAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfChromaticitiesAttribute.cpp; sourceTree = SOURCE_ROOT; };
 		C7B333090DF2454F985C4058 /* light.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = light.cpp; path = src/core/light.cpp; sourceTree = SOURCE_ROOT; };
@@ -1732,7 +1732,7 @@
 				F1B3FAF4C3D442F1AB6A48D8 /* model.h */,
 				A02C30C823A04A8CADBF909E /* parallel.cpp */,
 				A0C75DF21AE24A24A2493E00 /* parallel.hpp */,
-				C4A5E82143704AB5B5EB1DC4 /* serializable.h */,
+				C4A5E82143704AB5B5EB1DC4 /* cobject.h */,
 				A0B6B38E085F4663901EA44B /* stringprint.h */,
 				F6E231E323797D0500B68F58 /* classfactory.cpp */,
 				F6E231E423797D0500B68F58 /* classfactory.hpp */,

@@ -131,7 +131,7 @@ private:
 
 typedef shared_ptr<Transform> Transform_ptr;
         
-class Transform : public Serializable {
+class Transform : public CObject {
 // 参考pbrt设计变换类，包装了矩阵对象，只留变换接口，这样设计的好处在于，代码可读性高，
 // 比之前在写OpenGL程序时，需要用齐次坐标来区分点与向量要清晰
 public:
@@ -563,19 +563,19 @@ USING_STD
 
 
 // 反射机制工厂函数
-Serialize_ptr createScale(const nebJson &, const Arguments &);
+CObject_ptr createScale(const nebJson &, const Arguments &);
 
-Serialize_ptr createTranslate(const nebJson &, const Arguments &);
+CObject_ptr createTranslate(const nebJson &, const Arguments &);
 
-Serialize_ptr createRotateX(const nebJson &, const Arguments &);
+CObject_ptr createRotateX(const nebJson &, const Arguments &);
 
-Serialize_ptr createRotateY(const nebJson &, const Arguments &);
+CObject_ptr createRotateY(const nebJson &, const Arguments &);
 
-Serialize_ptr createRotateZ(const nebJson &, const Arguments &);
+CObject_ptr createRotateZ(const nebJson &, const Arguments &);
 
-Serialize_ptr createRotate(const nebJson &, const Arguments &);
+CObject_ptr createRotate(const nebJson &, const Arguments &);
 
-Serialize_ptr createLookAt(const nebJson &, const Arguments &);
+CObject_ptr createLookAt(const nebJson &, const Arguments &);
 
 
 PALADIN_END

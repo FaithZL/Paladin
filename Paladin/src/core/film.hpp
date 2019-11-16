@@ -12,7 +12,7 @@
 #include "core/spectrum.hpp"
 #include "core/filter.h"
 #include "tools/parallel.hpp"
-#include "tools/serializable.h"
+#include "tools/CObject.h"
 
 PALADIN_BEGIN
 
@@ -142,7 +142,7 @@ private:
  * 这样就可以很好的避免上述情况
  * 
  */
-class Film : public Serializable {
+class Film : public CObject {
 
 public:
     
@@ -253,7 +253,7 @@ private:
     }
 };
 
-Serialize_ptr createFilm(const nebJson &, const Arguments &);
+CObject_ptr createFilm(const nebJson &, const Arguments &);
 
 PALADIN_END
 

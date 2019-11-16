@@ -1,27 +1,27 @@
 //
-//  serializable.h
+//  CObject.h
 //  Paladin
 //
 //  Created by SATAN_Z on 2019/11/2.
 //
 
-#ifndef serializable_h
-#define serializable_h
+#ifndef CObject_h
+#define CObject_h
 
 #include "core/header.h"
 
 PALADIN_BEGIN
 
-class Serializable {
+class CObject {
     
 public:
     virtual neb::CJsonObject toJson() const = 0;
     
-    virtual ~Serializable() {
+    virtual ~CObject() {
         
     }
 };
 
 PALADIN_END
 
-#endif /* serializable_h */
+#endif /* CObject_h */

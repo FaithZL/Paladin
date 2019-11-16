@@ -579,39 +579,39 @@ Transform_ptr Transform::Perspective(Float fov, Float zNear, Float zFar, bool bR
 
 
 // 反射机制工厂函数
-Serialize_ptr createScale(const nebJson &param, const Arguments &lst) {
+CObject_ptr createScale(const nebJson &param, const Arguments &lst) {
     Float sx = param.getValue(0, 1.f);
     Float sy = param.getValue(1, 1.f);
     Float sz = param.getValue(2, 1.f);
     return Transform::Scale(sx, sy, sz);
 }
 
-Serialize_ptr createTranslate(const nebJson &param, const Arguments &lst) {
+CObject_ptr createTranslate(const nebJson &param, const Arguments &lst) {
     Float x = param.getValue(0, 0.f);
     Float y = param.getValue(1, 0.f);
     Float z = param.getValue(2, 0.f);
     return Transform::Translate(Vector3f(x, y, z));
 }
 
-Serialize_ptr createRotateX(const nebJson &param, const Arguments &lst) {
+CObject_ptr createRotateX(const nebJson &param, const Arguments &lst) {
     Float theta = param.getValue(0, 0);
     bool bRadian = param.getValue(1, false);
     return Transform::RotateX(theta, bRadian);
 }
 
-Serialize_ptr createRotateY(const nebJson &param, const Arguments &lst) {
+CObject_ptr createRotateY(const nebJson &param, const Arguments &lst) {
     Float theta = param.getValue(0, 0);
     bool bRadian = param.getValue(1, false);
     return Transform::RotateY(theta, bRadian);
 }
 
-Serialize_ptr createRotateZ(const nebJson &param, const Arguments &lst) {
+CObject_ptr createRotateZ(const nebJson &param, const Arguments &lst) {
     Float theta = param.getValue(0, 0);
     bool bRadian = param.getValue(1, false);
     return Transform::RotateZ(theta, bRadian);
 }
 
-Serialize_ptr createRotate(const nebJson &param, const Arguments &lst) {
+CObject_ptr createRotate(const nebJson &param, const Arguments &lst) {
    Float theta = param.getValue(0, 0);
    nebJson vec = param.getValue(1, vec);
    Float ax = vec.getValue(0, 1);
@@ -622,7 +622,7 @@ Serialize_ptr createRotate(const nebJson &param, const Arguments &lst) {
    return Transform::Rotate(theta, axis, bRadian);
 }
 
-Serialize_ptr createLookAt(const nebJson &param, const Arguments &lst) {
+CObject_ptr createLookAt(const nebJson &param, const Arguments &lst) {
     nebJson _pos = param.getValue(0, _pos);
     nebJson _target = param.getValue(1, _target);
     nebJson _up = param.getValue(2, _up);

@@ -9,7 +9,7 @@
 
 PALADIN_BEGIN
 
-shared_ptr<Serializable> createMitchellFilter(const nebJson &param) {
+CObject_ptr createMitchellFilter(const nebJson &param) {
 	nebJson radius = param.getValue("radius", radius);
     Float rx = radius.getValue(0, 2.f);
     Float ry = radius.getValue(1, 2.f);

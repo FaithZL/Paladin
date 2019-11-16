@@ -131,7 +131,7 @@ private:
 
 USING_STD
 
-Serialize_ptr createHaltonSampler(const nebJson &param, Arguments lst);
+CObject_ptr createHaltonSampler(const nebJson &param, Arguments lst);
 
 PALADIN_END
 

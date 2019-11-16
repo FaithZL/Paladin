@@ -32,7 +32,7 @@ public:
     }
 };
 
-shared_ptr<Serializable> createBoxFilter(const neb::CJsonObject &);
+CObject_ptr createBoxFilter(const neb::CJsonObject &);
 
 PALADIN_END
 

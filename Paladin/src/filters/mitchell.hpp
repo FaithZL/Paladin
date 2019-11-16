@@ -59,7 +59,7 @@ private:
 
 USING_STD
 
-shared_ptr<Serializable> createMitchellFilter(const nebJson &param);
+CObject_ptr createMitchellFilter(const nebJson &param);
 
 PALADIN_END
 

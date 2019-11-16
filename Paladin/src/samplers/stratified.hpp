@@ -50,7 +50,7 @@ private:
     const bool _jitterSamples;
 };
 
-Serialize_ptr createStratifiedSampler(const nebJson &param);
+CObject_ptr createStratifiedSampler(const nebJson &param);
 
 PALADIN_END
 

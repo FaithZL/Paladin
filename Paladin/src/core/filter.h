@@ -9,7 +9,7 @@
 #define filter_h
 
 #include "core/header.h"
-#include "tools/serializable.h"
+#include "tools/CObject.h"
 #include "tools/classfactory.hpp"
 PALADIN_BEGIN
 
@@ -45,7 +45,7 @@ PALADIN_BEGIN
  * 		f为滤波函数，返回值也可以理解为权重
  * 
  */
-class Filter : public Serializable {
+class Filter : public CObject {
     
 public:
     virtual ~Filter() {

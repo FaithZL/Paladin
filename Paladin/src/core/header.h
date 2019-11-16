@@ -93,7 +93,7 @@ class RGBSpectrum;
 
 class SampledSpectrum;
 
-class Serializable;
+class CObject;
 
 #ifdef PALADIN_SAMPLED_SPECTRUM
 typedef SampledSpectrum Spectrum;

@@ -9,18 +9,18 @@
 #define classfactory_hpp
 
 #include "core/header.h"
-#include "tools/serializable.h"
+#include "tools/CObject.h"
 #include <stdarg.h>
 
 PALADIN_BEGIN
 
 USING_STD;
 
-typedef shared_ptr<Serializable> Serialize_ptr;
+typedef shared_ptr<CObject>  CObject_ptr;
 
-typedef initializer_list<shared_ptr<Serializable>> Arguments;
+typedef initializer_list<CObject_ptr> Arguments;
 
-typedef shared_ptr<Serializable> (*createObject)(const neb::CJsonObject &, const Arguments &);
+typedef CObject_ptr (*createObject)(const neb::CJsonObject &, const Arguments &);
 
 class ClassFactory {
     

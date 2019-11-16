@@ -50,7 +50,7 @@ std::unique_ptr<Sampler> StratifiedSampler::clone(int seed) {
     return std::unique_ptr<Sampler>(ret);
 }
 
-Serialize_ptr createStratifiedSampler(const nebJson &param) {
+CObject_ptr createStratifiedSampler(const nebJson &param) {
     bool jitter = param.getValue("jitter", true);
     int xsamp = param.getValue("xsamples", 4);
     int ysamp = param.getValue("ysamples", 4);
