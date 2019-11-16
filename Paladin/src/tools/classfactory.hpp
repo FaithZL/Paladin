@@ -9,14 +9,12 @@
 #define classfactory_hpp
 
 #include "core/header.h"
-#include "tools/CObject.h"
-#include <stdarg.h>
 
 PALADIN_BEGIN
 
 USING_STD;
 
-typedef shared_ptr<CObject>  CObject_ptr;
+typedef CObject * CObject_ptr;
 
 typedef initializer_list<CObject_ptr> Arguments;
 

@@ -22,7 +22,7 @@ CObject_ptr createSincFilter(const nebJson &param) {
     Float rx = radius.GetValue(0, 2.f);
     Float ry = radius.GetValue(1, 2.f);
     Float tau = param.GetValue("tau", 3.f);
-    return make_shared<LanczosSincFilter>(Vector2f(rx, ry), tau);
+    return new LanczosSincFilter(Vector2f(rx, ry), tau);
 }
 
 //REGISTER("sinc", createSincFilter);

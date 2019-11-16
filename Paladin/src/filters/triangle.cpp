@@ -19,7 +19,7 @@ CObject_ptr createTriangleFilter(const nebJson &param) {
 	nebJson radius = param.GetValue("radius", nebJson());
     Float rx = radius.GetValue(0, 2.f);
     Float ry = radius.GetValue(1, 2.f);
-    return make_shared<TriangleFilter>(Vector2f(rx, ry));
+    return new TriangleFilter(Vector2f(rx, ry));
 }
 
 REGISTER("triangle", createTriangleFilter);

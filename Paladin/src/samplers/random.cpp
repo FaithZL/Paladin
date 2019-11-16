@@ -48,7 +48,7 @@ neb::CJsonObject RandomSampler::toJson() const {
  */
 CObject_ptr createRandomSampler(const nebJson &param) {
     int spp = param.GetValue("spp", 8);
-    return make_shared<RandomSampler>(spp);
+    return new RandomSampler(spp);
 }
 
 REGISTER("random", createRandomSampler);

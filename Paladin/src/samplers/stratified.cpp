@@ -63,7 +63,7 @@ CObject_ptr createStratifiedSampler(const nebJson &param) {
     int xsamp = param.GetValue("xsamples", 3);
     int ysamp = param.GetValue("ysamples", 3);
     int sd = param.GetValue("dimensions", 6);
-    return make_shared<StratifiedSampler>(xsamp, ysamp, jitter, sd);
+    return new StratifiedSampler(xsamp, ysamp, jitter, sd);
 }
 
 REGISTER("stratified", createStratifiedSampler);

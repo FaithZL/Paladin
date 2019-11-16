@@ -530,25 +530,25 @@ public:
 
     static Transform perspective(Float fov, Float zNear, Float zFar, bool bRadian=false);
         
-    static Transform_ptr Scale(Float s);
+    static Transform * Scale(Float s);
 
-    static Transform_ptr Scale(const Vector3f &);
+    static Transform * Scale(const Vector3f &);
             
-    static Transform_ptr Scale(Float, Float, Float);
+    static Transform * Scale(Float, Float, Float);
             
-    static Transform_ptr Translate(const Vector3f &delta);
+    static Transform * Translate(const Vector3f &delta);
         
-    static Transform_ptr RotateX(Float theta, bool bRadian=false);
+    static Transform * RotateX(Float theta, bool bRadian=false);
 
-    static Transform_ptr RotateY(Float theta, bool bRadian=false);
+    static Transform * RotateY(Float theta, bool bRadian=false);
 
-    static Transform_ptr RotateZ(Float theta, bool bRadian=false);
+    static Transform * RotateZ(Float theta, bool bRadian=false);
 
-    static Transform_ptr Rotate(Float theta, const Vector3f &axis, bool bRadian=false);
+    static Transform * Rotate(Float theta, const Vector3f &axis, bool bRadian=false);
 
-    static Transform_ptr LookAt(const Point3f &pos, const Point3f &look, const Vector3f &up);
+    static Transform * LookAt(const Point3f &pos, const Point3f &look, const Vector3f &up);
 
-    static Transform_ptr Perspective(Float fov, Float zNear, Float zFar, bool bRadian=false);
+    static Transform * Perspective(Float fov, Float zNear, Float zFar, bool bRadian=false);
 
 private:
 

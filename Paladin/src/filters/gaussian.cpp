@@ -22,7 +22,7 @@ CObject_ptr createGaussianFilter(const nebJson &param) {
     Float rx = radius.GetValue(0, 2.f);
     Float ry = radius.GetValue(1, 2.f);
     Float alpha = param.GetValue("alpha", 2.f);
-    return make_shared<GaussianFilter>(Vector2f(rx, ry), alpha);
+    return new GaussianFilter(Vector2f(rx, ry), alpha);
 }
 
 REGISTER("gaussian", createGaussianFilter);

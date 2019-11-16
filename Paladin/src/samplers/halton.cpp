@@ -209,9 +209,9 @@ CObject_ptr createHaltonSampler(const nebJson &param, Arguments lst) {
     bool sampleAtPixelCenter = param.GetValue("sampleAtPixelCenter", false);
     int spp = param.GetValue("spp", 8);
     auto iter = lst.begin();
-    shared_ptr<Film> film = dynamic_pointer_cast<Film>(*iter);
+    Film * film = dynamic_cast<Film *>(*iter);
     AABB2i bound = film->getSampleBounds();
-    return make_shared<HaltonSampler>(spp, bound, sampleAtPixelCenter);
+    return new HaltonSampler(spp, bound, sampleAtPixelCenter);
 }
 
 REGISTER("halton", createHaltonSampler);

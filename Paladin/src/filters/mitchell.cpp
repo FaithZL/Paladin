@@ -22,7 +22,7 @@ CObject_ptr createMitchellFilter(const nebJson &param) {
     Float ry = radius.GetValue(1, 2.f);
     Float B = param.GetValue("B", 1.f/3.f);
     Float C = param.GetValue("C", 1.f/3.f);
-    return make_shared<MitchellFilter>(Vector2f(rx, ry), B, C);
+    return new MitchellFilter(Vector2f(rx, ry), B, C);
 }
 
 REGISTER("mitchell", createMitchellFilter);

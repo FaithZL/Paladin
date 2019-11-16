@@ -26,6 +26,7 @@ void ClassFactory::registClass(const std::string& className, createObject func) 
 createObject ClassFactory::getCreatorByName(const std::string& className) {
     auto iter = _classMap.find(className);
     if (iter == _classMap.end()) {
+        LOG(ERROR) << className + " is not register" << endl;
         return nullptr;
     }
     return iter->second;

@@ -425,7 +425,7 @@ Transform Transform::perspective(Float fov, Float zNear, Float zFar, bool bRadia
     return Transform(mat);
 }
 
-Transform_ptr Transform::Scale(Float x, Float y, Float z) {
+Transform * Transform::Scale(Float x, Float y, Float z) {
     Float a[16] = {
         x, 0, 0, 0,
         0, y, 0, 0,
@@ -440,19 +440,19 @@ Transform_ptr Transform::Scale(Float x, Float y, Float z) {
     };
     Matrix4x4 mat(a);
     Matrix4x4 matInv(inv);
-    return make_shared<Transform>(mat, matInv);
+    return new Transform(mat, matInv);
 }
 
 
-Transform_ptr Transform::Scale(Float s) {
+Transform * Transform::Scale(Float s) {
     return Transform::Scale(s, s, s);
 }
 
-Transform_ptr Transform::Scale(const Vector3f &s) {
+Transform * Transform::Scale(const Vector3f &s) {
     return Transform::Scale(s.x, s.y, s.z);
 }
 
-Transform_ptr Transform::Translate(const Vector3f &delta) {
+Transform * Transform::Translate(const Vector3f &delta) {
     Float a[16] = {
         1, 0, 0, delta.x,
         0, 1, 0, delta.y,
@@ -467,10 +467,10 @@ Transform_ptr Transform::Translate(const Vector3f &delta) {
     };
     Matrix4x4 mat(a);
     Matrix4x4 matInv(inv);
-    return make_shared<Transform>(mat, matInv);
+    return new Transform(mat, matInv);
 }
 
-Transform_ptr Transform::RotateX(Float theta, bool bRadian/*=false*/) {
+Transform * Transform::RotateX(Float theta, bool bRadian/*=false*/) {
     theta = bRadian ? theta : degree2radian(theta);
     Float sinTheta = std::sin(theta);
     Float cosTheta = std::cos(theta);
@@ -482,10 +482,10 @@ Transform_ptr Transform::RotateX(Float theta, bool bRadian/*=false*/) {
     };
     Matrix4x4 mat(a);
     // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-    return make_shared<Transform>(mat, mat.getTransposeMat());
+    return new Transform(mat, mat.getTransposeMat());
 }
 
-Transform_ptr Transform::RotateY(Float theta, bool bRadian/*=false*/) {
+Transform * Transform::RotateY(Float theta, bool bRadian/*=false*/) {
     theta = bRadian ? theta : degree2radian(theta);
     Float sinTheta = std::sin(theta);
     Float cosTheta = std::cos(theta);
@@ -497,10 +497,10 @@ Transform_ptr Transform::RotateY(Float theta, bool bRadian/*=false*/) {
     };
     Matrix4x4 mat(a);
     // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-    return make_shared<Transform>(mat, mat.getTransposeMat());
+    return new Transform(mat, mat.getTransposeMat());
 }
 
-Transform_ptr Transform::RotateZ(Float theta, bool bRadian/*=false*/) {
+Transform * Transform::RotateZ(Float theta, bool bRadian/*=false*/) {
     theta = bRadian ? theta : degree2radian(theta);
     Float sinTheta = std::sin(theta);
     Float cosTheta = std::cos(theta);
@@ -512,10 +512,10 @@ Transform_ptr Transform::RotateZ(Float theta, bool bRadian/*=false*/) {
     };
     Matrix4x4 mat(a);
     // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-    return make_shared<Transform>(mat, mat.getTransposeMat());
+    return new Transform(mat, mat.getTransposeMat());
 }
 
-Transform_ptr Transform::Rotate(Float theta, const Vector3f &axis, bool bRadian/*=false*/) {
+Transform * Transform::Rotate(Float theta, const Vector3f &axis, bool bRadian/*=false*/) {
    Vector3f a = paladin::normalize(axis);
    theta = bRadian ? theta : degree2radian(theta);
    Float sinTheta = std::sin(theta);
@@ -537,10 +537,10 @@ Transform_ptr Transform::Rotate(Float theta, const Vector3f &axis, bool bRadian/
    mat._m[2][2] = a.z * a.z + (1 - a.z * a.z) * cosTheta;
    mat._m[2][3] = 0;
    // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-   return make_shared<Transform>(mat, mat.getTransposeMat());
+   return new Transform(mat, mat.getTransposeMat());
 }
 
-Transform_ptr Transform::LookAt(const Point3f &pos, const Point3f &look, const Vector3f &up) {
+Transform * Transform::LookAt(const Point3f &pos, const Point3f &look, const Vector3f &up) {
     //基本思路，先用up向量与dir向量确定right向量
     // right向量与dir向量互相垂直，由此可以确定新的up向量
     // right，dir，newUp向量两两垂直，可以构成直角坐标系，也就是视图空间
@@ -560,10 +560,10 @@ Transform_ptr Transform::LookAt(const Point3f &pos, const Point3f &look, const V
         0,       0,       0,     1
     };
     Matrix4x4 cameraToWorld(a);
-    return make_shared<Transform>(cameraToWorld.getInverseMat(), cameraToWorld);
+    return new Transform(cameraToWorld.getInverseMat(), cameraToWorld);
 }
 
-Transform_ptr Transform::Perspective(Float fov, Float zNear, Float zFar, bool bRadian/*=false*/) {
+Transform * Transform::Perspective(Float fov, Float zNear, Float zFar, bool bRadian/*=false*/) {
     //这里的透视矩阵没有aspect参数，是因为把光栅空间的变换分离出来了
     fov = bRadian ? fov : degree2radian(fov);
     Float invTanAng = 1 / std::tan(fov / 2);
@@ -574,7 +574,7 @@ Transform_ptr Transform::Perspective(Float fov, Float zNear, Float zFar, bool bR
         0, 0,         1,             0
     };
     Matrix4x4 mat(a);
-    return make_shared<Transform>(mat);
+    return new Transform(mat);
 }
 
 
@@ -637,7 +637,7 @@ CObject_ptr createRotateZ(const nebJson &param, const Arguments &lst) {
  */
 CObject_ptr createRotate(const nebJson &param, const Arguments &lst) {
    Float theta = param.GetValue(0, 0);
-   nebJson vec = param.GetValue(1, nebJson());
+   nebJson vec = param.GetValue(1, vec);
    Float ax = vec.GetValue(0, 1);
    Float ay = vec.GetValue(1, 1);
    Float az = vec.GetValue(2, 1);

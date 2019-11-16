@@ -41,13 +41,13 @@ public:
     
     void parse(const nebJson &);
     
-    shared_ptr<Sampler> parseSampler(const nebJson &param);
+    Sampler * parseSampler(const nebJson &param);
     
     shared_ptr<Camera> parseCamera(const nebJson &param);
     
     unique_ptr<Integrator> parseIntegrator(const neb::CJsonObject &param);
     
-    shared_ptr<Filter> parseFilter(const neb::CJsonObject &);
+    Filter * parseFilter(const neb::CJsonObject &);
     
     shared_ptr<Aggregate> parseAccelerator(const neb::CJsonObject &param);
     
