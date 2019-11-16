@@ -11,11 +11,17 @@ PALADIN_BEGIN
 
 USING_STD
 
+/**
+ * param : {
+ * 	   "radius" : [2,2],
+ * 	   "alpha" : 2
+ * }
+ */
 CObject_ptr createGaussianFilter(const nebJson &param) {
-    nebJson radius = param.getValue("radius", radius);
-    Float rx = radius.getValue(0, 2.f);
-    Float ry = radius.getValue(1, 2.f);
-    Float alpha = param.getValue("alpha", 2.f);
+    nebJson radius = param.GetValue("radius", nebJson());
+    Float rx = radius.GetValue(0, 2.f);
+    Float ry = radius.GetValue(1, 2.f);
+    Float alpha = param.GetValue("alpha", 2.f);
     return make_shared<GaussianFilter>(Vector2f(rx, ry), alpha);
 }
 

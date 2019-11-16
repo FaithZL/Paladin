@@ -42,10 +42,8 @@ int main(int argc, const char * argv[]) {
     
     Paladin paladin;
     paladin.render("res/conelbox.json");
-    int b = 1;
-    auto a = {1,1,b};
-    cout << sum(a) << endl;
-    
+//    unique_ptr<int> a;
+//    a.reset()
 //    paladin.render("res/scene.json");
     
 //    test_lua_main();

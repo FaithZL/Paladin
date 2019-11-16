@@ -11,11 +11,17 @@ PALADIN_BEGIN
 
 USING_STD
 
+/**
+ * param : {
+ * 	   "radius" : [2,2],
+ * 	   "tau" : 3
+ * }
+ */
 CObject_ptr createSincFilter(const nebJson &param) {
-	nebJson radius = param.getValue("radius", radius);
-    Float rx = radius.getValue(0, 2.f);
-    Float ry = radius.getValue(1, 2.f);
-    Float tau = param.getValue("tau", 3.f);
+	nebJson radius = param.GetValue("radius", nebJson());
+    Float rx = radius.GetValue(0, 2.f);
+    Float ry = radius.GetValue(1, 2.f);
+    Float tau = param.GetValue("tau", 3.f);
     return make_shared<LanczosSincFilter>(Vector2f(rx, ry), tau);
 }
 

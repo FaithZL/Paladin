@@ -9,10 +9,15 @@
 
 PALADIN_BEGIN
 
+/**
+ * param : {
+ *     "radius" : [2,2]
+ * }
+ */
 CObject_ptr createBoxFilter(const nebJson &param) {
-    nebJson radius = param.getValue("radius", radius);
-    Float rx = radius.getValue(0, 2.f);
-    Float ry = radius.getValue(1, 2.f);
+    nebJson radius = param.GetValue("radius", nebJson());
+    Float rx = radius.GetValue(0, 2.f);
+    Float ry = radius.GetValue(1, 2.f);
     return make_shared<BoxFilter>(Vector2f(rx, ry));
 }
 

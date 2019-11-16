@@ -579,67 +579,98 @@ Transform_ptr Transform::Perspective(Float fov, Float zNear, Float zFar, bool bR
 
 
 // 反射机制工厂函数
+// 
+
+/**
+ * param : [x,y,z]
+ */
 CObject_ptr createScale(const nebJson &param, const Arguments &lst) {
-    Float sx = param.getValue(0, 1.f);
-    Float sy = param.getValue(1, 1.f);
-    Float sz = param.getValue(2, 1.f);
+    Float sx = param.GetValue(0, 1.f);
+    Float sy = param.GetValue(1, 1.f);
+    Float sz = param.GetValue(2, 1.f);
     return Transform::Scale(sx, sy, sz);
 }
 
+/**
+ * param : [x,y,z]
+ */
 CObject_ptr createTranslate(const nebJson &param, const Arguments &lst) {
-    Float x = param.getValue(0, 0.f);
-    Float y = param.getValue(1, 0.f);
-    Float z = param.getValue(2, 0.f);
+    Float x = param.GetValue(0, 0.f);
+    Float y = param.GetValue(1, 0.f);
+    Float z = param.GetValue(2, 0.f);
     return Transform::Translate(Vector3f(x, y, z));
 }
 
+/**
+ * param : [theta, bRadian]
+ */
 CObject_ptr createRotateX(const nebJson &param, const Arguments &lst) {
-    Float theta = param.getValue(0, 0);
-    bool bRadian = param.getValue(1, false);
+    Float theta = param.GetValue(0, 0);
+    bool bRadian = param.GetValue(1, false);
     return Transform::RotateX(theta, bRadian);
 }
 
+/**
+ * param : [theta, bRadian]
+ */
 CObject_ptr createRotateY(const nebJson &param, const Arguments &lst) {
-    Float theta = param.getValue(0, 0);
-    bool bRadian = param.getValue(1, false);
+    Float theta = param.GetValue(0, 0);
+    bool bRadian = param.GetValue(1, false);
     return Transform::RotateY(theta, bRadian);
 }
 
+/**
+ * param : [theta, bRadian]
+ */
 CObject_ptr createRotateZ(const nebJson &param, const Arguments &lst) {
-    Float theta = param.getValue(0, 0);
-    bool bRadian = param.getValue(1, false);
+    Float theta = param.GetValue(0, 0);
+    bool bRadian = param.GetValue(1, false);
     return Transform::RotateZ(theta, bRadian);
 }
 
+/**
+ * param : [
+ *     theta,
+ *     [x,y,z],
+ *     bRadian
+ * ]
+ */
 CObject_ptr createRotate(const nebJson &param, const Arguments &lst) {
-   Float theta = param.getValue(0, 0);
-   nebJson vec = param.getValue(1, vec);
-   Float ax = vec.getValue(0, 1);
-   Float ay = vec.getValue(1, 1);
-   Float az = vec.getValue(2, 1);
-   bool bRadian = param.getValue(2, false);
+   Float theta = param.GetValue(0, 0);
+   nebJson vec = param.GetValue(1, nebJson());
+   Float ax = vec.GetValue(0, 1);
+   Float ay = vec.GetValue(1, 1);
+   Float az = vec.GetValue(2, 1);
+   bool bRadian = param.GetValue(2, false);
    Vector3f axis(ax, ay, az);
    return Transform::Rotate(theta, axis, bRadian);
 }
 
+/**
+ * param : [
+ *     [x,y,z], // pos
+ *     [x,y,z], // target
+ *     [x,y,z], // up
+ * ]
+ */
 CObject_ptr createLookAt(const nebJson &param, const Arguments &lst) {
-    nebJson _pos = param.getValue(0, _pos);
-    nebJson _target = param.getValue(1, _target);
-    nebJson _up = param.getValue(2, _up);
+    nebJson _pos = param.GetValue(0, nebJson());
+    nebJson _target = param.GetValue(1, nebJson());
+    nebJson _up = param.GetValue(2, nebJson());
 
-    Float x = _pos.getValue(0, 0);
-    Float y = _pos.getValue(1, 0);
-    Float z = _pos.getValue(2, -5);
+    Float x = _pos.GetValue(0, 0);
+    Float y = _pos.GetValue(1, 0);
+    Float z = _pos.GetValue(2, -5);
     Point3f pos(x, y, z);
 
-    x = _target.getValue(0, 0);
-    y = _target.getValue(1, 0);
-    z = _target.getValue(2, 0);
+    x = _target.GetValue(0, 0);
+    y = _target.GetValue(1, 0);
+    z = _target.GetValue(2, 0);
     Point3f target(x, y, z);
 
-    x = _up.getValue(0, 0);
-    y = _up.getValue(1, 1);
-    z = _up.getValue(2, 0);
+    x = _up.GetValue(0, 0);
+    y = _up.GetValue(1, 1);
+    z = _up.GetValue(2, 0);
     Vector3f up(x, y, z);
 
     return Transform::LookAt(pos, target, up);

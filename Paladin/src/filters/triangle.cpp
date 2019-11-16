@@ -10,10 +10,15 @@
 
 PALADIN_BEGIN
 
-CObject_ptr createTriangleFilter(const neb::CJsonObject &param) {
-	nebJson radius = param.getValue("radius", radius);
-    Float rx = radius.getValue(0, 2.f);
-    Float ry = radius.getValue(1, 2.f);
+/**
+ * param : {
+ * 	   "radius" : [2,2]
+ * }
+ */
+CObject_ptr createTriangleFilter(const nebJson &param) {
+	nebJson radius = param.GetValue("radius", nebJson());
+    Float rx = radius.GetValue(0, 2.f);
+    Float ry = radius.GetValue(1, 2.f);
     return make_shared<TriangleFilter>(Vector2f(rx, ry));
 }
 

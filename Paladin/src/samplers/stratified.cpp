@@ -50,11 +50,19 @@ std::unique_ptr<Sampler> StratifiedSampler::clone(int seed) {
     return std::unique_ptr<Sampler>(ret);
 }
 
+/**
+ * param : {
+ *     "jitter" : true,
+ *     "xsamples" : 3,
+ *     "xsamples" : 3,
+ *     "dimesions" : 6
+ * }
+ */
 CObject_ptr createStratifiedSampler(const nebJson &param) {
-    bool jitter = param.getValue("jitter", true);
-    int xsamp = param.getValue("xsamples", 4);
-    int ysamp = param.getValue("ysamples", 4);
-    int sd = param.getValue("dimensions", 4);
+    bool jitter = param.GetValue("jitter", true);
+    int xsamp = param.GetValue("xsamples", 3);
+    int ysamp = param.GetValue("ysamples", 3);
+    int sd = param.GetValue("dimensions", 6);
     return make_shared<StratifiedSampler>(xsamp, ysamp, jitter, sd);
 }
 

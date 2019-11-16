@@ -16,28 +16,35 @@ PALADIN_BEGIN
 using namespace neb;
 USING_STD;
 
-void SceneParser::parse(const neb::CJsonObject &data) {
-    CJsonObject filterData;
-    filterData = data.getValue("filter", filterData);
+void SceneParser::parse(const nebJson &data) {
+    nebJson filterData = data.GetValue("filter", nebJson());
     _filter = parseFilter(filterData);
+    nebJson samplerData = data.GetValue("sampler", nebJson());
+    _sampler = parseSampler(samplerData);
+    nebJson filmData = data.GetValue("film", nebJson());
+    _film = parseFilm(filmData);
 }
 
 
-shared_ptr<Sampler> SceneParser::parseSampler(const neb::CJsonObject &param) {
-    
+shared_ptr<Sampler> SceneParser::parseSampler(const nebJson &data) {
+    string samplerType = data.GetValue("type", "stratified");
+    nebJson param = data.GetValue("param", nebJson());
+    auto creator = GET_CREATOR(samplerType);
+    shared_ptr<Sampler> ret = dynamic_pointer_cast<Sampler>(creator(param, {}));
+    return ret;
 }
 
 shared_ptr<Camera> SceneParser::parseCamera(const neb::CJsonObject &param) {
     
 }
 
-shared_ptr<Integrator> SceneParser::parseIntegrator(const neb::CJsonObject &filterData) {
+unique_ptr<Integrator> SceneParser::parseIntegrator(const neb::CJsonObject &filterData) {
     
 }
 
 shared_ptr<Filter> SceneParser::parseFilter(const neb::CJsonObject &data) {
-    string filterType = data.getValue("type", "box");
-    nebJson param = data.getValue("param", "{}");
+    string filterType = data.GetValue("type", "box");
+    nebJson param = data.GetValue("param", nebJson());
     auto creator = GET_CREATOR(filterType.c_str());
     shared_ptr<Filter> ret = dynamic_pointer_cast<Filter>(creator(param, {}));
     return ret;

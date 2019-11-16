@@ -10,6 +10,7 @@
 
 #include "transformcache.h"
 #include <fstream>
+#include "core/integrator.hpp"
 
 PALADIN_BEGIN
 
@@ -38,13 +39,13 @@ public:
         return _transformCache;
     }
     
-    void parse(const neb::CJsonObject &);
+    void parse(const nebJson &);
     
-    shared_ptr<Sampler> parseSampler(const neb::CJsonObject &param);
+    shared_ptr<Sampler> parseSampler(const nebJson &param);
     
-    shared_ptr<Camera> parseCamera(const neb::CJsonObject &param);
+    shared_ptr<Camera> parseCamera(const nebJson &param);
     
-    shared_ptr<Integrator> parseIntegrator(const neb::CJsonObject &param);
+    unique_ptr<Integrator> parseIntegrator(const neb::CJsonObject &param);
     
     shared_ptr<Filter> parseFilter(const neb::CJsonObject &);
     
@@ -66,9 +67,9 @@ private:
     
     shared_ptr<Aggregate> _aggregate;
     
-    shared_ptr<Integrator> _integrator;
+    unique_ptr<Integrator> _integrator;
     
-    shared_ptr<Scene> _scene;
+    unique_ptr<Scene> _scene;
     
     vector<shared_ptr<Light>> lights;
     

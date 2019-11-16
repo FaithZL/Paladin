@@ -200,9 +200,14 @@ std::unique_ptr<Sampler> HaltonSampler::clone(int seed) {
     return std::unique_ptr<Sampler>(new HaltonSampler(*this));
 }
 
+/**
+ * param : {
+ *     "spp" : 8
+ * }
+ */
 CObject_ptr createHaltonSampler(const nebJson &param, Arguments lst) {
-    bool sampleAtPixelCenter = param.getValue("sampleAtPixelCenter", false);
-    int spp = param.getValue("spp", 16);
+    bool sampleAtPixelCenter = param.GetValue("sampleAtPixelCenter", false);
+    int spp = param.GetValue("spp", 8);
     auto iter = lst.begin();
     shared_ptr<Film> film = dynamic_pointer_cast<Film>(*iter);
     AABB2i bound = film->getSampleBounds();

@@ -73,7 +73,7 @@ public:     // method of ordinary json object
     bool Get(const std::string& strKey, double& dValue) const;
     
     template <typename T, typename U>
-    T getValue(const U &keyOrIdx, const T &defaultValue) const {
+    T GetValue(const U &keyOrIdx, const T &defaultValue) const {
         T temp = defaultValue;
         bool ret = Get(keyOrIdx, temp);
         if (ret) {
@@ -83,7 +83,7 @@ public:     // method of ordinary json object
     }
     
     template <typename U>
-    std::string getValue(const U &keyOrIdx, const char * defaultValue) const {
+    std::string GetValue(const U &keyOrIdx, const char * defaultValue) const {
         std::string temp = defaultValue;
         bool ret = Get(keyOrIdx, temp);
         if (ret) {

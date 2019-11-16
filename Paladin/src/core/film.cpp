@@ -162,6 +162,18 @@ neb::CJsonObject Film::toJson() const {
     return nebJson();
 }
 
+//"param" : {
+//    "resolution" : [400, 400],
+//    "cropWindow" : null,
+//    "fileName" : "conelbox.png",
+//    "diagonal" : null,
+//    "scale" : 1
+//}
+CObject_ptr createFilm(const nebJson &param, const Arguments &lst) {
+    auto iter = lst.begin();
+    
+}
+
 PALADIN_END
 
 
