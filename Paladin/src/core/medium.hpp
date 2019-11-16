@@ -10,6 +10,7 @@
 #define medium_hpp
 
 #include "core/header.h"
+#include "tools/serializable.h"
 
 PALADIN_BEGIN
 

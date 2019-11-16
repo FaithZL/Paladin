@@ -22,15 +22,15 @@ public:
         
     }
     
-    virtual void startPixel(const Point2i &);
+    virtual void startPixel(const Point2i &) override;
     
-    virtual Float get1D();
+    virtual Float get1D() override;
     
-    virtual Point2f get2D();
+    virtual Point2f get2D() override;
     
     virtual neb::CJsonObject toJson() const override;
     
-    virtual std::unique_ptr<Sampler> clone(int seed);
+    virtual std::unique_ptr<Sampler> clone(int seed) override;
     
 private:
     RNG _rng;

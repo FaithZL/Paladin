@@ -41,7 +41,7 @@ void StratifiedSampler::startPixel(const Point2i &p) {
 }
 
 neb::CJsonObject StratifiedSampler::toJson() const {
-    
+    return nebJson();
 }
 
 std::unique_ptr<Sampler> StratifiedSampler::clone(int seed) {
