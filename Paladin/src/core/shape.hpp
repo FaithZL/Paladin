@@ -24,7 +24,7 @@ PALADIN_BEGIN
  */
 class Shape : public CObject {
 public:
-	Shape(const Transform *ObjectToWorld, const Transform *WorldToObject,
+	Shape(shared_ptr<const Transform>ObjectToWorld, shared_ptr<const Transform>WorldToObject,
           bool reverseOrientation);
 
 	virtual ~Shape();
@@ -89,11 +89,11 @@ public:
      */
     virtual Float solidAngle(const Point3f &p, int nSamples = 512) const;
 
-	const Transform * objectToWorld;
-	const Transform * worldToObject;
+    shared_ptr<const Transform> objectToWorld;
+    shared_ptr<const Transform> worldToObject;
     // 通常是模型文件指定的属性
-	const bool reverseOrientation;
-	const bool transformSwapsHandedness;
+    const bool reverseOrientation;
+    const bool transformSwapsHandedness;
 protected:
     // 参照mitsuba渲染器，后续优化，保存表面积的倒数，每次图形有变化时更新数据
     // 初始值为零，0为非法值

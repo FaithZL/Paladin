@@ -33,6 +33,7 @@
 
 
 using namespace paladin;
+using namespace std;
 
 void testscene() {
     parallelInit();
@@ -62,7 +63,7 @@ void testscene() {
     auto sig = std::shared_ptr<ConstantTexture<Float>>(new ConstantTexture<Float>(0));
     auto matte = std::shared_ptr<Material>(new MatteMaterial(colorKd, sig, nullptr));
     
-    auto tralst = Transform::translate(Vector3f(0,0, 0));
+    auto tralst = Transform::translate_ptr(Vector3f(0,0, 0));
     auto scale = Transform::scale(1.2, 1, 1);
     
     auto envpath = "res/derelict_overpass_1k.hdr";
@@ -70,16 +71,16 @@ void testscene() {
     auto env2w = Transform::rotateX(-90);
     auto env = std::shared_ptr<Light>(new EnvironmentMap(env2w, el,10, envpath));
     
-    auto inverse = tralst.getInverse();
-    auto sphere = std::shared_ptr<Shape>(new Sphere(&tralst, &inverse, false, 0.75, 0.75, -0.75, 360));
+    auto inverse = tralst->getInverse_ptr();
+    auto sphere = std::shared_ptr<Shape>(new Sphere(shared_ptr<const Transform>(tralst), shared_ptr<const Transform>(inverse), false, 0.75, 0.75, -0.75, 360));
     
     auto gSphere = std::shared_ptr<Primitive>(new GeometricPrimitive(sphere, matte, nullptr, nullptr));
     auto mi = MediumInterface(nullptr);
     
-    auto t2 = Transform::translate(Vector3f(-2,0,0));
-    auto int2 = t2.getInverse();
-    auto lsphere = std::shared_ptr<Shape>(new Sphere(&t2, &int2, false, 0.75, 0.75, -0.75, 360));
-    auto areaL = std::shared_ptr<AreaLight>(new DiffuseAreaLight(tralst, mi, Spectrum(1), 10, lsphere));
+    auto t2 = Transform::translate_ptr(Vector3f(-2,0,0));
+    auto int2 = t2->getInverse_ptr();
+    auto lsphere = std::shared_ptr<Shape>(new Sphere(shared_ptr<const Transform>(t2), shared_ptr<const Transform>(int2), false, 0.75, 0.75, -0.75, 360));
+    auto areaL = std::shared_ptr<AreaLight>(new DiffuseAreaLight(*tralst, mi, Spectrum(1), 10, lsphere));
     auto l2 = std::shared_ptr<Primitive>(new GeometricPrimitive
                                          (lsphere, nullptr, areaL, nullptr));
     std::vector<std::shared_ptr<Primitive>> lst;

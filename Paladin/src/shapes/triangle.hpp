@@ -47,7 +47,7 @@ struct TriangleMesh {
 class Triangle : public Shape {
 public:
 
-    Triangle(const Transform *objectToWorld, const Transform *worldToObject,
+    Triangle(shared_ptr<const Transform> objectToWorld, shared_ptr<const Transform> worldToObject,
              bool reverseOrientation, const std::shared_ptr<TriangleMesh> &_mesh,
              int triNumber)
     : Shape(objectToWorld, worldToObject, reverseOrientation), _mesh(_mesh) {

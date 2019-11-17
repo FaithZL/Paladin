@@ -27,11 +27,14 @@ PALADIN_BEGIN
 class Cone : public Shape {
 public:
 
-    Cone(const Transform *o2w, const Transform *w2o, bool reverseOrientation,
-         Float height, Float radius, Float phiMax): Shape(o2w, w2o, reverseOrientation),
+    Cone(shared_ptr<const Transform> o2w, shared_ptr<const Transform> w2o, bool reverseOrientation,
+         Float height, Float radius, Float phiMax): 
+    Shape(o2w, w2o, reverseOrientation),
     _radius(radius),
     _height(height),
-    _phiMax(degree2radian(clamp(phiMax, 0, 360))) {}
+    _phiMax(degree2radian(clamp(phiMax, 0, 360))) {
+
+    }
     
     virtual void init() override {
         _invArea = 1 / area();
