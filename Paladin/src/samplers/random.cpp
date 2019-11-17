@@ -37,7 +37,7 @@ void RandomSampler::startPixel(const Point2i &p) {
     Sampler::startPixel(p);
 }
 
-neb::CJsonObject RandomSampler::toJson() const {
+nebJson RandomSampler::toJson() const {
     return nebJson();
 }
 

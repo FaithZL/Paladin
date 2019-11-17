@@ -40,7 +40,7 @@ void StratifiedSampler::startPixel(const Point2i &p) {
     PixelSampler::startPixel(p);
 }
 
-neb::CJsonObject StratifiedSampler::toJson() const {
+nebJson StratifiedSampler::toJson() const {
     return nebJson();
 }
 

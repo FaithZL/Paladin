@@ -158,7 +158,7 @@ void Film::clear() {
     }
 }
 
-neb::CJsonObject Film::toJson() const {
+nebJson Film::toJson() const {
     return nebJson();
 }
 

@@ -192,7 +192,7 @@ Float HaltonSampler::sampleDimension(int64_t index, int dim) const {
     }
 }
 
-neb::CJsonObject HaltonSampler::toJson() const {
+nebJson HaltonSampler::toJson() const {
     return nebJson();
 }
 

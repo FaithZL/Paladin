@@ -93,7 +93,7 @@ void SceneParser::parseModel(const nebJson &data) {
     
 }
 
-shared_ptr<Aggregate> SceneParser::parseAccelerator(const neb::CJsonObject &param) {
+shared_ptr<Aggregate> SceneParser::parseAccelerator(const nebJson &param) {
     
 }
 

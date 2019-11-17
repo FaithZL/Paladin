@@ -28,7 +28,7 @@ public:
     
     virtual Point2f get2D() override;
     
-    virtual neb::CJsonObject toJson() const override;
+    virtual nebJson toJson() const override;
     
     virtual std::unique_ptr<Sampler> clone(int seed) override;
     

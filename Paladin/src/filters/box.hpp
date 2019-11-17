@@ -32,7 +32,7 @@ public:
     }
 };
 
-CObject_ptr createBoxFilter(const neb::CJsonObject &);
+CObject_ptr createBoxFilter(const nebJson &);
 
 PALADIN_END
 

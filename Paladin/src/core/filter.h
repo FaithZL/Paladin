@@ -58,7 +58,7 @@ public:
         
     }
     
-    virtual neb::CJsonObject toJson() const {
+    virtual nebJson toJson() const {
         return nebJson();
     }
     

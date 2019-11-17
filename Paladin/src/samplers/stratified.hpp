@@ -37,7 +37,7 @@ public:
         
     }
     
-    virtual neb::CJsonObject toJson() const override;
+    virtual nebJson toJson() const override;
     
     virtual void startPixel(const Point2i &) override;
     

@@ -18,7 +18,7 @@ typedef CObject * CObject_ptr;
 
 typedef initializer_list<CObject_ptr> Arguments;
 
-typedef CObject_ptr (*createObject)(const neb::CJsonObject &, const Arguments &);
+typedef CObject_ptr (*createObject)(const nebJson &, const Arguments &);
 
 class ClassFactory {
     

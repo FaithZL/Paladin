@@ -23,8 +23,8 @@ void testjson() {
     str = buf.str();
 //    std::cout << str;
     
-    neb::CJsonObject j(str);
-    neb::CJsonObject j2;
+    nebJson j(str);
+    nebJson j2;
 
 }
 

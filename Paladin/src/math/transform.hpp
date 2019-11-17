@@ -179,7 +179,7 @@ public:
         return _mat < other._mat;
     }
         
-    virtual neb::CJsonObject toJson() const override {
+    virtual nebJson toJson() const override {
         return nebJson();
     }
 

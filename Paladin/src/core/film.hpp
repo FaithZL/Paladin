@@ -185,7 +185,7 @@ public:
     
     void clear();
     
-    virtual neb::CJsonObject toJson() const override;
+    virtual nebJson toJson() const override;
     
     // 图片分辨率，原点在左上角
     const Point2i fullResolution;
