@@ -89,14 +89,14 @@ public:
 
     }
 
-    Light(int flags, const Transform &LightToWorld,
+    Light(int flags, const Transform * LightToWorld,
           const MediumInterface &mediumInterface, int nSamples = 1)
         
     : flags(flags),
     nSamples(std::max(1, nSamples)),
     mediumInterface(mediumInterface),
     _lightToWorld(LightToWorld),
-    _worldToLight(LightToWorld.getInverse()) {
+    _worldToLight(LightToWorld->getInverse_ptr()) {
 
     }
     
@@ -149,12 +149,13 @@ public:
     
 protected:
 
-    const Transform _lightToWorld, _worldToLight;
+    const Transform * _lightToWorld;
+    const Transform * _worldToLight;
 };
 
 class AreaLight : public Light {
 public:
-    AreaLight(const Transform &LightToWorld, 
+    AreaLight(const Transform * LightToWorld, 
             const MediumInterface &mi,
             int nSamples)
     :Light((int)LightFlags::Area, LightToWorld, mi, nSamples) {

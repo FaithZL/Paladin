@@ -9,11 +9,11 @@
 
 PALADIN_BEGIN
 
-DistantLight::DistantLight(const Transform &LightToWorld, const Spectrum &L,
+DistantLight::DistantLight(const Transform * LightToWorld, const Spectrum &L,
                            const Vector3f &wLight)
 : Light((int)LightFlags::DeltaDirection, LightToWorld, MediumInterface()),
 _L(L),
-_wLight(normalize(LightToWorld.exec(wLight))) {
+_wLight(normalize(LightToWorld->exec(wLight))) {
     
 }
 

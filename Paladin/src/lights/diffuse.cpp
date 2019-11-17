@@ -10,7 +10,7 @@
 
 PALADIN_BEGIN
 
-DiffuseAreaLight::DiffuseAreaLight(const Transform &LightToWorld,
+DiffuseAreaLight::DiffuseAreaLight(const Transform * LightToWorld,
                                    const MediumInterface &mediumInterface,
                                    const Spectrum &L, int nSamples,
                                    const std::shared_ptr<Shape> &shape,

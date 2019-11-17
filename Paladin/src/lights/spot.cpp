@@ -9,11 +9,11 @@
 
 PALADIN_BEGIN
 
-SpotLight::SpotLight(const Transform &LightToWorld,
+SpotLight::SpotLight(const Transform * LightToWorld,
                      const MediumInterface &mediumInterface, const Spectrum &I,
                      Float totalWidth, Float falloffStart)
 : Light((int)LightFlags::DeltaPosition, LightToWorld, mediumInterface),
-_pos(LightToWorld.exec(Point3f(0, 0, 0))),
+_pos(LightToWorld->exec(Point3f(0, 0, 0))),
 _I(I),
 _cosTotalWidth(std::cos(degree2radian(totalWidth))),
 _cosFalloffStart(std::cos(degree2radian(falloffStart))) {
@@ -30,7 +30,7 @@ Spectrum SpotLight::sample_Li(const Interaction &ref, const Point2f &u,
 }
 
 Float SpotLight::falloff(const Vector3f &w) const {
-    Vector3f wl = normalize(_worldToLight.exec(w));
+    Vector3f wl = normalize(_worldToLight->exec(w));
     Float cosTheta = wl.z;
     if (cosTheta < _cosTotalWidth) {
         return 0;

@@ -17,10 +17,10 @@ PALADIN_BEGIN
 
 class PointLight : public Light {
 public:
-    PointLight(const Transform &LightToWorld,
+    PointLight(const Transform * LightToWorld,
                const MediumInterface &mediumInterface, const Spectrum &I)
     :Light((int)LightFlags::DeltaPosition, LightToWorld, mediumInterface),
-    _pos(LightToWorld.exec(Point3f(0, 0, 0))),
+    _pos(LightToWorld->exec(Point3f(0, 0, 0))),
     _I(I) {
 
     }

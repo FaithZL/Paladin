@@ -11,7 +11,7 @@
 
 PALADIN_BEGIN
 
-EnvironmentMap::EnvironmentMap(const Transform &LightToWorld,
+EnvironmentMap::EnvironmentMap(const Transform * LightToWorld,
                                const Spectrum &L,
                                int nSamples, const std::string &texmap)
 :Light((int)LightFlags::Infinite, LightToWorld, MediumInterface(),
@@ -62,7 +62,7 @@ Spectrum EnvironmentMap::power() const {
 }
 
 Spectrum EnvironmentMap::Le(const RayDifferential &ray) const {
-    Vector3f w = normalize(_worldToLight.exec(ray.dir));
+    Vector3f w = normalize(_worldToLight->exec(ray.dir));
     Point2f st(sphericalPhi(w) * Inv2Pi, sphericalTheta(w) * InvPi);
     return Spectrum(_Lmap->lookup(st), SpectrumType::Illuminant);
 }
@@ -81,7 +81,7 @@ Spectrum EnvironmentMap::sample_Li(const Interaction &ref, const Point2f &u,
     Vector3f wiLight = Vector3f(sinTheta * cosPhi,
                                 sinTheta * sinPhi,
                                 cosTheta);
-    *wi = _lightToWorld.exec(wiLight);
+    *wi = _lightToWorld->exec(wiLight);
     
     // p(u, v) / p(ω) = sinθ 2π^2
     *pdf = mapPdf / (2 * Pi * Pi * sinTheta);
@@ -95,7 +95,7 @@ Spectrum EnvironmentMap::sample_Li(const Interaction &ref, const Point2f &u,
 }
 
 Float EnvironmentMap::pdf_Li(const Interaction &, const Vector3f &w) const {
-    Vector3f wi = _worldToLight.exec(w);
+    Vector3f wi = _worldToLight->exec(w);
     Float theta = sphericalTheta(wi), phi = sphericalPhi(wi);
     Float sinTheta = std::sin(theta);
     if (sinTheta == 0) {
