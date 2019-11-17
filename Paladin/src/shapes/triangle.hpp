@@ -55,27 +55,31 @@ public:
         _faceIndex = _mesh->faceIndices.size() ? _mesh->faceIndices[triNumber] : 0;
     }
 
-    virtual void init() {
+    virtual nebJson toJson() const override {
+        return nebJson();
+    }
+    
+    virtual void init() override {
         _invArea = 1 / area();
     }
 
-    virtual AABB3f objectBound() const;
+    virtual AABB3f objectBound() const override;
 
-    virtual AABB3f worldBound() const;
+    virtual AABB3f worldBound() const override;
 
     virtual bool intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
-                   bool testAlphaTexture = true) const;
+                   bool testAlphaTexture = true) const override;
 
-    virtual bool intersectP(const Ray &ray, bool testAlphaTexture = true) const;
+    virtual bool intersectP(const Ray &ray, bool testAlphaTexture = true) const override;
     
-    virtual Float area() const {
+    virtual Float area() const override {
         const Point3f &p0 = _mesh->points[_vertexIdx[0]];
         const Point3f &p1 = _mesh->points[_vertexIdx[1]];
         const Point3f &p2 = _mesh->points[_vertexIdx[2]];
         return 0.5 * cross(p1 - p0, p2 - p0).length();
     }
     
-    virtual Interaction samplePos(const Point2f &u, Float *pdf) const;
+    virtual Interaction samplePos(const Point2f &u, Float *pdf) const override;
     
     /**
      * 先把三角形三个顶点投影到单位球上
@@ -83,7 +87,7 @@ public:
      * 球面三角形的三个球面角大小分别为ABC，球面三角形的面积为(A+B+C-π)/r^2
      * 所以对应的立体角为(A+B+C-π)
      */
-    Float solidAngle(const Point3f &p, int nSamples = 0) const {
+    Float solidAngle(const Point3f &p, int nSamples = 0) const override {
         std::vector<Vector3f> pSphere = {
             normalize(_mesh->points[_vertexIdx[0]] - p), normalize(_mesh->points[_vertexIdx[1]] - p),
             normalize(_mesh->points[_vertexIdx[2]] - p)

@@ -30,6 +30,9 @@ void SceneParser::parse(const nebJson &data) {
     nebJson integratorData = data.GetValue("integrator", nebJson());
     Integrator * integrator = parseIntegrator(integratorData, sampler, camera);
     _integrator.reset(integrator);
+    
+    nebJson shapesData = data.GetValue("shapes", nebJson());
+    parseShapes(shapesData);
 }
 
 
@@ -64,6 +67,27 @@ Filter * SceneParser::parseFilter(const nebJson &data) {
     auto ret = dynamic_cast<Filter *>(creator(param, {}));
     DCHECK(ret != nullptr);
     return ret;
+}
+
+void SceneParser::parseShapes(const nebJson &shapeListData) {
+    int num = shapeListData.GetArraySize();
+    for (int i = 0; i < num; ++i) {
+        nebJson shapeData = shapeListData.GetValue(i, nebJson());
+        string type = shapeData.GetValue("type", "sphere");
+        if (type == "model") {
+            parseModel(shapeData);
+        } else {
+            parseSimpleShape(shapeData, type);
+        }
+    }
+}
+
+void SceneParser::parseSimpleShape(const nebJson &data, const string &type) {
+    
+}
+
+void SceneParser::parseModel(const nebJson &data) {
+    
 }
 
 shared_ptr<Aggregate> SceneParser::parseAccelerator(const neb::CJsonObject &param) {

@@ -218,4 +218,10 @@ Interaction Cylinder::samplePos(const Point2f &u, Float *pdf) const {
     return ret;
 }
 
+CObject_ptr * createCylinder(const nebJson &param, const Arguments &lst){
+    
+}
+
+REGISTER("cylinder", createCylinder)
+
 PALADIN_END

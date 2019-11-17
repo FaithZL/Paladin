@@ -226,4 +226,10 @@ Interaction Cone::samplePos(const Point2f &u, Float *pdf) const {
     return ret;
 }
 
+CObject_ptr * createCone(const nebJson &param, const Arguments &lst) {
+    
+}
+
+REGISTER("cone", createCone)
+
 PALADIN_END

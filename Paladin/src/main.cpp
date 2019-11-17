@@ -25,20 +25,41 @@ USING_PALADIN
 
 USING_STD
 
+class A {
+    
+public:
+    int m = 0;
+};
 
-int sum(std::initializer_list<int> ls={})
-{
-    int  m = 0;
-    for(auto &n : ls)
-    {
-           m += n;
-    }
-    return m;
+void f2(const A * a) {
+//    a->m = 2;
+    cout <<a->m;
 }
+
+class Test {
+public:
+    Test() {
+        p = new A();
+        p->m = 9;
+    }
+    
+    void fun() const {
+        f2(p);
+    }
+    
+public:
+    A * p;
+};
 
 int main(int argc, const char * argv[]) {
     // insert code here...
     COUT << "Hello, paladin!\n";
+    
+//    Test t;
+//
+//    cout << t.p->m << endl;
+//    t.fun();
+//    cout << t.p->m << endl;
     
     Paladin paladin;
     paladin.render("res/conelbox.json");

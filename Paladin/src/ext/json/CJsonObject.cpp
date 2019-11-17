@@ -1833,7 +1833,7 @@ bool CJsonObject::ReplaceWithNull(const std::string& strKey)
     return(true);
 }
 
-int CJsonObject::GetArraySize()
+int CJsonObject::GetArraySize() const
 {
     if (m_pJsonData != NULL)
     {

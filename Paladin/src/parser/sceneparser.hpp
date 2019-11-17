@@ -42,6 +42,8 @@ public:
     
     void parse(const nebJson &);
     
+    void parseShapes(const nebJson &);
+    
     Sampler * parseSampler(const nebJson &param);
     
     Camera * parseCamera(const nebJson &, Film *);
@@ -49,6 +51,12 @@ public:
     Integrator * parseIntegrator(const nebJson &,Sampler * sampler, Camera * camera);
     
     Filter * parseFilter(const nebJson &);
+    
+    // 解析简单物体，球体，圆柱，圆锥等
+    void parseSimpleShape(const nebJson &data, const string &type);
+    
+    // 解析模型
+    void parseModel(const nebJson &data);
     
     shared_ptr<Aggregate> parseAccelerator(const nebJson &);
     
@@ -64,9 +72,9 @@ private:
     
     unique_ptr<Scene> _scene;
     
-    vector<shared_ptr<Light>> lights;
+    vector<shared_ptr<Light>> _lights;
     
-    vector<shared_ptr<Primitive>> primitives;
+    vector<shared_ptr<Primitive>> _primitives;
     
     Transform _cameraToWorld;
 };

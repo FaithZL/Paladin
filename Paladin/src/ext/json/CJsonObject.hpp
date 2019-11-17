@@ -116,7 +116,7 @@ public:     // method of ordinary json object
     bool ReplaceWithNull(const std::string& strKey);    // replace value with null
 
 public:     // method of json array
-    int GetArraySize();
+    int GetArraySize() const;
     CJsonObject& operator[](unsigned int uiWhich);
     std::string operator()(unsigned int uiWhich) const;
     bool Get(int iWhich, CJsonObject& oJsonObject) const;

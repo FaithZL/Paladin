@@ -29,7 +29,7 @@
             }
         }
     },
-	"primitives" : [
+	"shapes" : [
 		{
 			"type" : "sphere",
 			"param" : {
@@ -39,8 +39,21 @@
                 },
                 "radius" : 0.75
 			},
+            "material" : "matte" ,
             "emission" : null
-		}
+		},
+        {
+            "type" : "sphere",
+            "param" : {
+                "worldToLocal" : {
+                    "type" : "translate",
+                    "param" : [-1,1,1]
+                },
+                "radius" : 0.75
+            },
+            "material" : "matte" ,
+            "emission" : null
+        }        
 	],
 	"integrator" : {
         "type" : "PathTracer",

@@ -784,7 +784,7 @@ static char *print_object(cJSON *item, int depth, int fmt)
 }
 
 /* Get Array size/item / object item. */
-int cJSON_GetArraySize(cJSON *array)
+int cJSON_GetArraySize(const cJSON *array)
 {
     cJSON *c = array->child;
     int i = 0;

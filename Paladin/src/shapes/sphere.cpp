@@ -327,4 +327,10 @@ Float Sphere::pdfDir(const paladin::Interaction &ref, const Vector3f &wi) const 
     return uniformConePdf(cosThetaMax);
 }
 
+CObject_ptr createSphere(const nebJson &param, const Arguments &lst) {
+    
+}
+
+REGISTER("sphere", createSphere);
+
 PALADIN_END

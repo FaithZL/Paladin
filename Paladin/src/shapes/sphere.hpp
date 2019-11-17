@@ -55,11 +55,11 @@ public:
         init();
     }
     
-    virtual void init() {
+    virtual void init() override {
         _invArea = 1.f / area();
     }
     
-    virtual AABB3f objectBound() const {
+    virtual AABB3f objectBound() const override {
         // 这里似乎可以优化一下，bound的范围可以再小些，todo
         auto ret = AABB3f(Point3f(-_radius, -_radius, _zMin),
                         Point3f(_radius, _radius, _zMax));
@@ -72,9 +72,9 @@ public:
      * 2.判断交点是否在ray的范围内
      * 3.判断交点是否在sphere有效部分之内
      */
-    virtual bool intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect, bool testAlphaTexture) const;
+    virtual bool intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect, bool testAlphaTexture) const override;
     
-    virtual bool intersectP(const Ray &ray, bool testAlphaTexture) const;
+    virtual bool intersectP(const Ray &ray, bool testAlphaTexture) const override;
     
     /**
      * 可以把球体当做一个180°的圆弧以z轴旋转360°得到的一个回转体
@@ -85,17 +85,21 @@ public:
      * f'(z) = -(z / sqrt(r^2 - z^2))
      * 积分可得 area = φ * r * (zMax - zMin)
      */
-    virtual Float area() const {
+    virtual Float area() const override {
         return _phiMax * _radius * (_zMax - _zMin);
     }
     
-    virtual Interaction samplePos(const Point2f &u, Float *pdf) const;
+    virtual nebJson toJson() const override {
+        return nebJson();
+    }
     
-    virtual Interaction sampleDir(const Interaction &ref, const Point2f &u, Float *pdf) const;
+    virtual Interaction samplePos(const Point2f &u, Float *pdf) const override;
     
-    virtual Float pdfDir(const Interaction &ref, const Vector3f &wi) const;
+    virtual Interaction sampleDir(const Interaction &ref, const Point2f &u, Float *pdf) const override;
     
-    virtual Float solidAngle(const Point3f &p, int nSamples = 512) const {
+    virtual Float pdfDir(const Interaction &ref, const Vector3f &wi) const override;
+    
+    virtual Float solidAngle(const Point3f &p, int nSamples = 512) const override {
         Point3f pCenter = objectToWorld->exec(Point3f(0, 0, 0));
         Float r2 = _radius * _radius;
         if (distanceSquared(p, pCenter) <= r2) {
@@ -115,6 +119,8 @@ private:
     const Float _thetaMin;
     const Float _thetaMax;
 };
+
+CObject_ptr createSphere(const nebJson &param, const Arguments &lst);
 
 PALADIN_END
 

@@ -31,25 +31,29 @@ public:
         
     }
     
-    virtual void init() {
+    virtual void init() override {
         _invArea = 1 / area();
     }
     
-    virtual AABB3f objectBound() const {
+    virtual nebJson toJson() const override {
+        return nebJson();
+    }
+    
+    virtual AABB3f objectBound() const override {
         return AABB3f(Point3f(-_radius, -_radius, _height),
                     Point3f(_radius, _radius, _height));
     }
     
     virtual bool intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
-                   bool testAlphaTexture) const;
+                   bool testAlphaTexture) const override;
     
-    virtual bool intersectP(const Ray &ray, bool testAlphaTexture) const;
+    virtual bool intersectP(const Ray &ray, bool testAlphaTexture) const override;
    
-    virtual Float area() const {
+    virtual Float area() const override {
         return _phiMax * 0.5 * (_radius * _radius - _innerRadius * _innerRadius);
     }
     
-    virtual Interaction samplePos(const Point2f &u, Float *pdf) const;
+    virtual Interaction samplePos(const Point2f &u, Float *pdf) const override;
     
 private:
 

@@ -36,9 +36,13 @@ public:
 
     } 
 
-    virtual AABB3f objectBound() const {
+    virtual AABB3f objectBound() const override {
         return AABB3f(Point3f(-_radius, -_radius, _zMin),
                     Point3f(_radius, _radius, _zMax));
+    }
+    
+    virtual nebJson toJson() const override {
+        return nebJson();
     }
     
     /**
@@ -46,15 +50,15 @@ public:
      * 2.判断交点是否在ray的范围内
      * 3.判断交点是否在圆柱的有效范围内
      */
-    virtual bool intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect, bool testAlphaTexture) const;
+    virtual bool intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect, bool testAlphaTexture) const override;
 
-    virtual bool intersectP(const Ray &ray, bool testAlphaTexture) const;
+    virtual bool intersectP(const Ray &ray, bool testAlphaTexture) const override;
 
-    virtual Float area() const {
+    virtual Float area() const override {
         return (_zMax - _zMin) * _radius * _phiMax;
     }
 
-    virtual Interaction samplePos(const Point2f &u, Float *pdf) const;
+    virtual Interaction samplePos(const Point2f &u, Float *pdf) const override;
     
 protected:
     const Float _radius;
@@ -62,6 +66,8 @@ protected:
     const Float _zMax;
     const Float _phiMax;
 };
+
+CObject_ptr * createCylinder(const nebJson &param, const Arguments &lst);
 
 PALADIN_END
 
