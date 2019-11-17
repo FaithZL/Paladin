@@ -7,6 +7,7 @@
 //
 
 #include "pathtracer.hpp"
+#include "core/camera.hpp"
 
 PALADIN_BEGIN
 
@@ -131,18 +132,34 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
     return L;
 }
 
-neb::CJsonObject PathTracer::toJson() const {
-    return nebJson();
-}
-
 USING_STD;
 
-CObject_ptr createPathTracer(const nebJson &param, const Arguments &ls) {
+//"param" : {
+//    "maxBounce" : 5,
+//    "rrThreshold" : 1,
+//    "lightSampleStrategy" : "power"
+//}
+// lst = {sampler, camera}
+CObject_ptr createPathTracer(const nebJson &param, const Arguments &lst) {
+    int maxBounce = param.GetValue("maxBounce", 5);
+    Float rrThreshold = param.GetValue("rrThreshold", 1.f);
+    string lightSampleStrategy = param.GetValue("lightSampleStrategy", "power");
+    auto iter = lst.begin();
+    Sampler * sampler = dynamic_cast<Sampler *>(*iter);
+    ++iter;
+    Camera * camera = dynamic_cast<Camera *>(*iter);
+    AABB2i pixelBounds = camera->film->getSampleBounds();
+    PathTracer * ret = new PathTracer(maxBounce,
+                                      shared_ptr<const Camera>(camera),
+                                      shared_ptr<Sampler>(sampler),
+                                      pixelBounds,
+                                      rrThreshold,
+                                      lightSampleStrategy);
     
-    COUT << param.ToString();
+    return ret;
 }
 
-REGISTER("pathtracer", createPathTracer);
+REGISTER("PathTracer", createPathTracer);
 
 
 

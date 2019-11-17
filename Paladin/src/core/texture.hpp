@@ -12,6 +12,7 @@
 #include "header.h"
 #include "math/transform.hpp"
 #include "interaction.hpp"
+#include "tools/cobject.h"
 
 PALADIN_BEGIN
 

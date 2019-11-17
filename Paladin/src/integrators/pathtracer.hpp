@@ -257,7 +257,9 @@ public:
 	 */
 	virtual void preprocess(const Scene &scene, Sampler &sampler) override;
     
-    virtual neb::CJsonObject toJson() const override;
+    virtual nebJson toJson() const override {
+        return nebJson();
+    }
 	
 	
 	virtual Spectrum Li(const RayDifferential &ray, const Scene &scene,
@@ -276,7 +278,7 @@ private:
 
 USING_STD;
 
-CObject_ptr createPathTracer(const nebJson &param, const Arguments &ls);
+CObject_ptr createPathTracer(const nebJson &param, const Arguments &lst);
 
 PALADIN_END
 

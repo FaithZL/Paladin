@@ -36,21 +36,21 @@ using namespace paladin;
 
 void testscene() {
     parallelInit();
-    auto pos = Point3f(0,0,-10);
+    auto pos = Point3f(0,0,-5);
     auto target = Point3f(0,0,0);
     auto up = Vector3f(0,1,0);
-    auto c2w = Transform::lookAt(pos,target,up).getInverse();
-    auto aniTrans = AnimatedTransform(&c2w, 0, &c2w, 0);
+    auto c2w = Transform::lookAt(pos,target,up).getInverse_ptr();
+    auto aniTrans = AnimatedTransform(shared_ptr<const Transform>(c2w), 0, shared_ptr<const Transform>(c2w), 0);
     
     auto res = Point2i(400,400);
     auto windows = AABB2f(Point2f(0,0), Point2f(1,1));
     std::string fn = "pathtracing.png";
     auto filter = std::unique_ptr<Filter>(new BoxFilter(Vector2f(2,2)));
-    auto pFilm = new Film(res, windows, std::move(filter), 35, fn, 1);
+    auto pFilm = new Film(res, windows, std::move(filter), 45, fn, 1);
     
     auto camera = std::shared_ptr<Camera>(new PerspectiveCamera(aniTrans, AABB2f(Point2f(-1,-1), Point2f(1,1)), 0, 0, 0, 1e6, 45, std::shared_ptr<Film>(pFilm), nullptr));
     
-    auto sampler = std::shared_ptr<Sampler>(new StratifiedSampler(1, 1, true, 20));
+    auto sampler = std::shared_ptr<Sampler>(new StratifiedSampler(3, 3, true, 20));
     
     auto pt = new PathTracer(6, camera, sampler, AABB2i(Point2i(0,0), res));
     

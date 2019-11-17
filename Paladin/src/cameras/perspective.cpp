@@ -136,6 +136,7 @@ Spectrum PerspectiveCamera::sample_Wi(const Interaction &ref, const Point2f &u,
 //    "lensRadius" : 0,
 //    "focalDistance" : 100,
 //    "fov" : 45,
+//    "aspect" : 1,
 //    "lookAt" : [
 //        [0,0,-5],
 //        [0,0,0],
@@ -149,7 +150,6 @@ Spectrum PerspectiveCamera::sample_Wi(const Interaction &ref, const Point2f &u,
 //}
 // lst = {Film}
 CObject_ptr createPerspectiveCamera(const nebJson &param, const Arguments &lst) {
-    cout << param.ToFormattedString();
     Float shutterOpen = param.GetValue("shutterOpen", 0.f);
     Float shutterClose = param.GetValue("shutterClose", 1.f);
     Float lensRadius = param.GetValue("lensRadius", 0.f);
@@ -157,9 +157,45 @@ CObject_ptr createPerspectiveCamera(const nebJson &param, const Arguments &lst) 
     Float fov = param.GetValue("fov", 45);
     nebJson lookAtParam = param.GetValue("lookAt", nebJson());
     nebJson lookAtEndParam = param.GetValue("lookAtEnd", nebJson());
+
     
+    auto iter = lst.begin();
+    auto film = shared_ptr<Film>(dynamic_cast<Film *>(*iter));
+
+    Float aspect = Float(film->fullResolution.x) / Float(film->fullResolution.y);
     
-    return nullptr;
+    AABB2f scrn;
+    if (aspect > 1.f) {
+        scrn.pMin.x = -aspect;
+        scrn.pMax.x = aspect;
+        scrn.pMin.y = -1.f;
+        scrn.pMax.y = 1.f;
+    } else {
+        scrn.pMin.x = -1.f;
+        scrn.pMax.x = 1.f;
+        scrn.pMin.y = -1.f / aspect;
+        scrn.pMax.y = 1.f / aspect;
+    }
+    
+    Transform * lookAt = dynamic_cast<Transform *>(createLookAt(lookAtParam, {}));
+    Transform * lookAtEnd = dynamic_cast<Transform *>(createLookAt(lookAtEndParam, {}));
+    
+    AnimatedTransform animatedTransform(shared_ptr<const Transform>(lookAt->getInverse_ptr()),
+                                        shutterOpen,
+                                        shared_ptr<const Transform>(lookAtEnd->getInverse_ptr()),
+                                        shutterClose);
+    
+    PerspectiveCamera * ret(new PerspectiveCamera(animatedTransform,
+                                                  scrn,
+                                                  shutterOpen,
+                                                  shutterClose,
+                                                  lensRadius,
+                                                  focalDistance,
+                                                  fov,
+                                                  film,
+                                                  nullptr));
+    
+    return ret;
 }
 
 REGISTER("perspective", createPerspectiveCamera);

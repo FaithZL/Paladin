@@ -425,7 +425,7 @@ Transform Transform::perspective(Float fov, Float zNear, Float zFar, bool bRadia
     return Transform(mat);
 }
 
-Transform * Transform::Scale(Float x, Float y, Float z) {
+Transform * Transform::scale_ptr(Float x, Float y, Float z) {
     Float a[16] = {
         x, 0, 0, 0,
         0, y, 0, 0,
@@ -444,15 +444,15 @@ Transform * Transform::Scale(Float x, Float y, Float z) {
 }
 
 
-Transform * Transform::Scale(Float s) {
-    return Transform::Scale(s, s, s);
+Transform * Transform::scale_ptr(Float s) {
+    return Transform::scale_ptr(s, s, s);
 }
 
-Transform * Transform::Scale(const Vector3f &s) {
-    return Transform::Scale(s.x, s.y, s.z);
+Transform * Transform::scale_ptr(const Vector3f &s) {
+    return Transform::scale_ptr(s.x, s.y, s.z);
 }
 
-Transform * Transform::Translate(const Vector3f &delta) {
+Transform * Transform::translate_ptr(const Vector3f &delta) {
     Float a[16] = {
         1, 0, 0, delta.x,
         0, 1, 0, delta.y,
@@ -470,7 +470,7 @@ Transform * Transform::Translate(const Vector3f &delta) {
     return new Transform(mat, matInv);
 }
 
-Transform * Transform::RotateX(Float theta, bool bRadian/*=false*/) {
+Transform * Transform::rotateX_ptr(Float theta, bool bRadian/*=false*/) {
     theta = bRadian ? theta : degree2radian(theta);
     Float sinTheta = std::sin(theta);
     Float cosTheta = std::cos(theta);
@@ -485,7 +485,7 @@ Transform * Transform::RotateX(Float theta, bool bRadian/*=false*/) {
     return new Transform(mat, mat.getTransposeMat());
 }
 
-Transform * Transform::RotateY(Float theta, bool bRadian/*=false*/) {
+Transform * Transform::rotateY_ptr(Float theta, bool bRadian/*=false*/) {
     theta = bRadian ? theta : degree2radian(theta);
     Float sinTheta = std::sin(theta);
     Float cosTheta = std::cos(theta);
@@ -500,7 +500,7 @@ Transform * Transform::RotateY(Float theta, bool bRadian/*=false*/) {
     return new Transform(mat, mat.getTransposeMat());
 }
 
-Transform * Transform::RotateZ(Float theta, bool bRadian/*=false*/) {
+Transform * Transform::rotateZ_ptr(Float theta, bool bRadian/*=false*/) {
     theta = bRadian ? theta : degree2radian(theta);
     Float sinTheta = std::sin(theta);
     Float cosTheta = std::cos(theta);
@@ -515,7 +515,7 @@ Transform * Transform::RotateZ(Float theta, bool bRadian/*=false*/) {
     return new Transform(mat, mat.getTransposeMat());
 }
 
-Transform * Transform::Rotate(Float theta, const Vector3f &axis, bool bRadian/*=false*/) {
+Transform * Transform::rotate_ptr(Float theta, const Vector3f &axis, bool bRadian/*=false*/) {
    Vector3f a = paladin::normalize(axis);
    theta = bRadian ? theta : degree2radian(theta);
    Float sinTheta = std::sin(theta);
@@ -540,7 +540,7 @@ Transform * Transform::Rotate(Float theta, const Vector3f &axis, bool bRadian/*=
    return new Transform(mat, mat.getTransposeMat());
 }
 
-Transform * Transform::LookAt(const Point3f &pos, const Point3f &look, const Vector3f &up) {
+Transform * Transform::lookAt_ptr(const Point3f &pos, const Point3f &look, const Vector3f &up) {
     //基本思路，先用up向量与dir向量确定right向量
     // right向量与dir向量互相垂直，由此可以确定新的up向量
     // right，dir，newUp向量两两垂直，可以构成直角坐标系，也就是视图空间
@@ -563,7 +563,7 @@ Transform * Transform::LookAt(const Point3f &pos, const Point3f &look, const Vec
     return new Transform(cameraToWorld.getInverseMat(), cameraToWorld);
 }
 
-Transform * Transform::Perspective(Float fov, Float zNear, Float zFar, bool bRadian/*=false*/) {
+Transform * Transform::perspective_ptr(Float fov, Float zNear, Float zFar, bool bRadian/*=false*/) {
     //这里的透视矩阵没有aspect参数，是因为把光栅空间的变换分离出来了
     fov = bRadian ? fov : degree2radian(fov);
     Float invTanAng = 1 / std::tan(fov / 2);
@@ -588,7 +588,7 @@ CObject_ptr createScale(const nebJson &param, const Arguments &lst) {
     Float sx = param.GetValue(0, 1.f);
     Float sy = param.GetValue(1, 1.f);
     Float sz = param.GetValue(2, 1.f);
-    return Transform::Scale(sx, sy, sz);
+    return Transform::scale_ptr(sx, sy, sz);
 }
 
 /**
@@ -598,7 +598,7 @@ CObject_ptr createTranslate(const nebJson &param, const Arguments &lst) {
     Float x = param.GetValue(0, 0.f);
     Float y = param.GetValue(1, 0.f);
     Float z = param.GetValue(2, 0.f);
-    return Transform::Translate(Vector3f(x, y, z));
+    return Transform::translate_ptr(Vector3f(x, y, z));
 }
 
 /**
@@ -607,7 +607,7 @@ CObject_ptr createTranslate(const nebJson &param, const Arguments &lst) {
 CObject_ptr createRotateX(const nebJson &param, const Arguments &lst) {
     Float theta = param.GetValue(0, 0);
     bool bRadian = param.GetValue(1, false);
-    return Transform::RotateX(theta, bRadian);
+    return Transform::rotateX_ptr(theta, bRadian);
 }
 
 /**
@@ -616,7 +616,7 @@ CObject_ptr createRotateX(const nebJson &param, const Arguments &lst) {
 CObject_ptr createRotateY(const nebJson &param, const Arguments &lst) {
     Float theta = param.GetValue(0, 0);
     bool bRadian = param.GetValue(1, false);
-    return Transform::RotateY(theta, bRadian);
+    return Transform::rotateY_ptr(theta, bRadian);
 }
 
 /**
@@ -625,7 +625,7 @@ CObject_ptr createRotateY(const nebJson &param, const Arguments &lst) {
 CObject_ptr createRotateZ(const nebJson &param, const Arguments &lst) {
     Float theta = param.GetValue(0, 0);
     bool bRadian = param.GetValue(1, false);
-    return Transform::RotateZ(theta, bRadian);
+    return Transform::rotateZ_ptr(theta, bRadian);
 }
 
 /**
@@ -643,7 +643,7 @@ CObject_ptr createRotate(const nebJson &param, const Arguments &lst) {
    Float az = vec.GetValue(2, 1);
    bool bRadian = param.GetValue(2, false);
    Vector3f axis(ax, ay, az);
-   return Transform::Rotate(theta, axis, bRadian);
+   return Transform::rotate_ptr(theta, axis, bRadian);
 }
 
 /**
@@ -673,10 +673,10 @@ CObject_ptr createLookAt(const nebJson &param, const Arguments &lst) {
     z = _up.GetValue(2, 0);
     Vector3f up(x, y, z);
 
-    return Transform::LookAt(pos, target, up);
+    return Transform::lookAt_ptr(pos, target, up);
 }
 
-REGISTER("Scale", createScale);
+REGISTER("scale", createScale);
 REGISTER("Translate", createTranslate);
 REGISTER("RotateX", createRotateX);
 REGISTER("RotateY", createRotateY);

@@ -10,7 +10,8 @@
 #include "core/film.hpp"
 #include "tools/classfactory.hpp"
 #include "filters/box.hpp"
-#include "cameras/perspective.hpp"
+#include "core/camera.hpp"
+
 
 PALADIN_BEGIN
 
@@ -19,13 +20,16 @@ USING_STD;
 
 void SceneParser::parse(const nebJson &data) {
     nebJson filterData = data.GetValue("filter", nebJson());
-    auto filter = parseFilter(filterData);
+    Filter * filter = parseFilter(filterData);
     nebJson samplerData = data.GetValue("sampler", nebJson());
-    auto sampler = parseSampler(samplerData);
+    Sampler * sampler = parseSampler(samplerData);
     nebJson filmData = data.GetValue("film", nebJson());
-    _film = parseFilm(filmData, filter);
+    auto film = parseFilm(filmData, filter);
     nebJson cameraData = data.GetValue("camera", nebJson());
-    _camera = parseCamera(cameraData);
+    Camera * camera = parseCamera(cameraData, film);
+    nebJson integratorData = data.GetValue("integrator", nebJson());
+    Integrator * integrator = parseIntegrator(integratorData, sampler, camera);
+    _integrator.reset(integrator);
 }
 
 
@@ -37,16 +41,20 @@ Sampler * SceneParser::parseSampler(const nebJson &data) {
     return ret;
 }
 
-shared_ptr<const Camera> SceneParser::parseCamera(const nebJson &data) {
+Camera * SceneParser::parseCamera(const nebJson &data, Film * film) {
     string cameraType = data.GetValue("type", "perspective");
     nebJson param = data.GetValue("param", nebJson());
     auto creator = GET_CREATOR(cameraType);
-    auto ret = dynamic_cast<Camera *>(creator(param, {}));
-    return shared_ptr<const Camera>(ret);
+    auto ret = dynamic_cast<Camera *>(creator(param, {film}));
+    return ret;
 }
 
-unique_ptr<Integrator> SceneParser::parseIntegrator(const neb::CJsonObject &filterData) {
-    
+Integrator * SceneParser::parseIntegrator(const nebJson &data, Sampler * sampler, Camera * camera) {
+    string type = data.GetValue("type", "PathTracer");
+    nebJson param = data.GetValue("param", nebJson());
+    auto creator = GET_CREATOR(type);
+    auto ret = dynamic_cast<Integrator *>(creator(param,{sampler, camera}));
+    return ret;
 }
 
 Filter * SceneParser::parseFilter(const nebJson &data) {
@@ -62,10 +70,10 @@ shared_ptr<Aggregate> SceneParser::parseAccelerator(const neb::CJsonObject &para
     
 }
 
-shared_ptr<Film> SceneParser::parseFilm(const nebJson &data, Filter * filt) {
+Film * SceneParser::parseFilm(const nebJson &data, Filter * filt) {
     nebJson param = data.GetValue("param", nebJson());
     Film * film = dynamic_cast<Film *>(createFilm(param,{filt}));
-    return shared_ptr<Film>(film);
+    return film;
 }
 
 PALADIN_END

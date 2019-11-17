@@ -16,7 +16,10 @@
         }
 	],
     "textures" : {
-
+        "tex1" : {
+            "type" : "constant",
+            "param" : [0.1, 0.9, 0.5]
+        }
     },
     "materials" : {
         "metal1" : {
@@ -40,7 +43,7 @@
 		}
 	],
 	"integrator" : {
-        "type" : "pathtracer",
+        "type" : "PathTracer",
         "param" : {
         	"maxBounce" : 5,
         	"rrThreshold" : 1,

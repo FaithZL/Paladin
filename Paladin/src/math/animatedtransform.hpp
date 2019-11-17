@@ -163,8 +163,8 @@ public:
      *
      * 求导数为零的点还是不复杂，用牛顿迭代法
      */    
-    AnimatedTransform(const Transform *startTransform, Float startTime,
-                      const Transform *endTransform, Float endTime);
+    AnimatedTransform(shared_ptr<const Transform>startTransform, Float startTime,
+                      shared_ptr<const Transform>endTransform, Float endTime);
     
    /**
     * 基本思路
@@ -224,8 +224,8 @@ public:
 
 private:
     
-    const Transform * _startTransform;
-    const Transform * _endTransform;
+    shared_ptr<const Transform> _startTransform;
+    shared_ptr<const Transform> _endTransform;
     const Float _startTime;
     const Float _endTime;
     const bool _actuallyAnimated;

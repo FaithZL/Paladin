@@ -43,27 +43,21 @@ public:
     
     Sampler * parseSampler(const nebJson &param);
     
-    shared_ptr<const Camera> parseCamera(const nebJson &);
+    Camera * parseCamera(const nebJson &, Film *);
     
-    unique_ptr<Integrator> parseIntegrator(const nebJson &);
+    Integrator * parseIntegrator(const nebJson &,Sampler * sampler, Camera * camera);
     
     Filter * parseFilter(const nebJson &);
     
+    
+    
     shared_ptr<Aggregate> parseAccelerator(const nebJson &);
     
-    shared_ptr<Film> parseFilm(const nebJson &param, Filter *);
+    Film * parseFilm(const nebJson &param, Filter *);
     
 private:
     
     TransformCache _transformCache;
-    
-    shared_ptr<const Camera> _camera;
-    
-    shared_ptr<Filter> _filter;
-
-    shared_ptr<Sampler> _sampler;
-    
-    shared_ptr<Film> _film;
     
     shared_ptr<Aggregate> _aggregate;
     

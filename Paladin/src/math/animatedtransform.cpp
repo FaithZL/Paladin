@@ -10,9 +10,9 @@
 
 PALADIN_BEGIN
 
-AnimatedTransform::AnimatedTransform(const Transform *startTransform,
+AnimatedTransform::AnimatedTransform(shared_ptr<const Transform> startTransform,
                                      Float startTime,
-                                     const Transform *endTransform,
+                                     shared_ptr<const Transform> endTransform,
                                      Float endTime):
 _startTransform(startTransform),
 _endTransform(endTransform),
