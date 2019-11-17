@@ -15,7 +15,7 @@ PerspectiveCamera::PerspectiveCamera(const AnimatedTransform &CameraToWorld,
                                      const AABB2f &screenWindow,
                                      Float shutterOpen, Float shutterClose,
                                      Float lensRadius, Float focalDistance,
-                                     Float fov, Film *film,
+                                     Float fov, shared_ptr<Film> film,
                                      const Medium *medium)
 : ProjectiveCamera(CameraToWorld, Transform::perspective(fov, 1e-2f, 1000.f),
 screenWindow, shutterOpen, shutterClose, lensRadius,
@@ -129,5 +129,39 @@ Spectrum PerspectiveCamera::sample_Wi(const Interaction &ref, const Point2f &u,
     // todo 双向方法里用到，暂时不实现
     return Spectrum(0.f);
 }
+
+//"param" : {
+//    "shutterOpen" : 0,
+//    "shutterClose" : 1,
+//    "lensRadius" : 0,
+//    "focalDistance" : 100,
+//    "fov" : 45,
+//    "lookAt" : [
+//        [0,0,-5],
+//        [0,0,0],
+//        [0,1,0]
+//    ],
+//    "lookAtEnd" : [
+//        [0,0,-5],
+//        [0,0,0],
+//        [0,1,0]
+//    ]
+//}
+// lst = {Film}
+CObject_ptr createPerspectiveCamera(const nebJson &param, const Arguments &lst) {
+    cout << param.ToFormattedString();
+    Float shutterOpen = param.GetValue("shutterOpen", 0.f);
+    Float shutterClose = param.GetValue("shutterClose", 1.f);
+    Float lensRadius = param.GetValue("lensRadius", 0.f);
+    Float focalDistance = param.GetValue("focalDistance", 100.f);
+    Float fov = param.GetValue("fov", 45);
+    nebJson lookAtParam = param.GetValue("lookAt", nebJson());
+    nebJson lookAtEndParam = param.GetValue("lookAtEnd", nebJson());
+    
+    
+    return nullptr;
+}
+
+REGISTER("perspective", createPerspectiveCamera);
 
 PALADIN_END

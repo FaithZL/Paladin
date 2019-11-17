@@ -26,7 +26,7 @@ public:
         stringstream buffer;
         buffer << fst.rdbuf();
         string str = buffer.str();
-        neb::CJsonObject json(str);
+        nebJson json(str);
         auto errstr = json.GetErrMsg();
         if (errstr != "") {
             COUT << errstr;
@@ -43,21 +43,21 @@ public:
     
     Sampler * parseSampler(const nebJson &param);
     
-    shared_ptr<Camera> parseCamera(const nebJson &param);
+    shared_ptr<const Camera> parseCamera(const nebJson &);
     
-    unique_ptr<Integrator> parseIntegrator(const neb::CJsonObject &param);
+    unique_ptr<Integrator> parseIntegrator(const nebJson &);
     
-    Filter * parseFilter(const neb::CJsonObject &);
+    Filter * parseFilter(const nebJson &);
     
-    shared_ptr<Aggregate> parseAccelerator(const neb::CJsonObject &param);
+    shared_ptr<Aggregate> parseAccelerator(const nebJson &);
     
-    shared_ptr<Film> parseFilm(const neb::CJsonObject &param);
+    shared_ptr<Film> parseFilm(const nebJson &param, Filter *);
     
 private:
     
     TransformCache _transformCache;
     
-    shared_ptr<Camera> _camera;
+    shared_ptr<const Camera> _camera;
     
     shared_ptr<Filter> _filter;
 

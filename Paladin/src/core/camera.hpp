@@ -35,11 +35,7 @@ PALADIN_BEGIN
 class Camera : public CObject {
 public:
     Camera(const AnimatedTransform &CameraToWorld, Float shutterOpen,
-           Float shutterClose, Film *film, const Medium *medium);
-    
-    virtual ~Camera() {
-        delete film;
-    }
+           Float shutterClose, shared_ptr<Film> film, const Medium *medium);
     
     /**
      * 生成的ray中dir分量为单位向量
@@ -68,7 +64,7 @@ public:
     // 快门开启时间，快门关闭时间
     const Float shutterOpen, shutterClose;
     // 胶片
-    Film * film;
+    shared_ptr<Film> film;
     // 相机所在的介质
     const Medium *medium;
 };
@@ -93,7 +89,7 @@ public:
     ProjectiveCamera(const AnimatedTransform &CameraToWorld,
                      const Transform &cameraToScreen,
                      const AABB2f &screenWindow, Float shutterOpen,
-                     Float shutterClose, Float lensr, Float focalDistance, Film *film,
+                     Float shutterClose, Float lensr, Float focalDistance, shared_ptr<Film> film,
                      const Medium *medium)
     : Camera(CameraToWorld, shutterOpen, shutterClose, film, medium),
     _cameraToScreen(cameraToScreen) {

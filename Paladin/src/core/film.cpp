@@ -163,15 +163,37 @@ neb::CJsonObject Film::toJson() const {
 }
 
 //"param" : {
-//    "resolution" : [400, 400],
-//    "cropWindow" : null,
+//    "resolution" : [500, 500],
+//    "cropWindow" : [0,0,500,500],
 //    "fileName" : "conelbox.png",
 //    "diagonal" : null,
 //    "scale" : 1
 //}
 CObject_ptr createFilm(const nebJson &param, const Arguments &lst) {
-    auto iter = lst.begin();
     
+    nebJson res = param.GetValue("resolution", nebJson());
+    int resX = res.GetValue(0, 500);
+    int resY = res.GetValue(1, 500);
+    Point2i resolution(resX, resY);
+    
+    nebJson cw = param.GetValue("cropWindow", nebJson());
+    Float minX = cw.GetValue(0, 0.f);
+    Float minY = cw.GetValue(1, 0.f);
+    Float maxX = cw.GetValue(2, 1.f);
+    Float maxY = cw.GetValue(3, 1.f);
+    AABB2f cropWindow(Point2f(minX, minY), Point2f(maxX, maxY));
+    
+    auto iter = lst.begin();
+    Filter * filter = dynamic_cast<Filter *>(*iter);
+    std::unique_ptr<Filter> ufilter(filter);
+    
+    Float diagonal = param.GetValue("diagonal", 1);
+    
+    string fileName = param.GetValue("fileName", "paladin.png");
+    Float scale = param.GetValue("scale", 1.f);
+    
+    Film * film = new Film(resolution, cropWindow, move(ufilter), diagonal, fileName, scale);
+    return film;
 }
 
 PALADIN_END

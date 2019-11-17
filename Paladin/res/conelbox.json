@@ -15,6 +15,9 @@
             }
         }
 	],
+    "textures" : {
+
+    },
     "materials" : {
         "metal1" : {
             "type" : "metal",
@@ -61,7 +64,16 @@
     		"lensRadius" : 0,
     		"focalDistance" : 100,
     		"fov" : 45,
-            "lookAt" : []
+            "lookAt" : [
+                [0,0,-5],
+                [0,0,0],
+                [0,1,0]
+            ],
+            "lookAtEnd" : [
+                [0,0,-5],
+                [0,0,0],
+                [0,1,0]
+            ]
     	}
     },
     "film" : {

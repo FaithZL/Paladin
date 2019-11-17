@@ -12,7 +12,7 @@
 PALADIN_BEGIN
 
 Camera::Camera(const AnimatedTransform &CameraToWorld, Float shutterOpen,
-               Float shutterClose, Film *film, const Medium *medium)
+               Float shutterClose, shared_ptr<Film> film, const Medium *medium)
 : cameraToWorld(CameraToWorld),
 shutterOpen(shutterOpen),
 shutterClose(shutterClose),

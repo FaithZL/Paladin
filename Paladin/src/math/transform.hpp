@@ -128,8 +128,6 @@ private:
     friend struct Quaternion;
     friend class AnimatedTransform;
 };
-
-typedef shared_ptr<Transform> Transform_ptr;
         
 class Transform : public CObject {
 // 参考pbrt设计变换类，包装了矩阵对象，只留变换接口，这样设计的好处在于，代码可读性高，
@@ -156,9 +154,17 @@ public:
     Transform getInverse() const {
         return Transform(_matInv, _mat);
     }
+        
+    Transform * getInverse_ptr() const {
+        return new Transform(_matInv, _mat);
+    }
 
     Transform getTranspose() const {
         return Transform(_mat.getTransposeMat(), _matInv.getTransposeMat());
+    }
+        
+    Transform * getTranspose_ptr() const {
+        return new Transform(_mat.getTransposeMat(), _matInv.getTransposeMat());
     }
 
     bool operator == (const Transform &other) const {

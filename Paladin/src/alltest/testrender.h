@@ -48,7 +48,7 @@ void testscene() {
     auto filter = std::unique_ptr<Filter>(new BoxFilter(Vector2f(2,2)));
     auto pFilm = new Film(res, windows, std::move(filter), 35, fn, 1);
     
-    auto camera = std::shared_ptr<Camera>(new PerspectiveCamera(aniTrans, AABB2f(Point2f(-1,-1), Point2f(1,1)), 0, 0, 0, 1e6, 45, pFilm, nullptr));
+    auto camera = std::shared_ptr<Camera>(new PerspectiveCamera(aniTrans, AABB2f(Point2f(-1,-1), Point2f(1,1)), 0, 0, 0, 1e6, 45, std::shared_ptr<Film>(pFilm), nullptr));
     
     auto sampler = std::shared_ptr<Sampler>(new StratifiedSampler(1, 1, true, 20));
     

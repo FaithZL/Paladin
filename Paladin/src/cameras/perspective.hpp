@@ -71,20 +71,20 @@ public:
     PerspectiveCamera(const AnimatedTransform &CameraToWorld,
                       const AABB2f &screenWindow, Float shutterOpen,
                       Float shutterClose, Float lensRadius, Float focalDistance,
-                      Float fov, Film *film, const Medium *medium);
+                      Float fov, shared_ptr<Film> film, const Medium *medium);
     
-    virtual Float generateRay(const CameraSample &sample, Ray *) const;
+    virtual Float generateRay(const CameraSample &sample, Ray *) const override;
     
     virtual Float generateRayDifferential(const CameraSample &sample,
-                                  RayDifferential *ray) const;
+                                  RayDifferential *ray) const override;
     
-    virtual Spectrum We(const Ray &ray, Point2f *pRaster2 = nullptr) const;
+    virtual Spectrum We(const Ray &ray, Point2f *pRaster2 = nullptr) const override;
     
-    virtual void pdf_We(const Ray &ray, Float *pdfPos, Float *pdfDir) const;
+    virtual void pdf_We(const Ray &ray, Float *pdfPos, Float *pdfDir) const override;
     
     virtual Spectrum sample_Wi(const Interaction &ref, const Point2f &sample,
                        Vector3f *wi, Float *pdf, Point2f *pRaster,
-                       VisibilityTester *vis) const;
+                       VisibilityTester *vis) const override;
 
     virtual nebJson toJson() const override;
     
@@ -97,7 +97,7 @@ private:
     Float _area;
 };
 
-CObject_ptr createScale(const nebJson &, const Arguments &);
+CObject_ptr createPerspectiveCamera(const nebJson &, const Arguments &);
 
 PALADIN_END
 
