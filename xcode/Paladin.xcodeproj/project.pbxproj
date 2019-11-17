@@ -1732,7 +1732,6 @@
 				F1B3FAF4C3D442F1AB6A48D8 /* model.h */,
 				A02C30C823A04A8CADBF909E /* parallel.cpp */,
 				A0C75DF21AE24A24A2493E00 /* parallel.hpp */,
-				C4A5E82143704AB5B5EB1DC4 /* cobject.h */,
 				A0B6B38E085F4663901EA44B /* stringprint.h */,
 				F6E231E323797D0500B68F58 /* classfactory.cpp */,
 				F6E231E423797D0500B68F58 /* classfactory.hpp */,
@@ -2099,6 +2098,7 @@
 		D95D05DDC1034F28977CA7F9 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				C4A5E82143704AB5B5EB1DC4 /* cobject.h */,
 				725F65C8285D4FC88FF662FF /* bssrdf.cpp */,
 				0A80C54286034296B435D4A8 /* bssrdf.hpp */,
 				48981526BFC747158FAA967E /* bxdf.cpp */,

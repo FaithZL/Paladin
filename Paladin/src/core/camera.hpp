@@ -12,7 +12,7 @@
 #include "core/header.h"
 #include "core/film.hpp"
 #include "math/animatedtransform.hpp"
-#include "tools/CObject.h"
+#include "core/cobject.h"
 
 PALADIN_BEGIN
 

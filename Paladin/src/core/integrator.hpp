@@ -17,7 +17,7 @@
 #include "bxdf.hpp"
 #include "sampler.hpp"
 #include "material.hpp"
-#include "tools/CObject.h"
+#include "core/cobject.h"
 #include "tools/classfactory.hpp"
 
 PALADIN_BEGIN

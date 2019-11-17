@@ -12,7 +12,7 @@
 #include "core/spectrum.hpp"
 #include "core/filter.h"
 #include "tools/parallel.hpp"
-#include "tools/CObject.h"
+#include "core/cobject.h"
 
 PALADIN_BEGIN
 

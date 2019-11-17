@@ -22,8 +22,8 @@
         }
     },
     "materials" : {
-        "metal1" : {
-            "type" : "metal",
+        "matte" : {
+            "type" : "matte",
             "param" : {
 
             }

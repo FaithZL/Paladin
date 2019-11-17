@@ -26,6 +26,10 @@ public:
         return _value;
     }
     
+    virtual nebJson toJson() const override {
+        return nebJson();
+    }
+    
 private:
     T _value;
 };

@@ -26,6 +26,10 @@ public:
         return _tex1->evaluate(si) * _tex2->evaluate(si);
     }
     
+    virtual nebJson toJson() const override {
+        return nebJson();
+    }
+    
 private:
     std::shared_ptr<Texture<T1>> _tex1;
     std::shared_ptr<Texture<T2>> _tex2;

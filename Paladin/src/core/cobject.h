@@ -1,5 +1,5 @@
 //
-//  CObject.h
+//  cobject.h
 //  Paladin
 //
 //  Created by SATAN_Z on 2019/11/2.

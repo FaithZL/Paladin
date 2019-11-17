@@ -86,6 +86,10 @@ public:
 	   convertOut(mem, &ret);
 	   return ret;
 	}
+            
+    virtual nebJson toJson() const override {
+        return nebJson();
+    }
 
 private:
 

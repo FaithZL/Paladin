@@ -10,7 +10,7 @@
 #define medium_hpp
 
 #include "core/header.h"
-#include "tools/CObject.h"
+#include "core/cobject.h"
 
 PALADIN_BEGIN
 

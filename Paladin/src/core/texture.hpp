@@ -12,7 +12,7 @@
 #include "header.h"
 #include "math/transform.hpp"
 #include "interaction.hpp"
-#include "tools/cobject.h"
+#include "core/cobject.h"
 
 PALADIN_BEGIN
 
@@ -162,7 +162,7 @@ private:
  * 
  */
 template <typename T>
-class Texture {
+class Texture : public CObject {
 public:
     virtual T evaluate(const SurfaceInteraction &) const = 0;
     

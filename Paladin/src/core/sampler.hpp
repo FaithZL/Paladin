@@ -11,7 +11,7 @@
 
 #include "core/header.h"
 #include "math/rng.h"
-#include "tools/CObject.h"
+#include "core/cobject.h"
 #include "tools/classfactory.hpp"
 
 PALADIN_BEGIN

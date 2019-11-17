@@ -12,6 +12,7 @@
 #include <fstream>
 #include "core/integrator.hpp"
 
+
 PALADIN_BEGIN
 
 USING_STD
@@ -48,8 +49,6 @@ public:
     Integrator * parseIntegrator(const nebJson &,Sampler * sampler, Camera * camera);
     
     Filter * parseFilter(const nebJson &);
-    
-    
     
     shared_ptr<Aggregate> parseAccelerator(const nebJson &);
     

@@ -32,6 +32,10 @@ public:
                 + (st[0]) * (st[1]) * _v11;
     }
     
+    virtual nebJson toJson() const override {
+        return nebJson();
+    }
+    
 private:
     std::unique_ptr<TextureMapping2D> _mapping;
     const T _v00, _v01, _v10, _v11;
