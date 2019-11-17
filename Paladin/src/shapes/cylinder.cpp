@@ -218,8 +218,19 @@ Interaction Cylinder::samplePos(const Point2f &u, Float *pdf) const {
     return ret;
 }
 
+//"param" : {
+//    "worldToLocal" : {
+//        "type" : "translate",
+//        "param" : [-1,1,1]
+//    },
+//    "radius" : 1,
+//    "phiMax" : 360,
+//    "zMin" : 0.5,
+//    "zMax" : -0.5
+//}
 CObject_ptr * createCylinder(const nebJson &param, const Arguments &lst){
-    
+    cout << param.ToFormattedString();
+    return nullptr;
 }
 
 REGISTER("cylinder", createCylinder)

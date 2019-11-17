@@ -677,11 +677,11 @@ CObject_ptr createLookAt(const nebJson &param, const Arguments &lst) {
 }
 
 REGISTER("scale", createScale);
-REGISTER("Translate", createTranslate);
-REGISTER("RotateX", createRotateX);
-REGISTER("RotateY", createRotateY);
-REGISTER("RotateZ", createRotateZ);
-REGISTER("Rotate", createRotate);
-REGISTER("LookAt", createLookAt);
+REGISTER("translate", createTranslate);
+REGISTER("rotateX", createRotateX);
+REGISTER("rotateY", createRotateY);
+REGISTER("rotateZ", createRotateZ);
+REGISTER("rotate", createRotate);
+REGISTER("lookAt", createLookAt);
 
 PALADIN_END

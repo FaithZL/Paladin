@@ -35,9 +35,12 @@
 			"param" : {
                 "worldToLocal" : {
                     "type" : "translate",
-                    "param" : [1,1,1]
+                    "param" : [1,0,1]
                 },
-                "radius" : 0.75
+                "radius" : 0.75,
+                "zMin" : 0.75,
+                "zMax" : -0.75,
+                "phiMax" : 360
 			},
             "material" : "matte" ,
             "emission" : null
@@ -47,13 +50,54 @@
             "param" : {
                 "worldToLocal" : {
                     "type" : "translate",
-                    "param" : [-1,1,1]
+                    "param" : [-1,0,1]
                 },
-                "radius" : 0.75
+                "radius" : 0.75,
+                "zMin" : 0.75,
+                "zMax" : -0.75,
+                "phiMax" : 360
             },
             "material" : "matte" ,
             "emission" : null
-        }        
+        },
+        {
+            "type" : "cone",
+            "param" : {
+                "worldToLocal" : {
+                    "type" : "translate",
+                    "param" : [-1,1,1]
+                },
+                "radius" : 0.5,
+                "phiMax" : 360,
+                "height" : 1
+            }
+        },
+        {
+            "type" : "cylinder",
+            "param" : {
+                "worldToLocal" : {
+                    "type" : "translate",
+                    "param" : [-1,1,1]
+                },
+                "radius" : 1,
+                "phiMax" : 360,
+                "zMin" : 0.5,
+                "zMax" : -0.5
+            }
+        },
+        {
+            "type" : "disk",
+            "param" : {
+                "worldToLocal" : {
+                    "type" : "translate",
+                    "param" : [-1,1,1]
+                },
+                "radius" : 1,
+                "phiMax" : 360,
+                "innerRadius" : 0.5,
+                "height" : 0
+            }
+        }
 	],
 	"integrator" : {
         "type" : "PathTracer",

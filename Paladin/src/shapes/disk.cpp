@@ -99,4 +99,21 @@ Interaction Disk::samplePos(const Point2f &u, Float *pdf) const {
     return ret;
 }
 
+//"param" : {
+//    "worldToLocal" : {
+//        "type" : "translate",
+//        "param" : [-1,1,1]
+//    },
+//    "radius" : 1,
+//    "phiMax" : 360,
+//    "innerRadius" : 0.5,
+//    "height" : 0
+//}
+CObject_ptr createDisk(const nebJson &param, const Arguments &lst) {
+    cout << param.ToFormattedString();
+    return nullptr;
+}
+
+REGISTER("disk", createDisk)
+
 PALADIN_END

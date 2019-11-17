@@ -11,6 +11,7 @@
 #include "tools/classfactory.hpp"
 #include "filters/box.hpp"
 #include "core/camera.hpp"
+#include "core/shape.hpp"
 
 
 PALADIN_BEGIN
@@ -83,7 +84,9 @@ void SceneParser::parseShapes(const nebJson &shapeListData) {
 }
 
 void SceneParser::parseSimpleShape(const nebJson &data, const string &type) {
-    
+    nebJson param = data.GetValue("param", nebJson());
+    auto creator = GET_CREATOR(type);
+    Shape * shape = dynamic_cast<Shape *>(creator(param, {}));
 }
 
 void SceneParser::parseModel(const nebJson &data) {

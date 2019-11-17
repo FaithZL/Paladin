@@ -226,8 +226,18 @@ Interaction Cone::samplePos(const Point2f &u, Float *pdf) const {
     return ret;
 }
 
+//"param" : {
+//    "worldToLocal" : {
+//        "type" : "translate",
+//        "param" : [-1,1,1]
+//    },
+//    "radius" : 0.5,
+//    "phiMax" : 360,
+//    "height" : 1
+//}
 CObject_ptr * createCone(const nebJson &param, const Arguments &lst) {
-    
+    cout << param.ToFormattedString();
+    return nullptr;
 }
 
 REGISTER("cone", createCone)

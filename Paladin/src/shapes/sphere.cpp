@@ -327,8 +327,36 @@ Float Sphere::pdfDir(const paladin::Interaction &ref, const Vector3f &wi) const 
     return uniformConePdf(cosThetaMax);
 }
 
+//"param" : {
+//    "worldToLocal" : {
+//        "type" : "translate",
+//        "param" : [1,1,1]
+//    },
+//    "radius" : 0.75,
+//    "zMin" : 0.75,
+//    "reverseOrientation" : false
+//    "zMax" : -0.75,
+//    "phiMax" : 360
+//}
 CObject_ptr createSphere(const nebJson &param, const Arguments &lst) {
+    cout << param.ToFormattedString();
+    Float radius = param.GetValue("radius", 1.f);
+    Float zMin = param.GetValue("zMin", -radius);
+    Float zMax = param.GetValue("zMax", radius);
+    Float phiMax = param.GetValue("phiMax", 360.f);
+    bool reverseOri = param.GetValue("reverseOrientation", false);
     
+    nebJson w2l_data = param.GetValue("worldToLocal", nebJson());
+    string type = w2l_data.GetValue("type", "translate");
+    auto tf_creator = GET_CREATOR(type);
+    nebJson w2l_param = w2l_data.GetValue("param", nebJson());
+    cout << w2l_param.ToFormattedString();
+    Transform * w2l = dynamic_cast<Transform *>(tf_creator(w2l_param, {}));
+    shared_ptr<Transform> w2o(w2l);
+    shared_ptr<Transform> o2w(w2l->getInverse_ptr());
+    
+    auto ret = new Sphere(o2w, w2o, reverseOri, radius, zMax, zMin, phiMax);
+    return ret;
 }
 
 REGISTER("sphere", createSphere);

@@ -63,6 +63,8 @@ private:
     const Float _phiMax;
 };
 
+CObject_ptr createDisk(const nebJson &param, const Arguments &lst);
+
 PALADIN_END
 
 #endif /* disk_hpp */
