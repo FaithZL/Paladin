@@ -72,8 +72,8 @@ int main(int argc, const char * argv[]) {
 //    loadfile();
 //    testscene();
 //    test_glog_main(argv[0]);
-    testscene();
-//    testjson();
+//    testscene();
+    testjson();
 //    testCache();
 #ifdef _MSC_VER
     //让VS运行debug时不至于黑屏一闪而过

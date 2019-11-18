@@ -58,6 +58,7 @@ add_subdirectory(third/openexr)
 set(EXTRA_LIBS ${EXTRA_LIBS} lua53 glog ${OPENEXR_LIBS})
 # 设置头文件目录
 include_directories ("${PROJECT_SOURCE_DIR}/src")
+include_directories ("${PROJECT_SOURCE_DIR}/src/ext")
 include_directories ("${PROJECT_SOURCE_DIR}/third/lua53/lua")
 include_directories ("${PROJECT_SOURCE_DIR}/third/tinyobjloader")
 include_directories ("${PROJECT_SOURCE_DIR}/third/stblib/stb")

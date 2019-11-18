@@ -1219,6 +1219,40 @@
 		F636FE6B237C609500FD6CED /* box.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = box.cpp; path = src/filters/box.cpp; sourceTree = "<group>"; };
 		F636FE6D237C61AE00FD6CED /* gaussian.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gaussian.cpp; path = src/filters/gaussian.cpp; sourceTree = "<group>"; };
 		F636FE6E237C61AE00FD6CED /* gaussian.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = gaussian.hpp; path = src/filters/gaussian.hpp; sourceTree = "<group>"; };
+		F638E5122382DAE3005A718C /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
+		F638E5132382DAE3005A718C /* adl_serializer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = adl_serializer.hpp; sourceTree = "<group>"; };
+		F638E5152382DAE3005A718C /* json_ref.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json_ref.hpp; sourceTree = "<group>"; };
+		F638E5172382DAE3005A718C /* to_chars.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = to_chars.hpp; sourceTree = "<group>"; };
+		F638E5182382DAE3005A718C /* from_json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = from_json.hpp; sourceTree = "<group>"; };
+		F638E5192382DAE3005A718C /* to_json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = to_json.hpp; sourceTree = "<group>"; };
+		F638E51A2382DAE3005A718C /* value_t.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = value_t.hpp; sourceTree = "<group>"; };
+		F638E51C2382DAE3005A718C /* position_t.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = position_t.hpp; sourceTree = "<group>"; };
+		F638E51D2382DAE3005A718C /* parser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = parser.hpp; sourceTree = "<group>"; };
+		F638E51E2382DAE3005A718C /* json_sax.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json_sax.hpp; sourceTree = "<group>"; };
+		F638E51F2382DAE3005A718C /* binary_reader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = binary_reader.hpp; sourceTree = "<group>"; };
+		F638E5202382DAE3005A718C /* input_adapters.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = input_adapters.hpp; sourceTree = "<group>"; };
+		F638E5212382DAE3005A718C /* lexer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lexer.hpp; sourceTree = "<group>"; };
+		F638E5222382DAE3005A718C /* macro_scope.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = macro_scope.hpp; sourceTree = "<group>"; };
+		F638E5242382DAE3005A718C /* output_adapters.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = output_adapters.hpp; sourceTree = "<group>"; };
+		F638E5252382DAE3005A718C /* serializer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = serializer.hpp; sourceTree = "<group>"; };
+		F638E5262382DAE3005A718C /* binary_writer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = binary_writer.hpp; sourceTree = "<group>"; };
+		F638E5282382DAE3005A718C /* is_sax.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = is_sax.hpp; sourceTree = "<group>"; };
+		F638E5292382DAE3005A718C /* type_traits.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_traits.hpp; sourceTree = "<group>"; };
+		F638E52A2382DAE3005A718C /* cpp_future.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cpp_future.hpp; sourceTree = "<group>"; };
+		F638E52B2382DAE3005A718C /* detected.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = detected.hpp; sourceTree = "<group>"; };
+		F638E52C2382DAE3005A718C /* void_t.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = void_t.hpp; sourceTree = "<group>"; };
+		F638E52D2382DAE3005A718C /* json_pointer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json_pointer.hpp; sourceTree = "<group>"; };
+		F638E52E2382DAE3005A718C /* exceptions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = exceptions.hpp; sourceTree = "<group>"; };
+		F638E52F2382DAE3005A718C /* macro_unscope.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = macro_unscope.hpp; sourceTree = "<group>"; };
+		F638E5312382DAE3005A718C /* iter_impl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = iter_impl.hpp; sourceTree = "<group>"; };
+		F638E5322382DAE3005A718C /* json_reverse_iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json_reverse_iterator.hpp; sourceTree = "<group>"; };
+		F638E5332382DAE3005A718C /* iteration_proxy.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = iteration_proxy.hpp; sourceTree = "<group>"; };
+		F638E5342382DAE3005A718C /* iterator_traits.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = iterator_traits.hpp; sourceTree = "<group>"; };
+		F638E5352382DAE3005A718C /* internal_iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = internal_iterator.hpp; sourceTree = "<group>"; };
+		F638E5362382DAE3005A718C /* primitive_iterator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = primitive_iterator.hpp; sourceTree = "<group>"; };
+		F638E5392382DAE3005A718C /* hedley.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = hedley.hpp; sourceTree = "<group>"; };
+		F638E53A2382DAE3005A718C /* hedley_undef.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = hedley_undef.hpp; sourceTree = "<group>"; };
+		F638E53B2382DAE3005A718C /* json_fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json_fwd.hpp; sourceTree = "<group>"; };
 		F63983DC23790D1F004E15FA /* jsontest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = jsontest.h; path = src/alltest/jsontest.h; sourceTree = "<group>"; };
 		F63983E2237919D8004E15FA /* cJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cJSON.h; sourceTree = "<group>"; };
 		F63983E3237919D8004E15FA /* CJsonObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CJsonObject.cpp; sourceTree = "<group>"; };
@@ -1593,6 +1627,7 @@
 		705ED833F69F48D3A3E25D83 /* ext */ = {
 			isa = PBXGroup;
 			children = (
+				F638E5112382DAE3005A718C /* nlohmann */,
 				F63983E1237919D8004E15FA /* json */,
 			);
 			name = ext;
@@ -2282,6 +2317,112 @@
 				7E2A2ABF7BC64BC5A458E37B /* b44ExpLogTable */,
 			);
 			name = openexr;
+			sourceTree = "<group>";
+		};
+		F638E5112382DAE3005A718C /* nlohmann */ = {
+			isa = PBXGroup;
+			children = (
+				F638E5122382DAE3005A718C /* json.hpp */,
+				F638E5132382DAE3005A718C /* adl_serializer.hpp */,
+				F638E5142382DAE3005A718C /* detail */,
+				F638E5372382DAE3005A718C /* thirdparty */,
+				F638E53B2382DAE3005A718C /* json_fwd.hpp */,
+			);
+			name = nlohmann;
+			path = src/ext/nlohmann;
+			sourceTree = "<group>";
+		};
+		F638E5142382DAE3005A718C /* detail */ = {
+			isa = PBXGroup;
+			children = (
+				F638E5152382DAE3005A718C /* json_ref.hpp */,
+				F638E5162382DAE3005A718C /* conversions */,
+				F638E51A2382DAE3005A718C /* value_t.hpp */,
+				F638E51B2382DAE3005A718C /* input */,
+				F638E5222382DAE3005A718C /* macro_scope.hpp */,
+				F638E5232382DAE3005A718C /* output */,
+				F638E5272382DAE3005A718C /* meta */,
+				F638E52D2382DAE3005A718C /* json_pointer.hpp */,
+				F638E52E2382DAE3005A718C /* exceptions.hpp */,
+				F638E52F2382DAE3005A718C /* macro_unscope.hpp */,
+				F638E5302382DAE3005A718C /* iterators */,
+			);
+			path = detail;
+			sourceTree = "<group>";
+		};
+		F638E5162382DAE3005A718C /* conversions */ = {
+			isa = PBXGroup;
+			children = (
+				F638E5172382DAE3005A718C /* to_chars.hpp */,
+				F638E5182382DAE3005A718C /* from_json.hpp */,
+				F638E5192382DAE3005A718C /* to_json.hpp */,
+			);
+			path = conversions;
+			sourceTree = "<group>";
+		};
+		F638E51B2382DAE3005A718C /* input */ = {
+			isa = PBXGroup;
+			children = (
+				F638E51C2382DAE3005A718C /* position_t.hpp */,
+				F638E51D2382DAE3005A718C /* parser.hpp */,
+				F638E51E2382DAE3005A718C /* json_sax.hpp */,
+				F638E51F2382DAE3005A718C /* binary_reader.hpp */,
+				F638E5202382DAE3005A718C /* input_adapters.hpp */,
+				F638E5212382DAE3005A718C /* lexer.hpp */,
+			);
+			path = input;
+			sourceTree = "<group>";
+		};
+		F638E5232382DAE3005A718C /* output */ = {
+			isa = PBXGroup;
+			children = (
+				F638E5242382DAE3005A718C /* output_adapters.hpp */,
+				F638E5252382DAE3005A718C /* serializer.hpp */,
+				F638E5262382DAE3005A718C /* binary_writer.hpp */,
+			);
+			path = output;
+			sourceTree = "<group>";
+		};
+		F638E5272382DAE3005A718C /* meta */ = {
+			isa = PBXGroup;
+			children = (
+				F638E5282382DAE3005A718C /* is_sax.hpp */,
+				F638E5292382DAE3005A718C /* type_traits.hpp */,
+				F638E52A2382DAE3005A718C /* cpp_future.hpp */,
+				F638E52B2382DAE3005A718C /* detected.hpp */,
+				F638E52C2382DAE3005A718C /* void_t.hpp */,
+			);
+			path = meta;
+			sourceTree = "<group>";
+		};
+		F638E5302382DAE3005A718C /* iterators */ = {
+			isa = PBXGroup;
+			children = (
+				F638E5312382DAE3005A718C /* iter_impl.hpp */,
+				F638E5322382DAE3005A718C /* json_reverse_iterator.hpp */,
+				F638E5332382DAE3005A718C /* iteration_proxy.hpp */,
+				F638E5342382DAE3005A718C /* iterator_traits.hpp */,
+				F638E5352382DAE3005A718C /* internal_iterator.hpp */,
+				F638E5362382DAE3005A718C /* primitive_iterator.hpp */,
+			);
+			path = iterators;
+			sourceTree = "<group>";
+		};
+		F638E5372382DAE3005A718C /* thirdparty */ = {
+			isa = PBXGroup;
+			children = (
+				F638E5382382DAE3005A718C /* hedley */,
+			);
+			path = thirdparty;
+			sourceTree = "<group>";
+		};
+		F638E5382382DAE3005A718C /* hedley */ = {
+			isa = PBXGroup;
+			children = (
+				F638E5392382DAE3005A718C /* hedley.hpp */,
+				F638E53A2382DAE3005A718C /* hedley_undef.hpp */,
+			);
+			path = hedley;
 			sourceTree = "<group>";
 		};
 		F63983E1237919D8004E15FA /* json */ = {
@@ -5610,6 +5751,7 @@
 					/Users/satan_z/work/git/Paladin/xcode/third/openexr/IlmBase/config,
 					/Users/satan_z/work/git/Paladin/xcode/third/openexr/OpenEXR/config,
 					/Users/satan_z/work/git/Paladin/xcode/third/glog,
+					/Users/satan_z/work/git/Paladin/Paladin/src/ext,
 				);
 				INSTALL_PATH = "";
 				LIBRARY_SEARCH_PATHS = "";
@@ -8176,6 +8318,7 @@
 					/Users/satan_z/work/git/Paladin/xcode/third/openexr/IlmBase/config,
 					/Users/satan_z/work/git/Paladin/xcode/third/openexr/OpenEXR/config,
 					/Users/satan_z/work/git/Paladin/xcode/third/glog,
+					/Users/satan_z/work/git/Paladin/Paladin/src/ext,
 				);
 				INSTALL_PATH = "";
 				LIBRARY_SEARCH_PATHS = "";
@@ -8343,6 +8486,7 @@
 					/Users/satan_z/work/git/Paladin/xcode/third/openexr/IlmBase/config,
 					/Users/satan_z/work/git/Paladin/xcode/third/openexr/OpenEXR/config,
 					/Users/satan_z/work/git/Paladin/xcode/third/glog,
+					/Users/satan_z/work/git/Paladin/Paladin/src/ext,
 				);
 				INSTALL_PATH = "";
 				LIBRARY_SEARCH_PATHS = "";
@@ -8831,6 +8975,7 @@
 					/Users/satan_z/work/git/Paladin/xcode/third/openexr/IlmBase/config,
 					/Users/satan_z/work/git/Paladin/xcode/third/openexr/OpenEXR/config,
 					/Users/satan_z/work/git/Paladin/xcode/third/glog,
+					/Users/satan_z/work/git/Paladin/Paladin/src/ext,
 				);
 				INSTALL_PATH = "";
 				LIBRARY_SEARCH_PATHS = "";
