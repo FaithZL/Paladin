@@ -23,8 +23,11 @@
 #include <algorithm>
 #include <glog/logging.h>
 #include "ext/json/CJsonObject.hpp"
+#include "ext/nlohmann/json.hpp"
 
 typedef neb::CJsonObject nebJson;
+
+typedef nlohmann::json nloJson;
 
 #ifdef __GNUC__
     //fix 'numeric_limits' is not a member of 'std' for linux

@@ -61,8 +61,8 @@ int main(int argc, const char * argv[]) {
 //    t.fun();
 //    cout << t.p->m << endl;
     
-//    Paladin paladin;
-//    paladin.render("res/conelbox.json");
+    Paladin paladin;
+    paladin.render("res/conelbox.json");
 //    unique_ptr<int> a;
 //    a.reset()
 //    paladin.render("res/scene.json");
@@ -73,7 +73,7 @@ int main(int argc, const char * argv[]) {
 //    testscene();
 //    test_glog_main(argv[0]);
 //    testscene();
-    testjson();
+//    testjson();
 //    testCache();
 #ifdef _MSC_VER
     //让VS运行debug时不至于黑屏一闪而过
