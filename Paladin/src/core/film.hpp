@@ -185,7 +185,7 @@ public:
     
     void clear();
     
-    virtual nebJson toJson() const override;
+    virtual nloJson toJson() const override;
     
     // 图片分辨率，原点在左上角
     const Point2i fullResolution;
@@ -253,7 +253,7 @@ private:
     }
 };
 
-CObject_ptr createFilm(const nebJson &, const Arguments &);
+CObject_ptr createFilm(const nloJson &, const Arguments &);
 
 PALADIN_END
 

@@ -584,47 +584,47 @@ Transform * Transform::perspective_ptr(Float fov, Float zNear, Float zFar, bool 
 /**
  * param : [x,y,z]
  */
-CObject_ptr createScale(const nebJson &param, const Arguments &lst) {
-    Float sx = param.GetValue(0, 1.f);
-    Float sy = param.GetValue(1, 1.f);
-    Float sz = param.GetValue(2, 1.f);
+CObject_ptr createScale(const nloJson &param, const Arguments &lst) {
+    Float sx = param.at(0);
+    Float sy = param.at(1);
+    Float sz = param.at(2);
     return Transform::scale_ptr(sx, sy, sz);
 }
 
 /**
  * param : [x,y,z]
  */
-CObject_ptr createTranslate(const nebJson &param, const Arguments &lst) {
-    Float x = param.GetValue(0, 0.f);
-    Float y = param.GetValue(1, 0.f);
-    Float z = param.GetValue(2, 0.f);
+CObject_ptr createTranslate(const nloJson &param, const Arguments &lst) {
+    Float x = param.at(0);
+    Float y = param.at(1);
+    Float z = param.at(2);
     return Transform::translate_ptr(Vector3f(x, y, z));
 }
 
 /**
  * param : [theta, bRadian]
  */
-CObject_ptr createRotateX(const nebJson &param, const Arguments &lst) {
-    Float theta = param.GetValue(0, 0);
-    bool bRadian = param.GetValue(1, false);
+CObject_ptr createRotateX(const nloJson &param, const Arguments &lst) {
+    Float theta = param.at(0);
+    bool bRadian = param.at(1);
     return Transform::rotateX_ptr(theta, bRadian);
 }
 
 /**
  * param : [theta, bRadian]
  */
-CObject_ptr createRotateY(const nebJson &param, const Arguments &lst) {
-    Float theta = param.GetValue(0, 0);
-    bool bRadian = param.GetValue(1, false);
+CObject_ptr createRotateY(const nloJson &param, const Arguments &lst) {
+    Float theta = param.at(0);
+    bool bRadian = param.at(1);
     return Transform::rotateY_ptr(theta, bRadian);
 }
 
 /**
  * param : [theta, bRadian]
  */
-CObject_ptr createRotateZ(const nebJson &param, const Arguments &lst) {
-    Float theta = param.GetValue(0, 0);
-    bool bRadian = param.GetValue(1, false);
+CObject_ptr createRotateZ(const nloJson &param, const Arguments &lst) {
+    Float theta = param.at(0);
+    bool bRadian = param.at(1);
     return Transform::rotateZ_ptr(theta, bRadian);
 }
 
@@ -635,13 +635,13 @@ CObject_ptr createRotateZ(const nebJson &param, const Arguments &lst) {
  *     bRadian
  * ]
  */
-CObject_ptr createRotate(const nebJson &param, const Arguments &lst) {
-   Float theta = param.GetValue(0, 0);
-   nebJson vec = param.GetValue(1, vec);
-   Float ax = vec.GetValue(0, 1);
-   Float ay = vec.GetValue(1, 1);
-   Float az = vec.GetValue(2, 1);
-   bool bRadian = param.GetValue(2, false);
+CObject_ptr createRotate(const nloJson &param, const Arguments &lst) {
+   Float theta = param.value(0, 0);
+   nloJson vec = param.at(1);
+   Float ax = vec.at(0);
+   Float ay = vec.at(1);
+   Float az = vec.at(2);
+   bool bRadian = param.at(2);
    Vector3f axis(ax, ay, az);
    return Transform::rotate_ptr(theta, axis, bRadian);
 }
@@ -653,24 +653,24 @@ CObject_ptr createRotate(const nebJson &param, const Arguments &lst) {
  *     [x,y,z], // up
  * ]
  */
-CObject_ptr createLookAt(const nebJson &param, const Arguments &lst) {
-    nebJson _pos = param.GetValue(0, nebJson());
-    nebJson _target = param.GetValue(1, nebJson());
-    nebJson _up = param.GetValue(2, nebJson());
+CObject_ptr createLookAt(const nloJson &param, const Arguments &lst) {
+    nloJson _pos = param.at(0); //nloJson::array({0, 0, -5})
+    nloJson _target = param.at(1); //nloJson::array({0, 0, 0})
+    nloJson _up = param.at(2); // nloJson::array({0, 1, 0})
 
-    Float x = _pos.GetValue(0, 0);
-    Float y = _pos.GetValue(1, 0);
-    Float z = _pos.GetValue(2, -5);
+    Float x = _pos.at(0);
+    Float y = _pos.at(1);
+    Float z = _pos.at(2);
     Point3f pos(x, y, z);
 
-    x = _target.GetValue(0, 0);
-    y = _target.GetValue(1, 0);
-    z = _target.GetValue(2, 0);
+    x = _target.at(0);
+    y = _target.at(1);
+    z = _target.at(2);
     Point3f target(x, y, z);
 
-    x = _up.GetValue(0, 0);
-    y = _up.GetValue(1, 1);
-    z = _up.GetValue(2, 0);
+    x = _up.at(0);
+    y = _up.at(1);
+    z = _up.at(2);
     Vector3f up(x, y, z);
 
     return Transform::lookAt_ptr(pos, target, up);

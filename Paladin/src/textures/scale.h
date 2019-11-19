@@ -26,8 +26,8 @@ public:
         return _tex1->evaluate(si) * _tex2->evaluate(si);
     }
     
-    virtual nebJson toJson() const override {
-        return nebJson();
+    virtual nloJson toJson() const override {
+        return nloJson();
     }
     
 private:

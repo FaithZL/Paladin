@@ -37,8 +37,8 @@ void RandomSampler::startPixel(const Point2i &p) {
     Sampler::startPixel(p);
 }
 
-nebJson RandomSampler::toJson() const {
-    return nebJson();
+nloJson RandomSampler::toJson() const {
+    return nloJson();
 }
 
 /**
@@ -46,8 +46,8 @@ nebJson RandomSampler::toJson() const {
  *     "spp" : 8
  * }
  */
-CObject_ptr createRandomSampler(const nebJson &param) {
-    int spp = param.GetValue("spp", 8);
+CObject_ptr createRandomSampler(const nloJson &param) {
+    int spp = param.value("spp", 8);
     return new RandomSampler(spp);
 }
 

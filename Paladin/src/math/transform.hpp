@@ -179,8 +179,8 @@ public:
         return _mat < other._mat;
     }
         
-    virtual nebJson toJson() const override {
-        return nebJson();
+    virtual nloJson toJson() const override {
+        return nloJson();
     }
 
     bool isIdentity() const {
@@ -569,19 +569,19 @@ USING_STD
 
 
 // 反射机制工厂函数
-CObject_ptr createScale(const nebJson &, const Arguments &);
+CObject_ptr createScale(const nloJson &, const Arguments &);
 
-CObject_ptr createTranslate(const nebJson &, const Arguments &);
+CObject_ptr createTranslate(const nloJson &, const Arguments &);
 
-CObject_ptr createRotateX(const nebJson &, const Arguments &);
+CObject_ptr createRotateX(const nloJson &, const Arguments &);
 
-CObject_ptr createRotateY(const nebJson &, const Arguments &);
+CObject_ptr createRotateY(const nloJson &, const Arguments &);
 
-CObject_ptr createRotateZ(const nebJson &, const Arguments &);
+CObject_ptr createRotateZ(const nloJson &, const Arguments &);
 
-CObject_ptr createRotate(const nebJson &, const Arguments &);
+CObject_ptr createRotate(const nloJson &, const Arguments &);
 
-CObject_ptr createLookAt(const nebJson &, const Arguments &);
+CObject_ptr createLookAt(const nloJson &, const Arguments &);
 
 
 PALADIN_END

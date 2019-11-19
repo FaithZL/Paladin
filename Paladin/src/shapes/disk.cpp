@@ -109,8 +109,8 @@ Interaction Disk::samplePos(const Point2f &u, Float *pdf) const {
 //    "innerRadius" : 0.5,
 //    "height" : 0
 //}
-CObject_ptr createDisk(const nebJson &param, const Arguments &lst) {
-    cout << param.ToFormattedString();
+CObject_ptr createDisk(const nloJson &param, const Arguments &lst) {
+    
     return nullptr;
 }
 

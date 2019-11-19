@@ -40,8 +40,8 @@ void StratifiedSampler::startPixel(const Point2i &p) {
     PixelSampler::startPixel(p);
 }
 
-nebJson StratifiedSampler::toJson() const {
-    return nebJson();
+nloJson StratifiedSampler::toJson() const {
+    return nloJson();
 }
 
 std::unique_ptr<Sampler> StratifiedSampler::clone(int seed) {
@@ -58,11 +58,11 @@ std::unique_ptr<Sampler> StratifiedSampler::clone(int seed) {
  *     "dimesions" : 6
  * }
  */
-CObject_ptr createStratifiedSampler(const nebJson &param) {
-    bool jitter = param.GetValue("jitter", true);
-    int xsamp = param.GetValue("xsamples", 3);
-    int ysamp = param.GetValue("ysamples", 3);
-    int sd = param.GetValue("dimensions", 6);
+CObject_ptr createStratifiedSampler(const nloJson &param) {
+    bool jitter = param.value("jitter", true);
+    int xsamp = param.value("xsamples", 3);
+    int ysamp = param.value("ysamples", 3);
+    int sd = param.value("dimensions", 6);
     return new StratifiedSampler(xsamp, ysamp, jitter, sd);
 }
 

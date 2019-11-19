@@ -62,7 +62,7 @@ private:
 };
 
 USING_STD
-CObject_ptr createGaussianFilter(const nebJson &);
+CObject_ptr createGaussianFilter(const nloJson &);
 
 PALADIN_END
 

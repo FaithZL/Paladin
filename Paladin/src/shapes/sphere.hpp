@@ -89,8 +89,8 @@ public:
         return _phiMax * _radius * (_zMax - _zMin);
     }
     
-    virtual nebJson toJson() const override {
-        return nebJson();
+    virtual nloJson toJson() const override {
+        return nloJson();
     }
     
     virtual Interaction samplePos(const Point2f &u, Float *pdf) const override;
@@ -120,7 +120,7 @@ private:
     const Float _thetaMax;
 };
 
-CObject_ptr createSphere(const nebJson &param, const Arguments &lst);
+CObject_ptr createSphere(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 

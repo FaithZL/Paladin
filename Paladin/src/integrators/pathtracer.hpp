@@ -257,8 +257,8 @@ public:
 	 */
 	virtual void preprocess(const Scene &scene, Sampler &sampler) override;
     
-    virtual nebJson toJson() const override {
-        return nebJson();
+    virtual nloJson toJson() const override {
+        return nloJson();
     }
 	
 	
@@ -278,7 +278,7 @@ private:
 
 USING_STD;
 
-CObject_ptr createPathTracer(const nebJson &param, const Arguments &lst);
+CObject_ptr createPathTracer(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 

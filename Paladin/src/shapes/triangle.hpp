@@ -55,8 +55,8 @@ public:
         _faceIndex = _mesh->faceIndices.size() ? _mesh->faceIndices[triNumber] : 0;
     }
 
-    virtual nebJson toJson() const override {
-        return nebJson();
+    virtual nloJson toJson() const override {
+        return nloJson();
     }
     
     virtual void init() override {

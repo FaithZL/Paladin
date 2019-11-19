@@ -29,8 +29,8 @@ public:
         return (1 - amt) * t1 + amt * t2;
     }
     
-    virtual nebJson toJson() const override {
-        return nebJson();
+    virtual nloJson toJson() const override {
+        return nloJson();
     }
     
 private:

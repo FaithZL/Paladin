@@ -32,7 +32,7 @@ public:
 
 USING_STD
 
-CObject_ptr createTriangleFilter(const nebJson &);
+CObject_ptr createTriangleFilter(const nloJson &);
 
 PALADIN_END
 

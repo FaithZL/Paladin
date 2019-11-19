@@ -15,10 +15,10 @@ PALADIN_BEGIN
  * 	   "radius" : [2,2]
  * }
  */
-CObject_ptr createTriangleFilter(const nebJson &param) {
-	nebJson radius = param.GetValue("radius", nebJson());
-    Float rx = radius.GetValue(0, 2.f);
-    Float ry = radius.GetValue(1, 2.f);
+CObject_ptr createTriangleFilter(const nloJson &param) {
+    nloJson radius = param.value("radius", nloJson::array({2,2}));
+    Float rx = radius.at(0);
+    Float ry = radius.at(1);
     return new TriangleFilter(Vector2f(rx, ry));
 }
 

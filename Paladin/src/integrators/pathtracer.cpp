@@ -140,10 +140,10 @@ USING_STD;
 //    "lightSampleStrategy" : "power"
 //}
 // lst = {sampler, camera}
-CObject_ptr createPathTracer(const nebJson &param, const Arguments &lst) {
-    int maxBounce = param.GetValue("maxBounce", 5);
-    Float rrThreshold = param.GetValue("rrThreshold", 1.f);
-    string lightSampleStrategy = param.GetValue("lightSampleStrategy", "power");
+CObject_ptr createPathTracer(const nloJson &param, const Arguments &lst) {
+    int maxBounce = param.value("maxBounce", 5);
+    Float rrThreshold = param.value("rrThreshold", 1.f);
+    string lightSampleStrategy = param.value("lightSampleStrategy", "power");
     auto iter = lst.begin();
     Sampler * sampler = dynamic_cast<Sampler *>(*iter);
     ++iter;

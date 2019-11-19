@@ -32,8 +32,8 @@ public:
                 + (st[0]) * (st[1]) * _v11;
     }
     
-    virtual nebJson toJson() const override {
-        return nebJson();
+    virtual nloJson toJson() const override {
+        return nloJson();
     }
     
 private:

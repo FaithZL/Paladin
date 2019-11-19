@@ -109,8 +109,8 @@ Float PerspectiveCamera::generateRayDifferential(const CameraSample &sample, Ray
     return 1;
 }
 
-nebJson PerspectiveCamera::toJson() const {
-    return nebJson();
+nloJson PerspectiveCamera::toJson() const {
+    return nloJson();
 }
 
 Spectrum PerspectiveCamera::We(const paladin::Ray &ray, Point2f *pRaster2) const {
@@ -149,14 +149,14 @@ Spectrum PerspectiveCamera::sample_Wi(const Interaction &ref, const Point2f &u,
 //    ]
 //}
 // lst = {Film}
-CObject_ptr createPerspectiveCamera(const nebJson &param, const Arguments &lst) {
-    Float shutterOpen = param.GetValue("shutterOpen", 0.f);
-    Float shutterClose = param.GetValue("shutterClose", 1.f);
-    Float lensRadius = param.GetValue("lensRadius", 0.f);
-    Float focalDistance = param.GetValue("focalDistance", 100.f);
-    Float fov = param.GetValue("fov", 45);
-    nebJson lookAtParam = param.GetValue("lookAt", nebJson());
-    nebJson lookAtEndParam = param.GetValue("lookAtEnd", nebJson());
+CObject_ptr createPerspectiveCamera(const nloJson &param, const Arguments &lst) {
+    Float shutterOpen = param.value("shutterOpen", 0.f);
+    Float shutterClose = param.value("shutterClose", 1.f);
+    Float lensRadius = param.value("lensRadius", 0.f);
+    Float focalDistance = param.value("focalDistance", 100.f);
+    Float fov = param.value("fov", 45);
+    nloJson lookAtParam = param.value("lookAt", nloJson());
+    nloJson lookAtEndParam = param.value("lookAtEnd", nloJson());
 
     
     auto iter = lst.begin();

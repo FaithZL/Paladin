@@ -86,7 +86,7 @@ public:
                        Vector3f *wi, Float *pdf, Point2f *pRaster,
                        VisibilityTester *vis) const override;
 
-    virtual nebJson toJson() const override;
+    virtual nloJson toJson() const override;
     
 private:
     // 向x轴移动一个像素，对应相机空间的变化率
@@ -97,7 +97,7 @@ private:
     Float _area;
 };
 
-CObject_ptr createPerspectiveCamera(const nebJson &, const Arguments &);
+CObject_ptr createPerspectiveCamera(const nloJson &, const Arguments &);
 
 PALADIN_END
 

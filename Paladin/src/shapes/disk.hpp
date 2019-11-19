@@ -35,8 +35,8 @@ public:
         _invArea = 1 / area();
     }
     
-    virtual nebJson toJson() const override {
-        return nebJson();
+    virtual nloJson toJson() const override {
+        return nloJson();
     }
     
     virtual AABB3f objectBound() const override {
@@ -63,7 +63,7 @@ private:
     const Float _phiMax;
 };
 
-CObject_ptr createDisk(const nebJson &param, const Arguments &lst);
+CObject_ptr createDisk(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 

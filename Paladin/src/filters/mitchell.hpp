@@ -59,7 +59,7 @@ private:
 
 USING_STD
 
-CObject_ptr createMitchellFilter(const nebJson &param);
+CObject_ptr createMitchellFilter(const nloJson &param);
 
 PALADIN_END
 

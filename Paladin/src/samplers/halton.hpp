@@ -80,7 +80,7 @@ public:
     
     virtual std::unique_ptr<Sampler> clone(int seed) override;
     
-    virtual nebJson toJson() const override;
+    virtual nloJson toJson() const override;
     
 private:
     
@@ -131,7 +131,7 @@ private:
 
 USING_STD
 
-CObject_ptr createHaltonSampler(const nebJson &param, Arguments lst);
+CObject_ptr createHaltonSampler(const nloJson &param, Arguments lst);
 
 PALADIN_END
 

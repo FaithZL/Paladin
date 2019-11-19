@@ -235,8 +235,8 @@ Interaction Cone::samplePos(const Point2f &u, Float *pdf) const {
 //    "phiMax" : 360,
 //    "height" : 1
 //}
-CObject_ptr * createCone(const nebJson &param, const Arguments &lst) {
-    cout << param.ToFormattedString();
+CObject_ptr * createCone(const nloJson &param, const Arguments &lst) {
+    
     return nullptr;
 }
 

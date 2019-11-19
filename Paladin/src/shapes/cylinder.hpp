@@ -41,8 +41,8 @@ public:
                     Point3f(_radius, _radius, _zMax));
     }
     
-    virtual nebJson toJson() const override {
-        return nebJson();
+    virtual nloJson toJson() const override {
+        return nloJson();
     }
     
     /**
@@ -67,7 +67,7 @@ protected:
     const Float _phiMax;
 };
 
-CObject_ptr * createCylinder(const nebJson &param, const Arguments &lst);
+CObject_ptr * createCylinder(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 

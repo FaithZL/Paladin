@@ -26,7 +26,7 @@
 #include "ext/nlohmann/json.hpp"
 #include <iomanip>
 
-typedef neb::CJsonObject nebJson;
+//typedef neb::CJsonObject nebJson;
 
 typedef nlohmann::json nloJson;
 

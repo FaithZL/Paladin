@@ -228,8 +228,8 @@ Interaction Cylinder::samplePos(const Point2f &u, Float *pdf) const {
 //    "zMin" : 0.5,
 //    "zMax" : -0.5
 //}
-CObject_ptr * createCylinder(const nebJson &param, const Arguments &lst){
-    cout << param.ToFormattedString();
+CObject_ptr * createCylinder(const nloJson &param, const Arguments &lst){
+    
     return nullptr;
 }
 

@@ -28,7 +28,7 @@ public:
     
     virtual Point2f get2D() override;
     
-    virtual nebJson toJson() const override;
+    virtual nloJson toJson() const override;
     
     virtual std::unique_ptr<Sampler> clone(int seed) override;
     
@@ -38,7 +38,7 @@ private:
 
 USING_STD
 
-CObject_ptr createRandomSampler(const nebJson &param);
+CObject_ptr createRandomSampler(const nloJson &param);
 
 PALADIN_END
 

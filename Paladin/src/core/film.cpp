@@ -158,8 +158,8 @@ void Film::clear() {
     }
 }
 
-nebJson Film::toJson() const {
-    return nebJson();
+nloJson Film::toJson() const {
+    return nloJson();
 }
 
 //"param" : {
@@ -169,28 +169,28 @@ nebJson Film::toJson() const {
 //    "diagonal" : null,
 //    "scale" : 1
 //}
-CObject_ptr createFilm(const nebJson &param, const Arguments &lst) {
+CObject_ptr createFilm(const nloJson &param, const Arguments &lst) {
     
-    nebJson res = param.GetValue("resolution", nebJson());
-    int resX = res.GetValue(0, 500);
-    int resY = res.GetValue(1, 500);
+    nloJson res = param.value("resolution", nloJson::array({500, 500}));
+    int resX = res.at(0);
+    int resY = res.at(1);
     Point2i resolution(resX, resY);
     
-    nebJson cw = param.GetValue("cropWindow", nebJson());
-    Float minX = cw.GetValue(0, 0.f);
-    Float minY = cw.GetValue(1, 0.f);
-    Float maxX = cw.GetValue(2, 1.f);
-    Float maxY = cw.GetValue(3, 1.f);
+    nloJson cw = param.value("cropWindow", nloJson::array({0, 0, 500, 500}));
+    Float minX = cw.at(0);
+    Float minY = cw.at(1);
+    Float maxX = cw.at(2);
+    Float maxY = cw.at(3);
     AABB2f cropWindow(Point2f(minX, minY), Point2f(maxX, maxY));
     
     auto iter = lst.begin();
     Filter * filter = dynamic_cast<Filter *>(*iter);
     std::unique_ptr<Filter> ufilter(filter);
     
-    Float diagonal = param.GetValue("diagonal", 1);
+    Float diagonal = param.value("diagonal", 1);
     
-    string fileName = param.GetValue("fileName", "paladin.png");
-    Float scale = param.GetValue("scale", 1.f);
+    string fileName = param.value("fileName", "paladin.png");
+    Float scale = param.value("scale", 1.f);
     
     Film * film = new Film(resolution, cropWindow, move(ufilter), diagonal, fileName, scale);
     return film;

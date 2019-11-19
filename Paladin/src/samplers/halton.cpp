@@ -192,8 +192,8 @@ Float HaltonSampler::sampleDimension(int64_t index, int dim) const {
     }
 }
 
-nebJson HaltonSampler::toJson() const {
-    return nebJson();
+nloJson HaltonSampler::toJson() const {
+    return nloJson();
 }
 
 std::unique_ptr<Sampler> HaltonSampler::clone(int seed) {
@@ -205,9 +205,9 @@ std::unique_ptr<Sampler> HaltonSampler::clone(int seed) {
  *     "spp" : 8
  * }
  */
-CObject_ptr createHaltonSampler(const nebJson &param, Arguments lst) {
-    bool sampleAtPixelCenter = param.GetValue("sampleAtPixelCenter", false);
-    int spp = param.GetValue("spp", 8);
+CObject_ptr createHaltonSampler(const nloJson &param, Arguments lst) {
+    bool sampleAtPixelCenter = param.value("sampleAtPixelCenter", false);
+    int spp = param.value("spp", 8);
     auto iter = lst.begin();
     Film * film = dynamic_cast<Film *>(*iter);
     AABB2i bound = film->getSampleBounds();

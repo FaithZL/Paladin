@@ -37,7 +37,7 @@ public:
         
     }
     
-    virtual nebJson toJson() const override;
+    virtual nloJson toJson() const override;
     
     virtual void startPixel(const Point2i &) override;
     
@@ -50,7 +50,7 @@ private:
     const bool _jitterSamples;
 };
 
-CObject_ptr createStratifiedSampler(const nebJson &param);
+CObject_ptr createStratifiedSampler(const nloJson &param);
 
 PALADIN_END
 

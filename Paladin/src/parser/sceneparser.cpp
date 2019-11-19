@@ -19,86 +19,86 @@ PALADIN_BEGIN
 using namespace neb;
 USING_STD;
 
-void SceneParser::parse(const nebJson &data) {
-    nebJson filterData = data.GetValue("filter", nebJson());
+void SceneParser::parse(const nloJson &data) {
+    nloJson filterData = data.value("filter", nloJson());
     Filter * filter = parseFilter(filterData);
-    nebJson samplerData = data.GetValue("sampler", nebJson());
+    nloJson samplerData = data.value("sampler", nloJson());
     Sampler * sampler = parseSampler(samplerData);
-    nebJson filmData = data.GetValue("film", nebJson());
+    nloJson filmData = data.value("film", nloJson());
     auto film = parseFilm(filmData, filter);
-    nebJson cameraData = data.GetValue("camera", nebJson());
+    nloJson cameraData = data.value("camera", nloJson());
     Camera * camera = parseCamera(cameraData, film);
-    nebJson integratorData = data.GetValue("integrator", nebJson());
+    nloJson integratorData = data.value("integrator", nloJson());
     Integrator * integrator = parseIntegrator(integratorData, sampler, camera);
     _integrator.reset(integrator);
     
-    nebJson shapesData = data.GetValue("shapes", nebJson());
+    nloJson shapesData = data.value("shapes", nloJson());
     parseShapes(shapesData);
 }
 
 
-Sampler * SceneParser::parseSampler(const nebJson &data) {
-    string samplerType = data.GetValue("type", "stratified");
-    nebJson param = data.GetValue("param", nebJson());
+Sampler * SceneParser::parseSampler(const nloJson &data) {
+    string samplerType = data.value("type", "stratified");
+    nloJson param = data.value("param", nloJson());
     auto creator = GET_CREATOR(samplerType);
     auto ret = dynamic_cast<Sampler *>(creator(param, {}));
     return ret;
 }
 
-Camera * SceneParser::parseCamera(const nebJson &data, Film * film) {
-    string cameraType = data.GetValue("type", "perspective");
-    nebJson param = data.GetValue("param", nebJson());
+Camera * SceneParser::parseCamera(const nloJson &data, Film * film) {
+    string cameraType = data.value("type", "perspective");
+    nloJson param = data.value("param", nloJson());
     auto creator = GET_CREATOR(cameraType);
     auto ret = dynamic_cast<Camera *>(creator(param, {film}));
     return ret;
 }
 
-Integrator * SceneParser::parseIntegrator(const nebJson &data, Sampler * sampler, Camera * camera) {
-    string type = data.GetValue("type", "PathTracer");
-    nebJson param = data.GetValue("param", nebJson());
+Integrator * SceneParser::parseIntegrator(const nloJson &data, Sampler * sampler, Camera * camera) {
+    string type = data.value("type", "PathTracer");
+    nloJson param = data.value("param", nloJson());
     auto creator = GET_CREATOR(type);
     auto ret = dynamic_cast<Integrator *>(creator(param,{sampler, camera}));
     return ret;
 }
 
-Filter * SceneParser::parseFilter(const nebJson &data) {
-    string filterType = data.GetValue("type", "box");
-    nebJson param = data.GetValue("param", nebJson());
+Filter * SceneParser::parseFilter(const nloJson &data) {
+    string filterType = data.value("type", "box");
+    nloJson param = data.value("param", nloJson());
     auto creator = GET_CREATOR(filterType.c_str());
     auto ret = dynamic_cast<Filter *>(creator(param, {}));
     DCHECK(ret != nullptr);
     return ret;
 }
 
-void SceneParser::parseShapes(const nebJson &shapeListData) {
-    int num = shapeListData.GetArraySize();
-    for (int i = 0; i < num; ++i) {
-        nebJson shapeData = shapeListData.GetValue(i, nebJson());
-        string type = shapeData.GetValue("type", "sphere");
-        if (type == "model") {
-            parseModel(shapeData);
-        } else {
-            parseSimpleShape(shapeData, type);
-        }
-    }
+void SceneParser::parseShapes(const nloJson &shapeListData) {
+//    int num = shapeListData.GetArraySize();
+//    for (int i = 0; i < num; ++i) {
+//        nloJson shapeData = shapeListData.value(i, nloJson());
+//        string type = shapeData.value("type", "sphere");
+//        if (type == "model") {
+//            parseModel(shapeData);
+//        } else {
+//            parseSimpleShape(shapeData, type);
+//        }
+//    }
 }
 
-void SceneParser::parseSimpleShape(const nebJson &data, const string &type) {
-    nebJson param = data.GetValue("param", nebJson());
+void SceneParser::parseSimpleShape(const nloJson &data, const string &type) {
+    nloJson param = data.value("param", nloJson());
     auto creator = GET_CREATOR(type);
     Shape * shape = dynamic_cast<Shape *>(creator(param, {}));
 }
 
-void SceneParser::parseModel(const nebJson &data) {
+void SceneParser::parseModel(const nloJson &data) {
     
 }
 
-shared_ptr<Aggregate> SceneParser::parseAccelerator(const nebJson &param) {
+shared_ptr<Aggregate> SceneParser::parseAccelerator(const nloJson &param) {
     
 }
 
-Film * SceneParser::parseFilm(const nebJson &data, Filter * filt) {
-    nebJson param = data.GetValue("param", nebJson());
+Film * SceneParser::parseFilm(const nloJson &data, Filter * filt) {
+    nloJson param = data.value("param", nloJson());
     Film * film = dynamic_cast<Film *>(createFilm(param,{filt}));
     return film;
 }

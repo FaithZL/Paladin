@@ -17,11 +17,11 @@ USING_STD
  * 	   "alpha" : 2
  * }
  */
-CObject_ptr createGaussianFilter(const nebJson &param) {
-    nebJson radius = param.GetValue("radius", nebJson());
-    Float rx = radius.GetValue(0, 2.f);
-    Float ry = radius.GetValue(1, 2.f);
-    Float alpha = param.GetValue("alpha", 2.f);
+CObject_ptr createGaussianFilter(const nloJson &param) {
+    nloJson radius = param.value("radius", nloJson::array({2,2}));
+    Float rx = radius.at(0);
+    Float ry = radius.at(1);
+    Float alpha = param.value("alpha", 2.f);
     return new GaussianFilter(Vector2f(rx, ry), alpha);
 }
 

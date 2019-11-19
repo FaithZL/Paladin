@@ -58,8 +58,8 @@ public:
         
     }
     
-    virtual nebJson toJson() const {
-        return nebJson();
+    virtual nloJson toJson() const {
+        return nloJson();
     }
     
     /**

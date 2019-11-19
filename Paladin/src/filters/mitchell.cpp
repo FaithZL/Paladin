@@ -16,12 +16,12 @@ PALADIN_BEGIN
  * 	   "C" : 1/3,
  * }
  */
-CObject_ptr createMitchellFilter(const nebJson &param) {
-	nebJson radius = param.GetValue("radius", nebJson());
-    Float rx = radius.GetValue(0, 2.f);
-    Float ry = radius.GetValue(1, 2.f);
-    Float B = param.GetValue("B", 1.f/3.f);
-    Float C = param.GetValue("C", 1.f/3.f);
+CObject_ptr createMitchellFilter(const nloJson &param) {
+    nloJson radius = param.value("radius", nloJson::array({2,2}));
+    Float rx = radius.at(0);
+    Float ry = radius.at(1);
+    Float B = param.value("B", 1.f/3.f);
+    Float C = param.value("C", 1.f/3.f);
     return new MitchellFilter(Vector2f(rx, ry), B, C);
 }
 

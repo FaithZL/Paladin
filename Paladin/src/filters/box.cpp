@@ -14,10 +14,10 @@ PALADIN_BEGIN
  *     "radius" : [2,2]
  * }
  */
-CObject_ptr createBoxFilter(const nebJson &param) {
-    nebJson radius = param.GetValue("radius", nebJson());
-    Float rx = radius.GetValue(0, 2.f);
-    Float ry = radius.GetValue(1, 2.f);
+CObject_ptr createBoxFilter(const nloJson &param) {
+    nloJson radius = param.value("radius", nloJson::array({2,2}));
+    Float rx = radius.at(0);
+    Float ry = radius.at(1);
     return new BoxFilter(Vector2f(rx, ry));
 }
 

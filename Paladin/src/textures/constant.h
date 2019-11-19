@@ -26,8 +26,8 @@ public:
         return _value;
     }
     
-    virtual nebJson toJson() const override {
-        return nebJson();
+    virtual nloJson toJson() const override {
+        return nloJson();
     }
     
 private:

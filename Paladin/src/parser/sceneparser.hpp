@@ -27,40 +27,44 @@ public:
         stringstream buffer;
         buffer << fst.rdbuf();
         string str = buffer.str();
-        nebJson json(str);
-        auto errstr = json.GetErrMsg();
-        if (errstr != "") {
-            COUT << errstr;
-            DCHECK(false);
-        }
-        parse(str);
+//        nloJson json(str);
+        nloJson json = nloJson::parse(str);
+        
+        cout << setw(4) << json;
+        
+//        auto errstr = json.GetErrMsg();
+//        if (errstr != "") {
+//            COUT << errstr;
+//            DCHECK(false);
+//        }
+//        parse(str);
     }
     
     const TransformCache &getTransformCache() const {
         return _transformCache;
     }
     
-    void parse(const nebJson &);
+    void parse(const nloJson &);
     
-    void parseShapes(const nebJson &);
+    void parseShapes(const nloJson &);
     
-    Sampler * parseSampler(const nebJson &param);
+    Sampler * parseSampler(const nloJson &param);
     
-    Camera * parseCamera(const nebJson &, Film *);
+    Camera * parseCamera(const nloJson &, Film *);
     
-    Integrator * parseIntegrator(const nebJson &,Sampler * sampler, Camera * camera);
+    Integrator * parseIntegrator(const nloJson &,Sampler * sampler, Camera * camera);
     
-    Filter * parseFilter(const nebJson &);
+    Filter * parseFilter(const nloJson &);
     
     // 解析简单物体，球体，圆柱，圆锥等
-    void parseSimpleShape(const nebJson &data, const string &type);
+    void parseSimpleShape(const nloJson &data, const string &type);
     
     // 解析模型
-    void parseModel(const nebJson &data);
+    void parseModel(const nloJson &data);
     
-    shared_ptr<Aggregate> parseAccelerator(const nebJson &);
+    shared_ptr<Aggregate> parseAccelerator(const nloJson &);
     
-    Film * parseFilm(const nebJson &param, Filter *);
+    Film * parseFilm(const nloJson &param, Filter *);
     
 private:
     

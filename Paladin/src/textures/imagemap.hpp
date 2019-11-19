@@ -87,8 +87,8 @@ public:
 	   return ret;
 	}
             
-    virtual nebJson toJson() const override {
-        return nebJson();
+    virtual nloJson toJson() const override {
+        return nloJson();
     }
 
 private:

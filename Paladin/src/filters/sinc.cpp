@@ -17,11 +17,11 @@ USING_STD
  * 	   "tau" : 3
  * }
  */
-CObject_ptr createSincFilter(const nebJson &param) {
-	nebJson radius = param.GetValue("radius", nebJson());
-    Float rx = radius.GetValue(0, 2.f);
-    Float ry = radius.GetValue(1, 2.f);
-    Float tau = param.GetValue("tau", 3.f);
+CObject_ptr createSincFilter(const nloJson &param) {
+	nloJson radius = param.value("radius", nloJson::array({2,2}));
+    Float rx = radius.at(0);
+    Float ry = radius.at(1);
+    Float tau = param.value("tau", 3.f);
     return new LanczosSincFilter(Vector2f(rx, ry), tau);
 }
 

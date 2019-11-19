@@ -338,19 +338,17 @@ Float Sphere::pdfDir(const paladin::Interaction &ref, const Vector3f &wi) const 
 //    "zMax" : -0.75,
 //    "phiMax" : 360
 //}
-CObject_ptr createSphere(const nebJson &param, const Arguments &lst) {
-    cout << param.ToFormattedString();
-    Float radius = param.GetValue("radius", 1.f);
-    Float zMin = param.GetValue("zMin", -radius);
-    Float zMax = param.GetValue("zMax", radius);
-    Float phiMax = param.GetValue("phiMax", 360.f);
-    bool reverseOri = param.GetValue("reverseOrientation", false);
+CObject_ptr createSphere(const nloJson &param, const Arguments &lst) {
+    Float radius = param.value("radius", 1.f);
+    Float zMin = param.value("zMin", -radius);
+    Float zMax = param.value("zMax", radius);
+    Float phiMax = param.value("phiMax", 360.f);
+    bool reverseOri = param.value("reverseOrientation", false);
     
-    nebJson w2l_data = param.GetValue("worldToLocal", nebJson());
-    string type = w2l_data.GetValue("type", "translate");
+    nloJson w2l_data = param.value("worldToLocal", nloJson());
+    string type = w2l_data.value("type", "translate");
     auto tf_creator = GET_CREATOR(type);
-    nebJson w2l_param = w2l_data.GetValue("param", nebJson());
-    cout << w2l_param.ToFormattedString();
+    nloJson w2l_param = w2l_data.value("param", nloJson());
     Transform * w2l = dynamic_cast<Transform *>(tf_creator(w2l_param, {}));
     shared_ptr<Transform> w2o(w2l);
     shared_ptr<Transform> o2w(w2l->getInverse_ptr());

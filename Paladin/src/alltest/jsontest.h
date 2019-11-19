@@ -13,6 +13,8 @@
 
 PALADIN_BEGIN
 
+USING_STD;
+
 void testjson() {
 //    FILE * f = open(
     ifstream myfile;
@@ -21,6 +23,8 @@ void testjson() {
     stringstream buf;
     buf << myfile.rdbuf();
     str = buf.str();
+    nloJson j = nloJson::parse(str);
+    cout << setw(4) << j;
 //    std::cout << str;
 //    cout << j.value("transforms", 0);
 }
