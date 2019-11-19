@@ -24,6 +24,7 @@
 #include <glog/logging.h>
 #include "ext/json/CJsonObject.hpp"
 #include "ext/nlohmann/json.hpp"
+#include <iomanip>
 
 typedef neb::CJsonObject nebJson;
 
