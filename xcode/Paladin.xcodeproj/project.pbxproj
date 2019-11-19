@@ -353,8 +353,6 @@
 		F5BC44147DCD4C5FB184D17E /* ImfOutputPart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B7AFF225EDF2443F914BE22D /* ImfOutputPart.cpp */; };
 		F636FE6C237C609500FD6CED /* box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F636FE6B237C609500FD6CED /* box.cpp */; };
 		F636FE6F237C61AE00FD6CED /* gaussian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F636FE6D237C61AE00FD6CED /* gaussian.cpp */; };
-		F63983E623791A12004E15FA /* CJsonObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63983E3237919D8004E15FA /* CJsonObject.cpp */; };
-		F63983E723791A12004E15FA /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = F63983E4237919D8004E15FA /* cJSON.c */; };
 		F63983EC2379226E004E15FA /* sceneparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63983EA2379226D004E15FA /* sceneparser.cpp */; };
 		F69DF6E9237C6278008C0873 /* triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F69DF6E8237C6278008C0873 /* triangle.cpp */; };
 		F69DF6EB237C6460008C0873 /* sinc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F69DF6EA237C6460008C0873 /* sinc.cpp */; };
@@ -1221,10 +1219,6 @@
 		F636FE6D237C61AE00FD6CED /* gaussian.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gaussian.cpp; path = src/filters/gaussian.cpp; sourceTree = "<group>"; };
 		F636FE6E237C61AE00FD6CED /* gaussian.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = gaussian.hpp; path = src/filters/gaussian.hpp; sourceTree = "<group>"; };
 		F63983DC23790D1F004E15FA /* jsontest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = jsontest.h; path = src/alltest/jsontest.h; sourceTree = "<group>"; };
-		F63983E2237919D8004E15FA /* cJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cJSON.h; sourceTree = "<group>"; };
-		F63983E3237919D8004E15FA /* CJsonObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CJsonObject.cpp; sourceTree = "<group>"; };
-		F63983E4237919D8004E15FA /* cJSON.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cJSON.c; sourceTree = "<group>"; };
-		F63983E5237919D8004E15FA /* CJsonObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CJsonObject.hpp; sourceTree = "<group>"; };
 		F63983EA2379226D004E15FA /* sceneparser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sceneparser.cpp; path = src/parser/sceneparser.cpp; sourceTree = SOURCE_ROOT; };
 		F63983EB2379226D004E15FA /* sceneparser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = sceneparser.hpp; path = src/parser/sceneparser.hpp; sourceTree = SOURCE_ROOT; };
 		F63983ED23792D4A004E15FA /* transformcache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = transformcache.h; path = src/parser/transformcache.h; sourceTree = SOURCE_ROOT; };
@@ -1595,7 +1589,6 @@
 			isa = PBXGroup;
 			children = (
 				F6338F972383F98D0051232D /* nlohmann */,
-				F63983E1237919D8004E15FA /* json */,
 			);
 			name = ext;
 			sourceTree = "<group>";
@@ -2293,18 +2286,6 @@
 			);
 			name = nlohmann;
 			path = src/ext/nlohmann;
-			sourceTree = "<group>";
-		};
-		F63983E1237919D8004E15FA /* json */ = {
-			isa = PBXGroup;
-			children = (
-				F63983E2237919D8004E15FA /* cJSON.h */,
-				F63983E3237919D8004E15FA /* CJsonObject.cpp */,
-				F63983E4237919D8004E15FA /* cJSON.c */,
-				F63983E5237919D8004E15FA /* CJsonObject.hpp */,
-			);
-			name = json;
-			path = src/ext/json;
 			sourceTree = "<group>";
 		};
 		F63983E823792175004E15FA /* parser */ = {
@@ -3146,9 +3127,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F63983E623791A12004E15FA /* CJsonObject.cpp in Sources */,
 				F636FE6C237C609500FD6CED /* box.cpp in Sources */,
-				F63983E723791A12004E15FA /* cJSON.c in Sources */,
 				F69DF6ED237C6586008C0873 /* mitchell.cpp in Sources */,
 				5A5586CA2196489BB1351B6D /* bvh.cpp in Sources */,
 				D5F03767F6B042F2BF06ACA7 /* kdtree.cpp in Sources */,

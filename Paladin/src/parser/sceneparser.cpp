@@ -16,7 +16,6 @@
 
 PALADIN_BEGIN
 
-using namespace neb;
 USING_STD;
 
 void SceneParser::parse(const nloJson &data) {
