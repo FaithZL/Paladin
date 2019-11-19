@@ -70,17 +70,16 @@ Filter * SceneParser::parseFilter(const nloJson &data) {
     return ret;
 }
 
-void SceneParser::parseShapes(const nloJson &shapeListData) {
-//    int num = shapeListData.GetArraySize();
-//    for (int i = 0; i < num; ++i) {
-//        nloJson shapeData = shapeListData.value(i, nloJson());
-//        string type = shapeData.value("type", "sphere");
-//        if (type == "model") {
-//            parseModel(shapeData);
-//        } else {
-//            parseSimpleShape(shapeData, type);
-//        }
-//    }
+void SceneParser::parseShapes(const nloJson &shapeDataList) {
+    cout << setw(4) << shapeDataList;
+    for (auto &shapeData : shapeDataList) {
+        string type = shapeData.value("type", "sphere");
+        if (type == "model") {
+            parseModel(shapeData);
+        } else {
+            parseSimpleShape(shapeData, type);
+        }
+    }
 }
 
 void SceneParser::parseSimpleShape(const nloJson &data, const string &type) {

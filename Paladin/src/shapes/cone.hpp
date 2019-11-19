@@ -70,7 +70,7 @@ protected:
     const Float _radius, _height, _phiMax;
 };
 
-CObject_ptr * createCone(const nloJson &param, const Arguments &lst);
+CObject_ptr createCone(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 

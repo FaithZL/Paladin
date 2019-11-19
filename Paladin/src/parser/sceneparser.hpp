@@ -27,17 +27,8 @@ public:
         stringstream buffer;
         buffer << fst.rdbuf();
         string str = buffer.str();
-//        nloJson json(str);
         nloJson json = nloJson::parse(str);
-        
-        cout << setw(4) << json;
-        
-//        auto errstr = json.GetErrMsg();
-//        if (errstr != "") {
-//            COUT << errstr;
-//            DCHECK(false);
-//        }
-//        parse(str);
+        parse(json);
     }
     
     const TransformCache &getTransformCache() const {

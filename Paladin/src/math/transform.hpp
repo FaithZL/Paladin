@@ -583,6 +583,7 @@ CObject_ptr createRotate(const nloJson &, const Arguments &);
 
 CObject_ptr createLookAt(const nloJson &, const Arguments &);
 
+Transform * createTransform(const nloJson &);
 
 PALADIN_END
 

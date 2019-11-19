@@ -676,6 +676,18 @@ CObject_ptr createLookAt(const nloJson &param, const Arguments &lst) {
     return Transform::lookAt_ptr(pos, target, up);
 }
 
+//data : {
+//    "type" : "translate",
+//    "param" : [0,0,0]
+//}
+Transform * createTransform(const nloJson &data) {
+    string type = data.value("type", "translate");
+    auto creator = GET_CREATOR(type);
+    nloJson param = data.value("param", nloJson::array({0, 0, 0}));
+    Transform * ret = dynamic_cast<Transform *>(creator(param, {}));
+    return ret;
+}
+
 REGISTER("scale", createScale);
 REGISTER("translate", createTranslate);
 REGISTER("rotateX", createRotateX);
@@ -683,5 +695,7 @@ REGISTER("rotateY", createRotateY);
 REGISTER("rotateZ", createRotateZ);
 REGISTER("rotate", createRotate);
 REGISTER("lookAt", createLookAt);
+
+
 
 PALADIN_END

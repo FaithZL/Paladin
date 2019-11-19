@@ -81,8 +81,8 @@
                 },
                 "radius" : 1,
                 "phiMax" : 360,
-                "zMin" : 0.5,
-                "zMax" : -0.5
+                "zMin" : -0.5,
+                "zMax" : 0.5
             }
         },
         {
@@ -139,9 +139,9 @@
     "film" : {
     	"param" : {
 			"resolution" : [400, 400],
-	    	"cropWindow" : null,
+	    	"cropWindow" : [0,0,1,1],
 	    	"fileName" : "conelbox.png",
-	    	"diagonal" : null,
+	    	"diagonal" : 1,
 	    	"scale" : 1
     	}
     },

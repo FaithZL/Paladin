@@ -235,9 +235,18 @@ Interaction Cone::samplePos(const Point2f &u, Float *pdf) const {
 //    "phiMax" : 360,
 //    "height" : 1
 //}
-CObject_ptr * createCone(const nloJson &param, const Arguments &lst) {
+CObject_ptr createCone(const nloJson &param, const Arguments &lst) {
+    nloJson w2l_data = param.value("worldToLocal", nloJson());
+    Transform * w2l = createTransform(w2l_data);
+    shared_ptr<Transform> w2o(w2l);
+    shared_ptr<Transform> o2w(w2l->getInverse_ptr());
     
-    return nullptr;
+    Float radius = param.value("radius", 0.5f);
+    Float phiMax = param.value("phiMax", 360.f);
+    Float height = param.value("height", 1.f);
+    bool reverseOrientation = param.value("reverseOrientation", false);
+    
+    return new Cone(o2w, w2o, reverseOrientation, height, radius, phiMax);
 }
 
 REGISTER("cone", createCone)

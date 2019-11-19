@@ -346,10 +346,7 @@ CObject_ptr createSphere(const nloJson &param, const Arguments &lst) {
     bool reverseOri = param.value("reverseOrientation", false);
     
     nloJson w2l_data = param.value("worldToLocal", nloJson());
-    string type = w2l_data.value("type", "translate");
-    auto tf_creator = GET_CREATOR(type);
-    nloJson w2l_param = w2l_data.value("param", nloJson());
-    Transform * w2l = dynamic_cast<Transform *>(tf_creator(w2l_param, {}));
+    Transform * w2l = createTransform(w2l_data);
     shared_ptr<Transform> w2o(w2l);
     shared_ptr<Transform> o2w(w2l->getInverse_ptr());
     

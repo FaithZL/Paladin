@@ -25,7 +25,6 @@ _maxSampleLuminance(maxSampleLuminance) {
                      std::ceil(fullResolution.y * cropWindow.pMin.y)),
              Point2i(std::ceil(fullResolution.x * cropWindow.pMax.x),
                      std::ceil(fullResolution.y * cropWindow.pMax.y)));
-    
     _pixels = std::unique_ptr<Pixel[]>(new Pixel[croppedPixelBounds.area()]);
     
     // 预先计算好filter函数的值
@@ -164,7 +163,7 @@ nloJson Film::toJson() const {
 
 //"param" : {
 //    "resolution" : [500, 500],
-//    "cropWindow" : [0,0,500,500],
+//    "cropWindow" : [0,0,1,1],
 //    "fileName" : "conelbox.png",
 //    "diagonal" : null,
 //    "scale" : 1
@@ -172,11 +171,13 @@ nloJson Film::toJson() const {
 CObject_ptr createFilm(const nloJson &param, const Arguments &lst) {
     
     nloJson res = param.value("resolution", nloJson::array({500, 500}));
+    DCHECK(res.size() == 2);
     int resX = res.at(0);
     int resY = res.at(1);
     Point2i resolution(resX, resY);
     
-    nloJson cw = param.value("cropWindow", nloJson::array({0, 0, 500, 500}));
+    nloJson cw = param.value("cropWindow", nloJson::array({0, 0, 1, 1}));
+    DCHECK(cw.size() == 4);
     Float minX = cw.at(0);
     Float minY = cw.at(1);
     Float maxX = cw.at(2);

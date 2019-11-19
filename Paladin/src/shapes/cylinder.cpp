@@ -225,12 +225,23 @@ Interaction Cylinder::samplePos(const Point2f &u, Float *pdf) const {
 //    },
 //    "radius" : 1,
 //    "phiMax" : 360,
-//    "zMin" : 0.5,
-//    "zMax" : -0.5
+//    "reverseOrientation" : false
+//    "zMin" : -0.5,
+//    "zMax" : 0.5
 //}
-CObject_ptr * createCylinder(const nloJson &param, const Arguments &lst){
+CObject_ptr createCylinder(const nloJson &param, const Arguments &lst){
+    nloJson w2l_data = param.value("worldToLocal", nloJson());
+    Transform * w2l = createTransform(w2l_data);
+    shared_ptr<Transform> w2o(w2l);
+    shared_ptr<Transform> o2w(w2l->getInverse_ptr());
     
-    return nullptr;
+    Float radius = param.value("radius", 1.f);
+    Float phiMax = param.value("phiMax", 360.f);
+    Float reverseOrientation = param.value("reverseOrientation", false);
+    Float zMin = param.value("zMin", -0.5f);
+    Float zMax = param.value("zMax", 0.5f);
+    
+    return new Cylinder(o2w, w2o, reverseOrientation, radius, zMin, zMax, phiMax);
 }
 
 REGISTER("cylinder", createCylinder)

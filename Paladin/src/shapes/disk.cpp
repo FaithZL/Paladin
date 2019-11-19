@@ -106,12 +106,26 @@ Interaction Disk::samplePos(const Point2f &u, Float *pdf) const {
 //    },
 //    "radius" : 1,
 //    "phiMax" : 360,
-//    "innerRadius" : 0.5,
+//    "innerRadius" : 0.f,
+//    "reverseOrientation" : false
 //    "height" : 0
 //}
 CObject_ptr createDisk(const nloJson &param, const Arguments &lst) {
+    Float radius = param.value("radius", 1.f);
+    Float phiMax = param.value("phiMax", 360.f);
+    Float innerRadius = param.value("innerRadius", 0.f);
+    Float height = param.value("height", 0.f);
+    bool reverseOri = param.value("reverseOrientation", false);
     
-    return nullptr;
+    nloJson w2l_data = param.value("worldToLocal", nloJson());
+    Transform * w2l = createTransform(w2l_data);
+
+    shared_ptr<Transform> w2o(w2l);
+    shared_ptr<Transform> o2w(w2l->getInverse_ptr());
+    
+    auto ret = new Disk(o2w, w2o, reverseOri, height, radius, innerRadius, phiMax);
+    
+    return ret;
 }
 
 REGISTER("disk", createDisk)

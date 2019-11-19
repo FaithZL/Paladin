@@ -33,8 +33,12 @@ public:
     _zMin(std::min(zMin, zMax)),
     _zMax(std::max(zMin, zMax)),
     _phiMax(degree2radian(clamp(_phiMax, 0, 360))) {
-
-    } 
+        init();
+    }
+    
+    virtual void init() override {
+        
+    }
 
     virtual AABB3f objectBound() const override {
         return AABB3f(Point3f(-_radius, -_radius, _zMin),
@@ -67,7 +71,7 @@ protected:
     const Float _phiMax;
 };
 
-CObject_ptr * createCylinder(const nloJson &param, const Arguments &lst);
+CObject_ptr createCylinder(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 
