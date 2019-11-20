@@ -19,13 +19,17 @@
         "tex1" : {
             "type" : "constant",
             "param" : [0.1, 0.9, 0.5]
+        },
+        "tex2" : {
+            "type" : "content",
+            "param" : 0.5
         }
     },
     "materials" : {
         "matte" : {
             "type" : "matte",
             "param" : {
-
+                "Kd" : "tex1"
             }
         }
     },

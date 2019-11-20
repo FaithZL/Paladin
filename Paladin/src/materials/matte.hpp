@@ -11,6 +11,7 @@
 
 #include "core/header.h"
 #include "core/material.hpp"
+#include "tools/classfactory.hpp"
 
 PALADIN_BEGIN
 
@@ -27,11 +28,15 @@ public:
     : _Kd(Kd), _sigma(sigma), _bumpMap(bumpMap) {
 
     }
+    
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
 
 	virtual void computeScatteringFunctions(SurfaceInteraction *si,
 									MemoryArena &arena,
                                     TransportMode mode,
-                                    bool allowMultipleLobes) const;
+                                    bool allowMultipleLobes) const override;
 
 private:
     // 漫反射系数
@@ -43,6 +48,7 @@ private:
 	
 };
 
+CObject_ptr createMatte(const nloJson &, const Arguments&);
 
 PALADIN_END
 

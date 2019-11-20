@@ -32,9 +32,13 @@ public:
         
     }
     
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
+    
     virtual void computeScatteringFunctions(SurfaceInteraction *si, MemoryArena &arena,
                                     TransportMode mode,
-                                    bool allowMultipleLobes) const;
+                                    bool allowMultipleLobes) const override;
     
 private:
     // eta折射率，k吸收系数，详见bxdf.hpp文件

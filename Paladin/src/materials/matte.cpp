@@ -34,4 +34,10 @@ void MatteMaterial::computeScatteringFunctions(SurfaceInteraction *si,
 	}
 }
 
+CObject_ptr createMatte(const nloJson &param, const Arguments& lst) {
+    
+}
+
+REGISTER("matte", createMatte)
+
 PALADIN_END

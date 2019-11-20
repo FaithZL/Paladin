@@ -24,6 +24,7 @@
 #include <glog/logging.h>
 #include "ext/nlohmann/json.hpp"
 #include <iomanip>
+#include <map>
 
 typedef nlohmann::json nloJson;
 

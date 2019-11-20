@@ -32,10 +32,14 @@ public:
         
     }
     
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
+    
     virtual void computeScatteringFunctions(SurfaceInteraction *si,
                                             MemoryArena &arena,
                                             TransportMode mode,
-                                            bool allowMultipleLobes) const;
+                                            bool allowMultipleLobes) const override;
     
 private:
     std::shared_ptr<Texture<Spectrum>> _Kr, _Kt;

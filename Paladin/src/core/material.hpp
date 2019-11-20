@@ -10,7 +10,7 @@
 #define material_hpp
 
 #include "core/header.h"
-//#include "interaction.hpp"
+#include "cobject.h"
 
 PALADIN_BEGIN
 
@@ -19,13 +19,13 @@ enum class TransportMode { Radiance, Importance };
 /**
  * 材质基类主要实现的是bump函数
  */
-class Material {
+class Material : public CObject {
 public:
     virtual void computeScatteringFunctions(SurfaceInteraction *si,
                                             MemoryArena &arena,
                                             TransportMode mode,
                                             bool allowMultipleLobes) const = 0;
-
+    
     virtual ~Material() {
     	
     }

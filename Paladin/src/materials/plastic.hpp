@@ -32,10 +32,14 @@ public:
 	_remapRoughness(remapRoughness) {
 
 	}
+    
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
 
     void computeScatteringFunctions(SurfaceInteraction *si, MemoryArena &arena,
                                     TransportMode mode,
-                                    bool allowMultipleLobes) const;
+                                    bool allowMultipleLobes) const override;
 
 private:
     std::shared_ptr<Texture<Spectrum>> _Kd, _Ks;

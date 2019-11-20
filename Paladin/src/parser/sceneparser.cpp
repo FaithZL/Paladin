@@ -21,20 +21,36 @@ USING_STD;
 void SceneParser::parse(const nloJson &data) {
     nloJson filterData = data.value("filter", nloJson());
     Filter * filter = parseFilter(filterData);
+    
     nloJson samplerData = data.value("sampler", nloJson());
     Sampler * sampler = parseSampler(samplerData);
+    
     nloJson filmData = data.value("film", nloJson());
     auto film = parseFilm(filmData, filter);
     nloJson cameraData = data.value("camera", nloJson());
     Camera * camera = parseCamera(cameraData, film);
+    
     nloJson integratorData = data.value("integrator", nloJson());
     Integrator * integrator = parseIntegrator(integratorData, sampler, camera);
     _integrator.reset(integrator);
-    
+
     nloJson shapesData = data.value("shapes", nloJson());
     parseShapes(shapesData);
+    
+    nloJson textureDataList = data.value("textures", nloJson::object());
+    parseTextures(textureDataList);
+    
+    nloJson materialDataList = data.value("materials", nloJson::object());
+    parseMaterials(materialDataList);
 }
 
+void SceneParser::parseTextures(const nloJson &list) {
+    cout << setw(4) << list;
+}
+
+void SceneParser::parseMaterials(const nloJson &list) {
+    cout << setw(4) << list;
+}
 
 Sampler * SceneParser::parseSampler(const nloJson &data) {
     string samplerType = data.value("type", "stratified");
@@ -70,7 +86,6 @@ Filter * SceneParser::parseFilter(const nloJson &data) {
 }
 
 void SceneParser::parseShapes(const nloJson &shapeDataList) {
-    cout << setw(4) << shapeDataList;
     for (auto &shapeData : shapeDataList) {
         string type = shapeData.value("type", "sphere");
         if (type == "model") {

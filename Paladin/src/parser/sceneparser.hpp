@@ -45,6 +45,10 @@ public:
     
     Integrator * parseIntegrator(const nloJson &,Sampler * sampler, Camera * camera);
     
+    void parseTextures(const nloJson &);
+    
+    void parseMaterials(const nloJson &);
+    
     Filter * parseFilter(const nloJson &);
     
     // 解析简单物体，球体，圆柱，圆锥等
@@ -56,6 +60,30 @@ public:
     shared_ptr<Aggregate> parseAccelerator(const nloJson &);
     
     Film * parseFilm(const nloJson &param, Filter *);
+    
+private:
+    
+    void addMaterialToCache(const string &name, const shared_ptr<const Material> &material) {
+        // todo
+        _materialCache[name] = material;
+    }
+    
+    shared_ptr<const Material> getMaterial(const string &name) {
+        return _materialCache[name];
+    }
+    
+    template <typename T>
+    void addTextureToCache(const string &name, const shared_ptr<const Texture<T>> &tex) {
+        _textureCache[name] = tex;
+    }
+    
+    template <typename T>
+    shared_ptr<const Texture<T>> getTexture(const string &name, const T &) {
+        auto tmp = _textureCache[name];
+        auto ret = dynamic_cast<shared_ptr<const Texture<T>>>(tmp);
+        DCHECK(ret.get() != nullptr);
+        return ret;
+    }
     
 private:
     
@@ -71,10 +99,14 @@ private:
     
     vector<shared_ptr<Primitive>> _primitives;
     
+    // 先用map储存着，待后续优化todo
+    map<string, shared_ptr<const Material>> _materialCache;
+    
+    // 因为texture是模板类，所以只能储存基类指针
+    map<string, shared_ptr<const CObject>> _textureCache;
+    
     Transform _cameraToWorld;
 };
-
-
 
 PALADIN_END
 
