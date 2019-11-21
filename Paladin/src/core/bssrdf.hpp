@@ -56,27 +56,38 @@ protected:
 	Float _eta;
 };
 
+// 菲涅尔函数一阶矩
+// ∫[0,π/2]Fr(η, cosθi)sinθcosθdθ
+Float fresnelMoment1(Float invEta);
+
+// 菲涅尔函数二阶矩
+Float fresnelMoment2(Float invEta);
+
 /**
  * 
- * BSSRDF的通用性比较差
+ * BSSRDF的通用性比较強
  * 即使在比较简单的几何图形下求解光照传输的解决方案已经非常的困难了
  * 例如球体，平面等等，而BSSRDF可以附加到任何一个几何体上，导致求解
  * BSSRDF的积分是不现实的，接下来要介绍一种简单的表示
  * 
  * 我们可以做如下简化
  * 
- *     S(po, ωo, pi, ωi) ≈ (1 - Fr(cosθo)) Sp(po, pi) Sω(ωi)
+ *     S(po, ωo, pi, ωi) ≈ (1 - Fr(cosθo)) Sp(po, pi) Sω(ωi)  2式
  * 
- * 先来Sω(ωi)函数，该函数可以认为是一个菲涅尔投射的缩放版本
+ * 先来Sω(ωi)函数，该函数可以认为是一个菲涅尔透射的缩放版本
  *
- *     Sω(ωi) = (1 - Fr(cosθi)) / cπ
+ *     Sω(ωi) = (1 - Fr(cosθi)) / cπ         3式
  *
  * 先来看看分子部分，1 - Fr(cosθi)表示光子进入物体表面的部分
  * 分母部分为π是因为理想漫反射的brdf为1/π，c是常数，为了保证 ∫[H] Sω(ωi) cosθi dωi = 1
  * 
- * 
+ * 将 3式带入 ∫[H] Sω(ω) cosθ dω = 1，可得
  *
+ *     1 = ∫[H] ((1 - Fr(η, cosθ)) / cπ) cosθ dω
  *
+ *     求解得到 c = 1 - 2 * ∫[0,π/2]Fr(η, cosθi)sinθcosθdθ
+ *
+ * 这个积分被称为菲涅尔函数的一阶矩
  *
  * 
  * 
@@ -93,7 +104,25 @@ public:
 
 	}
 
+	// S(po, ωo, pi, ωi) ≈ (1 - Fr(cosθo)) Sp(po, pi) Sω(ωi)
+	Spectrum S(const SurfaceInteraction &pi, const Vector3f &wi) {
+		// todo 这里的折射率应该要传入，待优化
+		Float Ft = FrDielectric(CosTheta(_po.wo), 1, _eta);
+		return (1 - Ft) * Sp(pi) * Sw(wi);
+	}
 
+	// Sω(ωi) = (1 - Fr(cosθi)) / cπ
+	// c = 1 - 2 * ∫[0,π/2]Fr(η, cosθi)sinθcosθdθ
+	Spectrum Sw(const Vector3f &w) const {
+		Float c = 1 - 2 * FresnelMoment1(1 / eta);
+		return (1 - FrDielectric(CosTheta(w), 1, eta)) / (c * Pi);
+	}
+
+	Spectrum Sp(const SurfaceInteraction &pi) const {
+		return Sr(Distance(po.p, pi.p));
+	}
+
+	virtual Spectrum Sr(Float d) const = 0;
 
 private:
 	// 着色法线
