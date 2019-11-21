@@ -41,6 +41,10 @@ private:
     const T _v00, _v01, _v10, _v11;
 };
 
+CObject_ptr createFloatBilerpTexture(const nloJson &param, const Arguments &lst);
+
+CObject_ptr createSpectrumBilerpTexture(const nloJson &param, const Arguments &lst);
+
 PALADIN_END
 
 #endif /* bilerp_hpp */

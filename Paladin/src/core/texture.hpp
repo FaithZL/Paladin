@@ -175,9 +175,9 @@ public:
 // 过滤函数
 Float lanczos(Float x, Float tau);
 
-Texture<Float> * createTextureFloat(const nloJson &data);
+Texture<Float> * createFloatTexture(const nloJson &data);
 
-Texture<Spectrum> * createTextureSpectrum(const nloJson &data);
+Texture<Spectrum> * createSpectrumTexture(const nloJson &data);
 
 PALADIN_END
 

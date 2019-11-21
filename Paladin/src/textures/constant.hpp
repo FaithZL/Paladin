@@ -33,9 +33,9 @@ private:
     T _value;
 };
 
-CObject_ptr createConstantFloat(const nloJson &param, const Arguments &lst);
+CObject_ptr createFloatConstant(const nloJson &param, const Arguments &lst);
 
-CObject_ptr createConstantSpectrum(const nloJson &param, const Arguments &lst);
+CObject_ptr createSpectrumConstant(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 

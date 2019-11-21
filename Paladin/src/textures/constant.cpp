@@ -11,7 +11,7 @@ PALADIN_BEGIN
 
 
 //    "param" : 0
-CObject_ptr createConstantFloat(const nloJson &param, const Arguments &lst) {
+CObject_ptr createFloatConstant(const nloJson &param, const Arguments &lst) {
     Float value = param;
     return new ConstantTexture<Float>(value);
 }
@@ -20,7 +20,7 @@ CObject_ptr createConstantFloat(const nloJson &param, const Arguments &lst) {
 //    "colorType" : 0,
 //    "color" : [0.1, 0.9, 0.5],
 //}
-CObject_ptr createConstantSpectrum(const nloJson &param, const Arguments &lst) {
+CObject_ptr createSpectrumConstant(const nloJson &param, const Arguments &lst) {
     int colorType = param.value("colorType", 0);
     nloJson color = param.value("color", nloJson::array({1.f, 1.f, 1.f}));
     Float arr[3] = {};
@@ -31,8 +31,8 @@ CObject_ptr createConstantSpectrum(const nloJson &param, const Arguments &lst) {
     return new ConstantTexture<Spectrum>(spd);
 }
 
-REGISTER("constantFloat", createConstantFloat)
+REGISTER("Floatconstant", createFloatConstant)
 
-REGISTER("constantSpectrum", createConstantSpectrum)
+REGISTER("Spectrumconstant", createSpectrumConstant)
 
 PALADIN_END

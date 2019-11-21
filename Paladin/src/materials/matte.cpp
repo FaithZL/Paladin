@@ -53,11 +53,13 @@ void MatteMaterial::computeScatteringFunctions(SurfaceInteraction *si,
 //}
 CObject_ptr createMatte(const nloJson &param, const Arguments& lst) {
     nloJson _Kd = param.value("Kd", nloJson::object());
-    Texture<Spectrum> * Kd = createTextureSpectrum(_Kd);
+    auto Kd = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_Kd));
     nloJson _sigma = param.value("sigma", nloJson::object());
+    auto sigma = shared_ptr<Texture<Float>>(createFloatTexture(_sigma));
     nloJson _bumpMap = param.value("bumpMap", nloJson::object());
-    
-    
+    auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
+    auto ret = new MatteMaterial(Kd, sigma, bumpMap);
+    return ret;
 }
 
 REGISTER("matte", createMatte)

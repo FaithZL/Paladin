@@ -167,8 +167,8 @@ Float lanczos(Float x, Float tau) {
 //    "type" : "constant",
 //    "param" : 0
 //}
-Texture<Float> * createTextureFloat(const nloJson &data) {
-    string fullType = data.value("type", "constant") + "Float";
+Texture<Float> * createFloatTexture(const nloJson &data) {
+    string fullType = "Float" + data.value("type", "constant");
     auto creator = GET_CREATOR(fullType);
     nloJson param = data.value("param", nloJson::array({}));
     CObject_ptr tmp = creator(param, {});
@@ -182,8 +182,8 @@ Texture<Float> * createTextureFloat(const nloJson &data) {
 //        "color" : [0.1, 0.9, 0.5],
 //    }
 //}
-Texture<Spectrum> * createTextureSpectrum(const nloJson &data) {
-    string fullType = data.value("type", "constant") + "Spectrum";
+Texture<Spectrum> * createSpectrumTexture(const nloJson &data) {
+    string fullType = "Spectrum" + data.value("type", "constant");
     auto creator = GET_CREATOR(fullType);
     nloJson param = data.value("param", nloJson::array({}));
     CObject_ptr tmp = creator(param, {});
