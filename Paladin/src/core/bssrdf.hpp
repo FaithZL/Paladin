@@ -9,6 +9,8 @@
 #define bssrdf_hpp
 
 #include "interaction.hpp"
+#include "core/spectrum.hpp"
+#include "core/bxdf.hpp"
 
 PALADIN_BEGIN
 
@@ -58,10 +60,10 @@ protected:
 
 // 菲涅尔函数一阶矩
 // ∫[0,π/2]Fr(η, cosθi)sinθcosθdθ
-Float fresnelMoment1(Float invEta);
+Float FresnelMoment1(Float invEta);
 
 // 菲涅尔函数二阶矩
-Float fresnelMoment2(Float invEta);
+Float FresnelMoment2(Float invEta);
 
 /**
  * 
@@ -107,19 +109,19 @@ public:
 	// S(po, ωo, pi, ωi) ≈ (1 - Fr(cosθo)) Sp(po, pi) Sω(ωi)
 	Spectrum S(const SurfaceInteraction &pi, const Vector3f &wi) {
 		// todo 这里的折射率应该要传入，待优化
-		Float Ft = FrDielectric(CosTheta(_po.wo), 1, _eta);
+		Float Ft = frDielectric(cosTheta(_po.wo), 1, _eta);
 		return (1 - Ft) * Sp(pi) * Sw(wi);
 	}
 
 	// Sω(ωi) = (1 - Fr(cosθi)) / cπ
 	// c = 1 - 2 * ∫[0,π/2]Fr(η, cosθi)sinθcosθdθ
 	Spectrum Sw(const Vector3f &w) const {
-		Float c = 1 - 2 * FresnelMoment1(1 / eta);
-		return (1 - FrDielectric(CosTheta(w), 1, eta)) / (c * Pi);
+		Float c = 1 - 2 * FresnelMoment1(1 / _eta);
+		return (1 - frDielectric(cosTheta(w), 1, _eta)) / (c * Pi);
 	}
 
 	Spectrum Sp(const SurfaceInteraction &pi) const {
-		return Sr(Distance(po.p, pi.p));
+		return Sr(distance(_po.pos, pi.pos));
 	}
 
 	virtual Spectrum Sr(Float d) const = 0;
