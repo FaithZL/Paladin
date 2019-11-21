@@ -12,7 +12,7 @@
 #include "filters/box.hpp"
 #include "core/camera.hpp"
 #include "core/shape.hpp"
-
+#include "core/material.hpp"
 
 PALADIN_BEGIN
 
@@ -37,19 +37,23 @@ void SceneParser::parse(const nloJson &data) {
     nloJson shapesData = data.value("shapes", nloJson());
     parseShapes(shapesData);
     
-    nloJson textureDataList = data.value("textures", nloJson::object());
-    parseTextures(textureDataList);
+//    nloJson textureDataList = data.value("textures", nloJson::object());
+//    parseTextures(textureDataList);
     
     nloJson materialDataList = data.value("materials", nloJson::object());
     parseMaterials(materialDataList);
 }
 
-void SceneParser::parseTextures(const nloJson &list) {
-    cout << setw(4) << list;
+void SceneParser::parseTextures(const nloJson &dict) {
+//    cout << setw(4) << list;
 }
 
-void SceneParser::parseMaterials(const nloJson &list) {
-    cout << setw(4) << list;
+void SceneParser::parseMaterials(const nloJson &dict) {
+    for (auto iter = dict.cbegin(); iter != dict.cend(); ++iter) {
+        string name = iter.key();
+        nloJson data = iter.value();
+        createMaterial(data);
+    }
 }
 
 Sampler * SceneParser::parseSampler(const nloJson &data) {
@@ -86,7 +90,7 @@ Filter * SceneParser::parseFilter(const nloJson &data) {
 }
 
 void SceneParser::parseShapes(const nloJson &shapeDataList) {
-    for (auto &shapeData : shapeDataList) {
+    for (const auto &shapeData : shapeDataList) {
         string type = shapeData.value("type", "sphere");
         if (type == "model") {
             parseModel(shapeData);

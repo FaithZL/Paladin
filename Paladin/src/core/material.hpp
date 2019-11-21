@@ -11,6 +11,7 @@
 
 #include "core/header.h"
 #include "cobject.h"
+#include "tools/classfactory.hpp"
 
 PALADIN_BEGIN
 
@@ -80,6 +81,8 @@ public:
     static void bump(const std::shared_ptr<Texture<Float>> &d,
                      SurfaceInteraction *si);
 };
+
+Material * createMaterial(const nloJson &);
 
 PALADIN_END
 

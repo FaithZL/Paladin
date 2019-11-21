@@ -1,12 +1,12 @@
 //
-//  mix.h
+//  mixtex.hpp
 //  Paladin
 //
-//  Created by SATAN_Z on 2019/10/3.
+//  Created by SATAN_Z on 2019/11/21.
 //
 
-#ifndef texture_mix_h
-#define texture_mix_h
+#ifndef mixtex_hpp
+#define mixtex_hpp
 
 #include "core/header.h"
 #include "core/texture.hpp"
@@ -23,7 +23,7 @@ public:
         
     }
     
-    virtual T evaluate(const SurfaceInteraction &si) const {
+    virtual T evaluate(const SurfaceInteraction &si) const override {
         T t1 = _tex1->evaluate(si), t2 = _tex2->evaluate(si);
         Float amt = _amount->evaluate(si);
         return (1 - amt) * t1 + amt * t2;
@@ -40,4 +40,4 @@ private:
 
 PALADIN_END
 
-#endif /* texture_mix_h */
+#endif /* mixtex_hpp */

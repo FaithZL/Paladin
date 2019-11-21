@@ -2,11 +2,11 @@
 //  scale.hpp
 //  Paladin
 //
-//  Created by SATAN_Z on 2019/10/1.
+//  Created by SATAN_Z on 2019/11/21.
 //
 
-#ifndef scale_h
-#define scale_h
+#ifndef scale_hpp
+#define scale_hpp
 
 #include "core/header.h"
 #include "core/texture.hpp"
@@ -22,7 +22,7 @@ public:
         
     }
     
-    virtual T2 evaluate(const SurfaceInteraction &si) const {
+    virtual T2 evaluate(const SurfaceInteraction &si) const override {
         return _tex1->evaluate(si) * _tex2->evaluate(si);
     }
     
@@ -38,5 +38,4 @@ private:
 
 PALADIN_END
 
-
-#endif /* scale_h */
+#endif /* scale_hpp */

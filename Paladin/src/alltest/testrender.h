@@ -23,7 +23,7 @@
 
 #include "lights/diffuse.hpp"
 
-#include "textures/constant.h"
+#include "textures/constant.hpp"
 #include "accelerators/bvh.hpp"
 
 #include "core/scene.hpp"

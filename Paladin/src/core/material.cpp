@@ -70,5 +70,19 @@ void Material::bump(const std::shared_ptr<Texture<Float>> &d, SurfaceInteraction
     
 }
 
+//"matte" : {
+//    "type" : "matte",
+//    "param" : {
+//        "Kd" : "tex1"
+//    }
+//}
+Material * createMaterial(const nloJson &data) {
+    string type = data.value("type", "matte");
+    nloJson param = data["param"];
+    auto creator = GET_CREATOR(type);
+    cout << setw(4) << param;
+    auto ret = dynamic_cast<Material *>(creator(param, {}));
+    return ret;
+}
 
 PALADIN_END

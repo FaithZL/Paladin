@@ -13,6 +13,7 @@
 #include "math/transform.hpp"
 #include "interaction.hpp"
 #include "core/cobject.h"
+#include "core/spectrum.hpp"
 
 PALADIN_BEGIN
 
@@ -173,6 +174,10 @@ public:
 
 // 过滤函数
 Float lanczos(Float x, Float tau);
+
+Texture<Float> * createTextureFloat(const nloJson &data);
+
+Texture<Spectrum> * createTextureSpectrum(const nloJson &data);
 
 PALADIN_END
 

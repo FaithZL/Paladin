@@ -163,4 +163,31 @@ Float lanczos(Float x, Float tau) {
     return s * lanczos;
 }
 
+//"data" : {
+//    "type" : "constant",
+//    "param" : 0
+//}
+Texture<Float> * createTextureFloat(const nloJson &data) {
+    string fullType = data.value("type", "constant") + "Float";
+    auto creator = GET_CREATOR(fullType);
+    nloJson param = data.value("param", nloJson::array({}));
+    CObject_ptr tmp = creator(param, {});
+    return dynamic_cast<Texture<Float> *>(tmp);
+}
+
+//"data" : {
+//    "type" : "constant",
+//    "param" : {
+//        "colorType" : 0,
+//        "color" : [0.1, 0.9, 0.5],
+//    }
+//}
+Texture<Spectrum> * createTextureSpectrum(const nloJson &data) {
+    string fullType = data.value("type", "constant") + "Spectrum";
+    auto creator = GET_CREATOR(fullType);
+    nloJson param = data.value("param", nloJson::array({}));
+    CObject_ptr tmp = creator(param, {});
+    return dynamic_cast<Texture<Spectrum> *>(tmp);
+}
+
 PALADIN_END

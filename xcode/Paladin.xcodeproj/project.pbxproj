@@ -351,6 +351,10 @@
 		F4F9AFDC204747338C91C720 /* linit.c in Sources */ = {isa = PBXBuildFile; fileRef = BDE49B0E72704ADDAB013CE8 /* linit.c */; };
 		F5612AEBBE0C44BFA39EC83E /* ImfInputPart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8D2ED2B582D64F51B4FF0FFC /* ImfInputPart.cpp */; };
 		F5BC44147DCD4C5FB184D17E /* ImfOutputPart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B7AFF225EDF2443F914BE22D /* ImfOutputPart.cpp */; };
+		F6366EF32386A15E0060BAC0 /* constant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6366EF12386A15E0060BAC0 /* constant.cpp */; };
+		F6366EF62386A1E40060BAC0 /* mixtex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6366EF42386A1E40060BAC0 /* mixtex.cpp */; };
+		F6366EF92386A2310060BAC0 /* scale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6366EF72386A2310060BAC0 /* scale.cpp */; };
+		F6366EFC2386A2600060BAC0 /* bilerp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6366EFA2386A2600060BAC0 /* bilerp.cpp */; };
 		F636FE6C237C609500FD6CED /* box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F636FE6B237C609500FD6CED /* box.cpp */; };
 		F636FE6F237C61AE00FD6CED /* gaussian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F636FE6D237C61AE00FD6CED /* gaussian.cpp */; };
 		F63983EC2379226E004E15FA /* sceneparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63983EA2379226D004E15FA /* sceneparser.cpp */; };
@@ -823,7 +827,6 @@
 		076FC17EE3264050A52E5FF5 /* stb_image_write.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_image_write.h; path = third/stblib/stb/stb_image_write.h; sourceTree = SOURCE_ROOT; };
 		07E75AFDEB4F4ED79726822E /* cone.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = cone.hpp; path = src/shapes/cone.hpp; sourceTree = SOURCE_ROOT; };
 		086637EB737D4FD081F1FBF3 /* lapi.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lapi.c; path = third/lua53/lua/lapi.c; sourceTree = SOURCE_ROOT; };
-		08C10CE30C2A4DA6A86BF63C /* scale.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = scale.h; path = src/textures/scale.h; sourceTree = SOURCE_ROOT; };
 		0A7A97D984CD4611B62C0CC4 /* ImfIntAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfIntAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfIntAttribute.cpp; sourceTree = SOURCE_ROOT; };
 		0A80C54286034296B435D4A8 /* bssrdf.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = bssrdf.hpp; path = src/core/bssrdf.hpp; sourceTree = SOURCE_ROOT; };
 		0AABD4E3D5C44480A9CA5189 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = third/openexr/OpenEXR/IlmImf/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
@@ -1036,7 +1039,6 @@
 		899AB99413F24733A5ABDF42 /* ImfTiledInputPart.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfTiledInputPart.cpp; path = third/openexr/OpenEXR/IlmImf/ImfTiledInputPart.cpp; sourceTree = SOURCE_ROOT; };
 		8B97E5CC35874FB4A80A5A4C /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = third/openexr/IlmBase/IlmThread/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
 		8BA074F99DEA4129B4D61409 /* rapidxml.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = rapidxml.hpp; path = third/rapidxml/rapidxml.hpp; sourceTree = SOURCE_ROOT; };
-		8C9288E1104D4CBEBDC521E0 /* mix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = mix.h; path = src/textures/mix.h; sourceTree = SOURCE_ROOT; };
 		8D00620D67E74779886A2458 /* projection.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = projection.cpp; path = src/lights/projection.cpp; sourceTree = SOURCE_ROOT; };
 		8D2ED2B582D64F51B4FF0FFC /* ImfInputPart.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfInputPart.cpp; path = third/openexr/OpenEXR/IlmImf/ImfInputPart.cpp; sourceTree = SOURCE_ROOT; };
 		8D9D7E14F4224D38B3000853 /* ImfChannelListAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfChannelListAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfChannelListAttribute.cpp; sourceTree = SOURCE_ROOT; };
@@ -1085,7 +1087,6 @@
 		A558FC60161A4CE0BF826886 /* liblua53.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = liblua53.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A58CD026BA8644A68735595C /* mathutil.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = mathutil.h; path = src/math/mathutil.h; sourceTree = SOURCE_ROOT; };
 		A6B6795A8995463FA334C25B /* test_glog.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = test_glog.hpp; path = src/alltest/test_glog.hpp; sourceTree = SOURCE_ROOT; };
-		A71BCA0A4EE9437F8D4CDDC1 /* constant.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = constant.h; path = src/textures/constant.h; sourceTree = SOURCE_ROOT; };
 		A8137C609BC84197A207C23C /* interaction.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = interaction.cpp; path = src/core/interaction.cpp; sourceTree = SOURCE_ROOT; };
 		A870A8B9781E4B859605F8D5 /* ImathRandom.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImathRandom.cpp; path = third/openexr/IlmBase/Imath/ImathRandom.cpp; sourceTree = SOURCE_ROOT; };
 		A872640F38864D1AA35697E5 /* ImfTestFile.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfTestFile.cpp; path = third/openexr/OpenEXR/IlmImf/ImfTestFile.cpp; sourceTree = SOURCE_ROOT; };
@@ -1215,6 +1216,14 @@
 		F4CC7E55569C4411892E5439 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = third/glog/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
 		F58DDF6FBCCE466CA26FA10D /* lzio.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lzio.c; path = third/lua53/lua/lzio.c; sourceTree = SOURCE_ROOT; };
 		F6338F982383F98D0051232D /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
+		F6366EF12386A15E0060BAC0 /* constant.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = constant.cpp; path = src/textures/constant.cpp; sourceTree = "<group>"; };
+		F6366EF22386A15E0060BAC0 /* constant.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = constant.hpp; path = src/textures/constant.hpp; sourceTree = "<group>"; };
+		F6366EF42386A1E40060BAC0 /* mixtex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mixtex.cpp; path = src/textures/mixtex.cpp; sourceTree = "<group>"; };
+		F6366EF52386A1E40060BAC0 /* mixtex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = mixtex.hpp; path = src/textures/mixtex.hpp; sourceTree = "<group>"; };
+		F6366EF72386A2310060BAC0 /* scale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scale.cpp; path = src/textures/scale.cpp; sourceTree = "<group>"; };
+		F6366EF82386A2310060BAC0 /* scale.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = scale.hpp; path = src/textures/scale.hpp; sourceTree = "<group>"; };
+		F6366EFA2386A2600060BAC0 /* bilerp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bilerp.cpp; path = src/textures/bilerp.cpp; sourceTree = "<group>"; };
+		F6366EFB2386A2600060BAC0 /* bilerp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = bilerp.hpp; path = src/textures/bilerp.hpp; sourceTree = "<group>"; };
 		F636FE6B237C609500FD6CED /* box.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = box.cpp; path = src/filters/box.cpp; sourceTree = "<group>"; };
 		F636FE6D237C61AE00FD6CED /* gaussian.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gaussian.cpp; path = src/filters/gaussian.cpp; sourceTree = "<group>"; };
 		F636FE6E237C61AE00FD6CED /* gaussian.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = gaussian.hpp; path = src/filters/gaussian.hpp; sourceTree = "<group>"; };
@@ -1241,7 +1250,6 @@
 		FE1E927D1C17402495DF1687 /* ImfConvert.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfConvert.cpp; path = third/openexr/OpenEXR/IlmImf/ImfConvert.cpp; sourceTree = SOURCE_ROOT; };
 		FE54F820CBCB4E828AA384DA /* header.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = header.h; path = src/core/header.h; sourceTree = SOURCE_ROOT; };
 		FE6EC95991F242F6A42E1247 /* bxdf.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = bxdf.hpp; path = src/core/bxdf.hpp; sourceTree = SOURCE_ROOT; };
-		FEEA64BCEDF74BDEAAC5433E /* bilerp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = bilerp.h; path = src/textures/bilerp.h; sourceTree = SOURCE_ROOT; };
 		FEF3AAF926394F958B6A1B65 /* Paladin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = Paladin; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF0D8079079C49DB96441DC1 /* lbaselib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lbaselib.c; path = third/lua53/lua/lbaselib.c; sourceTree = SOURCE_ROOT; };
 		FF8F5B2C7AD941F896FD7718 /* lopcodes.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lopcodes.h; path = third/lua53/lua/lopcodes.h; sourceTree = SOURCE_ROOT; };
@@ -1694,12 +1702,16 @@
 		83FE8EF6AC584EADB84C946D /* textures */ = {
 			isa = PBXGroup;
 			children = (
-				FEEA64BCEDF74BDEAAC5433E /* bilerp.h */,
-				A71BCA0A4EE9437F8D4CDDC1 /* constant.h */,
 				0ACB0FCEB9E0466E8A0BB8AC /* imagemap.cpp */,
 				544996E0A8AE4F9A9CC46E89 /* imagemap.hpp */,
-				8C9288E1104D4CBEBDC521E0 /* mix.h */,
-				08C10CE30C2A4DA6A86BF63C /* scale.h */,
+				F6366EF42386A1E40060BAC0 /* mixtex.cpp */,
+				F6366EF52386A1E40060BAC0 /* mixtex.hpp */,
+				F6366EF12386A15E0060BAC0 /* constant.cpp */,
+				F6366EF22386A15E0060BAC0 /* constant.hpp */,
+				F6366EF72386A2310060BAC0 /* scale.cpp */,
+				F6366EF82386A2310060BAC0 /* scale.hpp */,
+				F6366EFA2386A2600060BAC0 /* bilerp.cpp */,
+				F6366EFB2386A2600060BAC0 /* bilerp.hpp */,
 			);
 			name = textures;
 			sourceTree = "<group>";
@@ -3140,9 +3152,11 @@
 				FFE5B8F53D454C97A965BDF9 /* interaction.cpp in Sources */,
 				DC824E68AEC149E2B95301D1 /* light.cpp in Sources */,
 				48D3D3F5393E4B32B971EBCF /* material.cpp in Sources */,
+				F6366EFC2386A2600060BAC0 /* bilerp.cpp in Sources */,
 				72F986DB37824F589015B26F /* medium.cpp in Sources */,
 				F6E231E523797D0500B68F58 /* classfactory.cpp in Sources */,
 				A3124FE394644361A59CE972 /* microfacet.cpp in Sources */,
+				F6366EF92386A2310060BAC0 /* scale.cpp in Sources */,
 				F636FE6F237C61AE00FD6CED /* gaussian.cpp in Sources */,
 				5B719F0F36B24788A8ECB104 /* paladin.cpp in Sources */,
 				2E578A4C1F5B40F7A5CBE21E /* primitive.cpp in Sources */,
@@ -3155,6 +3169,7 @@
 				DCDF39D112A44F0B94E3D962 /* directlighting.cpp in Sources */,
 				CBDF20C7969B4890B4A65893 /* pathtracer.cpp in Sources */,
 				7CDF96F0E90E425A99756DF9 /* volpath.cpp in Sources */,
+				F6366EF32386A15E0060BAC0 /* constant.cpp in Sources */,
 				80B8D79D64B84E8E8EE508D7 /* whitted.cpp in Sources */,
 				EB2D87771F294A2EA08CF203 /* diffuse.cpp in Sources */,
 				500CB80CCEFC41FFB3B03B19 /* distant.cpp in Sources */,
@@ -3184,6 +3199,7 @@
 				8B8E91FA84BF472684148424 /* cube.cpp in Sources */,
 				DBD7195250384419AFF125F3 /* curve.cpp in Sources */,
 				1EDE153FADE44FF99B48F029 /* cylinder.cpp in Sources */,
+				F6366EF62386A1E40060BAC0 /* mixtex.cpp in Sources */,
 				D09A96932A6D43EAB930027E /* disk.cpp in Sources */,
 				E9559EF187684821A2CEDD8A /* sphere.cpp in Sources */,
 				77A393C74D434A7982C37A85 /* triangle.cpp in Sources */,

@@ -78,7 +78,7 @@ public:
 	   _mipmapCache.erase(_mipmapCache.begin(), _mipmapCache.end());
 	}
 
-	virtual Treturn evaluate(const SurfaceInteraction &si) const {
+	virtual Treturn evaluate(const SurfaceInteraction &si) const override {
 	   Vector2f dstdx, dstdy;
 	   Point2f st = _mapping->map(si, &dstdx, &dstdy);
 	   Tmemory mem = _mipmap->lookup(st, dstdx, dstdy);

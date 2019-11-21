@@ -34,7 +34,29 @@ void MatteMaterial::computeScatteringFunctions(SurfaceInteraction *si,
 	}
 }
 
+//"param" : {
+//    "Kd" : {
+//        "type" : "constant",
+//        "param" : {
+//            "colorType" : 0,
+//            "color" : [0.1, 0.9, 0.5]
+//        }
+//    },
+//    "sigma" : {
+//        "type" : "constant",
+//        "param" : 0
+//    },
+//    "bumpMap" : {
+//        "type" : "constant",
+//        "param" : 0
+//    }
+//}
 CObject_ptr createMatte(const nloJson &param, const Arguments& lst) {
+    nloJson _Kd = param.value("Kd", nloJson::object());
+    Texture<Spectrum> * Kd = createTextureSpectrum(_Kd);
+    nloJson _sigma = param.value("sigma", nloJson::object());
+    nloJson _bumpMap = param.value("bumpMap", nloJson::object());
+    
     
 }
 

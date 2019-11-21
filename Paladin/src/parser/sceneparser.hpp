@@ -72,19 +72,6 @@ private:
         return _materialCache[name];
     }
     
-    template <typename T>
-    void addTextureToCache(const string &name, const shared_ptr<const Texture<T>> &tex) {
-        _textureCache[name] = tex;
-    }
-    
-    template <typename T>
-    shared_ptr<const Texture<T>> getTexture(const string &name, const T &) {
-        auto tmp = _textureCache[name];
-        auto ret = dynamic_cast<shared_ptr<const Texture<T>>>(tmp);
-        DCHECK(ret.get() != nullptr);
-        return ret;
-    }
-    
 private:
     
     TransformCache _transformCache;
@@ -101,9 +88,6 @@ private:
     
     // 先用map储存着，待后续优化todo
     map<string, shared_ptr<const Material>> _materialCache;
-    
-    // 因为texture是模板类，所以只能储存基类指针
-    map<string, shared_ptr<const CObject>> _textureCache;
     
     Transform _cameraToWorld;
 };

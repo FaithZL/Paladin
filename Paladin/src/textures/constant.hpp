@@ -2,12 +2,11 @@
 //  constant.hpp
 //  Paladin
 //
-//  Created by SATAN_Z on 2019/6/30.
-//  Copyright © 2019 Zero. All rights reserved.
+//  Created by SATAN_Z on 2019/11/21.
 //
 
-#ifndef constant_h
-#define constant_h
+#ifndef constant_hpp
+#define constant_hpp
 
 #include "core/texture.hpp"
 #include "core/header.h"
@@ -22,7 +21,7 @@ public:
         
     }
     
-    virtual T evaluate(const SurfaceInteraction &) const {
+    virtual T evaluate(const SurfaceInteraction &) const override {
         return _value;
     }
     
@@ -33,6 +32,10 @@ public:
 private:
     T _value;
 };
+
+CObject_ptr createConstantFloat(const nloJson &param, const Arguments &lst);
+
+CObject_ptr createConstantSpectrum(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 

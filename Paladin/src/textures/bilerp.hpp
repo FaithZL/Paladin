@@ -1,12 +1,12 @@
 //
-//  bilerp.h
+//  bilerp.hpp
 //  Paladin
 //
-//  Created by SATAN_Z on 2019/10/2.
+//  Created by SATAN_Z on 2019/11/21.
 //
 
-#ifndef bilerp_h
-#define bilerp_h
+#ifndef bilerp_hpp
+#define bilerp_hpp
 
 #include "core/header.h"
 #include "core/texture.hpp"
@@ -23,7 +23,7 @@ public:
         
     }
     
-    virtual T evaluate(const SurfaceInteraction &si) const {
+    virtual T evaluate(const SurfaceInteraction &si) const override {
         Vector2f dstdx, dstdy;
         Point2f st = _mapping->map(si, &dstdx, &dstdy);
         return (1 - st[0]) * (1 - st[1]) * _v00
@@ -43,4 +43,4 @@ private:
 
 PALADIN_END
 
-#endif /* bilerp_h */
+#endif /* bilerp_hpp */
