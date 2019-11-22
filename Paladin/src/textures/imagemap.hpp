@@ -75,7 +75,7 @@ public:
 	}
 
 	static void clearCache() {
-	   _mipmapCache.erase(_mipmapCache.begin(), _mipmapCache.end());
+	   _imageCache.erase(_imageCache.begin(), _imageCache.end());
 	}
 
 	virtual Treturn evaluate(const SurfaceInteraction &si) const override {
@@ -121,8 +121,8 @@ private:
                                        bool gamma) {
 		TexInfo textInfo(filename, doTrilinear, maxAniso, wm, scale, gamma);
 		// 先从纹理缓存中查找，如果找得到，直接返回对应mipmap指针
-		if (_mipmapCache.find(textInfo) != _mipmapCache.end()) {
-            return _mipmapCache[textInfo].get();
+		if (_imageCache.find(textInfo) != _imageCache.end()) {
+            return _imageCache[textInfo].get();
 		}
 		Point2i resolution;
         std::unique_ptr<RGBSpectrum[]> texels = readImage(filename, &resolution);
@@ -151,7 +151,7 @@ private:
         }
         mipmap = new MIPMap<Tmemory>(resolution, convertedTexels.get(),
                                      doTrilinear, maxAniso, wm);
-        _mipmapCache[textInfo].reset(mipmap);
+        _imageCache[textInfo].reset(mipmap);
         return mipmap;
 	}
 	// 纹理映射方式
@@ -159,9 +159,12 @@ private:
 
 	MIPMap<Tmemory> *_mipmap;
 
-	static std::map<TexInfo, std::unique_ptr<MIPMap<Tmemory>>> _mipmapCache;
+	static std::map<TexInfo, std::unique_ptr<MIPMap<Tmemory>>> _imageCache;
 };
 
+
+CObject_ptr createImageMap(const nloJson &param, const Arguments &lst);
+            
 PALADIN_END
 
 #endif /* imagemap_hpp */

@@ -348,6 +348,16 @@ public:
                                    nRGB2SpectSamples, wl0, wl1);
         }
     }
+        
+    static SampledSpectrum FromJsonRGB(const nloJson &data,
+                                   SpectrumType type = SpectrumType::Reflectance) {
+        Float rgb[3] = {1.f, 1.f, 1.f};
+        for(int i = 0; i < 3; ++i) {
+            rgb[i] = data[i];
+        }
+        return SampledSpectrum::FromRGB(rgb, type);
+    }
+        
     void ToXYZ(Float xyz[3]) const {
         xyz[0] = xyz[1] = xyz[2] = 0.f;
         for (int i = 0; i < nSpectralSamples; ++i) {
@@ -361,18 +371,22 @@ public:
         xyz[1] *= scale;
         xyz[2] *= scale;
     }
+        
     Float y() const {
         Float yy = 0.f;
         for (int i = 0; i < nSpectralSamples; ++i) yy += Y.c[i] * c[i];
         return yy * Float(sampledLambdaEnd - sampledLambdaStart) /
         Float(CIE_Y_integral * nSpectralSamples);
     }
+        
     void ToRGB(Float rgb[3]) const {
         Float xyz[3];
         ToXYZ(xyz);
         XYZToRGB(xyz, rgb);
     }
+        
     RGBSpectrum ToRGBSpectrum() const;
+        
     static SampledSpectrum FromRGB(
                                    const Float rgb[3], SpectrumType type = SpectrumType::Illuminant);
     static SampledSpectrum FromXYZ(
@@ -417,11 +431,22 @@ public:
         DCHECK(!s.HasNaNs());
         return s;
     }
+    
+    static RGBSpectrum FromJsonRGB(const nloJson &data,
+                                   SpectrumType type = SpectrumType::Reflectance) {
+        Float rgb[3] = {1.f, 1.f, 1.f};
+        for(int i = 0; i < 3; ++i) {
+            rgb[i] = data[i];
+        }
+        return RGBSpectrum::FromRGB(rgb, type);
+    }
+    
     void ToRGB(Float *rgb) const {
         rgb[0] = c[0];
         rgb[1] = c[1];
         rgb[2] = c[2];
     }
+        
     const RGBSpectrum &ToRGBSpectrum() const { return *this; }
     void ToXYZ(Float xyz[3]) const { RGBToXYZ(c, xyz); }
     static RGBSpectrum FromXYZ(const Float xyz[3],

@@ -10,6 +10,7 @@
 #define paladin_hpp
 
 #include "parser/sceneparser.hpp"
+#include "tools/parallel.hpp"
 
 PALADIN_BEGIN
 
@@ -24,7 +25,9 @@ public:
     }
     
     void render(const std::string fileName) {
+        parallelInit();
         _sceneParser.loadFromJson(fileName);
+        parallelCleanup();
     }
     
 private:
