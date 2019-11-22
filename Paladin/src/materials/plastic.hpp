@@ -47,6 +47,8 @@ private:
     const bool _remapRoughness;
 };
 
+CObject_ptr createPlastic(const nloJson &param, const Arguments &lst);
+
 PALADIN_END
 
 #endif /* plastic_hpp */

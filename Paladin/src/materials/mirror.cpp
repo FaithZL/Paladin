@@ -29,4 +29,24 @@ void MirrorMaterial::computeScatteringFunctions(SurfaceInteraction *si,
     
 }
 
+//"Kr" : {
+//    "type" : "constant",
+//    "param" : {
+//        "colorType" : 0,
+//        "color" : [0.1, 0.9, 0.5]
+//    }
+//}
+CObject_ptr createMirror(const nloJson &param, const Arguments &lst) {
+    nloJson _Kr = param.value("Kr", nloJson::object());
+    auto Kr = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_Kr));
+    
+    nloJson _bumpMap = param.value("bumpMap", nloJson());
+    auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
+    
+    auto ret = new MirrorMaterial(Kr, bumpMap);
+    return ret;
+}
+
+REGISTER("mirror", createMirror)
+
 PALADIN_END

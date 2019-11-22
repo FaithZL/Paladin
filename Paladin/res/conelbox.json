@@ -69,7 +69,7 @@
                 "Kd" : {
                     "type" : "image",
                     "param" : {
-                        "fileName" : "res/HelloWord.png",
+                        "fileName" : "pathtracing.png",
                         "doTri" : true,
                         "maxAniso" : 8,
                         "wrapMode" : 0,
@@ -85,6 +85,121 @@
                     "type" : "constant",
                     "param" : 0
                 }
+            }
+        },
+        "glass" : {
+            "type" : "glass",
+            "param" : {
+                "Kr" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.1, 0.9, 0.5]
+                    }
+                },
+                "Kt" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.1, 0.9, 0.5]
+                    }
+                },
+                "uRough" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
+                "vRough" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
+                "eta" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
+                "remapRough" : false 
+            }
+        },
+        "plastic" : {
+            "type" : "plastic",
+            "param" : {
+                "Kd" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.1, 0.9, 0.5]
+                    }
+                },
+                "Ks" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.1, 0.9, 0.5]
+                    }
+                },
+                "rough" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
+                "remapRough" : false
+            }
+        },
+        "metal" : {
+            "type" : "metal",
+            "param" : {
+                "eta" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.1, 0.9, 0.5]
+                    }
+                },
+                "k" : {
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.1, 0.9, 0.5]
+                    }
+                },
+                "rough" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
+                "uRough" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
+                "vRough" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
+                "remapRough" : false        
+            }
+        },
+        "mirror" : {
+            "type" : "mirror",
+            "param" : {
+                "Kr" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.1, 0.9, 0.5]
+                    }
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
             }
         }
     },

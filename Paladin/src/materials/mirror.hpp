@@ -35,6 +35,8 @@ private:
     std::shared_ptr<Texture<Float>> _bumpMap;
 };
 
+CObject_ptr createMirror(const nloJson &param, const Arguments &lst);
+
 PALADIN_END
 
 #endif /* mirror_hpp */

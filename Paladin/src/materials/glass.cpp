@@ -70,7 +70,66 @@ void GlassMaterial::computeScatteringFunctions(SurfaceInteraction *si,
     }
 }
 
+//"param" : {
+//    "Kr" : {
+//        "type" : "constant",
+//        "param" : {
+//            "colorType" : 0,
+//            "color" : [0.1, 0.9, 0.5]
+//        }
+//    },
+//    "Kt" : {
+//        "type" : "constant",
+//        "param" : {
+//            "colorType" : 0,
+//            "color" : [0.1, 0.9, 0.5]
+//        }
+//    },
+//    "uRough" : {
+//        "type" : "constant",
+//        "param" : 0.5
+//    },
+//    "vRough" : {
+//        "type" : "constant",
+//        "param" : 0.5
+//    },
+//    "eta" : {
+//        "type" : "constant",
+//        "param" : 0.5
+//    },
+//    "bumpMap" : {
+//        "type" : "constant",
+//        "param" : 0.5
+//    },
+//    "remapRough" : false
+//}
+CObject_ptr createGlass(const nloJson &param, const Arguments &lst) {
+    
+    nloJson _Kr = param.value("Kr", nloJson::object());
+    auto Kr = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_Kr));
+    
+    nloJson _Kt = param.value("Kt", nloJson::object());
+    auto Kt = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_Kt));
+    
+    nloJson _uRough = param.value("uRough", nloJson::object());
+    auto uRough = shared_ptr<Texture<Float>>(createFloatTexture(_uRough));
+    
+    nloJson _vRough = param.value("vRough", nloJson::object());
+    auto vRough = shared_ptr<Texture<Float>>(createFloatTexture(_vRough));
+    
+    nloJson _eta = param.value("eta", nloJson::object());
+    auto eta = shared_ptr<Texture<Float>>(createFloatTexture(_eta));
+    
+    nloJson _bumpMap = param.value("bumpMap", nloJson::object());
+    auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
+    
+    bool remap = param.value("remapRough", false);
+    
+    auto ret = new GlassMaterial(Kr, Kt, uRough, vRough, eta, bumpMap, remap);
+    return ret;
+}
 
+REGISTER("glass", createGlass)
 
 PALADIN_END
 

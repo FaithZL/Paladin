@@ -33,4 +33,64 @@ void MetalMaterial::computeScatteringFunctions(SurfaceInteraction *si,
     si->bsdf->add(ARENA_ALLOC(arena, MicrofacetReflection)(1., distrib, frMf));
 }
 
+//"param" : {
+//    "eta" : {
+//        "type" : "constant",
+//        "param" : {
+//            "colorType" : 0,
+//            "color" : [0.1, 0.9, 0.5]
+//        }
+//    },
+//    "k" : {
+//        "param" : {
+//            "colorType" : 0,
+//            "color" : [0.1, 0.9, 0.5]
+//        }
+//    },
+//    "rough" : {
+//        "type" : "constant",
+//        "param" : 0.5
+//    },
+//    "uRough" : {
+//        "type" : "constant",
+//        "param" : 0.5
+//    },
+//    "vRough" : {
+//        "type" : "constant",
+//        "param" : 0.5
+//    },
+//    "bumpMap" : {
+//        "type" : "constant",
+//        "param" : 0.5
+//    },
+//    "remapRough" : false
+//}
+CObject_ptr createMetal(const nloJson &param, const Arguments &lst) {
+    nloJson _eta = param.value("eta", nloJson::object());
+    auto eta = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_eta));
+    
+    nloJson _k = param.value("k", nloJson::object());
+    auto k = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_k));
+    
+    nloJson _rough = param.value("rough", nloJson::object());
+    auto rough = shared_ptr<Texture<Float>>(createFloatTexture(_rough));
+    
+    nloJson _uRough = param.value("uRough", nloJson::object());
+    auto uRough = shared_ptr<Texture<Float>>(createFloatTexture(_uRough));
+    
+    nloJson _vRough = param.value("vRough", nloJson::object());
+    auto vRough = shared_ptr<Texture<Float>>(createFloatTexture(_vRough));
+    
+    nloJson _bumpMap = param.value("bumpMap", nloJson::object());
+    auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
+    
+    bool remap = param.value("remapRough", false);
+    
+    auto ret = new MetalMaterial(eta, k, rough, uRough, vRough, bumpMap, remap);
+    
+    return ret;
+}
+
+REGISTER("metal", createMetal)
+
 PALADIN_END

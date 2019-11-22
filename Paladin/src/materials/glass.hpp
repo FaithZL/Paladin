@@ -49,6 +49,8 @@ private:
     bool _remapRoughness;
 };
 
+CObject_ptr createGlass(const nloJson &param, const Arguments &lst);
+
 PALADIN_END
 
 #endif /* glass_hpp */

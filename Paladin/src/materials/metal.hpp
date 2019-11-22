@@ -48,6 +48,8 @@ private:
     bool _remapRoughness;
 };
 
+CObject_ptr createMetal(const nloJson &param, const Arguments &lst);
+
 PALADIN_END
 
 #endif /* metal_hpp */

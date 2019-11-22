@@ -23,11 +23,7 @@ CObject_ptr createFloatConstant(const nloJson &param, const Arguments &lst) {
 CObject_ptr createSpectrumConstant(const nloJson &param, const Arguments &lst) {
     int colorType = param.value("colorType", 0);
     nloJson color = param.value("color", nloJson::array({1.f, 1.f, 1.f}));
-    Float arr[3] = {};
-    for (int i = 0; i < 3; ++i) {
-        arr[i] = color[i];
-    }
-    Spectrum spd = Spectrum::FromRGB(arr, (SpectrumType)colorType);
+    Spectrum spd = Spectrum::FromJsonRGB(color, (SpectrumType)colorType);
     return new ConstantTexture<Spectrum>(spd);
 }
 

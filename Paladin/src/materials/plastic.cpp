@@ -41,4 +41,50 @@ void PlasticMaterial::computeScatteringFunctions(
     }
 }
 
+//"param" : {
+//    "Kd" : {
+//        "type" : "constant",
+//        "param" : {
+//            "colorType" : 0,
+//            "color" : [0.1, 0.9, 0.5]
+//        }
+//    },
+//    "Ks" : {
+//        "type" : "constant",
+//        "param" : {
+//            "colorType" : 0,
+//            "color" : [0.1, 0.9, 0.5]
+//        }
+//    },
+//    "rough" : {
+//        "type" : "constant",
+//        "param" : 0.5
+//    },
+//    "bumpMap" : {
+//        "type" : "constant",
+//        "param" : 0.5
+//    },
+//    "remapRough" : false
+//}
+CObject_ptr createPlastic(const nloJson &param, const Arguments &lst) {
+    nloJson _Kd = param.value("Kd", nloJson::object());
+    auto Kd = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_Kd));
+    
+    nloJson _Ks = param.value("Ks", nloJson::object());
+    auto Ks = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_Ks));
+    
+    nloJson _rough = param.value("rough", nloJson::object());
+    auto rough = shared_ptr<Texture<Float>>(createFloatTexture(_rough));
+    
+    nloJson _bumpMap = param.value("bumpMap", nloJson::object());
+    auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
+    
+    bool remap = param.value("remapRough", false);
+    
+    auto ret = new PlasticMaterial(Kd, Ks, rough, bumpMap, remap);
+    return ret;
+}
+
+REGISTER("plastic", createPlastic)
+
 PALADIN_END
