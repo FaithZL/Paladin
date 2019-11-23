@@ -62,7 +62,7 @@ int main(int argc, const char * argv[]) {
 //    cout << t.p->m << endl;
     
     Paladin paladin;
-    paladin.render("res/conelbox.json");
+    paladin.render("res/simplescene.json");
 //    unique_ptr<int> a;
 //    a.reset()
 //    paladin.render("res/scene.json");

@@ -60,8 +60,8 @@ std::unique_ptr<Sampler> StratifiedSampler::clone(int seed) {
  */
 CObject_ptr createStratifiedSampler(const nloJson &param) {
     bool jitter = param.value("jitter", true);
-    int xsamp = param.value("xsamples", 3);
-    int ysamp = param.value("ysamples", 3);
+    int xsamp = param.value("xSamples", 3);
+    int ysamp = param.value("ySamples", xsamp);
     int sd = param.value("dimensions", 6);
     return new StratifiedSampler(xsamp, ysamp, jitter, sd);
 }

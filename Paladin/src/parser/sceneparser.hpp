@@ -21,14 +21,18 @@ class SceneParser {
     
 public:
     void loadFromJson(const std::string &fn) {
-        USING_STD;
-        std::ifstream fst;
-        fst.open(fn.c_str());
-        stringstream buffer;
-        buffer << fst.rdbuf();
-        string str = buffer.str();
-        nloJson json = nloJson::parse(str);
-        parse(json);
+        try {
+            std::ifstream fst;
+            fst.open(fn.c_str());
+            stringstream buffer;
+            buffer << fst.rdbuf();
+            string str = buffer.str();
+            nloJson json = nloJson::parse(str);
+            parse(json);
+        } catch (const std::exception &exc) {
+            cout << exc.what();
+            return;
+        }
     }
     
     const TransformCache &getTransformCache() const {
