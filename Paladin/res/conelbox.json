@@ -257,7 +257,7 @@
                 "nSamples" : 1,
                 "Le" : {
                     "colorType" : 1,
-                    "color" : [1,1,1],
+                    "color" : [1,1,1]
                 },
                 "twoSided" : false
             }

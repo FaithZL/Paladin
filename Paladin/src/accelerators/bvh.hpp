@@ -100,12 +100,17 @@ public:
              int maxPrimsInNode = 1,
              SplitMethod splitMethod = SplitMethod::SAH);
     
-    virtual AABB3f worldBound() const;
+    virtual AABB3f worldBound() const override;
+    
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
     
     virtual ~BVHAccel();
     
-    virtual bool intersect(const Ray &ray, SurfaceInteraction *isect) const;
-    virtual bool intersectP(const Ray &ray) const;
+    virtual bool intersect(const Ray &ray, SurfaceInteraction *isect) const override;
+    
+    virtual bool intersectP(const Ray &ray) const override;
     
 private:
     BVHBuildNode *recursiveBuild(
@@ -136,6 +141,8 @@ private:
     std::vector<std::shared_ptr<Primitive>> _primitives;
     LinearBVHNode *_nodes = nullptr;
 };
+
+shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Primitive>> &prims);
 
 PALADIN_END
 

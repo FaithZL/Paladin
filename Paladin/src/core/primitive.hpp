@@ -12,20 +12,27 @@
 #include "core/interaction.hpp"
 #include "core/material.hpp"
 #include "math/animatedtransform.hpp"
+#include "core/cobject.h"
 
 PALADIN_BEGIN
 
 // Primitive可以理解为片段
-class Primitive {
+class Primitive : public CObject {
 public:
     virtual ~Primitive() {
         
     }
+    
     virtual AABB3f worldBound() const = 0;
+    
     virtual bool intersect(const Ray &r, SurfaceInteraction *) const = 0;
+    
     virtual bool intersectP(const Ray &r) const = 0;
+    
     virtual const AreaLight *getAreaLight() const = 0;
+    
     virtual const Material *getMaterial() const = 0;
+    
     virtual void computeScatteringFunctions(SurfaceInteraction *isect,
                                             MemoryArena &arena,
                                             TransportMode mode,
@@ -36,23 +43,33 @@ public:
 class GeometricPrimitive : public Primitive {
     
 public:
-    virtual AABB3f worldBound() const;
-    virtual bool intersect(const Ray &r, SurfaceInteraction *isect) const;
-    virtual bool intersectP(const Ray &r) const;
+    virtual AABB3f worldBound() const override;
+    
+    virtual bool intersect(const Ray &r, SurfaceInteraction *isect) const override;
+    
+    virtual bool intersectP(const Ray &r) const override;
+    
     GeometricPrimitive(const std::shared_ptr<Shape> &shape,
-                       const std::shared_ptr<Material> &material,
+                       const std::shared_ptr<const Material> &material,
                        const std::shared_ptr<AreaLight> &areaLight,
                        const MediumInterface &mediumInterface);
-    virtual const AreaLight *getAreaLight() const;
-    virtual const Material *getMaterial() const;
+    
+    virtual const AreaLight *getAreaLight() const override;
+    
+    virtual const Material *getMaterial() const override;
+    
     virtual void computeScatteringFunctions(SurfaceInteraction *isect,
                                     MemoryArena &arena, TransportMode mode,
-                                    bool allowMultipleLobes) const;
+                                    bool allowMultipleLobes) const override;
+    
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
     
 private:
     
     std::shared_ptr<Shape> _shape;
-    std::shared_ptr<Material> _material;
+    std::shared_ptr<const Material> _material;
     // 发光属性
     std::shared_ptr<AreaLight> _areaLight;
     MediumInterface _mediumInterface;
@@ -64,27 +81,31 @@ public:
     TransformedPrimitive(std::shared_ptr<Primitive> &primitive,
                          const AnimatedTransform &PrimitiveToWorld);
     
-    virtual bool intersect(const Ray &r, SurfaceInteraction *in) const;
+    virtual bool intersect(const Ray &r, SurfaceInteraction *in) const override;
     
-    virtual bool intersectP(const Ray &r) const;
+    virtual bool intersectP(const Ray &r) const override;
     
-    virtual const AreaLight *getAreaLight() const {
-        return nullptr;
+    virtual const AreaLight *getAreaLight() const override {
+        return _primitive->getAreaLight();
     }
     
-    virtual const Material *getMaterial() const {
-        return nullptr;
+    virtual const Material *getMaterial() const override {
+        return _primitive->getMaterial();
+    }
+    
+    virtual nloJson toJson() const override {
+        return nloJson();
     }
     
     virtual void computeScatteringFunctions(SurfaceInteraction *isect,
                                     MemoryArena &arena, TransportMode mode,
-                                    bool allowMultipleLobes) const {
+                                    bool allowMultipleLobes) const override {
         LOG(FATAL) <<
         "TransformedPrimitive::ComputeScatteringFunctions() shouldn't be "
         "called";
     }
     
-    virtual AABB3f WorldBound() const {
+    virtual AABB3f worldBound() const override {
         return _primitiveToWorld.motionAABB(_primitive->worldBound());
     }
     
@@ -96,20 +117,23 @@ private:
 class Aggregate : public Primitive {
 public:
 
-    virtual const AreaLight *getAreaLight() const {
+    virtual const AreaLight *getAreaLight() const override {
         DCHECK(false);
         return nullptr;
     }
-    virtual const Material *getMaterial() const {
+    virtual const Material *getMaterial() const override {
         DCHECK(false);
         return nullptr;
     }
     virtual void computeScatteringFunctions(SurfaceInteraction *isect,
                                     MemoryArena &arena, TransportMode mode,
-                                    bool allowMultipleLobes) const {
+                                    bool allowMultipleLobes) const override {
         DCHECK(false);
     }
 };
+
+shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared_ptr<Primitive>> &);
+
 
 PALADIN_END
 

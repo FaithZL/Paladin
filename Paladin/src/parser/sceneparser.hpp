@@ -68,7 +68,14 @@ private:
         _materialCache[name] = material;
     }
     
-    shared_ptr<const Material> getMaterial(const string &name) {
+    shared_ptr<const Material> getMaterial(const nloJson &name) {
+        if (name.is_null()) {
+            return nullptr;
+        }
+        auto iter = _materialCache.find(name);
+        if (iter == _materialCache.end()) {
+            return nullptr;
+        }
         return _materialCache[name];
     }
     

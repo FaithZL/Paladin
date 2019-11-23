@@ -61,8 +61,8 @@ int main(int argc, const char * argv[]) {
 //    t.fun();
 //    cout << t.p->m << endl;
     
-//    Paladin paladin;
-//    paladin.render("res/conelbox.json");
+    Paladin paladin;
+    paladin.render("res/conelbox.json");
 //    unique_ptr<int> a;
 //    a.reset()
 //    paladin.render("res/scene.json");
@@ -72,7 +72,7 @@ int main(int argc, const char * argv[]) {
 //    loadfile();
 //    testscene();
 //    test_glog_main(argv[0]);
-    testscene();
+//    testscene();
 //    testjson();
 //    testCache();
 #ifdef _MSC_VER

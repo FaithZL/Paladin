@@ -14,6 +14,7 @@
 #include "core/shape.hpp"
 #include "core/material.hpp"
 #include "core/light.hpp"
+#include "lights/diffuse.hpp"
 
 PALADIN_BEGIN
 
@@ -46,6 +47,8 @@ void SceneParser::parse(const nloJson &data) {
     
     nloJson acceleratorData = data.value("accelerator", nloJson::object());
     _aggregate = parseAccelerator(acceleratorData);
+    
+    
 }
 
 void SceneParser::parseLights(const nloJson &list) {
@@ -60,10 +63,20 @@ void SceneParser::parseMaterials(const nloJson &dict) {
     for (auto iter = dict.cbegin(); iter != dict.cend(); ++iter) {
         string name = iter.key();
         nloJson data = iter.value();
-        createMaterial(data);
+        shared_ptr<const Material> material(createMaterial(data));
+        addMaterialToCache(name, material);
     }
 }
 
+//"sampler" : {
+//    "type" : "stratified",
+//    "param" : {
+//        "xSamples" : 2,
+//        "ySamples" : 2,
+//        "jitter" : true,
+//        "dimensions" : 10
+//    }
+//},
 Sampler * SceneParser::parseSampler(const nloJson &data) {
     string samplerType = data.value("type", "stratified");
     nloJson param = data.value("param", nloJson());
@@ -72,6 +85,26 @@ Sampler * SceneParser::parseSampler(const nloJson &data) {
     return ret;
 }
 
+//"camera" : {
+//    "type" : "perspective",
+//    "param" : {
+//        "shutterOpen" : 0,
+//        "shutterClose" : 1,
+//        "lensRadius" : 0,
+//        "focalDistance" : 100,
+//        "fov" : 45,
+//        "lookAt" : [
+//            [0,0,-5],
+//            [0,0,0],
+//            [0,1,0]
+//        ],
+//        "lookAtEnd" : [
+//            [0,0,-5],
+//            [0,0,0],
+//            [0,1,0]
+//        ]
+//    }
+//},
 Camera * SceneParser::parseCamera(const nloJson &data, Film * film) {
     string cameraType = data.value("type", "perspective");
     nloJson param = data.value("param", nloJson());
@@ -80,6 +113,14 @@ Camera * SceneParser::parseCamera(const nloJson &data, Film * film) {
     return ret;
 }
 
+//"integrator" : {
+//    "type" : "PathTracer",
+//    "param" : {
+//        "maxBounce" : 5,
+//        "rrThreshold" : 1,
+//        "lightSampleStrategy" : "power"
+//    }
+//}
 Integrator * SceneParser::parseIntegrator(const nloJson &data, Sampler * sampler, Camera * camera) {
     string type = data.value("type", "PathTracer");
     nloJson param = data.value("param", nloJson());
@@ -88,6 +129,12 @@ Integrator * SceneParser::parseIntegrator(const nloJson &data, Sampler * sampler
     return ret;
 }
 
+//"filter" : {
+//    "type" : "box",
+//    "param" : {
+//        "radius" : [2,2]
+//    }
+//}
 Filter * SceneParser::parseFilter(const nloJson &data) {
     string filterType = data.value("type", "box");
     nloJson param = data.value("param", nloJson());
@@ -108,19 +155,56 @@ void SceneParser::parseShapes(const nloJson &shapeDataList) {
     }
 }
 
+//"data" : {
+//    "type" : "sphere",
+//    "param" : {
+//        "worldToLocal" : {
+//            "type" : "translate",
+//            "param" : [1,0,1]
+//        },
+//        "radius" : 0.75,
+//        "zMin" : 0.75,
+//        "zMax" : -0.75,
+//        "phiMax" : 360
+//    },
+//    "material" : "matte1" ,
+//    "emission" : {
+//        "nSamples" : 1,
+//        "Le" : {
+//            "colorType" : 1,
+//            "color" : [1,1,1]
+//        },
+//        "twoSided" : false
+//    }
+//}
 void SceneParser::parseSimpleShape(const nloJson &data, const string &type) {
-    nloJson param = data.value("param", nloJson());
+    nloJson param = data.value("param", nloJson::object());
     auto creator = GET_CREATOR(type);
-    Shape * shape = dynamic_cast<Shape *>(creator(param, {}));
-    
+    auto shape = shared_ptr<Shape>(dynamic_cast<Shape *>(creator(param, {})));
+    auto mat = getMaterial(data.value("material", nloJson()));
+    auto tmpLight = createDiffuseAreaLight(data.value("emission", nloJson()), shape);
+    shared_ptr<AreaLight> areaLight(tmpLight);
+    if (areaLight) {
+        _lights.push_back(areaLight);
+    }
+    auto prim = new GeometricPrimitive(shape, mat, areaLight, nullptr);
+    shared_ptr<Primitive> primitive(prim);
+    _primitives.push_back(primitive);
 }
 
 void SceneParser::parseModel(const nloJson &data) {
     
 }
 
-shared_ptr<Aggregate> SceneParser::parseAccelerator(const nloJson &param) {
-    return nullptr;
+//"data" : {
+//    "type" : "bvh",
+//    "param" : {
+//        "maxPrimsInNode" : 1,
+//        "splitMethod" : "SAH"
+//    }
+//}
+shared_ptr<Aggregate> SceneParser::parseAccelerator(const nloJson &data) {
+    return createAccelerator(data, _primitives);
 }
 
 Film * SceneParser::parseFilm(const nloJson &data, Filter * filt) {

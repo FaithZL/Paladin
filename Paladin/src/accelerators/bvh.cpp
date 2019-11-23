@@ -426,4 +426,23 @@ int BVHAccel::flattenBVHTree(paladin::BVHBuildNode *node, int *offset) {
     return myOffset;
 }
 
+//"param" : {
+//    "maxPrimsInNode" : 1,
+//    "splitMethod" : "SAH"
+//}
+shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Primitive>> &prims) {
+    int maxPrimsInNode = param.value("maxPrimsInNode", 1);
+    BVHAccel::SplitMethod splitMethod;
+    string sm = param.value("splitMethod", "SAH");
+    if (sm == "SAH") {
+        splitMethod = BVHAccel::SplitMethod::SAH;
+    } else if (sm == "Middle") {
+        splitMethod = BVHAccel::SplitMethod::Middle;
+    } else if (sm == "EqualCounts") {
+        splitMethod = BVHAccel::SplitMethod::EqualCounts;
+    }
+    return make_shared<BVHAccel>(prims, maxPrimsInNode, splitMethod);
+}
+
+
 PALADIN_END

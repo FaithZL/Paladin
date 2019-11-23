@@ -7,12 +7,13 @@
 
 #include "primitive.hpp"
 #include "shape.hpp"
+#include "accelerators/bvh.hpp"
 
 PALADIN_BEGIN
 
 //GeometricPrimitive
 GeometricPrimitive::GeometricPrimitive(const std::shared_ptr<Shape> &shape,
-                                       const std::shared_ptr<Material> &material,
+                                       const std::shared_ptr<const Material> &material,
                                        const std::shared_ptr<AreaLight> &areaLight,
                                        const MediumInterface &mediumInterface)
 : _shape(shape),
@@ -98,6 +99,25 @@ bool TransformedPrimitive::intersectP(const Ray &r) const {
     Transform InterpolatedPrimToWorld = _primitiveToWorld.interpolate(r.time);
     Transform InterpolatedWorldToPrim = InterpolatedPrimToWorld.getInverse();
     return _primitive->intersectP(InterpolatedWorldToPrim.exec(r));
+}
+
+//"data" : {
+//    "type" : "bvh",
+//    "param" : {
+//        "maxPrimsInNode" : 1,
+//        "splitMethod" : "SAH"
+//    }
+//}
+shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared_ptr<Primitive>> &prims){
+    string type = data.value("type", "bvh");
+    if (type == "bvh") {
+        nloJson param = data.value("param", nloJson::object());
+        return createBVH(param, prims);
+    } else if (type == "kdTree") {
+        return nullptr;
+    }
+    DCHECK(false);
+    return nullptr;
 }
 
 PALADIN_END

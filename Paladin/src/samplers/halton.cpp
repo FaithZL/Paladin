@@ -202,7 +202,8 @@ std::unique_ptr<Sampler> HaltonSampler::clone(int seed) {
 
 /**
  * param : {
- *     "spp" : 8
+ *     "spp" : 8,
+ *     "sampleAtPixelCenter" : false
  * }
  */
 CObject_ptr createHaltonSampler(const nloJson &param, Arguments lst) {

@@ -53,13 +53,8 @@ private:
     const Float _area;
 };
 
-DiffuseAreaLight * createDiffuseAreaLight(shared_ptr<const Transform> LightToWorld,
-                                          const MediumInterface &mediumInterface, const Spectrum &Le,
-                                          int nSamples, const std::shared_ptr<Shape> &shape,
-                                          bool twoSided = false);
 
-DiffuseAreaLight * createDiffuse(const nloJson &param,
-                                shared_ptr<const Transform> lightToWorld,
+DiffuseAreaLight * createDiffuseAreaLight(const nloJson &param,
                                 const std::shared_ptr<Shape> &shape);
 
 PALADIN_END
