@@ -555,6 +555,8 @@ public:
     static Transform * lookAt_ptr(const Point3f &pos, const Point3f &look, const Vector3f &up);
 
     static Transform * perspective_ptr(Float fov, Float zNear, Float zFar, bool bRadian=false);
+        
+    static Transform * identity_ptr();
 
 private:
 
@@ -582,6 +584,8 @@ CObject_ptr createRotateZ(const nloJson &, const Arguments &);
 CObject_ptr createRotate(const nloJson &, const Arguments &);
 
 CObject_ptr createLookAt(const nloJson &, const Arguments &);
+        
+CObject_ptr createIdentity(const nloJson &, const Arguments &);
 
 Transform * createTransform(const nloJson &);
 

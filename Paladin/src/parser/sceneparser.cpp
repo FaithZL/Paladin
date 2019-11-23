@@ -34,15 +34,18 @@ void SceneParser::parse(const nloJson &data) {
     nloJson integratorData = data.value("integrator", nloJson());
     Integrator * integrator = parseIntegrator(integratorData, sampler, camera);
     _integrator.reset(integrator);
+    
+    nloJson materialDataList = data.value("materials", nloJson::object());
+    parseMaterials(materialDataList);
 
     nloJson shapesData = data.value("shapes", nloJson());
     parseShapes(shapesData);
     
-    nloJson materialDataList = data.value("materials", nloJson::object());
-    parseMaterials(materialDataList);
-    
     nloJson lightDataList = data.value("lights", nloJson::array());
     parseLights(lightDataList);
+    
+    nloJson acceleratorData = data.value("accelerator", nloJson::object());
+    _aggregate = parseAccelerator(acceleratorData);
 }
 
 void SceneParser::parseLights(const nloJson &list) {
@@ -109,6 +112,7 @@ void SceneParser::parseSimpleShape(const nloJson &data, const string &type) {
     nloJson param = data.value("param", nloJson());
     auto creator = GET_CREATOR(type);
     Shape * shape = dynamic_cast<Shape *>(creator(param, {}));
+    
 }
 
 void SceneParser::parseModel(const nloJson &data) {
@@ -116,7 +120,7 @@ void SceneParser::parseModel(const nloJson &data) {
 }
 
 shared_ptr<Aggregate> SceneParser::parseAccelerator(const nloJson &param) {
-    
+    return nullptr;
 }
 
 Film * SceneParser::parseFilm(const nloJson &data, Filter * filt) {

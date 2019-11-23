@@ -46,4 +46,25 @@ Float DiffuseAreaLight::pdf_Li(const Interaction &ref,
     return _shape->pdfDir(ref, wi);
 }
 
+DiffuseAreaLight * createDiffuseAreaLight(const Transform * lightToWorld,
+                                          const MediumInterface &mediumInterface, const Spectrum &Le,
+                                          int nSamples, const std::shared_ptr<Shape> &shape,
+                                          bool twoSided) {
+    return new DiffuseAreaLight(lightToWorld, mediumInterface, Le, nSamples, shape, twoSided);
+}
+
+//"emission" : {
+//    "nSamples" : 1,
+//    "Le" : {
+//        "colorType" : 1,
+//        "color" : [1,1,1],
+//    },
+//    "twoSided" : false
+//}
+DiffuseAreaLight * createDiffuse(const nloJson &param,
+                                 const std::shared_ptr<Shape> &shape) {
+    const Transform * o2w = shape->objectToWorld.get();
+    
+    
+}
 PALADIN_END

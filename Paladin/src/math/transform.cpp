@@ -577,6 +577,11 @@ Transform * Transform::perspective_ptr(Float fov, Float zNear, Float zFar, bool 
     return new Transform(mat);
 }
 
+Transform * Transform::identity_ptr() {
+    Matrix4x4 mat;
+    Matrix4x4 matInv;
+    return new Transform(mat, matInv);
+}
 
 // 反射机制工厂函数
 // 
@@ -676,6 +681,10 @@ CObject_ptr createLookAt(const nloJson &param, const Arguments &lst) {
     return Transform::lookAt_ptr(pos, target, up);
 }
 
+CObject_ptr createIdentity(const nloJson &, const Arguments &) {
+    return Transform::identity_ptr();
+}
+
 //data : {
 //    "type" : "translate",
 //    "param" : [0,0,0]
@@ -695,6 +704,7 @@ REGISTER("rotateY", createRotateY);
 REGISTER("rotateZ", createRotateZ);
 REGISTER("rotate", createRotate);
 REGISTER("lookAt", createLookAt);
+REGISTER("identity", createIdentity);
 
 
 
