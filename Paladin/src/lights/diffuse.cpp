@@ -10,7 +10,7 @@
 
 PALADIN_BEGIN
 
-DiffuseAreaLight::DiffuseAreaLight(const Transform * LightToWorld,
+DiffuseAreaLight::DiffuseAreaLight(shared_ptr<const Transform> LightToWorld,
                                    const MediumInterface &mediumInterface,
                                    const Spectrum &L, int nSamples,
                                    const std::shared_ptr<Shape> &shape,
@@ -46,7 +46,7 @@ Float DiffuseAreaLight::pdf_Li(const Interaction &ref,
     return _shape->pdfDir(ref, wi);
 }
 
-DiffuseAreaLight * createDiffuseAreaLight(const Transform * lightToWorld,
+DiffuseAreaLight * createDiffuseAreaLight(shared_ptr<const Transform> lightToWorld,
                                           const MediumInterface &mediumInterface, const Spectrum &Le,
                                           int nSamples, const std::shared_ptr<Shape> &shape,
                                           bool twoSided) {
@@ -63,7 +63,7 @@ DiffuseAreaLight * createDiffuseAreaLight(const Transform * lightToWorld,
 //}
 DiffuseAreaLight * createDiffuse(const nloJson &param,
                                  const std::shared_ptr<Shape> &shape) {
-    const Transform * o2w = shape->objectToWorld.get();
+//    shared_ptr<const Transform> o2w = shape->objectToWorld.get();
     
     
 }

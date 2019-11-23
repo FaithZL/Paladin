@@ -16,7 +16,7 @@ PALADIN_BEGIN
 class DistantLight : public Light {
 public:
 
-    DistantLight(const Transform * LightToWorld, const Spectrum &L,
+    DistantLight(shared_ptr<const Transform> LightToWorld, const Spectrum &L,
                  const Vector3f &w);
     
     virtual void preprocess(const Scene &scene) override {

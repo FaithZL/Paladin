@@ -15,7 +15,7 @@ PALADIN_BEGIN
 class SpotLight : public Light {
     
 public:
-    SpotLight(const Transform * LightToWorld, const MediumInterface &m,
+    SpotLight(shared_ptr<const Transform> LightToWorld, const MediumInterface &m,
               const Spectrum &I, Float totalWidth, Float falloffStart);
     
     virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,

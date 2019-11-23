@@ -11,7 +11,7 @@
 
 PALADIN_BEGIN
 
-EnvironmentMap::EnvironmentMap(const Transform * LightToWorld,
+EnvironmentMap::EnvironmentMap(shared_ptr<const Transform> LightToWorld,
                                const Spectrum &L,
                                int nSamples, const std::string &texmap)
 :Light((int)LightFlags::Infinite, LightToWorld, MediumInterface(),
