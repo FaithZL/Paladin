@@ -20,16 +20,20 @@ public:
     EnvironmentMap(const Transform * LightToWorld, const Spectrum &L,
                    int nSamples, const std::string &texmap);
     
-    void preprocess(const Scene &scene) {
+    virtual void preprocess(const Scene &scene) override {
         scene.worldBound().boundingSphere(&_worldCenter, &_worldRadius);
     }
     
-    Spectrum power() const;
+    Spectrum power() const override;
     
-    Spectrum Le(const RayDifferential &ray) const;
+    Spectrum Le(const RayDifferential &ray) const override;
+    
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
     
     Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
-                       Float *pdf, VisibilityTester *vis) const;
+                       Float *pdf, VisibilityTester *vis) const override;
     
     /**
      * 求基于方向的pdf，要把uv空间的pdf转为立体角空间的pdf
@@ -44,7 +48,7 @@ public:
      * p(u, v) / p(ω) = sinθ 2π^2
      * 
      */
-    Float pdf_Li(const Interaction &, const Vector3f &) const;
+    Float pdf_Li(const Interaction &, const Vector3f &) const override;
     
 private:
     // 环境贴图的纹理

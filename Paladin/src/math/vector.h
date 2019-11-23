@@ -22,6 +22,13 @@ public:
     Vector2(T xx, T yy) : x(xx), y(yy) { 
          DCHECK(!hasNaNs());
     }
+    
+    static Vector2<T> fromJsonArray(const nloJson &lst) {
+        T x = (T)lst.at(0);
+        T y = (T)lst.at(1);
+        return Vector2<T>(x, y);
+    }
+    
     bool hasNaNs() const { return isNaN(x) || isNaN(y); }
     explicit Vector2(const Point2<T> &p);
     explicit Vector2(const Point3<T> &p);
@@ -157,12 +164,20 @@ public:
         
     }
     
+    static Vector3<T> fromJsonArray(const nloJson &lst) {
+        T x = (T)lst.at(0);
+        T y = (T)lst.at(1);
+        T z = (T)lst.at(2);
+        return Vector3<T>(x, y, z);
+    }
+    
     T operator[](int i) const {
         // DCHECK(i >= 0 && i <= 2);
         if (i == 0) return x;
         if (i == 1) return y;
         return z;
     }
+    
     T &operator[](int i) {
         // DCHECK(i >= 0 && i <= 2);
         if (i == 0) return x;

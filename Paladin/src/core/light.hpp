@@ -13,6 +13,7 @@
 #include "core/interaction.hpp"
 #include "math/transform.hpp"
 #include "core/spectrum.hpp"
+#include "core/cobject.h"
 
 PALADIN_BEGIN
 
@@ -81,7 +82,7 @@ inline bool isDeltaLight(int flags) {
            flags & (int)LightFlags::DeltaDirection;
 }
 
-class Light {
+class Light : public CObject {
     
 public:
     
@@ -200,6 +201,8 @@ public:
 private:
     Interaction _p0, _p1;
 };
+
+Light * createLight(const nloJson &data);
 
 PALADIN_END
 

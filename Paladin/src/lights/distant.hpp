@@ -19,16 +19,20 @@ public:
     DistantLight(const Transform * LightToWorld, const Spectrum &L,
                  const Vector3f &w);
     
-    virtual void preprocess(const Scene &scene) {
+    virtual void preprocess(const Scene &scene) override {
         scene.worldBound().boundingSphere(&_worldCenter, &_worldRadius);
     }
     
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
+    
     virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
-                       Float *pdf, VisibilityTester *vis) const;
+                       Float *pdf, VisibilityTester *vis) const override;
     
-    virtual Spectrum power() const;
+    virtual Spectrum power() const override;
     
-    virtual Float pdf_Li(const Interaction &, const Vector3f &) const;
+    virtual Float pdf_Li(const Interaction &, const Vector3f &) const override;
     
 private:
     const Spectrum _L;
@@ -37,6 +41,8 @@ private:
     Point3f _worldCenter;
     Float _worldRadius;
 };
+
+CObject_ptr createDistantLight(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 

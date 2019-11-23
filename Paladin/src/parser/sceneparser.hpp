@@ -45,11 +45,11 @@ public:
     
     Integrator * parseIntegrator(const nloJson &,Sampler * sampler, Camera * camera);
     
-    void parseTextures(const nloJson &);
-    
     void parseMaterials(const nloJson &);
     
     Filter * parseFilter(const nloJson &);
+    
+    void parseLights(const nloJson &);
     
     // 解析简单物体，球体，圆柱，圆锥等
     void parseSimpleShape(const nloJson &data, const string &type);

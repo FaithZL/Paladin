@@ -30,5 +30,25 @@ Float PointLight::pdf_Li(const Interaction &, const Vector3f &) const {
     return 0;
 }
 
+//"param" : {
+//    "worldToLocal" : {
+//        "type" : "translate",
+//        "param" : [1,0,1]
+//    },
+//    "I" : {
+//        "colorType" : 1,
+//        "color" : [0.1, 0.9, 0.5]
+//    },
+//}
+CObject_ptr createPointLight(const nloJson &param, const Arguments &lst) {
+    nloJson l2w_data = param.value("lightToWorld", nloJson());
+    Transform * l2w = createTransform(l2w_data);
+    nloJson Idata = param.value("I", nloJson::object());
+    Spectrum I = Spectrum::FromJson(Idata);
+    auto ret = new PointLight(l2w, nullptr, I);
+    return ret;
+}
+
+REGISTER("pointLight", createPointLight)
 
 PALADIN_END

@@ -80,7 +80,6 @@ Material * createMaterial(const nloJson &data) {
     string type = data.value("type", "matte");
     nloJson param = data["param"];
     auto creator = GET_CREATOR(type);
-    cout << setw(4) << param;
     auto ret = dynamic_cast<Material *>(creator(param, {}));
     return ret;
 }

@@ -20,11 +20,15 @@ public:
                      int nSamples, const std::shared_ptr<Shape> &shape,
                      bool twoSided = false);
     
-    Spectrum L(const Interaction &intr, const Vector3f &w) const {
+    Spectrum L(const Interaction &intr, const Vector3f &w) const override {
         return (_twoSided || dot(intr.normal, w) > 0) ? _L : Spectrum(0.f);
     }
     
-    Spectrum power() const;
+    Spectrum power() const override;
+    
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
     
     /**
      * 在场景中某处ref，采样光源，生成入射方向，
@@ -37,9 +41,9 @@ public:
      * @return     ref在wi方向上的入射辐射度
      */
     Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wo,
-                       Float *pdf, VisibilityTester *vis) const;
+                       Float *pdf, VisibilityTester *vis) const override;
     
-    Float pdf_Li(const Interaction &, const Vector3f &) const;
+    Float pdf_Li(const Interaction &, const Vector3f &) const override;
     
 private:
     // 面光源才有的，发射的辐射度

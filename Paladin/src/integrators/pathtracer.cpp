@@ -51,9 +51,9 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
 		SurfaceInteraction isect;
 		bool foundIntersection = scene.intersect(ray, &isect);
 		// 如果当前ray是直接从相机发射，
-		// 判断光线是否与场景几何土元相交
+		// 判断光线是否与场景几何图元相交
 		if (bounces == 0 || specularBounce) {
-			// 如果与几何土元有交点，则判断是否为光源，估计Le
+			// 如果与几何图元有交点，则判断是否为光源，估计Le
 			if (foundIntersection) {
 				L += throughput * isect.Le(-ray.dir);
 			} else {

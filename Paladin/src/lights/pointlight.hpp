@@ -25,14 +25,18 @@ public:
 
     }
 
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
+    
     virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
-                       Float *pdf, VisibilityTester *vis) const;
+                       Float *pdf, VisibilityTester *vis) const override;
 
-    virtual Spectrum power() const {
+    virtual Spectrum power() const override {
         return 4 * Pi * _I;
     }
 
-    virtual Float pdf_Li(const Interaction &, const Vector3f &) const;
+    virtual Float pdf_Li(const Interaction &, const Vector3f &) const override;
 
 
 private:
@@ -41,6 +45,8 @@ private:
     // 辐射强度
     const Spectrum _I;
 };
+
+CObject_ptr createPointLight(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 

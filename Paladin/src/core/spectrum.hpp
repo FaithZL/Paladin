@@ -348,6 +348,12 @@ public:
                                    nRGB2SpectSamples, wl0, wl1);
         }
     }
+    
+    static SampledSpectrum FromJson(const nloJson &param) {
+        int colorType = param.value("colorType", 0);
+        nloJson color = param.value("color", nloJson::array({1.f, 1.f, 1.f}));
+        return SampledSpectrum::FromJsonRGB(color, (SpectrumType)colorType);
+    }
         
     static SampledSpectrum FromJsonRGB(const nloJson &data,
                                    SpectrumType type = SpectrumType::Reflectance) {
@@ -439,6 +445,12 @@ public:
             rgb[i] = data[i];
         }
         return RGBSpectrum::FromRGB(rgb, type);
+    }
+        
+    static RGBSpectrum FromJson(const nloJson &param) {
+        int colorType = param.value("colorType", 0);
+        nloJson color = param.value("color", nloJson::array({1.f, 1.f, 1.f}));
+        return RGBSpectrum::FromJsonRGB(color, (SpectrumType)colorType);
     }
     
     void ToRGB(Float *rgb) const {

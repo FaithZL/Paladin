@@ -13,6 +13,7 @@
 #include "core/camera.hpp"
 #include "core/shape.hpp"
 #include "core/material.hpp"
+#include "core/light.hpp"
 
 PALADIN_BEGIN
 
@@ -37,15 +38,19 @@ void SceneParser::parse(const nloJson &data) {
     nloJson shapesData = data.value("shapes", nloJson());
     parseShapes(shapesData);
     
-//    nloJson textureDataList = data.value("textures", nloJson::object());
-//    parseTextures(textureDataList);
-    
     nloJson materialDataList = data.value("materials", nloJson::object());
     parseMaterials(materialDataList);
+    
+    nloJson lightDataList = data.value("lights", nloJson::array());
+    parseLights(lightDataList);
 }
 
-void SceneParser::parseTextures(const nloJson &dict) {
-//    cout << setw(4) << list;
+void SceneParser::parseLights(const nloJson &list) {
+    for (auto iter = list.cbegin(); iter != list.cend(); ++iter) {
+        nloJson data = *iter;
+        shared_ptr<Light> light(createLight(data));
+        _lights.push_back(light);
+    }
 }
 
 void SceneParser::parseMaterials(const nloJson &dict) {

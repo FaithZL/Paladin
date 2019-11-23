@@ -9,9 +9,45 @@
     },
 	"lights" : [
         {
-            "type" : "pointlight",
+            "type" : "pointLight",
             "param" : {
-
+                "lightToWorld" : {
+                    "type" : "translate",
+                    "param" : [1,0,1]
+                },
+                "I" : {
+                    "colorType" : 1,
+                    "color" : [0.1, 0.9, 0.5]
+                }
+            }
+        },
+        {
+            "type" : "spot",
+            "param" : {
+                "lightToWorld" : {
+                    "type" : "translate",
+                    "param" : [1,0,1]
+                },
+                "I" : {
+                    "colorType" : 1,
+                    "color" : [0.1, 0.9, 0.5]
+                },
+                "falloffStart" : 45,
+                "totalAngle" : 60
+            }
+        },
+        {
+            "type" : "distant",
+            "param" : {
+                "lightToWorld" : {
+                    "type" : "translate",
+                    "param" : [1,0,1]
+                },
+                "L" : {
+                    "colorType" : 1,
+                    "color" : [0.1, 0.9, 0.5]
+                },
+                "wLight" : [1,1,1]
             }
         }
 	],
@@ -199,7 +235,7 @@
                 "bumpMap" : {
                     "type" : "constant",
                     "param" : 0.5
-                },
+                }
             }
         }
     },

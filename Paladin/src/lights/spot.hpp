@@ -19,19 +19,25 @@ public:
               const Spectrum &I, Float totalWidth, Float falloffStart);
     
     virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
-                       Float *pdf, VisibilityTester *vis) const;
+                       Float *pdf, VisibilityTester *vis) const override;
     
     Float falloff(const Vector3f &w) const;
     
-    virtual Spectrum power() const;
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
     
-    virtual Float pdf_Li(const Interaction &, const Vector3f &) const;
+    virtual Spectrum power() const override;
+    
+    virtual Float pdf_Li(const Interaction &, const Vector3f &) const override;
     
 private:
     const Point3f _pos;
     const Spectrum _I;
     const Float _cosTotalWidth, _cosFalloffStart;
 };
+
+CObject_ptr createSpot(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 
