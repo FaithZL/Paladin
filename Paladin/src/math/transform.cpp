@@ -611,7 +611,7 @@ CObject_ptr createTranslate(const nloJson &param, const Arguments &lst) {
  */
 CObject_ptr createRotateX(const nloJson &param, const Arguments &lst) {
     Float theta = param.at(0);
-    bool bRadian = param.at(1);
+    bool bRadian = param.size() < 2 ? false : (bool)param.at(1);
     return Transform::rotateX_ptr(theta, bRadian);
 }
 
@@ -620,7 +620,7 @@ CObject_ptr createRotateX(const nloJson &param, const Arguments &lst) {
  */
 CObject_ptr createRotateY(const nloJson &param, const Arguments &lst) {
     Float theta = param.at(0);
-    bool bRadian = param.at(1);
+    bool bRadian = param.size() < 2 ? false : (bool)param.at(1);
     return Transform::rotateY_ptr(theta, bRadian);
 }
 
@@ -629,7 +629,7 @@ CObject_ptr createRotateY(const nloJson &param, const Arguments &lst) {
  */
 CObject_ptr createRotateZ(const nloJson &param, const Arguments &lst) {
     Float theta = param.at(0);
-    bool bRadian = param.at(1);
+    bool bRadian = param.size() < 2 ? false : (bool)param.at(1);
     return Transform::rotateZ_ptr(theta, bRadian);
 }
 

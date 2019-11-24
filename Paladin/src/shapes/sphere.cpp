@@ -334,7 +334,7 @@ Float Sphere::pdfDir(const paladin::Interaction &ref, const Vector3f &wi) const 
 //    },
 //    "radius" : 0.75,
 //    "zMin" : 0.75,
-//    "reverseOrientation" : false
+//    "reverseOrientation" : true,
 //    "zMax" : -0.75,
 //    "phiMax" : 360
 //}
@@ -343,7 +343,7 @@ CObject_ptr createSphere(const nloJson &param, const Arguments &lst) {
     Float zMin = param.value("zMin", -radius);
     Float zMax = param.value("zMax", radius);
     Float phiMax = param.value("phiMax", 360.f);
-    bool reverseOri = param.value("reverseOrientation", false);
+    bool reverseOri = param.value("reverseOrientation", true);
     
     nloJson l2w_data = param.value("transform", nloJson());
     Transform * l2w = createTransform(l2w_data);

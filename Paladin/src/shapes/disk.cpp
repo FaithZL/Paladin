@@ -83,7 +83,7 @@ bool Disk::intersect(const paladin::Ray &r, Float *tHit, paladin::SurfaceInterac
     *isect = objectToWorld->exec(SurfaceInteraction(pHit, pError, Point2f(u, v), ray.dir, dpdu, dpdv, dndu, dndv, ray.time, this));
     
     *tHit = (Float)tShapeHit;
-    return false;
+    return true;
 }
 
 Interaction Disk::samplePos(const Point2f &u, Float *pdf) const {
