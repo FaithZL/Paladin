@@ -229,6 +229,10 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
         // 如果最centroidBounds为一个点，则初始化叶子节点
         if (centroidBounds.pMax[maxDim] == centroidBounds.pMin[maxDim]) {
             int firstPrimOffset = orderedPrims.size();
+            for (int i = start; i < end; ++i) {
+                int primNum = primitiveInfo[i].primitiveNumber;
+                orderedPrims.push_back(_primitives[primNum]);
+            }
             node->initLeaf(firstPrimOffset, numPrimitives, bounds);
             return node;
         } else {
