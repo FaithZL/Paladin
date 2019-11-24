@@ -238,8 +238,8 @@ CObject_ptr createCylinder(const nloJson &param, const Arguments &lst){
     Float radius = param.value("radius", 1.f);
     Float phiMax = param.value("phiMax", 360.f);
     Float reverseOrientation = param.value("reverseOrientation", false);
-    Float zMin = param.value("zMin", -0.5f);
-    Float zMax = param.value("zMax", 0.5f);
+    Float zMin = param.value("zMin", -radius);
+    Float zMax = param.value("zMax", radius);
     
     return new Cylinder(o2w, w2o, reverseOrientation, radius, zMin, zMax, phiMax);
 }

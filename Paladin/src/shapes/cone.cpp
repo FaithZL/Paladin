@@ -243,7 +243,7 @@ CObject_ptr createCone(const nloJson &param, const Arguments &lst) {
     
     Float radius = param.value("radius", 0.5f);
     Float phiMax = param.value("phiMax", 360.f);
-    Float height = param.value("height", 1.f);
+    Float height = param.value("height", radius);
     bool reverseOrientation = param.value("reverseOrientation", false);
     
     return new Cone(o2w, w2o, reverseOrientation, height, radius, phiMax);

@@ -368,10 +368,10 @@ public:
     template<typename T>
     inline Normal3<T> exec(const Normal3<T> &normal) const {
         T x = normal.x, y = normal.y, z = normal.z;
-        x = _matInv._m[0][0] * x + _matInv._m[1][0] * y + _matInv._m[2][0] * z;
-        y = _matInv._m[0][1] * x + _matInv._m[1][1] * y + _matInv._m[2][1] * z;
-        z = _matInv._m[0][2] * x + _matInv._m[1][2] * y + _matInv._m[2][2] * z;
-        return Normal3<T>(x, y, z);
+        T retx = _matInv._m[0][0] * x + _matInv._m[1][0] * y + _matInv._m[2][0] * z;
+        T rety = _matInv._m[0][1] * x + _matInv._m[1][1] * y + _matInv._m[2][1] * z;
+        T retz = _matInv._m[0][2] * x + _matInv._m[1][2] * y + _matInv._m[2][2] * z;
+        return Normal3<T>(retx, rety, retz);
     }
     
     /**
