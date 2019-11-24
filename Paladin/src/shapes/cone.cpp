@@ -227,7 +227,7 @@ Interaction Cone::samplePos(const Point2f &u, Float *pdf) const {
 }
 
 //"param" : {
-//    "worldToLocal" : {
+//    "transform" : {
 //        "type" : "translate",
 //        "param" : [-1,1,1]
 //    },
@@ -236,10 +236,10 @@ Interaction Cone::samplePos(const Point2f &u, Float *pdf) const {
 //    "height" : 1
 //}
 CObject_ptr createCone(const nloJson &param, const Arguments &lst) {
-    nloJson w2l_data = param.value("worldToLocal", nloJson());
-    Transform * w2l = createTransform(w2l_data);
-    shared_ptr<Transform> w2o(w2l);
-    shared_ptr<Transform> o2w(w2l->getInverse_ptr());
+    nloJson l2w_data = param.value("transform", nloJson());
+    Transform * l2w = createTransform(l2w_data);
+    shared_ptr<Transform> w2o(l2w->getInverse_ptr());
+    shared_ptr<Transform> o2w(l2w);
     
     Float radius = param.value("radius", 0.5f);
     Float phiMax = param.value("phiMax", 360.f);

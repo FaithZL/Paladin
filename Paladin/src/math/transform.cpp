@@ -690,6 +690,9 @@ CObject_ptr createIdentity(const nloJson &, const Arguments &) {
 //    "param" : [0,0,0]
 //}
 Transform * createTransform(const nloJson &data) {
+    if (data.is_null()) {
+        return Transform::identity_ptr();
+    }
     string type = data.value("type", "translate");
     auto creator = GET_CREATOR(type);
     nloJson param = data.value("param", nloJson::array({0, 0, 0}));

@@ -100,7 +100,7 @@ Interaction Disk::samplePos(const Point2f &u, Float *pdf) const {
 }
 
 //"param" : {
-//    "worldToLocal" : {
+//    "transform" : {
 //        "type" : "translate",
 //        "param" : [-1,1,1]
 //    },
@@ -117,11 +117,10 @@ CObject_ptr createDisk(const nloJson &param, const Arguments &lst) {
     Float height = param.value("height", 0.f);
     bool reverseOri = param.value("reverseOrientation", false);
     
-    nloJson w2l_data = param.value("worldToLocal", nloJson());
-    Transform * w2l = createTransform(w2l_data);
-
-    shared_ptr<Transform> w2o(w2l);
-    shared_ptr<Transform> o2w(w2l->getInverse_ptr());
+    nloJson l2w_data = param.value("transform", nloJson());
+    Transform * l2w = createTransform(l2w_data);
+    shared_ptr<Transform> w2o(l2w->getInverse_ptr());
+    shared_ptr<Transform> o2w(l2w);
     
     auto ret = new Disk(o2w, w2o, reverseOri, height, radius, innerRadius, phiMax);
     

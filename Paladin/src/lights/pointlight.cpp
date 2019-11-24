@@ -31,7 +31,7 @@ Float PointLight::pdf_Li(const Interaction &, const Vector3f &) const {
 }
 
 //"param" : {
-//    "worldToLocal" : {
+//    "transform" : {
 //        "type" : "translate",
 //        "param" : [1,0,1]
 //    },
@@ -41,7 +41,7 @@ Float PointLight::pdf_Li(const Interaction &, const Vector3f &) const {
 //    },
 //}
 CObject_ptr createPointLight(const nloJson &param, const Arguments &lst) {
-    nloJson l2w_data = param.value("lightToWorld", nloJson());
+    nloJson l2w_data = param.value("transform", nloJson());
     auto l2w = shared_ptr<const Transform>(createTransform(l2w_data));
     nloJson Idata = param.value("I", nloJson::object());
     Spectrum I = Spectrum::FromJson(Idata);

@@ -155,8 +155,8 @@ CObject_ptr createPerspectiveCamera(const nloJson &param, const Arguments &lst) 
     Float lensRadius = param.value("lensRadius", 0.f);
     Float focalDistance = param.value("focalDistance", 100.f);
     Float fov = param.value("fov", 45);
-    nloJson lookAtParam = param.value("lookAt", nloJson());
-    nloJson lookAtEndParam = param.value("lookAtEnd", nloJson());
+    nloJson lookAtParam = param.value("lookAt", nloJson::object());
+    nloJson lookAtEndParam = param.value("lookAtEnd", lookAtParam);
 
     
     auto iter = lst.begin();

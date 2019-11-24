@@ -43,7 +43,7 @@ Float DistantLight::pdf_Li(const Interaction &, const Vector3f &) const {
 // "data" : {
 //    "type" : "distant",
 //    "param" : {
-//        "lightToWorld" : {
+//        "transform" : {
 //            "type" : "translate",
 //            "param" : [1,0,1]
 //        },
@@ -55,7 +55,7 @@ Float DistantLight::pdf_Li(const Interaction &, const Vector3f &) const {
 //    }
 //}
 CObject_ptr createDistantLight(const nloJson &param, const Arguments &lst) {
-    nloJson l2w_data = param.value("lightToWorld", nloJson());
+    nloJson l2w_data = param.value("transform", nloJson());
     auto l2w = shared_ptr<const Transform>(createTransform(l2w_data));
     nloJson Ldata = param.value("L", nloJson::object());
     Spectrum L = Spectrum::FromJson(Ldata);
