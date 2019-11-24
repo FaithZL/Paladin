@@ -113,10 +113,16 @@
 		{
 			"type" : "cone",
             "param" : {
-                "transform" : {
-                    "type" : "rotateX",
-                    "param" : [-70]
-                },
+                "transform" : [
+                	{
+	                    "type" : "rotateX",
+	                    "param" : [-90]
+	                },
+	                {
+	                    "type" : "translate",
+	                    "param" : [0,0,1]
+	                }
+                ],
                 "radius" : 0.5,
                 "phiMax" : 360,
                 "height" : 1,

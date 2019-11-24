@@ -12,7 +12,7 @@
 PALADIN_BEGIN
 
 TriangleMesh::TriangleMesh(
-                           const Transform &ObjectToWorld, int nTriangles, const int *vertexIndices,
+                           shared_ptr<const Transform> ObjectToWorld, int nTriangles, const int *vertexIndices,
                            int nVertices, const Point3f *P, const Vector3f *S, const Normal3f *N,
                            const Point2f *UV, const std::shared_ptr<Texture<Float>> &alphaMask,
                            const std::shared_ptr<Texture<Float>> &shadowAlphaMask,
@@ -26,7 +26,7 @@ shadowAlphaMask(shadowAlphaMask) {
     
     points.reset(new Point3f[nVertices]);
     for (int i = 0; i < nVertices; ++i) {
-        points[i] = ObjectToWorld.exec(P[i]);
+        points[i] = ObjectToWorld->exec(P[i]);
     }
     
     if (UV) {
@@ -36,13 +36,13 @@ shadowAlphaMask(shadowAlphaMask) {
     if (N) {
         normals.reset(new Normal3f[nVertices]);
         for (int i = 0; i < nVertices; ++i) {
-            normals[i] = ObjectToWorld.exec(N[i]);
+            normals[i] = ObjectToWorld->exec(N[i]);
         }
     }
     if (S) {
         edges.reset(new Vector3f[nVertices]);
         for (int i = 0; i < nVertices; ++i) {
-            edges[i] = ObjectToWorld.exec(S[i]);
+            edges[i] = ObjectToWorld->exec(S[i]);
         }
     }
     

@@ -21,7 +21,7 @@ PALADIN_BEGIN
  */
 struct TriangleMesh {
 
-    TriangleMesh(const Transform &objectToWorld, int nTriangles,
+    TriangleMesh(shared_ptr<const Transform> objectToWorld, int nTriangles,
                  const int *vertexIndices, int nVertices, const Point3f *P,
                  const Vector3f *S, const Normal3f *N, const Point2f *uv,
                  const std::shared_ptr<Texture<Float>> &alphaMask,

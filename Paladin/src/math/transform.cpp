@@ -693,6 +693,15 @@ Transform * createTransform(const nloJson &data) {
     if (data.is_null()) {
         return Transform::identity_ptr();
     }
+    if (data.is_array()) {
+        Transform * ret = Transform::identity_ptr();
+        // 如果data是s列表，列表元素则为transform参数
+        for (const auto &it : data) {
+            shared_ptr<Transform> t(createTransform(it));
+            *ret = (*t.get()) * (*ret);
+        }
+        return ret;
+    }
     string type = data.value("type", "translate");
     auto creator = GET_CREATOR(type);
     nloJson param = data.value("param", nloJson::array({0, 0, 0}));

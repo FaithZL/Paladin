@@ -355,6 +355,7 @@
 		F6366EF62386A1E40060BAC0 /* mixtex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6366EF42386A1E40060BAC0 /* mixtex.cpp */; };
 		F6366EF92386A2310060BAC0 /* scale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6366EF72386A2310060BAC0 /* scale.cpp */; };
 		F6366EFC2386A2600060BAC0 /* bilerp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6366EFA2386A2600060BAC0 /* bilerp.cpp */; };
+		F6369966238AD468000E3114 /* quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6369964238AD468000E3114 /* quad.cpp */; };
 		F636FE6C237C609500FD6CED /* box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F636FE6B237C609500FD6CED /* box.cpp */; };
 		F636FE6F237C61AE00FD6CED /* gaussian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F636FE6D237C61AE00FD6CED /* gaussian.cpp */; };
 		F63983EC2379226E004E15FA /* sceneparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63983EA2379226D004E15FA /* sceneparser.cpp */; };
@@ -1224,6 +1225,8 @@
 		F6366EF82386A2310060BAC0 /* scale.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = scale.hpp; path = src/textures/scale.hpp; sourceTree = "<group>"; };
 		F6366EFA2386A2600060BAC0 /* bilerp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bilerp.cpp; path = src/textures/bilerp.cpp; sourceTree = "<group>"; };
 		F6366EFB2386A2600060BAC0 /* bilerp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = bilerp.hpp; path = src/textures/bilerp.hpp; sourceTree = "<group>"; };
+		F6369964238AD468000E3114 /* quad.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = quad.cpp; path = src/shapes/quad.cpp; sourceTree = "<group>"; };
+		F6369965238AD468000E3114 /* quad.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = quad.hpp; path = src/shapes/quad.hpp; sourceTree = "<group>"; };
 		F636FE6B237C609500FD6CED /* box.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = box.cpp; path = src/filters/box.cpp; sourceTree = "<group>"; };
 		F636FE6D237C61AE00FD6CED /* gaussian.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gaussian.cpp; path = src/filters/gaussian.cpp; sourceTree = "<group>"; };
 		F636FE6E237C61AE00FD6CED /* gaussian.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = gaussian.hpp; path = src/filters/gaussian.hpp; sourceTree = "<group>"; };
@@ -2327,6 +2330,8 @@
 				CD7F7104E11041C580C8D657 /* sphere.hpp */,
 				D801C5A439FF4FD19F88B468 /* triangle.cpp */,
 				D937E34DD2BA41F98C2CE20A /* triangle.hpp */,
+				F6369964238AD468000E3114 /* quad.cpp */,
+				F6369965238AD468000E3114 /* quad.hpp */,
 			);
 			name = shapes;
 			sourceTree = "<group>";
@@ -3207,6 +3212,7 @@
 				D78D26661D7943B59115B856 /* fileio.cpp in Sources */,
 				7CE8F87524334846846F9A33 /* fileutil.cpp in Sources */,
 				731289819DDC42869EE02D02 /* memory.cpp in Sources */,
+				F6369966238AD468000E3114 /* quad.cpp in Sources */,
 				98A96A4D011A44B1807163B9 /* parallel.cpp in Sources */,
 				EA7ECDD590674820B4A1B1EE /* stb_vorbis.c in Sources */,
 			);
