@@ -8,7 +8,7 @@
 #ifndef quad_hpp
 #define quad_hpp
 
-#include "shapes/triangle.hpp"
+#include "shapes/trianglemesh.hpp"
 
 PALADIN_BEGIN
 //
@@ -18,7 +18,7 @@ public:
     Quad(shared_ptr<const Transform> o2w,
          shared_ptr<const Transform> w2o,
          bool reverseOrientation,
-         int width, int height);
+         int width, int height = 0);
     
     virtual nloJson toJson() const override {
         return nloJson();

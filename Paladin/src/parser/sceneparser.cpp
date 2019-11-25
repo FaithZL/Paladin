@@ -191,9 +191,8 @@ void SceneParser::parseSimpleShape(const nloJson &data, const string &type) {
     if (areaLight) {
         _lights.push_back(areaLight);
     }
-    auto prim = new GeometricPrimitive(shape, mat, areaLight, nullptr);
-    shared_ptr<Primitive> primitive(prim);
-    _primitives.push_back(primitive);
+    shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, nullptr);
+    _primitives.push_back(primitives);
 }
 
 void SceneParser::parseModel(const nloJson &data) {

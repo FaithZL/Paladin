@@ -43,16 +43,17 @@ public:
 class GeometricPrimitive : public Primitive {
     
 public:
+    
+    GeometricPrimitive(const std::shared_ptr<Shape> &shape,
+                          const std::shared_ptr<const Material> &material,
+                          const std::shared_ptr<AreaLight> &areaLight,
+                          const MediumInterface &mediumInterface);
+    
     virtual AABB3f worldBound() const override;
     
     virtual bool intersect(const Ray &r, SurfaceInteraction *isect) const override;
     
     virtual bool intersectP(const Ray &r) const override;
-    
-    GeometricPrimitive(const std::shared_ptr<Shape> &shape,
-                       const std::shared_ptr<const Material> &material,
-                       const std::shared_ptr<AreaLight> &areaLight,
-                       const MediumInterface &mediumInterface);
     
     virtual const AreaLight *getAreaLight() const override;
     
@@ -66,7 +67,13 @@ public:
         return nloJson();
     }
     
+    static shared_ptr<GeometricPrimitive> create(const std::shared_ptr<Shape> &shape,
+                                        const std::shared_ptr<const Material> &material,
+                                        const std::shared_ptr<AreaLight> &areaLight,
+                                          const MediumInterface &mediumInterface);
+    
 private:
+
     
     std::shared_ptr<Shape> _shape;
     std::shared_ptr<const Material> _material;

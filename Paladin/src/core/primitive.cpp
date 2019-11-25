@@ -57,6 +57,13 @@ const Material *GeometricPrimitive::getMaterial() const {
     return _material.get();
 }
 
+shared_ptr<GeometricPrimitive> GeometricPrimitive::create(const std::shared_ptr<Shape> &shape,
+                                    const std::shared_ptr<const Material> &material,
+                                    const std::shared_ptr<AreaLight> &areaLight,
+                                    const MediumInterface &mediumInterface) {
+    return make_shared<GeometricPrimitive>(shape, material, areaLight, mediumInterface);
+}
+
 void GeometricPrimitive::computeScatteringFunctions(
                                                     SurfaceInteraction *isect, MemoryArena &arena, TransportMode mode,
                                                     bool allowMultipleLobes) const {

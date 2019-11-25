@@ -116,7 +116,7 @@
                 "transform" : [
                 	{
 	                    "type" : "rotateX",
-	                    "param" : [-90]
+	                    "param" : [-70]
 	                },
 	                {
 	                    "type" : "translate",

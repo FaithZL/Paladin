@@ -6,7 +6,7 @@
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#include "shapes/triangle.hpp"
+#include "shapes/trianglemesh.hpp"
 #include "math/sampling.hpp"
 
 PALADIN_BEGIN

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
-#ifndef triangle_hpp
-#define triangle_hpp
+#ifndef trianglemesh_hpp
+#define trianglemesh_hpp
 
 #include "core/header.h"
 #include "core/shape.hpp"
@@ -15,6 +15,8 @@
 #include <vector>
 
 PALADIN_BEGIN
+
+class Triangle;
 
 /*
  三角形网格，所以的向量法线以及点都是在世界坐标上
@@ -24,10 +26,12 @@ struct TriangleMesh {
     TriangleMesh(shared_ptr<const Transform> objectToWorld, int nTriangles,
                  const int *vertexIndices, int nVertices, const Point3f *P,
                  const Vector3f *S, const Normal3f *N, const Point2f *uv,
-                 const std::shared_ptr<Texture<Float>> &alphaMask,
-                 const std::shared_ptr<Texture<Float>> &shadowAlphaMask,
-                 const int *faceIndices);
-    
+                 const std::shared_ptr<Texture<Float>> &alphaMask=nullptr,
+                 const std::shared_ptr<Texture<Float>> &shadowAlphaMask=nullptr,
+                 const int *faceIndices=nullptr);
+
+
+private:
     // 三角形个数，顶点个数
     const int nTriangles, nVertices;
     // 顶点的索引
@@ -42,6 +46,8 @@ struct TriangleMesh {
     std::unique_ptr<Point2f[]> uv;
     std::shared_ptr<Texture<Float>> alphaMask, shadowAlphaMask;
     std::vector<int> faceIndices;
+    
+    friend class Triangle;
 };
 
 class Triangle : public Shape {
@@ -132,6 +138,8 @@ private:
     int _faceIndex;
 };
 
+
+
 PALADIN_END
 
-#endif /* triangle_hpp */
+#endif /* trianglemesh_hpp */

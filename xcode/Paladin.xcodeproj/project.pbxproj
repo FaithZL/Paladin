@@ -233,7 +233,7 @@
 		73EDDA2A49EE46D0B43DEEDE /* projection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8D00620D67E74779886A2458 /* projection.cpp */; };
 		747AA433A3C2476C84FABD8E /* IexMathFpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B56970DE1BE4429B74D5A2F /* IexMathFpu.cpp */; };
 		762D6768874744409D352D02 /* ImathShear.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E646E87317A498DB72FAA15 /* ImathShear.cpp */; };
-		77A393C74D434A7982C37A85 /* triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D801C5A439FF4FD19F88B468 /* triangle.cpp */; };
+		77A393C74D434A7982C37A85 /* trianglemesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D801C5A439FF4FD19F88B468 /* trianglemesh.cpp */; };
 		7A223C206E0A430BB1C96789 /* ImfStringVectorAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 182CF1065BD640E587D5E3EA /* ImfStringVectorAttribute.cpp */; };
 		7B291AAC1BE042D6AC899349 /* symbolize.cc in Sources */ = {isa = PBXBuildFile; fileRef = BB2F4E466479471B907A586D /* symbolize.cc */; };
 		7C0925C18F7C4D1BAA7A15F5 /* ImfScanLineInputFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93881333790344CB9719903C /* ImfScanLineInputFile.cpp */; };
@@ -1169,13 +1169,13 @@
 		D6B3715B85864477A68D442D /* ltests.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ltests.c; path = third/lua53/lua/ltests.c; sourceTree = SOURCE_ROOT; };
 		D725C93492AE45BA9594FF84 /* cone.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = cone.cpp; path = src/shapes/cone.cpp; sourceTree = SOURCE_ROOT; };
 		D76DAF0449704152BF03548E /* ImfTiledOutputPart.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfTiledOutputPart.cpp; path = third/openexr/OpenEXR/IlmImf/ImfTiledOutputPart.cpp; sourceTree = SOURCE_ROOT; };
-		D801C5A439FF4FD19F88B468 /* triangle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = triangle.cpp; path = src/shapes/triangle.cpp; sourceTree = SOURCE_ROOT; };
+		D801C5A439FF4FD19F88B468 /* trianglemesh.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = trianglemesh.cpp; path = src/shapes/trianglemesh.cpp; sourceTree = SOURCE_ROOT; };
 		D81DB899B3D14B37AA529E49 /* b44ExpLogTable.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = b44ExpLogTable.cpp; path = third/openexr/OpenEXR/IlmImf/b44ExpLogTable.cpp; sourceTree = SOURCE_ROOT; };
 		D840878923FE48A9B238182B /* ImfDeepTiledInputFile.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfDeepTiledInputFile.cpp; path = third/openexr/OpenEXR/IlmImf/ImfDeepTiledInputFile.cpp; sourceTree = SOURCE_ROOT; };
 		D8DBBDA1B5B74A79BF693B25 /* liolib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = liolib.c; path = third/lua53/lua/liolib.c; sourceTree = SOURCE_ROOT; };
 		D8E910D096AB4E0784D5CFF8 /* diffuse.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = diffuse.cpp; path = src/lights/diffuse.cpp; sourceTree = SOURCE_ROOT; };
 		D920F0D401774C979CCC332B /* ImfPreviewImageAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfPreviewImageAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfPreviewImageAttribute.cpp; sourceTree = SOURCE_ROOT; };
-		D937E34DD2BA41F98C2CE20A /* triangle.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = triangle.hpp; path = src/shapes/triangle.hpp; sourceTree = SOURCE_ROOT; };
+		D937E34DD2BA41F98C2CE20A /* trianglemesh.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = trianglemesh.hpp; path = src/shapes/trianglemesh.hpp; sourceTree = SOURCE_ROOT; };
 		D9F1E3D836424E5FB5999325 /* cube.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = cube.cpp; path = src/shapes/cube.cpp; sourceTree = SOURCE_ROOT; };
 		DA427B97C19047A08D4CA34B /* eLut.h.rule */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; name = eLut.h.rule; path = ../xcode/third/openexr/IlmBase/Half/eLut.h.rule; sourceTree = SOURCE_ROOT; };
 		DAA49FB55DD84D33A55AC7EE /* lgc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lgc.c; path = third/lua53/lua/lgc.c; sourceTree = SOURCE_ROOT; };
@@ -2328,8 +2328,8 @@
 				63FD6FCE57F54A68A2CE86BD /* disk.hpp */,
 				1C187195CC994582938C11EA /* sphere.cpp */,
 				CD7F7104E11041C580C8D657 /* sphere.hpp */,
-				D801C5A439FF4FD19F88B468 /* triangle.cpp */,
-				D937E34DD2BA41F98C2CE20A /* triangle.hpp */,
+				D801C5A439FF4FD19F88B468 /* trianglemesh.cpp */,
+				D937E34DD2BA41F98C2CE20A /* trianglemesh.hpp */,
 				F6369964238AD468000E3114 /* quad.cpp */,
 				F6369965238AD468000E3114 /* quad.hpp */,
 			);
@@ -3207,7 +3207,7 @@
 				F6366EF62386A1E40060BAC0 /* mixtex.cpp in Sources */,
 				D09A96932A6D43EAB930027E /* disk.cpp in Sources */,
 				E9559EF187684821A2CEDD8A /* sphere.cpp in Sources */,
-				77A393C74D434A7982C37A85 /* triangle.cpp in Sources */,
+				77A393C74D434A7982C37A85 /* trianglemesh.cpp in Sources */,
 				E91D96D2E00A409F93FDE736 /* imagemap.cpp in Sources */,
 				D78D26661D7943B59115B856 /* fileio.cpp in Sources */,
 				7CE8F87524334846846F9A33 /* fileutil.cpp in Sources */,
