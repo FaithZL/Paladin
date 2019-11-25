@@ -8,6 +8,8 @@
 
 #include "shapes/trianglemesh.hpp"
 #include "math/sampling.hpp"
+#include "lights/diffuse.hpp"
+#include "core/primitive.hpp"
 
 PALADIN_BEGIN
 
@@ -258,5 +260,64 @@ shared_ptr<Triangle> createTri(shared_ptr<const Transform> o2w, shared_ptr<const
                                 int triNumber) {
     return make_shared<Triangle>(o2w, w2o, reverseOrientation, _mesh, triNumber);
 }
+
+vector<shared_ptr<Shape>> createQuad(shared_ptr<const Transform> o2w,
+                                bool reverseOrientation,
+                                     int width, int height) {
+    if (height == 0) {
+        height = width;
+    }
+    DCHECK(width > 0);
+    DCHECK(height > 0);
+    Point3f tr(width, height, 0);
+    Point3f tl(-width, height, 0);
+    Point3f br(width, -height, 0);
+    Point3f bl(-width, -height,0);
+    
+    Point3f points[] = {tl, bl, br, tr};
+    int vertIndice[6] = {0,1,2, 0,2,3};
+    Point2f UVs[] = {Point2f(0, 1), Point2f(0, 0), Point2f(1, 0), Point2f(1,1)};
+    int nTri = 2;
+    int nVert = 4;
+    auto mesh = createTriMesh(o2w, nTri,vertIndice, nVert, points, UVs);
+    vector<shared_ptr<Shape>> ret;
+    shared_ptr<Transform>w2o(o2w->getInverse_ptr());
+    for (int i = 0; i < nTri; ++i) {
+        ret.push_back(createTri(o2w, w2o, reverseOrientation, mesh, i));
+    }
+    return ret;
+}
+
+//"param" : {
+//    "transform" : {
+//        "type" : "translate",
+//        "param" : [0,0,0]
+//    },
+//    "width" : 1,
+//    "height" : 1,
+//    "reverseOrientation" : false
+//}
+vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &data, shared_ptr<const Material>& mat, vector<shared_ptr<Light>> &lights) {
+    nloJson param = data.value("param", nloJson::object());
+    auto l2w = createTransform(param.value("transform", nloJson()));
+    bool ro = param.value("reverseOrientation", false);
+    shared_ptr<Transform> o2w(l2w);
+    int width = param.value("width", 1);
+    int height = param.value("height", width);
+    vector<shared_ptr<Shape>> triLst = createQuad(o2w, ro, width, height);
+    vector<shared_ptr<Primitive>> ret;
+    nloJson emission = data.value("emission", nloJson());
+    for (int i = 0; i < 2; ++i) {
+        auto shape = triLst.at(i);
+        shared_ptr<DiffuseAreaLight> areaLight(createDiffuseAreaLight(emission, shape));
+        if (areaLight) {
+            lights.push_back(areaLight);
+        }
+        shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, nullptr);
+        ret.push_back(primitives);
+    }
+    return ret;
+}
+
 
 PALADIN_END

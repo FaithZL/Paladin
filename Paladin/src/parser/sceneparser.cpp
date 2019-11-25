@@ -15,6 +15,7 @@
 #include "core/material.hpp"
 #include "core/light.hpp"
 #include "lights/diffuse.hpp"
+#include "shapes/trianglemesh.hpp"
 
 PALADIN_BEGIN
 
@@ -151,8 +152,8 @@ Filter * SceneParser::parseFilter(const nloJson &data) {
 void SceneParser::parseShapes(const nloJson &shapeDataList) {
     for (const auto &shapeData : shapeDataList) {
         string type = shapeData.value("type", "sphere");
-        if (type == "model") {
-            parseModel(shapeData);
+        if (type == "triMesh") {
+            parseTriMesh(shapeData);
         } else {
             parseSimpleShape(shapeData, type);
         }
@@ -195,8 +196,14 @@ void SceneParser::parseSimpleShape(const nloJson &data, const string &type) {
     _primitives.push_back(primitives);
 }
 
-void SceneParser::parseModel(const nloJson &data) {
-    
+void SceneParser::parseTriMesh(const nloJson &data) {
+    string subType = data.value("subType", "");
+    vector<shared_ptr<Primitive>> prims;
+    if (subType == "quad") {
+        shared_ptr<const Material> mat = getMaterial(data.value("material", nloJson()));
+        prims = createQuadPrimitive(data, mat, _lights);
+    }
+    _primitives.insert(_primitives.end(), prims.begin(), prims.end());
 }
 
 //"data" : {

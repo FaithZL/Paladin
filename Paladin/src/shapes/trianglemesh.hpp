@@ -150,6 +150,12 @@ shared_ptr<Triangle> createTri(shared_ptr<const Transform> o2w, shared_ptr<const
                             const std::shared_ptr<TriangleMesh> &_mesh,
                             int triNumber);
 
+vector<shared_ptr<Shape>> createQuad(shared_ptr<const Transform> o2w,
+                    bool reverseOrientation,
+                    int width, int height = 0);
+
+vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &, shared_ptr<const Material>&, vector<shared_ptr<Light>> &lights);
+
 PALADIN_END
 
 #endif /* trianglemesh_hpp */

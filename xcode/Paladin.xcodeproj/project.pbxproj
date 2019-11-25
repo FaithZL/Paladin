@@ -252,7 +252,6 @@
 		89B9C6B9A34740C398115AAF /* ImfRationalAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D55D469813D418AA89FD0DA /* ImfRationalAttribute.cpp */; };
 		8A937413F0474CC5A9EB2884 /* ltests.c in Sources */ = {isa = PBXBuildFile; fileRef = D6B3715B85864477A68D442D /* ltests.c */; };
 		8B23E4DDD9EC452390A1557F /* IexThrowErrnoExc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94ECFDCC586B46DDB8EEC8AA /* IexThrowErrnoExc.cpp */; };
-		8B8E91FA84BF472684148424 /* cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9F1E3D836424E5FB5999325 /* cube.cpp */; };
 		8E57A2AE6100481EBE527270 /* raw_logging.cc in Sources */ = {isa = PBXBuildFile; fileRef = D4674A2295ED43019C49C376 /* raw_logging.cc */; };
 		8FC6B3358FCA4159BAD71759 /* ImfMatrixAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1871C298C8CD4DBDA3F6A316 /* ImfMatrixAttribute.cpp */; };
 		8FEFC54717D94A0095A16B0A /* ldo.c in Sources */ = {isa = PBXBuildFile; fileRef = 606C21E2EB2044A394114743 /* ldo.c */; };
@@ -839,7 +838,6 @@
 		0E2957ECA73049BA83DF84CF /* IlmThreadSemaphore.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = IlmThreadSemaphore.cpp; path = third/openexr/IlmBase/IlmThread/IlmThreadSemaphore.cpp; sourceTree = SOURCE_ROOT; };
 		0E49BB746C2C415EA0D2C466 /* diffuse.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = diffuse.hpp; path = src/lights/diffuse.hpp; sourceTree = SOURCE_ROOT; };
 		0E6AE8C4A9F14DBEAAB3096E /* sampling.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = sampling.hpp; path = src/math/sampling.hpp; sourceTree = SOURCE_ROOT; };
-		0F59225EB1144B2D925702FF /* cube.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = cube.hpp; path = src/shapes/cube.hpp; sourceTree = SOURCE_ROOT; };
 		0F97CE62E3E4481E9026823D /* ImfFastHuf.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfFastHuf.cpp; path = third/openexr/OpenEXR/IlmImf/ImfFastHuf.cpp; sourceTree = SOURCE_ROOT; };
 		11063F591AE448B6865DE2A4 /* half.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = half.cpp; path = third/openexr/IlmBase/Half/half.cpp; sourceTree = SOURCE_ROOT; };
 		114D5F757AC24DFAB65D3164 /* ImathFun.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImathFun.cpp; path = third/openexr/IlmBase/Imath/ImathFun.cpp; sourceTree = SOURCE_ROOT; };
@@ -1175,7 +1173,6 @@
 		D8E910D096AB4E0784D5CFF8 /* diffuse.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = diffuse.cpp; path = src/lights/diffuse.cpp; sourceTree = SOURCE_ROOT; };
 		D920F0D401774C979CCC332B /* ImfPreviewImageAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfPreviewImageAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfPreviewImageAttribute.cpp; sourceTree = SOURCE_ROOT; };
 		D937E34DD2BA41F98C2CE20A /* trianglemesh.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = trianglemesh.hpp; path = src/shapes/trianglemesh.hpp; sourceTree = SOURCE_ROOT; };
-		D9F1E3D836424E5FB5999325 /* cube.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = cube.cpp; path = src/shapes/cube.cpp; sourceTree = SOURCE_ROOT; };
 		DA427B97C19047A08D4CA34B /* eLut.h.rule */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; name = eLut.h.rule; path = ../xcode/third/openexr/IlmBase/Half/eLut.h.rule; sourceTree = SOURCE_ROOT; };
 		DAA49FB55DD84D33A55AC7EE /* lgc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lgc.c; path = third/lua53/lua/lgc.c; sourceTree = SOURCE_ROOT; };
 		DC6BF979F02F46EFB06FDB41 /* lopcodes.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lopcodes.c; path = third/lua53/lua/lopcodes.c; sourceTree = SOURCE_ROOT; };
@@ -2315,8 +2312,6 @@
 			children = (
 				D725C93492AE45BA9594FF84 /* cone.cpp */,
 				07E75AFDEB4F4ED79726822E /* cone.hpp */,
-				D9F1E3D836424E5FB5999325 /* cube.cpp */,
-				0F59225EB1144B2D925702FF /* cube.hpp */,
 				6549A8DC2C1D481285193A1C /* curve.cpp */,
 				D2432B8B351D49C9AC80E75A /* curve.hpp */,
 				FBE72BC3429D4A2E94618A2C /* cylinder.cpp */,
@@ -3196,7 +3191,6 @@
 				D8E532EE3723417E9B5F84F5 /* random.cpp in Sources */,
 				BCB4A2462C5949AA89CAB1AF /* stratified.cpp in Sources */,
 				9FFF6DC8D7524CE1A5408A18 /* cone.cpp in Sources */,
-				8B8E91FA84BF472684148424 /* cube.cpp in Sources */,
 				DBD7195250384419AFF125F3 /* curve.cpp in Sources */,
 				1EDE153FADE44FF99B48F029 /* cylinder.cpp in Sources */,
 				F6366EF62386A1E40060BAC0 /* mixtex.cpp in Sources */,

@@ -59,7 +59,7 @@ public:
     void parseSimpleShape(const nloJson &data, const string &type);
     
     // 解析模型
-    void parseModel(const nloJson &data);
+    void parseTriMesh(const nloJson &data);
     
     shared_ptr<Aggregate> parseAccelerator(const nloJson &);
     
