@@ -237,4 +237,26 @@ Interaction Triangle::samplePos(const Point2f &u, Float *pdf) const {
     return ret;
 }
 
+shared_ptr<TriangleMesh> createTriMesh(shared_ptr<const Transform> o2w, int nTriangles,
+                                    const int *vertexIndices, int nVertices, const Point3f *P,
+                                    const Point2f *uv, const Normal3f *N, const Vector3f *S,
+                                    const std::shared_ptr<Texture<Float>> &alphaMask,
+                                    const std::shared_ptr<Texture<Float>> &shadowAlphaMask,
+                                    const int *faceIndices) {
+    return make_shared<TriangleMesh>(o2w, nTriangles,
+                                    vertexIndices,
+                                    nVertices,
+                                    P, S, N, uv,
+                                    alphaMask,
+                                    shadowAlphaMask,
+                                    faceIndices);
+}
+
+shared_ptr<Triangle> createTri(shared_ptr<const Transform> o2w, shared_ptr<const Transform> w2o,
+                                bool reverseOrientation,
+                                const std::shared_ptr<TriangleMesh> &_mesh,
+                                int triNumber) {
+    return make_shared<Triangle>(o2w, w2o, reverseOrientation, _mesh, triNumber);
+}
+
 PALADIN_END

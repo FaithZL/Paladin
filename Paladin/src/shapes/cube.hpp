@@ -9,9 +9,14 @@
 #ifndef cube_hpp
 #define cube_hpp
 
-#include "core/header.h"
+#include "shapes/trianglemesh.hpp"
 
 PALADIN_BEGIN
+
+vector<shared_ptr<Shape>> createQuad(shared_ptr<const Transform> o2w,
+                                    bool reverseOrientation,
+                                    int width, int height = 0);
+
 
 PALADIN_END
 

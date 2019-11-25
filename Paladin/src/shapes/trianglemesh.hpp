@@ -138,7 +138,17 @@ private:
     int _faceIndex;
 };
 
+shared_ptr<TriangleMesh> createTriMesh(shared_ptr<const Transform> objectToWorld, int nTriangles,
+    const int *vertexIndices, int nVertices, const Point3f *P,
+    const Point2f *uv, const Normal3f *N=nullptr, const Vector3f *S=nullptr,
+    const std::shared_ptr<Texture<Float>> &alphaMask=nullptr,
+    const std::shared_ptr<Texture<Float>> &shadowAlphaMask=nullptr,
+                                  const int *faceIndices=nullptr);
 
+shared_ptr<Triangle> createTri(shared_ptr<const Transform> o2w, shared_ptr<const Transform> w2o,
+                            bool reverseOrientation,
+                            const std::shared_ptr<TriangleMesh> &_mesh,
+                            int triNumber);
 
 PALADIN_END
 
