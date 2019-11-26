@@ -152,6 +152,10 @@ Filter * SceneParser::parseFilter(const nloJson &data) {
 void SceneParser::parseShapes(const nloJson &shapeDataList) {
     for (const auto &shapeData : shapeDataList) {
         string type = shapeData.value("type", "sphere");
+        bool show = shapeData.value("show", true);
+        if (!show) {
+            continue;
+        }
         if (type == "triMesh") {
             parseTriMesh(shapeData);
         } else {

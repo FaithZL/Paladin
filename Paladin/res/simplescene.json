@@ -8,17 +8,18 @@
         ]
     },
 	"lights" : [
+        
         {
-            "type" : "pointLight",
+            "type" : "distant",
             "param" : {
                 "transform" : {
-                    "type" : "translate",
-                    "param" : [0,0,-3]
+                    
                 },
-                "I" : {
+                "L" : {
                     "colorType" : 1,
-                    "color" : [5,5,5]
-                }
+                    "color" : [1,1,1]
+                },
+                "wLight" : [0,0,-1]
             }
         }
 	],
@@ -112,30 +113,33 @@
 	"shapes" : [
 		{
 			"type" : "cone",
+            "show" : false,
             "param" : {
-                
+                "transform" : [
+                    {
+                        "type" : "rotateX",
+                        "param" : [-90]
+                    },
+                    {
+                        "type" : "rotateZ",
+                        "param" : [90]
+                    }
+                ],
                 "radius" : 0.5,
                 "phiMax" : 360,
                 "height" : 1,
                 "reverseOrientation" : false
-            },
-			"emission" : {
-                "nSamples" : 1,
-                "Le" : {
-                    "colorType" : 1,
-                    "color" : [1,1,1]
-                },
-                "twoSided" : false
             },
 			"material" : "matte1"
 		},
         {
             "type" : "triMesh",
             "subType" : "quad",
+            "show" : true,
             "param" : {
                 "transform" : {
-                    "type" : "translate",
-                    "param" : [0,0,0.2]
+                    "type" : "rotateX",
+                    "param" : [10]
                 },
                 "width" : 1,
                 "height" : 1
@@ -177,7 +181,7 @@
     "film" : {
     	"param" : {
 			"resolution" : [400, 400],
-	    	"cropWindow" : [0,0,1,1],
+	    	"cropWindow" : [0.3,0.3,0.7,0.7],
 	    	"fileName" : "conelbox.png",
 	    	"diagonal" : 1,
 	    	"scale" : 1

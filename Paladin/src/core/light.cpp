@@ -31,6 +31,10 @@ bool VisibilityTester::unoccluded(const Scene &scene) const {
 //    }
 //}
 Light * createLight(const nloJson &data) {
+    bool show = data.value("show", true);
+    if (!show) {
+        return nullptr;
+    }
     string type = data.value("type", "pointLight");
     auto creator = GET_CREATOR(type);
     nloJson param = data.value("param", nloJson::object());
