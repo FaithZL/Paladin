@@ -340,19 +340,19 @@ public:
     }
     
     Normal3<T> &operator+=(const Normal3<T> &n) {
-        DCHECK(!n.HasNaNs());
+        DCHECK(!n.hasNaNs());
         x += n.x;
         y += n.y;
         z += n.z;
         return *this;
     }
     Normal3<T> operator-(const Normal3<T> &n) const {
-        DCHECK(!n.HasNaNs());
+        DCHECK(!n.hasNaNs());
         return Normal3<T>(x - n.x, y - n.y, z - n.z);
     }
     
     Normal3<T> &operator-=(const Normal3<T> &n) {
-        DCHECK(!n.HasNaNs());
+        DCHECK(!n.hasNaNs());
         x -= n.x;
         y -= n.y;
         z -= n.z;

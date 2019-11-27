@@ -73,6 +73,16 @@ public:
 
     virtual AABB3f worldBound() const override;
 
+    bool watertightIntersectP(const Ray &ray, bool testAlphaTexture) const;
+    
+    bool watertightIntersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
+                             bool testAlphaTexture = true) const;
+    
+    bool classicIntersectP(const Ray &ray, bool testAlphaTexture) const;
+    
+    bool classicIntersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
+                          bool testAlphaTexture = true) const;
+    
     virtual bool intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
                    bool testAlphaTexture = true) const override;
 
