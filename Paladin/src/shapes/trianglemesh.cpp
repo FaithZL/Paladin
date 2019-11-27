@@ -607,10 +607,12 @@ shared_ptr<Triangle> createTri(shared_ptr<const Transform> o2w, shared_ptr<const
 
 vector<shared_ptr<Shape>> createQuad(shared_ptr<const Transform> o2w,
                                 bool reverseOrientation,
-                                     int width, int height) {
+                                     Float width, Float height) {
     if (height == 0) {
         height = width;
     }
+    width /= 2.f;
+    height /= 2.f;
     DCHECK(width > 0);
     DCHECK(height > 0);
     Point3f tr(width, height, 0);
@@ -646,8 +648,8 @@ vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &data, shared_pt
     auto l2w = createTransform(param.value("transform", nloJson()));
     bool ro = param.value("reverseOrientation", false);
     shared_ptr<Transform> o2w(l2w);
-    int width = param.value("width", 1);
-    int height = param.value("height", width);
+    Float width = param.value("width", 1.f);
+    Float height = param.value("height", width);
     vector<shared_ptr<Shape>> triLst = createQuad(o2w, ro, width, height);
     vector<shared_ptr<Primitive>> ret;
     nloJson emission = data.value("emission", nloJson());
@@ -661,6 +663,15 @@ vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &data, shared_pt
         ret.push_back(primitives);
     }
     return ret;
+}
+
+vector<shared_ptr<Shape>> createCube(shared_ptr<const Transform> o2w, bool reverseOrientation, Float x, Float y, Float z) {
+    vector<shared_ptr<Shape>> ret;
+    
+}
+
+vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &, shared_ptr<const Material>&, vector<shared_ptr<Light>> &lights) {
+    
 }
 
 

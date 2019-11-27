@@ -18,7 +18,7 @@ USING_STD
  * }
  */
 CObject_ptr createSincFilter(const nloJson &param) {
-	nloJson radius = param.value("radius", nloJson::array({2,2}));
+	nloJson radius = param.value("radius", nloJson::array({0.5f,0.5f}));
     Float rx = radius.at(0);
     Float ry = radius.at(1);
     Float tau = param.value("tau", 3.f);

@@ -15,7 +15,7 @@ PALADIN_BEGIN
  * }
  */
 CObject_ptr createBoxFilter(const nloJson &param) {
-    nloJson radius = param.value("radius", nloJson::array({2,2}));
+    nloJson radius = param.value("radius", nloJson::array({0.5f,0.5f}));
     Float rx = radius.at(0);
     Float ry = radius.at(1);
     return new BoxFilter(Vector2f(rx, ry));
