@@ -8,7 +8,20 @@
         ]
     },
 	"lights" : [
-       
+         
+        {
+            "type" : "pointLight",
+            "enable" : true,
+            "param" : {
+                "transform" : {
+                    
+                },
+                "I" : {
+                    "colorType" : 1,
+                    "color" : [1,1,1]
+                }
+            }
+        }
 	],
     "materials" : {
         "matte1" : {
@@ -147,7 +160,7 @@
 	"shapes" : [
 		{
 			"type" : "sphere",
-            "show" : true,
+            "enable" : true,
             "param" : {
                 "transform" : [
                     {
@@ -168,7 +181,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "back",
-            "show" : true,
+            "enable" : true,
             "param" : {
                 "transform" : {
                     "type" : "translate",
@@ -182,7 +195,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "bottom",
-            "show" : true,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -202,7 +215,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "top",
-            "show" : true,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -222,7 +235,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "left",
-            "show" : true,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -242,7 +255,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "right",
-            "show" : true,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -262,7 +275,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "light",
-            "show" : true,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {

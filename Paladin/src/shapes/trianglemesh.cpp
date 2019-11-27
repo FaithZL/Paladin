@@ -667,7 +667,18 @@ vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &data, shared_pt
 
 vector<shared_ptr<Shape>> createCube(shared_ptr<const Transform> o2w, bool reverseOrientation, Float x, Float y, Float z) {
     vector<shared_ptr<Shape>> ret;
+    Float _x = 0.5 * x;
+    Float _y = 0.5 * y;
+    Float _z = 0.5 * z;
+    auto znTr(Transform::translate_ptr(0,0,-_z));
+    * znTr = *o2w * (*znTr);
+    auto znTris = createQuad(shared_ptr<const Transform>(znTr), reverseOrientation, x);
+    ret.insert(ret.end(), znTris.begin(), znTris.end());
     
+    auto zpTr(Transform::translate_ptr(0,0,_z));
+    * znTr = *o2w * (*zpTr);
+    auto zpTris = createQuad(shared_ptr<const Transform>(zpTr), reverseOrientation, x);
+    ret.insert(ret.end(), zpTris.begin(), zpTris.end());
 }
 
 vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &, shared_ptr<const Material>&, vector<shared_ptr<Light>> &lights) {

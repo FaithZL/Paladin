@@ -544,6 +544,8 @@ public:
             
     static Transform * translate_ptr(const Vector3f &delta);
         
+    static Transform * translate_ptr(Float, Float, Float);
+        
     static Transform * rotateX_ptr(Float theta, bool bRadian=false);
 
     static Transform * rotateY_ptr(Float theta, bool bRadian=false);

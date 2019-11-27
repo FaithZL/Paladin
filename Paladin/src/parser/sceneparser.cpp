@@ -60,7 +60,9 @@ void SceneParser::parseLights(const nloJson &list) {
     for (auto iter = list.cbegin(); iter != list.cend(); ++iter) {
         nloJson data = *iter;
         shared_ptr<Light> light(createLight(data));
-        _lights.push_back(light);
+        if (light) {
+            _lights.push_back(light);
+        }
     }
 }
 
@@ -152,8 +154,8 @@ Filter * SceneParser::parseFilter(const nloJson &data) {
 void SceneParser::parseShapes(const nloJson &shapeDataList) {
     for (const auto &shapeData : shapeDataList) {
         string type = shapeData.value("type", "sphere");
-        bool show = shapeData.value("show", true);
-        if (!show) {
+        bool enable = shapeData.value("enable", true);
+        if (!enable) {
             continue;
         }
         if (type == "triMesh") {

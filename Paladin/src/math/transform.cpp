@@ -452,6 +452,10 @@ Transform * Transform::scale_ptr(const Vector3f &s) {
     return Transform::scale_ptr(s.x, s.y, s.z);
 }
 
+Transform * Transform::translate_ptr(Float x, Float y, Float z) {
+    return Transform::translate_ptr(Vector3f(x,y,z));
+}
+
 Transform * Transform::translate_ptr(const Vector3f &delta) {
     Float a[16] = {
         1, 0, 0, delta.x,
