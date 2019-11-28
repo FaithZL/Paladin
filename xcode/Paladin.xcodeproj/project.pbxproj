@@ -242,7 +242,6 @@
 		7CDF96F0E90E425A99756DF9 /* volpath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2771845441EC4197B21AC75A /* volpath.cpp */; };
 		7CE8F87524334846846F9A33 /* fileutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 76C52BB7C01D4AC4AED598D6 /* fileutil.cpp */; };
 		7D94A14F30AD4CA39F7D7FB1 /* mirror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3C612DF34FF412680E559F0 /* mirror.cpp */; };
-		80B8D79D64B84E8E8EE508D7 /* whitted.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A19230B4407F441F884DAE9F /* whitted.cpp */; };
 		819D3A5BD2C74322A99BE66D /* ImfCompressor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E5F88C86F5D54033AD04035F /* ImfCompressor.cpp */; };
 		823F2D198BC2411CB7557FF1 /* lopcodes.c in Sources */ = {isa = PBXBuildFile; fileRef = DC6BF979F02F46EFB06FDB41 /* lopcodes.c */; };
 		847446FC3B9143B6AFE80BE8 /* ImfKeyCode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6A4A68967C5946C6969612D6 /* ImfKeyCode.cpp */; };
@@ -323,7 +322,6 @@
 		DA9A5F6AC5A94D49BD63C769 /* ImfMultiPartInputFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 121F9D84F19E4A2A89470E8E /* ImfMultiPartInputFile.cpp */; };
 		DBD7195250384419AFF125F3 /* curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6549A8DC2C1D481285193A1C /* curve.cpp */; };
 		DC824E68AEC149E2B95301D1 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7B333090DF2454F985C4058 /* light.cpp */; };
-		DCDF39D112A44F0B94E3D962 /* directlighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C0575D65FC4E5DBE6E35D3 /* directlighting.cpp */; };
 		DD385ED6C01745D883A48295 /* logging_unittest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6AD8DDD208204D5FA8F98911 /* logging_unittest.cc */; };
 		DDAAB68F4C9645FF81181C44 /* IlmThreadMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6A130E99116141E08F091454 /* IlmThreadMutex.cpp */; };
 		DDBDDA2DD79E43039D0840A1 /* signalhandler_unittest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 9375C36A2D33433086A6C44C /* signalhandler_unittest.cc */; };
@@ -841,7 +839,6 @@
 		0F97CE62E3E4481E9026823D /* ImfFastHuf.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfFastHuf.cpp; path = third/openexr/OpenEXR/IlmImf/ImfFastHuf.cpp; sourceTree = SOURCE_ROOT; };
 		11063F591AE448B6865DE2A4 /* half.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = half.cpp; path = third/openexr/IlmBase/Half/half.cpp; sourceTree = SOURCE_ROOT; };
 		114D5F757AC24DFAB65D3164 /* ImathFun.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImathFun.cpp; path = third/openexr/IlmBase/Imath/ImathFun.cpp; sourceTree = SOURCE_ROOT; };
-		11C0575D65FC4E5DBE6E35D3 /* directlighting.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = directlighting.cpp; path = src/integrators/directlighting.cpp; sourceTree = SOURCE_ROOT; };
 		121F9D84F19E4A2A89470E8E /* ImfMultiPartInputFile.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfMultiPartInputFile.cpp; path = third/openexr/OpenEXR/IlmImf/ImfMultiPartInputFile.cpp; sourceTree = SOURCE_ROOT; };
 		13518B783DA74A0EB5326AB0 /* ImfTileDescriptionAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfTileDescriptionAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfTileDescriptionAttribute.cpp; sourceTree = SOURCE_ROOT; };
 		1381C5429CF444EBB73D3DD2 /* texture.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = texture.hpp; path = src/core/texture.hpp; sourceTree = SOURCE_ROOT; };
@@ -856,7 +853,6 @@
 		1871C298C8CD4DBDA3F6A316 /* ImfMatrixAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfMatrixAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfMatrixAttribute.cpp; sourceTree = SOURCE_ROOT; };
 		18813C97BEF44E4FA14A730E /* fileio.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = fileio.hpp; path = src/tools/fileio.hpp; sourceTree = SOURCE_ROOT; };
 		18B0BFE9523D432C830C9FB5 /* ImfDeepTiledInputPart.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfDeepTiledInputPart.cpp; path = third/openexr/OpenEXR/IlmImf/ImfDeepTiledInputPart.cpp; sourceTree = SOURCE_ROOT; };
-		18F201A0E0D147529F136202 /* whitted.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = whitted.hpp; path = src/integrators/whitted.hpp; sourceTree = SOURCE_ROOT; };
 		18F75FF2F4A04E4989D887A3 /* stb_perlin.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_perlin.h; path = third/stblib/stb/stb_perlin.h; sourceTree = SOURCE_ROOT; };
 		1929AF48F2CF4F9F9861B2EB /* random.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = random.hpp; path = src/samplers/random.hpp; sourceTree = SOURCE_ROOT; };
 		197E368D5CB24822A22ECB90 /* stratified.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = stratified.cpp; path = src/samplers/stratified.cpp; sourceTree = SOURCE_ROOT; };
@@ -1044,7 +1040,6 @@
 		8E8EDB7A100F410983166A6F /* ImfFloatVectorAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfFloatVectorAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfFloatVectorAttribute.cpp; sourceTree = SOURCE_ROOT; };
 		8F1A71BA0BA14FEAB9E59543 /* dwaLookups */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = dwaLookups; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FE56B04418B4071A0F7BF38 /* ImfCompressionAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfCompressionAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfCompressionAttribute.cpp; sourceTree = SOURCE_ROOT; };
-		9006AEE6E7924623BEC83320 /* directlighting.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = directlighting.hpp; path = src/integrators/directlighting.hpp; sourceTree = SOURCE_ROOT; };
 		903472388B9A4C8AA3DA7AE6 /* ImfDwaCompressor.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfDwaCompressor.cpp; path = third/openexr/OpenEXR/IlmImf/ImfDwaCompressor.cpp; sourceTree = SOURCE_ROOT; };
 		903ED6ACAA264FA0958FFBCF /* ImfIO.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfIO.cpp; path = third/openexr/OpenEXR/IlmImf/ImfIO.cpp; sourceTree = SOURCE_ROOT; };
 		90F2966B964F404FAA27F701 /* ImfDoubleAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfDoubleAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfDoubleAttribute.cpp; sourceTree = SOURCE_ROOT; };
@@ -1076,7 +1071,6 @@
 		A0B6B38E085F4663901EA44B /* stringprint.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = stringprint.h; path = src/tools/stringprint.h; sourceTree = SOURCE_ROOT; };
 		A0C75DF21AE24A24A2493E00 /* parallel.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = parallel.hpp; path = src/tools/parallel.hpp; sourceTree = SOURCE_ROOT; };
 		A11D1BF5DD5C4F7CAF9DBB58 /* stb_include.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_include.h; path = third/stblib/stb/stb_include.h; sourceTree = SOURCE_ROOT; };
-		A19230B4407F441F884DAE9F /* whitted.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = whitted.cpp; path = src/integrators/whitted.cpp; sourceTree = SOURCE_ROOT; };
 		A3E85E1DAE35498AA5A5AF90 /* fileutil.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = fileutil.hpp; path = src/tools/fileutil.hpp; sourceTree = SOURCE_ROOT; };
 		A3FC9139D7414DE290254D49 /* demangle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = demangle.h; path = third/glog/src/demangle.h; sourceTree = SOURCE_ROOT; };
 		A42D7EC351EF43988805737C /* medium.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = medium.hpp; path = src/core/medium.hpp; sourceTree = SOURCE_ROOT; };
@@ -2001,14 +1995,10 @@
 		C619E5B02B22450D9594D9F5 /* integrators */ = {
 			isa = PBXGroup;
 			children = (
-				11C0575D65FC4E5DBE6E35D3 /* directlighting.cpp */,
-				9006AEE6E7924623BEC83320 /* directlighting.hpp */,
 				9A86508742404E5F861DEB8D /* pathtracer.cpp */,
 				6ACDCD05875946F1BF006790 /* pathtracer.hpp */,
 				2771845441EC4197B21AC75A /* volpath.cpp */,
 				9BB50F7BC1FF42D3B24564F4 /* volpath.hpp */,
-				A19230B4407F441F884DAE9F /* whitted.cpp */,
-				18F201A0E0D147529F136202 /* whitted.hpp */,
 			);
 			name = integrators;
 			sourceTree = "<group>";
@@ -3161,11 +3151,9 @@
 				A83B1C8426CD45009AACAC19 /* shape.cpp in Sources */,
 				266D3D95990E4FE58D99AFCC /* spectrum.cpp in Sources */,
 				BF42F9B4CFBC4CFA838A4568 /* texture.cpp in Sources */,
-				DCDF39D112A44F0B94E3D962 /* directlighting.cpp in Sources */,
 				CBDF20C7969B4890B4A65893 /* pathtracer.cpp in Sources */,
 				7CDF96F0E90E425A99756DF9 /* volpath.cpp in Sources */,
 				F6366EF32386A15E0060BAC0 /* constant.cpp in Sources */,
-				80B8D79D64B84E8E8EE508D7 /* whitted.cpp in Sources */,
 				EB2D87771F294A2EA08CF203 /* diffuse.cpp in Sources */,
 				500CB80CCEFC41FFB3B03B19 /* distant.cpp in Sources */,
 				9C2F49F7932646E1AA83BADF /* envmap.cpp in Sources */,

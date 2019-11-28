@@ -16,7 +16,7 @@ USING_STD;
 
 typedef CObject * CObject_ptr;
 
-typedef initializer_list<CObject_ptr> Arguments;
+typedef initializer_list<const CObject_ptr> Arguments;
 
 typedef CObject_ptr (*createObject)(const nloJson &, const Arguments &);
 

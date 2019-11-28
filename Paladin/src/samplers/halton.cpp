@@ -206,7 +206,7 @@ std::unique_ptr<Sampler> HaltonSampler::clone(int seed) {
  *     "sampleAtPixelCenter" : false
  * }
  */
-CObject_ptr createHaltonSampler(const nloJson &param, Arguments lst) {
+CObject_ptr createHaltonSampler(const nloJson &param, const Arguments& lst) {
     bool sampleAtPixelCenter = param.value("sampleAtPixelCenter", false);
     int spp = param.value("spp", 8);
     auto iter = lst.begin();

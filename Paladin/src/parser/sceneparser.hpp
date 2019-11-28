@@ -43,7 +43,7 @@ public:
     
     void parseShapes(const nloJson &);
     
-    Sampler * parseSampler(const nloJson &param);
+    Sampler * parseSampler(const nloJson &param, Film *);
     
     Camera * parseCamera(const nloJson &, Film *);
     

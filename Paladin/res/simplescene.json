@@ -11,7 +11,7 @@
          
         {
             "type" : "pointLight",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" : {
                     
@@ -36,7 +36,7 @@
                 },
                 "sigma" : {
                     "type" : "constant",
-                    "param" : 0
+                    "param" : 0.5
                 },
                 "bumpMap" : {
                     "type" : "constant",
@@ -160,7 +160,7 @@
 	"shapes" : [
 		{
 			"type" : "sphere",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" : [
                     {
@@ -249,7 +249,7 @@
                 ],
                 "width" : 2
             },
-            "material" : "matteRed"
+            "material" : "matte1"
         },
         {
             "type" : "triMesh",
@@ -269,7 +269,7 @@
                 ],
                 "width" : 2
             },
-            "material" : "matteGreen"
+            "material" : "matte1"
         },
         {
             "type" : "triMesh",
@@ -298,6 +298,50 @@
                 },
                 "twoSided" : false
             }
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "cube",
+            "name" : "cube1",
+            "enable" : false,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateY",
+                        "param" : [-20]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [-0.3,-0.4,0.2]
+                    }
+                ],
+                "x" : 0.6,
+                "y" : 1.2,
+                "z" : 0.6
+            },
+            "material" : "matte1"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "cube",
+            "name" : "cube1",
+            "enable" : false,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateY",
+                        "param" : [20]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0.3,-0.7,-0.2]
+                    }
+                ],
+                "x" : 0.6,
+                "y" : 0.6,
+                "z" : 0.6
+            },
+            "material" : "matte1"
         }
 	],
 	"integrator" : {
@@ -309,11 +353,9 @@
         }
     },
     "sampler" : {
-    	"type" : "stratified",
+    	"type" : "halton",
     	"param" : {
-    		"xSamples" : 5,
-    		"jitter" : true,
-    		"dimensions" : 10
+    		"spp" : 2
     	}
     },
     "camera" : {
@@ -341,7 +383,7 @@
     	}
     },
     "filter" : {
-    	"type" : "box",
+    	"type" : "triangle",
     	"param" : {
     		"radius" : [1,1]
     	}

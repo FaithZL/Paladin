@@ -25,11 +25,12 @@ void SceneParser::parse(const nloJson &data) {
     nloJson filterData = data.value("filter", nloJson());
     Filter * filter = parseFilter(filterData);
     
-    nloJson samplerData = data.value("sampler", nloJson());
-    Sampler * sampler = parseSampler(samplerData);
-    
     nloJson filmData = data.value("film", nloJson());
     auto film = parseFilm(filmData, filter);
+    
+    nloJson samplerData = data.value("sampler", nloJson());
+    Sampler * sampler = parseSampler(samplerData, film);
+    
     nloJson cameraData = data.value("camera", nloJson());
     Camera * camera = parseCamera(cameraData, film);
     
@@ -84,11 +85,11 @@ void SceneParser::parseMaterials(const nloJson &dict) {
 //        "dimensions" : 10
 //    }
 //},
-Sampler * SceneParser::parseSampler(const nloJson &data) {
+Sampler * SceneParser::parseSampler(const nloJson &data, Film * film) {
     string samplerType = data.value("type", "stratified");
     nloJson param = data.value("param", nloJson());
     auto creator = GET_CREATOR(samplerType);
-    auto ret = dynamic_cast<Sampler *>(creator(param, {}));
+    auto ret = dynamic_cast<Sampler *>(creator(param, {film}));
     return ret;
 }
 
@@ -208,6 +209,9 @@ void SceneParser::parseTriMesh(const nloJson &data) {
     if (subType == "quad") {
         shared_ptr<const Material> mat = getMaterial(data.value("material", nloJson()));
         prims = createQuadPrimitive(data, mat, _lights);
+    } else if (subType == "cube") {
+        shared_ptr<const Material> mat = getMaterial(data.value("material", nloJson()));
+        prims = createCubePrimitive(data, mat, _lights);
     }
     _primitives.insert(_primitives.end(), prims.begin(), prims.end());
 }
