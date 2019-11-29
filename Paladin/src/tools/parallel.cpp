@@ -176,9 +176,9 @@ static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
 	}
 }
 
-void parallelInit() {
+void parallelInit(int num) {
 	CHECK_EQ(threads.size(), 0);
-	int nThreads = maxThreadIndex();
+	int nThreads = num == 0 ? maxThreadIndex() : 1;
 	ThreadIndex = 0;
 
 	std::shared_ptr<Barrier> barrier = std::make_shared<Barrier>(nThreads);

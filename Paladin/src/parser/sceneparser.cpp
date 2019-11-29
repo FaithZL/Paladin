@@ -16,12 +16,17 @@
 #include "core/light.hpp"
 #include "lights/diffuse.hpp"
 #include "shapes/trianglemesh.hpp"
+#include "tools/parallel.hpp"
 
 PALADIN_BEGIN
 
 USING_STD;
 
 void SceneParser::parse(const nloJson &data) {
+    
+    int threadNum = data.value("threadNum", 0);
+    parallelInit(threadNum);
+    
     nloJson filterData = data.value("filter", nloJson());
     Filter * filter = parseFilter(filterData);
     

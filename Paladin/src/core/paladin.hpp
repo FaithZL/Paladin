@@ -25,7 +25,6 @@ public:
     }
     
     void render(const std::string fileName) {
-        parallelInit();
         _sceneParser.loadFromJson(fileName);
         parallelCleanup();
     }

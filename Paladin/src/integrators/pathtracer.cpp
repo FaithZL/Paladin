@@ -128,7 +128,10 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
 		}
 	}
-
+    if (L.MaxComponentValue() < 0.1) {
+        int a;
+        a = 0;
+    }
     return L;
 }
 

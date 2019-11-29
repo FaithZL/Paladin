@@ -213,7 +213,7 @@ inline int maxThreadIndex() {
     return numSystemCores();
 }
 
-void parallelInit();
+void parallelInit(int num = 0);
 
 void parallelCleanup();
 
