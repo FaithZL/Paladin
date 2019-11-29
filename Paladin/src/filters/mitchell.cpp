@@ -17,7 +17,7 @@ PALADIN_BEGIN
  * }
  */
 CObject_ptr createMitchellFilter(const nloJson &param) {
-    nloJson radius = param.value("radius", nloJson::array({0.5f,0.5f}));
+    nloJson radius = param.value("radius", nloJson::array({2.f,2.f}));
     Float rx = radius.at(0);
     Float ry = radius.at(1);
     Float B = param.value("B", 1.f/3.f);

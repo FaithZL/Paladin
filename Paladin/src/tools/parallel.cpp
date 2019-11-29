@@ -24,6 +24,7 @@ static std::atomic<int> reporterCount;
 
 static std::condition_variable reportDoneCondition;
 static std::mutex reportDoneMutex;
+static int nThread = 0;
 thread_local int ThreadIndex = 0;
 
 static std::condition_variable workListCondition;
@@ -176,9 +177,18 @@ static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
 	}
 }
 
+void setThreadNum(int num) {
+    nThread = num;
+}
+
+int maxThreadIndex() {
+    return nThread == 0 ? numSystemCores() : nThread;
+}
+
 void parallelInit(int num) {
 	CHECK_EQ(threads.size(), 0);
-	int nThreads = num == 0 ? maxThreadIndex() : 1;
+    setThreadNum(num);
+	int nThreads = maxThreadIndex();
 	ThreadIndex = 0;
 
 	std::shared_ptr<Barrier> barrier = std::make_shared<Barrier>(nThreads);

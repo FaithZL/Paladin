@@ -187,7 +187,7 @@
                 "transform" :[
                     {
                         "type" : "rotateX",
-                        "param" : [180]
+                        "param" : [0]
                     },
                     {
                         "type" : "translate",
@@ -337,11 +337,11 @@
                 "transform" :[
                     {
                         "type" : "rotateY",
-                        "param" : [20]
+                        "param" : [15]
                     },
                     {
                         "type" : "translate",
-                        "param" : [0.3,-0.7,-0.4]
+                        "param" : [0.35,-0.7,-0.4]
                     }
                 ],
                 "x" : 0.6,
@@ -360,7 +360,7 @@
         }
     },
     "sampler" : {
-    	"type" : "halton",
+    	"type" : "random",
     	"param" : {
     		"spp" : 16
     	}

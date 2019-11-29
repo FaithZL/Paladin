@@ -209,9 +209,9 @@ inline int numSystemCores() {
     return std::max(1u, std::thread::hardware_concurrency());
 }
 
-inline int maxThreadIndex() {
-    return numSystemCores();
-}
+int maxThreadIndex();
+
+void setThreadNum(int num);
 
 void parallelInit(int num = 0);
 

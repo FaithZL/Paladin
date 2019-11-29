@@ -73,7 +73,7 @@ Spectrum BxDF::sample_f(const Vector3f &wo,
                         Float *pdf,
                         BxDFType *sampledType) const {
     *wi = cosineSampleHemisphere(sample);
-    if (wi->z < 0) {
+    if (wo.z < 0) {
         wi->z *= -1;
     }
     *pdf = pdfDir(wo, *wi);
