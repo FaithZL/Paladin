@@ -360,7 +360,7 @@
         }
     },
     "sampler" : {
-    	"type" : "random",
+    	"type" : "halton",
     	"param" : {
     		"spp" : 16
     	}
@@ -382,7 +382,7 @@
     },
     "film" : {
     	"param" : {
-			"resolution" : [400, 400],
+			"resolution" : [1024, 1024],
 	    	"cropWindow" : [0,0,1,1],
 	    	"fileName" : "conelbox.png",
 	    	"diagonal" : 1,
