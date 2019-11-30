@@ -1,0 +1,405 @@
+{
+    "threadNum" : 0,
+    "transforms" :{
+        "name1" : [
+            {
+                "tpye" : "translate",
+                "param" :[0,0,0]
+            }
+        ]
+    },
+	"lights" : [
+         
+        {
+            "type" : "pointLight",
+            "enable" : false,
+            "param" : {
+                "transform" : {
+                    
+                },
+                "I" : {
+                    "colorType" : 1,
+                    "color" : [1,1,1]
+                }
+            }
+        }
+	],
+    "materials" : {
+        "matte1" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.725, 0.71, 0.68]
+                    }
+                },
+                "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                }
+            }
+        },
+        "matteRed" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.63, 0.065, 0.05]
+                    }
+                },
+                "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                } 
+            }
+        },
+        "matteGreen" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.14, 0.45, 0.091]
+                    }
+                },
+                "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                }
+            }
+        },
+        "black" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0,0,0]
+                    }
+                },
+                "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                }
+            }
+        },
+        "glass" : {
+            "type" : "glass",
+            "param" : {
+                "Kr" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [1, 1, 1]
+                    }
+                },
+                "Kt" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0, 0, 0]
+                    }
+                },
+                "uRough" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
+                "vRough" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
+                "eta" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
+                "remapRough" : false 
+            }
+        },
+        "mirror" : {
+            "type" : "mirror",
+            "param" : {
+                "Kr" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [1, 1, 1]
+                    }
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                }
+            }
+        }
+    },
+	"shapes" : [
+		{
+			"type" : "sphere",
+            "enable" : false,
+            "param" : {
+                "transform" : [
+                    {
+                        "type" : "rotateX",
+                        "param" : [-90]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,0,1000]
+                    }
+                ],
+                "radius" : 999,
+                "phiMax" : 360
+            },
+			"material" : "matte1"
+		},
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
+            "name" : "back",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateX",
+                        "param" : [0]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,0,1]
+                    }
+                ],
+                "width" : 2
+            },
+            "material" : "matte1"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
+            "name" : "bottom",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateX",
+                        "param" : [-90]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,-1,0]
+                    }
+                ],
+                "width" : 2
+            },
+            "material" : "matte1"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
+            "name" : "top",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateX",
+                        "param" : [90]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,1,0]
+                    }
+                ],
+                "width" : 2
+            },
+            "material" : "matte1"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
+            "name" : "left",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateY",
+                        "param" : [90]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [-1,0,0]
+                    }
+                ],
+                "width" : 2
+            },
+            "material" : "matteRed"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
+            "name" : "right",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateY",
+                        "param" : [-90]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [1,0,0]
+                    }
+                ],
+                "width" : 2
+            },
+            "material" : "matteGreen"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
+            "name" : "light",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateX",
+                        "param" : [90]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,0.98,0]
+                    }
+                ],
+                "width" : 0.5
+            },
+            "material" : "black",
+            "emission" : {
+                "nSamples" : 1,
+                "Le" : {
+                    "colorType" : 1,
+                    "color" : [17, 12, 4]
+                },
+                "twoSided" : false
+            }
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "cube",
+            "name" : "cube1",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateY",
+                        "param" : [-20]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [-0.3,-0.4,0.2]
+                    }
+                ],
+                "x" : 0.6,
+                "y" : 1.2,
+                "z" : 0.6
+            },
+            "material" : "matte1"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "cube",
+            "name" : "cube1",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateY",
+                        "param" : [15]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0.35,-0.7,-0.4]
+                    }
+                ],
+                "x" : 0.6,
+                "y" : 0.6,
+                "z" : 0.6
+            },
+            "material" : "matte1"
+        }
+	],
+	"integrator" : {
+        "type" : "PathTracer",
+        "param" : {
+        	"maxBounce" : 5,
+        	"rrThreshold" : 1,
+        	"lightSampleStrategy" : "power"
+        }
+    },
+    "sampler" : {
+    	"type" : "halton",
+    	"param" : {
+    		"spp" : 16
+    	}
+    },
+    "camera" : {
+    	"type" : "perspective",
+    	"param" : {
+    		"shutterOpen" : 0,
+    		"shutterClose" : 1,
+    		"lensRadius" : 0,
+    		"focalDistance" : 100,
+    		"fov" : 20,
+            "lookAt" : [
+                [0,0,-6.6],
+                [0,0,0],
+                [0,1,0]
+            ]
+    	}
+    },
+    "film" : {
+    	"param" : {
+			"resolution" : [1024, 1024],
+	    	"cropWindow" : [0,0,1,1],
+	    	"fileName" : "conelbox.png",
+	    	"diagonal" : 1,
+	    	"scale" : 1
+    	}
+    },
+    "filter" : {
+    	"type" : "triangle",
+    	"param" : {
+    		"radius" : [1,1]
+    	}
+    },
+    "accelerator" : {
+    	"type" : "bvh",
+    	"param" : {
+    		"maxPrimsInNode" : 1,
+    		"splitMethod" : "SAH"
+    	}
+    }
+}
