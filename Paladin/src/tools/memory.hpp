@@ -231,15 +231,15 @@ public:
      * 分配一段连续的内存块，用uv参数重排二维数组的索引
      */
     BlockedArray(int uRes, int vRes, const T *d = nullptr)
-    : _uRes(uRes), 
-    _vRes(vRes), 
+    : _uRes(uRes),
+    _vRes(vRes),
     _uBlocks(roundUp(uRes) >> logBlockSize) {
         // 先向上取到2^logBlockSize
         int nAlloc = roundUp(_uRes) * roundUp(_vRes);
         _data = allocAligned<T>(nAlloc);
         for (int i = 0; i < nAlloc; ++i) {
             // placement new，在指定地址上调用构造函数
-            * new (&_data[i]) T();
+            new (&_data[i]) T();
         }
         if (d) {
             for (int v = 0; v < _vRes; ++v){
@@ -253,8 +253,8 @@ public:
     /**
      * 2^logBlockSize
      */
-    CONSTEXPR int blockSize() const { 
-        return 1 << logBlockSize; 
+    CONSTEXPR int blockSize() const {
+        return 1 << logBlockSize;
     }
 
     /**
@@ -264,12 +264,12 @@ public:
         return (x + blockSize() - 1) & ~(blockSize() - 1);
     }
 
-    int uSize() const { 
-        return _uRes; 
+    int uSize() const {
+        return _uRes;
     }
 
-    int vSize() const { 
-        return _vRes; 
+    int vSize() const {
+        return _vRes;
     }
 
     ~BlockedArray() {
@@ -282,12 +282,12 @@ public:
     /**
      * 返回a * 2^logBlockSize
      */
-    int block(int a) const { 
-        return a >> logBlockSize; 
+    int block(int a) const {
+        return a >> logBlockSize;
     }
 
-    int offset(int a) const { 
-        return (a & (blockSize() - 1)); 
+    int offset(int a) const {
+        return (a & (blockSize() - 1));
     }
 
     /**
@@ -296,11 +296,11 @@ public:
      * 2.然后找到块中的偏移量 (ou, ov)
      */
     inline int getTotalOffset(int u, int v) const {
-        int bu = block(u); 
+        int bu = block(u);
         int bv = block(v);
         int ou = offset(u);
         int ov = offset(v);
-        // 小block的偏移 
+        // 小block的偏移
         int offset = blockSize() * blockSize() * (_uBlocks * bv + bu);
         // 小block内的偏移
         offset += blockSize() * ov + ou;
@@ -324,7 +324,7 @@ public:
             }
         }
     }
-    
+
 private:
     T *_data;
     const int _uRes, _vRes, _uBlocks;

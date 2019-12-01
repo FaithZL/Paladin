@@ -164,7 +164,7 @@ nloJson Film::toJson() const {
 //"param" : {
 //    "resolution" : [500, 500],
 //    "cropWindow" : [0,0,1,1],
-//    "fileName" : "conelbox.png",
+//    "fileName" : "paladin.png",
 //    "diagonal" : null,
 //    "scale" : 1
 //}

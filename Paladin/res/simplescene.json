@@ -45,6 +45,28 @@
                 }
             }
         },
+        "matte2" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : {
+                    "type" : "bilerp",
+                    "param" : {
+                        "v00" : [1, 0, 0],
+                        "v01" : [0, 1, 0],
+                        "v10" : [0, 0, 1],
+                        "v11" : [0.1, 0.9, 0.5]
+                    }
+                },
+                "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                }
+            }
+        },
         "matteRed" : {
             "type" : "matte",
             "param" : {
@@ -93,6 +115,25 @@
                     "param" : {
                         "colorType" : 0,
                         "color" : [0,0,0]
+                    }
+                },
+                "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                }
+            }
+        },
+        "image" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : {
+                    "type" : "image",
+                    "param" : {
+                        "fileName" : "res/HelloWorld.png"
                     }
                 },
                 "sigma" : {
@@ -196,7 +237,7 @@
                 ],
                 "width" : 2
             },
-            "material" : "matte1"
+            "material" : "image"
         },
         {
             "type" : "triMesh",
@@ -310,7 +351,7 @@
             "type" : "triMesh",
             "subType" : "cube",
             "name" : "cube1",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -332,7 +373,7 @@
             "type" : "triMesh",
             "subType" : "cube",
             "name" : "cube1",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -362,7 +403,7 @@
     "sampler" : {
     	"type" : "halton",
     	"param" : {
-    		"spp" : 16
+    		"spp" : 2
     	}
     },
     "camera" : {
@@ -382,9 +423,9 @@
     },
     "film" : {
     	"param" : {
-			"resolution" : [1024, 1024],
+			"resolution" : [400, 400],
 	    	"cropWindow" : [0,0,1,1],
-	    	"fileName" : "conelbox.png",
+	    	"fileName" : "paladin.png",
 	    	"diagonal" : 1,
 	    	"scale" : 1
     	}

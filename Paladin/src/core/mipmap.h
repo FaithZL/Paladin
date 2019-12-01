@@ -28,12 +28,12 @@ struct ResampleWeight {
 template <typename T>
 class MIPMap {
 public:
-    MIPMap(const Point2i &resolution, const T *img, bool doTri = true,
+    MIPMap(const Point2i &res, const T *img, bool doTri = true,
            Float maxAniso = 8.f, ImageWrap wrapMode = ImageWrap::Repeat)
     : _doTrilinear(doTri),
     _maxAnisotropy(maxAniso),
     _wrapMode(wrapMode),
-    _resolution(resolution) {
+    _resolution(res) {
         
         std::unique_ptr<T[]> resampledImage = nullptr;
         // 如果s，t两个方向有一个方向的分辨率不是2的整数次幂，则重采样，增加采样率提高到2的整数次幂
@@ -51,20 +51,20 @@ public:
                     for (int j = 0; j < 4; ++j) {
                         int origS = sWeights[s].firstTexel + j;
                         if (wrapMode == ImageWrap::Repeat) {
-                            origS = Mod(origS, resolution[0]);
+                            origS = Mod(origS, _resolution[0]);
                         } else if (wrapMode == ImageWrap::Clamp) {
-                            origS = clamp(origS, 0, resolution[0] - 1);
+                            origS = clamp(origS, 0, _resolution[0] - 1);
                         }
-                        if (origS >= 0 && origS < (int)resolution[0]) {
+                        if (origS >= 0 && origS < (int)_resolution[0]) {
                             resampledImage[t * resPow2[0] + s] +=
                                 sWeights[s].weight[j] *
-                                img[t * resolution[0] + origS];
+                                img[t * _resolution[0] + origS];
                         }
                     }
                 }
-            }, resolution[1], 16);
+            }, _resolution[1], 16);
             
-            std::unique_ptr<ResampleWeight[]> tWeights = resampleWeights(resolution[1], resPow2[1]);
+            std::unique_ptr<ResampleWeight[]> tWeights = resampleWeights(_resolution[1], resPow2[1]);
             // 处理t方向上的时候需要一些临时缓存来防止污染resampledImage中的数据
             // 临时空间需要手动删除            
             std::vector<T *> resampleBufs;
@@ -80,11 +80,11 @@ public:
                     for (int j = 0; j < 4; ++j) {
                         int offset = tWeights[t].firstTexel + j;
                         if (wrapMode == ImageWrap::Repeat) {
-                            offset = Mod(offset, resolution[1]);
+                            offset = Mod(offset, _resolution[1]);
                         } else if (wrapMode == ImageWrap::Clamp) {
-                            offset = clamp(offset, 0, (int)resolution[1] - 1);
+                            offset = clamp(offset, 0, (int)_resolution[1] - 1);
                         }
-                        if (offset >= 0 && offset < (int)resolution[1]) {
+                        if (offset >= 0 && offset < (int)_resolution[1]) {
                             workData[t] += tWeights[t].weight[j] *
                                 resampledImage[offset * resPow2[0] + s];
                         }
@@ -101,11 +101,11 @@ public:
             _resolution = resPow2;
         }
 
-        int nLevels = 1 + Log2Int(std::max(resolution[0], resolution[1]));
+        int nLevels = 1 + Log2Int(std::max(_resolution[0], _resolution[1]));
         _pyramid.resize(nLevels);
 
         _pyramid[0].reset(
-            new BlockedArray<T>(resolution[0], resolution[1],
+            new BlockedArray<T>(_resolution[0], _resolution[1],
                             resampledImage ? resampledImage.get() : img));
 
         for (int i = 1; i < nLevels; ++i) {

@@ -15,7 +15,7 @@ std::map<TexInfo, std::unique_ptr<MIPMap<Tmemory>>>
 
 template class ImageTexture<RGBSpectrum, Spectrum>;
 //"param" : {
-//    "fileName" : "res/HelloWord.png",
+//    "fileName" : "res/planet_Quom1200.png",
 //    "doTri" : true,
 //    "maxAniso" : 8,
 //    "wrapMode" : 0,
