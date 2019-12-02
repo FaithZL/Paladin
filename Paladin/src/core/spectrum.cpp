@@ -68,6 +68,10 @@ RGBSpectrum SampledSpectrum::ToRGBSpectrum() const {
     return RGBSpectrum::FromRGB(rgb);
 }
 
+nloJson SampledSpectrum::toJson() const {
+    return ToRGBSpectrum().toJson();
+}
+
 SampledSpectrum SampledSpectrum::FromRGB(const Float rgb[3],
                                          SpectrumType type) {
     SampledSpectrum r;

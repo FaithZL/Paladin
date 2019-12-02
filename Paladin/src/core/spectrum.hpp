@@ -391,6 +391,8 @@ public:
         XYZToRGB(xyz, rgb);
     }
         
+    nloJson toJson() const;
+        
     RGBSpectrum ToRGBSpectrum() const;
         
     static SampledSpectrum FromRGB(
@@ -458,7 +460,12 @@ public:
         rgb[1] = c[1];
         rgb[2] = c[2];
     }
-        
+    
+    nloJson toJson() const {
+        nloJson ret = nloJson::array({c[0], c[1], c[2]});
+        return ret;
+    }
+    
     const RGBSpectrum &ToRGBSpectrum() const { return *this; }
     void ToXYZ(Float xyz[3]) const { RGBToXYZ(c, xyz); }
     static RGBSpectrum FromXYZ(const Float xyz[3],

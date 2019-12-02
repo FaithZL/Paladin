@@ -262,11 +262,6 @@ void MonteCarloIntegrator::render(const Scene &scene) {
     				L = Spectrum(0.0f);
     			}
                 
-                if (pixel.x == 55 && pixel.y == 57) {
-                    int a;
-                    a = 0;
-                }
-                
                 // 将像素样本值与权重保存到pixel像素数据中
     			filmTile->addSample(cameraSample.pFilm, L, rayWeight);
                 arena.reset();

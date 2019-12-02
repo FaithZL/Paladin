@@ -56,7 +56,7 @@ void SceneParser::parse(const nloJson &data) {
     _aggregate = parseAccelerator(acceleratorData);
     
     auto scene = new Scene(_aggregate, _lights);
-//    _scene.reset(scene);
+    _scene.reset(scene);
     
     _integrator->render(*scene);
     

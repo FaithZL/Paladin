@@ -28,21 +28,9 @@
         "matte1" : {
             "type" : "matte",
             "param" : {
-                "Kd" : {
-                    "type" : "constant",
-                    "param" : {
-                        "colorType" : 0,
-                        "color" : [0.725, 0.71, 0.68]
-                    }
-                },
-                "sigma" : {
-                    "type" : "constant",
-                    "param" : 0
-                },
-                "bumpMap" : {
-                    "type" : "constant",
-                    "param" : 0
-                }
+                "Kd" : [0.725, 0.71, 0.68],
+                "sigma" : 0,
+                "bumpMap" : 0
             }
         },
         "matte2" : {
@@ -207,17 +195,17 @@
                 "transform" : [
                     {
                         "type" : "rotateX",
-                        "param" : [-90]
+                        "param" : [170]
                     },
                     {
                         "type" : "translate",
-                        "param" : [0,0,1000]
+                        "param" : [0,-0.6,0]
                     }
                 ],
-                "radius" : 999,
+                "radius" : 0.4,
                 "phiMax" : 360
             },
-			"material" : "matte1"
+			"material" : "matte2"
 		},
         {
             "type" : "triMesh",
@@ -237,7 +225,7 @@
                 ],
                 "width" : 2
             },
-            "material" : "image"
+            "material" : "matte1"
         },
         {
             "type" : "triMesh",
@@ -351,7 +339,7 @@
             "type" : "triMesh",
             "subType" : "cube",
             "name" : "cube1",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -373,7 +361,7 @@
             "type" : "triMesh",
             "subType" : "cube",
             "name" : "cube1",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {

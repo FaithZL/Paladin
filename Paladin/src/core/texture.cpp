@@ -7,7 +7,7 @@
 //
 
 #include "texture.hpp"
-
+#include "textures/constant.hpp"
 
 PALADIN_BEGIN
 
@@ -167,9 +167,14 @@ Float lanczos(Float x, Float tau) {
 //    "type" : "constant",
 //    "param" : 0
 //}
+// or
+// data : 0
 Texture<Float> * createFloatTexture(const nloJson &data) {
     if (data.is_null()) {
         return nullptr;
+    }
+    if (data.is_number()) {
+        return dynamic_cast<Texture<Float> *>(createFloatConstant(data, {}));
     }
     string fullType = "Float" + data.value("type", "constant");
     auto creator = GET_CREATOR(fullType);
@@ -185,9 +190,18 @@ Texture<Float> * createFloatTexture(const nloJson &data) {
 //        "color" : [0.1, 0.9, 0.5],
 //    }
 //}
+// or
+// data : [0.1, 0.9, 0.5]
 Texture<Spectrum> * createSpectrumTexture(const nloJson &data) {
     if (data.is_null()) {
         return nullptr;
+    }
+    if (data.is_array()) {
+        nloJson param = nloJson::object({
+            {"colorType", 0},
+            {"color", data},
+        });
+        return dynamic_cast<Texture<Spectrum> *>(createSpectrumConstant(param, {}));
     }
     string fullType = "Spectrum" + data.value("type", "constant");
     auto creator = GET_CREATOR(fullType);

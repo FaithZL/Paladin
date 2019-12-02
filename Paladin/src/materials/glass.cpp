@@ -111,16 +111,16 @@ CObject_ptr createGlass(const nloJson &param, const Arguments &lst) {
     nloJson _Kt = param.value("Kt", nloJson::object());
     auto Kt = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_Kt));
     
-    nloJson _uRough = param.value("uRough", nloJson::object());
+    nloJson _uRough = param.value("uRough", nloJson(0.f));
     auto uRough = shared_ptr<Texture<Float>>(createFloatTexture(_uRough));
     
-    nloJson _vRough = param.value("vRough", nloJson::object());
+    nloJson _vRough = param.value("vRough", nloJson(0.f));
     auto vRough = shared_ptr<Texture<Float>>(createFloatTexture(_vRough));
     
-    nloJson _eta = param.value("eta", nloJson::object());
+    nloJson _eta = param.value("eta", nloJson(1.f));
     auto eta = shared_ptr<Texture<Float>>(createFloatTexture(_eta));
     
-    nloJson _bumpMap = param.value("bumpMap", nloJson::object());
+    nloJson _bumpMap = param.value("bumpMap", nloJson(0.f));
     auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
     
     bool remap = param.value("remapRough", false);

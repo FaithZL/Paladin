@@ -52,7 +52,7 @@ void MatteMaterial::computeScatteringFunctions(SurfaceInteraction *si,
 //    }
 //}
 CObject_ptr createMatte(const nloJson &param, const Arguments& lst) {
-    nloJson _Kd = param.value("Kd", nloJson::object());
+    nloJson _Kd = param.value("Kd", nloJson::array({1.f, 1.f, 1.f}));
     auto Kd = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_Kd));
     nloJson _sigma = param.value("sigma", nloJson::object());
     auto sigma = shared_ptr<Texture<Float>>(createFloatTexture(_sigma));
