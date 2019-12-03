@@ -101,7 +101,7 @@ Float FresnelMoment2(Float invEta);
  *
  * 接下来分析Sp(po, pi)项，我们假设表面不仅局部平坦，而且任意等距离的两点的Sp函数相同
  * 
- *                Sp(po, pi) ≈ Sp(|po - pi|)
+ *                Sp(po, pi) ≈ Sr(|po - pi|)
  *
  * SeparableBSSRDF 就做了如上的近似简化
  * 
@@ -133,7 +133,7 @@ public:
 		return (1 - frDielectric(cosTheta(w), 1, _eta)) / (c * Pi);
 	}
 
-	// Sp(po, pi) ≈ Sp(|po - pi|)
+	// Sp(po, pi) ≈ Sr(|po - pi|)
 	Spectrum Sp(const SurfaceInteraction &pi) const {
 		return Sr(distance(_po.pos, pi.pos));
 	}
@@ -169,10 +169,35 @@ protected:
 };
 
 
+/**
+ * tabulated BSSRDF，在我理解为制成表格的bssrdf，该形式可以处理各种散射曲线
+ * 包括实际测量的bssrdf
+ * 
+ * 先来介绍一下Sr函数
+ * 注意：当材质属性固定时，Sr只是一个1D函数，更一般的来看Sr还有其他四个参数
+ * 折射率η，散射各向异性系数g，反射率ρ，衰减系数σt，组合成一个完整的函数
+ * Sr(η,g,ρ,σt,r)，不幸的是，这个函数对于离散化而言，维度太高了。
+ * 上述参数中，除了r，只有σt是有物理单位的，这个参数量化了单位距离内的吸收率以及散射率
+ * 这个参数比较简单，它仅仅控制了bssrdf的空间轮廓比例，为了降低函数的维度，我们可以把它固定为1
+ * 并且制作一个无单位版本的bssrdf的外形轮廓。
+ *
+ * 在运行时，我们查找一个给定消光系数σt，半径r，我们找到一个无单位光学半径Roptical = σt r,
+ * 计算更低维度的表格，表达式如下：
+ * 
+ *               Sr(η,g,ρ,σt,r) = σt^2 Sr(η,g,ρ,1,Roptical)
+ *
+ * 为何？因为Sr在极坐标(r,θ)空间中是一个2D密度函数，需要一个相应的比例因子来解释变量的变化
+ *      p(r,θ) = r p(x,y)  (sampling.hpp文件8式)
+ *
+ * 
+ *
+ * 
+ */
 class TabulatedBSSRDF : public SeparableBSSRDF {
     
 public:
-    
+    Spectrum Sr(Float distance) const;
+
 private:
     
     
