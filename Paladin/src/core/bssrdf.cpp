@@ -7,6 +7,8 @@
 
 #include "bssrdf.hpp"
 
+PALADIN_BEGIN
+
 // 如果没有理解错的话，这应该是用多项式去逼近目标曲线
 Float FresnelMoment1(Float eta) {
     Float eta2 = eta * eta, eta3 = eta2 * eta, eta4 = eta3 * eta,
@@ -32,3 +34,7 @@ Float FresnelMoment2(Float eta) {
                54.9327f * eta3 - 9.00603f * eta4 + 0.63942f * eta5;
     }
 }
+
+
+
+PALADIN_END

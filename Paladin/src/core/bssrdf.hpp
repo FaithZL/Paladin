@@ -72,26 +72,38 @@ Float FresnelMoment2(Float invEta);
  * 例如球体，平面等等，而BSSRDF可以附加到任何一个几何体上，导致求解
  * BSSRDF的积分是不现实的，接下来要介绍一种简单的表示
  * 
- * 我们可以做如下简化
+ * 我们可以做如下近似简化
  * 
  *     S(po, ωo, pi, ωi) ≈ (1 - Fr(cosθo)) Sp(po, pi) Sω(ωi)  2式
  * 
- * 先来Sω(ωi)函数，该函数可以认为是一个菲涅尔透射的缩放版本
+ * 先来分析一下Sω(ωi)函数，该函数可以认为是一个菲涅尔透射的缩放版本
  *
  *     Sω(ωi) = (1 - Fr(cosθi)) / cπ         3式
  *
- * 先来看看分子部分，1 - Fr(cosθi)表示光子进入物体表面的部分
+ * 来看看分子部分，1 - Fr(cosθi)表示光子进入物体表面的部分
  * 分母部分为π是因为理想漫反射的brdf为1/π，c是常数，为了保证 ∫[H] Sω(ωi) cosθi dωi = 1
  * 
  * 将 3式带入 ∫[H] Sω(ω) cosθ dω = 1，可得
  *
  *     1 = ∫[H] ((1 - Fr(η, cosθ)) / cπ) cosθ dω
  *
- *     求解得到 c = 1 - 2 * ∫[0,π/2]Fr(η, cosθi)sinθcosθdθ
+ *     求解得到 c = 1 - 2 * ∫[0,π/2]Fr(η, cosθ)sinθcosθdθ
  *
- * 这个积分被称为菲涅尔函数的一阶矩
+ * 式中的积分被称为菲涅尔函数的一阶矩（个人理解这应该是近似函数）
+ * 也有其他涉及余弦函数高次幂的矩，并且经常出现在与次表面散射相关的计算中，
+ * 更一般的表示方法，菲涅尔的第i阶矩：
+ * _
+ * Fr(η,i) = ∫[0,π/2] Fr(η, cosθ) sinθ (cosθ)^i dθ
  *
+ * pbrt提供了FresnelMoment1()，FresnelMoment2()
+ * 两个函数用多项式的方式去拟合菲涅尔的一阶矩跟二阶矩，但有个微妙的地方是
+ * 这两个函数接受了eta的倒数
+ *
+ * 接下来分析Sp(po, pi)项，我们假设表面不仅局部平坦，而且任意等距离的两点的Sp函数相同
  * 
+ *                Sp(po, pi) ≈ Sp(|po - pi|)
+ *
+ * SeparableBSSRDF 就做了如上的近似简化
  * 
  */
 class SeparableBSSRDF : public BSSRDF {
@@ -100,6 +112,7 @@ public:
 					const Material *material, TransportMode mode)
 	: BSSRDF(po, eta),
 	_sNormal(po.shading.normal),
+	_material(material),
 	_sTangent(normalize(po.shading.dpdu)),
 	_tTangent(cross(_sNormal, _sTangent)),
 	_mode(mode){
@@ -120,13 +133,28 @@ public:
 		return (1 - frDielectric(cosTheta(w), 1, _eta)) / (c * Pi);
 	}
 
+	// Sp(po, pi) ≈ Sp(|po - pi|)
 	Spectrum Sp(const SurfaceInteraction &pi) const {
 		return Sr(distance(_po.pos, pi.pos));
 	}
 
+	Spectrum sample_S(const Scene &scene, Float u1, const Point2f &u2,
+                      MemoryArena &arena, SurfaceInteraction *si,
+                      Float *pdf) const;
+
+	Spectrum sample_Sp(const Scene &scene, Float u1, const Point2f &u2,
+                       MemoryArena &arena, SurfaceInteraction *si,
+                       Float *pdf) const;
+
+	Float pdf_Sp(const SurfaceInteraction &si) const;
+
 	virtual Spectrum Sr(Float d) const = 0;
 
-private:
+	virtual Float Sample_Sr(int ch, Float u) const = 0;
+
+    virtual Float pdf_Sr(int ch, Float r) const = 0;
+
+protected:
 	// 着色法线
     const Normal3f _sNormal;
     // 着色切线(s方向，u方向)
@@ -139,6 +167,17 @@ private:
     const TransportMode _mode;
 	
 };
+
+
+class TabulatedBSSRDF : public SeparableBSSRDF {
+    
+public:
+    
+private:
+    
+    
+};
+
 
 PALADIN_END
 
