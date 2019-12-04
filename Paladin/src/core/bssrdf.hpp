@@ -65,6 +65,10 @@ Float FresnelMoment1(Float invEta);
 // 菲涅尔函数二阶矩
 Float FresnelMoment2(Float invEta);
 
+struct BSSRDFTable;
+
+class SeparableBSSRDFAdapter;
+
 /**
  * 
  * BSSRDF的通用性比较強
@@ -150,7 +154,7 @@ public:
 
 	virtual Spectrum Sr(Float d) const = 0;
 
-	virtual Float Sample_Sr(int ch, Float u) const = 0;
+	virtual Float sample_Sr(int ch, Float u) const = 0;
 
     virtual Float pdf_Sr(int ch, Float r) const = 0;
 
@@ -165,6 +169,8 @@ protected:
     const Material * _material;
     // 光照传输模式
     const TransportMode _mode;
+    
+    friend class SeparableBSSRDFAdapter;
 	
 };
 
@@ -181,28 +187,113 @@ protected:
  * 这个参数比较简单，它仅仅控制了bssrdf的空间轮廓比例，为了降低函数的维度，我们可以把它固定为1
  * 并且制作一个无单位版本的bssrdf的外形轮廓。
  *
- * 在运行时，我们查找一个给定消光系数σt，半径r，我们找到一个无单位光学半径Roptical = σt r,
+ * 在运行时，我们查找一个给定消光系数σt，半径r，我们找到一个无单位光学半径r_optical = σt r,
  * 计算更低维度的表格，表达式如下：
+ *
+ *               Sr(σt,r) = σt^2 Sr(1, σt r)
  * 
- *               Sr(η,g,ρ,σt,r) = σt^2 Sr(η,g,ρ,1,Roptical)
+ *               Sr(η,g,ρ,σt,r) = σt^2 Sr(η,g,ρ,1,r_optical)
  *
  * 为何？因为Sr在极坐标(r,θ)空间中是一个2D密度函数，需要一个相应的比例因子来解释变量的变化
  *      p(r,θ) = r p(x,y)  (sampling.hpp文件8式)
  *
- * 
+ * 握草，这个表达式有点难搞，先跳过todo
  *
+ * 其实bssrdf的最终解决方案还是查表
+ *
+ * 我们也将固定折射率η，以及各向异性系数g这两个参数，这意味着使用TabulatedBSSRDF材质的
+ * 对象不能添加纹理
+ *
+ * 简化之后剩下一个可管理性很强的2d函数
+ * 可以通过反射率ρ，光学半径r_optical，实现离散化
+ * 
  * 
  */
 class TabulatedBSSRDF : public SeparableBSSRDF {
     
 public:
-    Spectrum Sr(Float distance) const;
-
+    TabulatedBSSRDF(const SurfaceInteraction &po, const Material *material,
+                    TransportMode mode, Float eta, const Spectrum &sigma_a,
+                    const Spectrum &sigma_s, const BSSRDFTable &table)
+    : SeparableBSSRDF(po, eta, material, mode),
+    table(table) {
+        _sigma_t = sigma_a + sigma_s;
+        for (int i = 0; c < Spectrum::nSamples; ++i) {
+            _rho[i] = _sigma_t[i] != 0 ? (sigma_s[i] / _sigma_t[i]) : 0;
+        }
+    }
+    
+    virtual Spectrum Sr(Float distance) const override;
+    
+    virtual Float pdf_Sr(int ch, Float distance) const override;
+    
+    virtual Float sample_Sr(int ch, Float sample) const override;
+    
 private:
-    
-    
+    // 
+    const BSSRDFTable &table;
+    // 衰减系数
+    Spectrum _sigma_t;
+    // 反射率
+    Spectrum _rho;
 };
 
+struct BSSRDFTable {
+    // 反射率采样数量
+    const int nRhoSamples;
+    // 半径采样数量
+    const int nRadiusSamples;
+    // 反射率样本列表
+    std::unique_ptr<Float[]> rhoSamples;
+    // 光学半径样本列表
+    std::unique_ptr<Float[]> radiusSamples;
+    std::unique_ptr<Float[]> profile;
+    std::unique_ptr<Float[]> rhoEff;
+    std::unique_ptr<Float[]> profileCDF;
+
+    BSSRDFTable(int nRhoSamples, int nRadiusSamples);
+    
+    inline Float evalProfile(int rhoIndex, int radiusIndex) const {
+        return profile[rhoIndex * nRadiusSamples + radiusIndex];
+    }
+};
+
+class SeparableBSSRDFAdapter : public BxDF {
+public:
+    // SeparableBSSRDFAdapter Public Methods
+    SeparableBSSRDFAdapter(const SeparableBSSRDF *bssrdf)
+    : BxDF(BxDFType(BSDF_REFLECTION | BSDF_DIFFUSE)),
+    _bssrdf(bssrdf) {
+        
+    }
+    
+    Spectrum f(const Vector3f &wo, const Vector3f &wi) const {
+        Spectrum f = _bssrdf->Sw(wi);
+        if (_bssrdf->_mode == TransportMode::Radiance) {
+            f *= _bssrdf->_eta * _bssrdf->_eta;
+        }
+        return f;
+    }
+    
+    std::string toString() const {
+        return "[ SeparableBSSRDFAdapter ]";
+    }
+
+private:
+    const SeparableBSSRDF * _bssrdf;
+};
+
+Float beamDiffusionSS(Float sigma_s, Float sigma_a, Float g, Float eta,
+                      Float r);
+
+Float beamDiffusionMS(Float sigma_s, Float sigma_a, Float g, Float eta,
+                      Float r);
+
+void computeBeamDiffusionBSSRDF(Float g, Float eta, BSSRDFTable *t);
+
+void subsurfaceFromDiffuse(const BSSRDFTable &table, const Spectrum &rhoEff,
+                           const Spectrum &mfp, Spectrum *sigma_a,
+                           Spectrum *sigma_s);
 
 PALADIN_END
 

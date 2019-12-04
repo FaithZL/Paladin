@@ -10,6 +10,9 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
 	考虑到也许这些代码以及注释可能会对比我还要新手的新手有一些微不足道的帮助，做了跨平台。
 	或者如果发现有什么不对的地方，希望各位大侠不吝赐教
 
+	基本的框架已经搭好，场景是用json文件来描述，目前实现的渲染算法也只有路径追踪，其他的部分待后续完善，先贴上经典效果图connellbox
+	![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-pt-16spp-halton.png)
+
 
 # 获取仓库
 	git clone --recursive https://github.com/FaithZL/Paladin.git
