@@ -247,6 +247,7 @@ struct BSSRDFTable {
     std::unique_ptr<Float[]> rhoSamples;
     // 光学半径样本列表
     std::unique_ptr<Float[]> radiusSamples;
+    // Sr函数表
     std::unique_ptr<Float[]> profile;
     std::unique_ptr<Float[]> rhoEff;
     std::unique_ptr<Float[]> profileCDF;
