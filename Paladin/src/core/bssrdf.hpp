@@ -206,7 +206,7 @@ protected:
  *
  * 简化之后剩下一个可管理性很强的2d函数
  * 可以通过反射率ρ，光学半径r_optical，实现离散化
- * 
+ * 用以上两个物理量作为Sr表的两个维度，为了更准确地表示基本函数，光学半径跟反射率的间距通常是不均匀的
  * 
  */
 class TabulatedBSSRDF : public SeparableBSSRDF {
@@ -217,8 +217,10 @@ public:
                     const Spectrum &sigma_s, const BSSRDFTable &table)
     : SeparableBSSRDF(po, eta, material, mode),
     table(table) {
+        // σt = σa + σs
+        // ρ = σs / σt
         _sigma_t = sigma_a + sigma_s;
-        for (int i = 0; c < Spectrum::nSamples; ++i) {
+        for (int i = 0; i < Spectrum::nSamples; ++i) {
             _rho[i] = _sigma_t[i] != 0 ? (sigma_s[i] / _sigma_t[i]) : 0;
         }
     }
@@ -234,7 +236,10 @@ private:
     const BSSRDFTable &table;
     // 衰减系数
     Spectrum _sigma_t;
-    // 反射率
+    // 反射率，确定了单个散射事件之后的能量剩余量
+    // 这与材质整体的反射率不同
+    // 材质整体的反射率考虑了所有的散射顺序
+    // 为了强调这种差别，我们将把这些不同类型的反照率称为单散射反射率ρ和有效反射率ρeff
     Spectrum _rho;
 };
 
