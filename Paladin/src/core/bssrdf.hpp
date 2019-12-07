@@ -206,7 +206,23 @@ protected:
  *
  * 简化之后剩下一个可管理性很强的2d函数
  * 可以通过反射率ρ，光学半径r_optical，实现离散化
- * 用以上两个物理量作为Sr表的两个维度，为了更准确地表示基本函数，光学半径跟反射率的间距通常是不均匀的
+ * 用以上两个物理量作为Sr表的两个维度，为了更准确地表示基本函数，
+ * 光学半径跟反射率的间距通常是不均匀的
+ * 
+ * 反射率ρ，确定了单个散射事件之后的能量剩余量
+ * 这与材质整体的反射率不同
+ * 材质整体的反射率考虑了所有的散射顺序
+ * 为了强调这种差别，我们将把这些不同类型的反照率称为单散射反射率ρ和有效反射率ρeff
+ *
+ * 我们定义有效反射率如下所示
+ *
+ * ρeff = ∫[0,2π]∫[0,∞] r Sr(r) dr dφ = 2π ∫[0,∞] r Sr(r) dr
+ *
+ * KdSubsurfaceMaterial材质与Sr采样代码都会频繁的访问ρeff的值
+ *
+ * ρeff是ρ的严格单调递增函数
+ *
+ * 给定半径值r和单次散射反照率，函数Sr()实现了对表格配置文件的样条插值查找。
  * 
  */
 class TabulatedBSSRDF : public SeparableBSSRDF {
@@ -220,12 +236,12 @@ public:
         // σt = σa + σs
         // ρ = σs / σt
         _sigma_t = sigma_a + sigma_s;
-        for (int i = 0; i < Spectrum::nSamples; ++i) {
-            _rho[i] = _sigma_t[i] != 0 ? (sigma_s[i] / _sigma_t[i]) : 0;
+        for (int ch = 0; ch < Spectrum::nSamples; ++ch) {
+            _rho[ch] = _sigma_t[ch] != 0 ? (sigma_s[ch] / _sigma_t[ch]) : 0;
         }
     }
     
-    virtual Spectrum Sr(Float distance) const override;
+    virtual Spectrum Sr(Float r) const override;
     
     virtual Float pdf_Sr(int ch, Float distance) const override;
     
@@ -254,7 +270,9 @@ struct BSSRDFTable {
     std::unique_ptr<Float[]> radiusSamples;
     // Sr函数表
     std::unique_ptr<Float[]> profile;
+    // 有效反射率，映射到对应的Sr函数值
     std::unique_ptr<Float[]> rhoEff;
+    // Sr函数表的累积分布函数
     std::unique_ptr<Float[]> profileCDF;
 
     BSSRDFTable(int nRhoSamples, int nRadiusSamples);

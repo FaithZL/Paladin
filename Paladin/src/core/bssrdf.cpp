@@ -102,4 +102,21 @@ profileCDF(new Float[nRadiusSamples * nRhoSamples]) {
 
 }
 
+Spectrum TabulatedBSSRDF::Sr(Float r) const {
+    Spectrum ret(0.f);
+    
+    for (int ch = 0; ch < Spectrum::nSamples; ++ch) {
+        Float rOptical = r * _sigma_t[ch];
+    }
+    return ret;
+}
+
+Float TabulatedBSSRDF::pdf_Sr(int ch, Float distance) const {
+    return 0;
+}
+
+Float TabulatedBSSRDF::sample_Sr(int ch, Float sample) const {
+    return 0;
+}
+
 PALADIN_END
