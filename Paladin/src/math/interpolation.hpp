@@ -29,7 +29,7 @@ PALADIN_BEGIN
  *         p_i(x_i) = f(x_i)
  *         p_i+1(x_i+1) = f(x_i+1)
  *
- * 为了简单的描述，我们把目标放在[x0,x1]区间假设区间为，[0,1],将x0,x1带入函数之后，得
+ * 为了简单的描述，我们把目标放在[x0,x1]区间，假设区间为[0,1],将x0,x1带入函数之后，得
  *
  *           f(x0) = a(x0)^3 + b(x0)^2 + c(x0) + d
  *           f(x1) = a(x1)^3 + b(x1)^2 + c(x1) + d
@@ -67,12 +67,13 @@ PALADIN_BEGIN
  *
  *                                     x^3 - x^2
  *               + (2x^3 - 3x^2 + 1 - -----------) f(x0)
- *                                        x^2
+ *                                      x2 - x0
  *               
  *                                  x^3 - 2x^2 + x
- *               + (-2x^3 + 3x^2 + ----------------) f(x1)
+ *               + (-2x^3 + 3x^2 - ----------------) f(x1)
  *                                    x1 - x_-1
  *                                    
+ *
  *                   x^3 - x^2
  *               + ------------- f(x2)
  *                    x2 - x0
@@ -83,6 +84,8 @@ PALADIN_BEGIN
  *
  * 
  */
+
+
 Float CatmullRom(int size, const Float *nodes, const Float *values, Float x);
 
 bool CatmullRomWeights(int size, const Float *nodes, Float x, int *offset,
@@ -96,6 +99,7 @@ Float SampleCatmullRom2D(int size1, int size2, const Float *nodes1,
                          const Float *nodes2, const Float *values,
                          const Float *cdf, Float alpha, Float sample,
                          Float *fval = nullptr, Float *pdf = nullptr);
+
 
 Float IntegrateCatmullRom(int n, const Float *nodes, const Float *values,
                           Float *cdf);
