@@ -91,8 +91,47 @@ Float CatmullRom(int size, const Float *nodes, const Float *values, Float x);
 bool CatmullRomWeights(int size, const Float *nodes, Float x, int *offset,
                        Float *weights);
 
+/**
+ * 随机采样CatmullRom曲线
+ *
+ * 累积分布函数形式如下
+ * 
+ *       0                                 i = 0
+ * Fi =  
+ *      i-1               1
+ *       ∑  ∫[xk, x_k+1] --- fk(x') dx'    i > 0
+ *      k=0               c
+ *
+ * 其中，c为归一化参数
+ *
+ * c = ∫[x0, x_n-1] f(x) dx
+ *
+ * 一个直接的方法是找到均匀随机变量u的所在cdf的区间
+ * 
+ *         Fi <= ξ1 <= Fi+1
+ *         
+ * 由于F函数单调递增，则用如下方式可以求出i
+ *
+ *         Fi <= ξ1 * Fn-1 <= Fi+1
+ *
+ *
+ *         ξ1 * Fn−1 − Fi 
+ * ξ2 = --------------------   4式
+ *           Fi+1 − Fi
+ *
+ * ξ2为子区间内的随机变量值，用于采样[xi,x_i+1]区间的累积分布函数
+ *
+ *        Fi(x) = ∫[xi,x] f(x')dx'
+ *
+ *
+ * x = F^-1(Fi(x_i+1) * ξ2)   5式
+ * 其中将4式带入5式，又因为Fi(x_i+1) = F_i+1 - Fi
+ *
+ * x = F^-1(ξ1 * Fn−1 − Fi)
+ * 
+ */
 Float SampleCatmullRom(int size, const Float *nodes, const Float *f,
-                       const Float *cdf, Float sample, Float *fval = nullptr,
+                       const Float *cdf, Float u, Float *fval = nullptr,
                        Float *pdf = nullptr);
 
 Float SampleCatmullRom2D(int size1, int size2, const Float *nodes1,
