@@ -128,6 +128,27 @@ bool CatmullRomWeights(int size, const Float *nodes, Float x, int *offset,
  * 其中将4式带入5式，又因为Fi(x_i+1) = F_i+1 - Fi
  *
  * x = F^-1(ξ1 * Fn−1 − Fi)
+ *
+ * 要求反函数的值，使用牛顿迭代法
+ * 
+ * 首先要选择一个合适的初始值,这里假设样条线段是线性的 
+ * 
+ *          f(t) = (1-t) f(0) + tf(1)
+ *          
+ * 然后求积分 
+ * 
+ *          F(t) = tf(0) - t^2 * f(0)+t^2 * f(1)
+ * 
+ * 然后求反函数
+ * 
+ *          F^-1(x) = f(0) ± srqt(f(0)^2 + 2(f(1)-f(0))*x) / (f(0)-f(1))
+ * 
+ * 式中有个±符号，但经过计算，发现只有取负号的时候，F^-1(x)才∈[0,1]内
+ * 所以
+ *         F^-1(x) = f(0) - srqt(f(0)^2 + 2(f(1)-f(0))*x) / (f(0)-f(1))
+ *         
+ * 
+ *
  * 
  */
 Float SampleCatmullRom(int size, const Float *nodes, const Float *f,

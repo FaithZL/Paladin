@@ -134,9 +134,7 @@ Float SampleCatmullRom(int n, const Float *x, const Float *f, const Float *F,
 		d1 = f1 - f0;
 	}
 	// 找到u所在的子区间之后重新映射
-	//        ξ1Fn−1 − Fi 
-	// ξ2 = ----------------
-	//         Fi+1 − Fi
+	// x = F^-1(ξ1 * Fn−1 − Fi)
 	u = (u - F[i]) / width;
 
 	// 开始使用牛顿-二分法来求定义域值
@@ -157,13 +155,18 @@ Float SampleCatmullRom(int n, const Float *x, const Float *f, const Float *F,
 			t = 0.5f * (a + b);
 		}
 
-		//计算相应的t的函数值
-        //这里是相应的CatmullRom样条的Horner格式	
+		// 计算相应的t的函数值
+        // 这里是相应的CatmullRom样条的Horner形式
+        // horner形式的好处是效率高
+        // 简单来说就是
+        // x^5 + x^4 + x^3 + x^2 + x
+        // 可以转换为
+        // x*(x*(x*(x*(x + 1) + 1) + 1) + 1)形式
 		Fhat = t * (f0 +
                     t * (.5f * d0 +
                          t * ((1.f / 3.f) * (-2 * d0 - d1) + f1 - f0 +
                               t * (.25f * (d0 + d1) + .5f * (f0 - f1)))));
-        fhat = f0 +
+        Fhat = f0 +
                t * (d0 +
                     t * (-2 * d0 - d1 + 3 * (f1 - f0) +
                          t * (d0 + d1 + 2 * (f0 - f1))));
@@ -210,7 +213,8 @@ Float SampleCatmullRom2D(int size1, int size2, const Float *nodes1,
                          Float *fval, Float *pdf) {
 	int offset;
     Float weights[4];
-    // 计算出alpha对应nodes1列表中的偏移
+    // 计算出alpha对应nodes1列表中的偏移，与权重
+    // offset表示第offset行
     if (!CatmullRomWeights(size1, nodes1, alpha, &offset, weights)) {
     	return 0;
     }
@@ -224,7 +228,7 @@ Float SampleCatmullRom2D(int size1, int size2, const Float *nodes1,
         }
         return value;
     };
-    // 找到当前alpha所在的列的最大值
+    // 找到当前alpha所在的行的最大值
 	Float maximum = interpolate(cdf, size2 - 1);
     u *= maximum;
 	int idx = findInterval(size2, [&](int i) {return interpolate(cdf, i) <= u;});    
