@@ -80,11 +80,11 @@ inline Interval cos(const Interval &i) {
  * 牛顿迭代法求出零点
  * 牛顿迭代法公式为 x[i+1] = xi + f(xi) / f'(xi)
  * 牛顿迭代法思路f(x) = 0，x=r为精确解，x0作为近似解
- * 过点(x0, f(x0))做切线L，L的方程为 y = f(x0) + f'(x0) *  (x - x0)
- * L与x轴的交点为 x1 = x0 + f(x0) / f'(x0)，反复迭代求出近似解
+ * 过点(x0, f(x0))做切线L，L的方程为 y = f(x0) + f'(x0) * (x - x0)
+ * L与x轴的交点为 x1 = x0 - f(x0) / f'(x0)，反复迭代求出近似解
  * 
  * 设 p' = f(t)
- * t[i + 1] = ti + f'(t)/f''(t)
+ * t_i+1 = ti - f'(t)/f''(t)
  * 
  * 原始公式，
  * f'(t) = dp'/dt = c1 + (c2 + c3 * t) * cos(2θt) + (c4 + c5 * t) * sin(2θt)
@@ -119,9 +119,9 @@ inline void intervalFindZeros(Float c1, Float c2, Float c3, Float c4, Float c5,
         for (int i = 0; i < 4; ++i) {
 
             Float dfdt = c1 + (c2 + c3 * t) * std::cos(2.f * theta * t)
-                       + (c4 + c5 * t) * std::sin(2.f * theta * t);
+                        + (c4 + c5 * t) * std::sin(2.f * theta * t);
             Float d2fdt2 = (c3 + 2 * (c4 + c5 * t) * theta) * std::cos(2.f * t * theta) 
-                         + (c5 - 2 * (c2 + c3 * t) * theta) * std::sin(2.f * t * theta);
+                        + (c5 - 2 * (c2 + c3 * t) * theta) * std::sin(2.f * t * theta);
             if (dfdt == 0 || d2fdt2 == 0) 
                 break;
             t = t - dfdt / d2fdt2;
