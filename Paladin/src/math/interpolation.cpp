@@ -301,7 +301,7 @@ Float SampleCatmullRom2D(int size1, int size2, const Float *nodes1,
             b = t;
         }
 
-        // 执行牛顿迭代这里是不是有问题？todo
+        // 执行牛顿迭代
         t -= (Fhat - u) / fhat;
     }
 

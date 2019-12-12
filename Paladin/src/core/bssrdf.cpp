@@ -107,6 +107,8 @@ Spectrum TabulatedBSSRDF::Sr(Float r) const {
     
     for (int ch = 0; ch < Spectrum::nSamples; ++ch) {
         Float rOptical = r * _sigma_t[ch];
+        int rhoOffset, radiusOffset;
+        Float rhoWeights[4], radiusWeights[4];
     }
     return ret;
 }
