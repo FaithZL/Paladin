@@ -90,6 +90,39 @@ Float beamDiffusionMS(Float sigma_s, Float sigma_a, Float g, Float eta,
     return Ed / nSamples;
 }
 
+Float beamDiffusionSS(Float sigma_s, Float sigma_a, Float g, Float eta,
+                      Float r) {
+    // Compute material parameters and minimum $t$ below the critical angle
+    Float sigma_t = sigma_a + sigma_s, rho = sigma_s / sigma_t;
+    Float tCrit = r * std::sqrt(eta * eta - 1);
+    Float Ess = 0;
+    const int nSamples = 100;
+    for (int i = 0; i < nSamples; ++i) {
+        // Evaluate single scattering integrand and add to _Ess_
+        Float ti = tCrit - std::log(1 - (i + .5f) / nSamples) / sigma_t;
+
+        // Determine length $d$ of connecting segment and $\cos\theta_\roman{o}$
+        Float d = std::sqrt(r * r + ti * ti);
+        Float cosThetaO = ti / d;
+
+        // Add contribution of single scattering at depth $t$
+        Ess += rho * std::exp(-sigma_t * (d + tCrit)) / (d * d) *
+               PhaseHG(cosThetaO, g) * (1 - FrDielectric(-cosThetaO, 1, eta)) *
+               std::abs(cosThetaO);
+    }
+    return Ess / nSamples;
+}
+
+void computeBeamDiffusionBSSRDF(Float g, Float eta, BSSRDFTable *t) {
+    // 光学半径的样本列表 0   0.0025
+    t->radiusSamples[0] = 0;
+    t->radiusSamples[1] = 2.5e-3f;
+    // 生成光学半径样本列表
+    for (int i = 2; i < t->nRadiusSamples; ++i) {
+        t->radiusSamples[i] = t->radiusSamples[i - 1] * 1.2f;
+    }
+}
+
 
 BSSRDFTable::BSSRDFTable(int nRhoSamples, int nRadiusSamples)
 : nRhoSamples(nRhoSamples),

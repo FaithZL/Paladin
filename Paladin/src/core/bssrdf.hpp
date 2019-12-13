@@ -262,6 +262,8 @@ private:
 
 
 /**
+ * 参考章节
+ * http://www.pbr-book.org/3ed-2018/Light_Transport_II_Volume_Rendering/Subsurface_Scattering_Using_the_Diffusion_Equation.html#sec:filling-in-bssrdftable
  * Sr函数由两个参数
  * r_optical,ρeff
  * 实际上Sr函数是通过查表来实现，
@@ -284,9 +286,18 @@ private:
  * 我们让生成的二维表的元素与各向异性系数g，折射率η有关就好了
  * computeBeamDiffusionBSSRDF 函数接收以上两个输入参数，还有一个用于输出的参数
  *
- *
- *
- *
+ * Sr(r_optical)函数是随着r_optical指数衰减 （这还是比较容易理解的）
+ * 那么在采样的时候就应该是在函数值比较大的地方，样本间隔应该小一些，
+ * 函数值小的地方，样本间隔可以大一些
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  *
  */
 struct BSSRDFTable {
