@@ -227,7 +227,7 @@ inline Float cosDPhi(const Vector3f &wa, const Vector3f &wb) {
  * @param  etaT      传播介质的折射率
  * @return           绝缘体的菲涅尔函数值
  */
-Float frDielectric(Float cosThetaI, Float etaI, Float etaT);
+Float FrDielectric(Float cosThetaI, Float etaI, Float etaT);
 
 /**
  * η' = η + i*k(有时候光会被材质吸收转化为热量，k表示吸收系数)
@@ -260,7 +260,7 @@ Float frDielectric(Float cosThetaI, Float etaI, Float etaT);
  * @param  k         吸收系数
  * @return           导体的菲涅尔函数值
  */
-Spectrum frConductor(Float cosThetaI, const Spectrum &etaI,
+Spectrum FrConductor(Float cosThetaI, const Spectrum &etaI,
                      const Spectrum &etaT, const Spectrum &kt);
 
 /**
@@ -613,7 +613,7 @@ public:
      * @return    		 返回对应入射角的菲涅尔函数值
      */
     virtual Spectrum evaluate(Float cosThetaI) const {
-        return frConductor(std::abs(cosThetaI), _etaI, _etaT, _kt);
+        return FrConductor(std::abs(cosThetaI), _etaI, _etaT, _kt);
     }
     
     FresnelConductor(const Spectrum &etaI, const Spectrum &etaT,
@@ -644,7 +644,7 @@ public:
      * @return    		 返回对应入射角的菲涅尔函数值
      */
     virtual Spectrum evaluate(Float cosThetaI) const {
-        return frDielectric(cosThetaI, _etaI, _etaT);
+        return FrDielectric(cosThetaI, _etaI, _etaT);
     }
     
     FresnelDielectric(Float etaI, Float etaT) : _etaI(etaI), _etaT(etaT) {

@@ -126,7 +126,7 @@ public:
 	// S(po, ωo, pi, ωi) ≈ (1 - Fr(cosθo)) Sp(po, pi) Sω(ωi)
 	Spectrum S(const SurfaceInteraction &pi, const Vector3f &wi) {
 		// todo 这里的折射率应该要传入，待优化
-		Float Ft = frDielectric(cosTheta(_po.wo), 1, _eta);
+		Float Ft = FrDielectric(cosTheta(_po.wo), 1, _eta);
 		return (1 - Ft) * Sp(pi) * Sw(wi);
 	}
 
@@ -134,7 +134,7 @@ public:
 	// c = 1 - 2 * ∫[0,π/2]Fr(η, cosθi)sinθcosθdθ
 	Spectrum Sw(const Vector3f &w) const {
 		Float c = 1 - 2 * FresnelMoment1(1 / _eta);
-		return (1 - frDielectric(cosTheta(w), 1, _eta)) / (c * Pi);
+		return (1 - FrDielectric(cosTheta(w), 1, _eta)) / (c * Pi);
 	}
 
 	// Sp(po, pi) ≈ Sr(|po - pi|)

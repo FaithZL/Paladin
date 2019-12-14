@@ -107,7 +107,7 @@ Float beamDiffusionSS(Float sigma_s, Float sigma_a, Float g, Float eta,
 
         // Add contribution of single scattering at depth $t$
         Ess += rho * std::exp(-sigma_t * (d + tCrit)) / (d * d) *
-               PhaseHG(cosThetaO, g) * (1 - FrDielectric(-cosThetaO, 1, eta)) *
+        phaseHG(cosThetaO, g) * (1 - FrDielectric(-cosThetaO, 1, eta)) *
                std::abs(cosThetaO);
     }
     return Ess / nSamples;

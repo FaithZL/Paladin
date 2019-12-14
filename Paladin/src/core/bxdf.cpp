@@ -12,7 +12,7 @@
 
 PALADIN_BEGIN
 
-Float frDielectric(Float cosThetaI, Float etaI, Float etaT) {
+Float FrDielectric(Float cosThetaI, Float etaI, Float etaT) {
     cosThetaI = clamp(cosThetaI, -1, 1);
 
     bool entering = cosThetaI > 0.f;
@@ -40,7 +40,7 @@ Float frDielectric(Float cosThetaI, Float etaI, Float etaT) {
     return (Rparl * Rparl + Rperp * Rperp) / 2;
 }
 
-Spectrum frConductor(Float cosThetaI, const Spectrum &etai,
+Spectrum FrConductor(Float cosThetaI, const Spectrum &etai,
                      const Spectrum &etat, const Spectrum &kt) {
     cosThetaI = clamp(cosThetaI, -1, 1);
     Spectrum eta = etat / etai;
@@ -329,7 +329,7 @@ std::string SpecularTransmission::toString() const {
 // FresnelSpecular
 Spectrum FresnelSpecular::sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
                   Float *pdf, BxDFType *sampledType) const {
-    Float F = frDielectric(cosTheta(wo), _etaA, _etaB);
+    Float F = FrDielectric(cosTheta(wo), _etaA, _etaB);
     if (u[0] < F) {
         *wi = Vector3f(-wo.x, -wo.y, wo.z);
         if (sampledType)
