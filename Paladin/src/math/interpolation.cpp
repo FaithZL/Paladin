@@ -203,7 +203,7 @@ Float SampleCatmullRom(int n, const Float *x, const Float *f, const Float *F,
  * @param  cdf    一个二维离散CDF矩阵，每一行通过IntegrateCatmullRom函数计算而来
  * @param  alpha  固定参数，可以是bssrdf反射率，也可以是fourierBSDF的cosθ
  * @param  u	  [description]
- * @param  fval   [description]
+ * @param  fval   样本点对应的导函数值
  * @param  pdf    [description]
  * @return        [description]
  */
@@ -214,7 +214,8 @@ Float SampleCatmullRom2D(int size1, int size2, const Float *nodes1,
 	int offset;
     Float weights[4];
     // 计算出alpha对应nodes1列表中的偏移，与权重
-    // offset表示第offset行
+    // 默认第一维度为数组纵坐标，第二维度为数组横坐标
+    // offset表示alpha在nodes1列表中的偏移量
     if (!CatmullRomWeights(size1, nodes1, alpha, &offset, weights)) {
     	return 0;
     }

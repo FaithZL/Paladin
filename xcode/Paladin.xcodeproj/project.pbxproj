@@ -358,6 +358,7 @@
 		F410AE053E114DEEB81A3FE7 /* lobject.c in Sources */ = {isa = PBXBuildFile; fileRef = 74CE0A22258C4D30B6A237F6 /* lobject.c */; };
 		F49E206910774D919CD3CD34 /* ImfEnvmapAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16E81D043FB14B8FA888C0B5 /* ImfEnvmapAttribute.cpp */; };
 		F56434F298C74BE0948EFC20 /* ImfWav.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0E81D61EEE94B41836763F1 /* ImfWav.cpp */; };
+		F63A181A23A52E6100ED2599 /* subsurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63A181823A52E6100ED2599 /* subsurface.cpp */; };
 		F63B31D3239A8FE9004ED6D5 /* interpolation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63B31D1239A8FE9004ED6D5 /* interpolation.cpp */; };
 		F70E8D277E02406FAA1DDCC4 /* utilities_unittest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 8AA01D54BA424506B16989F3 /* utilities_unittest.cc */; };
 		FA41E4A37EA8489E8900108A /* pointlight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B4F5D3B7AAC4CB182D6CFA4 /* pointlight.cpp */; };
@@ -1195,6 +1196,8 @@
 		F54F609393364950BCF9D66A /* model.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = model.h; path = src/tools/model.h; sourceTree = SOURCE_ROOT; };
 		F5BD9893236D4A5EB1FC215E /* stb_perlin.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_perlin.h; path = third/stblib/stb/stb_perlin.h; sourceTree = SOURCE_ROOT; };
 		F6238B97CD8D4BA78446B8DD /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = third/glog/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		F63A181823A52E6100ED2599 /* subsurface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = subsurface.cpp; path = src/materials/subsurface.cpp; sourceTree = "<group>"; };
+		F63A181923A52E6100ED2599 /* subsurface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = subsurface.hpp; path = src/materials/subsurface.hpp; sourceTree = "<group>"; };
 		F63B31D1239A8FE9004ED6D5 /* interpolation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = interpolation.cpp; path = src/math/interpolation.cpp; sourceTree = "<group>"; };
 		F63B31D2239A8FE9004ED6D5 /* interpolation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = interpolation.hpp; path = src/math/interpolation.hpp; sourceTree = "<group>"; };
 		F67145DE6FFB470381E9DB82 /* liolib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = liolib.c; path = third/lua53/lua/liolib.c; sourceTree = SOURCE_ROOT; };
@@ -1966,6 +1969,8 @@
 				DBA687D2B73C4AC09EAE1B58 /* mix.hpp */,
 				46CBF334FA7E4C6DA2AA44D3 /* plastic.cpp */,
 				68D5926D699C4919ABBB5185 /* plastic.hpp */,
+				F63A181823A52E6100ED2599 /* subsurface.cpp */,
+				F63A181923A52E6100ED2599 /* subsurface.hpp */,
 			);
 			name = materials;
 			sourceTree = "<group>";
@@ -3131,6 +3136,7 @@
 				1FCA7116DF3B49B08E13CA94 /* fileio.cpp in Sources */,
 				C9ABEEF8694D4FD3B9386924 /* fileutil.cpp in Sources */,
 				28C81C1DCD194E10B12ABF40 /* memory.cpp in Sources */,
+				F63A181A23A52E6100ED2599 /* subsurface.cpp in Sources */,
 				7B31E6652D784CA2A1395A06 /* parallel.cpp in Sources */,
 				F63B31D3239A8FE9004ED6D5 /* interpolation.cpp in Sources */,
 				70679893ED3546DBB9065866 /* stb_vorbis.c in Sources */,

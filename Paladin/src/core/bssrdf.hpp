@@ -233,7 +233,7 @@ public:
                     TransportMode mode, Float eta, const Spectrum &sigma_a,
                     const Spectrum &sigma_s, const BSSRDFTable &table)
     : SeparableBSSRDF(po, eta, material, mode),
-    table(table) {
+    _table(table) {
         // σt = σa + σs
         // ρ = σs / σt
         _sigma_t = sigma_a + sigma_s;
@@ -250,7 +250,7 @@ public:
     
 private:
     // 
-    const BSSRDFTable &table;
+    const BSSRDFTable &_table;
     // 衰减系数
     Spectrum _sigma_t;
     // 反射率，确定了单个散射事件之后的能量剩余量
@@ -291,14 +291,26 @@ private:
  * 函数值小的地方，样本间隔可以大一些
  * 
  * 
+ * 在将完全一般的传递方程转化为扩散方程的过程中，采用了许多重要的思想，
+ * 可以近似地求解地下散射问题。第一个是相似原理，即对于具有高反照率的各向异性散射介质，
+ * 可以将其模拟为具有具有适当修正的散射和衰减系数的各向同性相位函数。
+ * 基于修正系数计算出的光照传输解与原系数和相位函数的光照传输解很好地对应，
+ * 同时由于各向同性散射的假设可以进行简化。
  * 
+ * 相似原理是基于这样的观察，即在多次散射后，高反照率介质中的光的分布变得越来越均匀，
+ * 无论初始化的光照分布或相位函数的各向异性。要了解这是如何发生的，
+ * 一种方法是考虑Yanovitskij(1997)派生的表达式;
+ * 它描述了由于多次散射事件的Henyey–Greenstein相函数的各向同性。他证明了被散射的光的分布如下
  * 
- * 
- * 
- * 
- * 
- * 
+ *                              1 - g^(2n)      
+ * p_n(w->w') = ------------------------------------------
+ *               4π(1 + g^(2n) - 2g|g^(n-1)|(w·w'))^(3/2)
  *
+ * 其中g为各向异性系数
+ * n为散射次数，随着n的增长，p_n(w->w')将收敛到 1/4π，各向同性的相函数
+ *
+ *
+ * 
  */
 struct BSSRDFTable {
     // 反射率采样数量
@@ -347,6 +359,18 @@ public:
 private:
     const SeparableBSSRDF * _bssrdf;
 };
+
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * 
+ */
 
 Float beamDiffusionSS(Float sigma_s, Float sigma_a, Float g, Float eta,
                       Float r);
