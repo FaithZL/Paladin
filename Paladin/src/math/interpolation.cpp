@@ -166,7 +166,7 @@ Float SampleCatmullRom(int n, const Float *x, const Float *f, const Float *F,
                     t * (.5f * d0 +
                          t * ((1.f / 3.f) * (-2 * d0 - d1) + f1 - f0 +
                               t * (.25f * (d0 + d1) + .5f * (f0 - f1)))));
-        Fhat = f0 +
+        fhat = f0 +
                t * (d0 +
                     t * (-2 * d0 - d1 + 3 * (f1 - f0) +
                          t * (d0 + d1 + 2 * (f0 - f1))));
