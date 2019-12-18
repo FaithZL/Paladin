@@ -1406,7 +1406,32 @@ private:
  * FourierBSDFTable结构提供了相关数据以及方法
  * 
  * 
- * 为了估计8.21式我们需要知道最大
+ * 为了估计8.21式我们需要知道阶数m，以及对应ωi,ωo的所有系数a0,a1,a2....a_m-1
+ * 为简单起见,我们只提供基本思路如下，最近的系数μ方向小于或等于μi和μo,
+ * 尽管实现遵循间作插值系数从多个方向μ值。（todo，这里暂时不理解）
+ * 
+ * 傅里叶表达式中的阶数m始终受限于mMax,
+ * 但随入射方向与出射方向的天顶角余弦值μi和μo的变化而变化
+ * m的值为多少？可以通过查询一个nMu × nMu整数矩阵mat获取到
+ * 
+ * 为了找到特定的方向，ωi,ωo所对应的阶数m，我们可以用二分法在mu列表中查找
+ *       mu[i] <= μi < mu[i + 1]
+ *       mu[o] <= μo < mu[o + 1]
+ * 用以上两个索引i,o可以在mMat矩阵中查询到m值，m = mMat[o * nMu + i]
+ * 
+ * 所有关于离散方向对的系数ak被打包储存到一个数组a中，
+ * 因为最大的阶数(系数的数量)是变化的，甚至可以是零，
+ * 这取决于给定方向对的BSDF的特性，所以找到数组a中的偏移量是一个两步的过程:
+ * 
+ *    1.偏移量i与o通过一个关系式映射到一个数组aOffset中，这个数组储存着
+ *      数组a的偏移量， offset = aOffset[o * nMu + i] (aOffset的尺寸也是nMu^2)
+ *    2.从a[offset]开始的m个元素，确定了指定方向对所对应的m个系数(也就是a0,a1...a_m-1)
+ *      如果是三个通道，则第一个m表示亮度通道，第二个表示红色通道，第三个表示绿色通道
+ * 
+ * 
+ * 
+ * 
+ * 
  * 
  * 
  * 
@@ -1428,22 +1453,60 @@ struct FourierBSDFTable {
     // 通道数，通常为1或3
     // 为1时，表示单色bsdf
     // 为3时，三个通道分别为亮度，红，蓝，三个通道
-    // 直接表示亮度对于蒙特卡洛采样非常有用
+    // 直接表示亮度对于蒙特卡洛采样非常有用，并且用这三个量也容易计算出绿色通道
     int nChannels;
 
     // 将天顶角离散成nMu个方向，储存在mu中
     // μ的数量
     int nMu;
-    // μ列表，从小到大排列
+    // μ列表，从小到大排列，尺寸为nMu * nMu
     Float *mu;
 
-    // 
-    int *mat;
-    int *aOffset;
+    // nMu × nMu矩阵，储存对应的阶数m
+    int *mMat;
+
+    // 系数ak列表
     Float *a;
+    // ak列表的偏移，尺寸为nMu * nMu的列表
+    int *aOffset;
     Float *a0;
     Float *cdf;
+    // 1/i
     Float *recip;
+
+    static bool read(const std::string &filename, FourierBSDFTable *table);
+
+    const Float *getAk(int offsetI, int offsetO, int *mptr) const {
+        *mptr = mMat[offsetO * nMu + offsetI];
+        return a + aOffset[offsetO * nMu + offsetI];
+    }
+
+    bool getWeightsAndOffset(Float cosTheta, int *offset,
+                                           Float weights[4]) const {
+        return CatmullRomWeights(nMu, mu, cosTheta, offset, weights);
+    }
+};
+
+class FourierBSDF : public BxDF {
+
+public:
+
+    FourierBSDF(const FourierBSDFTable &bsdfTable, TransportMode mode)
+    :BxDF(BxDFType(BSDF_REFLECTION | BSDF_TRANSMISSION | BSDF_GLOSSY)),
+    bsdfTable(bsdfTable),
+    mode(mode) {
+
+    }
+
+    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const override;
+
+    virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
+                  Float *pdf, BxDFType *sampledType) const override;
+
+    virtual Float pdf(const Vector3f &wo, const Vector3f &wi) const override;
+
+    virtual std::string toString() const override;
+
 };
 
 PALADIN_END

@@ -593,4 +593,22 @@ std::string FresnelBlend::toString() const {
     std::string(" ]");
 }
 
+
+// 傅里叶BSDF
+Spectrum FourierBSDF::f(const Vector3f &wo, const Vector3f &wi) const {
+    // 这里为什么是-wi？
+    Float muI = cosTheta(-wi);
+    Float muO = cosTheta(wo);
+    Float cosPhi = cosDPhi(-wi, wo);
+}
+
+Spectrum FourierBSDF::sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
+                  Float *pdf, BxDFType *sampledType) const {
+
+}
+
+Float FourierBSDF::pdf(const Vector3f &wo, const Vector3f &wi) const {
+
+}
+
 PALADIN_END
