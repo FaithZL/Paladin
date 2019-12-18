@@ -167,6 +167,20 @@ Float IntegrateCatmullRom(int n, const Float *nodes, const Float *values,
 Float InvertCatmullRom(int n, const Float *x, const Float *values, Float u);
 
 
+/**
+ * 根据阶数以及系数列表返回傅里叶级数值
+ * 为了避免频繁调用三角函数
+ * 用到如下关系式
+ * 
+ * cos(k φ) = (2 cos φ) cos((k − 1)φ) − cos((k − 2)φ)
+ * 
+ * @param  a      [description]
+ * @param  m      [description]
+ * @param  cosPhi [description]
+ * @return        [description]
+ */
+Float Fourier(const Float *a, int m, double cosPhi);
+
 PALADIN_END
 
 #endif /* interpolation_hpp */

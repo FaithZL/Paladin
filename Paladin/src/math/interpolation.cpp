@@ -438,4 +438,20 @@ Float InvertCatmullRom(int n, const Float *x, const Float *values, Float u)  {
 	return x0 + t * width;
 }
 
+
+// cos((k + 1) φ) = (2 cos φ) cos(kφ) − cos((k − 1)φ)
+Float Fourier(const Float *a, int m, double cosPhi) {
+    double value = 0.0;
+    double cosKMinusOnePhi = cosPhi;
+    // 当k=0，cos(kφ) 为1
+    double cosKPhi = 1;
+    for (int k = 0; k < m; ++k) {
+        value += a[k] * cosKPhi;
+        double cosKPlusOnePhi = 2 * cosPhi * cosKPhi - cosKMinusOnePhi;
+        cosKMinusOnePhi = cosKPhi;
+        cosKPhi = cosKPlusOnePhi;
+    }
+    return value;
+}
+
 PALADIN_END

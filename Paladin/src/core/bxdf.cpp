@@ -9,6 +9,7 @@
 #include "core/bxdf.hpp"
 #include "math/sampling.hpp"
 #include "core/interaction.hpp"
+#include "math/interpolation.hpp"
 
 PALADIN_BEGIN
 
@@ -597,9 +598,40 @@ std::string FresnelBlend::toString() const {
 // 傅里叶BSDF
 Spectrum FourierBSDF::f(const Vector3f &wo, const Vector3f &wi) const {
     // 这里为什么是-wi？
+    // 可能外部读取的数据默认是wi是从外部指向入射点的向量
+    // 所以要取反
     Float muI = cosTheta(-wi);
     Float muO = cosTheta(wo);
     Float cosPhi = cosDPhi(-wi, wo);
+    
+    int offsetI, offsetO;
+    Float weightsI[4], weightsO[4];
+    if (!_bsdfTable.getWeightsAndOffset(muI, &offsetI, weightsI) ||
+        !_bsdfTable.getWeightsAndOffset(muO, &offsetO, weightsO)) {
+        return Spectrum(0.f);
+    }
+    
+    Float *ak = ALLOCA(Float, _bsdfTable.mMax * _bsdfTable.nChannels);
+    memset(ak, 0, _bsdfTable.mMax * _bsdfTable.nChannels * sizeof(Float));
+    
+    int mMax = 0;
+    for (int b = 0; b < 4; ++b) {
+        for (int a = 0; a < 4; ++a) {
+            Float weight = weightsI[a] * weightsO[b];
+            if (weight != 0) {
+                int m;
+                const Float *ap = _bsdfTable.getAk(offsetI + a, offsetO + b, &m);
+                mMax = std::max(mMax, m);
+                for (int c = 0; c < _bsdfTable.nChannels; ++c) {
+                    for (int k = 0; k < mMax; ++k) {
+                        ak[c * _bsdfTable.mMax + k] += weight * ap[c * m + k];
+                    }
+                }
+            }
+        }
+    }
+    
+    Float Y = std::max((Float)0, Fourier(ak, mMax, cosPhi));
 }
 
 Spectrum FourierBSDF::sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
@@ -607,8 +639,18 @@ Spectrum FourierBSDF::sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &
 
 }
 
-Float FourierBSDF::pdf(const Vector3f &wo, const Vector3f &wi) const {
+Float FourierBSDF::pdfDir(const Vector3f &wo, const Vector3f &wi) const {
 
+}
+
+std::string FourierBSDF::toString() const {
+    // todo
+    return "";
+}
+
+bool FourierBSDFTable::getWeightsAndOffset(Float cosTheta, int *offset,
+                                       Float weights[4]) const {
+    return CatmullRomWeights(nMu, mu, cosTheta, offset, weights);
 }
 
 PALADIN_END

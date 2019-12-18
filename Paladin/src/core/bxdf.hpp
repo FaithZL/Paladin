@@ -1428,10 +1428,12 @@ private:
  *    2.从a[offset]开始的m个元素，确定了指定方向对所对应的m个系数(也就是a0,a1...a_m-1)
  *      如果是三个通道，则第一个m表示亮度通道，第二个表示红色通道，第三个表示绿色通道
  * 
- * 
- * 
- * 
- * 
+ * 为了使重建BSDF更加平滑ak需要用插值计算
+ *
+ *      3   3
+ * ak = ∑   ∑ ak(i+a, o+b)wi(a)wo(b)
+ *     a=0 b=0
+ *
  * 
  * 
  * 
@@ -1482,9 +1484,7 @@ struct FourierBSDFTable {
     }
 
     bool getWeightsAndOffset(Float cosTheta, int *offset,
-                                           Float weights[4]) const {
-        return CatmullRomWeights(nMu, mu, cosTheta, offset, weights);
-    }
+                             Float weights[4]) const;
 };
 
 class FourierBSDF : public BxDF {
@@ -1493,8 +1493,8 @@ public:
 
     FourierBSDF(const FourierBSDFTable &bsdfTable, TransportMode mode)
     :BxDF(BxDFType(BSDF_REFLECTION | BSDF_TRANSMISSION | BSDF_GLOSSY)),
-    bsdfTable(bsdfTable),
-    mode(mode) {
+    _bsdfTable(bsdfTable),
+    _mode(mode) {
 
     }
 
@@ -1503,10 +1503,14 @@ public:
     virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
                   Float *pdf, BxDFType *sampledType) const override;
 
-    virtual Float pdf(const Vector3f &wo, const Vector3f &wi) const override;
+    virtual Float pdfDir(const Vector3f &wo, const Vector3f &wi) const override;
 
     virtual std::string toString() const override;
-
+    
+private:
+    const FourierBSDFTable &_bsdfTable;
+    
+    const TransportMode _mode;
 };
 
 PALADIN_END
