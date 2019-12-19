@@ -389,35 +389,9 @@ private:
  * 注意，这里μ跟傅里叶材质中的μ不是一个东西
  * 
  * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
+ * 生成BSSRDFTable表中的数据实在是比较难
+ * 真心是看不懂，无耻的抄了一把pbrt代码 todo，先做更重要的事情吧
+ *  
  */
 struct BSSRDFTable {
     // 反射率采样数量
@@ -430,7 +404,8 @@ struct BSSRDFTable {
     std::unique_ptr<Float[]> radiusSamples;
     // Sr函数表
     std::unique_ptr<Float[]> profile;
-    // 有效反射率，映射到对应的Sr函数值
+    // 有效反射率，映射到对应的Sr函数值，
+    // 是关于反射率的非线性严格单调递增函数
     std::unique_ptr<Float[]> rhoEff;
     // Sr函数表的累积分布函数
     std::unique_ptr<Float[]> profileCDF;

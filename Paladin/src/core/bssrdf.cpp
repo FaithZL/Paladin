@@ -113,14 +113,45 @@ Float beamDiffusionSS(Float sigma_s, Float sigma_a, Float g, Float eta,
     return Ess / nSamples;
 }
 
+// 生成BSSRDFTable中的数据
 void computeBeamDiffusionBSSRDF(Float g, Float eta, BSSRDFTable *t) {
     // 光学半径的样本列表 0   0.0025
     t->radiusSamples[0] = 0;
     t->radiusSamples[1] = 2.5e-3f;
-    // 生成光学半径样本列表
+    // 生成光学半径样本列表，一般来说，64个样本
     for (int i = 2; i < t->nRadiusSamples; ++i) {
         t->radiusSamples[i] = t->radiusSamples[i - 1] * 1.2f;
     }
+
+    // 生成反射率样本，一般来说，100个样本
+    // 样本点的通项公式如下
+    // 
+    //        1 - e^(-8i/(N-1))
+    // ρi = --------------------
+    //           1 - e^(-8)
+    for (int i = 0; i < t->nRhoSamples; ++i) {
+        t->rhoSamples[i] =
+            (1 - std::exp(-8 * i / (Float)(t->nRhoSamples - 1))) /
+            (1 - std::exp(-8));
+    }
+
+    // 并行的生成Sr函数表
+    parallelFor([&](int i) {
+        // 计算第i个反射率样本所对应的的nRadiusSamples个半径样本的函数值
+        // 难点就在于下面两个函数的实现
+        for (int j = 0; j < t->nRadiusSamples; ++j) {
+            Float rho = t->rhoSamples[i], r = t->radiusSamples[j];
+            t->profile[i * t->nRadiusSamples + j] =
+                2 * Pi * r * (beamDiffusionSS(rho, 1 - rho, g, eta, r) +
+                              beamDiffusionMS(rho, 1 - rho, g, eta, r));
+        }
+
+        // 计算有效反射率与反射率之间的关系，还有Sr的cdf用于重要性采样
+        t->rhoEff[i] =
+            IntegrateCatmullRom(t->nRadiusSamples, t->radiusSamples.get(),
+                                &t->profile[i * t->nRadiusSamples],
+                                &t->profileCDF[i * t->nRadiusSamples]);
+    }, t->nRhoSamples);
 }
 
 
