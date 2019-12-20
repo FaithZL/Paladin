@@ -6,6 +6,8 @@
 //
 
 #include "bssrdf.hpp"
+#include "math/interpolation.hpp"
+#include "tools/parallel.hpp"
 
 PALADIN_BEGIN
 
@@ -42,8 +44,10 @@ Float beamDiffusionMS(Float sigma_s, Float sigma_a, Float g, Float eta,
     Float Ed = 0;
     // Precompute information for dipole integrand
 
-    // Compute reduced scattering coefficients $\sigmaps, \sigmapt$ and albedo
-    // $\rhop$
+    // 根据相似理论计算对应的修正系数
+    // σ's = (1 - g)σs
+    // σ't = σa + σ's
+    // ρ' = σ's / σ't
     Float sigmap_s = sigma_s * (1 - g);
     Float sigmap_t = sigma_a + sigmap_s;
     Float rhop = sigmap_s / sigmap_t;

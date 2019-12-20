@@ -637,18 +637,18 @@ Spectrum FourierBSDF::f(const Vector3f &wo, const Vector3f &wi) const {
 
     if (_mode == TransportMode::Radiance && muI * muO > 0) {
         // 经过折射之后有缩放
-        float eta = muI > 0 ? 1 / bsdfTable.eta : bsdfTable.eta;
+        float eta = muI > 0 ? 1 / _bsdfTable.eta : _bsdfTable.eta;
         scale *= eta * eta;
     }
     
-    if (bsdfTable.nChannels == 1)
+    if (_bsdfTable.nChannels == 1)
         return Spectrum(Y * scale);
     else {
-        Float R = Fourier(ak + 1 * bsdfTable.mMax, mMax, cosPhi);
-        Float B = Fourier(ak + 2 * bsdfTable.mMax, mMax, cosPhi);
+        Float R = Fourier(ak + 1 * _bsdfTable.mMax, mMax, cosPhi);
+        Float B = Fourier(ak + 2 * _bsdfTable.mMax, mMax, cosPhi);
         Float G = 1.39829f * Y - 0.100913f * B - 0.297375f * R;
         Float rgb[3] = {R * scale, G * scale, B * scale};
-        return Spectrum::FromRGB(rgb).Clamp();
+        return Spectrum::FromRGB(rgb).clamp();
     }
 }
 
