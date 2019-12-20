@@ -1,5 +1,5 @@
 //
-//  volpath.hpp
+//  volpt.hpp
 //  Paladin
 //
 //  Created by SATAN_Z on 2019/10/21.
@@ -141,7 +141,7 @@ private:
     const std::string _lightSampleStrategy;
     // 光源分布
     std::unique_ptr<LightDistribution> _lightDistribution;
-}
+};
 
 USING_STD;
 
@@ -149,4 +149,4 @@ CObject_ptr createVolumePathTracer(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 
-#endif /* volpath_hpp */
+#endif /* volpt_hpp */

@@ -241,7 +241,7 @@
 		6B99737BF63740A68485BB22 /* logging.cc in Sources */ = {isa = PBXBuildFile; fileRef = 62100C3A57D84EAFB49140A4 /* logging.cc */; };
 		6E349681D5094AC8B8AD8ABE /* ImfDeepScanLineOutputFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FCE36D9BC554128AD1DA580 /* ImfDeepScanLineOutputFile.cpp */; };
 		6EB5605BB54A4ABBBA198D3A /* ImfFloatVectorAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE159FCB2FE94A4FB2FCFCDF /* ImfFloatVectorAttribute.cpp */; };
-		6EF65E2BFF6640DC9738EC42 /* volpath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4169D57C85814A7C947E36A2 /* volpath.cpp */; };
+		6EF65E2BFF6640DC9738EC42 /* volpt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4169D57C85814A7C947E36A2 /* volpt.cpp */; };
 		701219566A5A4BE99CE5A2EF /* raw_logging.cc in Sources */ = {isa = PBXBuildFile; fileRef = E11E1F8A6FDD441CB4E6DC5E /* raw_logging.cc */; };
 		70679893ED3546DBB9065866 /* stb_vorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = EDDE1936F2B440BCA56C71DE /* stb_vorbis.c */; };
 		724E1BB7922149EE9A194914 /* liolib.c in Sources */ = {isa = PBXBuildFile; fileRef = F67145DE6FFB470381E9DB82 /* liolib.c */; };
@@ -358,6 +358,7 @@
 		F410AE053E114DEEB81A3FE7 /* lobject.c in Sources */ = {isa = PBXBuildFile; fileRef = 74CE0A22258C4D30B6A237F6 /* lobject.c */; };
 		F49E206910774D919CD3CD34 /* ImfEnvmapAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16E81D043FB14B8FA888C0B5 /* ImfEnvmapAttribute.cpp */; };
 		F56434F298C74BE0948EFC20 /* ImfWav.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0E81D61EEE94B41836763F1 /* ImfWav.cpp */; };
+		F6393E6523AD2884000CA600 /* homogeneous.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6393E6323AD2884000CA600 /* homogeneous.cpp */; };
 		F63A181A23A52E6100ED2599 /* subsurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63A181823A52E6100ED2599 /* subsurface.cpp */; };
 		F63B31D3239A8FE9004ED6D5 /* interpolation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63B31D1239A8FE9004ED6D5 /* interpolation.cpp */; };
 		F70E8D277E02406FAA1DDCC4 /* utilities_unittest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 8AA01D54BA424506B16989F3 /* utilities_unittest.cc */; };
@@ -898,7 +899,7 @@
 		3F5CAACF77994127B1999218 /* scene.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = scene.hpp; path = src/core/scene.hpp; sourceTree = SOURCE_ROOT; };
 		4152172D4994404DAA184538 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = third/glog/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
 		415B9F5FFD2E498AA8329992 /* ImfGenericOutputFile.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfGenericOutputFile.cpp; path = third/openexr/OpenEXR/IlmImf/ImfGenericOutputFile.cpp; sourceTree = SOURCE_ROOT; };
-		4169D57C85814A7C947E36A2 /* volpath.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = volpath.cpp; path = src/integrators/volpath.cpp; sourceTree = SOURCE_ROOT; };
+		4169D57C85814A7C947E36A2 /* volpt.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = volpt.cpp; path = src/integrators/volpt.cpp; sourceTree = SOURCE_ROOT; };
 		424DECB251F640E78C7D8D57 /* loslib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = loslib.c; path = third/lua53/lua/loslib.c; sourceTree = SOURCE_ROOT; };
 		42DD419E3EBD453AB90800D4 /* stb_tilemap_editor.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_tilemap_editor.h; path = third/stblib/stb/stb_tilemap_editor.h; sourceTree = SOURCE_ROOT; };
 		43ABC2BE004842D3883C6A25 /* ImfConvert.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfConvert.cpp; path = third/openexr/OpenEXR/IlmImf/ImfConvert.cpp; sourceTree = SOURCE_ROOT; };
@@ -1157,7 +1158,7 @@
 		E0332FAC8DC94DF7AECC0999 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = third/openexr/IlmBase/IlmThread/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
 		E11E1F8A6FDD441CB4E6DC5E /* raw_logging.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = raw_logging.cc; path = third/glog/src/raw_logging.cc; sourceTree = SOURCE_ROOT; };
 		E1B432A77E70411C8994F3BB /* lobject.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lobject.h; path = third/lua53/lua/lobject.h; sourceTree = SOURCE_ROOT; };
-		E1E5A064D0DA4BA780D6E105 /* volpath.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = volpath.hpp; path = src/integrators/volpath.hpp; sourceTree = SOURCE_ROOT; };
+		E1E5A064D0DA4BA780D6E105 /* volpt.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = volpt.hpp; path = src/integrators/volpt.hpp; sourceTree = SOURCE_ROOT; };
 		E21D1EBA41864BDBBE68F540 /* ImathBox.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImathBox.cpp; path = third/openexr/IlmBase/Imath/ImathBox.cpp; sourceTree = SOURCE_ROOT; };
 		E2A970303DCD459483FE101C /* disk.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = disk.cpp; path = src/shapes/disk.cpp; sourceTree = SOURCE_ROOT; };
 		E36C8DBFA0EE441C8FC15158 /* sampling.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = sampling.hpp; path = src/math/sampling.hpp; sourceTree = SOURCE_ROOT; };
@@ -1196,6 +1197,8 @@
 		F54F609393364950BCF9D66A /* model.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = model.h; path = src/tools/model.h; sourceTree = SOURCE_ROOT; };
 		F5BD9893236D4A5EB1FC215E /* stb_perlin.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_perlin.h; path = third/stblib/stb/stb_perlin.h; sourceTree = SOURCE_ROOT; };
 		F6238B97CD8D4BA78446B8DD /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = third/glog/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		F6393E6323AD2884000CA600 /* homogeneous.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = homogeneous.cpp; path = src/medium/homogeneous.cpp; sourceTree = SOURCE_ROOT; };
+		F6393E6423AD2884000CA600 /* homogeneous.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = homogeneous.hpp; path = src/medium/homogeneous.hpp; sourceTree = SOURCE_ROOT; };
 		F63A181823A52E6100ED2599 /* subsurface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = subsurface.cpp; path = src/materials/subsurface.cpp; sourceTree = "<group>"; };
 		F63A181923A52E6100ED2599 /* subsurface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = subsurface.hpp; path = src/materials/subsurface.hpp; sourceTree = "<group>"; };
 		F63B31D1239A8FE9004ED6D5 /* interpolation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = interpolation.cpp; path = src/math/interpolation.cpp; sourceTree = "<group>"; };
@@ -2086,8 +2089,8 @@
 				AAFDD57855684A7793A5B983 /* geometry.hpp */,
 				0FD5158C06AD41FFB6462C9C /* pathtracer.cpp */,
 				35D4D45D3FA6444EA4D31E22 /* pathtracer.hpp */,
-				4169D57C85814A7C947E36A2 /* volpath.cpp */,
-				E1E5A064D0DA4BA780D6E105 /* volpath.hpp */,
+				4169D57C85814A7C947E36A2 /* volpt.cpp */,
+				E1E5A064D0DA4BA780D6E105 /* volpt.hpp */,
 			);
 			name = integrators;
 			sourceTree = "<group>";
@@ -2287,6 +2290,15 @@
 			name = dwaLookups;
 			sourceTree = "<group>";
 		};
+		F6393E6223AD2849000CA600 /* medium */ = {
+			isa = PBXGroup;
+			children = (
+				F6393E6323AD2884000CA600 /* homogeneous.cpp */,
+				F6393E6423AD2884000CA600 /* homogeneous.hpp */,
+			);
+			path = medium;
+			sourceTree = "<group>";
+		};
 		F76165006636489A88413F0E /* Header Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -2308,6 +2320,7 @@
 		FA9878E06F3C4C209F0AF1D1 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				F6393E6223AD2849000CA600 /* medium */,
 				03E5C5281759427E8CEF41D8 /* accelerators */,
 				204F138E30954AFCAD626191 /* alltest */,
 				CF514FE66F644670BB035086 /* cameras */,
@@ -3097,7 +3110,7 @@
 				0023EE994CA745E3842AE0AB /* triangle.cpp in Sources */,
 				AD5B7313834140ADBA65D22A /* geometry.cpp in Sources */,
 				BADAFCAD678B48C38150E657 /* pathtracer.cpp in Sources */,
-				6EF65E2BFF6640DC9738EC42 /* volpath.cpp in Sources */,
+				6EF65E2BFF6640DC9738EC42 /* volpt.cpp in Sources */,
 				774BB45920C245BB83232B0C /* diffuse.cpp in Sources */,
 				23748CC0BE954B98A6B932E4 /* distant.cpp in Sources */,
 				CDD1E4A837B74CC78319019B /* envmap.cpp in Sources */,
@@ -3123,6 +3136,7 @@
 				210E819FEFCD4BF8AE4FED1E /* stratified.cpp in Sources */,
 				D7F2DE106DA24035B2910A62 /* cone.cpp in Sources */,
 				F219452C6C424F5BA3E5026A /* curve.cpp in Sources */,
+				F6393E6523AD2884000CA600 /* homogeneous.cpp in Sources */,
 				B7F3230FBC67455CB81AB28A /* cylinder.cpp in Sources */,
 				2176337860884A6EBB6B4E9B /* disk.cpp in Sources */,
 				1E45F84A7AE24F5991CB6C4D /* sphere.cpp in Sources */,
