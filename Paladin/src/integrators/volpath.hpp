@@ -110,9 +110,42 @@
 #define volpath_hpp
 
 #include "core/integrator.hpp"
+#include "math/lightdistribute.hpp"
 
 PALADIN_BEGIN
 
+// 思路基本与路径追踪一致，只是添加了参与介质的渲染
+class VolumePathTracer : public MonteCarloIntegrator {
+
+public:
+	VolumePathTracer(int maxDepth, std::shared_ptr<const Camera> camera,
+                   std::shared_ptr<Sampler> sampler,
+                   const AABB2i &pixelBounds, Float rrThreshold = 1,
+	               const std::string &lightSampleStrategy = "power");
+
+	virtual void preprocess(const Scene &scene, Sampler &sampler) override;
+
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
+
+    virtual Spectrum Li(const RayDifferential &ray, const Scene &scene,
+                Sampler &sampler, MemoryArena &arena, int depth) const override;
+
+private:
+	// 最大反射次数
+	const int _maxDepth;
+	// 俄罗斯轮盘结束的阈值
+    const Float _rrThreshold;
+    // 光源采样策略
+    const std::string _lightSampleStrategy;
+    // 光源分布
+    std::unique_ptr<LightDistribution> _lightDistribution;
+}
+
+USING_STD;
+
+CObject_ptr createVolumePathTracer(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 
