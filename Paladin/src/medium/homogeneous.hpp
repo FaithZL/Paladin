@@ -9,6 +9,7 @@
 #define homogeneous_hpp
 
 #include "core/medium.hpp"
+#include "core/spectrum.hpp"
 
 PALADIN_BEGIN
 
@@ -23,10 +24,10 @@ public:
 
     }
 
-	Spectrum tr(const Ray &ray, Sampler &sampler) const;
+	virtual Spectrum Tr(const Ray &ray, Sampler &sampler) const override;
 
-	Spectrum sample(const Ray &ray, Sampler &sampler, MemoryArena &arena,
-						MediumInteraction *mi) const;
+	virtual Spectrum sample(const Ray &ray, Sampler &sampler, MemoryArena &arena,
+						MediumInteraction *mi) const override;
 
 private:
 	// 散射系数

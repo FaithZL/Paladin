@@ -8,8 +8,10 @@
             }
         ]
     },
+    "mediums" : {
+
+    },
 	"lights" : [
-         
         {
             "type" : "pointLight",
             "enable" : false,

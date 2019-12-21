@@ -6,6 +6,19 @@
 //  Copyright © 2019 Zero. All rights reserved.
 //
 
+
+/**
+ *
+ * 就像BSDF描述了场景中表面的反射一样，介质类的实现代表了表面之间发生的散射;
+ * 例子包括大气散射效应，如雾霾，吸收在彩色玻璃窗，或散射的脂肪球在一瓶牛奶。
+ * 从技术上讲，所有这些现象都是由于大量微观粒子的表面相互作用造成的，
+ * 尽管找到一种比单独考虑它们更简便的建模方法更为可取。
+ * 在本章描述的模型中，粒子被认为是如此之多，以至于它们可以用统计分布而不是显式计数来表示。
+ *
+ *
+ * 
+ */
+
 #ifndef medium_hpp
 #define medium_hpp
 
@@ -56,7 +69,9 @@ class Medium {
 public:
     // Medium Interface
     virtual ~Medium() {}
-    virtual Spectrum tr(const Ray &ray, Sampler &sampler) const = 0;
+    
+    virtual Spectrum Tr(const Ray &ray, Sampler &sampler) const = 0;
+    
     virtual Spectrum sample(const Ray &ray, Sampler &sampler,
                             MemoryArena &arena,
                             MediumInteraction *mi) const = 0;
