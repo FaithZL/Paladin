@@ -7,6 +7,7 @@
 
 #include "volpt.hpp"
 #include "core/camera.hpp"
+#include "core/medium.hpp"
 
 PALADIN_BEGIN
 
@@ -28,7 +29,7 @@ void VolumePathTracer::preprocess(const Scene &scene, Sampler &sampler) {
 Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
 						Sampler &sampler, MemoryArena &arena, int depth) const {
     Spectrum L(0.f);
-    Spectrum throughput (1.f);
+    Spectrum throughput(1.f);
     RayDifferential ray(r);
     bool specularBounce = false;
     int bounce;
@@ -39,9 +40,10 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
         SurfaceInteraction isect;
         bool foundIntersection = scene.intersect(ray, &isect);
         
-        MediumInterface mi;
+        MediumInteraction mi;
         if (ray.medium) {
-            
+            // 如果ray有参与介质，则对参与介质进行采样，计算散射
+            throughput *= ray.medium->sample(ray, sampler, arena, &mi);
         }
         
         // 如果当前ray是直接从相机发射，
