@@ -7,6 +7,7 @@
 
 #include "homogeneous.hpp"
 #include "core/sampler.hpp"
+#include "core/interaction.hpp"
 
 PALADIN_BEGIN
 
@@ -25,11 +26,12 @@ Spectrum HomogeneousMedium::sample(const Ray &ray, Sampler &sampler, MemoryArena
 	// dist = -------------
 	//             σt
 	Float dist = -std::log(1 - sampler.get1D()) / _sigma_t[channel];
-	Float t = std::min(dist / ray.d.Length(), ray.tMax);
+	Float t = std::min(dist / ray.dir.length(), ray.tMax);
     bool sampledMedium = t < ray.tMax;
-    if (sampledMedium)
-        *mi = MediumInteraction(ray(t), -ray.d, ray.time, this,
-                                ARENA_ALLOC(arena, HenyeyGreenstein)(g));
+    if (sampledMedium) {
+        *mi = MediumInteraction(ray.at(t), -ray.dir, ray.time, this,
+                                ARENA_ALLOC(arena, HenyeyGreenstein)(_g));
+    }
 }
 
 

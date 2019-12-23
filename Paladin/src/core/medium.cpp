@@ -7,3 +7,15 @@
 //
 
 #include "medium.hpp"
+
+PALADIN_BEGIN
+
+Float HenyeyGreenstein::p(const Vector3f &wo, const Vector3f &wi) const {
+    
+}
+
+Float HenyeyGreenstein::sample_p(const Vector3f &wo, Vector3f *wi, const Point2f &sample) const {
+    
+}
+
+PALADIN_END

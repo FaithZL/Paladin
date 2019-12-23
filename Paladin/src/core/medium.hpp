@@ -80,7 +80,7 @@ public:
 class HenyeyGreenstein : public PhaseFunction {
 public:
     HenyeyGreenstein(Float g) 
-    : g(g) {
+    : _g(g) {
 
     }
 
@@ -89,8 +89,8 @@ public:
     virtual Float sample_p(const Vector3f &wo, Vector3f *wi,
                    const Point2f &sample) const override;
 
-    virtual std::string toString() const {
-        return StringPrintf("[ HenyeyGreenstein g: %f ]", g);
+    virtual std::string toString() const override {
+        return StringPrintf("[ HenyeyGreenstein g: %f ]", _g);
     }
 
 private:
