@@ -77,6 +77,26 @@ public:
                             MediumInteraction *mi) const = 0;
 };
 
+class HenyeyGreenstein : public PhaseFunction {
+public:
+    HenyeyGreenstein(Float g) 
+    : g(g) {
+
+    }
+
+    virtual Float p(const Vector3f &wo, const Vector3f &wi) const override;
+
+    virtual Float sample_p(const Vector3f &wo, Vector3f *wi,
+                   const Point2f &sample) const override;
+
+    virtual std::string toString() const {
+        return StringPrintf("[ HenyeyGreenstein g: %f ]", g);
+    }
+
+private:
+    const Float _g;
+};
+
 /**
  * Henyey和Greenstein开发的phase函数，表达式如下
  * 
