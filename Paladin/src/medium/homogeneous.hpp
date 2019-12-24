@@ -53,23 +53,36 @@ PALADIN_BEGIN
  * 采样逻辑在sample函数实现
  * 
  * 采样生成MediumInteraction对象时可能有两种情况
- * 1.采样生成的t不在[0,t_max]区间内，只需要估计Tr(p0->p) Lo(p0,-w)项，则不生成MediumInteraction对象
- * 2.如果生成的t在[0,t_max]区间内，则两项都需要估计，并生成MediumInteraction对象
- *
+ * 1.采样生成的t不在[0,t_max]区间内，显然样本点在物体表面上，因为t_max落在物体表面上
+ * 		只需要估计Tr(p0->p) Lo(p0,-w)项，则不生成MediumInteraction对象
+ * 
+ * 2.如果生成的t在[0,t_max]区间内，表示样本点在介质中，
+ * 		则只需要估计积分项，并生成MediumInteraction对象
+ * 
+ * 
+ * 
  * 假设函数pt(t)表示位置p+tw处每单位距离内生成一个interaction的概率密度函数
  * 由于可能不会采样到一个medium interaction，所以在[0,t_max]区间上的积分可能不为1，
- * 我们定义了一个p_surf表示对表面项进行采样的相关离散概率
+ * 我们定义了一个p_surf表示对表面项进行采样的相关概率
  *
  *           p_surf = 1 - ∫[0,t_max] pt(t) dt
  *
+ * 所以 ∫[0,t_max] pt(t) dt 可以理解为采样到介质的概率
+ *       显然，两个概率值相加为1，没毛病
+ *
  * 接下来解释一下sample函数，这与之前我们遇到的BSDF中的sample_f函数不同，主要在于
- * 这个sample函数不会像sample_f一样返回pdf，通常不需要
+ * 这个sample函数不会像sample_f一样返回pdf，通常不需要。
  * 
+ * 要想判断样本点是在物体表面还是在介质中，首先要得到t值
  * 
- * t是如何计算出来的呢
+ * t是如何计算出来的呢？？？？？？？
  * 通过均匀介质的传输系数可得
  *		
  *      f(t) = e^(−σt * t)    4式
+ * 
+ * 
+ * 
+ * 
  * 
  * 逆变换算法可得
  * 
