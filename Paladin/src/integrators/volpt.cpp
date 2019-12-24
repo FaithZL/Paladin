@@ -26,6 +26,13 @@ void VolumePathTracer::preprocess(const Scene &scene, Sampler &sampler) {
     _lightDistribution = createLightSampleDistribution(_lightSampleStrategy, scene);
 }
 
+/**
+ * 体渲染路径追踪跟普通路径追踪的区别主要在于
+ * 如果场景中有介质，则对介质进行采样
+ *      如果采样到物体表面，则按照传统pt算法继续执行
+ *      如果采样到介质，则生成MediumInteraction对象，再随机采样相函数生成新的ray对象
+ * 
+ */
 Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
 						Sampler &sampler, MemoryArena &arena, int depth) const {
     Spectrum L(0.f);
