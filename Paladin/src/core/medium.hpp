@@ -48,6 +48,7 @@ PALADIN_BEGIN
  * P_hg(cosθ) = ---- * ----------------------------
  *               4π     (1 + g^2 + 2g cosθ)^(3/2)
  * 
+ * 其中θ为入射方向与出射方向的夹角
  */
 class PhaseFunction {
 public:
@@ -77,6 +78,32 @@ public:
                             MediumInteraction *mi) const = 0;
 };
 
+/**
+ *                1              1 - g^2
+ * P_hg(cosθ) = ---- * ----------------------------
+ *               4π     (1 + g^2 + 2g cosθ)^(3/2)
+ *
+ * 这里主要介绍一下相函数的采样思路
+ *
+ * 不同于BXDF，相函数不会返回PDF值，我们假设相函数采样的PDF完美符合该函数的分布
+ * 并且相函数是归一化的 ∫[sphere]p(ω,ω')dω = 1 ，所以函数值与PDF保持一致
+ *
+ * 现在来介绍一下sample_p函数的实现思路
+ *
+ * 采样的方向可以分为两个维度，θ与φ，θ∈[0,π), φ∈[0,2π)
+ *
+ * 其中θ为入射方向与出射方向的夹角，可以把wo方向作为θ为零的方向，
+ * 根据相函数的分布采样入射方向
+ * 
+ * 显然 p(φ) = 1/2π
+ *
+ *         1                    1 - g^2
+ * cosθ = ---- [1 + g^2 - (-----------------)^2]  (todo待推导)
+ *         2π                1 - g + 2 ξ g
+ *
+ * 
+ * 
+ */
 class HenyeyGreenstein : public PhaseFunction {
 public:
     HenyeyGreenstein(Float g) 
@@ -94,6 +121,7 @@ public:
     }
 
 private:
+    // 各向异性系数
     const Float _g;
 };
 

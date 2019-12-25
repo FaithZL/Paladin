@@ -29,7 +29,16 @@ Spectrum HomogeneousMedium::Tr(const Ray &ray, Sampler &sampler) const {
  *     β_med = ----------------------   
  *                    pt(t)
  *
+ * p_surf = 1 - ∫[0,t_max] pt(t) dt 
  *
+ *        = 1 - ∫[0,t_max] σt e^(−σt * t) dt 
+ *
+ * 		  = e^(−σt * t_max)
+ * 
+ * 		  = Tr(p0->p)
+ *
+ *
+ * pt(t) = σt e^(−σt * t) = σt Tr(p0->p)
  *
  */
 Spectrum HomogeneousMedium::sample(const Ray &ray, Sampler &sampler, MemoryArena &arena, MediumInteraction *mi) const {
@@ -51,7 +60,8 @@ Spectrum HomogeneousMedium::sample(const Ray &ray, Sampler &sampler, MemoryArena
 
     // Tr(p → p′) = e^(−σt * l)
     Spectrum Tr = Exp(-_sigma_t * std::min(t, MaxFloat) * ray.dir.length());
-
+    // pbrt里的PDF函数是取各个通道的平均值，到时候试试看直接使用当前频道的值
+    // 看看会有什么结果 todo
     Spectrum density = sampledMedium ? (_sigma_t * Tr) : Tr;
     Float pdf = 0;
     for (int i = 0; i < Spectrum::nSamples; ++i) {

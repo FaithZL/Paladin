@@ -65,7 +65,7 @@ PALADIN_BEGIN
  * 由于可能不会采样到一个medium interaction，所以在[0,t_max]区间上的积分可能不为1，
  * 我们定义了一个p_surf表示对表面项进行采样的离散概率(重点)
  *
- *           p_surf = 1 - ∫[0,t_max] pt(t) dt
+ *           p_surf = 1 - ∫[0,t_max] pt(t) dt     6式
  *
  * 所以 ∫[0,t_max] pt(t) dt 可以理解为采样到介质的概率
  *       显然，两个概率值相加为1，没毛病
@@ -99,7 +99,7 @@ PALADIN_BEGIN
  *
  * 对f(t)函数求导，可得对应的PDF，
  * 
- *     PDF = σt e^(−σt * t)
+ *     PDF = σt e^(−σt * t) = pt(t)     5式
  * 
  * 现在来介绍一下3式的蒙特卡洛估计形式
  * 
@@ -137,8 +137,26 @@ PALADIN_BEGIN
  * 
  * 上诉1,2两个过程均在VolumePathTracer中的Li函数中执行，
  * 这就解释了为何 β_surf中不包含Lo(p0,-w)， β_med中不包含Li(p,wi)的原因
+ *
+ * 最后来介绍一下p_surf是如何计算得到的
+ * 观察5式，我们可知pt(t) 的形式
+ *
+ * 计算6式就可以求出p_surf的值了
+ *
+ * p_surf = 1 - ∫[0,t_max] pt(t) dt 
+ *
+ *        = 1 - ∫[0,t_max] σt e^(−σt * t) dt 
+ *
+ * 		  = e^(−σt * t_max)
  * 
- * 
+ * 		  = Tr(p0->p)
+ *
+ *
+ * pt(t) = σt e^(−σt * t) = σt Tr(p0->p)
+ *
+ * 以上为sample函数的实现原理以及推导过程
+ *
+ * medium.hpp中将会介绍如何采样相函数
  */
 class HomogeneousMedium : public Medium {
     
