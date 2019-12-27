@@ -257,10 +257,10 @@ Spectrum sampleOneLight(const Interaction &it, const Scene &scene,
  * @return             返回直接光照辐射度
  */
 Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uShading,
-                        const Light &light, const Point2f &uLight,
-                        const Scene &scene, Sampler &sampler,
-                        MemoryArena &arena, bool handleMedia = false,
-                        bool specular = false);
+                                const Light &light, const Point2f &uLight,
+                                const Scene &scene, Sampler &sampler,
+                                MemoryArena &arena, bool handleMedia = false,
+                                bool specular = false);
 
 class MonteCarloIntegrator : public Integrator {
     
