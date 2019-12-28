@@ -51,6 +51,8 @@ public:
     
     void parseMaterials(const nloJson &);
     
+    void parseMediums(const nloJson &);
+    
     Filter * parseFilter(const nloJson &);
     
     void parseLights(const nloJson &);
@@ -83,6 +85,21 @@ private:
         return _materialCache[name];
     }
     
+    void addMediumToCache(const string &name, const shared_ptr<const Medium> &medium) {
+        _mediumCache[name] = medium;
+    }
+    
+    shared_ptr<const Medium> getMedium(const nloJson &name) {
+        if (name.is_null()) {
+            return nullptr;
+        }
+        auto iter = _mediumCache.find(name);
+        if (iter == _mediumCache.end()) {
+            return nullptr;
+        }
+        return _mediumCache[name];
+    }
+    
 private:
     
     TransformCache _transformCache;
@@ -99,6 +116,9 @@ private:
     
     // 先用map储存着，待后续优化todo
     map<string, shared_ptr<const Material>> _materialCache;
+    
+    // 先用map储存着，待后续优化
+    map<string, shared_ptr<const Medium>> _mediumCache;
     
     Transform _cameraToWorld;
 };

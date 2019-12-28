@@ -119,7 +119,8 @@
 #define medium_hpp
 
 #include "core/header.h"
-#include "core/cobject.h"
+#include "cobject.h"
+#include "tools/classfactory.hpp"
 
 PALADIN_BEGIN
 /**
@@ -153,10 +154,14 @@ public:
 };
 
 // 介质
-class Medium {
+class Medium : public CObject {
 public:
     // Medium Interface
     virtual ~Medium() {}
+    
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
     
     virtual Spectrum Tr(const Ray &ray, Sampler &sampler) const = 0;
     
@@ -273,6 +278,9 @@ struct MediumInterface {
     // 外部的介质
     const Medium *outside;
 };
+
+
+Medium * createMedium(const nloJson &);
 
 PALADIN_END
 

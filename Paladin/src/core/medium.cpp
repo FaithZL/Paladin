@@ -40,4 +40,20 @@ Float HenyeyGreenstein::sample_p(const Vector3f &wo, Vector3f *wi, const Point2f
     return phaseHG(-cosTheta, _g);
 }
 
+//"homo" : {
+//    "type" : "homo",
+//    "param" : {
+//        "g" : 0,
+//        "sigma_a" : [0.0011, 0.0024, 0.014],
+//        "sigma_s" : [2.55, 3.21, 3.77],
+//    }
+//}
+Medium * createMedium(const nloJson &data) {
+    string type = data.value("type", "homo");
+    nloJson param = data["param"];
+    auto creator = GET_CREATOR(type);
+    auto ret = dynamic_cast<Medium *>(creator(param, {}));
+    return ret;
+}
+
 PALADIN_END

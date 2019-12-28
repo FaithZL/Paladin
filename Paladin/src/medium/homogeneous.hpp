@@ -185,6 +185,10 @@ private:
 	const Float _g;
 };
 
+USING_STD;
+
+CObject_ptr createHomogeneousMedium(const nloJson &param, const Arguments &lst);
+
 PALADIN_END
 
 #endif /* homogeneous_hpp */

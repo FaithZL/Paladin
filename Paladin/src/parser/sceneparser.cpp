@@ -17,6 +17,7 @@
 #include "lights/diffuse.hpp"
 #include "shapes/trianglemesh.hpp"
 #include "tools/parallel.hpp"
+#include "core/medium.hpp"
 
 PALADIN_BEGIN
 
@@ -43,8 +44,11 @@ void SceneParser::parse(const nloJson &data) {
     Integrator * integrator = parseIntegrator(integratorData, sampler, camera);
     _integrator.reset(integrator);
     
-    nloJson materialDataList = data.value("materials", nloJson::object());
-    parseMaterials(materialDataList);
+    nloJson materialDataDict = data.value("materials", nloJson::object());
+    parseMaterials(materialDataDict);
+    
+    nloJson mediumDataDict = data.value("mediums", nloJson::object());
+    parseMediums(mediumDataDict);
 
     nloJson shapesData = data.value("shapes", nloJson());
     parseShapes(shapesData);
@@ -69,6 +73,14 @@ void SceneParser::parseLights(const nloJson &list) {
         if (light) {
             _lights.push_back(light);
         }
+    }
+}
+
+void SceneParser::parseMediums(const nloJson &dict) {
+    for (auto iter = dict.cbegin(); iter != dict.cend(); ++iter) {
+        string name = iter.key();
+        nloJson data = iter.value();
+        shared_ptr<const Medium> medium(createMedium(data));
     }
 }
 
