@@ -53,70 +53,81 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
             throughput *= ray.medium->sample(ray, sampler, arena, &mi);
         }
         
-        // 如果当前ray是直接从相机发射，
-        // 判断光线是否与场景几何图元相交
-        if (specularBounce || bounce == 0) {
-        	// 因为在这种情况下，ray的方向是确定的，因此直接取isect的Le
-        	if (foundIntersection) {
-                L += throughput * isect.Le(-ray.dir);
-            } else {
-                for (const auto &light : scene.infiniteLights) {
-                    L += throughput * light->Le(ray);
+        if (mi.isValid()) {
+            // 如果采样到的顶点没有落在物体表面
+            if (bounce >= _maxDepth) {
+                break;
+            }
+            
+            
+        } else {
+        
+            // 如果当前ray是直接从相机发射，
+            // 判断光线是否与场景几何图元相交
+            if (specularBounce || bounce == 0) {
+                // 因为在这种情况下，ray的方向是确定的，因此直接取isect的Le
+                if (foundIntersection) {
+                    L += throughput * isect.Le(-ray.dir);
+                } else {
+                    for (const auto &light : scene.infiniteLights) {
+                        L += throughput * light->Le(ray);
+                    }
                 }
             }
-        }
 
-        if (!foundIntersection || bounce > _maxDepth) {
-            break;
+            if (!foundIntersection || bounce > _maxDepth) {
+                break;
+            }
+            // 计算bsdf
+            isect.computeScatteringFunctions(ray, arena);
+            // 如果没有bsdf，则不计算反射次数
+            // 有些几何图元是仅仅是为了限定参与介质的范围
+            // 所以没有bsdf
+            if (!isect.bsdf) {
+                ray = isect.spawnRay(ray.dir);
+                --bounce;
+                continue;
+            }
+            const Distribution1D * distrib = _lightDistribution->lookup(isect.pos);
+            // 找到非高光反射comp，如果有，则估计直接光照贡献
+            if (isect.bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR))) {
+                Spectrum Ld = throughput * sampleOneLight(isect, scene, arena,
+                                                 sampler, true, distrib);
+                L += Ld;
+            }
+            Vector3f wo = -ray.dir;
+            Vector3f wi;
+            Float pdf;
+            BxDFType flags;
+            Spectrum f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(), &pdf, BSDF_ALL, &flags);
+            ray = isect.spawnRay(wi);
+            if (f.IsBlack() || pdf == 0) {
+                break;
+            }
+            /**
+             * 复用之前的路径对吞吐量进行累积
+             *      f(pj+1 → pj → pj-1) |cosθj|
+             *    --------------------------------
+             *             pω(pj+1 - pj)
+             */
+            throughput *= f * absDot(wi, isect.shading.normal) / pdf;
+            CHECK_GE(throughput.y(), 0.0f);
+            DCHECK(!std::isinf(throughput.y()));
+            specularBounce = (flags & BSDF_SPECULAR) != 0;
+            
+            if (flags & BSDF_TRANSMISSION) {
+                // 如果采样到投射comp
+                Float eta = isect.bsdf->eta;
+                // 详见bxdf.hpp文件中SpecularTransmission的注释
+                etaScale *= (dot(wo, isect.normal) > 0) ? (eta * eta) : 1 / (eta * eta);
+            }
+            
+            ray = isect.spawnRay(wi);
+            if (isect.bssrdf && (flags & BSDF_TRANSMISSION)) {
+                // todo 处理bssrdf
+            }
         }
-        // 计算bsdf
-        isect.computeScatteringFunctions(ray, arena);
-        // 如果没有bsdf，则不计算反射次数
-        // 有些几何图元是仅仅是为了限定参与介质的范围
-        // 所以没有bsdf
-        if (!isect.bsdf) {
-            ray = isect.spawnRay(ray.dir);
-            --bounce;
-            continue;
-        }
-        const Distribution1D * distrib = _lightDistribution->lookup(isect.pos);
-        // 找到非高光反射comp，如果有，则估计直接光照贡献
-        if (isect.bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR))) {
-            Spectrum Ld = throughput * sampleOneLight(isect, scene, arena,
-                                             sampler, true, distrib);
-            L += Ld;
-        }
-        Vector3f wo = -ray.dir;
-        Vector3f wi;
-        Float pdf;
-        BxDFType flags;
-        Spectrum f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(), &pdf, BSDF_ALL, &flags);
-        ray = isect.spawnRay(wi);
-        if (f.IsBlack() || pdf == 0) {
-            break;
-        }
-        /**
-         * 复用之前的路径对吞吐量进行累积
-         *      f(pj+1 → pj → pj-1) |cosθj|
-         *    --------------------------------  
-         *             pω(pj+1 - pj)
-         */
-        throughput *= f * absDot(wi, isect.shading.normal) / pdf;
-        CHECK_GE(throughput.y(), 0.0f);
-        DCHECK(!std::isinf(throughput.y()));
-        specularBounce = (flags & BSDF_SPECULAR) != 0;
         
-        if (flags & BSDF_TRANSMISSION) {
-            // 如果采样到投射comp
-            Float eta = isect.bsdf->eta;
-            // 详见bxdf.hpp文件中SpecularTransmission的注释
-            etaScale *= (dot(wo, isect.normal) > 0) ? (eta * eta) : 1 / (eta * eta);
-        }
-        
-        ray = isect.spawnRay(wi);
-        if (isect.bssrdf && (flags & BSDF_TRANSMISSION)) {
-            // todo 处理bssrdf
-        }
         if (throughput.MaxComponentValue() < _rrThreshold && bounce > 3) {
             Float q = std::max((Float)0.05, 1 - throughput.MaxComponentValue());
             if (sampler.get1D() < q) {

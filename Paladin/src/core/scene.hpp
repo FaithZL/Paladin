@@ -43,9 +43,17 @@ public:
         CHECK_NE(ray.dir, Vector3f(0,0,0));
         return _aggregate->intersectP(ray);
     }
-
+    
+    /**
+     * 光线在场景中传播的函数
+     * @param  ray     指定的光线对象
+     * @param  sampler 采样器
+     * @param  isect   指定物体表面交点
+     * @param  Tr      可以理解为传播的百分比
+     * @return         返回ray与isect是否有交点
+     */
     bool intersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
-                     Spectrum *transmittance) const;
+                     Spectrum *Tr) const;
     
     std::vector<std::shared_ptr<Light>> lights;
 

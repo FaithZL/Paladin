@@ -164,7 +164,10 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
             SurfaceInteraction lightIsect;
             Ray ray = it.spawnRay(wi);
             Spectrum Tr(1.0f);
-            bool foundSurfaceInteraction = scene.intersect(ray, &lightIsect);
+            
+            bool foundSurfaceInteraction = handleMedia
+                            ? scene.intersectTr(ray, sampler, &lightIsect, &Tr)
+                            : scene.intersect(ray, &lightIsect);
             Spectrum Li(0.0f);
             if (foundSurfaceInteraction) {
                 // 如果找到的交点是light光源上的点，则计算光照

@@ -134,17 +134,8 @@ PALADIN_BEGIN
  * 所以各向同性的相函数满足
  * p(ωo,ωi) = 1/4π
  *
- * Henyey和Greenstein(1941)开发了一种广泛使用的相位函数。
- * 这种相位函数是专门设计的，以方便适合测量散射数据。
- * 一个单独的参数g(称为不对称参数)控制着散射光的分布
  *
- * 表达式如下
- *
- *                1              1 - g^2
- * P_hg(cosθ) = ---- * ----------------------------
- *               4π     (1 + g^2 + 2g cosθ)^(3/2)
  * 
- * 其中θ为入射方向与出射方向的夹角
  */
 class PhaseFunction {
 public:
@@ -174,31 +165,45 @@ public:
                             MediumInteraction *mi) const = 0;
 };
 
+
+
+
 /**
+ *
+ * Henyey和Greenstein(1941)开发了一种广泛使用的相位函数。
+ * 这种相位函数是专门设计的，以方便适合测量散射数据。
+ * 一个单独的参数g(称为不对称参数)控制着散射光的分布
+ *
+ * 表达式如下
+ *
  *                1              1 - g^2
  * P_hg(cosθ) = ---- * ----------------------------
  *               4π     (1 + g^2 + 2g cosθ)^(3/2)
  *
- * 这里主要介绍一下相函数的采样思路
+ * 其中θ为入射方向与出射方向的夹角
  *
- * 不同于BXDF，相函数不会返回PDF值，我们假设相函数采样的PDF完美符合该函数的分布
- * 并且相函数是归一化的 ∫[sphere]p(ω,ω')dω = 1 ，所以函数值与PDF保持一致
- *
- * 现在来介绍一下sample_p函数的实现思路
- *
- * 采样的方向可以分为两个维度，θ与φ，θ∈[0,π), φ∈[0,2π)
- *
- * 其中θ为入射方向与出射方向的夹角，可以把wo方向作为θ为零的方向，
- * 根据相函数的分布采样入射方向
+ * 先看下面的推导，待会解释
  * 
- * 显然 p(φ) = 1/2π
+ * 1 = ∫[sphere]p(ωo,ωi) = ∫[0,2π] ∫[0,π] p(θ,φ) sinθ dθ dφ
+ *
+ * = ∫[0,2π] ∫[0,π] p(θ) sinθ dθ dφ  (由于相函数值跟φ没有关系，所以可以这样简化)
+ *
+ * = 2π ∫[0,π] p(θ) sinθ dθ 
+ *
+ * 我们假设不对称参数g为0，这么这个积分确实是为1的
+ * 在带入多个g值，用函数图像生成工具生成了多个图像，积分都为1
+ *
+ * 那么我们可以把函数 f(θ) = 2π sinθ p(θ)
+ *
+ * 作为θ的概率密度函数，在 θ ∈ [0,π)积分为1
+ *
+ * 积分，求得CDF之后求反函数，(懒得手动计算了todo，以后搞完主线再推吧)
+ *
  *
  *         1                    1 - g^2
- * cosθ = ---- [1 + g^2 - (-----------------)^2]  (todo待推导)
+ * cosθ = ---- [1 + g^2 - (-----------------)^2] 
  *         2π                1 - g + 2 ξ g
  *
- * 
- * 
  */
 class HenyeyGreenstein : public PhaseFunction {
 public:
@@ -209,15 +214,26 @@ public:
 
     virtual Float p(const Vector3f &wo, const Vector3f &wi) const override;
 
+    /**
+     * 根据相函数分布采样
+     *         1                    1 - g^2
+     * cosθ = ---- [1 + g^2 - (-----------------)^2] 
+     *         2π                1 - g + 2 ξ g
+     *
+     * @param  wo     给定的出射光线
+     * @param  wi     返回生成的入射方向
+     * @param  u      二维均匀随机变量
+     * @return        概率密度函数
+     */
     virtual Float sample_p(const Vector3f &wo, Vector3f *wi,
-                   const Point2f &sample) const override;
+                   const Point2f &u) const override;
 
     virtual std::string toString() const override {
         return StringPrintf("[ HenyeyGreenstein g: %f ]", _g);
     }
 
 private:
-    // 各向异性系数
+    // 不对称参数
     const Float _g;
 };
 
