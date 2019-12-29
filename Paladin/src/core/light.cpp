@@ -17,6 +17,30 @@ bool VisibilityTester::unoccluded(const Scene &scene) const {
     return !scene.intersectP(_p0.spawnRayTo(_p1));
 }
 
+Spectrum VisibilityTester::Tr(const Scene &scene, Sampler &sampler) const {
+    Spectrum ret(1.f);
+    Ray ray = _p0.spawnRayTo(_p1);
+    while (true) {
+        SurfaceInteraction isect;
+        bool hitSurface = scene.intersect(ray, &isect);
+        // 如果有交点，且交点处材质不为空，则返回0，透明材质不在此处理
+        if (hitSurface && isect.primitive->getMaterial() != nullptr) {
+            return Spectrum(0.f);
+        }
+        
+        if (ray.medium) {
+            ret *= ray.medium->Tr(ray, sampler);
+        }
+        
+        if (!hitSurface) {
+            break;
+        }
+        // 交点处的材质为空时会运行到此，重新生成ray
+        ray = isect.spawnRayTo(_p1);
+    }
+    return ret;
+}
+
 //"data" : {
 //    "type" : "pointLight",
 //    "param" : {

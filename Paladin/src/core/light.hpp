@@ -195,7 +195,7 @@ public:
      * @return       无遮挡时返回true
      */
     bool unoccluded(const Scene &scene) const;
-    // 用于体积渲染，暂时不理
+    
     Spectrum Tr(const Scene &scene, Sampler &sampler) const;
     
 private:

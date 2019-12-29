@@ -44,8 +44,8 @@ Float HenyeyGreenstein::sample_p(const Vector3f &wo, Vector3f *wi, const Point2f
 //    "type" : "homo",
 //    "param" : {
 //        "g" : 0,
-//        "sigma_a" : [0.0011, 0.0024, 0.014],
-//        "sigma_s" : [2.55, 3.21, 3.77],
+//        "sigma_a" : [0,0,0],
+//        "sigma_s" : [1,1,1],
 //    }
 //}
 Medium * createMedium(const nloJson &data) {

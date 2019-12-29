@@ -9,12 +9,12 @@
         ]
     },
     "mediums" : {
-        "homo" : {
+        "fog" : {
             "type" : "homo",
             "param" : {
                 "g" : 0,
-                "sigma_a" : [0.0011, 0.0024, 0.014],
-                "sigma_s" : [2.55, 3.21, 3.77]
+                "sigma_a" : [0.0,0.0,0.0],
+                "sigma_s" : [1.0,1.0,1.0]
             }
         }
     },
@@ -315,6 +315,23 @@
                 "width" : 2
             },
             "material" : "matteGreen"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
+            "name" : "front",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "translate",
+                        "param" : [-1,0,0]
+                    }
+                ],
+                "width" : 2
+            },
+            "mediumInterface" : [null, "fog"],
+            "material" : null
         },
         {
             "type" : "triMesh",

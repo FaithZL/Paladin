@@ -78,14 +78,14 @@ Spectrum HomogeneousMedium::sample(const Ray &ray, Sampler &sampler, MemoryArena
 
 //"param" : {
 //    "g" : 0,
-//    "sigma_a" : [0.0011, 0.0024, 0.014],
-//    "sigma_s" : [2.55, 3.21, 3.77],
+//    "sigma_a" : [0.f, 0.f, 0.f],
+//    "sigma_s" : [1.f, 1.f, 1.f],
 //}
 CObject_ptr createHomogeneousMedium(const nloJson &param, const Arguments &lst) {
     Float g = param.value("g", 0.f);
-    nloJson sig_a_data = param.value("sigma_a", nloJson::array({0.0011, 0.0024, 0.014}));
+    nloJson sig_a_data = param.value("sigma_a", nloJson::array({0.f, 0.f, 0.f}));
     Spectrum sigma_a = Spectrum::FromJsonRGB(sig_a_data);
-    nloJson sig_s_data = param.value("sigma_s", nloJson::array({2.55, 3.21, 3.77}));
+    nloJson sig_s_data = param.value("sigma_s", nloJson::array({1.f, 1.f, 1.f}));
     Spectrum sigma_s = Spectrum::FromJsonRGB(sig_s_data);
     
     auto ret = new HomogeneousMedium(sigma_a, sigma_s, g);

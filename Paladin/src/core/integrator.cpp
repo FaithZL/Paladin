@@ -107,7 +107,10 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
     		f = isect.bsdf->f(isect.wo, wi, bsdfFlags) * absDot(wi, isect.shading.normal);
             scatteringPdf = isect.bsdf->pdfDir(isect.wo, wi, bsdfFlags);
     	} else {
-    		// todo 处理参与介质的phase函数
+            const MediumInteraction &mi = (const MediumInteraction &)it;
+            Float p = mi.phase->p(mi.wo, wi);
+            f = Spectrum(p);
+            scatteringPdf = p;
     	}
     	if (!f.IsBlack()) {
     		// 计算可见性
@@ -143,7 +146,10 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
             f *= absDot(wi, isect.shading.normal);
     		sampledSpecular = (sampledType & BSDF_SPECULAR) != 0;
     	} else {
-    		// todo 处理参与介质
+    		const MediumInteraction &mi = (const MediumInteraction &)it;
+            Float p = mi.phase->sample_p(mi.wo, &wi, uScattering);
+            f = Spectrum(p);
+            scatteringPdf = p;
     	}
 
         if (!f.IsBlack() && scatteringPdf > 0) {
