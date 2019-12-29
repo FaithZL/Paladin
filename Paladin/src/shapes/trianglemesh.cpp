@@ -607,7 +607,8 @@ shared_ptr<Triangle> createTri(shared_ptr<const Transform> o2w, shared_ptr<const
 
 vector<shared_ptr<Shape>> createQuad(shared_ptr<const Transform> o2w,
                                 bool reverseOrientation,
-                                     Float width, Float height) {
+                                Float width, Float height,
+                                const MediumInterface &mediumInterface) {
     if (height == 0) {
         height = width;
     }
@@ -643,7 +644,10 @@ vector<shared_ptr<Shape>> createQuad(shared_ptr<const Transform> o2w,
 //    "height" : 1,
 //    "reverseOrientation" : false
 //}
-vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &data, shared_ptr<const Material>& mat, vector<shared_ptr<Light>> &lights) {
+vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &data,
+                                                  shared_ptr<const Material>& mat,
+                                                  vector<shared_ptr<Light>> &lights,
+                                                  const MediumInterface &mediumInterface) {
     nloJson param = data.value("param", nloJson::object());
     auto l2w = createTransform(param.value("transform", nloJson()));
     bool ro = param.value("reverseOrientation", false);
@@ -659,13 +663,16 @@ vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &data, shared_pt
         if (areaLight) {
             lights.push_back(areaLight);
         }
-        shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, nullptr);
+        shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, mediumInterface);
         ret.push_back(primitives);
     }
     return ret;
 }
 
-vector<shared_ptr<Shape>> createCube(shared_ptr<const Transform> o2w, bool reverseOrientation, Float x, Float y, Float z) {
+vector<shared_ptr<Shape>> createCube(shared_ptr<const Transform> o2w,
+                                     bool reverseOrientation,
+                                     Float x, Float y, Float z,
+                                     const MediumInterface &mediumInterface) {
     vector<shared_ptr<Shape>> ret;
     Float hx = 0.5 * x;
     Float hy = 0.5 * y;
@@ -673,30 +680,30 @@ vector<shared_ptr<Shape>> createCube(shared_ptr<const Transform> o2w, bool rever
     auto znTr(Transform::translate_ptr(0,0,-hz));
     * znTr = (*znTr) * Transform::rotateX(180);
     * znTr = *o2w * (*znTr);
-    auto znTris = createQuad(shared_ptr<const Transform>(znTr), reverseOrientation, x,y);
+    auto znTris = createQuad(shared_ptr<const Transform>(znTr), reverseOrientation, x,y,mediumInterface);
     ret.insert(ret.end(), znTris.begin(), znTris.end());
 
     auto zpTr(Transform::translate_ptr(0,0,hz));
     * zpTr = *o2w * (*zpTr);
-    auto zpTris = createQuad(shared_ptr<const Transform>(zpTr), reverseOrientation, x,y);
+    auto zpTris = createQuad(shared_ptr<const Transform>(zpTr), reverseOrientation, x,y,mediumInterface);
     ret.insert(ret.end(), zpTris.begin(), zpTris.end());
 
     auto ynTr(Transform::translate_ptr(0, -hy, 0));
     * ynTr = (*ynTr) * Transform::rotateX(90);
     * ynTr = *o2w * (*ynTr);
-    auto ynTris = createQuad(shared_ptr<const Transform>(ynTr), reverseOrientation, x,z);
+    auto ynTris = createQuad(shared_ptr<const Transform>(ynTr), reverseOrientation, x,z,mediumInterface);
     ret.insert(ret.end(), ynTris.begin(), ynTris.end());
 
     auto ypTr(Transform::translate_ptr(0, hy, 0));
     * ypTr = (*ypTr) * Transform::rotateX(-90);
     * ypTr = *o2w * (*ypTr);
-    auto ypTris = createQuad(shared_ptr<const Transform>(ypTr), reverseOrientation, x,z);
+    auto ypTris = createQuad(shared_ptr<const Transform>(ypTr), reverseOrientation, x,z,mediumInterface);
     ret.insert(ret.end(), ypTris.begin(), ypTris.end());
 
     auto xnTr(Transform::translate_ptr(-hx, 0, 0));
     * xnTr = (*xnTr) * Transform::rotateY(-90);
     * xnTr = *o2w * (*xnTr);
-    auto xnTris = createQuad(shared_ptr<const Transform>(xnTr), reverseOrientation, z,y);
+    auto xnTris = createQuad(shared_ptr<const Transform>(xnTr), reverseOrientation, z,y,mediumInterface);
     ret.insert(ret.end(), xnTris.begin(), xnTris.end());
 
     auto xpTr(Transform::translate_ptr(hx, 0, 0));
@@ -709,7 +716,10 @@ vector<shared_ptr<Shape>> createCube(shared_ptr<const Transform> o2w, bool rever
     return ret;
 }
 
-vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &data, shared_ptr<const Material>&mat, vector<shared_ptr<Light>> &lights) {
+vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &data,
+                                                  shared_ptr<const Material>&mat,
+                                                  vector<shared_ptr<Light>> &lights,
+                                                  const MediumInterface &mediumInterface) {
     nloJson param = data.value("param", nloJson::object());
     auto l2w = createTransform(param.value("transform", nloJson()));
     bool ro = param.value("reverseOrientation", false);
@@ -717,7 +727,7 @@ vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &data, shared_pt
     Float x = param.value("x", 1.f);
     Float y = param.value("y", x);
     Float z = param.value("z", y);
-    vector<shared_ptr<Shape>> triLst = createCube(o2w, ro, x, y, z);
+    vector<shared_ptr<Shape>> triLst = createCube(o2w, ro, x, y, z, mediumInterface);
     vector<shared_ptr<Primitive>> ret;
     nloJson emission = data.value("emission", nloJson());
     for (int i = 0; i < triLst.size(); ++i) {
@@ -726,7 +736,7 @@ vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &data, shared_pt
         if (areaLight) {
             lights.push_back(areaLight);
         }
-        shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, nullptr);
+        shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, mediumInterface);
         ret.push_back(primitives);
     }
     

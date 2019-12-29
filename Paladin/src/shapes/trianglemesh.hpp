@@ -162,14 +162,23 @@ shared_ptr<Triangle> createTri(shared_ptr<const Transform> o2w, shared_ptr<const
 
 vector<shared_ptr<Shape>> createQuad(shared_ptr<const Transform> o2w,
                         bool reverseOrientation,
-                        Float width, Float height = 0);
+                        Float width, Float height = 0,
+                        const MediumInterface &mediumInterface = nullptr);
 
 
-vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &, shared_ptr<const Material>&, vector<shared_ptr<Light>> &lights);
+vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &, shared_ptr<const Material>&,
+                                                  vector<shared_ptr<Light>> &lights,
+                                                  const MediumInterface &mediumInterface);
 
-vector<shared_ptr<Shape>> createCube(shared_ptr<const Transform> o2w,bool reverseOrientation, Float x, Float y, Float z);
+vector<shared_ptr<Shape>> createCube(shared_ptr<const Transform> o2w,
+                                     bool reverseOrientation,
+                                     Float x, Float y, Float z,
+                                     const MediumInterface &mediumInterface);
 
-vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &, shared_ptr<const Material>&, vector<shared_ptr<Light>> &lights);
+vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &,
+                                                  shared_ptr<const Material>&,
+                                                  vector<shared_ptr<Light>> &lights,
+                                                  const MediumInterface &mediumInterface);
 
 PALADIN_END
 

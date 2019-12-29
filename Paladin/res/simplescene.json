@@ -330,7 +330,7 @@
                 ],
                 "width" : 2
             },
-            "mediumInterface" : [null, "fog"],
+            "mediumInterface" : ["", "fog"],
             "material" : null
         },
         {

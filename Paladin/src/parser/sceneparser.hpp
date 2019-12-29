@@ -89,6 +89,24 @@ private:
         _mediumCache[name] = medium;
     }
     
+    MediumInterface getMediumIntetface(const nloJson& data) {
+        if (data.is_null() || data.size() == 0) {
+            return nullptr;
+        }
+        if (data.size() == 1) {
+            string mediumName = data[0];
+            const Medium * inside = getMedium(mediumName).get();
+            return MediumInterface(inside);
+        } else if (data.size() == 2) {
+            string insideName = data[0];
+            string outsideName = data[1];
+            const Medium * inside = getMedium(insideName).get();
+            const Medium * outside = getMedium(outsideName).get();
+            return MediumInterface(inside, outside);
+        }
+        return nullptr;
+    }
+    
     shared_ptr<const Medium> getMedium(const nloJson &name) {
         if (name.is_null()) {
             return nullptr;

@@ -81,6 +81,7 @@ void SceneParser::parseMediums(const nloJson &dict) {
         string name = iter.key();
         nloJson data = iter.value();
         shared_ptr<const Medium> medium(createMedium(data));
+        addMediumToCache(name, medium);
     }
 }
 
@@ -197,6 +198,7 @@ void SceneParser::parseShapes(const nloJson &shapeDataList) {
 //        "phiMax" : 360
 //    },
 //    "material" : "matte1" ,
+//    "mediumInterface" : [null, "fog"],
 //    "emission" : {
 //        "nSamples" : 1,
 //        "Le" : {
@@ -216,19 +218,40 @@ void SceneParser::parseSimpleShape(const nloJson &data, const string &type) {
     if (areaLight) {
         _lights.push_back(areaLight);
     }
-    shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, nullptr);
+    nloJson medIntfceData = data.value("mediumInterface", nloJson());
+    MediumInterface mediumInterface = getMediumIntetface(medIntfceData);
+    shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, mediumInterface);
     _primitives.push_back(primitives);
 }
 
+//data : {
+//    "type" : "triMesh",
+//    "subType" : "quad",
+//    "name" : "front",
+//    "enable" : true,
+//    "param" : {
+//        "transform" :[
+//            {
+//                "type" : "translate",
+//                "param" : [-1,0,0]
+//            }
+//        ],
+//        "width" : 2
+//    },
+//    "mediumInterface" : [null, "fog"],
+//    "material" : null
+//}
 void SceneParser::parseTriMesh(const nloJson &data) {
     string subType = data.value("subType", "");
     vector<shared_ptr<Primitive>> prims;
+    nloJson medIntfceData = data.value("mediumInterface", nloJson());
+    MediumInterface mediumInterface = getMediumIntetface(medIntfceData);
     if (subType == "quad") {
         shared_ptr<const Material> mat = getMaterial(data.value("material", nloJson()));
-        prims = createQuadPrimitive(data, mat, _lights);
+        prims = createQuadPrimitive(data, mat, _lights, mediumInterface);
     } else if (subType == "cube") {
         shared_ptr<const Material> mat = getMaterial(data.value("material", nloJson()));
-        prims = createCubePrimitive(data, mat, _lights);
+        prims = createCubePrimitive(data, mat, _lights, mediumInterface);
     }
     _primitives.insert(_primitives.end(), prims.begin(), prims.end());
 }
