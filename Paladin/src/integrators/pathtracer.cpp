@@ -158,7 +158,7 @@ CObject_ptr createPathTracer(const nloJson &param, const Arguments &lst) {
     return ret;
 }
 
-REGISTER("PathTracer", createPathTracer);
+REGISTER("pt", createPathTracer);
 
 
 

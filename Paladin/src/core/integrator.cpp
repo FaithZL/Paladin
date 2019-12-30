@@ -115,7 +115,7 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
     	if (!f.IsBlack()) {
     		// 计算可见性
     		if (handleMedia) {
-    			// 处理参与介质todo
+                Li *= visibility.Tr(scene, sampler);
     		} else {
     			if (!visibility.unoccluded(scene)) {
     				Li = Spectrum(0.0f);
