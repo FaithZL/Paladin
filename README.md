@@ -16,7 +16,8 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
 
  * connell box 16spp halton
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-pt-16spp-halton.png)
-
+ * connell box fog 128spp halton
+   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-fog-halton-128spp.png)
 
 # 获取仓库
 	git clone --recursive https://github.com/FaithZL/Paladin.git
