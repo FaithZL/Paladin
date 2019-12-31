@@ -52,16 +52,30 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
             // 如果ray有参与介质，则对参与介质进行采样，计算散射
             throughput *= ray.medium->sample(ray, sampler, arena, &mi);
         }
+        if (throughput.IsBlack()) {
+            break;
+        }
         
         if (mi.isValid()) {
-            // 如果采样到的顶点没有落在物体表面
+            // 如果采样点落在参与介质中
+            // 其实跟采样表面一样的处理方式，
+            // 1.估计直接光照
+            // 2.随机选方向继续追踪
             if (bounce >= _maxDepth) {
                 break;
             }
+            const Distribution1D *lightDistrib = _lightDistribution->lookup(mi.pos);
+            L += throughput * sampleOneLight(mi, scene, arena, sampler, true,
+                                              lightDistrib);
             
+            Vector3f wo = -ray.dir;
+            Vector3f wi;
+            mi.phase->sample_p(wo, &wi, sampler.get2D());
+            ray = mi.spawnRay(wi);
+            specularBounce = false;
             
         } else {
-        
+            // 如果采样到的顶点没有落在物体表面
             // 如果当前ray是直接从相机发射，
             // 判断光线是否与场景几何图元相交
             if (specularBounce || bounce == 0) {

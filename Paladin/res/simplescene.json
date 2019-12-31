@@ -14,7 +14,7 @@
             "param" : {
                 "g" : 0,
                 "sigma_a" : [0.0,0.0,0.0],
-                "sigma_s" : [1.0,1.0,1.0]
+                "sigma_s" : [0.8,0.8,0.8]
             }
         }
     },
@@ -325,12 +325,12 @@
                 "transform" :[
                     {
                         "type" : "translate",
-                        "param" : [-1,0,0]
+                        "param" : [0,0,-1]
                     }
                 ],
                 "width" : 2
             },
-            "mediumInterface" : ["", ""],
+            "mediumInterface" : ["", "fog"],
             "material" : null
         },
         {
@@ -417,7 +417,7 @@
     "sampler" : {
     	"type" : "halton",
     	"param" : {
-    		"spp" : 2
+    		"spp" : 512
     	}
     },
     "camera" : {
@@ -437,7 +437,7 @@
     },
     "film" : {
     	"param" : {
-			"resolution" : [400, 400],
+			"resolution" : [1024, 1024],
 	    	"cropWindow" : [0,0,1,1],
 	    	"fileName" : "paladin-vol.png",
 	    	"diagonal" : 1,

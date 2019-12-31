@@ -6,6 +6,7 @@ xcode/CMakeCache.txt
 xcode/cmake_install.cmake
 xcode/CMakeScripts
 xcode/Debug
+xcode/Release
 xcode/Paladin.build
 xcode/third
 xcuserdata

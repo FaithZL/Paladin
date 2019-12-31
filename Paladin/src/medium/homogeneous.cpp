@@ -88,7 +88,7 @@ CObject_ptr createHomogeneousMedium(const nloJson &param, const Arguments &lst) 
     nloJson sig_s_data = param.value("sigma_s", nloJson::array({1.f, 1.f, 1.f}));
     Spectrum sigma_s = Spectrum::FromJsonRGB(sig_s_data);
     
-    auto ret = new HomogeneousMedium(sigma_a, sigma_s, g);
+    auto ret = new HomogeneousMedium(sigma_s, sigma_a, g);
     return ret;
 }
 
