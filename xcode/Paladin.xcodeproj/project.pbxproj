@@ -361,6 +361,7 @@
 		F6393E6523AD2884000CA600 /* homogeneous.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6393E6323AD2884000CA600 /* homogeneous.cpp */; };
 		F63A181A23A52E6100ED2599 /* subsurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63A181823A52E6100ED2599 /* subsurface.cpp */; };
 		F63B31D3239A8FE9004ED6D5 /* interpolation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63B31D1239A8FE9004ED6D5 /* interpolation.cpp */; };
+		F640190F23BB9A910047F72D /* bdpt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F640190E23BB9A910047F72D /* bdpt.cpp */; };
 		F70E8D277E02406FAA1DDCC4 /* utilities_unittest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 8AA01D54BA424506B16989F3 /* utilities_unittest.cc */; };
 		FA41E4A37EA8489E8900108A /* pointlight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B4F5D3B7AAC4CB182D6CFA4 /* pointlight.cpp */; };
 		FAAE260F8F664A66B8BC3B88 /* ImfRationalAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27EF23D8293B40C890D7E28F /* ImfRationalAttribute.cpp */; };
@@ -1203,6 +1204,9 @@
 		F63A181923A52E6100ED2599 /* subsurface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = subsurface.hpp; path = src/materials/subsurface.hpp; sourceTree = "<group>"; };
 		F63B31D1239A8FE9004ED6D5 /* interpolation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = interpolation.cpp; path = src/math/interpolation.cpp; sourceTree = "<group>"; };
 		F63B31D2239A8FE9004ED6D5 /* interpolation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = interpolation.hpp; path = src/math/interpolation.hpp; sourceTree = "<group>"; };
+		F640190D23BB9A910047F72D /* bdpt.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = bdpt.hpp; sourceTree = "<group>"; };
+		F640190E23BB9A910047F72D /* bdpt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bdpt.cpp; sourceTree = "<group>"; };
+		F640191023BB9C5F0047F72D /* pathvertex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pathvertex.h; sourceTree = "<group>"; };
 		F67145DE6FFB470381E9DB82 /* liolib.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = liolib.c; path = third/lua53/lua/liolib.c; sourceTree = SOURCE_ROOT; };
 		F6D076CD1FA846EE9FF8A217 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = third/openexr/IlmBase/IexMath/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
 		F777F669355D4E04B2974B59 /* IlmThreadPool.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = IlmThreadPool.cpp; path = third/openexr/IlmBase/IlmThread/IlmThreadPool.cpp; sourceTree = SOURCE_ROOT; };
@@ -2085,6 +2089,7 @@
 		C4767B44C9644DC192A1B2C0 /* integrators */ = {
 			isa = PBXGroup;
 			children = (
+				F640190C23BB9A910047F72D /* bdpt */,
 				69FFC136A07C49A5965A1025 /* geometry.cpp */,
 				AAFDD57855684A7793A5B983 /* geometry.hpp */,
 				0FD5158C06AD41FFB6462C9C /* pathtracer.cpp */,
@@ -2297,6 +2302,17 @@
 				F6393E6423AD2884000CA600 /* homogeneous.hpp */,
 			);
 			path = medium;
+			sourceTree = "<group>";
+		};
+		F640190C23BB9A910047F72D /* bdpt */ = {
+			isa = PBXGroup;
+			children = (
+				F640190D23BB9A910047F72D /* bdpt.hpp */,
+				F640190E23BB9A910047F72D /* bdpt.cpp */,
+				F640191023BB9C5F0047F72D /* pathvertex.h */,
+			);
+			name = bdpt;
+			path = src/integrators/bdpt;
 			sourceTree = "<group>";
 		};
 		F76165006636489A88413F0E /* Header Files */ = {
@@ -3094,6 +3110,7 @@
 				072CD126640E47BCB1679D79 /* interaction.cpp in Sources */,
 				0955C7C1951A4243A10DD8AD /* light.cpp in Sources */,
 				2093E833291D475C9E238B91 /* material.cpp in Sources */,
+				F640190F23BB9A910047F72D /* bdpt.cpp in Sources */,
 				98A7FBA677D3478FB2231398 /* medium.cpp in Sources */,
 				052E05E1709D4A85A3F3CA53 /* microfacet.cpp in Sources */,
 				3E768021DBC047899028FC24 /* paladin.cpp in Sources */,
