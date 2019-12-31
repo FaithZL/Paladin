@@ -10,8 +10,9 @@
 #include "core/header.h"
 #include "core/paladin.hpp"
 
+#include "ext/tinyobj/tiny_obj_loader.h"
+
 #include "alltest/test_lua.hpp"
-#include "alltest/test_rapidxml.hpp"
 #include "alltest/test_glog.hpp"
 #include "alltest/test_openexr.hpp"
 #include "alltest/loadfile.h"
@@ -28,7 +29,7 @@ USING_STD
 int main(int argc, const char * argv[]) {
     // insert code here...
     COUT << "Hello, paladin!\n";
-    
+    tinyobj::MaterialFileReader mr("99");
     Paladin paladin;
     string fileName(argv[1]);
     paladin.render(fileName);
