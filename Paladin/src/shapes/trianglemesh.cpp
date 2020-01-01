@@ -788,8 +788,7 @@ vector<shared_ptr<Shape>> createTriFromFile(const string &fn,
     vector<shared_ptr<Shape>> ret;
     ModelParser mp;
     mp.load(fn, basePath);
-    
-    return ret;
+    return mp.getTriLst(o2w, reverseOrientation);
 }
 
 vector<shared_ptr<Primitive>> createPrimitive(const vector<shared_ptr<Shape>> &triLst,

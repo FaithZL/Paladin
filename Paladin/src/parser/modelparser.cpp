@@ -19,4 +19,8 @@ void ModelParser::load(const string &fn, const string &basePath, bool triangulat
     return;
 }
 
+vector<shared_ptr<Shape>> ModelParser::getTriLst(const shared_ptr<const Transform> &o2w, bool reverseOrientation) {
+    
+}
+
 PALADIN_END
