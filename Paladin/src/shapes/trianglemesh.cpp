@@ -716,6 +716,28 @@ vector<shared_ptr<Shape>> createCube(shared_ptr<const Transform> o2w,
     return ret;
 }
 
+//data : {
+//    "type" : "triMesh",
+//    "subType" : "cube",
+//    "name" : "cube1",
+//    "enable" : true,
+//    "param" : {
+//        "transform" :[
+//            {
+//                "type" : "rotateY",
+//                "param" : [-20]
+//            },
+//            {
+//                "type" : "translate",
+//                "param" : [-0.3,-0.4,0.2]
+//            }
+//        ],
+//        "x" : 0.6,
+//        "y" : 1.2,
+//        "z" : 0.6
+//    },
+//    "material" : "matte1"
+//}
 vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &data,
                                                   shared_ptr<const Material>&mat,
                                                   vector<shared_ptr<Light>> &lights,
@@ -742,6 +764,41 @@ vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &data,
     
     return ret;
 }
+
+//data : {
+//    "type" : "triMesh",
+//    "subType" : "model",
+//    "name" : "box",
+//    "enable" : true,
+//    "param" : {
+//        "transform" :[
+//            {
+//                "type" : "rotateY",
+//                "param" : [15]
+//            },
+//            {
+//                "type" : "translate",
+//                "param" : [0.35,-0.7,-0.4]
+//            }
+//        ],
+//        "fileName" : "res/box.obj"
+//    },
+//    "material" : "matte1"
+//}
+vector<shared_ptr<Primitive>> createModelPrimitive(const nloJson &data,
+                                            shared_ptr<const Material>&,
+                                            vector<shared_ptr<Light>> &lights,
+                                                   const MediumInterface &mediumInterface) {
+    string fileName = data.value("fileName", "");
+    nloJson param = data.value("param", nloJson::object());
+    auto l2w = createTransform(param.value("transform", nloJson()));
+    bool ro = param.value("reverseOrientation", false);
+    
+    vector<shared_ptr<Primitive>> ret;
+    
+    return ret;
+}
+
 
 
 PALADIN_END

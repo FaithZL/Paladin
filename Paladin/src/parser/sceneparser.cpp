@@ -246,15 +246,18 @@ void SceneParser::parseTriMesh(const nloJson &data) {
     vector<shared_ptr<Primitive>> prims;
     nloJson medIntfceData = data.value("mediumInterface", nloJson());
     MediumInterface mediumInterface = getMediumIntetface(medIntfceData);
+    shared_ptr<const Material> mat = getMaterial(data.value("material", nloJson()));
     if (subType == "quad") {
-        shared_ptr<const Material> mat = getMaterial(data.value("material", nloJson()));
         prims = createQuadPrimitive(data, mat, _lights, mediumInterface);
     } else if (subType == "cube") {
-        shared_ptr<const Material> mat = getMaterial(data.value("material", nloJson()));
         prims = createCubePrimitive(data, mat, _lights, mediumInterface);
+    } else if (subType == "model"){
+        prims = createModelPrimitive(data, mat, _lights, mediumInterface);
     }
     _primitives.insert(_primitives.end(), prims.begin(), prims.end());
 }
+
+
 
 //"data" : {
 //    "type" : "bvh",

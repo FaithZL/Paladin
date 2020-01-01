@@ -180,6 +180,11 @@ vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &,
                                                   vector<shared_ptr<Light>> &lights,
                                                   const MediumInterface &mediumInterface);
 
+vector<shared_ptr<Primitive>> createModelPrimitive(const nloJson &,
+                                                   shared_ptr<const Material>&,
+                                                   vector<shared_ptr<Light>> &lights,
+                                                   const MediumInterface &mediumInterface);
+
 PALADIN_END
 
 #endif /* trianglemesh_hpp */

@@ -404,6 +404,26 @@
                 "z" : 0.6
             },
             "material" : "matte1"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "model",
+            "name" : "box",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateY",
+                        "param" : [15]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0.35,-0.7,-0.4]
+                    }
+                ],
+                "fileName" : "res/box.obj"
+            },
+            "material" : "matte1"
         }
 	],
 	"integrator" : {
