@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7840CAAF2F4A49C386716B30"
+               BlueprintIdentifier = "C28E621C903C491DBADE6F91"
                BuildableName = "Paladin"
                BlueprintName = "Paladin"
                ReferencedContainer = "container:../xcode/Paladin.xcodeproj">
@@ -44,7 +44,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7840CAAF2F4A49C386716B30"
+            BlueprintIdentifier = "C28E621C903C491DBADE6F91"
             BuildableName = "Paladin"
             BlueprintName = "Paladin"
             ReferencedContainer = "container:../xcode/Paladin.xcodeproj">
@@ -67,7 +67,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7840CAAF2F4A49C386716B30"
+            BlueprintIdentifier = "C28E621C903C491DBADE6F91"
             BuildableName = "Paladin"
             BlueprintName = "Paladin"
             ReferencedContainer = "container:../xcode/Paladin.xcodeproj">

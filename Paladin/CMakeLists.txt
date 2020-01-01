@@ -12,8 +12,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # 收集所有头文件源文件，存入 ALL_FILES 变量中
-file(GLOB_RECURSE ALL_FILES "src/*.h*" "src/*.cpp")
-file(GLOB MORE_FILES "third/stblib/stb/*.h" "third/stblib/stb/*.c" "third/tinyobjloader/*.h")
+file(GLOB_RECURSE ALL_FILES "src/*.h*" "src/*.c*")
+file(GLOB MORE_FILES "third/stblib/stb/*.h" "third/stblib/stb/*.c")
 foreach(_file IN ITEMS ${MORE_FILES})
     list(APPEND ALL_FILES ${_file})
 endforeach()
