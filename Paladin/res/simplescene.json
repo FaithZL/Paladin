@@ -417,7 +417,7 @@
     "sampler" : {
     	"type" : "halton",
     	"param" : {
-    		"spp" : 512
+    		"spp" : 2
     	}
     },
     "camera" : {
@@ -437,7 +437,7 @@
     },
     "film" : {
     	"param" : {
-			"resolution" : [1024, 1024],
+			"resolution" : [400, 400],
 	    	"cropWindow" : [0,0,1,1],
 	    	"fileName" : "paladin-vol.png",
 	    	"diagonal" : 1,
