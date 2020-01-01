@@ -20,7 +20,7 @@ PALADIN_BEGIN
 class Disk : public Shape {
 public:
     
-    Disk(shared_ptr<const Transform> objectToWorld, shared_ptr<const Transform> worldToObject,
+    Disk(const shared_ptr<const Transform> &objectToWorld, const shared_ptr<const Transform> &worldToObject,
          bool reverseOrientation, Float height, Float radius, Float innerRadius,
          Float phiMax)
     : Shape(objectToWorld, worldToObject, reverseOrientation),

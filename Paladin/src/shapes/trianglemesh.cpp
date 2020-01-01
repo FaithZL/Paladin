@@ -10,11 +10,12 @@
 #include "math/sampling.hpp"
 #include "lights/diffuse.hpp"
 #include "core/primitive.hpp"
+#include "parser/modelparser.hpp"
 
 PALADIN_BEGIN
 
 TriangleMesh::TriangleMesh(
-                           shared_ptr<const Transform> ObjectToWorld, int nTriangles, const int *vertexIndices,
+                           const shared_ptr<const Transform> &ObjectToWorld, int nTriangles, const int *vertexIndices,
                            int nVertices, const Point3f *P, const Vector3f *S, const Normal3f *N,
                            const Point2f *UV, const std::shared_ptr<Texture<Float>> &alphaMask,
                            const std::shared_ptr<Texture<Float>> &shadowAlphaMask,
@@ -583,7 +584,7 @@ Interaction Triangle::samplePos(const Point2f &u, Float *pdf) const {
     return ret;
 }
 
-shared_ptr<TriangleMesh> createTriMesh(shared_ptr<const Transform> o2w, int nTriangles,
+shared_ptr<TriangleMesh> createTriMesh(const shared_ptr<const Transform> &o2w, int nTriangles,
                                     const int *vertexIndices, int nVertices, const Point3f *P,
                                     const Point2f *uv, const Normal3f *N, const Vector3f *S,
                                     const std::shared_ptr<Texture<Float>> &alphaMask,
@@ -598,14 +599,14 @@ shared_ptr<TriangleMesh> createTriMesh(shared_ptr<const Transform> o2w, int nTri
                                     faceIndices);
 }
 
-shared_ptr<Triangle> createTri(shared_ptr<const Transform> o2w, shared_ptr<const Transform> w2o,
+shared_ptr<Triangle> createTri(const shared_ptr<const Transform> &o2w, shared_ptr<const Transform> w2o,
                                 bool reverseOrientation,
                                 const std::shared_ptr<TriangleMesh> &_mesh,
                                 int triNumber) {
     return make_shared<Triangle>(o2w, w2o, reverseOrientation, _mesh, triNumber);
 }
 
-vector<shared_ptr<Shape>> createQuad(shared_ptr<const Transform> o2w,
+vector<shared_ptr<Shape>> createQuad(const shared_ptr<const Transform> &o2w,
                                 bool reverseOrientation,
                                 Float width, Float height,
                                 const MediumInterface &mediumInterface) {
@@ -659,7 +660,7 @@ vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &data,
     return createPrimitive(triLst, lights, mat, mediumInterface, emissionData);
 }
 
-vector<shared_ptr<Shape>> createCube(shared_ptr<const Transform> o2w,
+vector<shared_ptr<Shape>> createCube(const shared_ptr<const Transform> &o2w,
                                      bool reverseOrientation,
                                      Float x, Float y, Float z,
                                      const MediumInterface &mediumInterface) {
@@ -770,19 +771,23 @@ vector<shared_ptr<Primitive>> createModelPrimitive(const nloJson &data,
                                                    const MediumInterface &mediumInterface) {
     nloJson param = data.value("param", nloJson::object());
     string fileName = param.value("fileName", "");
+    string basePath = param.value("basePath", "");
     auto l2w = shared_ptr<const Transform>(createTransform(param.value("transform", nloJson())));
     bool ro = param.value("reverseOrientation", false);
     nloJson emission = data.value("emission", nloJson());
-    vector<shared_ptr<Shape>> triLst = createTriFromFile(fileName,l2w,ro);
+    vector<shared_ptr<Shape>> triLst = createTriFromFile(fileName, l2w, ro, basePath);
     vector<shared_ptr<Primitive>> ret;
     
     return ret;
 }
 
 vector<shared_ptr<Shape>> createTriFromFile(const string &fn,
-                                            shared_ptr<const Transform> &o2w,
-                                            bool reverseOrientation) {
+                                            const shared_ptr<const Transform> &o2w,
+                                            bool reverseOrientation,
+                                            const string &basePath) {
     vector<shared_ptr<Shape>> ret;
+    ModelParser mp;
+    mp.load(fn, basePath);
     
     return ret;
 }

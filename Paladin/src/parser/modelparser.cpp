@@ -14,9 +14,9 @@ void ModelParser::load(const string &fn, const string &basePath, bool triangulat
     string err;
     tinyobj::LoadObj(&_attrib, &_shapes, &_materials,
                      &warn, &err, fn.c_str(),
-                     basePath.c_str(), triangulate);
+                     nullptr, triangulate);
     
-    
+    return;
 }
 
 PALADIN_END

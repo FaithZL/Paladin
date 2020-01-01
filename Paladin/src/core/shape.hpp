@@ -24,7 +24,7 @@ PALADIN_BEGIN
  */
 class Shape : public CObject {
 public:
-	Shape(shared_ptr<const Transform>ObjectToWorld, shared_ptr<const Transform>WorldToObject,
+	Shape(const shared_ptr<const Transform> &ObjectToWorld, const shared_ptr<const Transform>&WorldToObject,
           bool reverseOrientation);
 
 	virtual ~Shape();

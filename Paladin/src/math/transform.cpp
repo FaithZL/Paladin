@@ -594,6 +594,9 @@ Transform * Transform::identity_ptr() {
  * param : [x,y,z]
  */
 CObject_ptr createScale(const nloJson &param, const Arguments &lst) {
+    if (param.is_number()) {
+        return Transform::scale_ptr(param);
+    }
     Float sx = param.at(0);
     Float sy = param.at(1);
     Float sz = param.at(2);

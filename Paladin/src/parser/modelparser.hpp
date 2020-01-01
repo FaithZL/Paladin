@@ -11,6 +11,8 @@
 #include "core/header.h"
 #include "ext/tinyobj/tiny_obj_loader.h"
 #include "shapes/trianglemesh.hpp"
+#include "math/transform.hpp"
+#include "shapes/trianglemesh.hpp"
 
 PALADIN_BEGIN
 
@@ -27,16 +29,15 @@ public:
     void load(const string &fn, const string &basePath = nullptr,
               bool triangulate = true);
     
+    vector<shared_ptr<Shape>> getTriLst(const shared_ptr<const Transform> &o2w);
     
 private:
-    
+    // tinyobjloader中的成员
     attrib_t _attrib;
-    
     vector<shape_t> _shapes;
-    
     vector<material_t> _materials;
-    // 用于输出
-    vector<shared_ptr<Primitive>> _primitives;
+    
+    
 };
 
 PALADIN_END
