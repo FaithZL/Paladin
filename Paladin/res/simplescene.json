@@ -409,7 +409,7 @@
             "type" : "triMesh",
             "subType" : "model",
             "name" : "box",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -427,7 +427,7 @@
         }
 	],
 	"integrator" : {
-        "type" : "volpt",
+        "type" : "pt",
         "param" : {
         	"maxBounce" : 5,
         	"rrThreshold" : 1,

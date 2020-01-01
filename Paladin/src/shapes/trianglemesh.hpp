@@ -166,7 +166,8 @@ vector<shared_ptr<Shape>> createQuad(shared_ptr<const Transform> o2w,
                         const MediumInterface &mediumInterface = nullptr);
 
 
-vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &, shared_ptr<const Material>&,
+vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &,
+                                                  const shared_ptr<const Material>&,
                                                   vector<shared_ptr<Light>> &lights,
                                                   const MediumInterface &mediumInterface);
 
@@ -175,15 +176,27 @@ vector<shared_ptr<Shape>> createCube(shared_ptr<const Transform> o2w,
                                      Float x, Float y, Float z,
                                      const MediumInterface &mediumInterface);
 
-vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &,
-                                                  shared_ptr<const Material>&,
+vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &data,
+                                                  const shared_ptr<const Material>& mat,
                                                   vector<shared_ptr<Light>> &lights,
                                                   const MediumInterface &mediumInterface);
 
-vector<shared_ptr<Primitive>> createModelPrimitive(const nloJson &,
-                                                   shared_ptr<const Material>&,
+vector<shared_ptr<Primitive>> createModelPrimitive(const nloJson &data,
+                                                   const shared_ptr<const Material> &mat,
                                                    vector<shared_ptr<Light>> &lights,
                                                    const MediumInterface &mediumInterface);
+
+vector<shared_ptr<Shape>> createTriFromFile(const string &fn,
+                                            shared_ptr<const Transform> &o2w,
+                                            bool reverseOrientation);
+
+vector<shared_ptr<Primitive>> createPrimitive(const vector<shared_ptr<Shape>> &triLst,
+                                              vector<shared_ptr<Light>> &lights,
+                                              const shared_ptr<const Material>&mat,
+                                              const MediumInterface &mediumInterface,
+                                              const nloJson &emissionData);
+
+
 
 PALADIN_END
 

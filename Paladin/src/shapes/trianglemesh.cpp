@@ -645,7 +645,7 @@ vector<shared_ptr<Shape>> createQuad(shared_ptr<const Transform> o2w,
 //    "reverseOrientation" : false
 //}
 vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &data,
-                                                  shared_ptr<const Material>& mat,
+                                                  const shared_ptr<const Material>& mat,
                                                   vector<shared_ptr<Light>> &lights,
                                                   const MediumInterface &mediumInterface) {
     nloJson param = data.value("param", nloJson::object());
@@ -655,18 +655,8 @@ vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &data,
     Float width = param.value("width", 1.f);
     Float height = param.value("height", width);
     vector<shared_ptr<Shape>> triLst = createQuad(o2w, ro, width, height);
-    vector<shared_ptr<Primitive>> ret;
-    nloJson emission = data.value("emission", nloJson());
-    for (int i = 0; i < 2; ++i) {
-        auto shape = triLst.at(i);
-        shared_ptr<DiffuseAreaLight> areaLight(createDiffuseAreaLight(emission, shape));
-        if (areaLight) {
-            lights.push_back(areaLight);
-        }
-        shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, mediumInterface);
-        ret.push_back(primitives);
-    }
-    return ret;
+    nloJson emissionData = data.value("emission", nloJson());
+    return createPrimitive(triLst, lights, mat, mediumInterface, emissionData);
 }
 
 vector<shared_ptr<Shape>> createCube(shared_ptr<const Transform> o2w,
@@ -739,7 +729,7 @@ vector<shared_ptr<Shape>> createCube(shared_ptr<const Transform> o2w,
 //    "material" : "matte1"
 //}
 vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &data,
-                                                  shared_ptr<const Material>&mat,
+                                                  const shared_ptr<const Material>&mat,
                                                   vector<shared_ptr<Light>> &lights,
                                                   const MediumInterface &mediumInterface) {
     nloJson param = data.value("param", nloJson::object());
@@ -750,19 +740,8 @@ vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &data,
     Float y = param.value("y", x);
     Float z = param.value("z", y);
     vector<shared_ptr<Shape>> triLst = createCube(o2w, ro, x, y, z, mediumInterface);
-    vector<shared_ptr<Primitive>> ret;
     nloJson emission = data.value("emission", nloJson());
-    for (int i = 0; i < triLst.size(); ++i) {
-        auto shape = triLst.at(i);
-        shared_ptr<DiffuseAreaLight> areaLight(createDiffuseAreaLight(emission, shape));
-        if (areaLight) {
-            lights.push_back(areaLight);
-        }
-        shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, mediumInterface);
-        ret.push_back(primitives);
-    }
-    
-    return ret;
+    return createPrimitive(triLst, lights, mat, mediumInterface, emission);
 }
 
 //data : {
@@ -786,19 +765,44 @@ vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &data,
 //    "material" : "matte1"
 //}
 vector<shared_ptr<Primitive>> createModelPrimitive(const nloJson &data,
-                                            shared_ptr<const Material>&,
-                                            vector<shared_ptr<Light>> &lights,
+                                                   const shared_ptr<const Material> &mat,
+                                                   vector<shared_ptr<Light>> &lights,
                                                    const MediumInterface &mediumInterface) {
-    string fileName = data.value("fileName", "");
     nloJson param = data.value("param", nloJson::object());
-    auto l2w = createTransform(param.value("transform", nloJson()));
+    string fileName = param.value("fileName", "");
+    auto l2w = shared_ptr<const Transform>(createTransform(param.value("transform", nloJson())));
     bool ro = param.value("reverseOrientation", false);
-    
+    nloJson emission = data.value("emission", nloJson());
+    vector<shared_ptr<Shape>> triLst = createTriFromFile(fileName,l2w,ro);
     vector<shared_ptr<Primitive>> ret;
     
     return ret;
 }
 
+vector<shared_ptr<Shape>> createTriFromFile(const string &fn,
+                                            shared_ptr<const Transform> &o2w,
+                                            bool reverseOrientation) {
+    vector<shared_ptr<Shape>> ret;
+    
+    return ret;
+}
 
+vector<shared_ptr<Primitive>> createPrimitive(const vector<shared_ptr<Shape>> &triLst,
+                                              vector<shared_ptr<Light>> &lights,
+                                              const shared_ptr<const Material> &mat,
+                                              const MediumInterface &mediumInterface,
+                                              const nloJson &emissionData) {
+    vector<shared_ptr<Primitive>> ret;
+    for (int i = 0; i < triLst.size(); ++i) {
+        auto shape = triLst.at(i);
+        shared_ptr<DiffuseAreaLight> areaLight(createDiffuseAreaLight(emissionData, shape));
+        if (areaLight) {
+            lights.push_back(areaLight);
+        }
+        shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, mediumInterface);
+        ret.push_back(primitives);
+    }
+    return ret;
+}
 
 PALADIN_END
