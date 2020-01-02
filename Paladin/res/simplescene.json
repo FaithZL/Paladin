@@ -409,7 +409,7 @@
             "type" : "triMesh",
             "subType" : "model",
             "name" : "box",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -417,8 +417,8 @@
                         "param" : [15]
                     },
                     {
-                        "type" : "translate",
-                        "param" : [0.35,-0.7,-0.4]
+                        "type" : "scale",
+                        "param" : 0.5
                     }
                 ],
                 "fileName" : "res/box.obj"

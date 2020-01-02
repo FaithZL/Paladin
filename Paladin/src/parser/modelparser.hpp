@@ -26,8 +26,16 @@ public:
         
     }
     
-    void load(const string &fn, const string &basePath = nullptr,
+    bool load(const string &fn, const string &basePath = nullptr,
               bool triangulate = true);
+    
+    void initPoints();
+    
+    void initNormals();
+    
+    void initUVs();
+    
+    void parseShapes();
     
     vector<shared_ptr<Shape>> getTriLst(const shared_ptr<const Transform> &o2w, bool reverseOrientation);
     

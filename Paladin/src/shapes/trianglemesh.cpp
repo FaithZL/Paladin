@@ -774,11 +774,9 @@ vector<shared_ptr<Primitive>> createModelPrimitive(const nloJson &data,
     string basePath = param.value("basePath", "");
     auto l2w = shared_ptr<const Transform>(createTransform(param.value("transform", nloJson())));
     bool ro = param.value("reverseOrientation", false);
-    nloJson emission = data.value("emission", nloJson());
+    nloJson emissionData = data.value("emission", nloJson());
     vector<shared_ptr<Shape>> triLst = createTriFromFile(fileName, l2w, ro, basePath);
-    vector<shared_ptr<Primitive>> ret;
-    
-    return ret;
+    return createPrimitive(triLst, lights, mat, mediumInterface, emissionData);
 }
 
 vector<shared_ptr<Shape>> createTriFromFile(const string &fn,
