@@ -48,7 +48,7 @@ private:
     // 边向量列表
     vector<Vector3f> _edges;
     // 法线列表
-    vector<Normal3f> _normals
+    vector<Normal3f> _normals;
     // uv坐标列表
     vector<Point2f> _UVs;
     // 面索引列表

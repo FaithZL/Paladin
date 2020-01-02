@@ -87,7 +87,7 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
     // 再随机采样it处的bsdf，生成一个ray，如果顺着ray方向能找到光P1点所在的光源
     // 则计算出ray与光源表面的交点P2，计算从P2发射的光线在it点产生的辐射度L2
     // 根据复合重要性采样的公式，估计出it受到light的直接光照
-    // 如果没有采样bsdf时生成的ray不与light相交，则返回对L1加权之后的辐射度
+    // 如果采样bsdf时生成的ray不与light相交，则返回对L1加权之后的辐射度
     // 具体逻辑，看代码
     BxDFType bsdfFlags = specular ?
     					BSDF_ALL : 
