@@ -61,24 +61,11 @@ void ModelParser::parseShapes() {
 }
 
 void ModelParser::parseMesh(const mesh_t &mesh) {
+    // todo 顶点索引与法线索引可能不一致，看看怎么处理
     for (size_t i = 0; i < mesh.indices.size(); ++i) {
         index_t idx = mesh.indices[i];
         _vertIndices.push_back(idx.vertex_index);
     }
-}
-
-void ModelParser::remedyIndices() {
-    // 顶点索引与法线索引，UV索引可能不一致，需要整理
-    // 以顶点索引为标准，整理
-    vector<Point2f> tmpUVs(_UVs.size());
-    vector<Normal3f> tmpNormals(_normals.size());
-    for (size_t i = 0; i < _vertIndices.size(); ++i) {
-        int pointIdx = _vertIndices[i];
-        tmpNormals[i] = _normals[pointIdx];
-        tmpUVs[i] = _UVs[pointIdx];
-    }
-    _normals.swap(tmpNormals);
-    _UVs.swap(tmpUVs);
 }
 
 vector<shared_ptr<Shape>> ModelParser::getTriLst(const shared_ptr<const Transform> &o2w,
@@ -87,15 +74,14 @@ vector<shared_ptr<Shape>> ModelParser::getTriLst(const shared_ptr<const Transfor
     initNormals();
     initUVs();
     parseShapes();
-    remedyIndices();
 
-    auto mesh = createTriMesh(o2w, _nTriangles, &_vertIndices[0], 
-                        _vertIndices.size(), _points, _UVs);
+    size_t nTriangles = _vertIndices.size() / 3;
+    
+    auto mesh = createTriMesh(o2w, nTriangles, &_vertIndices[0], _points.size(), &_points[0]);
 
     vector<shared_ptr<Shape>> ret;
     shared_ptr<Transform> w2o(o2w->getInverse_ptr());
-    // todo
-    for (int i = 0; i < _nTriangles; ++i) {
+    for (int i = 0; i < nTriangles; ++i) {
         ret.push_back(createTri(o2w, w2o, reverseOrientation, mesh, i));
     }
     return ret;

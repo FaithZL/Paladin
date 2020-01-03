@@ -29,7 +29,8 @@ shadowAlphaMask(shadowAlphaMask) {
     
     points.reset(new Point3f[nVertices]);
     for (int i = 0; i < nVertices; ++i) {
-        points[i] = ObjectToWorld->exec(P[i]);
+        Point3f p = P[i];
+        points[i] = ObjectToWorld->exec(p);
     }
     
     if (UV) {

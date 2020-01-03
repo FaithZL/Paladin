@@ -364,8 +364,8 @@
         {
             "type" : "triMesh",
             "subType" : "cube",
-            "name" : "cube1",
-            "enable" : true,
+            "name" : "cube2",
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -387,7 +387,7 @@
             "type" : "triMesh",
             "subType" : "cube",
             "name" : "cube1",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -414,14 +414,18 @@
                 "transform" :[
                     {
                         "type" : "rotateY",
-                        "param" : [15]
+                        "param" : [0]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,-1,0]
                     },
                     {
                         "type" : "scale",
-                        "param" : 0.5
+                        "param" : 0.2
                     }
                 ],
-                "fileName" : "res/bunny.obj"
+                "fileName" : "res/teapot.obj"
             },
             "material" : "matte1"
         }

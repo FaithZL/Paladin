@@ -39,8 +39,6 @@ public:
     
     void parseMesh(const mesh_t &mesh);
     
-    void remedyIndices();
-    
     vector<shared_ptr<Shape>> getTriLst(const shared_ptr<const Transform> &o2w, bool reverseOrientation);
     
 private:
@@ -51,10 +49,6 @@ private:
     
     // triangle mesh构造需要的参数
     
-    // 三角形个数
-    int _nTriangles = 0;
-    // 顶点个数
-    int _nVertices = 0;
     // 顶点列表
     vector<Point3f> _points;
     // 边向量列表
