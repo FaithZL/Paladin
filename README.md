@@ -25,6 +25,7 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
   - [ ] 梅特波利斯光照传输(MLT,metropolis light transport)
   - [ ] 随机渐进光子映射(SPPM,stochastic progress photon mapping)
   - [ ] 光子映射与双向路径追踪结合(VCM,vertex connection and merging)
+  - [ ] practical path guiding
   - [ ] 光的色散
 
 - 场景模型解析
@@ -39,7 +40,7 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
   - [x] 三角形网格，quad，cube
   - [ ] 表面细分
   - [ ] 曲线(curve)
-  - [ ] 双曲面
+  - [ ] 抛物面(Paraboloids)，双曲面(Hyperboloids)
 
 - BSDF，材质相关
   - [ ] 次表面散射BSSRDF
@@ -63,7 +64,7 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
   - [x] 各种几何表面采样(待完善)
   - [x] 离散一维分布，二维分布
   
-- [x] 采样器
+- 采样器
   - [x] 随机采样器(random sampler)
   - [x] halton采样器(halton sampler)
   - [x] 分层采样器(stratified sampler)

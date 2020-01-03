@@ -52,9 +52,9 @@ private:
     // triangle mesh构造需要的参数
     
     // 三角形个数
-    int _nTriangles;
+    int _nTriangles = 0;
     // 顶点个数
-    int _nVertices;
+    int _nVertices = 0;
     // 顶点列表
     vector<Point3f> _points;
     // 边向量列表
@@ -66,11 +66,7 @@ private:
     // 面索引列表
     vector<int> _faceIndices;
     // 点索引列表
-    vector<int> _pointIndices;
-    // uv索引列表
-    vector<int> _uvIndices;
-    // 法线索引列表
-    vector<int> _normalIndice;
+    vector<int> _vertIndices;
 };
 
 PALADIN_END
