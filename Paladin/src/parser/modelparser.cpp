@@ -56,7 +56,21 @@ void ModelParser::initUVs() {
 void ModelParser::parseShapes() {
     for (size_t i = 0; i < _shapes.size(); ++i) {
         shape_t shape = _shapes.at(i);
+        parseMesh(shape.mesh);
     }
+}
+
+void ModelParser::parseMesh(const mesh_t &mesh) {
+    for (size_t i = 0; i < mesh.indices.size(); ++i) {
+        index_t idx = mesh.indices[i];
+        _pointIndices.push_back(idx.vertex_index);
+        _normalIndice.push_back(idx.normal_index);
+        _uvIndices.push_back(idx.texcoord_index);
+    }
+}
+
+void ModelParser::remedyIndices() {
+    
 }
 
 vector<shared_ptr<Shape>> ModelParser::getTriLst(const shared_ptr<const Transform> &o2w,
@@ -65,7 +79,9 @@ vector<shared_ptr<Shape>> ModelParser::getTriLst(const shared_ptr<const Transfor
     initNormals();
     initUVs();
     
+    parseShapes();
     
+    remedyIndices();
 }
 
 PALADIN_END

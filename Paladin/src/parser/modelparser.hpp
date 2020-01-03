@@ -37,6 +37,10 @@ public:
     
     void parseShapes();
     
+    void parseMesh(const mesh_t &mesh);
+    
+    void remedyIndices();
+    
     vector<shared_ptr<Shape>> getTriLst(const shared_ptr<const Transform> &o2w, bool reverseOrientation);
     
 private:
@@ -61,8 +65,12 @@ private:
     vector<Point2f> _UVs;
     // 面索引列表
     vector<int> _faceIndices;
-    // 顶点索引列表
-    vector<int> _vertexIndices;
+    // 点索引列表
+    vector<int> _pointIndices;
+    // uv索引列表
+    vector<int> _uvIndices;
+    // 法线索引列表
+    vector<int> _normalIndice;
 };
 
 PALADIN_END

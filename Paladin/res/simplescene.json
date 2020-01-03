@@ -421,7 +421,7 @@
                         "param" : 0.5
                     }
                 ],
-                "fileName" : "res/box.obj"
+                "fileName" : "res/bunny.obj"
             },
             "material" : "matte1"
         }
