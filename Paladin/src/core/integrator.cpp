@@ -9,6 +9,7 @@
 #include "integrator.hpp"
 #include "camera.hpp"
 #include "tools/parallel.hpp"
+#include "tools/progressreporter.hpp"
 
 PALADIN_BEGIN
 
@@ -203,9 +204,10 @@ void MonteCarloIntegrator::render(const Scene &scene) {
     // 把屏幕x方向分为nTile.x部分，y方向分为nTile.y部分
     Point2i nTile((sampleExtent.x + tileSize - 1) / tileSize,
     			(sampleExtent.y + tileSize - 1) / tileSize);
-
+    
+    ProgressReporter reporter("rendering", nTile.x * nTile.y);
     auto renderTile = [&](Point2i tile) {
-        fprintf(stderr, "\r[%d, %d]", tile.x, tile.y);
+//        fprintf(stderr, "\r[%d, %d]", tile.x, tile.y);
     	// 内存池对象，预先申请一大段连续内存
     	// 之后所有内存全都通过arena分配
     	MemoryArena arena;
@@ -275,8 +277,8 @@ void MonteCarloIntegrator::render(const Scene &scene) {
     			filmTile->addSample(cameraSample.pFilm, L, rayWeight);
                 arena.reset();
             } while (tileSampler->startNextSample());
-            
     	}
+        reporter.update();
     	_camera->film->mergeFilmTile(std::move(filmTile));
     };
     parallelFor2D(renderTile, nTile);

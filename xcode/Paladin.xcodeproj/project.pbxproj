@@ -365,6 +365,7 @@
 		F33EA64601024392A072A1E7 /* lundump.c in Sources */ = {isa = PBXBuildFile; fileRef = 7F4A835F51CD4F8DA04DA128 /* lundump.c */; };
 		F614B328C7D9483CB405C30A /* glass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6875B88F46CF4721A3353BA8 /* glass.cpp */; };
 		F615E8055EFD48F4A6C8B0A1 /* mirror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 416669E939EE4B8EB03D3ABB /* mirror.cpp */; };
+		F63F19DC23C0C151003A6806 /* progressreporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63F19DA23C0C151003A6806 /* progressreporter.cpp */; };
 		F648BFFF23BCA007007D489E /* modelparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F648BFFD23BCA007007D489E /* modelparser.cpp */; };
 		F844FC8C3CBC4463B0D08605 /* ImfCompressor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FFC9A54A336491C8CCC5004 /* ImfCompressor.cpp */; };
 		F8C8B15197664D56BA60F053 /* medium.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12E5909286804619BC88C1F9 /* medium.cpp */; };
@@ -1205,6 +1206,8 @@
 		F329D616863E4EE4B04DFF73 /* ltable.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ltable.h; path = third/lua53/lua/ltable.h; sourceTree = SOURCE_ROOT; };
 		F32D48C3913447199A16C749 /* parallel.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = parallel.hpp; path = src/tools/parallel.hpp; sourceTree = SOURCE_ROOT; };
 		F503BE31B2C24210B5A00078 /* ImfZip.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfZip.cpp; path = third/openexr/OpenEXR/IlmImf/ImfZip.cpp; sourceTree = SOURCE_ROOT; };
+		F63F19DA23C0C151003A6806 /* progressreporter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = progressreporter.cpp; path = src/tools/progressreporter.cpp; sourceTree = "<group>"; };
+		F63F19DB23C0C151003A6806 /* progressreporter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = progressreporter.hpp; path = src/tools/progressreporter.hpp; sourceTree = "<group>"; };
 		F648BFFD23BCA007007D489E /* modelparser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = modelparser.cpp; path = src/parser/modelparser.cpp; sourceTree = "<group>"; };
 		F648BFFE23BCA007007D489E /* modelparser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = modelparser.hpp; path = src/parser/modelparser.hpp; sourceTree = "<group>"; };
 		F7456311408844AC95E54C0A /* libImath-2_2.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = "libImath-2_2.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2161,6 +2164,8 @@
 				584FB13227C6417CBB40B2F2 /* parallel.cpp */,
 				F32D48C3913447199A16C749 /* parallel.hpp */,
 				7D3205709BDC4CCD837EF207 /* stringprint.h */,
+				F63F19DA23C0C151003A6806 /* progressreporter.cpp */,
+				F63F19DB23C0C151003A6806 /* progressreporter.hpp */,
 			);
 			name = tools;
 			sourceTree = "<group>";
@@ -3382,6 +3387,7 @@
 				F614B328C7D9483CB405C30A /* glass.cpp in Sources */,
 				B5D9721ADD0A400DBC1E612C /* matte.cpp in Sources */,
 				A5AAF5970B1741E88CAC54B7 /* metal.cpp in Sources */,
+				F63F19DC23C0C151003A6806 /* progressreporter.cpp in Sources */,
 				F615E8055EFD48F4A6C8B0A1 /* mirror.cpp in Sources */,
 				7862F5B050004106AC905E6F /* mix.cpp in Sources */,
 				D5D6BCDC87D346C694AF3B92 /* plastic.cpp in Sources */,

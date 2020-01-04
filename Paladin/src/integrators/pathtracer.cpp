@@ -22,17 +22,6 @@ _lightSampleStrategy(lightSampleStrategy) {
     
 }
 
-PathTracer::PathTracer(int maxDepth,
-                       const AABB2i &pixelBounds,
-                       Float rrThreshold /*= 1*/,
-                       const std::string &lightSampleStrategy/*( = "power"*/)
-: MonteCarloIntegrator(pixelBounds),
-_maxDepth(maxDepth),
-_rrThreshold(rrThreshold),
-_lightSampleStrategy(lightSampleStrategy){
-    
-}
-
 void PathTracer::preprocess(const Scene &scene, Sampler &sampler) {
     _lightDistribution = createLightSampleDistribution(_lightSampleStrategy, scene);
 }

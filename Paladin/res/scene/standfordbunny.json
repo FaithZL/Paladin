@@ -401,7 +401,7 @@
             "type" : "triMesh",
             "subType" : "cube",
             "name" : "cube2",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -423,7 +423,7 @@
             "type" : "triMesh",
             "subType" : "cube",
             "name" : "cube1",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -445,7 +445,7 @@
             "type" : "triMesh",
             "subType" : "model",
             "name" : "box",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {

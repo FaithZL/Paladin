@@ -244,11 +244,7 @@ public:
                    std::shared_ptr<Sampler> sampler,
                    const AABB2i &pixelBounds, Float rrThreshold = 1,
                const std::string &lightSampleStrategy = "power");
-    
-    PathTracer(int maxDepth,
-               const AABB2i &pixelBounds,
-               Float rrThreshold = 1,
-               const std::string &lightSampleStrategy = "power");
+
 
 	/**
 	 * 预处理阶段，先构造好光源分布对象

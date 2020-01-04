@@ -440,34 +440,10 @@
                 "z" : 0.6
             },
             "material" : "glass"
-        },
-        {
-            "type" : "triMesh",
-            "subType" : "model",
-            "name" : "box",
-            "enable" : false,
-            "param" : {
-                "transform" :[
-                    {
-                        "type" : "rotateY",
-                        "param" : [180]
-                    },
-                    {
-                        "type" : "translate",
-                        "param" : [-0.2,-1.0,0]
-                    },
-                    {
-                        "type" : "scale",
-                        "param" : 0.7
-                    }
-                ],
-                "fileName" : "res/bunny.obj"
-            },
-            "material" : "glass"
         }
 	],
 	"integrator" : {
-        "type" : "pt",
+        "type" : "volpt",
         "param" : {
         	"maxBounce" : 5,
         	"rrThreshold" : 1,
@@ -497,9 +473,9 @@
     },
     "film" : {
     	"param" : {
-			"resolution" : [400, 400],
+			"resolution" : [1024, 1024],
 	    	"cropWindow" : [0,0,1,1],
-	    	"fileName" : "standford_bunny-pt-16spp.png",
+	    	"fileName" : "connellbox-fog-16spp.png",
 	    	"diagonal" : 1,
 	    	"scale" : 1
     	}

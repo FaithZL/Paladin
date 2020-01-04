@@ -274,19 +274,6 @@ public:
         
     }
     
-    MonteCarloIntegrator(const AABB2i &pixelBound)
-    : _pixelBounds(pixelBound){
-        
-    }
-    
-    void setSampler(std::shared_ptr<Sampler> sampler) {
-        _sampler = sampler;
-    }
-    
-    void setCamera(std::shared_ptr<const Camera> camera) {
-        _camera = camera;
-    }
-    
     virtual void preprocess(const Scene &scene, Sampler &sampler) {
         
     }
