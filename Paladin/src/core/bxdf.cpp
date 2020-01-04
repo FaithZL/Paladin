@@ -431,8 +431,9 @@ Spectrum MicrofacetReflection::f(const Vector3f &wo, const Vector3f &wi) const {
     }
     wh = normalize(wh);
     Spectrum F = _fresnel->evaluate(dot(wi, wh));
-    return _R * _distribution->D(wh) * _distribution->G(wo, wi) * F /
-    (4 * cosThetaI * cosThetaO);
+    Float D = _distribution->D(wh);
+    Float G = _distribution->G(wo, wi);
+    return _R * D * G * F / (4 * cosThetaI * cosThetaO);
 }
 
 Spectrum MicrofacetReflection::sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,

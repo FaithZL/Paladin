@@ -858,7 +858,7 @@ public:
       _etaA(etaA),
       _etaB(etaB),
       _mode(mode) {
-
+        DCHECK(!isNaN(_etaA) && !isNaN(_etaB));
     }
 
     virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const {

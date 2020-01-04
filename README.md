@@ -31,7 +31,7 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
 - 场景模型解析
   - [x] 自定义json格式场景，场景解析
   - [x] 简单反射机制 
-  - [ ] 加载obj模型
+  - [ ] 加载obj模型(已完成加载，材质接入需要实现Disney材质)
 
 - 几何相关
   - [x] watertight三角形与ray求交算法
@@ -72,9 +72,12 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
   - [ ] MaxMinDistSampler
   - [ ] ZeroTwoSequenceSampler
 
-- 内存
+- 性能优化
   - [x] 内存池
   - [x] 针对cache line优化(内存重排)
+  - [ ] simd
+  - [ ] 误差管理优化
+
 
 - 滤波器(filter)
   - [x] 高斯(gaussian filter)
@@ -101,6 +104,8 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-pt-16spp-halton.png)
  * connell box fog 128spp halton
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-fog-halton-128spp.png)
+ * standford bunny 512spp halton
+   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/standford_bunny-halton-512spp.png)
 
 # 获取仓库
 	git clone --recursive https://github.com/FaithZL/Paladin.git

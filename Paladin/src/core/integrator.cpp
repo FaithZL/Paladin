@@ -205,7 +205,7 @@ void MonteCarloIntegrator::render(const Scene &scene) {
     			(sampleExtent.y + tileSize - 1) / tileSize);
 
     auto renderTile = [&](Point2i tile) {
-        COUT << tile << std::endl;
+        fprintf(stderr, "\r[%d, %d]", tile.x, tile.y);
     	// 内存池对象，预先申请一大段连续内存
     	// 之后所有内存全都通过arena分配
     	MemoryArena arena;

@@ -157,26 +157,62 @@
                     "type" : "constant",
                     "param" : {
                         "colorType" : 0,
-                        "color" : [0, 0, 0]
+                        "color" : [1, 1, 1]
                     }
                 },
                 "uRough" : {
                     "type" : "constant",
-                    "param" : 0.5
+                    "param" : 0.0
                 },
                 "vRough" : {
                     "type" : "constant",
-                    "param" : 0.5
+                    "param" : 0.0
                 },
                 "eta" : {
                     "type" : "constant",
-                    "param" : 0.5
+                    "param" : 1.5
                 },
                 "bumpMap" : {
                     "type" : "constant",
-                    "param" : 0.5
+                    "param" : 0
                 },
                 "remapRough" : false 
+            }
+        },
+        "metal" : {
+            "type" : "metal",
+            "param" : {
+                "eta" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.6, 1, 1]
+                    }
+                },
+                "k" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [1, 1, 1]
+                    }
+                },
+                "rough" : {
+                    "type" : "constant",
+                    "param" : 0.1
+                },
+                "uRough" : {
+                    "type" : "constant",
+                    "param" : 0.1
+                },
+                "vRough" : {
+                    "type" : "constant",
+                    "param" : 0.1
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "remapRough" : false
             }
         },
         "mirror" : {
@@ -208,13 +244,13 @@
                     },
                     {
                         "type" : "translate",
-                        "param" : [0,-0.6,0]
+                        "param" : [0,-0.1,0]
                     }
                 ],
-                "radius" : 0.4,
+                "radius" : 0.3,
                 "phiMax" : 360
             },
-			"material" : "matte2"
+			"material" : "glass"
 		},
         {
             "type" : "triMesh",
@@ -381,7 +417,7 @@
                 "y" : 1.2,
                 "z" : 0.6
             },
-            "material" : "matte1"
+            "material" : "glass"
         },
         {
             "type" : "triMesh",
@@ -403,7 +439,7 @@
                 "y" : 0.6,
                 "z" : 0.6
             },
-            "material" : "matte1"
+            "material" : "glass"
         },
         {
             "type" : "triMesh",
@@ -414,20 +450,20 @@
                 "transform" :[
                     {
                         "type" : "rotateY",
-                        "param" : [0]
+                        "param" : [180]
                     },
                     {
                         "type" : "translate",
-                        "param" : [0,-1,0]
+                        "param" : [-0.2,-1.0,0]
                     },
                     {
                         "type" : "scale",
-                        "param" : 0.2
+                        "param" : 0.7
                     }
                 ],
-                "fileName" : "res/teapot.obj"
+                "fileName" : "res/bunny.obj"
             },
-            "material" : "matte1"
+            "material" : "glass"
         }
 	],
 	"integrator" : {
@@ -441,7 +477,7 @@
     "sampler" : {
     	"type" : "halton",
     	"param" : {
-    		"spp" : 2
+    		"spp" : 16
     	}
     },
     "camera" : {
@@ -463,7 +499,7 @@
     	"param" : {
 			"resolution" : [400, 400],
 	    	"cropWindow" : [0,0,1,1],
-	    	"fileName" : "paladin-vol.png",
+	    	"fileName" : "standford_bunny-pt-16spp.png",
 	    	"diagonal" : 1,
 	    	"scale" : 1
     	}
