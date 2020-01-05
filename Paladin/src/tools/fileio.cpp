@@ -49,7 +49,7 @@ RGBSpectrum * _readImage(const std::string &name,
         }
     }
     free(rgb);
-    COUT << StringPrintf("Read image %s (%d x %d)", name.c_str(), *width, *height);
+    VLOG(2) << StringPrintf("Read image %s (%d x %d)", name.c_str(), *width, *height);
     return ret;
 }
 

@@ -82,11 +82,13 @@ private:
     MediumInterface _mediumInterface;
 };
 
-// 用于多个完全相同的实例，只保存一个实例对象在内存中，其他的不同通过transform来区分，节省内存空间
+// 用于多个完全相同的实例，只保存一个实例对象在内存中，
+// 其他的不同通过transform来区分，节省内存空间
 class TransformedPrimitive : public Primitive {
 public:
     TransformedPrimitive(std::shared_ptr<Primitive> &primitive,
-                         const AnimatedTransform &PrimitiveToWorld);
+                         const AnimatedTransform &PrimitiveToWorld,
+                         const std::shared_ptr<const Material> &mat = nullptr);
     
     virtual bool intersect(const Ray &r, SurfaceInteraction *in) const override;
     
@@ -97,7 +99,9 @@ public:
     }
     
     virtual const Material *getMaterial() const override {
-        return _primitive->getMaterial();
+        return _material != nullptr
+                ? _material.get()
+                : _primitive->getMaterial();
     }
     
     virtual nloJson toJson() const override {
@@ -119,6 +123,9 @@ public:
 private:
     std::shared_ptr<Primitive> _primitive;
     const AnimatedTransform _primitiveToWorld;
+    // 材质也可能不同
+    std::shared_ptr<const Material> _material;
+    
 };
 
 class Aggregate : public Primitive {

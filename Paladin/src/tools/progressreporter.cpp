@@ -36,7 +36,10 @@ void ProgressReporter::printProgress() const {
     std::chrono::milliseconds sleepDuration(250);
     int bufLen = 100;
     unique_ptr<char[]> buf(new char[bufLen]);
+    snprintf(buf.get(), bufLen, "\r%s: ", _title.c_str());
     int iterCount = 0;
+    fputs(buf.get(), stdout);
+    fflush(stdout);
     while (!_exitThread) {
         this_thread::sleep_for(sleepDuration);
         ++iterCount;
@@ -53,6 +56,7 @@ void ProgressReporter::printProgress() const {
         Float percentDone = Float(_workDone) / Float(_totalWork);
         Float seconds = elapsedMS() / 1000.f;
         Float estRemaining = seconds / percentDone - seconds;
+        fputs(buf.get(), stdout);
         printf("progress is %.2f%%",percentDone * 100);
         if (percentDone == 1.f)
             printf(" (%.1fs)       ", seconds);
@@ -61,9 +65,6 @@ void ProgressReporter::printProgress() const {
                    std::max((Float)0., estRemaining));
         else
             printf(" (%.1fs|?s)  ", seconds);
-//        string content;
-//        content = StringPrintf("progress is %5.2f%%, (%5.2fs|%5.2fs)",
-//                                percentDone * 100, seconds, estRemaining);
         fflush(stdout);
     }
 }

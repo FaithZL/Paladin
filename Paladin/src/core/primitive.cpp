@@ -76,9 +76,11 @@ void GeometricPrimitive::computeScatteringFunctions(
 
 //TransformedPrimitive
 TransformedPrimitive::TransformedPrimitive(std::shared_ptr<Primitive> &primitive,
-                                           const AnimatedTransform &PrimitiveToWorld):
+                                           const AnimatedTransform &PrimitiveToWorld,
+                                           const std::shared_ptr<const Material> &mat):
 _primitive(primitive),
-_primitiveToWorld(PrimitiveToWorld) {
+_primitiveToWorld(PrimitiveToWorld),
+_material(mat) {
     
 }
 

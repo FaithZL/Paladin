@@ -77,10 +77,11 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
   - [x] 针对cache line优化(内存重排)
   - [ ] simd
   - [ ] 误差管理优化
+  - [ ] transform primitive
 
 
 - 滤波器(filter)
-  - [x] 高斯(gaussian filter)
+  - [x] 高斯滤波器(gaussian filter)
   - [x] 盒式滤波器(box filter)
   - [x] sinc filter
   - [x] mitchell filter
@@ -99,13 +100,15 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
   - [ ] 投影仪(projection light)
   - [ ] 纹理面光源(texture area light)
 
+- 其他
+  - [ ] 统计机制
 
  * connell box 16spp halton
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-pt-16spp-halton.png)
  * connell box fog 128spp halton
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-fog-halton-128spp.png)
- * standford bunny 512spp halton
-   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/standford_bunny-halton-512spp.png)
+ * standford bunny 128spp halton
+   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/standford_bunny-halton-128spp.png)
 
 # 获取仓库
 	git clone --recursive https://github.com/FaithZL/Paladin.git
