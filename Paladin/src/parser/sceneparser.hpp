@@ -125,7 +125,7 @@ private:
         _cloneMap[key] = value;
     }
     
-    vector<shared_ptr<Primitive>> & getPrimitives(const string &key) {
+    const vector<shared_ptr<Primitive>> & getPrimitives(const string &key) {
         return _cloneMap[key];
     }
     

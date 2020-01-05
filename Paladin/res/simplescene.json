@@ -446,7 +446,7 @@
             "type" : "clonal",
             "subType" : "cube",
             "name" : "cube3",
-            "enable" : true,
+            "enable" : false,
             "transform" :[
                 {
                     "type" : "rotateY",
@@ -454,11 +454,11 @@
                 },
                 {
                     "type" : "translate",
-                    "param" : [0.35,0.7,-0.4]
+                    "param" : [0.35,0.3,-0.4]
                 }
             ],
             "from" : "cube1",
-            "material" : "glass"
+            "material" : "matte1"
         },
         {
             "type" : "triMesh",
@@ -496,7 +496,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 16
+            "spp" : 2
         }
     },
     "camera" : {

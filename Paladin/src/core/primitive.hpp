@@ -51,6 +51,8 @@ public:
     
     virtual AABB3f worldBound() const override;
     
+    virtual AABB3f objectBound() const;
+    
     virtual bool intersect(const Ray &r, SurfaceInteraction *isect) const override;
     
     virtual bool intersectP(const Ray &r) const override;
@@ -88,28 +90,32 @@ private:
 
 // 用于多个完全相同的实例，只保存一个实例对象在内存中，
 // 其他的不同通过transform来区分，节省内存空间
+// 注意，paladin的实例化暂时不支持光源
 class TransformedPrimitive : public Primitive {
 public:
-    TransformedPrimitive(std::shared_ptr<Primitive> &primitive,
-                         const AnimatedTransform &PrimitiveToWorld,
-                         const std::shared_ptr<const Material> &mat = nullptr);
+    TransformedPrimitive(const shared_ptr<Primitive> &primitive,
+                         const shared_ptr<const Transform> &o2w,
+                         const std::shared_ptr<const Material> &mat = nullptr,
+                         const MediumInterface &mediumInterface = nullptr);
     
-    static shared_ptr<TransformedPrimitive> create(std::shared_ptr<Primitive> &primitive,
-                  const AnimatedTransform &PrimitiveToWorld,
-                  const std::shared_ptr<const Material> &mat = nullptr);
+    static shared_ptr<TransformedPrimitive> create(const shared_ptr<Primitive> &primitive,
+                                                   const shared_ptr<const Transform> &o2w,
+                                                   const std::shared_ptr<const Material> &mat = nullptr,
+                                                   const MediumInterface &mediumInterface = nullptr);
     
     virtual bool intersect(const Ray &r, SurfaceInteraction *isect) const override;
     
     virtual bool intersectP(const Ray &r) const override;
     
-    virtual const AreaLight *getAreaLight() const override {
-        return _primitive->getAreaLight();
-    }
-    
     virtual const Material *getMaterial() const override {
         return _material != nullptr
                 ? _material.get()
                 : _primitive->getMaterial();
+    }
+    
+    virtual const AreaLight * getAreaLight() const override {
+        // 注意，paladin的实例化暂时不支持光源，所以返回空
+        return nullptr;
     }
     
     virtual nloJson toJson() const override {
@@ -119,21 +125,27 @@ public:
     virtual void computeScatteringFunctions(SurfaceInteraction *isect,
                                     MemoryArena &arena, TransportMode mode,
                                     bool allowMultipleLobes) const override {
-        LOG(FATAL) <<
-        "TransformedPrimitive::ComputeScatteringFunctions() shouldn't be "
-        "called";
+        auto material = getMaterial();
+        if (material) {
+            material->computeScatteringFunctions(isect, arena, mode,
+                                            allowMultipleLobes);
+        }
+        CHECK_GE(dot(isect->normal, isect->shading.normal), 0.);
     }
     
     virtual AABB3f worldBound() const override {
-        return _primitiveToWorld.motionAABB(_primitive->worldBound());
+        shared_ptr<GeometricPrimitive> prim = dynamic_pointer_cast<GeometricPrimitive>(_primitive);
+        return _objectToWorld.exec(prim->objectBound());
     }
     
 private:
     std::shared_ptr<Primitive> _primitive;
-    const AnimatedTransform _primitiveToWorld;
-    // 材质也可能不同
-    std::shared_ptr<const Material> _material;
     
+    Transform _objectToWorld;
+
+    shared_ptr<const Material> _material;
+    
+    MediumInterface _mediumInterface;
 };
 
 class Aggregate : public Primitive {

@@ -8,6 +8,7 @@
 #include "primitive.hpp"
 #include "shape.hpp"
 #include "accelerators/bvh.hpp"
+#include "math/transform.hpp"
 
 PALADIN_BEGIN
 
@@ -25,6 +26,10 @@ _mediumInterface(mediumInterface) {
 
 AABB3f GeometricPrimitive::worldBound() const { 
     return _shape->worldBound(); 
+}
+
+AABB3f GeometricPrimitive::objectBound() const {
+    return _shape->objectBound();
 }
 
 bool GeometricPrimitive::intersectP(const Ray &r) const {
@@ -83,31 +88,32 @@ void GeometricPrimitive::computeScatteringFunctions(
 }
 
 //TransformedPrimitive
-shared_ptr<TransformedPrimitive> TransformedPrimitive::create(std::shared_ptr<Primitive> &primitive,
-                                                              const AnimatedTransform &PrimitiveToWorld,
-                                                              const std::shared_ptr<const Material> &mat) {
-    const Transform & t = PrimitiveToWorld.getStartTransform();
-    shared_ptr<GeometricPrimitive> prim = dynamic_pointer_cast<GeometricPrimitive>(primitive);
-    const Transform & t2 = prim->getWorldToObject();
-    
-    
+shared_ptr<TransformedPrimitive> TransformedPrimitive::create(const std::shared_ptr<Primitive> &primitive,
+                                                              const shared_ptr<const Transform> &o2w,
+                                                              const std::shared_ptr<const Material> &mat,
+                                                              const MediumInterface &mediumInterface) {
+    return make_shared<TransformedPrimitive>(primitive, o2w, mat);
 }
 
-TransformedPrimitive::TransformedPrimitive(std::shared_ptr<Primitive> &primitive,
-                                           const AnimatedTransform &PrimitiveToWorld,
-                                           const std::shared_ptr<const Material> &mat):
+TransformedPrimitive::TransformedPrimitive(const std::shared_ptr<Primitive> &primitive,
+                                          const shared_ptr<const Transform> &o2w,
+                                           const std::shared_ptr<const Material> &mat,
+                                           const MediumInterface &mediumInterface):
 _primitive(primitive),
-_primitiveToWorld(PrimitiveToWorld),
-_material(mat) {
-    
+_material(mat),
+_mediumInterface(mediumInterface) {
+    shared_ptr<GeometricPrimitive> prim = dynamic_pointer_cast<GeometricPrimitive>(primitive);
+    const Transform & trf = prim->getObjectToWorld();
+    auto w2o = (o2w->getInverse()) * (trf);
+    _objectToWorld = w2o.getInverse();
 }
 
 bool TransformedPrimitive::intersect(const Ray &r,
                                      SurfaceInteraction *isect) const {
     // 插值获取primitive到world的变换
-    Transform InterpolatedPrimToWorld = _primitiveToWorld.interpolate(r.time);
+
     // 将局部坐标转换为世界坐标
-    Ray ray = InterpolatedPrimToWorld.getInverse().exec(r);
+    Ray ray = _objectToWorld.getInverse().exec(r);
     
     if (!_primitive->intersect(ray, isect)) {
         return false;
@@ -115,15 +121,21 @@ bool TransformedPrimitive::intersect(const Ray &r,
     // 更新tMax
     r.tMax = ray.tMax;
 
-    if (!InterpolatedPrimToWorld.isIdentity()) {
-        *isect = InterpolatedPrimToWorld.exec(*isect);
+    if (!_objectToWorld.isIdentity()) {
+        *isect = _objectToWorld.exec(*isect);
+    }
+    
+    if (_mediumInterface.isMediumTransition()){
+        isect->mediumInterface = _mediumInterface;
+    } else {
+        isect->mediumInterface = MediumInterface(r.medium);
     }
     CHECK_GE(dot(isect->normal, isect->shading.normal), 0);
     return true;
 }
 
 bool TransformedPrimitive::intersectP(const Ray &r) const {
-    Transform InterpolatedPrimToWorld = _primitiveToWorld.interpolate(r.time);
+    Transform InterpolatedPrimToWorld = _objectToWorld;
     Transform InterpolatedWorldToPrim = InterpolatedPrimToWorld.getInverse();
     return _primitive->intersectP(InterpolatedWorldToPrim.exec(r));
 }

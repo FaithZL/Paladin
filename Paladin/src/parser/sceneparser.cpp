@@ -202,11 +202,28 @@ void SceneParser::parseShapes(const nloJson &shapeDataList) {
 //            "param" : [0.35,-0.7,-0.4]
 //        }
 //    ],
+//    "mediumInterface" : [null, "fog"],
 //    "from" : "cube1",
 //    "material" : "glass"
 //},
 void SceneParser::parseClonal(const nloJson &data) {
+    // paladin的实例化暂时不支持光源
     nloJson param = data.value("param", nloJson::object());
+    nloJson medIntfceData = data.value("mediumInterface", nloJson());
+    MediumInterface mediumInterface = getMediumIntetface(medIntfceData);
+    auto mat = getMaterial(data.value("material", nloJson()));
+    nloJson from = data.value("from", nloJson());
+    if (from.is_null()) {
+        return;
+    }
+    const vector<shared_ptr<Primitive>> & prims = getPrimitives(from);
+    vector<shared_ptr<Primitive>> tPrims;
+    auto l2w = createTransform(data.value("transform", nloJson()));
+    shared_ptr<Transform> o2w(l2w);
+    for (auto iter = prims.cbegin(); iter != prims.cend(); ++iter) {
+        auto tPrim = TransformedPrimitive::create(*iter, o2w, mat, mediumInterface);
+        _primitives.push_back(tPrim);
+    };
 }
 
 //"data" : {

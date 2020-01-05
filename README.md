@@ -77,7 +77,7 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
   - [x] 针对cache line优化(内存重排)
   - [ ] simd
   - [ ] 误差管理优化
-  - [ ] transform primitive
+  - [ ] 实例化
 
 
 - 滤波器(filter)
