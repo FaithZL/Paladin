@@ -63,6 +63,10 @@ public:
                                     MemoryArena &arena, TransportMode mode,
                                     bool allowMultipleLobes) const override;
     
+    const Transform & getWorldToObject() const;
+    
+    const Transform & getObjectToWorld() const;
+    
     virtual nloJson toJson() const override {
         return nloJson();
     }
@@ -90,7 +94,11 @@ public:
                          const AnimatedTransform &PrimitiveToWorld,
                          const std::shared_ptr<const Material> &mat = nullptr);
     
-    virtual bool intersect(const Ray &r, SurfaceInteraction *in) const override;
+    static shared_ptr<TransformedPrimitive> create(std::shared_ptr<Primitive> &primitive,
+                  const AnimatedTransform &PrimitiveToWorld,
+                  const std::shared_ptr<const Material> &mat = nullptr);
+    
+    virtual bool intersect(const Ray &r, SurfaceInteraction *isect) const override;
     
     virtual bool intersectP(const Ray &r) const override;
     

@@ -31,6 +31,14 @@ bool GeometricPrimitive::intersectP(const Ray &r) const {
     return _shape->intersectP(r);
 }
 
+const Transform & GeometricPrimitive::getWorldToObject() const {
+    return * (_shape->worldToObject.get());
+}
+
+const Transform & GeometricPrimitive::getObjectToWorld() const {
+    return * (_shape->objectToWorld.get());
+}
+
 bool GeometricPrimitive::intersect(const Ray &r,
                                    SurfaceInteraction *isect) const {
     Float tHit;
@@ -75,6 +83,16 @@ void GeometricPrimitive::computeScatteringFunctions(
 }
 
 //TransformedPrimitive
+shared_ptr<TransformedPrimitive> TransformedPrimitive::create(std::shared_ptr<Primitive> &primitive,
+                                                              const AnimatedTransform &PrimitiveToWorld,
+                                                              const std::shared_ptr<const Material> &mat) {
+    const Transform & t = PrimitiveToWorld.getStartTransform();
+    shared_ptr<GeometricPrimitive> prim = dynamic_pointer_cast<GeometricPrimitive>(primitive);
+    const Transform & t2 = prim->getWorldToObject();
+    
+    
+}
+
 TransformedPrimitive::TransformedPrimitive(std::shared_ptr<Primitive> &primitive,
                                            const AnimatedTransform &PrimitiveToWorld,
                                            const std::shared_ptr<const Material> &mat):

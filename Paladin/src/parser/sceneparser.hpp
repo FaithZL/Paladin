@@ -63,6 +63,9 @@ public:
     // 解析模型
     void parseTriMesh(const nloJson &data);
     
+    // 解析clone物体
+    void parseClonal(const nloJson &data);
+    
     shared_ptr<Aggregate> parseAccelerator(const nloJson &);
     
     Film * parseFilm(const nloJson &param, Filter *);
@@ -118,6 +121,14 @@ private:
         return _mediumCache[name];
     }
     
+    void addPrimitivesToCloneMap(const std::string &key, const vector<shared_ptr<Primitive>> &value) {
+        _cloneMap[key] = value;
+    }
+    
+    vector<shared_ptr<Primitive>> & getPrimitives(const string &key) {
+        return _cloneMap[key];
+    }
+    
 private:
     
     TransformCache _transformCache;
@@ -132,13 +143,14 @@ private:
     
     vector<shared_ptr<Primitive>> _primitives;
     
+    // 克隆map，key为对象名，value为片元列表
+    map<string, vector<shared_ptr<Primitive>>> _cloneMap;
+    
     // 先用map储存着，待后续优化todo
     map<string, shared_ptr<const Material>> _materialCache;
     
     // 先用map储存着，待后续优化
     map<string, shared_ptr<const Medium>> _mediumCache;
-    
-    Transform _cameraToWorld;
 };
 
 PALADIN_END

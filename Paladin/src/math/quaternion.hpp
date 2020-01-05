@@ -87,7 +87,7 @@ struct Quaternion {
         return ret;
     }
 
-    Transform ToTransform() const;
+    Transform toTransform() const;
 
     Quaternion(const Transform &t);
 

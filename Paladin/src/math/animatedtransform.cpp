@@ -771,11 +771,13 @@ Transform AnimatedTransform::interpolate(Float time) const {
     Quaternion R = slerp(dt, _R[0], _R[1]);
     
     Matrix4x4 S;
-    for (int i = 0; i < 3; ++i)
-        for (int j = 0; j < 3; ++j)
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
             S._m[i][j] = lerp(dt, _S[0]._m[i][j], _S[1]._m[i][j]);
+        }
+    }
     
-    return Transform::translate(T) * R.ToTransform() * Transform(S);
+    return Transform::translate(T) * R.toTransform() * Transform(S);
 }
 
 AABB3f AnimatedTransform::boundPointMotion(const Point3f &p) const {

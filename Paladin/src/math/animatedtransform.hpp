@@ -212,6 +212,14 @@ public:
         return _startTransform->hasScale() || _endTransform->hasScale();
     }
     
+    const Transform & getStartTransform() const {
+        return * (_startTransform.get());
+    }
+    
+    const Transform & getEndTransform() const {
+        return * (_endTransform.get());
+    }
+    
     /**
      * 获取一个包围盒对象，返回运动过程中包围盒扫过的范围的包围盒
      */

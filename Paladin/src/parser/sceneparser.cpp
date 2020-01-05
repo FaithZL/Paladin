@@ -179,14 +179,39 @@ void SceneParser::parseShapes(const nloJson &shapeDataList) {
         }
         if (type == "triMesh") {
             parseTriMesh(shapeData);
+        } else if (type == "clonal") {
+            parseClonal(shapeData);
         } else {
             parseSimpleShape(shapeData, type);
         }
     }
 }
 
+//data : {
+//    "type" : "clonal",
+//    "subType" : "cube",
+//    "name" : "cube3",
+//    "enable" : true,
+//    "transform" :[
+//        {
+//            "type" : "rotateY",
+//            "param" : [15]
+//        },
+//        {
+//            "type" : "translate",
+//            "param" : [0.35,-0.7,-0.4]
+//        }
+//    ],
+//    "from" : "cube1",
+//    "material" : "glass"
+//},
+void SceneParser::parseClonal(const nloJson &data) {
+    nloJson param = data.value("param", nloJson::object());
+}
+
 //"data" : {
 //    "type" : "sphere",
+//    "name" : "sphere1"
 //    "param" : {
 //        "worldToLocal" : {
 //            "type" : "translate",
@@ -222,6 +247,13 @@ void SceneParser::parseSimpleShape(const nloJson &data, const string &type) {
     MediumInterface mediumInterface = getMediumIntetface(medIntfceData);
     shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, mediumInterface);
     _primitives.push_back(primitives);
+    // 如果需要克隆的话，则保存在_cloneMap中
+    if (data.value("clone", false)) {
+        string name = data.value("name", "");
+        vector<shared_ptr<Primitive>> v;
+        v.push_back(primitives);
+        addPrimitivesToCloneMap(name, v);
+    }
 }
 
 //data : {
@@ -253,6 +285,10 @@ void SceneParser::parseTriMesh(const nloJson &data) {
         prims = createCubePrimitive(data, mat, _lights, mediumInterface);
     } else if (subType == "model"){
         prims = createModelPrimitive(data, mat, _lights, mediumInterface);
+    }
+    if (data.value("clone", false)) {
+        string name = data.value("name", "");
+        addPrimitivesToCloneMap(name, prims);
     }
     _primitives.insert(_primitives.end(), prims.begin(), prims.end());
 }

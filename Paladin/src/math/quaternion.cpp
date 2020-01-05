@@ -26,7 +26,7 @@ Quaternion slerp(Float t, const Quaternion &q1, const Quaternion &q2) {
     }
 }
 
-Transform Quaternion::ToTransform() const {
+Transform Quaternion::toTransform() const {
     //具体推导过程就不写了，比较复杂
     Float xx = v.x * v.x, yy = v.y * v.y, zz = v.z * v.z;
     Float xy = v.x * v.y, xz = v.x * v.z, yz = v.y * v.z;
