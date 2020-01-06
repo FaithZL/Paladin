@@ -1,5 +1,5 @@
 {
-    "threadNum" : 1,
+    "threadNum" : 0,
     "transforms" :{
         "name1" : [
             {
@@ -235,7 +235,7 @@
     "shapes" : [
         {
             "type" : "sphere",
-            "enable" : true,
+            "enable" : false,
             "name" : "sphere",
             "clone" : true,
             "param" : {
@@ -246,7 +246,7 @@
                     },
                     {
                         "type" : "translate",
-                        "param" : [-0.2,-0,0]
+                        "param" : [-0.3,-0.2,0]
                     }
                 ],
                 "radius" : 0.3,
@@ -358,7 +358,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "front",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -445,8 +445,33 @@
             "material" : "matte1"
         },
         {
+            "type" : "triMesh",
+            "subType" : "model",
+            "name" : "dragon",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateY",
+                        "param" : [0]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [-0.2,-0.3,0]
+                    },
+                    {
+                        "type" : "scale",
+                        "param" : 1.0
+                    }
+                ],
+                "fileName" : "res/dragon.obj"
+            },
+            "clone" : true,
+            "material" : "metal"
+        },
+        {
             "type" : "clonal",
-            "name" : "sphere2",
+            "name" : "dragon2",
             "enable" : true,
             "transform" :[
                 {
@@ -455,35 +480,15 @@
                 },
                 {
                     "type" : "translate",
-                    "param" : [0.35,-0.6,-0.4]
+                    "param" : [0.2,-0.3,0]
+                },
+                {
+                    "type" : "scale",
+                    "param" : 1.0
                 }
             ],
-            "from" : "sphere",
+            "from" : "dragon",
             "material" : "matte1"
-        },
-        {
-            "type" : "triMesh",
-            "subType" : "model",
-            "name" : "box",
-            "enable" : false,
-            "param" : {
-                "transform" :[
-                    {
-                        "type" : "rotateY",
-                        "param" : [180]
-                    },
-                    {
-                        "type" : "translate",
-                        "param" : [-0.2,-1.0,0]
-                    },
-                    {
-                        "type" : "scale",
-                        "param" : 0.7
-                    }
-                ],
-                "fileName" : "res/bunny.obj"
-            },
-            "material" : "glass"
         }
     ],
     "integrator" : {
@@ -498,7 +503,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 1
+            "spp" : 2
         }
     },
     "camera" : {

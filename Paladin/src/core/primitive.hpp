@@ -135,7 +135,7 @@ public:
     
     virtual AABB3f worldBound() const override {
         shared_ptr<GeometricPrimitive> prim = dynamic_pointer_cast<GeometricPrimitive>(_primitive);
-        return _objectToWorld.exec(prim->objectBound());
+        return _objectToWorld.exec(prim->worldBound());
     }
     
 private:

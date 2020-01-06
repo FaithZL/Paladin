@@ -32,7 +32,7 @@ bool Sphere::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, boo
 
     // 保守计算
     if (t0.upperBound() > ray.tMax || t1.lowerBound() <= 0) {
-         return false;
+        return false;
     }
     EFloat tShapeHit = t0;
 
