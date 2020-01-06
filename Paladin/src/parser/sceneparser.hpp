@@ -63,7 +63,7 @@ public:
     // 解析模型
     void parseTriMesh(const nloJson &data);
     
-    // 解析clone物体
+    // 解析clone物体，注意，clone物体暂不支持quad,cube
     void parseClonal(const nloJson &data);
     
     shared_ptr<Aggregate> parseAccelerator(const nloJson &);

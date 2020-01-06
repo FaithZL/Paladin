@@ -1,5 +1,5 @@
 {
-    "threadNum" : 0,
+    "threadNum" : 1,
     "transforms" :{
         "name1" : [
             {
@@ -235,16 +235,18 @@
     "shapes" : [
         {
             "type" : "sphere",
-            "enable" : false,
+            "enable" : true,
+            "name" : "sphere",
+            "clone" : true,
             "param" : {
                 "transform" : [
                     {
                         "type" : "rotateX",
-                        "param" : [170]
+                        "param" : [0]
                     },
                     {
                         "type" : "translate",
-                        "param" : [0,-0.1,0]
+                        "param" : [-0.2,-0,0]
                     }
                 ],
                 "radius" : 0.3,
@@ -401,7 +403,7 @@
             "type" : "triMesh",
             "subType" : "cube",
             "name" : "cube2",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -423,12 +425,12 @@
             "type" : "triMesh",
             "subType" : "cube",
             "name" : "cube1",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
                         "type" : "rotateY",
-                        "param" : [15]
+                        "param" : [20]
                     },
                     {
                         "type" : "translate",
@@ -440,24 +442,23 @@
                 "z" : 0.6
             },
             "clone" : true,
-            "material" : "glass"
+            "material" : "matte1"
         },
         {
             "type" : "clonal",
-            "subType" : "cube",
-            "name" : "cube3",
-            "enable" : false,
+            "name" : "sphere2",
+            "enable" : true,
             "transform" :[
                 {
                     "type" : "rotateY",
-                    "param" : [15]
+                    "param" : [0]
                 },
                 {
                     "type" : "translate",
-                    "param" : [0.35,0.3,-0.4]
+                    "param" : [0.35,-0.6,-0.4]
                 }
             ],
-            "from" : "cube1",
+            "from" : "sphere",
             "material" : "matte1"
         },
         {
@@ -490,13 +491,14 @@
         "param" : {
             "maxBounce" : 15,
             "rrThreshold" : 1,
-            "lightSampleStrategy" : "power"
+            "lightSampleStrategy" : "power",
+            "type" : "normal"
         }
     },
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 2
+            "spp" : 1
         }
     },
     "camera" : {

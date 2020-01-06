@@ -102,6 +102,7 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
 
 - 其他
   - [ ] 统计机制
+  - [ ] 图形交互界面(GUI)
 
  * connell box 16spp halton
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-pt-16spp-halton.png)

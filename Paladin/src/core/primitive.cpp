@@ -103,9 +103,9 @@ _primitive(primitive),
 _material(mat),
 _mediumInterface(mediumInterface) {
     shared_ptr<GeometricPrimitive> prim = dynamic_pointer_cast<GeometricPrimitive>(primitive);
-    const Transform & trf = prim->getObjectToWorld();
-    auto w2o = (o2w->getInverse()) * (trf);
-    _objectToWorld = w2o.getInverse();
+    const Transform & trf = prim->getWorldToObject();
+    auto w2o = (*o2w) * (trf);
+    _objectToWorld = w2o;
 }
 
 bool TransformedPrimitive::intersect(const Ray &r,
@@ -130,6 +130,7 @@ bool TransformedPrimitive::intersect(const Ray &r,
     } else {
         isect->mediumInterface = MediumInterface(r.medium);
     }
+    isect->primitive = this;
     CHECK_GE(dot(isect->normal, isect->shading.normal), 0);
     return true;
 }
