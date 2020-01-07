@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C28E621C903C491DBADE6F91"
+               BlueprintIdentifier = "21131A38ADBF429B89B4B593"
                BuildableName = "Paladin"
                BlueprintName = "Paladin"
                ReferencedContainer = "container:../xcode/Paladin.xcodeproj">
@@ -44,18 +44,12 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C28E621C903C491DBADE6F91"
+            BlueprintIdentifier = "21131A38ADBF429B89B4B593"
             BuildableName = "Paladin"
             BlueprintName = "Paladin"
             ReferencedContainer = "container:../xcode/Paladin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "res/simplescene.json"
-            isEnabled = "YES">
-         </CommandLineArgument>
-      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -67,7 +61,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C28E621C903C491DBADE6F91"
+            BlueprintIdentifier = "21131A38ADBF429B89B4B593"
             BuildableName = "Paladin"
             BlueprintName = "Paladin"
             ReferencedContainer = "container:../xcode/Paladin.xcodeproj">
