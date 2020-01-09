@@ -47,6 +47,10 @@ public:
     _remapRoughness(remapRoughness) {
         
     }
+    
+    void computeScatteringFunctions(SurfaceInteraction *si,
+                               MemoryArena &arena, TransportMode mode,
+                               bool allowMultipleLobes) const;
 
 private:
     std::shared_ptr<Texture<Spectrum>> _Kd, _Ks, _Kr, _Kt, _opacity;
