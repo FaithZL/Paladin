@@ -189,8 +189,8 @@ Float BeckmannDistribution::lambda(const Vector3f &w) const {
 }
 
 
-//TrowbridgeReitzDistribution
-Float TrowbridgeReitzDistribution::D(const Vector3f &wh) const {
+//GGXDistribution
+Float GGXDistribution::D(const Vector3f &wh) const {
     Float _cosTheta = absCosTheta(wh);
     if (_cosTheta == 1) {
         // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
@@ -272,7 +272,7 @@ static Vector3f TrowbridgeReitzSample(const Vector3f &wi, Float alpha_x,
     return normalize(Vector3f(-slope_x, -slope_y, 1.));
 }
 
-Float TrowbridgeReitzDistribution::lambda(const Vector3f &w) const {
+Float GGXDistribution::lambda(const Vector3f &w) const {
     Float absTanTheta = std::abs(tanTheta(w));
     if (std::isinf(absTanTheta)) {
         // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
@@ -285,7 +285,7 @@ Float TrowbridgeReitzDistribution::lambda(const Vector3f &w) const {
     return (-1 + std::sqrt(1.f + alpha2Tan2Theta)) / 2;
 }
 
-Vector3f TrowbridgeReitzDistribution::sample_wh(const Vector3f &wo,
+Vector3f GGXDistribution::sample_wh(const Vector3f &wo,
                                                 const Point2f &u) const {
     Vector3f wh;
     if (_sampleVisibleArea) {

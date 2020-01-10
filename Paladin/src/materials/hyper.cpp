@@ -55,10 +55,10 @@ void HyperMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryAre
             rough_v = _roughness->evaluate(*si);
         }
         if (_remapRoughness) {
-            rough_u = TrowbridgeReitzDistribution::RoughnessToAlpha(rough_u);
-            rough_v = TrowbridgeReitzDistribution::RoughnessToAlpha(rough_v);
+            rough_u = GGXDistribution::RoughnessToAlpha(rough_u);
+            rough_v = GGXDistribution::RoughnessToAlpha(rough_v);
         }
-        MicrofacetDistribution * d = ARENA_ALLOC(arena, TrowbridgeReitzDistribution)(rough_u,rough_v);
+        MicrofacetDistribution * d = ARENA_ALLOC(arena, GGXDistribution)(rough_u,rough_v);
         
         auto mSpec = ARENA_ALLOC(arena, MicrofacetReflection)(Ks, d, fresnel);
         si->bsdf->add(mSpec);

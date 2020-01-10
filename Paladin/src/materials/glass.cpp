@@ -41,13 +41,13 @@ void GlassMaterial::computeScatteringFunctions(SurfaceInteraction *si,
         si->bsdf->add(fr);
     } else {
         if (_remapRoughness) {
-            urough = TrowbridgeReitzDistribution::RoughnessToAlpha(urough);
-            vrough = TrowbridgeReitzDistribution::RoughnessToAlpha(vrough);
+            urough = GGXDistribution::RoughnessToAlpha(urough);
+            vrough = GGXDistribution::RoughnessToAlpha(vrough);
         }
         
         MicrofacetDistribution * distrib = isSpecular ?
                                             nullptr :
-                                            ARENA_ALLOC(arena, TrowbridgeReitzDistribution)(urough, vrough);
+                                            ARENA_ALLOC(arena, GGXDistribution)(urough, vrough);
         if (!R.IsBlack()) {
             Fresnel *fresnel = ARENA_ALLOC(arena, FresnelDielectric)(etaMedium, eta);
             if (isSpecular) {

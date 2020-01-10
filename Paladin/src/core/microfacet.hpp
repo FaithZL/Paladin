@@ -285,7 +285,7 @@ public:
      * 4.用生成的θ与φ计算向量
      * 5.完事！
      *
-     * TrowbridgeReitzDistribution::sample_wh的采样表达式也可以用上述方式推导出来
+     * GGXDistribution::sample_wh的采样表达式也可以用上述方式推导出来
      * 在这里就不再赘述了
      * 
      */
@@ -338,7 +338,7 @@ private:
  * Λ(ω) = [-1 + √(1 + (α tanθ)^2)] / 2
  * 
  */
-class TrowbridgeReitzDistribution : public MicrofacetDistribution {
+class GGXDistribution : public MicrofacetDistribution {
 public:
     /**
      * 粗糙度转α参数，代码直接照搬pbrt
@@ -352,7 +352,7 @@ public:
         0.000640711f * x * x * x * x;
     }
     
-    TrowbridgeReitzDistribution(Float alphax, Float alphay,
+    GGXDistribution(Float alphax, Float alphay,
                                 bool samplevis = true)
     : MicrofacetDistribution(samplevis),
     _alphax(alphax),
@@ -374,7 +374,7 @@ public:
     virtual Vector3f sample_wh(const Vector3f &wo, const Point2f &u) const;
     
     virtual std::string toString() const {
-        return StringPrintf("[ TrowbridgeReitzDistribution alphax: %f alphay: %f ]",
+        return StringPrintf("[ GGXDistribution alphax: %f alphay: %f ]",
                             _alphax, _alphay);
     }
     

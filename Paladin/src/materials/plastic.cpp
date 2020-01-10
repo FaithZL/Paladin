@@ -31,10 +31,10 @@ void PlasticMaterial::computeScatteringFunctions(
         
         Float rough = _roughness->evaluate(*si);
         if (_remapRoughness) {
-            rough = TrowbridgeReitzDistribution::RoughnessToAlpha(rough);
+            rough = GGXDistribution::RoughnessToAlpha(rough);
         }
         MicrofacetDistribution *distrib =
-            ARENA_ALLOC(arena, TrowbridgeReitzDistribution)(rough, rough);
+            ARENA_ALLOC(arena, GGXDistribution)(rough, rough);
         BxDF *spec =
             ARENA_ALLOC(arena, MicrofacetReflection)(ks, distrib, fresnel);
         si->bsdf->add(spec);
