@@ -20,10 +20,10 @@
 
 PALADIN_BEGIN
 
-class UniteMaterial : public Material {
+class HyperMaterial : public Material {
     
 public:
-    UniteMaterial(const std::shared_ptr<Texture<Spectrum>> &Kd,
+    HyperMaterial(const std::shared_ptr<Texture<Spectrum>> &Kd,
 				const std::shared_ptr<Texture<Spectrum>> &Ks,
 				const std::shared_ptr<Texture<Spectrum>> &Kr,
 				const std::shared_ptr<Texture<Spectrum>> &Kt,
@@ -59,7 +59,7 @@ private:
     bool _remapRoughness;
 };
 
-CObject_ptr createUniteMaterial(const nloJson &param, const Arguments &lst);
+CObject_ptr createHyperMaterial(const nloJson &param, const Arguments &lst);
 
 
 PALADIN_END

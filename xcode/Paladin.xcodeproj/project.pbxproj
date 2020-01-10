@@ -368,7 +368,7 @@
 		F2BCDE406373412F9B6C42D9 /* ImfTiledInputPart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6AF61A122258491DA03ED200 /* ImfTiledInputPart.cpp */; };
 		F3A7973CAF4A41A48033CA30 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 190B627A40204238973316F8 /* texture.cpp */; };
 		F4EFF31917644D4A887A6E59 /* mix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 893F64A350384AD0B806CD46 /* mix.cpp */; };
-		F63E41C223C62F5300DC344F /* unite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63E41C023C62F5300DC344F /* unite.cpp */; };
+		F63E41C223C62F5300DC344F /* hyper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63E41C023C62F5300DC344F /* hyper.cpp */; };
 		F70B9831A35245A0AF43CE40 /* bilerp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92DB55250D1C426C990C5D43 /* bilerp.cpp */; };
 		F9A9BFDA221B45BB83ACA914 /* stl_logging_unittest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 00796ACAD0754DF597B8A859 /* stl_logging_unittest.cc */; };
 		F9E23F0E6ED9497E84426822 /* film.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5DC492C93F5949859A0A73D7 /* film.cpp */; };
@@ -1214,8 +1214,8 @@
 		F399A10F80C24AE2BBA3B978 /* stb_vorbis.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = stb_vorbis.c; path = third/stblib/stb/stb_vorbis.c; sourceTree = SOURCE_ROOT; };
 		F44D9BF75BB8473384476333 /* demangle_unittest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = demangle_unittest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F61245C99AEC4940B782752D /* ImfZipCompressor.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfZipCompressor.cpp; path = third/openexr/OpenEXR/IlmImf/ImfZipCompressor.cpp; sourceTree = SOURCE_ROOT; };
-		F63E41C023C62F5300DC344F /* unite.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unite.cpp; path = src/materials/unite.cpp; sourceTree = "<group>"; };
-		F63E41C123C62F5300DC344F /* unite.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = unite.hpp; path = src/materials/unite.hpp; sourceTree = "<group>"; };
+		F63E41C023C62F5300DC344F /* hyper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hyper.cpp; path = src/materials/hyper.cpp; sourceTree = "<group>"; };
+		F63E41C123C62F5300DC344F /* hyper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = hyper.hpp; path = src/materials/hyper.hpp; sourceTree = "<group>"; };
 		F6C85EEE1706402E8DA4F41A /* ImfChannelListAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfChannelListAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfChannelListAttribute.cpp; sourceTree = SOURCE_ROOT; };
 		F6EA671206CD46579926A7D1 /* b44ExpLogTable */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = b44ExpLogTable; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7D7BAE64EFE47DA9AFED2D0 /* homogeneous.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = homogeneous.cpp; path = src/medium/homogeneous.cpp; sourceTree = SOURCE_ROOT; };
@@ -1535,8 +1535,8 @@
 				5D2E02EBA14F4B3FA235933E /* plastic.hpp */,
 				4CD36AE9722542B5986C47D4 /* subsurface.cpp */,
 				87553412C3B445E68DF83F93 /* subsurface.hpp */,
-				F63E41C023C62F5300DC344F /* unite.cpp */,
-				F63E41C123C62F5300DC344F /* unite.hpp */,
+				F63E41C023C62F5300DC344F /* hyper.cpp */,
+				F63E41C123C62F5300DC344F /* hyper.hpp */,
 			);
 			name = materials;
 			sourceTree = "<group>";
@@ -3408,7 +3408,7 @@
 				CD2438B11AE04B2EABDC5FB9 /* cylinder.cpp in Sources */,
 				9F3C759ED86E4ED0981B783F /* disk.cpp in Sources */,
 				E3F6AC4A95814F39B4C2EE36 /* sphere.cpp in Sources */,
-				F63E41C223C62F5300DC344F /* unite.cpp in Sources */,
+				F63E41C223C62F5300DC344F /* hyper.cpp in Sources */,
 				16887F38741948FB826AD127 /* trianglemesh.cpp in Sources */,
 				F70B9831A35245A0AF43CE40 /* bilerp.cpp in Sources */,
 				B484929F1024499E9E38BE02 /* constant.cpp in Sources */,

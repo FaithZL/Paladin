@@ -57,6 +57,7 @@ public:
     virtual void computeScatteringFunctions(SurfaceInteraction *si,
                                             MemoryArena &arena,
                                             TransportMode mode,
+                                            bool allowMultipleLobes) const override;
     
 private:
 	std::shared_ptr<Texture<Spectrum>> _color;
