@@ -31,8 +31,10 @@ int main(int argc, const char * argv[]) {
     COUT << "Hello, paladin!\n";
     tinyobj::MaterialFileReader mr("99");
     Paladin paladin;
-    string fileName(argv[1]);
-    paladin.render(fileName);
+    if (argc >= 2) {
+        string fileName(argv[1]);
+        paladin.render(fileName);
+    }
 #ifdef _MSC_VER
     //让VS运行debug时不至于黑屏一闪而过
     system("pause");

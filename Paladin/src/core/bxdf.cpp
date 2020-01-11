@@ -655,11 +655,11 @@ Spectrum FourierBSDF::f(const Vector3f &wo, const Vector3f &wi) const {
 
 Spectrum FourierBSDF::sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
                   Float *pdf, BxDFType *sampledType) const {
-
+    return Spectrum(1.f);
 }
 
 Float FourierBSDF::pdfDir(const Vector3f &wo, const Vector3f &wi) const {
-
+    return 0;
 }
 
 std::string FourierBSDF::toString() const {

@@ -12,9 +12,12 @@ PALADIN_BEGIN
 bool ModelParser::load(const string &fn, const string &basePath, bool triangulate) {
     string warn;
     string err;
+    string mtlDir = basePath.empty()
+                ? fn.substr(0, fn.find_last_of("/"))
+                :basePath;
     bool ret = tinyobj::LoadObj(&_attrib, &_shapes, &_materials,
                      &warn, &err, fn.c_str(),
-                     nullptr, triangulate);
+                     mtlDir.c_str(), triangulate);
     
     if (!warn.empty()) {
         std::cout << "WARN: " << warn << std::endl;

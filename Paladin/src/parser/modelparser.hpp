@@ -26,7 +26,7 @@ public:
         
     }
     
-    bool load(const string &fn, const string &basePath = nullptr,
+    bool load(const string &fn, const string &basePath = "",
               bool triangulate = true);
     
     void initPoints();
@@ -36,6 +36,8 @@ public:
     void initUVs();
     
     void parseShapes();
+    
+    void parseMaterials();
     
     void parseMesh(const mesh_t &mesh);
     

@@ -464,7 +464,7 @@
                         "param" : 1.0
                     }
                 ],
-                "fileName" : "res/dragon.obj"
+                "fileName" : "res/sportsCar/sportsCar.obj"
             },
             "clone" : true,
             "material" : "metal"
