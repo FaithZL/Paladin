@@ -189,7 +189,7 @@ vector<shared_ptr<Primitive>> createModelPrimitive(const nloJson &data,
 vector<shared_ptr<Shape>> createTriFromFile(const string &fn,
                                             const shared_ptr<const Transform> &o2w,
                                             bool reverseOrientation,
-                                            const string &basePath = nullptr);
+                                            const string &basePath = "");
 
 vector<shared_ptr<Primitive>> createPrimitive(const vector<shared_ptr<Shape>> &triLst,
                                               vector<shared_ptr<Light>> &lights,
@@ -197,7 +197,12 @@ vector<shared_ptr<Primitive>> createPrimitive(const vector<shared_ptr<Shape>> &t
                                               const MediumInterface &mediumInterface,
                                               const nloJson &emissionData);
 
-
+vector<shared_ptr<Primitive>> getPrimitiveFromObj(const string &fn,
+                                                const shared_ptr<const Transform> &o2w,
+                                                vector<shared_ptr<Light>> &lights,
+                                                const MediumInterface &mediumInterface,
+                                                bool reverseOrientation,
+                                                const string &basePath = "");
 
 PALADIN_END
 

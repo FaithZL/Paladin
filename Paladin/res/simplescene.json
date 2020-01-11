@@ -467,7 +467,7 @@
                 "fileName" : "res/sportsCar/sportsCar.obj"
             },
             "clone" : true,
-            "material" : "metal"
+            "material" : null
         },
         {
             "type" : "clonal",

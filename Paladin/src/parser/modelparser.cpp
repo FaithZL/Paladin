@@ -90,4 +90,11 @@ vector<shared_ptr<Shape>> ModelParser::getTriLst(const shared_ptr<const Transfor
     return ret;
 }
 
+vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<const Transform> &o2w,
+                                                           vector<shared_ptr<Light>> &lights,
+                                                           bool reverseOrientation) {
+    vector<shared_ptr<Primitive>> ret;
+    return ret;
+}
+
 PALADIN_END

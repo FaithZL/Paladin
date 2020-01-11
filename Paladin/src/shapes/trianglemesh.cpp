@@ -776,6 +776,10 @@ vector<shared_ptr<Primitive>> createModelPrimitive(const nloJson &data,
     auto l2w = shared_ptr<const Transform>(createTransform(param.value("transform", nloJson())));
     bool ro = param.value("reverseOrientation", false);
     nloJson emissionData = data.value("emission", nloJson());
+    // 如果没有发光属性，并且没有指定材质，则使用模型原有材质
+    if (emissionData.is_null() && mat == nullptr) {
+        return getPrimitiveFromObj(fileName, l2w, lights, mediumInterface, ro);
+    }
     vector<shared_ptr<Shape>> triLst = createTriFromFile(fileName, l2w, ro, basePath);
     return createPrimitive(triLst, lights, mat, mediumInterface, emissionData);
 }
@@ -784,10 +788,20 @@ vector<shared_ptr<Shape>> createTriFromFile(const string &fn,
                                             const shared_ptr<const Transform> &o2w,
                                             bool reverseOrientation,
                                             const string &basePath) {
-    vector<shared_ptr<Shape>> ret;
     ModelParser mp;
     mp.load(fn, basePath);
     return mp.getTriLst(o2w, reverseOrientation);
+}
+
+vector<shared_ptr<Primitive>> getPrimitiveFromObj(const string &fn,
+                                                const shared_ptr<const Transform> &o2w,
+                                                vector<shared_ptr<Light>> &lights,
+                                                const MediumInterface &mediumInterface,
+                                                bool reverseOrientation,
+                                                const string &basePath) {
+    ModelParser mp;
+    mp.load(fn, basePath);
+    return mp.getPrimitiveLst(o2w, lights, false);
 }
 
 vector<shared_ptr<Primitive>> createPrimitive(const vector<shared_ptr<Shape>> &triLst,
