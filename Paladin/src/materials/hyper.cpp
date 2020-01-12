@@ -78,4 +78,18 @@ void HyperMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryAre
     }
 }
 
+shared_ptr<HyperMaterial> createHyperMaterial(const std::shared_ptr<Texture<Spectrum>> &Kd,
+                                            const std::shared_ptr<Texture<Spectrum>> &Ks,
+                                            const std::shared_ptr<Texture<Spectrum>> &Kr,
+                                            const std::shared_ptr<Texture<Spectrum>> &Kt,
+                                            const std::shared_ptr<Texture<Float>> &roughness,
+                                            const std::shared_ptr<Texture<Float>> &roughnessu,
+                                            const std::shared_ptr<Texture<Float>> &roughnessv,
+                                            const std::shared_ptr<Texture<Spectrum>> &opacity,
+                                            const std::shared_ptr<Texture<Float>> &eta,
+                                            const std::shared_ptr<Texture<Float>> &bumpMap,
+                                              bool remapRoughness) {
+    return make_shared<HyperMaterial>(Kd, Ks, Kr, Kt, roughness, roughnessu, roughnessv, opacity, eta, bumpMap, remapRoughness);
+}
+
 PALADIN_END

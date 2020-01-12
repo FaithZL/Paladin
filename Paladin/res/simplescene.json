@@ -457,38 +457,17 @@
                     },
                     {
                         "type" : "translate",
-                        "param" : [-0.2,-0.3,0]
+                        "param" : [-0.2,-0.3,-2]
                     },
                     {
                         "type" : "scale",
-                        "param" : 1.0
+                        "param" : 0.2
                     }
                 ],
-                "fileName" : "res/sportsCar/sportsCar.obj"
+                "fileName" : "res/cube/cube.obj"
             },
             "clone" : true,
             "material" : null
-        },
-        {
-            "type" : "clonal",
-            "name" : "dragon2",
-            "enable" : true,
-            "transform" :[
-                {
-                    "type" : "rotateY",
-                    "param" : [0]
-                },
-                {
-                    "type" : "translate",
-                    "param" : [0.2,-0.3,0]
-                },
-                {
-                    "type" : "scale",
-                    "param" : 1.0
-                }
-            ],
-            "from" : "dragon",
-            "material" : "matte1"
         }
     ],
     "integrator" : {

@@ -30,25 +30,22 @@ bool ModelParser::load(const string &fn, const string &basePath, bool triangulat
     return ret;
 }
 
-void ModelParser::initPoints() {
+void ModelParser::packageData() {
+    // 初始化顶点
     for (size_t i = 0; i < _attrib.vertices.size() / 3; ++i) {
         Float x = _attrib.vertices[i * 3 + 0];
         Float y = _attrib.vertices[i * 3 + 1];
         Float z = _attrib.vertices[i * 3 + 2];
         _points.emplace_back(x,y,z);
     }
-}
-
-void ModelParser::initNormals() {
+    // 初始化法线
     for (size_t i = 0; i < _attrib.normals.size() / 3; ++i) {
         Float x = _attrib.normals[i * 3 + 0];
         Float y = _attrib.normals[i * 3 + 1];
         Float z = _attrib.normals[i * 3 + 2];
         _normals.emplace_back(x, y, z);
     }
-}
-
-void ModelParser::initUVs() {
+    // 初始化纹理坐标
     for (size_t i = 0; i < _attrib.texcoords.size() / 2; ++i) {
         Float u = _attrib.texcoords[i * 2 + 0];
         Float v = _attrib.texcoords[i * 2 + 1];
@@ -63,6 +60,16 @@ void ModelParser::parseShapes() {
     }
 }
 
+shared_ptr<const Material> ModelParser::fromObjMaterial(const material_t &mat) {
+    return nullptr;
+}
+
+void ModelParser::parseMaterials() {
+    for (size_t i = 0; i < _materials.size(); ++i) {
+        _materialLst.push_back(fromObjMaterial(_materials[i]));
+    }
+}
+
 void ModelParser::parseMesh(const mesh_t &mesh) {
     // todo 顶点索引与法线索引可能不一致，看看怎么处理
     for (size_t i = 0; i < mesh.indices.size(); ++i) {
@@ -73,11 +80,8 @@ void ModelParser::parseMesh(const mesh_t &mesh) {
 
 vector<shared_ptr<Shape>> ModelParser::getTriLst(const shared_ptr<const Transform> &o2w,
                                                  bool reverseOrientation) {
-    initPoints();
-    initNormals();
-    initUVs();
+    packageData();
     parseShapes();
-
     size_t nTriangles = _vertIndices.size() / 3;
     
     auto mesh = createTriMesh(o2w, nTriangles, &_vertIndices[0], _points.size(), &_points[0]);
@@ -90,10 +94,25 @@ vector<shared_ptr<Shape>> ModelParser::getTriLst(const shared_ptr<const Transfor
     return ret;
 }
 
+void ModelParser::pushPrimitiveToLst(vector<shared_ptr<Primitive>> &ret, const shape_t &shape, vector<shared_ptr<Light>> &lights) {
+    mesh_t mesh = shape.mesh;
+    for (size_t i = 0; i < mesh.indices.size(); ++i) {
+        index_t idx = mesh.indices[i];
+        _vertIndices.push_back(idx.vertex_index);
+    }
+}
+
 vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<const Transform> &o2w,
                                                            vector<shared_ptr<Light>> &lights,
                                                            bool reverseOrientation) {
     vector<shared_ptr<Primitive>> ret;
+    packageData();
+    
+    for (size_t i = 0; i < _shapes.size(); ++i) {
+        shape_t shape = _shapes.at(i);
+        pushPrimitiveToLst(ret, shape, lights);
+    }
+    
     return ret;
 }
 

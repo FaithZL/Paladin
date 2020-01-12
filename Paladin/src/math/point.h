@@ -163,13 +163,13 @@ public:
 
 template <typename T>
 inline std::ostream &operator<<(std::ostream &os, const Point2<T> &v) {
-    os << "[ " << v.x << ", " << v.y << " ]";
+    os << "(" << v.x << ", " << v.y << ")";
     return os;
 }
 
 template <>
 inline std::ostream &operator<<(std::ostream &os, const Point2<Float> &v) {
-    os << StringPrintf("[ %f, %f ]", v.x, v.y);
+    os << StringPrintf("(%f, %f)", v.x, v.y);
     return os;
 }
 
@@ -307,13 +307,13 @@ public:
 
 template <typename T>
 inline std::ostream &operator<<(std::ostream &os, const Point3<T> &v) {
-    os << "[ " << v.x << ", " << v.y << ", " << v.z << " ]";
+    os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
     return os;
 }
 
 template <>
 inline std::ostream &operator<<(std::ostream &os, const Point3<Float> &v) {
-    os << StringPrintf("[ %f, %f, %f ]", v.x, v.y, v.z);
+    os << StringPrintf("(%f, %f, %f)", v.x, v.y, v.z);
     return os;
 }
 

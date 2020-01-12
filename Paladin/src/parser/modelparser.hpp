@@ -29,17 +29,17 @@ public:
     bool load(const string &fn, const string &basePath = "",
               bool triangulate = true);
     
-    void initPoints();
-    
-    void initNormals();
-    
-    void initUVs();
-    
     void parseShapes();
     
     void parseMaterials();
     
+    shared_ptr<const Material> fromObjMaterial(const material_t &);
+    
     void parseMesh(const mesh_t &mesh);
+    
+    void packageData();
+    
+    void pushPrimitiveToLst(vector<shared_ptr<Primitive>> &, const shape_t &, vector<shared_ptr<Light>> &);
     
     vector<shared_ptr<Shape>> getTriLst(const shared_ptr<const Transform> &o2w,
                                         bool reverseOrientation);
@@ -68,6 +68,8 @@ private:
     vector<int> _faceIndices;
     // 点索引列表
     vector<int> _vertIndices;
+    // 材质列表
+    vector<shared_ptr<const Material>> _materialLst;
 };
 
 PALADIN_END

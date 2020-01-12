@@ -211,6 +211,11 @@ public:
         
     }
     virtual void render(const Scene &) = 0;
+    
+    void outputSceneInfo(const Scene &scene, const Camera * camera = nullptr) const {
+        AABB3f sceneBound = scene.worldBound();
+        cout << "scene bound box is:" << sceneBound << endl;
+    }
 };
 
 /**
