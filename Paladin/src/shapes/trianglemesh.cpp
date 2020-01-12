@@ -801,7 +801,7 @@ vector<shared_ptr<Primitive>> getPrimitiveFromObj(const string &fn,
                                                 const string &basePath) {
     ModelParser mp;
     mp.load(fn, basePath);
-    return mp.getPrimitiveLst(o2w, lights, false);
+    return mp.getPrimitiveLst(o2w, lights, false, mediumInterface);
 }
 
 vector<shared_ptr<Primitive>> createPrimitive(const vector<shared_ptr<Shape>> &triLst,

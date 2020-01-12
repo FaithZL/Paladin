@@ -6,6 +6,7 @@
 //
 
 #include "modelparser.hpp"
+#include "core/primitive.hpp"
 
 PALADIN_BEGIN
 
@@ -61,6 +62,7 @@ void ModelParser::parseShapes() {
 }
 
 shared_ptr<const Material> ModelParser::fromObjMaterial(const material_t &mat) {
+    // todo
     return nullptr;
 }
 
@@ -94,23 +96,40 @@ vector<shared_ptr<Shape>> ModelParser::getTriLst(const shared_ptr<const Transfor
     return ret;
 }
 
-void ModelParser::pushPrimitiveToLst(vector<shared_ptr<Primitive>> &ret, const shape_t &shape, vector<shared_ptr<Light>> &lights) {
+void ModelParser::parseShape(const shape_t &shape) {
     mesh_t mesh = shape.mesh;
-    for (size_t i = 0; i < mesh.indices.size(); ++i) {
-        index_t idx = mesh.indices[i];
-        _vertIndices.push_back(idx.vertex_index);
+    for (size_t i = 0; i < mesh.material_ids.size(); ++i) {
+        int matId = mesh.material_ids[i];
+        index_t idx0 = mesh.indices[i * 3];
+        index_t idx1 = mesh.indices[i * 3 + 1];
+        index_t idx2 = mesh.indices[i * 3 + 2];
+        _vertIndices.push_back(idx0.vertex_index);
+        _vertIndices.push_back(idx1.vertex_index);
+        _vertIndices.push_back(idx2.vertex_index);
+        _matIndices.push_back(matId);
     }
 }
 
 vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<const Transform> &o2w,
                                                            vector<shared_ptr<Light>> &lights,
-                                                           bool reverseOrientation) {
+                                                           bool reverseOrientation,
+                                                           const MediumInterface &mediumInterface) {
     vector<shared_ptr<Primitive>> ret;
     packageData();
+    parseMaterials();
     
     for (size_t i = 0; i < _shapes.size(); ++i) {
         shape_t shape = _shapes.at(i);
-        pushPrimitiveToLst(ret, shape, lights);
+        parseShape(shape);
+    }
+    size_t nTriangles = _vertIndices.size() / 3;
+    auto mesh = createTriMesh(o2w, nTriangles, &_vertIndices[0], _points.size(), &_points[0]);
+    shared_ptr<Transform> w2o(o2w->getInverse_ptr());
+    vector<shared_ptr<Shape>> triLst;
+    for (size_t i = 0; i < nTriangles; ++i) {
+        auto tri = createTri(o2w, w2o, reverseOrientation, mesh, i);
+        auto mat = _matIndices[i];
+        
     }
     
     return ret;

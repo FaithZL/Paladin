@@ -39,14 +39,15 @@ public:
     
     void packageData();
     
-    void pushPrimitiveToLst(vector<shared_ptr<Primitive>> &, const shape_t &, vector<shared_ptr<Light>> &);
+    void parseShape(const shape_t &);
     
     vector<shared_ptr<Shape>> getTriLst(const shared_ptr<const Transform> &o2w,
                                         bool reverseOrientation);
     
     vector<shared_ptr<Primitive>> getPrimitiveLst(const shared_ptr<const Transform> &o2w,
                                                   vector<shared_ptr<Light>> &lights,
-                                                  bool reverseOrientation);
+                                                  bool reverseOrientation,
+                                                  const MediumInterface &mediumInterface);
     
 private:
     // tinyobjloader中的成员
@@ -70,6 +71,8 @@ private:
     vector<int> _vertIndices;
     // 材质列表
     vector<shared_ptr<const Material>> _materialLst;
+    // 材质索引列表
+    vector<int> _matIndices;
 };
 
 PALADIN_END
