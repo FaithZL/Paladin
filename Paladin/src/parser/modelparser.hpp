@@ -18,6 +18,8 @@ PALADIN_BEGIN
 
 using namespace tinyobj;
 
+
+
 class ModelParser {
     
 public:
@@ -26,6 +28,11 @@ public:
         
     }
     
+    struct SurfaceData {
+        shared_ptr<const Material> material;
+        Float emission[3];
+    };
+    
     bool load(const string &fn, const string &basePath = "",
               bool triangulate = true);
     
@@ -33,7 +40,7 @@ public:
     
     void parseMaterials();
     
-    shared_ptr<const Material> fromObjMaterial(const material_t &);
+    SurfaceData fromObjMaterial(const material_t &);
     
     void parseMesh(const mesh_t &mesh);
     
@@ -70,7 +77,7 @@ private:
     // 点索引列表
     vector<int> _vertIndices;
     // 材质列表
-    vector<shared_ptr<const Material>> _materialLst;
+    vector<SurfaceData> _materialLst;
     // 材质索引列表
     vector<int> _matIndices;
 };

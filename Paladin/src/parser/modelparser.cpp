@@ -7,6 +7,7 @@
 
 #include "modelparser.hpp"
 #include "core/primitive.hpp"
+#include "lights/diffuse.hpp"
 #include "materials/hyper.hpp"
 
 PALADIN_BEGIN
@@ -62,10 +63,12 @@ void ModelParser::parseShapes() {
     }
 }
 
-shared_ptr<const Material> ModelParser::fromObjMaterial(const material_t &mat) {
-    // todo
-    
-    return nullptr;
+ModelParser::SurfaceData ModelParser::fromObjMaterial(const material_t &mat) {
+    SurfaceData ret;
+    for (int i = 0; i < 3; ++i) {
+        ret.emission[i] = mat.emission[i];
+    }
+    return ret;
 }
 
 void ModelParser::parseMaterials() {
@@ -131,8 +134,9 @@ vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<cons
     for (size_t i = 0; i < nTriangles; ++i) {
         auto tri = createTri(o2w, w2o, reverseOrientation, mesh, i);
         int matIdx = _matIndices[i];
-        shared_ptr<const Material> mat = _materialLst[matIdx];
-        auto prim = GeometricPrimitive::create(tri, mat, nullptr, mediumInterface);
+        SurfaceData data = _materialLst[matIdx];
+        auto light = DiffuseAreaLight::create(data.emission, tri, mediumInterface);
+        auto prim = GeometricPrimitive::create(tri, data.material, light, mediumInterface);
         ret.push_back(prim);
     }
     

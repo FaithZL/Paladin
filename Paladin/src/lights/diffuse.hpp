@@ -45,6 +45,8 @@ public:
     
     Float pdf_Li(const Interaction &, const Vector3f &) const override;
     
+    static shared_ptr<DiffuseAreaLight> create(Float rgb[3], const std::shared_ptr<Shape> &, const MediumInterface &mi = nullptr);
+    
 private:
     // 面光源才有的，发射的辐射度
     const Spectrum _L;
