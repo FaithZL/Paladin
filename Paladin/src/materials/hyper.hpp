@@ -55,15 +55,8 @@ public:
     void computeScatteringFunctions(SurfaceInteraction *si,
                                MemoryArena &arena, TransportMode mode,
                                bool allowMultipleLobes) const override;
-
-private:
-    std::shared_ptr<Texture<Spectrum>> _Kd, _Ks, _Kr, _Kt, _opacity;
-    std::shared_ptr<Texture<Float>> _roughness, _roughness_u,_roughness_v; 
-    std::shared_ptr<Texture<Float>> _eta, _bumpMap;
-    bool _remapRoughness;
-};
-
-shared_ptr<HyperMaterial> createHyperMaterial(const std::shared_ptr<Texture<Spectrum>> &Kd,
+    
+    static shared_ptr<HyperMaterial> create(const std::shared_ptr<Texture<Spectrum>> &Kd,
                                             const std::shared_ptr<Texture<Spectrum>> &Ks,
                                             const std::shared_ptr<Texture<Spectrum>> &Kr,
                                             const std::shared_ptr<Texture<Spectrum>> &Kt,
@@ -74,6 +67,13 @@ shared_ptr<HyperMaterial> createHyperMaterial(const std::shared_ptr<Texture<Spec
                                             const std::shared_ptr<Texture<Float>> &eta,
                                             const std::shared_ptr<Texture<Float>> &bumpMap,
                                             bool remapRoughness = false);
+
+private:
+    std::shared_ptr<Texture<Spectrum>> _Kd, _Ks, _Kr, _Kt, _opacity;
+    std::shared_ptr<Texture<Float>> _roughness, _roughness_u,_roughness_v; 
+    std::shared_ptr<Texture<Float>> _eta, _bumpMap;
+    bool _remapRoughness;
+};
 
 CObject_ptr createHyperMaterial(const nloJson &param, const Arguments &lst);
 

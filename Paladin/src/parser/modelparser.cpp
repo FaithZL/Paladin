@@ -7,6 +7,7 @@
 
 #include "modelparser.hpp"
 #include "core/primitive.hpp"
+#include "materials/hyper.hpp"
 
 PALADIN_BEGIN
 
@@ -63,6 +64,7 @@ void ModelParser::parseShapes() {
 
 shared_ptr<const Material> ModelParser::fromObjMaterial(const material_t &mat) {
     // todo
+    
     return nullptr;
 }
 
@@ -128,8 +130,10 @@ vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<cons
     vector<shared_ptr<Shape>> triLst;
     for (size_t i = 0; i < nTriangles; ++i) {
         auto tri = createTri(o2w, w2o, reverseOrientation, mesh, i);
-        auto mat = _matIndices[i];
-        
+        int matIdx = _matIndices[i];
+        shared_ptr<const Material> mat = _materialLst[matIdx];
+        auto prim = GeometricPrimitive::create(tri, mat, nullptr, mediumInterface);
+        ret.push_back(prim);
     }
     
     return ret;
