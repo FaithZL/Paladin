@@ -29,6 +29,14 @@ public:
         return nloJson();
     }
     
+    static shared_ptr<ConstantTexture<Spectrum>> create(const Float rgb[3]) {
+        return make_shared<ConstantTexture<Spectrum>>(Spectrum::FromRGB(rgb));
+    }
+    
+    static shared_ptr<ConstantTexture<T>> create(T v) {
+        return make_shared<ConstantTexture<T>>(v);
+    }
+    
 private:
     T _value;
 };

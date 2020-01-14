@@ -453,11 +453,11 @@
                 "transform" :[
                     {
                         "type" : "rotateY",
-                        "param" : [0]
+                        "param" : [45]
                     },
                     {
                         "type" : "translate",
-                        "param" : [-0.2,-0.3,-2]
+                        "param" : [-0.2,-0.3,-0]
                     },
                     {
                         "type" : "scale",

@@ -47,6 +47,9 @@ Float DiffuseAreaLight::pdf_Li(const Interaction &ref,
 }
 
 shared_ptr<DiffuseAreaLight> DiffuseAreaLight::create(Float rgb[3], const std::shared_ptr<Shape> &shape, const MediumInterface &mi) {
+    if (rgb[0] == 0 && rgb[1] == 0 && rgb[2] == 0) {
+        return nullptr;
+    }
     Spectrum Le = Spectrum::FromRGB(rgb);
     shared_ptr<const Transform> l2w = shape->objectToWorld;
     return make_shared<DiffuseAreaLight>(l2w, mi, Le, 1, shape, false);

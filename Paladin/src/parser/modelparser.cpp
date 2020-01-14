@@ -9,6 +9,7 @@
 #include "core/primitive.hpp"
 #include "lights/diffuse.hpp"
 #include "materials/hyper.hpp"
+#include "textures/constant.hpp"
 
 PALADIN_BEGIN
 
@@ -65,9 +66,20 @@ void ModelParser::parseShapes() {
 
 ModelParser::SurfaceData ModelParser::fromObjMaterial(const material_t &mat) {
     SurfaceData ret;
-    for (int i = 0; i < 3; ++i) {
-        ret.emission[i] = mat.emission[i];
-    }
+    ret.emission[0] = mat.emission[0];
+    ret.emission[1] = mat.emission[1];
+    ret.emission[2] = mat.emission[2];
+    
+    shared_ptr<Texture<Spectrum>> Kd = ConstantTexture<Spectrum>::create(mat.diffuse);
+    shared_ptr<Texture<Spectrum>> Ks = ConstantTexture<Spectrum>::create(mat.specular);
+    shared_ptr<Texture<Spectrum>> Kt = ConstantTexture<Spectrum>::create(mat.transmittance);
+    shared_ptr<Texture<Spectrum>> Kr = nullptr;
+    shared_ptr<Texture<Spectrum>> op = ConstantTexture<Spectrum>::create(mat.dissolve);
+    shared_ptr<Texture<Float>> eta = ConstantTexture<Float>::create(mat.ior);
+    float roughness = (mat.shininess == 0) ? 0. : (1.f / mat.shininess);
+    shared_ptr<Texture<Float>> rough = ConstantTexture<Float>::create(roughness);
+    
+    ret.material = HyperMaterial::create(Kd, Ks, Kr, Kt, rough, nullptr, nullptr, op, eta, nullptr);
     return ret;
 }
 

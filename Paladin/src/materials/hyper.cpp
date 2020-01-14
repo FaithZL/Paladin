@@ -64,17 +64,20 @@ void HyperMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryAre
         si->bsdf->add(mSpec);
     }
     
-    Spectrum Kr = _Kr->evaluate(*si);
-    if (!Kr.IsBlack()) {
-        auto fresnel = ARENA_ALLOC(arena, FresnelDielectric)(1.f, eta);
-        auto specR = ARENA_ALLOC(arena, SpecularReflection)(Kr, fresnel);
-        si->bsdf->add(specR);
+    if (_Kr) {
+        Spectrum Kr = _Kr->evaluate(*si);
+        if (!Kr.IsBlack()) {
+            auto fresnel = ARENA_ALLOC(arena, FresnelDielectric)(1.f, eta);
+            auto specR = ARENA_ALLOC(arena, SpecularReflection)(Kr, fresnel);
+            si->bsdf->add(specR);
+        }
     }
-    
-    Spectrum Kt = _Kt->evaluate(*si);
-    if (!Kt.IsBlack()) {
-        auto specT = ARENA_ALLOC(arena, SpecularTransmission)(Kt, 1.f, eta, mode);
-        si->bsdf->add(specT);
+    if (_Kt) {
+        Spectrum Kt = _Kt->evaluate(*si);
+        if (!Kt.IsBlack()) {
+            auto specT = ARENA_ALLOC(arena, SpecularTransmission)(Kt, 1.f, eta, mode);
+            si->bsdf->add(specT);
+        }
     }
 }
 
