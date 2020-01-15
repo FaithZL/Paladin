@@ -146,9 +146,17 @@ vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<cons
     for (size_t i = 0; i < nTriangles; ++i) {
         auto tri = createTri(o2w, w2o, reverseOrientation, mesh, i);
         int matIdx = _matIndices[i];
-        SurfaceData data = _materialLst[matIdx];
-        auto light = DiffuseAreaLight::create(data.emission, tri, mediumInterface);
-        auto prim = GeometricPrimitive::create(tri, data.material, light, mediumInterface);
+        SurfaceData data;
+        shared_ptr<DiffuseAreaLight> light;
+        shared_ptr<GeometricPrimitive> prim;
+        if (matIdx >= 0) {
+            data = _materialLst[matIdx];
+            light = DiffuseAreaLight::create(data.emission, tri, mediumInterface);
+            prim = GeometricPrimitive::create(tri, data.material, light, mediumInterface);
+        } else {
+            prim = GeometricPrimitive::create(tri, nullptr, nullptr, mediumInterface);
+        }
+        
         ret.push_back(prim);
     }
     

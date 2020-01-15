@@ -234,27 +234,6 @@
     },
     "shapes" : [
         {
-            "type" : "sphere",
-            "enable" : false,
-            "name" : "sphere",
-            "clone" : true,
-            "param" : {
-                "transform" : [
-                    {
-                        "type" : "rotateX",
-                        "param" : [0]
-                    },
-                    {
-                        "type" : "translate",
-                        "param" : [-0.3,-0.2,0]
-                    }
-                ],
-                "radius" : 0.3,
-                "phiMax" : 360
-            },
-            "material" : "glass"
-        },
-        {
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "back",
@@ -267,10 +246,10 @@
                     },
                     {
                         "type" : "translate",
-                        "param" : [0,0,1]
+                        "param" : [0,0,3]
                     }
                 ],
-                "width" : 2
+                "width" : 6
             },
             "material" : "matte1"
         },
@@ -290,7 +269,7 @@
                         "param" : [0,-1,0]
                     }
                 ],
-                "width" : 2
+                "width" : 6
             },
             "material" : "matte1"
         },
@@ -310,7 +289,7 @@
                         "param" : [0,1,0]
                     }
                 ],
-                "width" : 2
+                "width" : 6
             },
             "material" : "matte1"
         },
@@ -327,10 +306,10 @@
                     },
                     {
                         "type" : "translate",
-                        "param" : [-1,0,0]
+                        "param" : [-2,0,0]
                     }
                 ],
-                "width" : 2
+                "width" : 6
             },
             "material" : "matteRed"
         },
@@ -347,10 +326,10 @@
                     },
                     {
                         "type" : "translate",
-                        "param" : [1,0,0]
+                        "param" : [2,0,0]
                     }
                 ],
-                "width" : 2
+                "width" : 6
             },
             "material" : "matteGreen"
         },
@@ -394,7 +373,7 @@
                 "nSamples" : 1,
                 "Le" : {
                     "colorType" : 1,
-                    "color" : [22, 22, 22]
+                    "color" : [69, 69, 69]
                 },
                 "twoSided" : false
             }
@@ -453,18 +432,18 @@
                 "transform" :[
                     {
                         "type" : "rotateY",
-                        "param" : [45]
+                        "param" : [230]
                     },
                     {
                         "type" : "translate",
-                        "param" : [-0.2,-0.3,-0]
+                        "param" : [-0.2,-2,-0.9]
                     },
                     {
                         "type" : "scale",
-                        "param" : 0.2
+                        "param" : 0.5
                     }
                 ],
-                "fileName" : "res/cube/cube.obj"
+                "fileName" : "res/sportsCar/sportsCar.obj"
             },
             "clone" : true,
             "material" : null
@@ -480,9 +459,9 @@
         }
     },
     "sampler" : {
-        "type" : "halton",
+        "type" : "random",
         "param" : {
-            "spp" : 2
+            "spp" : 256
         }
     },
     "camera" : {
@@ -494,17 +473,17 @@
             "focalDistance" : 100,
             "fov" : 20,
             "lookAt" : [
-                [0,0,-6.6],
-                [0,0,0],
+                [0,0.5,-6.6],
+                [0,-0.8,0],
                 [0,1,0]
             ]
         }
     },
     "film" : {
         "param" : {
-            "resolution" : [400, 400],
+            "resolution" : [600, 400],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "standford_bunny-pt-16spp.png",
+            "fileName" : "parseobjmodel.png",
             "diagonal" : 1,
             "scale" : 1
         }
