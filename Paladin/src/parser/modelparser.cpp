@@ -103,7 +103,8 @@ vector<shared_ptr<Shape>> ModelParser::getTriLst(const shared_ptr<const Transfor
     parseShapes();
     size_t nTriangles = _vertIndices.size() / 3;
     
-    auto mesh = createTriMesh(o2w, nTriangles, &_vertIndices[0], _points.size(), &_points[0]);
+    auto mesh = createTriMesh(o2w, nTriangles, &_vertIndices[0], _points.size(),
+                                &_points[0], &_UVs[0], &_normals[0]);
 
     vector<shared_ptr<Shape>> ret;
     shared_ptr<Transform> w2o(o2w->getInverse_ptr());
@@ -140,7 +141,8 @@ vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<cons
         parseShape(shape);
     }
     size_t nTriangles = _vertIndices.size() / 3;
-    auto mesh = createTriMesh(o2w, nTriangles, &_vertIndices[0], _points.size(), &_points[0]);
+    auto mesh = createTriMesh(o2w, nTriangles, &_vertIndices[0], _points.size(),
+                              &_points[0], &_UVs[0], &_normals[0]);
     shared_ptr<Transform> w2o(o2w->getInverse_ptr());
     vector<shared_ptr<Shape>> triLst;
     for (size_t i = 0; i < nTriangles; ++i) {
