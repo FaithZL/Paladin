@@ -55,6 +55,19 @@ shadowAlphaMask(shadowAlphaMask) {
     }
 }
 
+TriangleMesh::TriangleMesh(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
+                            const vector<int> &vertexIndices, const vector<Point3f> *points,
+                            const vector<Normal3f> *normals, const vector<Point2f> *uv, const vector<Vector3f> *edges,
+                            const std::shared_ptr<Texture<Float>> &alphaMask,
+                            const std::shared_ptr<Texture<Float>> &shadowAlphaMask,
+                            const int *faceIndices)
+: nTriangles(nTriangles),
+nVertices(vertexIndices.size()),
+alphaMask(alphaMask),
+shadowAlphaMask(shadowAlphaMask){
+    
+}
+
 AABB3f Triangle::objectBound() const {
     const Point3f &p0 = _mesh->points[_vertexIdx[0]];
     const Point3f &p1 = _mesh->points[_vertexIdx[1]];

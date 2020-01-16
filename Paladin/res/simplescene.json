@@ -42,6 +42,34 @@
                 "bumpMap" : 0
             }
         },
+        "plastic" : {
+            "type" : "plastic",
+            "param" : {
+                "Kd" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0, 0, 0]
+                    }
+                },
+                "Ks" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.9, 0.9, 0.9]
+                    }
+                },
+                "rough" : {
+                    "type" : "constant",
+                    "param" : 0.01
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "remapRough" : false
+            }
+        },
         "matte2" : {
             "type" : "matte",
             "param" : {
@@ -237,7 +265,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "back",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -257,7 +285,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "bottom",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -436,21 +464,21 @@
                     },
                     {
                         "type" : "translate",
-                        "param" : [-0.2,-2,-0.9]
+                        "param" : [-0.1,-230,-0.9]
                     },
                     {
                         "type" : "scale",
-                        "param" : 0.5
+                        "param" : 0.005
                     }
                 ],
-                "fileName" : "res/sportsCar/sportsCar.obj"
+                "fileName" : "res/bmw/bmw.obj"
             },
             "clone" : true,
-            "material" : null
+            "material" : "plastic"
         }
     ],
     "integrator" : {
-        "type" : "pt",
+        "type" : "Geometry",
         "param" : {
             "maxBounce" : 15,
             "rrThreshold" : 1,
@@ -461,7 +489,7 @@
     "sampler" : {
         "type" : "random",
         "param" : {
-            "spp" : 256
+            "spp" : 16
         }
     },
     "camera" : {
@@ -471,7 +499,7 @@
             "shutterClose" : 1,
             "lensRadius" : 0,
             "focalDistance" : 100,
-            "fov" : 20,
+            "fov" : 18,
             "lookAt" : [
                 [0,0.5,-6.6],
                 [0,-0.8,0],
@@ -481,8 +509,8 @@
     },
     "film" : {
         "param" : {
-            "resolution" : [600, 400],
-            "cropWindow" : [0,0,1,1],
+            "resolution" : [1200, 800],
+            "cropWindow" : [0.2,0.2,0.9,0.8],
             "fileName" : "parseobjmodel.png",
             "diagonal" : 1,
             "scale" : 1

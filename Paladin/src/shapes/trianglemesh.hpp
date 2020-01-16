@@ -29,6 +29,13 @@ struct TriangleMesh {
                  const std::shared_ptr<Texture<Float>> &alphaMask=nullptr,
                  const std::shared_ptr<Texture<Float>> &shadowAlphaMask=nullptr,
                  const int *faceIndices=nullptr);
+    
+    TriangleMesh(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
+                 const vector<int> &vertexIndices, const vector<Point3f> *points,
+                 const vector<Normal3f> *normals=nullptr, const vector<Point2f> *uv=nullptr, const vector<Vector3f> *edges=nullptr,
+                 const std::shared_ptr<Texture<Float>> &alphaMask=nullptr,
+                 const std::shared_ptr<Texture<Float>> &shadowAlphaMask=nullptr,
+                 const int *faceIndices=nullptr);
 
 
 private:
@@ -36,6 +43,10 @@ private:
     const int nTriangles, nVertices;
     // 顶点的索引
     std::vector<int> vertexIndices;
+    // 法线索引
+    std::vector<int> normalIndices;
+    // 纹理索引
+    std::vector<int> uvIndices;
     // 顶点列表，为世界坐标
     std::unique_ptr<Point3f[]> points;
     // 法线列表
