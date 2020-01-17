@@ -18,6 +18,15 @@ PALADIN_BEGIN
 
 class Triangle;
 
+struct Index {
+    // 顶点uv索引
+    int uv;
+    // 顶点位置索引
+    int pos;
+    // 顶点法线索引
+    int normal;
+};
+
 /*
  三角形网格，所以的向量法线以及点都是在世界坐标上
  */
@@ -31,8 +40,8 @@ struct TriangleMesh {
                  const int *faceIndices=nullptr);
     
     TriangleMesh(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
-                 const vector<int> &vertexIndices, const vector<Point3f> *points,
-                 const vector<Normal3f> *normals=nullptr, const vector<Point2f> *uv=nullptr, const vector<Vector3f> *edges=nullptr,
+                 const vector<int> &vertexIndices, const vector<Point3f> *P,
+                 const vector<Normal3f> *N=nullptr, const vector<Point2f> *UV=nullptr, const vector<Vector3f> *E=nullptr,
                  const std::shared_ptr<Texture<Float>> &alphaMask=nullptr,
                  const std::shared_ptr<Texture<Float>> &shadowAlphaMask=nullptr,
                  const int *faceIndices=nullptr);
@@ -43,6 +52,9 @@ private:
     const int nTriangles, nVertices;
     // 顶点的索引
     std::vector<int> vertexIndices;
+    
+    vector<Index> vertexIndice;
+    
     // 法线索引
     std::vector<int> normalIndices;
     // 纹理索引

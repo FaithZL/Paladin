@@ -56,8 +56,8 @@ shadowAlphaMask(shadowAlphaMask) {
 }
 
 TriangleMesh::TriangleMesh(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
-                            const vector<int> &vertexIndices, const vector<Point3f> *points,
-                            const vector<Normal3f> *normals, const vector<Point2f> *uv, const vector<Vector3f> *edges,
+                            const vector<int> &vertexIndices, const vector<Point3f> *P,
+                            const vector<Normal3f> *N, const vector<Point2f> *UV, const vector<Vector3f> *E,
                             const std::shared_ptr<Texture<Float>> &alphaMask,
                             const std::shared_ptr<Texture<Float>> &shadowAlphaMask,
                             const int *faceIndices)
@@ -65,7 +65,33 @@ TriangleMesh::TriangleMesh(const shared_ptr<const Transform> &objectToWorld, int
 nVertices(vertexIndices.size()),
 alphaMask(alphaMask),
 shadowAlphaMask(shadowAlphaMask){
+    points.reset(new Point3f[nVertices]);
+    for (int i = 0; i < nVertices; ++i) {
+        Point3f p = (*P)[i];
+        points[i] = objectToWorld->exec(p);
+    }
     
+    if (N) {
+        size_t size = N->size();
+        normals.reset(new Normal3f[size]);
+        for (int i = 0; i < size; ++i) {
+            normals[i] = objectToWorld->exec((*N)[i]);
+        }
+    }
+    
+    if (UV) {
+        size_t size = UV->size();
+        uv.reset(new Point2f[size]);
+        memcpy(uv.get(), UV, size * sizeof(Point2f));
+    }
+    
+    if (E) {
+        size_t size = E->size();
+        edges.reset(new Vector3f[size]);
+        for (size_t i = 0; i < size; ++i) {
+            edges[i] = objectToWorld->exec((*E)[i]);
+        }
+    }
 }
 
 AABB3f Triangle::objectBound() const {
