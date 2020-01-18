@@ -25,6 +25,8 @@ struct Index {
     int pos;
     // 顶点法线索引
     int normal;
+    //
+    int edge;
 };
 
 /*
@@ -40,11 +42,18 @@ struct TriangleMesh {
                  const int *faceIndices=nullptr);
     
     TriangleMesh(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
-                 const vector<int> &vertexIndices, const vector<Point3f> *P,
+                 const vector<Index> &vertexIndices, const vector<Point3f> *P,
                  const vector<Normal3f> *N=nullptr, const vector<Point2f> *UV=nullptr, const vector<Vector3f> *E=nullptr,
                  const std::shared_ptr<Texture<Float>> &alphaMask=nullptr,
                  const std::shared_ptr<Texture<Float>> &shadowAlphaMask=nullptr,
                  const int *faceIndices=nullptr);
+    
+    static std::shared_ptr<TriangleMesh> create(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
+                                        const vector<Index> &vertexIndices, const vector<Point3f> *P,
+                                        const vector<Normal3f> *N=nullptr, const vector<Point2f> *UV=nullptr, const vector<Vector3f> *E=nullptr,
+                                        const std::shared_ptr<Texture<Float>> &alphaMask=nullptr,
+                                        const std::shared_ptr<Texture<Float>> &shadowAlphaMask=nullptr,
+                                        const int *faceIndices=nullptr);
 
 
 private:
@@ -80,7 +89,8 @@ public:
              bool reverseOrientation, const std::shared_ptr<TriangleMesh> &_mesh,
              int triNumber)
     : Shape(objectToWorld, worldToObject, reverseOrientation), _mesh(_mesh) {
-        _vertexIdx = &_mesh->vertexIndices[3 * triNumber];
+        _vertexIdx = &_mesh->vertexIndice[3 * triNumber];
+        
         _faceIndex = _mesh->faceIndices.size() ? _mesh->faceIndices[triNumber] : 0;
     }
 
@@ -112,9 +122,9 @@ public:
     virtual bool intersectP(const Ray &ray, bool testAlphaTexture = true) const override;
     
     virtual Float area() const override {
-        const Point3f &p0 = _mesh->points[_vertexIdx[0]];
-        const Point3f &p1 = _mesh->points[_vertexIdx[1]];
-        const Point3f &p2 = _mesh->points[_vertexIdx[2]];
+        const Point3f &p0 = _mesh->points[_vertexIdx[0].pos];
+        const Point3f &p1 = _mesh->points[_vertexIdx[1].pos];
+        const Point3f &p2 = _mesh->points[_vertexIdx[2].pos];
         return 0.5 * cross(p1 - p0, p2 - p0).length();
     }
     
@@ -128,8 +138,8 @@ public:
      */
     Float solidAngle(const Point3f &p, int nSamples = 0) const override {
         std::vector<Vector3f> pSphere = {
-            normalize(_mesh->points[_vertexIdx[0]] - p), normalize(_mesh->points[_vertexIdx[1]] - p),
-            normalize(_mesh->points[_vertexIdx[2]] - p)
+            normalize(_mesh->points[_vertexIdx[0].pos] - p), normalize(_mesh->points[_vertexIdx[1].pos] - p),
+            normalize(_mesh->points[_vertexIdx[2].pos] - p)
         };
         
         Vector3f cross01 = (cross(pSphere[0], pSphere[1]));
@@ -156,9 +166,9 @@ private:
 
     void getUVs(Point2f uv[3]) const {
         if (_mesh->uv) {
-            uv[0] = _mesh->uv[_vertexIdx[0]];
-            uv[1] = _mesh->uv[_vertexIdx[1]];
-            uv[2] = _mesh->uv[_vertexIdx[2]];
+            uv[0] = _mesh->uv[_vertexIdx[0].uv];
+            uv[1] = _mesh->uv[_vertexIdx[1].uv];
+            uv[2] = _mesh->uv[_vertexIdx[2].uv];
         } else {
             uv[0] = Point2f(0, 0);
             uv[1] = Point2f(1, 0);
@@ -167,7 +177,10 @@ private:
     }
     
     std::shared_ptr<TriangleMesh> _mesh;
-    const int * _vertexIdx;
+    const Index * _vertexIdx;
+    
+//    const Index * _vertexIndex;
+    
     int _faceIndex;
 };
 

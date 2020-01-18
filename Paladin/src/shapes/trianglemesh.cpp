@@ -26,6 +26,14 @@ vertexIndices(vertexIndices, vertexIndices + 3 * nTriangles),
 alphaMask(alphaMask),
 shadowAlphaMask(shadowAlphaMask) {
 
+    for (int i = 0; i < nVertices; ++i) {
+        Index idx;
+        idx.pos = vertexIndices[i];
+        idx.uv = idx.pos;
+        idx.normal = idx.pos;
+        idx.edge = idx.pos;
+        vertexIndice.push_back(idx);
+    }
     
     points.reset(new Point3f[nVertices]);
     for (int i = 0; i < nVertices; ++i) {
@@ -56,15 +64,18 @@ shadowAlphaMask(shadowAlphaMask) {
 }
 
 TriangleMesh::TriangleMesh(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
-                            const vector<int> &vertexIndices, const vector<Point3f> *P,
+                            const vector<Index> &verts, const vector<Point3f> *P,
                             const vector<Normal3f> *N, const vector<Point2f> *UV, const vector<Vector3f> *E,
                             const std::shared_ptr<Texture<Float>> &alphaMask,
                             const std::shared_ptr<Texture<Float>> &shadowAlphaMask,
                             const int *faceIndices)
 : nTriangles(nTriangles),
-nVertices(vertexIndices.size()),
+nVertices(verts.size()),
 alphaMask(alphaMask),
 shadowAlphaMask(shadowAlphaMask){
+    
+    vertexIndice = verts;
+    
     points.reset(new Point3f[nVertices]);
     for (int i = 0; i < nVertices; ++i) {
         Point3f p = (*P)[i];
@@ -94,19 +105,34 @@ shadowAlphaMask(shadowAlphaMask){
     }
 }
 
+shared_ptr<TriangleMesh> TriangleMesh::create(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
+                                            const vector<Index> &vertexIndices, const vector<Point3f> *P,
+                                            const vector<Normal3f> *N, const vector<Point2f> *UV, const vector<Vector3f> *E,
+                                            const std::shared_ptr<Texture<Float>> &alphaMask,
+                                            const std::shared_ptr<Texture<Float>> &shadowAlphaMask,
+                                            const int *faceIndices) {
+    return make_shared<TriangleMesh>(objectToWorld,
+                                     nTriangles,
+                                     vertexIndices,
+                                     P, N, UV, E,
+                                     alphaMask,
+                                     shadowAlphaMask,
+                                     faceIndices);
+}
+
 AABB3f Triangle::objectBound() const {
-    const Point3f &p0 = _mesh->points[_vertexIdx[0]];
-    const Point3f &p1 = _mesh->points[_vertexIdx[1]];
-    const Point3f &p2 = _mesh->points[_vertexIdx[2]];
+    const Point3f &p0 = _mesh->points[_vertexIdx[0].pos];
+    const Point3f &p1 = _mesh->points[_vertexIdx[1].pos];
+    const Point3f &p2 = _mesh->points[_vertexIdx[2].pos];
     AABB3f b1 = AABB3f(worldToObject->exec(p0), worldToObject->exec(p1));
     return unionSet(b1, worldToObject->exec(p2));;
 }
 
 bool Triangle::watertightIntersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
                          bool testAlphaTexture) const {
-    const Point3f &p0 = _mesh->points[_vertexIdx[0]];
-    const Point3f &p1 = _mesh->points[_vertexIdx[1]];
-    const Point3f &p2 = _mesh->points[_vertexIdx[2]];
+    const Point3f &p0 = _mesh->points[_vertexIdx[0].pos];
+    const Point3f &p1 = _mesh->points[_vertexIdx[1].pos];
+    const Point3f &p2 = _mesh->points[_vertexIdx[2].pos];
     
     Point3f p0t = p0 - Vector3f(ray.ori);
     Point3f p1t = p1 - Vector3f(ray.ori);
@@ -258,7 +284,7 @@ bool Triangle::watertightIntersect(const Ray &ray, Float *tHit, SurfaceInteracti
         // Compute shading normal _ns_ for triangle
         Normal3f ns;
         if (_mesh->normals) {
-            ns = (b0 * _mesh->normals[_vertexIdx[0]] + b1 * _mesh->normals[_vertexIdx[1]] + b2 * _mesh->normals[_vertexIdx[2]]);
+            ns = (b0 * _mesh->normals[_vertexIdx[0].normal] + b1 * _mesh->normals[_vertexIdx[1].normal] + b2 * _mesh->normals[_vertexIdx[2].normal]);
             if (ns.lengthSquared() > 0)
                 ns = normalize(ns);
             else
@@ -269,7 +295,7 @@ bool Triangle::watertightIntersect(const Ray &ray, Float *tHit, SurfaceInteracti
          // Compute shading tangent _ss_ for triangle
         Vector3f ss;
         if (_mesh->edges) {
-            ss = (b0 * _mesh->edges[_vertexIdx[0]] + b1 * _mesh->edges[_vertexIdx[1]] + b2 * _mesh->edges[_vertexIdx[2]]);
+            ss = (b0 * _mesh->edges[_vertexIdx[0].edge] + b1 * _mesh->edges[_vertexIdx[1].edge] + b2 * _mesh->edges[_vertexIdx[2].edge]);
             if (ss.lengthSquared() > 0)
                 ss = normalize(ss);
             else
@@ -291,8 +317,8 @@ bool Triangle::watertightIntersect(const Ray &ray, Float *tHit, SurfaceInteracti
             // Compute deltas for triangle partial derivatives of normal
             Vector2f duv02 = uv[0] - uv[2];
             Vector2f duv12 = uv[1] - uv[2];
-            Normal3f dn1 = _mesh->normals[_vertexIdx[0]] - _mesh->normals[_vertexIdx[2]];
-            Normal3f dn2 = _mesh->normals[_vertexIdx[1]] - _mesh->normals[_vertexIdx[2]];
+            Normal3f dn1 = _mesh->normals[_vertexIdx[0].normal] - _mesh->normals[_vertexIdx[2].normal];
+            Normal3f dn2 = _mesh->normals[_vertexIdx[1].normal] - _mesh->normals[_vertexIdx[2].normal];
             Float determinant = duv02[0] * duv12[1] - duv02[1] * duv12[0];
             bool degenerateUV = std::abs(determinant) < 1e-8;
             if (degenerateUV) {
@@ -302,8 +328,8 @@ bool Triangle::watertightIntersect(const Ray &ray, Float *tHit, SurfaceInteracti
                  // (rather than giving up) so that ray differentials for
                  // rays reflected from triangles with degenerate
                  // parameterizations are still reasonable.
-                Vector3f dn = cross(Vector3f(_mesh->normals[_vertexIdx[2]] - _mesh->normals[_vertexIdx[0]]),
-                                     Vector3f(_mesh->normals[_vertexIdx[1]] - _mesh->normals[_vertexIdx[0]]));
+                Vector3f dn = cross(Vector3f(_mesh->normals[_vertexIdx[2].normal] - _mesh->normals[_vertexIdx[0].normal]),
+                                     Vector3f(_mesh->normals[_vertexIdx[1].normal] - _mesh->normals[_vertexIdx[0].normal]));
                 if (dn.lengthSquared() == 0)
                     dndu = dndv = Normal3f(0, 0, 0);
                 else {
@@ -390,9 +416,9 @@ bool Triangle::watertightIntersect(const Ray &ray, Float *tHit, SurfaceInteracti
  * 求得u>=0, v >= 0,u+v<=1，t <= tMax则有交点
  */
 bool Triangle::classicIntersectP(const Ray &ray, bool testAlphaTexture) const {
-    const Point3f &p0 = _mesh->points[_vertexIdx[0]];
-    const Point3f &p1 = _mesh->points[_vertexIdx[1]];
-    const Point3f &p2 = _mesh->points[_vertexIdx[2]];
+    const Point3f &p0 = _mesh->points[_vertexIdx[0].pos];
+    const Point3f &p1 = _mesh->points[_vertexIdx[1].pos];
+    const Point3f &p2 = _mesh->points[_vertexIdx[2].pos];
     
     Float u, v, t;
     
@@ -438,9 +464,9 @@ bool Triangle::classicIntersect(const Ray &ray, Float *tHit,
 }
 
 bool Triangle::watertightIntersectP(const Ray &ray, bool testAlphaTexture) const {
-    const Point3f &p0 = _mesh->points[_vertexIdx[0]];
-    const Point3f &p1 = _mesh->points[_vertexIdx[1]];
-    const Point3f &p2 = _mesh->points[_vertexIdx[2]];
+    const Point3f &p0 = _mesh->points[_vertexIdx[0].pos];
+    const Point3f &p1 = _mesh->points[_vertexIdx[1].pos];
+    const Point3f &p2 = _mesh->points[_vertexIdx[2].pos];
 
     // Perform ray--triangle intersection test
 
@@ -592,9 +618,9 @@ bool Triangle::intersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
 }
 
 AABB3f Triangle::worldBound() const {
-    const Point3f &p0 = _mesh->points[_vertexIdx[0]];
-    const Point3f &p1 = _mesh->points[_vertexIdx[1]];
-    const Point3f &p2 = _mesh->points[_vertexIdx[2]];
+    const Point3f &p0 = _mesh->points[_vertexIdx[0].pos];
+    const Point3f &p1 = _mesh->points[_vertexIdx[1].pos];
+    const Point3f &p2 = _mesh->points[_vertexIdx[2].pos];
     AABB3f b1 = AABB3f(p0, p1);
     return unionSet(b1, p2);
 }
@@ -602,17 +628,17 @@ AABB3f Triangle::worldBound() const {
 Interaction Triangle::samplePos(const Point2f &u, Float *pdf) const {
     Interaction ret;
     Point2f b = uniformSampleTriangle(u);
-    const Point3f &p0 = _mesh->points[_vertexIdx[0]];
-    const Point3f &p1 = _mesh->points[_vertexIdx[1]];
-    const Point3f &p2 = _mesh->points[_vertexIdx[2]];
+    const Point3f &p0 = _mesh->points[_vertexIdx[0].pos];
+    const Point3f &p1 = _mesh->points[_vertexIdx[1].pos];
+    const Point3f &p2 = _mesh->points[_vertexIdx[2].pos];
     // 2D三角形坐标转换为3D空间三角形坐标
     ret.pos = b[0] * p0 + b[1] * p1 + (1 - b[0] - b[1]) * p2;
     
     ret.normal = normalize(Normal3f(cross(p1 - p0, p2 - p0)));
     
     if (_mesh->normals) {
-        Normal3f ns(b[0] * _mesh->normals[_vertexIdx[0]] + b[1] * _mesh->normals[_vertexIdx[1]] +
-                    (1 - b[0] - b[1]) * _mesh->normals[_vertexIdx[2]]);
+        Normal3f ns(b[0] * _mesh->normals[_vertexIdx[0].normal] + b[1] * _mesh->normals[_vertexIdx[1].normal] +
+                    (1 - b[0] - b[1]) * _mesh->normals[_vertexIdx[2].normal]);
         ret.normal = faceforward(ret.normal, ns);
     } else if (reverseOrientation ^ transformSwapsHandedness) {
         ret.normal *= -1;

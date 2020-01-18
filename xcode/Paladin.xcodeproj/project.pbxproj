@@ -368,6 +368,7 @@
 		F2BCDE406373412F9B6C42D9 /* ImfTiledInputPart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6AF61A122258491DA03ED200 /* ImfTiledInputPart.cpp */; };
 		F3A7973CAF4A41A48033CA30 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 190B627A40204238973316F8 /* texture.cpp */; };
 		F4EFF31917644D4A887A6E59 /* mix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 893F64A350384AD0B806CD46 /* mix.cpp */; };
+		F6394E0223D20695006C55F6 /* coated.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6394E0023D20695006C55F6 /* coated.cpp */; };
 		F63E41C223C62F5300DC344F /* hyper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63E41C023C62F5300DC344F /* hyper.cpp */; };
 		F70B9831A35245A0AF43CE40 /* bilerp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92DB55250D1C426C990C5D43 /* bilerp.cpp */; };
 		F9A9BFDA221B45BB83ACA914 /* stl_logging_unittest.cc in Sources */ = {isa = PBXBuildFile; fileRef = 00796ACAD0754DF597B8A859 /* stl_logging_unittest.cc */; };
@@ -1214,6 +1215,8 @@
 		F399A10F80C24AE2BBA3B978 /* stb_vorbis.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = stb_vorbis.c; path = third/stblib/stb/stb_vorbis.c; sourceTree = SOURCE_ROOT; };
 		F44D9BF75BB8473384476333 /* demangle_unittest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = demangle_unittest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F61245C99AEC4940B782752D /* ImfZipCompressor.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfZipCompressor.cpp; path = third/openexr/OpenEXR/IlmImf/ImfZipCompressor.cpp; sourceTree = SOURCE_ROOT; };
+		F6394E0023D20695006C55F6 /* coated.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = coated.cpp; path = src/materials/coated.cpp; sourceTree = "<group>"; };
+		F6394E0123D20695006C55F6 /* clearcoated.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = clearcoated.hpp; path = src/materials/clearcoated.hpp; sourceTree = "<group>"; };
 		F63E41C023C62F5300DC344F /* hyper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hyper.cpp; path = src/materials/hyper.cpp; sourceTree = "<group>"; };
 		F63E41C123C62F5300DC344F /* hyper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = hyper.hpp; path = src/materials/hyper.hpp; sourceTree = "<group>"; };
 		F6C85EEE1706402E8DA4F41A /* ImfChannelListAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfChannelListAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfChannelListAttribute.cpp; sourceTree = SOURCE_ROOT; };
@@ -1537,6 +1540,8 @@
 				87553412C3B445E68DF83F93 /* subsurface.hpp */,
 				F63E41C023C62F5300DC344F /* hyper.cpp */,
 				F63E41C123C62F5300DC344F /* hyper.hpp */,
+				F6394E0023D20695006C55F6 /* coated.cpp */,
+				F6394E0123D20695006C55F6 /* clearcoated.hpp */,
 			);
 			name = materials;
 			sourceTree = "<group>";
@@ -3346,6 +3351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				218CD574FFAB4612A07C23B5 /* bvh.cpp in Sources */,
+				F6394E0223D20695006C55F6 /* coated.cpp in Sources */,
 				D6A39310CC7744A0AEC9629E /* kdtree.cpp in Sources */,
 				37E31A382C1E49D4893F7A1D /* perspective.cpp in Sources */,
 				AC4E68CAD8134A66A6BF6356 /* bssrdf.cpp in Sources */,

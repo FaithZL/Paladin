@@ -8,17 +8,8 @@
             }
         ]
     },
-    "mediums" : {
-        "fog" : {
-            "type" : "homo",
-            "param" : {
-                "g" : 0,
-                "sigma_a" : [0.0,0.0,0.0],
-                "sigma_s" : [0.8,0.8,0.8]
-            }
-        }
-    },
     "lights" : [
+         
         {
             "type" : "pointLight",
             "enable" : false,
@@ -37,49 +28,11 @@
         "matte1" : {
             "type" : "matte",
             "param" : {
-                "Kd" : [0.725, 0.71, 0.68],
-                "sigma" : 0,
-                "bumpMap" : 0
-            }
-        },
-        "plastic" : {
-            "type" : "plastic",
-            "param" : {
                 "Kd" : {
                     "type" : "constant",
                     "param" : {
                         "colorType" : 0,
-                        "color" : [0, 0, 0]
-                    }
-                },
-                "Ks" : {
-                    "type" : "constant",
-                    "param" : {
-                        "colorType" : 0,
-                        "color" : [0.9, 0.9, 0.9]
-                    }
-                },
-                "rough" : {
-                    "type" : "constant",
-                    "param" : 0.01
-                },
-                "bumpMap" : {
-                    "type" : "constant",
-                    "param" : 0
-                },
-                "remapRough" : false
-            }
-        },
-        "matte2" : {
-            "type" : "matte",
-            "param" : {
-                "Kd" : {
-                    "type" : "bilerp",
-                    "param" : {
-                        "v00" : [1, 0, 0],
-                        "v01" : [0, 1, 0],
-                        "v10" : [0, 0, 1],
-                        "v11" : [0.1, 0.9, 0.5]
+                        "color" : [0.725, 0.71, 0.68]
                     }
                 },
                 "sigma" : {
@@ -99,7 +52,7 @@
                     "type" : "constant",
                     "param" : {
                         "colorType" : 0,
-                        "color" : [0.75,0.25,0.25]
+                        "color" : [0.63, 0.065, 0.05]
                     }
                 },
                 "sigma" : {
@@ -119,7 +72,7 @@
                     "type" : "constant",
                     "param" : {
                         "colorType" : 0,
-                        "color" : [0.25,0.25,0.75]
+                        "color" : [0.14, 0.45, 0.091]
                     }
                 },
                 "sigma" : {
@@ -152,25 +105,6 @@
                 }
             }
         },
-        "image" : {
-            "type" : "matte",
-            "param" : {
-                "Kd" : {
-                    "type" : "image",
-                    "param" : {
-                        "fileName" : "res/HelloWorld.png"
-                    }
-                },
-                "sigma" : {
-                    "type" : "constant",
-                    "param" : 0
-                },
-                "bumpMap" : {
-                    "type" : "constant",
-                    "param" : 0
-                }
-            }
-        },
         "glass" : {
             "type" : "glass",
             "param" : {
@@ -185,62 +119,26 @@
                     "type" : "constant",
                     "param" : {
                         "colorType" : 0,
-                        "color" : [1, 1, 1]
+                        "color" : [0, 0, 0]
                     }
                 },
                 "uRough" : {
                     "type" : "constant",
-                    "param" : 0.0
+                    "param" : 0.5
                 },
                 "vRough" : {
                     "type" : "constant",
-                    "param" : 0.0
+                    "param" : 0.5
                 },
                 "eta" : {
                     "type" : "constant",
-                    "param" : 1.5
+                    "param" : 0.5
                 },
                 "bumpMap" : {
                     "type" : "constant",
-                    "param" : 0
+                    "param" : 0.5
                 },
                 "remapRough" : false 
-            }
-        },
-        "metal" : {
-            "type" : "metal",
-            "param" : {
-                "eta" : {
-                    "type" : "constant",
-                    "param" : {
-                        "colorType" : 0,
-                        "color" : [0.6, 1, 1]
-                    }
-                },
-                "k" : {
-                    "type" : "constant",
-                    "param" : {
-                        "colorType" : 0,
-                        "color" : [1, 1, 1]
-                    }
-                },
-                "rough" : {
-                    "type" : "constant",
-                    "param" : 0.1
-                },
-                "uRough" : {
-                    "type" : "constant",
-                    "param" : 0.1
-                },
-                "vRough" : {
-                    "type" : "constant",
-                    "param" : 0.1
-                },
-                "bumpMap" : {
-                    "type" : "constant",
-                    "param" : 0
-                },
-                "remapRough" : false
             }
         },
         "mirror" : {
@@ -262,6 +160,25 @@
     },
     "shapes" : [
         {
+            "type" : "sphere",
+            "enable" : false,
+            "param" : {
+                "transform" : [
+                    {
+                        "type" : "rotateX",
+                        "param" : [-90]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,0,1000]
+                    }
+                ],
+                "radius" : 999,
+                "phiMax" : 360
+            },
+            "material" : "matte1"
+        },
+        {
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "back",
@@ -274,10 +191,10 @@
                     },
                     {
                         "type" : "translate",
-                        "param" : [0,0,3]
+                        "param" : [0,0,1]
                     }
                 ],
-                "width" : 6
+                "width" : 2
             },
             "material" : "matte1"
         },
@@ -297,7 +214,7 @@
                         "param" : [0,-1,0]
                     }
                 ],
-                "width" : 6
+                "width" : 2
             },
             "material" : "matte1"
         },
@@ -305,7 +222,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "top",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -317,7 +234,7 @@
                         "param" : [0,1,0]
                     }
                 ],
-                "width" : 6
+                "width" : 2
             },
             "material" : "matte1"
         },
@@ -325,7 +242,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "left",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -334,10 +251,10 @@
                     },
                     {
                         "type" : "translate",
-                        "param" : [-2,0,0]
+                        "param" : [-1,0,0]
                     }
                 ],
-                "width" : 6
+                "width" : 2
             },
             "material" : "matteRed"
         },
@@ -345,7 +262,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "right",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -354,29 +271,12 @@
                     },
                     {
                         "type" : "translate",
-                        "param" : [2,0,0]
-                    }
-                ],
-                "width" : 6
-            },
-            "material" : "matteGreen"
-        },
-        {
-            "type" : "triMesh",
-            "subType" : "quad",
-            "name" : "front",
-            "enable" : false,
-            "param" : {
-                "transform" :[
-                    {
-                        "type" : "translate",
-                        "param" : [0,0,-1]
+                        "param" : [1,0,0]
                     }
                 ],
                 "width" : 2
             },
-            "mediumInterface" : ["", "fog"],
-            "material" : null
+            "material" : "matteGreen"
         },
         {
             "type" : "triMesh",
@@ -401,7 +301,7 @@
                 "nSamples" : 1,
                 "Le" : {
                     "colorType" : 1,
-                    "color" : [69, 69, 69]
+                    "color" : [17, 12, 4]
                 },
                 "twoSided" : false
             }
@@ -409,7 +309,7 @@
         {
             "type" : "triMesh",
             "subType" : "cube",
-            "name" : "cube2",
+            "name" : "cube1",
             "enable" : false,
             "param" : {
                 "transform" :[
@@ -426,7 +326,7 @@
                 "y" : 1.2,
                 "z" : 0.6
             },
-            "material" : "glass"
+            "material" : "matte1"
         },
         {
             "type" : "triMesh",
@@ -437,7 +337,7 @@
                 "transform" :[
                     {
                         "type" : "rotateY",
-                        "param" : [20]
+                        "param" : [15]
                     },
                     {
                         "type" : "translate",
@@ -448,46 +348,19 @@
                 "y" : 0.6,
                 "z" : 0.6
             },
-            "clone" : true,
             "material" : "matte1"
-        },
-        {
-            "type" : "triMesh",
-            "subType" : "model",
-            "name" : "dragon",
-            "enable" : true,
-            "param" : {
-                "transform" :[
-                    {
-                        "type" : "rotateY",
-                        "param" : [230]
-                    },
-                    {
-                        "type" : "translate",
-                        "param" : [-0.1,-230,-0.9]
-                    },
-                    {
-                        "type" : "scale",
-                        "param" : 0.005
-                    }
-                ],
-                "fileName" : "res/bmw/bmw.obj"
-            },
-            "clone" : true,
-            "material" : "plastic"
         }
     ],
     "integrator" : {
-        "type" : "Geometry",
+        "type" : "pt",
         "param" : {
-            "maxBounce" : 15,
+            "maxBounce" : 5,
             "rrThreshold" : 1,
-            "lightSampleStrategy" : "power",
-            "type" : "normal"
+            "lightSampleStrategy" : "power"
         }
     },
     "sampler" : {
-        "type" : "random",
+        "type" : "halton",
         "param" : {
             "spp" : 16
         }
@@ -499,19 +372,19 @@
             "shutterClose" : 1,
             "lensRadius" : 0,
             "focalDistance" : 100,
-            "fov" : 18,
+            "fov" : 20,
             "lookAt" : [
-                [0,0.5,-6.6],
-                [0,-0.8,0],
+                [0,0,-6.6],
+                [0,0,0],
                 [0,1,0]
             ]
         }
     },
     "film" : {
         "param" : {
-            "resolution" : [1200, 800],
-            "cropWindow" : [0.2,0.2,0.9,0.8],
-            "fileName" : "parseobjmodel.png",
+            "resolution" : [400, 400],
+            "cropWindow" : [0,0,1,1],
+            "fileName" : "conelbox.png",
             "diagonal" : 1,
             "scale" : 1
         }

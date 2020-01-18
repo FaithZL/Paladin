@@ -94,6 +94,12 @@ void ModelParser::parseMesh(const mesh_t &mesh) {
     for (size_t i = 0; i < mesh.indices.size(); ++i) {
         index_t idx = mesh.indices[i];
         _vertIndices.push_back(idx.vertex_index);
+        
+        Index index;
+        index.pos = idx.vertex_index;
+        index.normal = idx.normal_index;
+        index.uv = idx.texcoord_index;
+        _verts.push_back(index);
     }
 }
 
