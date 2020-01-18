@@ -43,6 +43,10 @@ public:
     
     void parseShapes(const nloJson &);
     
+    void autoPlane();
+    
+    void autoLight();
+    
     Sampler * parseSampler(const nloJson &param, Film *);
     
     Camera * parseCamera(const nloJson &, Film *);
@@ -90,6 +94,14 @@ private:
     
     void addMediumToCache(const string &name, const shared_ptr<const Medium> &medium) {
         _mediumCache[name] = medium;
+    }
+    
+    AABB3f getPrimsBound() const {
+        AABB3f ret;
+        for (int i = 0; i < _primitives.size(); ++i) {
+            ret = unionSet(ret, _primitives[i]->worldBound());
+        }
+        return ret;
     }
     
     MediumInterface getMediumIntetface(const nloJson& data) {

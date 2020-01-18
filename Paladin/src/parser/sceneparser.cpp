@@ -18,6 +18,8 @@
 #include "shapes/trianglemesh.hpp"
 #include "tools/parallel.hpp"
 #include "core/medium.hpp"
+#include "materials/matte.hpp"
+#include "textures/constant.hpp"
 
 PALADIN_BEGIN
 
@@ -56,6 +58,15 @@ void SceneParser::parse(const nloJson &data) {
     nloJson lightDataList = data.value("lights", nloJson::array());
     parseLights(lightDataList);
     
+    bool autolight = data.value("autolight", false);
+    if (autolight) {
+        autoLight();
+    }
+    bool autoplane = data.value("autoplane", false);
+    if (autoplane) {
+        autoPlane();
+    }
+    
     nloJson acceleratorData = data.value("accelerator", nloJson::object());
     _aggregate = parseAccelerator(acceleratorData);
     
@@ -63,6 +74,27 @@ void SceneParser::parse(const nloJson &data) {
     _scene.reset(scene);
     
     _integrator->render(*scene);
+    
+}
+
+void SceneParser::autoPlane() {
+    AABB3f bound = getPrimsBound();
+    std::cout << "scene bound box is:" << bound << endl;
+    auto d = bound.diagonal();
+    float width = std::max(d.x, d.z);
+    width *= 5;
+    auto rotate = Transform::rotateX(-90);
+    auto translate = Transform::translate_ptr(Vector3f(0, bound.pMin.y, 0));
+    *translate = (*translate) * rotate;
+    shared_ptr<Transform> o2w = shared_ptr<Transform>(translate);
+    auto tex = make_shared<ConstantTexture<Spectrum>>(Spectrum(1.f));
+    auto mat = make_shared<MatteMaterial>(tex, nullptr, nullptr);
+    auto quad = createQuad(o2w, false, width);
+    auto prims = createPrimitive(quad, _lights, mat, nullptr, nloJson());
+    _primitives.insert(_primitives.end(), prims.begin(), prims.end());
+}
+
+void SceneParser::autoLight() {
     
 }
 

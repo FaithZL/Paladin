@@ -1,5 +1,7 @@
 {
     "threadNum" : 0,
+    "autoplane" : true,
+    "autolight" : true,
     "transforms" :{
         "name1" : [
             {
@@ -160,25 +162,6 @@
     },
     "shapes" : [
         {
-            "type" : "sphere",
-            "enable" : false,
-            "param" : {
-                "transform" : [
-                    {
-                        "type" : "rotateX",
-                        "param" : [-90]
-                    },
-                    {
-                        "type" : "translate",
-                        "param" : [0,0,1000]
-                    }
-                ],
-                "radius" : 999,
-                "phiMax" : 360
-            },
-            "material" : "matte1"
-        },
-        {
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "back",
@@ -202,7 +185,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "bottom",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -310,7 +293,7 @@
             "type" : "triMesh",
             "subType" : "model",
             "name" : "box",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {

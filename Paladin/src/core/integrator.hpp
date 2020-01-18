@@ -214,7 +214,7 @@ public:
     
     void outputSceneInfo(const Scene &scene, const Camera * camera = nullptr) const {
         AABB3f sceneBound = scene.worldBound();
-        cout << "scene bound box is:" << sceneBound << endl;
+        cout << "total scene bound box is:" << sceneBound << endl;
     }
 };
 
