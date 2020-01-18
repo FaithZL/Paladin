@@ -22,11 +22,10 @@ TriangleMesh::TriangleMesh(
                            const int *fIndices)
 : nTriangles(nTriangles),
 nVertices(nVertices),
-vertexIndices(vertexIndices, vertexIndices + 3 * nTriangles),
 alphaMask(alphaMask),
 shadowAlphaMask(shadowAlphaMask) {
 
-    for (int i = 0; i < nVertices; ++i) {
+    for (int i = 0; i < 3 * nTriangles; ++i) {
         Index idx;
         idx.pos = vertexIndices[i];
         idx.uv = idx.pos;
@@ -76,8 +75,9 @@ shadowAlphaMask(shadowAlphaMask){
     
     vertexIndice = verts;
     
-    points.reset(new Point3f[nVertices]);
-    for (int i = 0; i < nVertices; ++i) {
+    size_t size = P->size();
+    points.reset(new Point3f[size]);
+    for (int i = 0; i < size; ++i) {
         Point3f p = (*P)[i];
         points[i] = objectToWorld->exec(p);
     }

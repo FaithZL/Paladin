@@ -90,11 +90,8 @@ void ModelParser::parseMaterials() {
 }
 
 void ModelParser::parseMesh(const mesh_t &mesh) {
-    // todo 顶点索引与法线索引可能不一致，看看怎么处理
     for (size_t i = 0; i < mesh.indices.size(); ++i) {
         index_t idx = mesh.indices[i];
-        _vertIndices.push_back(idx.vertex_index);
-        
         Index index;
         index.pos = idx.vertex_index;
         index.normal = idx.normal_index;
@@ -107,10 +104,9 @@ vector<shared_ptr<Shape>> ModelParser::getTriLst(const shared_ptr<const Transfor
                                                  bool reverseOrientation) {
     packageData();
     parseShapes();
-    size_t nTriangles = _vertIndices.size() / 3;
+    size_t nTriangles = _verts.size() / 3;
     
-    auto mesh = createTriMesh(o2w, nTriangles, &_vertIndices[0], _points.size(),
-                                &_points[0], &_UVs[0], &_normals[0]);
+    auto mesh = TriangleMesh::create(o2w, nTriangles, _verts, &_points, &_normals, &_UVs);
 
     vector<shared_ptr<Shape>> ret;
     shared_ptr<Transform> w2o(o2w->getInverse_ptr());
@@ -127,9 +123,9 @@ void ModelParser::parseShape(const shape_t &shape) {
         index_t idx0 = mesh.indices[i * 3];
         index_t idx1 = mesh.indices[i * 3 + 1];
         index_t idx2 = mesh.indices[i * 3 + 2];
-        _vertIndices.push_back(idx0.vertex_index);
-        _vertIndices.push_back(idx1.vertex_index);
-        _vertIndices.push_back(idx2.vertex_index);
+        _verts.emplace_back(idx0.texcoord_index, idx0.vertex_index, idx0.normal_index, 0);
+        _verts.emplace_back(idx1.texcoord_index, idx1.vertex_index, idx1.normal_index, 0);
+        _verts.emplace_back(idx2.texcoord_index, idx2.vertex_index, idx2.normal_index, 0);
         _matIndices.push_back(matId);
     }
 }
@@ -146,9 +142,8 @@ vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<cons
         shape_t shape = _shapes.at(i);
         parseShape(shape);
     }
-    size_t nTriangles = _vertIndices.size() / 3;
-    auto mesh = createTriMesh(o2w, nTriangles, &_vertIndices[0], _points.size(),
-                              &_points[0], &_UVs[0], &_normals[0]);
+    size_t nTriangles = _verts.size() / 3;
+    auto mesh = TriangleMesh::create(o2w, nTriangles, _verts, &_points, &_normals, &_UVs);
     shared_ptr<Transform> w2o(o2w->getInverse_ptr());
     vector<shared_ptr<Shape>> triLst;
     for (size_t i = 0; i < nTriangles; ++i) {

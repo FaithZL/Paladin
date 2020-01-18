@@ -19,6 +19,21 @@ PALADIN_BEGIN
 class Triangle;
 
 struct Index {
+    Index(int uv, int pos, int normal, int edge):
+    uv(uv),
+    pos(pos),
+    normal(normal),
+    edge(edge) {
+        
+    }
+    
+    Index() {
+        uv = 0;
+        pos = 0;
+        normal = 0;
+        edge = 0;
+    }
+    
     // 顶点uv索引
     int uv;
     // 顶点位置索引
@@ -59,8 +74,6 @@ struct TriangleMesh {
 private:
     // 三角形个数，顶点个数
     const int nTriangles, nVertices;
-    // 顶点的索引
-    std::vector<int> vertexIndices;
     
     vector<Index> vertexIndice;
     

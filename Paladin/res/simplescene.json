@@ -182,7 +182,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "back",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -202,7 +202,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "bottom",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -222,7 +222,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "top",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -242,7 +242,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "left",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -262,7 +262,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "right",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -296,7 +296,7 @@
                 ],
                 "width" : 0.5
             },
-            "material" : "black",
+            "material" : null,
             "emission" : {
                 "nSamples" : 1,
                 "Le" : {
@@ -308,51 +308,30 @@
         },
         {
             "type" : "triMesh",
-            "subType" : "cube",
-            "name" : "cube1",
-            "enable" : false,
+            "subType" : "model",
+            "name" : "box",
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
                         "type" : "rotateY",
-                        "param" : [-20]
+                        "param" : [180]
                     },
                     {
                         "type" : "translate",
-                        "param" : [-0.3,-0.4,0.2]
-                    }
-                ],
-                "x" : 0.6,
-                "y" : 1.2,
-                "z" : 0.6
-            },
-            "material" : "matte1"
-        },
-        {
-            "type" : "triMesh",
-            "subType" : "cube",
-            "name" : "cube1",
-            "enable" : false,
-            "param" : {
-                "transform" :[
-                    {
-                        "type" : "rotateY",
-                        "param" : [15]
+                        "param" : [-0.2,-1.0,0]
                     },
                     {
-                        "type" : "translate",
-                        "param" : [0.35,-0.7,-0.4]
+                        "type" : "scale",
+                        "param" : 0.7
                     }
                 ],
-                "x" : 0.6,
-                "y" : 0.6,
-                "z" : 0.6
-            },
-            "material" : "matte1"
+                "fileName" : "res/sportsCar/sportsCar.obj"
+            }
         }
     ],
     "integrator" : {
-        "type" : "pt",
+        "type" : "Geometry",
         "param" : {
             "maxBounce" : 5,
             "rrThreshold" : 1,
@@ -362,7 +341,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 16
+            "spp" : 1
         }
     },
     "camera" : {
@@ -384,7 +363,7 @@
         "param" : {
             "resolution" : [400, 400],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "conelbox.png",
+            "fileName" : "sportcar.png",
             "diagonal" : 1,
             "scale" : 1
         }

@@ -74,8 +74,6 @@ private:
     vector<Point2f> _UVs;
     // 面索引列表
     vector<int> _faceIndices;
-    // 点索引列表
-    vector<int> _vertIndices;
     
     // 顶点索引列表
     vector<Index> _verts;
