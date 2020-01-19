@@ -20,6 +20,7 @@
 #include "core/medium.hpp"
 #include "materials/matte.hpp"
 #include "textures/constant.hpp"
+#include "lights/distant.hpp"
 
 PALADIN_BEGIN
 
@@ -88,14 +89,18 @@ void SceneParser::autoPlane() {
     *translate = (*translate) * rotate;
     shared_ptr<Transform> o2w = shared_ptr<Transform>(translate);
     auto tex = make_shared<ConstantTexture<Spectrum>>(Spectrum(1.f));
-    auto mat = make_shared<MatteMaterial>(tex, nullptr, nullptr);
+    auto sigma = make_shared<ConstantTexture<Float>>(0);
+    auto mat = make_shared<MatteMaterial>(tex, sigma, nullptr);
     auto quad = createQuad(o2w, false, width);
     auto prims = createPrimitive(quad, _lights, mat, nullptr, nloJson());
     _primitives.insert(_primitives.end(), prims.begin(), prims.end());
 }
 
 void SceneParser::autoLight() {
-    
+    auto tf = shared_ptr<Transform>(Transform::identity_ptr());
+    Spectrum L(1.f);
+    auto light = make_shared<DistantLight>(tf, L, Vector3f(1,1,-1));
+    _lights.push_back(light);
 }
 
 void SceneParser::parseLights(const nloJson &list) {

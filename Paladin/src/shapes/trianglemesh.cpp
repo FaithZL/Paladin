@@ -82,7 +82,7 @@ shadowAlphaMask(shadowAlphaMask){
         points[i] = objectToWorld->exec(p);
     }
     
-    if (N) {
+    if (N && N->size() > 0) {
         size_t size = N->size();
         normals.reset(new Normal3f[size]);
         for (int i = 0; i < size; ++i) {
@@ -90,13 +90,13 @@ shadowAlphaMask(shadowAlphaMask){
         }
     }
     
-    if (UV) {
+    if (UV && UV->size() > 0) {
         size_t size = UV->size();
         uv.reset(new Point2f[size]);
-        memcpy(uv.get(), UV, size * sizeof(Point2f));
+        memcpy(uv.get(), &UV->at(0), size * sizeof(Point2f));
     }
     
-    if (E) {
+    if (E && E->size() > 0) {
         size_t size = E->size();
         edges.reset(new Vector3f[size]);
         for (size_t i = 0; i < size; ++i) {

@@ -3,7 +3,7 @@
 
 newmtl SmallHeadLights
 	Ns 100.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 0.7000 0.7000 0.7000 
 	illum 2
@@ -14,7 +14,7 @@ newmtl SmallHeadLights
 
 newmtl  RearLights
 	Ns 100.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -25,7 +25,7 @@ newmtl  RearLights
 
 newmtl Interior_Black
 	Ns 7.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -34,7 +34,7 @@ newmtl Interior_Black
 
 newmtl Interior_GlossBlack
 	Ns 40.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -45,7 +45,7 @@ newmtl Interior_GlossBlack
 
 newmtl Interior_Monitor
 	Ns 110.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -56,7 +56,7 @@ newmtl Interior_Monitor
 
 newmtl Interior_White
 	Ns 50.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -67,7 +67,7 @@ newmtl Interior_White
 
 newmtl WindowGlassMat
 	Ns 1000.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 0.3
 	Tf 0.4 0.4 0.4
 	illum 4
@@ -78,7 +78,7 @@ newmtl WindowGlassMat
 
 newmtl GomBlack
 	Ns 100.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -89,7 +89,7 @@ newmtl GomBlack
 
 newmtl EngineSilver2
 	Ns 50.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 3
@@ -100,7 +100,7 @@ newmtl EngineSilver2
 
 newmtl Interior_Silver
 	Ns 80.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -111,7 +111,7 @@ newmtl Interior_Silver
 
 newmtl Interior_Red
 	Ns 100.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -122,7 +122,7 @@ newmtl Interior_Red
 
 newmtl BodyGlossBlackMat
 	Ns 100.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -133,7 +133,7 @@ newmtl BodyGlossBlackMat
 
 newmtl SeatColor
 	Ns 10.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -142,7 +142,7 @@ newmtl SeatColor
 
 newmtl Seat_Black
 	Ns 20.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -153,7 +153,7 @@ newmtl Seat_Black
 
 newmtl PedalsSilver_mat
 	Ns 4.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -164,7 +164,7 @@ newmtl PedalsSilver_mat
 
 newmtl GlassMat
 	Ns 1000.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1
 	Tf 0.4 0.4 0.4
 	illum 4
@@ -175,7 +175,7 @@ newmtl GlassMat
 
 newmtl LightReflectMat
 	Ns 150.0000
-	Ni 1.0000
+	Ni 1.5000
 	Tf 0.4 0.4 0.4 
 	illum 4
 	Ka 0.0000 0.0000 0.0000
@@ -185,7 +185,7 @@ newmtl LightReflectMat
 
 newmtl HeadLightBK_Mat
 	Ns 20.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -196,7 +196,7 @@ newmtl HeadLightBK_Mat
 
 newmtl HeadLight_LED
 	Ns 100.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -207,7 +207,7 @@ newmtl HeadLight_LED
 
 newmtl StopLightBK_Mat
 	Ns 100.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -218,7 +218,7 @@ newmtl StopLightBK_Mat
 
 newmtl CarbonBlack
 	Ns 30.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -229,7 +229,7 @@ newmtl CarbonBlack
 
 newmtl RedMat
 	Ns 96.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -241,7 +241,7 @@ newmtl RedMat
 
 newmtl BodyMat
 	Ns 90.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -252,7 +252,7 @@ newmtl BodyMat
 
 newmtl MeshBlack
 	Ns 100.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -263,7 +263,7 @@ newmtl MeshBlack
 
 newmtl BodyMat_BK
 	Ns 100.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -274,7 +274,7 @@ newmtl BodyMat_BK
 
 newmtl MirrorMat
 	Ns 300.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 3
@@ -285,7 +285,7 @@ newmtl MirrorMat
 
 newmtl TireMat
 	Ns 20.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -296,7 +296,7 @@ newmtl TireMat
 
 newmtl SusArm_Silver2
 	Ns 35.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -307,7 +307,7 @@ newmtl SusArm_Silver2
 
 newmtl BoltSilver
 	Ns 30.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -318,7 +318,7 @@ newmtl BoltSilver
 
 newmtl Suspention_Red
 	Ns 30.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -329,7 +329,7 @@ newmtl Suspention_Red
 
 newmtl Winker_Mat
 	Ns 100.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -340,7 +340,7 @@ newmtl Winker_Mat
 
 newmtl SpotLightCover_Mat
 	Ns 95.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -351,7 +351,7 @@ newmtl SpotLightCover_Mat
 
 newmtl Chassis_Black
 	Ns 90.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -362,7 +362,7 @@ newmtl Chassis_Black
 
 newmtl Suspention_Black
 	Ns 98.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -373,7 +373,7 @@ newmtl Suspention_Black
 
 newmtl BrakeRotarySilver
 	Ns 33.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -384,7 +384,7 @@ newmtl BrakeRotarySilver
 
 newmtl WheelHubColor
 	Ns 98.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -395,7 +395,7 @@ newmtl WheelHubColor
 
 newmtl CamCover
 	Ns 80.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2
@@ -406,7 +406,7 @@ newmtl CamCover
 
 newmtl suspension_red
 	Ns 70.0000
-	Ni 1.0000
+	Ni 1.5000
 	d 1.0000
 	Tf 1.0000 1.0000 1.0000 
 	illum 2

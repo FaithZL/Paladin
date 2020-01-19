@@ -164,108 +164,8 @@
         {
             "type" : "triMesh",
             "subType" : "quad",
-            "name" : "back",
-            "enable" : true,
-            "param" : {
-                "transform" :[
-                    {
-                        "type" : "rotateX",
-                        "param" : [0]
-                    },
-                    {
-                        "type" : "translate",
-                        "param" : [0,0,1]
-                    }
-                ],
-                "width" : 2
-            },
-            "material" : "matte1"
-        },
-        {
-            "type" : "triMesh",
-            "subType" : "quad",
-            "name" : "bottom",
-            "enable" : false,
-            "param" : {
-                "transform" :[
-                    {
-                        "type" : "rotateX",
-                        "param" : [-90]
-                    },
-                    {
-                        "type" : "translate",
-                        "param" : [0,-1,0]
-                    }
-                ],
-                "width" : 2
-            },
-            "material" : "matte1"
-        },
-        {
-            "type" : "triMesh",
-            "subType" : "quad",
-            "name" : "top",
-            "enable" : true,
-            "param" : {
-                "transform" :[
-                    {
-                        "type" : "rotateX",
-                        "param" : [90]
-                    },
-                    {
-                        "type" : "translate",
-                        "param" : [0,1,0]
-                    }
-                ],
-                "width" : 2
-            },
-            "material" : "matte1"
-        },
-        {
-            "type" : "triMesh",
-            "subType" : "quad",
-            "name" : "left",
-            "enable" : true,
-            "param" : {
-                "transform" :[
-                    {
-                        "type" : "rotateY",
-                        "param" : [90]
-                    },
-                    {
-                        "type" : "translate",
-                        "param" : [-1,0,0]
-                    }
-                ],
-                "width" : 2
-            },
-            "material" : "matteRed"
-        },
-        {
-            "type" : "triMesh",
-            "subType" : "quad",
-            "name" : "right",
-            "enable" : true,
-            "param" : {
-                "transform" :[
-                    {
-                        "type" : "rotateY",
-                        "param" : [-90]
-                    },
-                    {
-                        "type" : "translate",
-                        "param" : [1,0,0]
-                    }
-                ],
-                "width" : 2
-            },
-            "material" : "matteGreen"
-        },
-        {
-            "type" : "triMesh",
-            "subType" : "quad",
             "name" : "light",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -293,20 +193,20 @@
             "type" : "triMesh",
             "subType" : "model",
             "name" : "box",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
                         "type" : "rotateY",
-                        "param" : [180]
+                        "param" : [120]
                     },
                     {
                         "type" : "translate",
-                        "param" : [-0.2,-1.0,0]
+                        "param" : [0,0,0]
                     },
                     {
                         "type" : "scale",
-                        "param" : 0.7
+                        "param" : 1
                     }
                 ],
                 "fileName" : "res/sportsCar/sportsCar.obj"
@@ -314,7 +214,7 @@
         }
     ],
     "integrator" : {
-        "type" : "Geometry",
+        "type" : "pt",
         "param" : {
             "maxBounce" : 5,
             "rrThreshold" : 1,
@@ -324,7 +224,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 1
+            "spp" : 8
         }
     },
     "camera" : {
@@ -334,9 +234,9 @@
             "shutterClose" : 1,
             "lensRadius" : 0,
             "focalDistance" : 100,
-            "fov" : 20,
+            "fov" : 29,
             "lookAt" : [
-                [0,0,-6.6],
+                [0,3,-6.6],
                 [0,0,0],
                 [0,1,0]
             ]
@@ -344,7 +244,7 @@
     },
     "film" : {
         "param" : {
-            "resolution" : [400, 400],
+            "resolution" : [600, 400],
             "cropWindow" : [0,0,1,1],
             "fileName" : "sportcar.png",
             "diagonal" : 1,

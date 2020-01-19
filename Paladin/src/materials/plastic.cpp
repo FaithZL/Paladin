@@ -27,7 +27,7 @@ void PlasticMaterial::computeScatteringFunctions(
 
     Spectrum ks = _Ks->evaluate(*si).clamp();
     if (!ks.IsBlack()) {
-        Fresnel *fresnel = ARENA_ALLOC(arena, FresnelDielectric)(1.5f, 1.f);
+        Fresnel *fresnel = ARENA_ALLOC(arena, FresnelDielectric)(1.f, 1.5f);
         
         Float rough = _roughness->evaluate(*si);
         if (_remapRoughness) {
