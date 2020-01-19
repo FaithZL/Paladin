@@ -198,7 +198,7 @@
                 "transform" :[
                     {
                         "type" : "rotateY",
-                        "param" : [120]
+                        "param" : [45]
                     },
                     {
                         "type" : "translate",
@@ -209,12 +209,12 @@
                         "param" : 1
                     }
                 ],
-                "fileName" : "res/sportsCar/sportsCar.obj"
+                "fileName" : "res/model/fireplace_room/fireplace_room.obj"
             }
         }
     ],
     "integrator" : {
-        "type" : "pt",
+        "type" : "Geometry",
         "param" : {
             "maxBounce" : 5,
             "rrThreshold" : 1,
@@ -236,8 +236,8 @@
             "focalDistance" : 100,
             "fov" : 29,
             "lookAt" : [
-                [0,3,-6.6],
-                [0,0,0],
+                [0,1,0],
+                [0,1,1],
                 [0,1,0]
             ]
         }
