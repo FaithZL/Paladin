@@ -10,6 +10,7 @@
 #include "lights/diffuse.hpp"
 #include "materials/hyper.hpp"
 #include "textures/constant.hpp"
+#include "textures/imagemap.hpp"
 
 PALADIN_BEGIN
 
@@ -19,6 +20,9 @@ bool ModelParser::load(const string &fn, const string &basePath, bool triangulat
     string mtlDir = basePath.empty()
                 ? fn.substr(0, fn.find_last_of("/"))
                 :basePath;
+    
+    _basePath = mtlDir;
+    
     bool ret = tinyobj::LoadObj(&_attrib, &_shapes, &_materials,
                      &warn, &err, fn.c_str(),
                      mtlDir.c_str(), triangulate);
@@ -64,16 +68,44 @@ void ModelParser::parseShapes() {
     }
 }
 
+bool isValid(Float rgb[3]) {
+    return rgb[0] > 0 || rgb[1] > 0 || rgb[2] > 0;
+}
+
+shared_ptr<Texture<Spectrum>> createKd(const material_t &mat, const string &basePath) {
+    if (!mat.diffuse_texname.empty()) {
+        string fn = basePath + "/" + mat.diffuse_texname;
+        return createImageMap(fn);
+    }
+    return ConstantTexture<Spectrum>::create(mat.diffuse);
+}
+
+shared_ptr<Texture<Spectrum>> createKs(const material_t &mat, const string &basePath) {
+    if (!mat.specular_texname.empty()) {
+        string fn = basePath + "/" + mat.specular_texname;
+        return createImageMap(fn);
+    }
+    return ConstantTexture<Spectrum>::create(mat.specular);
+}
+
+shared_ptr<Texture<Spectrum>> createKr(const material_t &mat, const string &basePath) {
+    if (!mat.reflection_texname.empty()) {
+        string fn = basePath + "/" + mat.reflection_texname;
+        return createImageMap(fn);
+    }
+    return nullptr;
+}
+
 ModelParser::SurfaceData ModelParser::fromObjMaterial(const material_t &mat) {
     SurfaceData ret;
     ret.emission[0] = mat.emission[0];
     ret.emission[1] = mat.emission[1];
     ret.emission[2] = mat.emission[2];
     
-    shared_ptr<Texture<Spectrum>> Kd = ConstantTexture<Spectrum>::create(mat.diffuse);
-    shared_ptr<Texture<Spectrum>> Ks = ConstantTexture<Spectrum>::create(mat.specular);
+    shared_ptr<Texture<Spectrum>> Kd = createKd(mat, _basePath);
+    shared_ptr<Texture<Spectrum>> Ks = createKs(mat, _basePath);
     shared_ptr<Texture<Spectrum>> Kt = ConstantTexture<Spectrum>::create(mat.transmittance);
-    shared_ptr<Texture<Spectrum>> Kr = nullptr;
+    shared_ptr<Texture<Spectrum>> Kr = createKr(mat, _basePath);
     shared_ptr<Texture<Spectrum>> op = ConstantTexture<Spectrum>::create(mat.dissolve);
     shared_ptr<Texture<Float>> eta = ConstantTexture<Float>::create(mat.ior);
     float roughness = (mat.shininess == 0) ? 0. : (1.f / mat.shininess);

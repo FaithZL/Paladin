@@ -9,4 +9,5 @@ xcode/Debug
 xcode/Release
 xcode/Paladin.build
 xcode/third
+Paladin/res/model
 xcuserdata

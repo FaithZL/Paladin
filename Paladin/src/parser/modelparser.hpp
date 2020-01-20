@@ -62,6 +62,8 @@ private:
     vector<shape_t> _shapes;
     vector<material_t> _materials;
     
+    string _basePath;
+    
     // triangle mesh构造需要的参数
     
     // 顶点列表

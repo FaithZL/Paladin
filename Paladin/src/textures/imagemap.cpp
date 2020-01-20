@@ -13,6 +13,16 @@ template <typename Tmemory, typename Treturn>
 std::map<TexInfo, std::unique_ptr<MIPMap<Tmemory>>>
     ImageTexture<Tmemory, Treturn>::_imageCache;
 
+shared_ptr<ImageTexture<RGBSpectrum, Spectrum>> createImageMap(const string &filename, bool gamma, bool doTri,
+                                                                    Float maxAniso, ImageWrap wm, Float scale,
+                                                                    unique_ptr<TextureMapping2D> mapping) {
+    return make_shared<ImageTexture<RGBSpectrum, Spectrum>>(move(mapping),
+                                                            filename,
+                                                            doTri, maxAniso,
+                                                            wm, scale, gamma);
+}
+
+
 template class ImageTexture<RGBSpectrum, Spectrum>;
 //"param" : {
 //    "fileName" : "res/planet_Quom1200.png",

@@ -163,6 +163,10 @@ private:
 };
 
 
+shared_ptr<ImageTexture<RGBSpectrum, Spectrum>> createImageMap(const string &filename, bool gamma = false, bool doTri = true,
+                                        Float maxAniso = 8, ImageWrap wm = ImageWrap::Repeat, Float scale = 1,
+                                        unique_ptr<TextureMapping2D> mapping = unique_ptr<TextureMapping2D>(new UVMapping2D()));
+            
 CObject_ptr createImageMap(const nloJson &param, const Arguments &lst);
             
 PALADIN_END
