@@ -177,8 +177,19 @@ CObject_ptr createPerspectiveCamera(const nloJson &param, const Arguments &lst) 
         scrn.pMax.y = 1.f / aspect;
     }
     
-    Transform * lookAt = dynamic_cast<Transform *>(createLookAt(lookAtParam, {}));
-    Transform * lookAtEnd = dynamic_cast<Transform *>(createLookAt(lookAtEndParam, {}));
+    Transform * lookAt = nullptr;
+    Transform * lookAtEnd = nullptr;
+    
+    nloJson transform = param.value("transform", nloJson());
+    if (!transform.is_null()) {
+        lookAt = createTransform(transform);
+        * lookAt = lookAt->getInverse();
+        lookAtEnd = createTransform(transform);
+        * lookAtEnd = lookAtEnd->getInverse();
+    } else {
+        lookAt = dynamic_cast<Transform *>(createLookAt(lookAtParam, {}));
+        lookAtEnd = dynamic_cast<Transform *>(createLookAt(lookAtEndParam, {}));
+    }
     
     AnimatedTransform animatedTransform(shared_ptr<const Transform>(lookAt->getInverse_ptr()),
                                         shutterOpen,

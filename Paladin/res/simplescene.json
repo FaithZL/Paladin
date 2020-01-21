@@ -198,7 +198,7 @@
                 "transform" :[
                     {
                         "type" : "rotateY",
-                        "param" : [45]
+                        "param" : [180]
                     },
                     {
                         "type" : "translate",
@@ -206,15 +206,15 @@
                     },
                     {
                         "type" : "scale",
-                        "param" : 1
+                        "param" : 0.1
                     }
                 ],
-                "fileName" : "res/model/fireplace_room/fireplace_room.obj"
+                "fileName" : "res/model/nanosuit/nanosuit.obj"
             }
         }
     ],
     "integrator" : {
-        "type" : "Geometry",
+        "type" : "pt",
         "param" : {
             "maxBounce" : 5,
             "rrThreshold" : 1,
@@ -234,19 +234,29 @@
             "shutterClose" : 1,
             "lensRadius" : 0,
             "focalDistance" : 100,
-            "fov" : 29,
+            "fov" : 40,
             "lookAt" : [
+                [0,1,-2],
                 [0,1,0],
-                [0,1,1],
                 [0,1,0]
+            ],
+            "transform" : [
+                {
+                    "type" : "rotateY",
+                    "param" : [-9]
+                },
+                {
+                    "type" : "translate",
+                    "param" : [0,1,-5]
+                }
             ]
         }
     },
     "film" : {
         "param" : {
-            "resolution" : [600, 400],
+            "resolution" : [700, 700],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "sportcar.png",
+            "fileName" : "erato.png",
             "diagonal" : 1,
             "scale" : 1
         }
