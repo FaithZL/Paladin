@@ -90,6 +90,48 @@ public:
     virtual nloJson toJson() const override {
         return nloJson();
     }
+            
+    static MIPMap<Tmemory> *getTexture(const std::string &filename,
+                                       bool doTrilinear,
+                                       Float maxAniso,
+                                       ImageWrap wm,
+                                       Float scale,
+                                       bool gamma) {
+        TexInfo textInfo(filename, doTrilinear, maxAniso, wm, scale, gamma);
+        // 先从纹理缓存中查找，如果找得到，直接返回对应mipmap指针
+        if (_imageCache.find(textInfo) != _imageCache.end()) {
+            return _imageCache[textInfo].get();
+        }
+        Point2i resolution;
+        std::unique_ptr<RGBSpectrum[]> texels = readImage(filename, &resolution);
+        if (!texels) {
+            // 如果图片读取失败，则创建常量纹理
+            resolution.x = resolution.y = 1;
+            RGBSpectrum *rgb = new RGBSpectrum[1];
+            *rgb = RGBSpectrum(0.5f) * scale;
+            texels.reset(rgb);
+        }
+        // 图片保存在内存中左上角为原点
+        // 纹理坐标系中左下角为原点，需要转换一下
+        for (int y = 0; y < resolution.y / 2; ++y) {
+            for (int x = 0; x < resolution.x; ++x) {
+                int o1 = y * resolution.x + x;
+                int o2 = (resolution.y - y - 1) * resolution.x + x;
+                std::swap(texels[o1], texels[o2]);
+            }
+        }
+
+        MIPMap<Tmemory> *mipmap = nullptr;
+        std::unique_ptr<Tmemory[]> convertedTexels(new Tmemory[resolution.x *
+                                                               resolution.y]);
+        for (int i = 0; i < resolution.x * resolution.y; ++i) {
+            convertIn(texels[i], &convertedTexels[i], scale, gamma);
+        }
+        mipmap = new MIPMap<Tmemory>(resolution, convertedTexels.get(),
+                                     doTrilinear, maxAniso, wm);
+        _imageCache[textInfo].reset(mipmap);
+        return mipmap;
+    }
 
 private:
 
@@ -113,47 +155,6 @@ private:
     	*to = from; 
     }
 
-	static MIPMap<Tmemory> *getTexture(const std::string &filename,
-                                       bool doTrilinear, 
-                                       Float maxAniso,
-                                       ImageWrap wm, 
-                                       Float scale, 
-                                       bool gamma) {
-		TexInfo textInfo(filename, doTrilinear, maxAniso, wm, scale, gamma);
-		// 先从纹理缓存中查找，如果找得到，直接返回对应mipmap指针
-		if (_imageCache.find(textInfo) != _imageCache.end()) {
-            return _imageCache[textInfo].get();
-		}
-		Point2i resolution;
-        std::unique_ptr<RGBSpectrum[]> texels = readImage(filename, &resolution);
-        if (!texels) {
-        	// 如果图片读取失败，则创建常量纹理
-        	resolution.x = resolution.y = 1;
-        	RGBSpectrum *rgb = new RGBSpectrum[1];
-        	*rgb = RGBSpectrum(0.5f) * scale;
-        	texels.reset(rgb);
-        }
-        // 图片保存在内存中左上角为原点
-        // 纹理坐标系中左下角为原点，需要转换一下
-        for (int y = 0; y < resolution.y / 2; ++y) {
-        	for (int x = 0; x < resolution.x; ++x) {
-        		int o1 = y * resolution.x + x;
-        		int o2 = (resolution.y - y - 1) * resolution.x + x;
-                std::swap(texels[o1], texels[o2]);
-        	}
-        }
-
-        MIPMap<Tmemory> *mipmap = nullptr;
-        std::unique_ptr<Tmemory[]> convertedTexels(new Tmemory[resolution.x *
-                                                               resolution.y]);
-        for (int i = 0; i < resolution.x * resolution.y; ++i) {
-            convertIn(texels[i], &convertedTexels[i], scale, gamma);
-        }
-        mipmap = new MIPMap<Tmemory>(resolution, convertedTexels.get(),
-                                     doTrilinear, maxAniso, wm);
-        _imageCache[textInfo].reset(mipmap);
-        return mipmap;
-	}
 	// 纹理映射方式
 	std::unique_ptr<TextureMapping2D> _mapping;
 

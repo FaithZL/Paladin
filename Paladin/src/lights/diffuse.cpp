@@ -14,13 +14,21 @@ DiffuseAreaLight::DiffuseAreaLight(shared_ptr<const Transform> LightToWorld,
                                    const MediumInterface &mediumInterface,
                                    const Spectrum &L, int nSamples,
                                    const std::shared_ptr<Shape> &shape,
-                                   bool twoSided)
+                                   bool twoSided,
+                                   const string &texname)
 : AreaLight(LightToWorld, mediumInterface, nSamples),
 _L(L),
 _shape(shape),
 _twoSided(twoSided),
-_area(_shape->area()) {
-    
+_area(_shape->area()),
+_Lmap(nullptr) {
+    if (!texname.empty()) {
+        loadLeMap(texname);
+    }
+}
+
+void DiffuseAreaLight::loadLeMap(const string &texname) {
+    _Lmap = ImageTexture<RGBSpectrum, Spectrum>::getTexture(texname, true, 8, ImageWrap::Repeat, 1, false);
 }
 
 Spectrum DiffuseAreaLight::power() const {
@@ -46,7 +54,8 @@ Float DiffuseAreaLight::pdf_Li(const Interaction &ref,
     return _shape->pdfDir(ref, wi);
 }
 
-shared_ptr<DiffuseAreaLight> DiffuseAreaLight::create(Float rgb[3], const std::shared_ptr<Shape> &shape, const MediumInterface &mi) {
+shared_ptr<DiffuseAreaLight> DiffuseAreaLight::create(Float rgb[3], const std::shared_ptr<Shape> &shape,
+                                                      const MediumInterface &mi,const string &texname) {
     if (rgb[0] == 0 && rgb[1] == 0 && rgb[2] == 0) {
         return nullptr;
     }

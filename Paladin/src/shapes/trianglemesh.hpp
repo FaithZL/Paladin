@@ -175,8 +175,6 @@ public:
                         std::acos(clamp(dot(cross20, -cross01), -1, 1)) - Pi);
     }
     
-private:
-
     void getUVs(Point2f uv[3]) const {
         if (_mesh->uv) {
             uv[0] = _mesh->uv[_vertexIdx[0].uv];
@@ -189,11 +187,10 @@ private:
         }
     }
     
+private:
+    
     std::shared_ptr<TriangleMesh> _mesh;
     const Index * _vertexIdx;
-    
-//    const Index * _vertexIndex;
-    
     int _faceIndex;
 };
 
