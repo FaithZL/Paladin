@@ -27,7 +27,6 @@
         },
         {
             "type" : "distant",
-            "enable" : false,
             "param" : {
                 "transform" : {
                     "type" : "translate",
@@ -35,7 +34,7 @@
                 },
                 "L" : {
                     "colorType" : 1,
-                    "color" : [3.4, 2.4, 0.8]
+                    "color" : [3, 3, 3]
                 },
                 "wLight" : [-1,0.5,-1]
             }
@@ -262,14 +261,14 @@
                 },
                 {
                     "type" : "translate",
-                    "param" : [0.6,1.5,-9.8]
+                    "param" : [0.6,1.5,-5]
                 }
             ]
         }
     },
     "film" : {
         "param" : {
-            "resolution" : [500, 500],
+            "resolution" : [700, 400],
             "cropWindow" : [0,0,1,1],
             "fileName" : "erato.png",
             "diagonal" : 1,

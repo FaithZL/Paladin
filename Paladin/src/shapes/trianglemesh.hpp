@@ -177,9 +177,9 @@ public:
     
     void getUVs(Point2f uv[3]) const {
         if (_mesh->uv) {
-            uv[0] = _mesh->uv[_vertexIdx[0].uv];
-            uv[1] = _mesh->uv[_vertexIdx[1].uv];
-            uv[2] = _mesh->uv[_vertexIdx[2].uv];
+            uv[0] = _vertexIdx[0].uv < 0 ? Point2f(0, 0) : _mesh->uv[_vertexIdx[0].uv];
+            uv[1] = _vertexIdx[1].uv < 0 ? Point2f(1, 0) : _mesh->uv[_vertexIdx[1].uv];
+            uv[2] = _vertexIdx[2].uv < 0 ? Point2f(1, 1) : _mesh->uv[_vertexIdx[2].uv];
         } else {
             uv[0] = Point2f(0, 0);
             uv[1] = Point2f(1, 0);

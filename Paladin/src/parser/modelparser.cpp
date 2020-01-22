@@ -188,6 +188,9 @@ vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<cons
             data = _materialLst[matIdx];
             light = DiffuseAreaLight::create(data.emission, tri, mediumInterface);
             prim = GeometricPrimitive::create(tri, data.material, light, mediumInterface);
+            if (light) {
+                lights.push_back(light);
+            }
         } else {
             prim = GeometricPrimitive::create(tri, nullptr, nullptr, mediumInterface);
         }
