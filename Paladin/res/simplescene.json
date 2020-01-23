@@ -26,8 +26,22 @@
             }
         },
         {
+            "type" : "envmap",
+            "enable" : true,
+            "param" : {
+                "transform" : {
+                    "type" : "rotateX",
+                    "param" : [90]       
+                },
+                "scale" : 0.2,
+                "L" : [3.4, 2.4, 0.8],
+                "nSamples" : 1,
+                "fn" : "" 
+            }
+        },
+        {
             "type" : "distant",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" : {
                     "type" : "translate",
@@ -231,7 +245,7 @@
     "integrator" : {
         "type" : "pt",
         "param" : {
-            "maxBounce" : 5,
+            "maxBounce" : 15,
             "rrThreshold" : 1,
             "lightSampleStrategy" : "power"
         }
@@ -239,7 +253,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 32
+            "spp" : 1
         }
     },
     "camera" : {
@@ -258,20 +272,20 @@
             "transform" : [
                 {
                     "type" : "rotateX",
-                    "param" : [0]
+                    "param" : [2]
                 },
                 {
                     "type" : "translate",
-                    "param" : [0.6,1.5,-9.8]
+                    "param" : [0.6,2.5,-6.8]
                 }
             ]
         }
     },
     "film" : {
         "param" : {
-            "resolution" : [500, 500],
+            "resolution" : [1000, 600],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "erato.png",
+            "fileName" : "breakfast_room_.png",
             "diagonal" : 1,
             "scale" : 1
         }

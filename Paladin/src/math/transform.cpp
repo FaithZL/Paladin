@@ -709,9 +709,9 @@ Transform * createTransform(const nloJson &data) {
         }
         return ret;
     }
-    string type = data.value("type", "translate");
+    string type = data.value("type", nloJson());
     auto creator = GET_CREATOR(type);
-    nloJson param = data.value("param", nloJson::array({0, 0, 0}));
+    nloJson param = data.value("param", nloJson());
     Transform * ret = dynamic_cast<Transform *>(creator(param, {}));
     return ret;
 }

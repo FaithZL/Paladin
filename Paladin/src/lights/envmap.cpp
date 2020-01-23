@@ -105,4 +105,29 @@ Float EnvironmentMap::pdf_Li(const Interaction &, const Vector3f &w) const {
            (2 * Pi * Pi * sinTheta);
 }
 
+//"param" : {
+//    "transform" : {
+//        "type" : "rotateX",
+//        "param" : 90
+//    },
+//    "scale" : 1,
+//    "L" : [0.5,0.6,0.6],
+//    "nSamples" : 1,
+//    "fn" : ""
+//}
+CObject_ptr createEnvironmentMap(const nloJson &param, const Arguments &lst) {
+    nloJson l2w_data = param.value("transform", nloJson());
+    auto l2w = shared_ptr<const Transform>(createTransform(l2w_data));
+    nloJson scale = param.value("scale", 1.0);
+    nloJson Ldata = param.value("L", nloJson::object());
+    Spectrum L = Spectrum::FromJsonRGB(Ldata);
+    L *= Float(scale);
+    int nSamples = param.value("nSamples", 1);
+    string fn = param.value("fn", "");
+    return new EnvironmentMap(shared_ptr<const Transform>(l2w),
+                              L, nSamples, fn);
+}
+
+REGISTER("envmap", createEnvironmentMap);
+
 PALADIN_END

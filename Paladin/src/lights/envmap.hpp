@@ -59,6 +59,8 @@ private:
     std::unique_ptr<Distribution2D> _distribution;
 };
 
+CObject_ptr createEnvironmentMap(const nloJson &param, const Arguments &lst);
+
 PALADIN_END
 
 #endif /* envmap_hpp */
