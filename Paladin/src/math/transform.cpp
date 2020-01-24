@@ -7,6 +7,7 @@
 //
 
 #include "transform.hpp"
+#include "core/paladin.hpp"
 
 PALADIN_BEGIN
 
@@ -709,6 +710,12 @@ Transform * createTransform(const nloJson &data) {
         }
         return ret;
     }
+    
+    if (data.is_string()) {
+        auto sceneParser = Paladin::getInstance()->getSceneParser();
+        return sceneParser->getTransform(data);
+    }
+    
     string type = data.value("type", nloJson());
     auto creator = GET_CREATOR(type);
     nloJson param = data.value("param", nloJson());

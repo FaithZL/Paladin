@@ -16,20 +16,29 @@ PALADIN_BEGIN
 
 class Paladin {
 public:
-    Paladin() {
-        
-    }
     
     int run() {
         return 0;
     }
     
-    void render(const std::string fileName) {
+    void render(const std::string &fileName) {
         _sceneParser.loadFromJson(fileName);
         parallelCleanup();
     }
     
+    static Paladin * getInstance();
+    
+    const SceneParser * getSceneParser() const {
+        return & _sceneParser;
+    }
+    
 private:
+    
+    Paladin() {
+        
+    }
+    
+    static Paladin * s_paladin;
     
     SceneParser _sceneParser;
 

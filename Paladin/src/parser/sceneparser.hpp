@@ -35,10 +35,6 @@ public:
         }
     }
     
-    const TransformCache &getTransformCache() const {
-        return _transformCache;
-    }
-    
     void parse(const nloJson &);
     
     void parseShapes(const nloJson &);
@@ -70,9 +66,19 @@ public:
     // 解析clone物体，注意，clone物体暂不支持quad,cube
     void parseClonal(const nloJson &data);
     
+    void parseTransformMap(const nloJson &dict);
+    
     shared_ptr<Aggregate> parseAccelerator(const nloJson &);
     
     Film * parseFilm(const nloJson &param, Filter *);
+    
+    Transform * getTransform(const string &key) const {
+        auto iter = _transformCache.find(key);
+        if (iter == _transformCache.end()) {
+            return nullptr;
+        }
+        return _transformCache.at(key);
+    }
     
 private:
     
@@ -141,9 +147,13 @@ private:
         return _cloneMap[key];
     }
     
-private:
+    void addTransformToCache(const string &key, Transform * transform) {
+        _transformCache[key] = transform;
+    }
     
-    TransformCache _transformCache;
+    
+    
+private:
     
     shared_ptr<Aggregate> _aggregate;
     
@@ -154,6 +164,8 @@ private:
     vector<shared_ptr<Light>> _lights;
     
     vector<shared_ptr<Primitive>> _primitives;
+    
+    map<string, Transform *> _transformCache;
     
     // 克隆map，key为对象名，value为片元列表
     map<string, vector<shared_ptr<Primitive>>> _cloneMap;

@@ -131,6 +131,15 @@ void SceneParser::parseMaterials(const nloJson &dict) {
     }
 }
 
+void SceneParser::parseTransformMap(const nloJson &dict) {
+    for (auto iter = dict.cbegin(); iter != dict.cend(); ++iter) {
+        string name = iter.key();
+        nloJson data = iter.value();
+        Transform * tf = createTransform(data);
+        addTransformToCache(name, tf);
+    }
+}
+
 //"sampler" : {
 //    "type" : "stratified",
 //    "param" : {

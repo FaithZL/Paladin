@@ -8,3 +8,15 @@
 
 #include "paladin.hpp"
 
+PALADIN_BEGIN
+
+Paladin * Paladin::s_paladin = nullptr;
+
+Paladin * Paladin::getInstance() {
+    if (s_paladin == nullptr) {
+        s_paladin = new Paladin();
+    }
+    return s_paladin;
+}
+
+PALADIN_END
