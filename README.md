@@ -112,6 +112,8 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/standford_bunny-halton-128spp.png)
  * instance and depth of field 32spp halton
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/instance-dof-32spp-halton.png)
+ * 1024-spp-random path tracing
+   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/breakfast_room_1024spp_pt.png)
 
 # 获取仓库
 	git clone --recursive https://github.com/FaithZL/Paladin.git
