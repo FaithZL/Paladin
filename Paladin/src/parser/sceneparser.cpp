@@ -50,6 +50,9 @@ void SceneParser::parse(const nloJson &data) {
     nloJson materialDataDict = data.value("materials", nloJson::object());
     parseMaterials(materialDataDict);
     
+    nloJson transformDict = data.value("transforms", nloJson::object());
+    parseTransformMap(transformDict);
+    
     nloJson mediumDataDict = data.value("mediums", nloJson::object());
     parseMediums(mediumDataDict);
 

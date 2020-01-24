@@ -1,0 +1,480 @@
+{
+    "threadNum" : 0,
+    "transforms" :{
+        "translate" : [
+            {
+                "type" : "translate",
+                "param" :[0,1,0]
+            }
+        ],
+        "t2" : [
+            {
+                "type" : "translate",
+                "param" :[0,0.3,0]
+            }
+        ]
+    },
+    "mediums" : {
+        "fog" : {
+            "type" : "homo",
+            "param" : {
+                "g" : 0,
+                "sigma_a" : [0.0,0.0,0.0],
+                "sigma_s" : [0.8,0.8,0.8]
+            }
+        }
+    },
+    "lights" : [
+        {
+            "type" : "pointLight",
+            "enable" : false,
+            "param" : {
+                "transform" : {
+                    
+                },
+                "I" : {
+                    "colorType" : 1,
+                    "color" : [1,1,1]
+                }
+            }
+        }
+    ],
+    "materials" : {
+        "matte1" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : [0.725, 0.71, 0.68],
+                "sigma" : 0,
+                "bumpMap" : 0
+            }
+        },
+        "matte2" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : {
+                    "type" : "bilerp",
+                    "param" : {
+                        "v00" : [1, 0, 0],
+                        "v01" : [0, 1, 0],
+                        "v10" : [0, 0, 1],
+                        "v11" : [0.1, 0.9, 0.5]
+                    }
+                },
+                "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                }
+            }
+        },
+        "matteRed" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.75, 0.25, 0.25]
+                    }
+                },
+                "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                } 
+            }
+        },
+        "matteGreen" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.25, 0.25, 0.75]
+                    }
+                },
+                "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                }
+            }
+        },
+        "black" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0,0,0]
+                    }
+                },
+                "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                }
+            }
+        },
+        "image" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : {
+                    "type" : "image",
+                    "param" : {
+                        "fileName" : "res/HelloWorld.png"
+                    }
+                },
+                "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                }
+            }
+        },
+        "glass" : {
+            "type" : "glass",
+            "param" : {
+                "Kr" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [1, 1, 1]
+                    }
+                },
+                "Kt" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [1, 1, 1]
+                    }
+                },
+                "uRough" : {
+                    "type" : "constant",
+                    "param" : 0.0
+                },
+                "vRough" : {
+                    "type" : "constant",
+                    "param" : 0.0
+                },
+                "eta" : {
+                    "type" : "constant",
+                    "param" : 1.5
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "remapRough" : false 
+            }
+        },
+        "metal" : {
+            "type" : "metal",
+            "param" : {
+                "eta" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.6, 1, 1]
+                    }
+                },
+                "k" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [1, 1, 1]
+                    }
+                },
+                "rough" : {
+                    "type" : "constant",
+                    "param" : 0.1
+                },
+                "uRough" : {
+                    "type" : "constant",
+                    "param" : 0.1
+                },
+                "vRough" : {
+                    "type" : "constant",
+                    "param" : 0.1
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "remapRough" : false
+            }
+        },
+        "mirror" : {
+            "type" : "mirror",
+            "param" : {
+                "Kr" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [1, 1, 1]
+                    }
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                }
+            }
+        }
+    },
+    "shapes" : [
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
+            "name" : "back",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateX",
+                        "param" : [0]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,0,1]
+                    },
+                    "translate"
+                ],
+                "width" : 2
+            },
+            "material" : "matte1"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
+            "name" : "bottom",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateX",
+                        "param" : [-90]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,-1,0]
+                    },
+                    "translate"
+                ],
+                "width" : 2
+            },
+            "material" : "matte1"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
+            "name" : "top",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateX",
+                        "param" : [90]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,1,0]
+                    },
+                    "t2"
+                ],
+                "width" : 2
+            },
+            "material" : "matte1"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
+            "name" : "left",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateY",
+                        "param" : [90]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [-1,0,0]
+                    },
+                    "translate"
+                ],
+                "width" : 2
+            },
+            "material" : "matteRed"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
+            "name" : "right",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateY",
+                        "param" : [-90]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [1,0,0]
+                    },
+                    "translate"
+                ],
+                "width" : 2
+            },
+            "material" : "matteGreen"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
+            "name" : "front",
+            "enable" : false,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "translate",
+                        "param" : [0,0,-1]
+                    },
+                    "translate"
+                ],
+                "width" : 2
+            },
+            "mediumInterface" : ["", "fog"],
+            "material" : null
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
+            "name" : "light",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateX",
+                        "param" : [90]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,0.98,0]
+                    },
+                    "t2"
+                ],
+                "width" : 0.5
+            },
+            "material" : "black",
+            "emission" : {
+                "nSamples" : 1,
+                "Le" : {
+                    "colorType" : 1,
+                    "color" : [32, 32, 32]
+                },
+                "twoSided" : false
+            }
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "model",
+            "name" : "box",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateY",
+                        "param" : [30]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,0,-100]
+                    },
+                    {
+                        "type" : "scale",
+                        "param" : 0.0017
+                    }
+                ],
+                "fileName" : "res/model/ka50s/ka50s.obj"
+            },
+            "material" : null
+        }
+    ],
+    "integrator" : {
+        "type" : "pt",
+        "param" : {
+            "maxBounce" : 5,
+            "rrThreshold" : 1,
+            "lightSampleStrategy" : "power"
+        }
+    },
+    "sampler" : {
+        "type" : "halton",
+        "param" : {
+            "spp" : 256
+        }
+    },
+    "camera" : {
+        "type" : "perspective",
+        "param" : {
+            "shutterOpen" : 0,
+            "shutterClose" : 1,
+            "lensRadius" : 0,
+            "focalDistance" : 100,
+            "fov" : 29,
+            "lookAt" : [
+                [0,0,-6.6],
+                [0,0,0],
+                [0,1,0]
+            ],
+            "transform" : [
+                {
+                    "type" : "rotateX",
+                    "param" : [8]
+                },
+                {
+                    "type" : "translate",
+                    "param" : [0,0.75,-2.6]
+                }
+            ]
+        }
+    },
+    "film" : {
+        "param" : {
+            "resolution" : [1050, 600],
+            "cropWindow" : [0,0,1,1],
+            "fileName" : "ka50-pt-256spp.png",
+            "diagonal" : 1,
+            "scale" : 1
+        }
+    },
+    "filter" : {
+        "type" : "gaussian",
+        "param" : {
+            "radius" : [2,2]
+        }
+    },
+    "accelerator" : {
+        "type" : "bvh",
+        "param" : {
+            "maxPrimsInNode" : 1,
+            "splitMethod" : "SAH"
+        }
+    }
+}
