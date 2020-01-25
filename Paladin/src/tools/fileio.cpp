@@ -30,7 +30,7 @@ RGBSpectrum * _readImage(const std::string &name,
     int w, h;
     int channel;
     // 用stb库加载图片
-    rgb = stbi_load(name.c_str(), &w, &h , &channel , 3);
+    rgb = stbi_load(name.c_str(), &w, &h , &channel , 4);
     if (!rgb) {
         throw std::runtime_error(name + " load fail");
     }
@@ -40,16 +40,20 @@ RGBSpectrum * _readImage(const std::string &name,
     RGBSpectrum *ret = new RGBSpectrum[*width * *height];
     unsigned char *src = rgb;
     for (unsigned int y = 0; y < h; ++y) {
-        for (unsigned int x = 0; x < w; ++x, src += 3) {
+        for (unsigned int x = 0; x < w; ++x, src += 4) {
             Float c[3];
             c[0] = src[0] / 255.f;
             c[1] = src[1] / 255.f;
             c[2] = src[2] / 255.f;
+            if (channel == 4) {
+                // todo
+            }
             ret[y * *width + x] = RGBSpectrum::FromRGB(c);
         }
     }
     free(rgb);
     VLOG(2) << StringPrintf("Read image %s (%d x %d)", name.c_str(), *width, *height);
+    std::cout << name << "        " << channel << std::endl;
     return ret;
 }
 
