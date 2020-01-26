@@ -19,6 +19,7 @@
 
 #include <ImfRgba.h>
 #include <ImfRgbaFile.h>
+#include "core/mipmap.h"
 
 
 PALADIN_BEGIN
@@ -53,7 +54,6 @@ RGBSpectrum * _readImage(const std::string &name,
     }
     free(rgb);
     VLOG(2) << StringPrintf("Read image %s (%d x %d)", name.c_str(), *width, *height);
-    std::cout << name << "        " << channel << std::endl;
     return ret;
 }
 

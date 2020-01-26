@@ -61,6 +61,18 @@ void ModelParser::packageData() {
     }
 }
 
+void ModelParser::generateNormals() {
+    for (size_t i = 0; i < _verts.size(); i += 3) {
+        int posIdx0 = _verts[i].pos;
+        int posIdx1 = _verts[i + 1].pos;
+        int posIdx2 = _verts[i + 2].pos;
+        Point3f p0 = _points[posIdx0];
+        Point3f p1 = _points[posIdx1];
+        Point3f p2 = _points[posIdx2];
+        
+    }
+}
+
 void ModelParser::parseShapes() {
     for (size_t i = 0; i < _shapes.size(); ++i) {
         shape_t shape = _shapes.at(i);
@@ -136,6 +148,9 @@ vector<shared_ptr<Shape>> ModelParser::getTriLst(const shared_ptr<const Transfor
                                                  bool reverseOrientation) {
     packageData();
     parseShapes();
+    if (_normals.size() == 0) {
+        generateNormals();
+    }
     size_t nTriangles = _verts.size() / 3;
     
     auto mesh = TriangleMesh::create(o2w, nTriangles, _verts, &_points, &_normals, &_UVs);
@@ -174,6 +189,9 @@ vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<cons
         shape_t shape = _shapes.at(i);
         parseShape(shape);
     }
+    if (_normals.size() == 0) {
+        generateNormals();
+    }
     size_t nTriangles = _verts.size() / 3;
     auto mesh = TriangleMesh::create(o2w, nTriangles, _verts, &_points, &_normals, &_UVs);
     shared_ptr<Transform> w2o(o2w->getInverse_ptr());
@@ -187,7 +205,9 @@ vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<cons
         if (matIdx >= 0) {
             data = _materialLst[matIdx];
             light = DiffuseAreaLight::create(data.emission, tri, mediumInterface);
-            prim = GeometricPrimitive::create(tri, data.material, light, mediumInterface);
+            // 如果primitive为光源，则材质为null
+            auto mat = light == nullptr ? data.material : nullptr;
+            prim = GeometricPrimitive::create(tri, mat, light, mediumInterface);
             if (light) {
                 lights.push_back(light);
             }

@@ -48,6 +48,8 @@ public:
     
     void parseShape(const shape_t &);
     
+    void generateNormals();
+    
     vector<shared_ptr<Shape>> getTriLst(const shared_ptr<const Transform> &o2w,
                                         bool reverseOrientation);
     
