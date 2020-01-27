@@ -62,6 +62,10 @@ void ModelParser::packageData() {
 }
 
 void ModelParser::generateNormals() {
+    map<string, Float> areaMap;
+    vector<Float> areaLst;
+    areaLst.resize(_points.size(), 0);
+    _normals.resize(_points.size(), Normal3f(0, 0, 0));
     for (size_t i = 0; i < _verts.size(); i += 3) {
         int posIdx0 = _verts[i].pos;
         int posIdx1 = _verts[i + 1].pos;
@@ -69,8 +73,19 @@ void ModelParser::generateNormals() {
         Point3f p0 = _points[posIdx0];
         Point3f p1 = _points[posIdx1];
         Point3f p2 = _points[posIdx2];
-        
+        Vector3f crs = cross(p1 - p0, p2 - p0);
+        Float area = 0.5 * crs.length();
+        Normal3f normal = normalize(Normal3f(crs));
+        for (size_t j = 0; j < 3; ++j) {
+            int posIdx = _verts[i + j].pos;
+            Float curArea = areaLst[posIdx];
+            Normal3f curNormal = _normals[posIdx];
+            Normal3f newNormal = (curNormal * curArea + normal * area) / (area + curArea);
+            areaLst[posIdx] = area + curArea;
+            _normals[posIdx] = newNormal;
+        }
     }
+    return;
 }
 
 void ModelParser::parseShapes() {
@@ -167,12 +182,11 @@ void ModelParser::parseShape(const shape_t &shape) {
     mesh_t mesh = shape.mesh;
     for (size_t i = 0; i < mesh.material_ids.size(); ++i) {
         int matId = mesh.material_ids[i];
-        index_t idx0 = mesh.indices[i * 3];
-        index_t idx1 = mesh.indices[i * 3 + 1];
-        index_t idx2 = mesh.indices[i * 3 + 2];
-        _verts.emplace_back(idx0.texcoord_index, idx0.vertex_index, idx0.normal_index, 0);
-        _verts.emplace_back(idx1.texcoord_index, idx1.vertex_index, idx1.normal_index, 0);
-        _verts.emplace_back(idx2.texcoord_index, idx2.vertex_index, idx2.normal_index, 0);
+        for (int j = 0; j < 3; ++j) {
+            index_t idx = mesh.indices[i * 3 + j];
+            idx.normal_index = idx.normal_index == -1 ? idx.vertex_index : idx.normal_index;
+            _verts.emplace_back(idx.texcoord_index, idx.vertex_index, idx.normal_index, 0);
+        }
         _matIndices.push_back(matId);
     }
 }

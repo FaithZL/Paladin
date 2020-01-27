@@ -86,7 +86,7 @@ shadowAlphaMask(shadowAlphaMask){
         size_t size = N->size();
         normals.reset(new Normal3f[size]);
         for (int i = 0; i < size; ++i) {
-            normals[i] = objectToWorld->exec((*N)[i]);
+            normals[i] = normalize(objectToWorld->exec((*N)[i]));
         }
     } else {
         normals.reset();
