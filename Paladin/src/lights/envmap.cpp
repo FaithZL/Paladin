@@ -57,12 +57,47 @@ nSamples) {
 Spectrum EnvironmentMap::sample_Le(const Point2f &u1, const Point2f &u2,
                                      Float time, Ray *ray, Normal3f *nLight,
                                      Float *pdfPos, Float *pdfDir) const {
+    Float mapPdf;
+    Point2f uv = _distribution->sampleContinuous(u1, &mapPdf);
+    if (mapPdf == 0) {
+        return Spectrum(0.f);
+    }
+    Float theta = uv[1] * Pi, phi = uv[0] * 2 * Pi;
+    Float cosTheta = std::cos(theta), sinTheta = std::sin(theta);
+    Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
+    Vector3f wiLight = Vector3f(sinTheta * cosPhi,
+                            sinTheta * sinPhi,
+                            cosTheta);
+    // wiLight由场景指向光源
+    wiLight = _lightToWorld->exec(wiLight);
     
+    Vector3f v1, v2;
+    coordinateSystem(wiLight, &v1, &v2);
+    
+    *nLight = Normal3f(-wiLight);
+    Point2f tmp = uniformSampleDisk(u2);
+    Point3f pDisk = _worldCenter + _worldRadius * (tmp.x * v1 + tmp.y * v2);
+    Point3f ori = pDisk + _worldRadius * wiLight;
+    *ray = Ray(ori, -wiLight, Infinity, time);
+    
+    *pdfPos = 1 / (Pi * _worldRadius * _worldRadius);
+    // p(u, v) / p(ω) = dω / dudv = (sinθ dθ dφ) / dudv
+    // p(u, v) / p(ω) = sinθ 2π^2
+    *pdfDir = sinTheta == 0 ? 0 : mapPdf / (2 * Pi * Pi * sinTheta);
+    
+    return Spectrum(_Lmap->lookup(uv), SpectrumType::Illuminant);
 }
 
 void EnvironmentMap::pdf_Le(const Ray &ray, const Normal3f &nLight,
                               Float *pdfPos, Float *pdfDir) const {
-    
+    // ray的方向为远离光源
+    Vector3f d = -_worldToLight->exec(ray.dir);
+    Float theta = sphericalTheta(d);
+    Float phi = sphericalPhi(d);
+    Point2f uv(phi * Inv2Pi, theta * InvPi);
+    Float mapPdf = _distribution->pdf(uv);
+    *pdfPos = 1 / (Pi * _worldRadius * _worldRadius);
+    *pdfDir = mapPdf / (2 * Pi * Pi * std::sin(theta));
 }
 
 Spectrum EnvironmentMap::power() const {

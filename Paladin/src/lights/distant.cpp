@@ -6,6 +6,7 @@
 //
 
 #include "distant.hpp"
+#include "math/sampling.hpp"
 
 PALADIN_BEGIN
 
@@ -20,12 +21,23 @@ _wLight(normalize(LightToWorld->exec(wLight))) {
 Spectrum DistantLight::sample_Le(const Point2f &u1, const Point2f &u2,
                                      Float time, Ray *ray, Normal3f *nLight,
                                      Float *pdfPos, Float *pdfDir) const {
+    Vector3f v1,v2;
+    coordinateSystem(_wLight, &v1, &v2);
+    Point2f tmp = uniformSampleDisk(u1);
+    Point3f pDisk = _worldCenter + _worldRadius * (tmp.x * v1 + tmp.y * v2);
+    Point3f ori = pDisk + _wLight * _worldRadius;
+    *ray = Ray(ori, -_wLight, Infinity, time);
     
+    *nLight = Normal3f(-_wLight);
+    *pdfPos = 1 / (Pi * _worldRadius * _worldRadius);
+    *pdfDir = 1;
+    return _L;
 }
 
 void DistantLight::pdf_Le(const Ray &ray, const Normal3f &nLight,
                               Float *pdfPos, Float *pdfDir) const {
-    
+    *pdfPos = 1 / (Pi * _worldRadius * _worldRadius);
+    *pdfDir = 0;
 }
 
 Spectrum DistantLight::sample_Li(const Interaction &ref, const Point2f &u,

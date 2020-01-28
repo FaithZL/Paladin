@@ -6,6 +6,8 @@
 //
 
 #include "spot.hpp"
+#include "math/sampling.hpp"
+#include "core/bxdf.hpp"
 
 PALADIN_BEGIN
 
@@ -32,12 +34,18 @@ Spectrum SpotLight::sample_Li(const Interaction &ref, const Point2f &u,
 Spectrum SpotLight::sample_Le(const Point2f &u1, const Point2f &u2,
                                      Float time, Ray *ray, Normal3f *nLight,
                                      Float *pdfPos, Float *pdfDir) const {
-    
+    *pdfPos = 1;
+    *pdfDir = uniformConePdf(_cosTotalWidth);
+    *ray = Ray(_pos, uniformSampleCone(u2, _cosTotalWidth), Infinity, time, mediumInterface.inside);
+    *nLight = Normal3f(ray->dir);
+    return _I * falloff(ray->dir);
 }
 
 void SpotLight::pdf_Le(const Ray &ray, const Normal3f &nLight,
                        Float *pdfPos, Float *pdfDir) const {
-    
+    *pdfPos = 0;
+    *pdfDir = (cosTheta(_worldToLight->exec(ray.dir)) >= _cosTotalWidth) ?
+                uniformConePdf(_cosTotalWidth) : 0;
 }
 
 Float SpotLight::falloff(const Vector3f &w) const {

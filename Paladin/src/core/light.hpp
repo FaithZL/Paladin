@@ -125,6 +125,17 @@ public:
 
     }
     
+    /**
+     * 根据Le分布采样光源
+     * @param  u1     用于光源表面
+     * @param  u2     用于生成方向
+     * @param  time   时间
+     * @param  ray    返回生成的ray
+     * @param  nLight 光源表面法线
+     * @param  pdfPos 位置PDF
+     * @param  pdfDir 方向PDF
+     * @return        [description]
+     */
     virtual Spectrum sample_Le(const Point2f &u1, const Point2f &u2,
                             Float time, Ray *ray, Normal3f *nLight,
                             Float *pdfPos, Float *pdfDir) const = 0;

@@ -27,12 +27,17 @@ Spectrum PointLight::sample_Li(const Interaction &ref, const Point2f &u,
 Spectrum PointLight::sample_Le(const Point2f &u1, const Point2f &u2,
                                      Float time, Ray *ray, Normal3f *nLight,
                                      Float *pdfPos, Float *pdfDir) const {
-    
+    *pdfPos = 1;
+    *pdfDir = uniformSpherePdf();
+    *ray = Ray(_pos, uniformSampleSphere(u2), Infinity, time, mediumInterface.inside);
+    *nLight = Normal3f(ray->dir);
+    return _I;
 }
 
 void PointLight::pdf_Le(const Ray &ray, const Normal3f &nLight,
                         Float *pdfPos, Float *pdfDir) const {
-    
+    *pdfPos = 0;
+    *pdfDir = uniformSpherePdf();
 }
 
 // 狄拉克函数

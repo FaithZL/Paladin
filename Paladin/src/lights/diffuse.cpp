@@ -7,6 +7,8 @@
 
 #include "diffuse.hpp"
 #include "core/shape.hpp"
+#include "math/sampling.hpp"
+#include "core/bxdf.hpp"
 
 PALADIN_BEGIN
 
@@ -57,12 +59,41 @@ Float DiffuseAreaLight::pdf_Li(const Interaction &ref,
 Spectrum DiffuseAreaLight::sample_Le(const Point2f &u1, const Point2f &u2,
                                      Float time, Ray *ray, Normal3f *nLight,
                                      Float *pdfPos, Float *pdfDir) const {
+    auto lightIntr = _shape->samplePos(u1, pdfPos);
+    lightIntr.mediumInterface = mediumInterface;
+    *nLight = lightIntr.normal;
     
+    Vector3f w;
+    if (_twoSided) {
+        Point2f u = u2;
+        if (u[0] < 0.5f) {
+            u[0] = std::min(u[0] * 2, OneMinusEpsilon);
+            w = cosineSampleHemisphere(u);
+        } else {
+            u[0] = std::min(2 * u[0] - 1, OneMinusEpsilon);
+            w = cosineSampleHemisphere(u);
+            w.z *= -1;
+        }
+        *pdfDir = 0.5 * cosineHemispherePdf(cosTheta(w));
+    } else {
+        w = cosineSampleHemisphere(u2);
+        *pdfDir = cosineHemispherePdf(cosTheta(w));
+    }
+    
+    Vector3f v1, v2, n(lightIntr.normal);
+    coordinateSystem(n, &v1, &v2);
+    // 将w转到世界空间
+    w = w.x * v1 + w.y * v2 + w.z * n;
+    *ray = lightIntr.spawnRay(w);
+    return L(lightIntr, w);
 }
 
 void DiffuseAreaLight::pdf_Le(const Ray &ray, const Normal3f &nLight,
                               Float *pdfPos, Float *pdfDir) const {
-    
+    *pdfPos = _shape->pdfPos();
+    *pdfDir = _twoSided ?
+            0.5f * cosineHemispherePdf(absDot(nLight, ray.dir)) :
+            cosineHemispherePdf(dot(nLight, ray.dir));
 }
 
 shared_ptr<DiffuseAreaLight> DiffuseAreaLight::create(Float rgb[3], const std::shared_ptr<Shape> &shape,
