@@ -27,6 +27,13 @@ public:
         return nloJson();
     }
     
+    virtual Spectrum sample_Le(const Point2f &u1, const Point2f &u2,
+                                Float time, Ray *ray, Normal3f *nLight,
+                                Float *pdfPos, Float *pdfDir) const override;
+    
+    virtual void pdf_Le(const Ray &ray, const Normal3f &nLight,
+                        Float *pdfPos, Float *pdfDir) const override;
+    
     virtual Spectrum power() const override;
     
     virtual Float pdf_Li(const Interaction &, const Vector3f &) const override;

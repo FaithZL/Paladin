@@ -27,6 +27,13 @@ public:
     
     void loadLeMap(const string &texname);
     
+    virtual Spectrum sample_Le(const Point2f &u1, const Point2f &u2,
+                                Float time, Ray *ray, Normal3f *nLight,
+                                Float *pdfPos, Float *pdfDir) const override;
+    
+    virtual void pdf_Le(const Ray &ray, const Normal3f &nLight,
+                        Float *pdfPos, Float *pdfDir) const override;
+    
     Spectrum power() const override;
     
     virtual nloJson toJson() const override {

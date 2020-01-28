@@ -29,6 +29,17 @@ Spectrum SpotLight::sample_Li(const Interaction &ref, const Point2f &u,
     return _I * falloff(-*wi) / distanceSquared(_pos, ref.pos);
 }
 
+Spectrum SpotLight::sample_Le(const Point2f &u1, const Point2f &u2,
+                                     Float time, Ray *ray, Normal3f *nLight,
+                                     Float *pdfPos, Float *pdfDir) const {
+    
+}
+
+void SpotLight::pdf_Le(const Ray &ray, const Normal3f &nLight,
+                       Float *pdfPos, Float *pdfDir) const {
+    
+}
+
 Float SpotLight::falloff(const Vector3f &w) const {
     Vector3f wl = normalize(_worldToLight->exec(w));
     Float cosTheta = wl.z;

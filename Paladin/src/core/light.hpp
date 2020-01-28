@@ -124,6 +124,13 @@ public:
     virtual void preprocess(const Scene &scene) {
 
     }
+    
+    virtual Spectrum sample_Le(const Point2f &u1, const Point2f &u2,
+                            Float time, Ray *ray, Normal3f *nLight,
+                            Float *pdfPos, Float *pdfDir) const = 0;
+    
+    virtual void pdf_Le(const Ray &ray, const Normal3f &nLight,
+                        Float *pdfPos, Float *pdfDir) const = 0;
 
     virtual Spectrum Le(const RayDifferential &r) const {
         return Spectrum(0.f);

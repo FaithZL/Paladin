@@ -208,6 +208,16 @@ public:
         return interpolate(time).exec(v);
     }
     
+    Normal3f exec(Float time, const Normal3f &n) const {
+        if (time <= _startTime || !_actuallyAnimated) {
+            return _startTransform->exec(n);
+        }
+        if (time >= _endTime) {
+            return _endTransform->exec(n);
+        }
+        return interpolate(time).exec(n);
+    }
+    
     bool hasScale() const {
         return _startTransform->hasScale() || _endTransform->hasScale();
     }

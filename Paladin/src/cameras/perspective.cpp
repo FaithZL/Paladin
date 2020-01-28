@@ -8,6 +8,7 @@
 
 #include "cameras/perspective.hpp"
 #include "math/sampling.hpp"
+#include "core/light.hpp"
 
 PALADIN_BEGIN
 
@@ -113,21 +114,126 @@ nloJson PerspectiveCamera::toJson() const {
     return nloJson();
 }
 
-Spectrum PerspectiveCamera::We(const paladin::Ray &ray, Point2f *pRaster2) const {
-    // todo 双向方法里用到，暂时不实现
-    return Spectrum(0);
+/**
+ * 参考资料
+ * http://www.pbr-book.org/3ed-2018/Light_Transport_III_Bidirectional_Methods/The_Path-Space_Measurement_Equation.html
+ *
+ * 该函数可以理解为光线的权重值
+ * 第一个参数可以理解为相机生成的ray，ray的原定暂时理解为相机位置
+ * 
+ * 
+ *                 dA cosθ
+ * 重要表达式 dw = -----------
+ *                   r^2
+ *
+ * p(w)dw = p(A)dA   (A为相平面面积)
+ *
+ *                   r^2
+ * p(w) = p(A) * ------------  =  (r^2) / (A cosθ)
+ *                   cosθ
+ *
+ * r = 1/cosθ
+ *
+ *              1
+ * p(w) = -------------
+ *         A (cosθ)^3
+ *
+ * 
+ * ∫[A_lens] ∫[sphere] We(p,w) cosθ dw dA(p) = 1
+ *
+ * 上式可以转为以下表达式
+ * 
+ * ∫[A_lens] ∫[sphere] p_a(p) p_w(w) dw dA(p) = 1
+ *
+ * We(p,w) = (p_a(p) p_w(w) )/ cosθ
+ *
+ * 其中p_a(p)为透镜表面的PDF，p_w(w)为相机位置朝相平面的PDF
+ *
+ * We(p,w) = p_w(w) / (πr^2 cosθ)
+ * 
+ * 
+ * @param  ray      暂时理解为ray的原点就是相机位置
+ * @param  pRaster2 [description]
+ * @return          [description]
+ */
+Spectrum PerspectiveCamera::We(const Ray &ray, Point2f *pRaster2) const {
+    Transform c2w = cameraToWorld.interpolate(ray.time);
+    Float cosTheta = dot(ray.dir, c2w.exec(Vector3f(0, 0, 1)));
+    if (cosTheta <= 0) {
+        return Spectrum(0);
+    }
+    // 计算前焦点
+    // 对于有透镜的相机，计算焦平面的位置
+    // 小孔相机计算z = 1平面
+    // 焦点在世界空间的坐标
+    Point3f pFocus = ray.at((_lensRadius > 0 ? _focalDistance : 1) / cosTheta);
+    // 焦点在光栅空间的坐标
+    Point3f pRaster = _rasterToCamera.getInverse().exec(c2w.getInverse().exec(pFocus));
+    if (pRaster2) {
+        *pRaster2 = Point2f(pRaster.x, pRaster.y);
+    }
+    // 如果超出感应器范围，则返回0
+    AABB2i sampleBounds = film->getSampleBounds();
+    if (pRaster.x > sampleBounds.pMax.x || pRaster.y > sampleBounds.pMax.y ||
+        pRaster.x < sampleBounds.pMin.x || pRaster.y < sampleBounds.pMin.y) {
+        return Spectrum(0);
+    }
+    
+    Float lensArea = _lensRadius == 0 ? 1 : (Pi * _lensRadius * _lensRadius);
+    Float cosTheta_2 = cosTheta * cosTheta;
+    return Spectrum(1 / (_area * lensArea * cosTheta_2 * cosTheta_2));
 }
 
 
 void PerspectiveCamera::pdf_We(const Ray &ray, Float *pdfPos, Float *pdfDir) const {
-    // todo 双向方法里用到，暂时不实现
+    Transform c2w = cameraToWorld.interpolate(ray.time);
+    Float cosTheta = dot(ray.dir, c2w.exec(Vector3f(0, 0, 1)));
+    if (cosTheta <= 0) {
+        *pdfPos = *pdfDir = 0;
+        return;
+    }
+    // 计算前焦点
+    // 对于有透镜的相机，计算焦平面的位置
+    // 小孔相机计算z = 1平面
+    // 焦点在世界空间的坐标
+    Point3f pFocus = ray.at((_lensRadius > 0 ? _focalDistance : 1) / cosTheta);
+    // 焦点在光栅空间的坐标
+    Point3f pRaster = _rasterToCamera.getInverse().exec(c2w.getInverse().exec(pFocus));
+    
+    AABB2i sampleBounds = film->getSampleBounds();
+    if (pRaster.x > sampleBounds.pMax.x || pRaster.y > sampleBounds.pMax.y ||
+        pRaster.x < sampleBounds.pMin.x || pRaster.y < sampleBounds.pMin.y) {
+        *pdfPos = *pdfDir = 0;
+        return;
+    }
+    
+    Float lensArea = _lensRadius != 0 ? (Pi * _lensRadius * _lensRadius) : 1;
+    *pdfPos = 1 / lensArea;
+    *pdfDir = 1 / (_area * cosTheta * cosTheta * cosTheta);
 }
 
+
 Spectrum PerspectiveCamera::sample_Wi(const Interaction &ref, const Point2f &u,
-                          Vector3f *wi, Float *pdf, Point2f *pRaster,
+                          Vector3f *wi, Float *pdfDir, Point2f *pRaster,
                           VisibilityTester *vis) const {
-    // todo 双向方法里用到，暂时不实现
-    return Spectrum(0.f);
+    
+    Point2f pLens = uniformSampleDisk(u);
+    Point3f pLensWorld = cameraToWorld.exec(ref.time, Point3f(pLens.x, pLens.y, 0));
+    Interaction pLensIntr(pLensWorld, ref.time, medium);
+    pLensIntr.normal = cameraToWorld.exec(ref.time, Normal3f(0, 0, 1));
+    
+    *wi = pLensWorld - ref.pos;
+    *vis = VisibilityTester(pLensIntr, ref);
+    Float length = wi->length();
+    *wi /= length;
+    
+    Float lensArea = _lensRadius != 0 ? (Pi * _lensRadius * _lensRadius) : 1;
+    //                   r^2
+    // p(w) = p(A) * ------------  =  (r^2) / (A cosθ)
+    //                   cosθ
+    *pdfDir = (length * length) / (absDot(pLensIntr.normal, *wi) * lensArea);
+    
+    return We(pLensIntr.spawnRay(-*wi), pRaster);
 }
 
 //"param" : {

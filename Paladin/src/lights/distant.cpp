@@ -17,6 +17,17 @@ _wLight(normalize(LightToWorld->exec(wLight))) {
     
 }
 
+Spectrum DistantLight::sample_Le(const Point2f &u1, const Point2f &u2,
+                                     Float time, Ray *ray, Normal3f *nLight,
+                                     Float *pdfPos, Float *pdfDir) const {
+    
+}
+
+void DistantLight::pdf_Le(const Ray &ray, const Normal3f &nLight,
+                              Float *pdfPos, Float *pdfDir) const {
+    
+}
+
 Spectrum DistantLight::sample_Li(const Interaction &ref, const Point2f &u,
                                  Vector3f *wi, Float *pdf,
                                  VisibilityTester *vis) const {

@@ -54,6 +54,17 @@ Float DiffuseAreaLight::pdf_Li(const Interaction &ref,
     return _shape->pdfDir(ref, wi);
 }
 
+Spectrum DiffuseAreaLight::sample_Le(const Point2f &u1, const Point2f &u2,
+                                     Float time, Ray *ray, Normal3f *nLight,
+                                     Float *pdfPos, Float *pdfDir) const {
+    
+}
+
+void DiffuseAreaLight::pdf_Le(const Ray &ray, const Normal3f &nLight,
+                              Float *pdfPos, Float *pdfDir) const {
+    
+}
+
 shared_ptr<DiffuseAreaLight> DiffuseAreaLight::create(Float rgb[3], const std::shared_ptr<Shape> &shape,
                                                       const MediumInterface &mi,const string &texname) {
     if (rgb[0] == 0 && rgb[1] == 0 && rgb[2] == 0) {

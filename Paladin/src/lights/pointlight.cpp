@@ -24,6 +24,17 @@ Spectrum PointLight::sample_Li(const Interaction &ref, const Point2f &u,
     return _I / distanceSquared(_pos, ref.pos);
 }
 
+Spectrum PointLight::sample_Le(const Point2f &u1, const Point2f &u2,
+                                     Float time, Ray *ray, Normal3f *nLight,
+                                     Float *pdfPos, Float *pdfDir) const {
+    
+}
+
+void PointLight::pdf_Le(const Ray &ray, const Normal3f &nLight,
+                        Float *pdfPos, Float *pdfDir) const {
+    
+}
+
 // 狄拉克函数
 // 特殊处理
 Float PointLight::pdf_Li(const Interaction &, const Vector3f &) const {

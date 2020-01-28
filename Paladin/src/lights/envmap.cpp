@@ -54,6 +54,17 @@ nSamples) {
     _distribution.reset(new Distribution2D(img.get(), width, height));
 }
 
+Spectrum EnvironmentMap::sample_Le(const Point2f &u1, const Point2f &u2,
+                                     Float time, Ray *ray, Normal3f *nLight,
+                                     Float *pdfPos, Float *pdfDir) const {
+    
+}
+
+void EnvironmentMap::pdf_Le(const Ray &ray, const Normal3f &nLight,
+                              Float *pdfPos, Float *pdfDir) const {
+    
+}
+
 Spectrum EnvironmentMap::power() const {
     // todo 球面映射会产生扭曲所以这样估计通量是有误差的
     return Pi * _worldRadius * _worldRadius *
