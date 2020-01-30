@@ -92,8 +92,8 @@ static RGBSpectrum * _readImageEXR(const std::string &name, int *width,
     using namespace Imf;
     using namespace Imath;
     try {
-//        RgbaInputFile file(name.c_str());
-//        Box2i dw = file.dataWindow();
+        RgbaInputFile file(name.c_str());
+        Box2i dw = file.dataWindow();
 //
 //        // OpenEXR uses inclusive pixel bounds; adjust to non-inclusive
 //        // (the convention pbrt uses) in the values returned.
