@@ -34,6 +34,39 @@
  *                             ηi
  * f_r(wi->wo) = f(wo->wi) = (----)^2 f(wi->wo)
  *                             ηo
+ *
+ * 以上表达式直接给出结论，推导过程详见 SpecularTransmission 的注释
+ *
+ * 除了BSDF以外，还有一些内容的不对称性也会导致不正确的结果
+ * 着色法线
+ * 观察以下方程
+ *
+ * 如果不考虑着色法线：
+ *
+ *      Lo(wo) = ∫ Li(wi) f_Ng(wi->wo) |wi · Ng| dwi
+ *
+ * 但如果有着色法线的情况下：
+ * 
+ *      Lo(wo) = ∫ Li(wi) f_Ns(wi->wo) |wi · Ns| dwi
+ *
+ * 但我们需要如下形式：
+ *
+ *      Lo(wo) = ∫ Li(wi) f(wi->wo) |wi · Ng| dwi
+ *
+ * 根据上述表达式，可得 f与f_Ns的关系为
+ *
+ *                              wi · Ns
+ * f(wi->wo) = f_Ns(wi->wo) |-------------|
+ *                              wi · Ng
+ *
+ * 进一步，可得
+ * 
+ *                              wo · Ns
+ * f(wo->wi) = f_Ns(wo->wi) |-------------|
+ *                              wo · Ng
+ *
+ * 以上介绍完了不对称性的源头，并且给出了解决方案
+ * 
  */
 
 #include "core/integrator.hpp"
