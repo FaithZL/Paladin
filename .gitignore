@@ -10,5 +10,6 @@ xcode/Release
 xcode/RelWithDebInfo
 xcode/Paladin.build
 xcode/third
+xcode_
 Paladin/res/model
 xcuserdata

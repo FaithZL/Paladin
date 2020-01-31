@@ -94,32 +94,30 @@ static RGBSpectrum * _readImageEXR(const std::string &name, int *width,
     try {
         RgbaInputFile file(name.c_str());
         Box2i dw = file.dataWindow();
-//
-//        // OpenEXR uses inclusive pixel bounds; adjust to non-inclusive
-//        // (the convention pbrt uses) in the values returned.
-//        if (dataWindow)
-//            *dataWindow = {{dw.min.x, dw.min.y}, {dw.max.x + 1, dw.max.y + 1}};
-//        if (displayWindow) {
-//            Box2i dispw = file.displayWindow();
-//            *displayWindow = {{dispw.min.x, dispw.min.y},
-//                              {dispw.max.x + 1, dispw.max.y + 1}};
-//        }
-//        *width = dw.max.x - dw.min.x + 1;
-//        *height = dw.max.y - dw.min.y + 1;
-//
-//        std::vector<Rgba> pixels(*width * *height);
-//        file.setFrameBuffer(&pixels[0] - dw.min.x - dw.min.y * *width, 1,
-//                            *width);
-//        file.readPixels(dw.min.y, dw.max.y);
-//
-//        RGBSpectrum *ret = new RGBSpectrum[*width * *height];
-//        for (int i = 0; i < *width * *height; ++i) {
-//            Float frgb[3] = {pixels[i].r, pixels[i].g, pixels[i].b};
-//            ret[i] = RGBSpectrum::FromRGB(frgb);
-//        }
-//        LOG(INFO) << StringPrintf("Read EXR image %s (%d x %d)",
-//                                  name.c_str(), *width, *height);
-//        return ret;
+
+        if (dataWindow)
+            *dataWindow = {{dw.min.x, dw.min.y}, {dw.max.x + 1, dw.max.y + 1}};
+        if (displayWindow) {
+            Box2i dispw = file.displayWindow();
+            *displayWindow = {{dispw.min.x, dispw.min.y},
+                              {dispw.max.x + 1, dispw.max.y + 1}};
+        }
+        *width = dw.max.x - dw.min.x + 1;
+        *height = dw.max.y - dw.min.y + 1;
+
+        std::vector<Rgba> pixels(*width * *height);
+        file.setFrameBuffer(&pixels[0] - dw.min.x - dw.min.y * *width, 1,
+                            *width);
+        file.readPixels(dw.min.y, dw.max.y);
+
+        RGBSpectrum *ret = new RGBSpectrum[*width * *height];
+        for (int i = 0; i < *width * *height; ++i) {
+            Float frgb[3] = {pixels[i].r, pixels[i].g, pixels[i].b};
+            ret[i] = RGBSpectrum::FromRGB(frgb);
+        }
+        LOG(INFO) << StringPrintf("Read EXR image %s (%d x %d)",
+                                  name.c_str(), *width, *height);
+        return ret;
     } catch (const std::exception &e) {
         LOG(ERROR) << ("Unable to read image file \"%s\": %s", name.c_str(), e.what());
     }
@@ -208,9 +206,9 @@ void writeImage(const std::string &name,
     } else if (hasExtension(name, "tga")) {
         stbi_write_tga(name.c_str(), resolution.x, resolution.y, 3, rgb8.get());
     } else if (hasExtension(name, "exr")) {
-//        _writeImageEXR(name, rgb, resolution.x, resolution.y, totalResolution.x,
-//        totalResolution.y, outputBounds.pMin.x,
-//        outputBounds.pMin.y);
+        _writeImageEXR(name, rgb, resolution.x, resolution.y, totalResolution.x,
+                    totalResolution.y, outputBounds.pMin.x,
+                    outputBounds.pMin.y);
     }
 }
 

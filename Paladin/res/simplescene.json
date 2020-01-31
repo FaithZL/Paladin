@@ -408,7 +408,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 512
+            "spp" : 8
         }
     },
     "camera" : {
@@ -440,7 +440,7 @@
         "param" : {
             "resolution" : [1050, 600],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "mi28-pt-512spp.png",
+            "fileName" : "mi28-pt-8spp.exr",
             "diagonal" : 1,
             "scale" : 1
         }
