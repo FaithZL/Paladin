@@ -29,11 +29,11 @@
  * 从相机发出的射线是模拟光线的反向传输，有些BSDF是不对称的，则需要特殊处理
  * 例如，高光透射，
  *
- * 假设f(wi->wo) 的互反函数为 f_r(wi->wo) 
+ * 假设f(wi->wo) 的互反函数为 f_adjoint(wi->wo) 
  * 则满足
- *                             ηi
- * f_r(wi->wo) = f(wo->wi) = (----)^2 f(wi->wo)
- *                             ηo
+ *                                   ηi
+ * f_adjoint(wi->wo) = f(wo->wi) = (----)^2 f(wi->wo)
+ *                                   ηo
  *
  * 以上表达式直接给出结论，推导过程详见 SpecularTransmission 的注释
  *
@@ -62,9 +62,23 @@
  * 进一步，可得
  * 
  *                              wo · Ns
- * f(wo->wi) = f_Ns(wo->wi) |-------------|
+ * f(wo->wi) = f_Ns(wo->wi) |-------------| = f_adjoint(wi->wo)
  *                              wo · Ng
  *
+ * 假设 f_Ns(wi->wo) = f_Ns(wo->wi)，则
+ * 
+ *  f_adjoint(wi->wo)     wo · Ns     wi · Ng
+ * ------------------ = |---------| |---------|
+ *     f(wi->wo)          wo · Ng     wi · Ns
+ *
+ * 给每个f函数添加一个校正因数(correct factor cf)
+ *
+ *        wo · Ns     wi · Ng
+ * cf = |---------| |---------|  (importance transport)
+ *        wo · Ng     wi · Ns
+ *
+ * cf = 1 (radiance transport)
+ * 
  * 以上介绍完了不对称性的源头，并且给出了解决方案
  * 
  */

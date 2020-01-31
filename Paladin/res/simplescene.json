@@ -367,7 +367,7 @@
                 "nSamples" : 1,
                 "Le" : {
                     "colorType" : 1,
-                    "color" : [32, 32, 32]
+                    "color" : [25, 25, 25]
                 },
                 "twoSided" : false
             }
@@ -381,18 +381,18 @@
                 "transform" :[
                     {
                         "type" : "rotateY",
-                        "param" : [30]
+                        "param" : [120]
                     },
                     {
                         "type" : "translate",
-                        "param" : [0,0,-100]
+                        "param" : [0,20,-20]
                     },
                     {
                         "type" : "scale",
-                        "param" : 0.0017
+                        "param" : 0.0083
                     }
                 ],
-                "fileName" : "res/model/ka50s/ka50s.obj"
+                "fileName" : "res/model/mi28/mi28.obj"
             },
             "material" : null
         }
@@ -400,7 +400,7 @@
     "integrator" : {
         "type" : "pt",
         "param" : {
-            "maxBounce" : 5,
+            "maxBounce" : 15,
             "rrThreshold" : 1,
             "lightSampleStrategy" : "power"
         }
@@ -408,7 +408,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 256
+            "spp" : 512
         }
     },
     "camera" : {
@@ -440,7 +440,7 @@
         "param" : {
             "resolution" : [1050, 600],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "ka50-pt-256spp.png",
+            "fileName" : "mi28-pt-512spp.png",
             "diagonal" : 1,
             "scale" : 1
         }
@@ -448,7 +448,8 @@
     "filter" : {
         "type" : "gaussian",
         "param" : {
-            "radius" : [2,2]
+            "radius" : [1,1],
+            "alpha" : 1.0
         }
     },
     "accelerator" : {
