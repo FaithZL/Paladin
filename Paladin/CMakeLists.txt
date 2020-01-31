@@ -55,7 +55,6 @@ include_directories(${ZLIB_INCLUDE_DIRS})
 add_subdirectory(third/lua53)
 add_subdirectory(third/glog)
 add_subdirectory(third/openexr)
-set(EXTRA_LIBS ${EXTRA_LIBS} lua53 glog ${OPENEXR_LIBS})
 # 设置头文件目录
 include_directories ("${PROJECT_SOURCE_DIR}/src")
 include_directories ("${PROJECT_SOURCE_DIR}/src/ext")
@@ -101,6 +100,7 @@ ELSE()
   SET(OPENEXR_LIBS IlmImf Imath Half)
 ENDIF()
 
+set(EXTRA_LIBS ${EXTRA_LIBS} lua53 glog ${OPENEXR_LIBS})
 
 # 指定生成目标
 add_executable (${APP_NAME} ${ALL_FILES})
