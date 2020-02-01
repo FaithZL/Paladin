@@ -6,3 +6,12 @@
 //
 
 #include "bdpt.hpp"
+
+
+PALADIN_BEGIN
+
+void BidirectionalPathTracer::render(const Scene &scene) {
+    
+}
+
+PALADIN_END

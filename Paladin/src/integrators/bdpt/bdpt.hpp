@@ -84,10 +84,42 @@
  */
 
 #include "core/integrator.hpp"
+#include "pathvertex.h"
 
 PALADIN_BEGIN
 
-
+class BidirectionalPathTracer : public Integrator {
+    
+    BidirectionalPathTracer(std::shared_ptr<Sampler> sampler,
+                   std::shared_ptr<const Camera> camera, int maxDepth,
+                   bool visualizeStrategies, bool visualizeWeights,
+                   const AABB2i &pixelBounds,
+                   const std::string &lightSampleStrategy = "power")
+    : _sampler(sampler),
+    _camera(camera),
+    _maxDepth(maxDepth),
+    _visualizeStrategies(visualizeStrategies),
+    _visualizeWeights(visualizeWeights),
+    _pixelBounds(pixelBounds),
+    _lightSampleStrategy(lightSampleStrategy) {
+      
+    }
+    
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
+    
+    void render(const Scene &scene) override;
+    
+private:
+    std::shared_ptr<Sampler> _sampler;
+    std::shared_ptr<const Camera> _camera;
+    const int _maxDepth;
+    const bool _visualizeStrategies;
+    const bool _visualizeWeights;
+    const AABB2i _pixelBounds;
+    const std::string _lightSampleStrategy;
+};
 
 PALADIN_END
 
