@@ -108,6 +108,57 @@ struct Vertex {
         memcpy(this, &v, sizeof(Vertex));
         return *this;
     }
+    
+    static Vertex createCamera(const Camera *camera, const Ray &ray,
+                                const Spectrum &throughput);
+    
+    static Vertex createCamera(const Camera *camera, const Interaction &it,
+                                      const Spectrum &throughput);
+    
+    static Vertex createLight(const Light *light, const Ray &ray,
+                                     const Normal3f &nLight, const Spectrum &Le,
+                                     Float pdf);
+    
+    static Vertex createLight(const EndpointInteraction &ei,
+                                     const Spectrum &throughput, Float pdf);
+    
+    static Vertex createMedium(const MediumInteraction &mi,
+                                      const Spectrum &throughput, Float pdf,
+                                      const Vertex &prev);
+    
+    static Vertex createSurface(const SurfaceInteraction &si,
+                                       const Spectrum &throughput, Float pdf,
+                                       const Vertex &prev);
+    
+    const Interaction &getInteraction() const {
+        switch (type) {
+            case VertexType::Medium:
+                return mi;
+            case VertexType::Surface:
+                return si;
+            default:
+                return ei;
+        }
+    }
+    
+    const Point3f &pos() const {
+        return getInteraction().pos;
+    }
+    
+    Float time() const {
+        return getInteraction().time;
+    }
+    
+    const Normal3f &ng() const {
+        return getInteraction().normal;
+    }
+    
+    const Normal3f &ns() const {
+        if (type == VertexType::Surface)
+            return si.shading.normal;
+        else
+            return getInteraction().normal;
+    }
 };
 
 PALADIN_END

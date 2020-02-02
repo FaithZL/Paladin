@@ -118,7 +118,7 @@ nloJson PerspectiveCamera::toJson() const {
  * 参考资料
  * http://www.pbr-book.org/3ed-2018/Light_Transport_III_Bidirectional_Methods/The_Path-Space_Measurement_Equation.html
  *
- * 该函数可以理解为光线的权重值
+ * 该函数可以理解相机的响应函数
  * 第一个参数可以理解为相机生成的ray，ray的原定暂时理解为相机位置
  * 
  * 
@@ -212,7 +212,16 @@ void PerspectiveCamera::pdf_We(const Ray &ray, Float *pdfPos, Float *pdfDir) con
     *pdfDir = 1 / (_area * cosTheta * cosTheta * cosTheta);
 }
 
-
+/**
+ * 在ref点处采样相机的film
+ * @param  ref     场景中的某个点
+ * @param  u       均匀随机变量
+ * @param  wi      采样生成方向，指向相机方向
+ * @param  pdfDir  ref点采样film对应立体角空间中的概率密度函数
+ * @param  pRaster 对应的光栅点
+ * @param  vis     
+ * @return         We函数值
+ */
 Spectrum PerspectiveCamera::sample_Wi(const Interaction &ref, const Point2f &u,
                           Vector3f *wi, Float *pdfDir, Point2f *pRaster,
                           VisibilityTester *vis) const {
