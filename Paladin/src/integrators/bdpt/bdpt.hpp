@@ -86,8 +86,14 @@
  * 它跟踪来自光源的光线，从而递归地估计到达表面的incident importance(这个词组不知道怎么翻译比较好)。
  * 这本身并不是一种特别有用的渲染技术，但它构成了其他方法(如双向路径跟踪和光子映射)的基本组成部分。
  *
+ * 
  *
- *
+ * 
+ */
+ 
+
+
+/**
  * 
  *
  * 从相机发出的射线是模拟光线的反向传输，有些BSDF是不对称的，则需要特殊处理
@@ -152,6 +158,7 @@
 
 #include "core/integrator.hpp"
 #include "pathvertex.h"
+#include "../bidirectional.h"
 
 PALADIN_BEGIN
 
@@ -187,6 +194,9 @@ private:
     const AABB2i _pixelBounds;
     const std::string _lightSampleStrategy;
 };
+
+
+CObject_ptr createBDPT(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 

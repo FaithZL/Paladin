@@ -110,21 +110,33 @@ struct Vertex {
     }
     
     static Vertex createCamera(const Camera *camera, const Ray &ray,
-                                const Spectrum &throughput);
+                               const Spectrum &throughput) {
+        return Vertex(VertexType::Camera, EndpointInteraction(camera, ray), throughput);
+    }
     
     static Vertex createCamera(const Camera *camera, const Interaction &it,
-                                      const Spectrum &throughput);
+                               const Spectrum &throughput) {
+        return Vertex(VertexType::Camera, EndpointInteraction(it, camera), throughput);
+    }
     
     static Vertex createLight(const Light *light, const Ray &ray,
                                      const Normal3f &nLight, const Spectrum &Le,
-                                     Float pdf);
+                              Float pdf) {
+        return Vertex(VertexType::Light, EndpointInteraction(light, ray, nLight), Le);
+    }
     
     static Vertex createLight(const EndpointInteraction &ei,
-                                     const Spectrum &throughput, Float pdf);
+                              const Spectrum &throughput, Float pdf) {
+        auto ret = Vertex(VertexType::Light, ei, throughput);
+        ret.pdfFwd = pdf;
+        return ret;
+    }
     
     static Vertex createMedium(const MediumInteraction &mi,
                                       const Spectrum &throughput, Float pdf,
-                                      const Vertex &prev);
+                               const Vertex &prev) {
+        
+    }
     
     static Vertex createSurface(const SurfaceInteraction &si,
                                        const Spectrum &throughput, Float pdf,
@@ -158,6 +170,27 @@ struct Vertex {
             return si.shading.normal;
         else
             return getInteraction().normal;
+    }
+    
+    bool isOnSurface() const {
+        return !ng().isZero();
+    }
+    
+    bool isLight() const {
+        return type == VertexType::Light ||
+               (type == VertexType::Surface && si.primitive->getAreaLight());
+    }
+    
+    bool isDeltaLight() const {
+        return type == VertexType::Light &&
+                ei.light != nullptr &&
+                ei.light->isDelta();
+    }
+    
+    bool IsInfiniteLight() const {
+        return type == VertexType::Light &&
+               (!ei.light || ei.light->flags & (int)LightFlags::Infinite ||
+                ei.light->flags & (int)LightFlags::DeltaDirection);
     }
 };
 
