@@ -157,8 +157,7 @@
  */
 
 #include "core/integrator.hpp"
-#include "pathvertex.h"
-#include "../bidirectional.h"
+#include "../bidir_util/func.h"
 
 PALADIN_BEGIN
 
