@@ -370,6 +370,7 @@
 		F4E589C9155849F8B26DA8AD /* medium.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 309E196AB47E46A3A8A3E996 /* medium.cpp */; settings = {COMPILER_FLAGS = ""; }; };
 		F5304BFDC59F4F208D7B7AF8 /* ImfStandardAttributes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F5684FEF3D74445A5D72DCB /* ImfStandardAttributes.cpp */; settings = {COMPILER_FLAGS = ""; }; };
 		F63925CF23E92196007C6659 /* mlt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63925CD23E92196007C6659 /* mlt.cpp */; };
+		F63925D323E9B797007C6659 /* mcmc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63925D123E9B797007C6659 /* mcmc.cpp */; };
 		F736D2717E1446CD87D6DB68 /* distant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9138C620B527494C9C145B59 /* distant.cpp */; settings = {COMPILER_FLAGS = ""; }; };
 		F9B00A20E143469AAFF4008A /* dwaLookups.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DC2D154C90A442288ABE5711 /* dwaLookups.cpp */; settings = {COMPILER_FLAGS = ""; }; };
 		FB203F5E917E4279A94BDC25 /* interaction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CD8BA05A581482E99DEF4F4 /* interaction.cpp */; settings = {COMPILER_FLAGS = ""; }; };
@@ -1423,7 +1424,8 @@
 		F63925CB23E91D93007C6659 /* assignment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = assignment.h; sourceTree = "<group>"; };
 		F63925CD23E92196007C6659 /* mlt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mlt.cpp; path = src/integrators/mlt/mlt.cpp; sourceTree = SOURCE_ROOT; };
 		F63925CE23E92196007C6659 /* mlt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = mlt.hpp; path = src/integrators/mlt/mlt.hpp; sourceTree = SOURCE_ROOT; };
-		F63925D023E9224B007C6659 /* mcmc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = mcmc.h; path = src/integrators/mlt/mcmc.h; sourceTree = SOURCE_ROOT; };
+		F63925D123E9B797007C6659 /* mcmc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mcmc.cpp; path = src/samplers/mcmc.cpp; sourceTree = "<group>"; };
+		F63925D223E9B797007C6659 /* mcmc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = mcmc.hpp; path = src/samplers/mcmc.hpp; sourceTree = "<group>"; };
 		F722E06F584A48EE89AA4A25 /* ImfAttribute.o */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.objfile"; fileEncoding = 4; name = ImfAttribute.o; path = "../xcode/third/openexr/OpenEXR/IlmImf/$(PROJECT_NAME).build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/IlmImf-obj.build/Objects-normal/$(CURRENT_ARCH)/ImfAttribute.o"; sourceTree = SOURCE_ROOT; };
 		F902E0AD003F4BB3B7A64D9A /* ldebug.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ldebug.c; path = third/lua53/lua/ldebug.c; sourceTree = SOURCE_ROOT; };
 		F97B59AEE362479A91A08C28 /* ImfVecAttribute.o */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.objfile"; fileEncoding = 4; name = ImfVecAttribute.o; path = "../xcode/third/openexr/OpenEXR/IlmImf/$(PROJECT_NAME).build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/IlmImf-obj.build/Objects-normal/$(CURRENT_ARCH)/ImfVecAttribute.o"; sourceTree = SOURCE_ROOT; };
@@ -2192,6 +2194,8 @@
 				C94AD470F4334D65BE781C54 /* random.hpp */,
 				01C0B75991144628A5B8B513 /* stratified.cpp */,
 				60F44AEAAC5140219EB125E1 /* stratified.hpp */,
+				F63925D123E9B797007C6659 /* mcmc.cpp */,
+				F63925D223E9B797007C6659 /* mcmc.hpp */,
 			);
 			name = samplers;
 			sourceTree = "<group>";
@@ -2687,7 +2691,6 @@
 			children = (
 				F63925CD23E92196007C6659 /* mlt.cpp */,
 				F63925CE23E92196007C6659 /* mlt.hpp */,
-				F63925D023E9224B007C6659 /* mcmc.h */,
 			);
 			path = mlt;
 			sourceTree = "<group>";
@@ -3574,6 +3577,7 @@
 				81DD6A08253541D7B0144B78 /* sampling.cpp in Sources */,
 				B646472308DA4CB9BD0F1785 /* transform.cpp in Sources */,
 				38FD49E9F9D44852B9DECF1C /* homogeneous.cpp in Sources */,
+				F63925D323E9B797007C6659 /* mcmc.cpp in Sources */,
 				913BFE611BC44BC9B5430203 /* modelparser.cpp in Sources */,
 				9F4B5A430F94492788A72B17 /* sceneparser.cpp in Sources */,
 				15893C91BA224AE3AFF19E14 /* halton.cpp in Sources */,

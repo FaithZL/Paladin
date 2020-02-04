@@ -8,7 +8,12 @@
 #ifndef mlt_hpp
 #define mlt_hpp
 
-#include "mcmc.h"
+#include "samplers/mcmc.hpp"
 
+PALADIN_BEGIN
+
+
+
+PALADIN_END
 
 #endif /* mlt_hpp */

@@ -30,7 +30,9 @@ struct Vertex {
     };
     
     bool delta = false;
+    // 当前顶点的前向pdf
     Float pdfFwd = 0;
+    // 当前顶点的后向pdf（如果光反向传播）
     Float pdfRev = 0;
     
     Vertex() : ei() {
@@ -134,7 +136,7 @@ struct Vertex {
                 ei.light->isDelta();
     }
     
-    bool IsInfiniteLight() const {
+    bool isInfiniteLight() const {
         return type == VertexType::Light &&
                (!ei.light || ei.light->flags & (int)LightFlags::Infinite ||
                 ei.light->flags & (int)LightFlags::DeltaDirection);
