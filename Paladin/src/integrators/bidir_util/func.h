@@ -34,11 +34,24 @@ Float MISWeight(const Scene &scene, Vertex *lightVertices,
                 const Distribution1D &lightPdf,
                 const std::unordered_map<const Light *, size_t> &lightToIndex);
 
-extern Spectrum connectBDPT(const Scene &scene, Vertex *lightVertices, Vertex *cameraVertices, int s,
+extern Spectrum connectPath(const Scene &scene, Vertex *lightVertices, Vertex *cameraVertices, int s,
                     int t, const Distribution1D &lightDistr,
                     const std::unordered_map<const Light *, size_t> &lightToIndex,
                     const Camera &camera, Sampler &sampler, Point2f *pRaster,
                     Float *misWeight = nullptr);
+
+inline Float infiniteLightDensity(
+    const Scene &scene, const Distribution1D &lightDistr,
+    const std::unordered_map<const Light *, size_t> &lightToDistrIndex,
+    const Vector3f &w) {
+    Float pdf = 0;
+    for (const auto &light : scene.infiniteLights) {
+        CHECK(lightToDistrIndex.find(light.get()) != lightToDistrIndex.end());
+        size_t index = lightToDistrIndex.find(light.get())->second;
+        pdf += light->pdf_Li(Interaction(), -w) * lightDistr.funcAt(index);
+    }
+    return pdf / (lightDistr.getFuncInt() * lightDistr.count());
+}
 
 PALADIN_END
 

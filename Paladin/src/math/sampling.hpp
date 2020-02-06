@@ -526,6 +526,14 @@ struct Distribution1D {
         }
         return offset;        
     }
+    
+    inline Float getFuncInt() const {
+        return _funcInt;
+    }
+    
+    inline Float funcAt(size_t idx) const {
+        return _func[idx];
+    }
 
     /**
      * 获取离散形式的pdf
