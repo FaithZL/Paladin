@@ -158,7 +158,7 @@
  */
 
 #include "core/integrator.hpp"
-#include "../bidir_util/func.h"
+#include "../bidir_util/func.hpp"
 
 PALADIN_BEGIN
 

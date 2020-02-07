@@ -12,4 +12,6 @@ xcode/Paladin.build
 xcode/third
 xcode_
 Paladin/res/model
+Paladin/cmake-build-debug
+Paladin/.idea
 xcuserdata

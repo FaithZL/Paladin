@@ -1,14 +1,14 @@
 //
-//  bidirectional.h
+//  func.hpp
 //  Paladin
 //
-//  Created by SATAN_Z on 2020/2/3.
+//  Created by SATAN_Z on 2020/2/7.
 //
 
-#ifndef bidirectional_h
-#define bidirectional_h
+#ifndef func_hpp
+#define func_hpp
 
-#include "vertex.h"
+#include "vertex.hpp"
 #include "assignment.h"
 
 PALADIN_BEGIN
@@ -40,20 +40,10 @@ extern Spectrum connectPath(const Scene &scene, Vertex *lightVertices, Vertex *c
                     const Camera &camera, Sampler &sampler, Point2f *pRaster,
                     Float *misWeight = nullptr);
 
-inline Float infiniteLightDensity(
+Float infiniteLightDensity(
     const Scene &scene, const Distribution1D &lightDistr,
     const std::unordered_map<const Light *, size_t> &lightToDistrIndex,
-    const Vector3f &w) {
-    Float pdf = 0;
-    for (const auto &light : scene.infiniteLights) {
-        CHECK(lightToDistrIndex.find(light.get()) != lightToDistrIndex.end());
-        size_t index = lightToDistrIndex.find(light.get())->second;
-        pdf += light->pdf_Li(Interaction(), -w) * lightDistr.funcAt(index);
-    }
-    return pdf / (lightDistr.getFuncInt() * lightDistr.count());
-}
-
+                                  const Vector3f &w);
 PALADIN_END
 
-
-#endif /* bidirectional_h */
+#endif /* func_hpp */
