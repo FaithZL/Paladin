@@ -10,6 +10,7 @@
 #include "core/bxdf.hpp"
 #include "core/interaction.hpp"
 #include "core/texture.hpp"
+#include "textures/constant.hpp"
 
 PALADIN_BEGIN
 
@@ -23,7 +24,7 @@ void MatteMaterial::computeScatteringFunctions(SurfaceInteraction *si,
 
 	si->bsdf = ARENA_ALLOC(arena, BSDF)(*si);
 	Spectrum r = _Kd->evaluate(*si).clamp();
-	Float sig = clamp(_sigma->evaluate(*si), 0, 90);
+	Float sig = _sigma ? clamp(_sigma->evaluate(*si), 0, 90) : 0;
 	if (!r.IsBlack()) {
 		if (sig == 0) {
 			// 如果粗糙度为零，朗博反射
@@ -32,6 +33,11 @@ void MatteMaterial::computeScatteringFunctions(SurfaceInteraction *si,
 			si->bsdf->add(ARENA_ALLOC(arena, OrenNayar)(r, sig));
 		}
 	}
+}
+
+shared_ptr<MatteMaterial> createLightMat() {
+    ConstantTexture<Spectrum> * Kd = new ConstantTexture<Spectrum>(Spectrum(0.f));
+    return make_shared<MatteMaterial>(shared_ptr<Texture<Spectrum>>(Kd), nullptr, nullptr);
 }
 
 //"param" : {

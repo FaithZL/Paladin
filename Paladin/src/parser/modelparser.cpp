@@ -11,6 +11,7 @@
 #include "materials/hyper.hpp"
 #include "textures/constant.hpp"
 #include "textures/imagemap.hpp"
+#include "materials/matte.hpp"
 
 PALADIN_BEGIN
 
@@ -219,8 +220,8 @@ vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<cons
         if (matIdx >= 0) {
             data = _materialLst[matIdx];
             light = DiffuseAreaLight::create(data.emission, tri, mediumInterface);
-            // 如果primitive为光源，则材质为null
-            auto mat = light == nullptr ? data.material : nullptr;
+            // 如果primitive为光源，则材质为光源默认材质
+            auto mat = light ? createLightMat() : data.material;
             prim = GeometricPrimitive::create(tri, mat, light, mediumInterface);
             if (light) {
                 lights.push_back(light);
