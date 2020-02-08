@@ -42,7 +42,7 @@ Vertex Vertex::createMedium(const MediumInteraction &mi,
                             const Spectrum &throughput, Float pdf,
                             const Vertex &prev) {
     Vertex v(mi, throughput);
-    v.pdfFwd = prev.convertPdfToDirBase(pdf, v);
+    v.pdfFwd = prev.convertPdf(pdf, v);
     return v;
 }
 
@@ -50,23 +50,25 @@ Vertex Vertex::createSurface(const SurfaceInteraction &si,
                             const Spectrum &throughput, Float pdf,
                              const Vertex &prev) {
     Vertex v(si, throughput);
-    v.pdfFwd = prev.convertPdfToDirBase(pdf, v);
+    v.pdfFwd = prev.convertPdf(pdf, v);
     return v;
 }
 
-Float Vertex::convertPdfToDirBase(Float pdf, const Vertex &next) const {
-     if (next.isInfiniteLight()) {
-         return pdf;
-     }
-     Vector3f w = next.pos() - pos();
-     if (w.lengthSquared() == 0) {
-         return 0;
-     }
-     Float invDist2 = 1 / w.lengthSquared();
-     if (next.isOnSurface()) {
-         pdf *= absDot(next.ng(), w * std::sqrt(invDist2));
-     }
-     return pdf * invDist2;
+Float Vertex::convertPdf(Float pdf, const Vertex &next) const {
+    // 如果下一个点在infinitylight上，直接返回
+    // 因为相当于直接在单位半球上采样
+    if (next.isInfiniteLight()) {
+        return pdf;
+    }
+    Vector3f w = next.pos() - pos();
+    if (w.lengthSquared() == 0) {
+        return 0;
+    }
+    Float invDist2 = 1 / w.lengthSquared();
+    if (next.isOnSurface()) {
+        pdf *= absDot(next.ng(), w * std::sqrt(invDist2));
+    }
+    return pdf * invDist2;
 }
 
 const Interaction &Vertex::getInteraction() const {
@@ -77,6 +79,22 @@ const Interaction &Vertex::getInteraction() const {
             return si;
         default:
             return ei;
+    }
+}
+
+Spectrum Vertex::f(const Vertex &next, TransportMode mode) const {
+    Vector3f w = (next.pos() - pos());
+    if (w.lengthSquared() == 0) {
+        return 0.;
+    }
+    switch (type) {
+        case VertexType::Medium:
+            return mi.phase->p(mi.wo, w);
+        case VertexType::Surface:
+            return si.bsdf->f(si.wo, w) * correctShadingNormal(si, si.wo, w, mode);
+        default:
+            LOG(FATAL) << "Vertex::f(): Unimplemented";
+            return Spectrum(0.f);
     }
 }
 
@@ -115,16 +133,17 @@ bool Vertex::isDeltaLight() const {
 }
 
 bool Vertex::isInfiniteLight() const {
+    // InfiniteLight上的点的light指针为nullptr
     return type == VertexType::Light &&
            (!ei.light || ei.light->flags & (int)LightFlags::Infinite ||
             ei.light->flags & (int)LightFlags::DeltaDirection);
 }
 
-Spectrum Vertex::Le(const Scene &scene, const Vertex &v) const {
+Spectrum Vertex::Le(const Scene &scene, const Vertex &ref) const {
     if (!isLight()) {
         return Spectrum(0.f);
     }
-    Vector3f w = v.pos() - pos();
+    Vector3f w = ref.pos() - pos();
     if (w.lengthSquared() == 0) {
         return Spectrum(0.f);
     }
@@ -144,14 +163,15 @@ Spectrum Vertex::Le(const Scene &scene, const Vertex &v) const {
 
 bool Vertex::isConnectible() const {
     switch (type) {
-    case VertexType::Medium:
-        return true;
-    case VertexType::Light:
-        return (ei.light->flags & (int)LightFlags::DeltaDirection) == 0;
-    case VertexType::Camera:
-        return true;
-    case VertexType::Surface:
-        return si.bsdf->numComponents(BxDFType(BSDF_DIFFUSE | BSDF_GLOSSY |
+        case VertexType::Medium:
+            return true;
+        case VertexType::Light:
+            return (ei.light->flags & (int)LightFlags::DeltaDirection) == 0;
+        case VertexType::Camera:
+            return true;
+        case VertexType::Surface:
+            // 如果没有non-specular的分量，则不能连接
+            return si.bsdf->numComponents(BxDFType(BSDF_DIFFUSE | BSDF_GLOSSY |
                                                BSDF_REFLECTION |
                                                BSDF_TRANSMISSION)) > 0;
     }
@@ -166,12 +186,16 @@ Float Vertex::pdfDir(const Scene &scene, const Vertex *prev,
     }
     
     Vector3f wn = next.pos() - pos();
-    if (wn.lengthSquared() == 0) return 0;
+    if (wn.lengthSquared() == 0) {
+        return 0;
+    }
     wn = normalize(wn);
     Vector3f wp;
     if (prev) {
         wp = prev->pos() - pos();
-        if (wp.lengthSquared() == 0) return 0;
+        if (wp.lengthSquared() == 0) {
+            return 0;
+        }
         wp = normalize(wp);
     } else {
         CHECK(type == VertexType::Camera);
@@ -188,7 +212,7 @@ Float Vertex::pdfDir(const Scene &scene, const Vertex *prev,
     } else {
         LOG(FATAL) << "Vertex::Pdf(): Unimplemented";
     }
-    return convertPdfToDirBase(pdf, next);
+    return convertPdf(pdf, next);
 }
 
 Float Vertex::pdfLight(const Scene &scene, const Vertex &v) const {

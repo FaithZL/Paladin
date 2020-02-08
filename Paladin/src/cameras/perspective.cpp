@@ -141,6 +141,9 @@ nloJson PerspectiveCamera::toJson() const {
  * 
  * ∫[A_lens] ∫[sphere] We(p,w) cosθ dw dA(p) = 1
  *
+ * 以上的表达式的意思是，假设透镜为一个光源，则辐射通量为1(这个概念是关键点)
+ * 相机的fov越小，通量就越小
+ *
  * 上式可以转为以下表达式
  * 
  * ∫[A_lens] ∫[sphere] p_a(p) p_w(w) dw dA(p) = 1
@@ -150,7 +153,10 @@ nloJson PerspectiveCamera::toJson() const {
  * 其中p_a(p)为透镜表面的PDF，p_w(w)为相机位置朝相平面的PDF
  *
  * We(p,w) = p_w(w) / (πr^2 cosθ)
- * 
+ *
+ *                    1
+ * We(p,w) = -------------------
+ *            (πr^2) A (cosθ)^4
  * 
  * @param  ray      暂时理解为ray的原点就是相机位置
  * @param  pRaster2 [description]
@@ -185,6 +191,28 @@ Spectrum PerspectiveCamera::We(const Ray &ray, Point2f *pRaster2) const {
 }
 
 
+/**
+ *                 dA cosθ
+ * 重要表达式 dw = -----------
+ *                   r^2
+ *
+ * p(w)dw = p(A)dA   (A为相平面面积)
+ *
+ *                   r^2
+ * p(w) = p(A) * ------------  =  (r^2) / (A cosθ)
+ *                   cosθ
+ *
+ * r = 1/cosθ
+ *
+ *              1
+ * p(w) = -------------
+ *         A (cosθ)^3
+ *         
+ * @param ray    
+ * @param pdfPos 采样透镜表面的pdf
+ * @param pdfDir 在相机原点采样film的PDF(基于立体角)
+ * 
+ */
 void PerspectiveCamera::pdf_We(const Ray &ray, Float *pdfPos, Float *pdfDir) const {
     Transform c2w = cameraToWorld.interpolate(ray.time);
     Float cosTheta = dot(ray.dir, c2w.exec(Vector3f(0, 0, 1)));

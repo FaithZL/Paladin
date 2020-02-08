@@ -252,6 +252,9 @@ Spectrum sampleOneLight(const Interaction &it, const Scene &scene,
 
 /**
  * 用复合重要性采样进行直接光照的估计
+ * todo 借鉴其他渲染器思路
+ * 估计直接光照的时候只进行sample_Li采样然后mis
+ * 复用bsdf路径，继续追踪，如果随机追踪到光源，再进行两侧mis
  * @param  it          场景中的点
  * @param  uShading    用于采样着色点的随机变量，用于生成wi方向，采样bsdf
  * @param  light       光源对象

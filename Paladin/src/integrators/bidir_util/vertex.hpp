@@ -85,9 +85,11 @@ struct Vertex {
                                        const Spectrum &throughput, Float pdf,
                                        const Vertex &prev);
     // 将基于面积的PDF转换为基于立体角的PDF
-    Float convertPdfToDirBase(Float pdf, const Vertex &next) const;
+    Float convertPdf(Float pdf, const Vertex &next) const;
     
     const Interaction &getInteraction() const;
+    
+    Spectrum f(const Vertex &next, TransportMode mode) const;
     
     const Point3f &pos() const;
     
