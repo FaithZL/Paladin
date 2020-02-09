@@ -15,16 +15,29 @@ PALADIN_BEGIN
 
 // 双向方法y通用的一些函数
 
+/**
+ * 随机生成路径顶点
+ * @param  scene    场景
+ * @param  ray      
+ * @param  sampler  
+ * @param  arena    
+ * @param  beta     吞吐量
+ * @param  pdf      选中当前起点的PDF
+ * @param  maxDepth 最大深度
+ * @param  mode     传输模式
+ * @param  path     路径
+ * @return          返回顶点数量
+ */
 int randomWalk(const Scene &scene, RayDifferential ray, Sampler &sampler,
-                MemoryArena &arena, Spectrum beta, Float pdf, int maxDepth,
+                MemoryArena &arena, Spectrum throughput, Float pdf, int maxDepth,
                 TransportMode mode, Vertex *path);
 
-extern int generateCameraSubpath(const Scene &scene, Sampler &sampler,
+int generateCameraSubpath(const Scene &scene, Sampler &sampler,
                                  MemoryArena &arena, int maxDepth,
                                  const Camera &camera, const Point2f &pFilm,
                                  Vertex *path);
 
-extern int generateLightSubpath(const Scene &scene, Sampler &sampler, MemoryArena &arena,
+int generateLightSubpath(const Scene &scene, Sampler &sampler, MemoryArena &arena,
                                 int maxDepth,Float time, const Distribution1D &lightDistr,
                                 const std::unordered_map<const Light *, size_t> &lightToIndex,
                                 Vertex *path);

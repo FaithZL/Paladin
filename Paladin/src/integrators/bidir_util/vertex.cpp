@@ -28,7 +28,9 @@ Vertex Vertex::createCamera(const Camera *camera, const Interaction &it,
 
 Vertex Vertex::createLight(const Light *light, const Ray &ray,const Normal3f &nLight,
                            const Spectrum &Le,Float pdf) {
-    return Vertex(VertexType::Light, EndpointInteraction(light, ray, nLight), Le);
+    Vertex ret(VertexType::Light, EndpointInteraction(light, ray, nLight), Le);
+    ret.pdfFwd = pdf;
+    return ret;
 }
 
 Vertex Vertex::createLight(const EndpointInteraction &ei,

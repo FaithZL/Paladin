@@ -141,8 +141,6 @@ nloJson PerspectiveCamera::toJson() const {
  * 
  * ∫[A_lens] ∫[sphere] We(p,w) cosθ dw dA(p) = 1
  *
- * 以上的表达式的意思是，假设透镜为一个光源，则辐射通量为1(这个概念是关键点)
- * 相机的fov越小，通量就越小
  *
  * 上式可以转为以下表达式
  * 
@@ -157,6 +155,8 @@ nloJson PerspectiveCamera::toJson() const {
  *                    1
  * We(p,w) = -------------------
  *            (πr^2) A (cosθ)^4
+ *
+ * We(p,w) cosθ 又可以理解为采样透镜与film的联合概率密度函数
  * 
  * @param  ray      暂时理解为ray的原点就是相机位置
  * @param  pRaster2 [description]
