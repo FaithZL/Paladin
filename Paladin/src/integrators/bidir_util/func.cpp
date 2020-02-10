@@ -9,6 +9,7 @@
 #include "core/scene.hpp"
 #include "math/sampling.hpp"
 #include "core/sampler.hpp"
+#include "core/bxdf.hpp"
 
 PALADIN_BEGIN
 
@@ -88,7 +89,7 @@ int generateCameraSubpath(const Scene &scene, Sampler &sampler,
     
     return randomWalk(scene, ray, sampler, arena,
                       throughput, pdfDir, maxDepth - 1,
-                      TransportMode::Importance, path + 1) + 1;
+                      TransportMode::Radiance, path + 1) + 1;
 }
 
 int generateLightSubpath(const Scene &scene, Sampler &sampler, MemoryArena &arena,
@@ -132,6 +133,68 @@ int randomWalk(const Scene &scene, RayDifferential ray, Sampler &sampler,
     int bounces = 0;
     Float pdfFwd = pdf, pdfRev = 0;
     
+    while (true) {
+        
+        MediumInteraction mi;
+        SurfaceInteraction isect;
+        
+        bool foundIntr = scene.intersect(ray, &isect);
+        
+        if (ray.medium) {
+            throughput *= ray.medium->sample(ray, sampler, arena, &mi);
+        }
+        if (throughput.IsBlack()) {
+            break;
+        }
+        
+        Vertex &vertex = path[bounces];
+        Vertex &prev = path[bounces - 1];
+        
+        if (mi.isValid()) {
+            Vector3f wo = -ray.dir;
+            Vector3f wi;
+            vertex = Vertex::createMedium(mi, throughput, pdfFwd, prev);
+            if (++bounces >= maxDepth) {
+                break;
+            }
+            pdfFwd = pdfRev = mi.phase->sample_p(wo, &wi, sampler.get2D());
+            ray = mi.spawnRay(wi);
+            
+        } else {
+            if (!foundIntr) {
+                
+            }
+            
+            if (isect.bsdf == nullptr) {
+                ray = isect.spawnRay(ray.dir);
+                continue;
+            }
+            
+            vertex = Vertex::createSurface(isect, throughput, pdfFwd, prev);
+            if (++bounces >= maxDepth) {
+                break;
+            }
+            Vector3f wo = isect.wo;
+            Vector3f wi;
+            BxDFType type;
+            Spectrum f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(), &pdfFwd, BSDF_ALL, &type);
+            if (f.IsBlack() || pdfFwd == 0.f) {
+                break;
+            }
+            throughput *= f * absDot(wi, isect.shading.normal) / pdfFwd;
+            pdfRev = isect.bsdf->pdfDir(wo, wi, BSDF_ALL);
+            
+            if (type & BSDF_SPECULAR) {
+                vertex.delta = true;
+                pdfRev = pdfFwd = 0;
+            }
+            throughput *= correctShadingNormal(isect, wo, wi, mode);
+            ray = isect.spawnRay(wi);
+            prev.pdfRev = vertex.convertPdf(pdfRev, prev);
+        }
+        
+    }
+    return bounces;
 }
 
 PALADIN_END
