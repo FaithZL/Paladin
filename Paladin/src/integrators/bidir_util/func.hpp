@@ -47,8 +47,9 @@ Float MISWeight(const Scene &scene, Vertex *lightVertices,
                 const Distribution1D &lightPdf,
                 const std::unordered_map<const Light *, size_t> &lightToIndex);
 
-extern Spectrum connectPath(const Scene &scene, Vertex *lightVertices, Vertex *cameraVertices, int s,
-                    int t, const Distribution1D &lightDistr,
+Spectrum connectPath(const Scene &scene, Vertex *lightVertices, 
+                    Vertex *cameraVertices, int s, int t, 
+                    const Distribution1D &lightDistr,
                     const std::unordered_map<const Light *, size_t> &lightToIndex,
                     const Camera &camera, Sampler &sampler, Point2f *pRaster,
                     Float *misWeight = nullptr);
@@ -82,13 +83,21 @@ extern Spectrum connectPath(const Scene &scene, Vertex *lightVertices, Vertex *c
 Float correctShadingNormal(const SurfaceInteraction &isect, const Vector3f &wo,
                            const Vector3f &wi, TransportMode mode);
 
-Float infiniteLightDensity(
+/**
+ * 采样光源的pdf，基于面积的PDF
+ * @param  scene             [description]
+ * @param  lightDistr        [description]
+ * @param  lightToDistrIndex [description]
+ * @param  w                 [description]
+ * @return                   [description]
+ */
+Float infiniteLightPdf(
     const Scene &scene, const Distribution1D &lightDistr,
     const std::unordered_map<const Light *, size_t> &lightToDistrIndex,
                                   const Vector3f &w);
 
-Spectrum G(const Scene &scene, Sampler &sampler, const Vertex &v0,
-           const Vertex &v1);
+Spectrum G(const Scene &scene, Sampler &sampler, 
+            const Vertex &v0,const Vertex &v1);
 
 PALADIN_END
 

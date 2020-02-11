@@ -251,7 +251,7 @@ Float Vertex::pdfLightOrigin(const Scene &scene, const Vertex &v,
     if (w.lengthSquared() == 0) return 0.;
     w = normalize(w);
     if (isInfiniteLight()) {
-        return infiniteLightDensity(scene, lightDistr, lightToDistrIndex, w);
+        return infiniteLightPdf(scene, lightDistr, lightToDistrIndex, w);
     } else {
 
         Float pdfPos, pdfDir, pdfChoice = 0;

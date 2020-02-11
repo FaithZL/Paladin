@@ -13,7 +13,7 @@
 
 PALADIN_BEGIN
 
-Float infiniteLightDensity(
+Float infiniteLightPdf(
     const Scene &scene, const Distribution1D &lightDistr,
     const std::unordered_map<const Light *, size_t> &lightToDistrIndex,
     const Vector3f &w) {
@@ -23,6 +23,7 @@ Float infiniteLightDensity(
         size_t index = lightToDistrIndex.find(light.get())->second;
         pdf += light->pdf_Li(Interaction(), -w) * lightDistr.funcAt(index);
     }
+    // pdf需要归一化
     return pdf / (lightDistr.getFuncInt() * lightDistr.count());
 }
 
@@ -107,7 +108,8 @@ int generateLightSubpath(const Scene &scene, Sampler &sampler, MemoryArena &aren
     Normal3f nLight;
     Float pdfPos, pdfDir;
     
-    Spectrum Le = light->sample_Le(sampler.get2D(), sampler.get2D(), time, &ray, &nLight, &pdfPos, &pdfDir);
+    Spectrum Le = light->sample_Le(sampler.get2D(), sampler.get2D(),
+                                time, &ray, &nLight, &pdfPos, &pdfDir);
     if (pdfPos == 0 || pdfDir == 0 || Le.IsBlack()) {
         return 0;
     }
@@ -120,6 +122,18 @@ int generateLightSubpath(const Scene &scene, Sampler &sampler, MemoryArena &aren
     int nVertices = randomWalk(scene, ray, sampler, arena,
                                throughput, pdfDir, maxDepth - 1,
                                TransportMode::Importance, path + 1);
+    // 因为infiniteLight采样的范围是在
+    // 如果采样的是环境光源，则光源路径第二个点
+    // 否则用pdfDir
+    if (path[0].isInfiniteLight()) {
+        if (nVertices > 0) {
+            path[1].pdfFwd = pdfPos;
+            if (path[1].isOnSurface()) {
+                path[1].pdfFwd *= absDot(path[0].ng(), ray.dir);
+            }
+        }
+        path[0].pdfFwd = infiniteLightPdf(scene, lightDistr, lightToIndex, ray.dir);
+    }
     
     return nVertices + 1;
 }
@@ -132,7 +146,9 @@ int randomWalk(const Scene &scene, RayDifferential ray, Sampler &sampler,
         return 0;
     int bounces = 0;
     Float pdfFwd = pdf, pdfRev = 0;
-    
+    // 基本思路
+    // 根据指定的ray，按照衰减分布采样medium
+    // 则根据采样到的点的p函数或者bsdf函数分布生成下一个顶点
     while (true) {
         
         MediumInteraction mi;
@@ -162,7 +178,12 @@ int randomWalk(const Scene &scene, RayDifferential ray, Sampler &sampler,
             
         } else {
             if (!foundIntr) {
-                
+                // 如果是从相机发出的射线，没有交点时，最后一个顶点是环境光源上的
+                if (mode == TransportMode::Radiance) {
+                    vertex = Vertex::createLight(EndpointInteraction(ray),
+                                                 throughput, pdfFwd);
+                    ++bounces;
+                }
             }
             
             if (isect.bsdf == nullptr) {
@@ -177,7 +198,8 @@ int randomWalk(const Scene &scene, RayDifferential ray, Sampler &sampler,
             Vector3f wo = isect.wo;
             Vector3f wi;
             BxDFType type;
-            Spectrum f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(), &pdfFwd, BSDF_ALL, &type);
+            Spectrum f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(), 
+                                            &pdfFwd, BSDF_ALL, &type);
             if (f.IsBlack() || pdfFwd == 0.f) {
                 break;
             }
@@ -190,11 +212,19 @@ int randomWalk(const Scene &scene, RayDifferential ray, Sampler &sampler,
             }
             throughput *= correctShadingNormal(isect, wo, wi, mode);
             ray = isect.spawnRay(wi);
-            prev.pdfRev = vertex.convertPdf(pdfRev, prev);
         }
-        
+        prev.pdfRev = vertex.convertPdf(pdfRev, prev);
     }
     return bounces;
+}
+
+Spectrum connectPath(const Scene &scene, Vertex *lightVertices, 
+                    Vertex *cameraVertices, int s, int t, 
+                    const Distribution1D &lightDistr,
+                    const std::unordered_map<const Light *, size_t> &lightToIndex,
+                    const Camera &camera, Sampler &sampler, Point2f *pRaster,
+                    Float *misWeight) {
+    
 }
 
 PALADIN_END

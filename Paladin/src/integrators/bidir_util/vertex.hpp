@@ -31,9 +31,9 @@ struct Vertex {
     };
     
     bool delta = false;
-    // 当前顶点的前向pdf
+    // 上个顶点正向采样当前顶点的pdf
     Float pdfFwd = 0;
-    // 当前顶点的后向pdf（如果光反向传播）
+    // 下个顶点反向采样到当前顶点的pdf（如果光反向传播）
     Float pdfRev = 0;
     
     Vertex() : ei() {
