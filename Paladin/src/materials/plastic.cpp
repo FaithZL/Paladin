@@ -9,6 +9,7 @@
 #include "core/bxdf.hpp"
 #include "core/spectrum.hpp"
 #include "core/texture.hpp"
+#include "bxdfs/lambert.hpp"
 
 PALADIN_BEGIN
 

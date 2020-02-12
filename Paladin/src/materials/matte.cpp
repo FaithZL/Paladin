@@ -11,6 +11,7 @@
 #include "core/interaction.hpp"
 #include "core/texture.hpp"
 #include "textures/constant.hpp"
+#include "bxdfs/lambert.hpp"
 
 PALADIN_BEGIN
 

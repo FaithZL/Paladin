@@ -371,6 +371,8 @@
 		F5304BFDC59F4F208D7B7AF8 /* ImfStandardAttributes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F5684FEF3D74445A5D72DCB /* ImfStandardAttributes.cpp */; settings = {COMPILER_FLAGS = ""; }; };
 		F618B36923ED9CC1004E0727 /* vertex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F618B36723ED9CC1004E0727 /* vertex.cpp */; };
 		F618B36C23EDA86D004E0727 /* func.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F618B36A23EDA86D004E0727 /* func.cpp */; };
+		F619E5D823F3DB96007F35EF /* lambert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F619E5D623F3DB96007F35EF /* lambert.cpp */; };
+		F619E5DB23F3DEA9007F35EF /* specular.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F619E5D923F3DEA9007F35EF /* specular.cpp */; };
 		F63925CF23E92196007C6659 /* mlt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63925CD23E92196007C6659 /* mlt.cpp */; };
 		F63925D323E9B797007C6659 /* mcmc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63925D123E9B797007C6659 /* mcmc.cpp */; };
 		F736D2717E1446CD87D6DB68 /* distant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9138C620B527494C9C145B59 /* distant.cpp */; settings = {COMPILER_FLAGS = ""; }; };
@@ -1424,6 +1426,10 @@
 		F618B36823ED9CC1004E0727 /* vertex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vertex.hpp; sourceTree = "<group>"; };
 		F618B36A23EDA86D004E0727 /* func.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = func.cpp; sourceTree = "<group>"; };
 		F618B36B23EDA86D004E0727 /* func.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = func.hpp; sourceTree = "<group>"; };
+		F619E5D623F3DB96007F35EF /* lambert.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = lambert.cpp; sourceTree = "<group>"; };
+		F619E5D723F3DB96007F35EF /* lambert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = lambert.hpp; sourceTree = "<group>"; };
+		F619E5D923F3DEA9007F35EF /* specular.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = specular.cpp; sourceTree = "<group>"; };
+		F619E5DA23F3DEA9007F35EF /* specular.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = specular.hpp; sourceTree = "<group>"; };
 		F63925CA23E918BB007C6659 /* endpoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = endpoint.h; sourceTree = "<group>"; };
 		F63925CB23E91D93007C6659 /* assignment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = assignment.h; sourceTree = "<group>"; };
 		F63925CD23E92196007C6659 /* mlt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mlt.cpp; path = src/integrators/mlt/mlt.cpp; sourceTree = SOURCE_ROOT; };
@@ -2554,6 +2560,7 @@
 		DAFDEE0B772940A9AB284500 /* materials */ = {
 			isa = PBXGroup;
 			children = (
+				F619E5D323F3DB3F007F35EF /* bxdfs */,
 				8E1FAAF29DAA46B6A190000B /* disney */,
 				DF0D04D1BDDA4DACAB39AAD9 /* clearcoated.cpp */,
 				4AC49F8124034A0BA58F7FD2 /* clearcoated.hpp */,
@@ -2676,6 +2683,18 @@
 				CE7DD1B0D5434F898258C09B /* vlog_is_on.h */,
 			);
 			name = "Header Files";
+			sourceTree = "<group>";
+		};
+		F619E5D323F3DB3F007F35EF /* bxdfs */ = {
+			isa = PBXGroup;
+			children = (
+				F619E5D623F3DB96007F35EF /* lambert.cpp */,
+				F619E5D723F3DB96007F35EF /* lambert.hpp */,
+				F619E5D923F3DEA9007F35EF /* specular.cpp */,
+				F619E5DA23F3DEA9007F35EF /* specular.hpp */,
+			);
+			name = bxdfs;
+			path = src/materials/bxdfs;
 			sourceTree = "<group>";
 		};
 		F63925C623E915E8007C6659 /* bidir_util */ = {
@@ -3570,6 +3589,7 @@
 				1696BB4E8F8A40D4A18B4AF6 /* disney.cpp in Sources */,
 				86580322FEC445BAADAC7703 /* glass.cpp in Sources */,
 				4F7E166DC48847668B199B9D /* hyper.cpp in Sources */,
+				F619E5D823F3DB96007F35EF /* lambert.cpp in Sources */,
 				82F07DF45A2B4A60AB216AC7 /* matte.cpp in Sources */,
 				C438D495EBF843DE8A6B4BA2 /* metal.cpp in Sources */,
 				BF64169454C44A8796B1F0D3 /* mirror.cpp in Sources */,
@@ -3590,6 +3610,7 @@
 				9F4B5A430F94492788A72B17 /* sceneparser.cpp in Sources */,
 				15893C91BA224AE3AFF19E14 /* halton.cpp in Sources */,
 				1487121576DD424299A768DF /* random.cpp in Sources */,
+				F619E5DB23F3DEA9007F35EF /* specular.cpp in Sources */,
 				6F46F60D314340ABAA12CFB3 /* stratified.cpp in Sources */,
 				6F6A9EE0A68242FDB48DA9C9 /* cone.cpp in Sources */,
 				9B8A068A80264B71A58D3164 /* curve.cpp in Sources */,

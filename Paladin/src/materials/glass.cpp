@@ -9,6 +9,7 @@
 #include "core/interaction.hpp"
 #include "core/bxdf.hpp"
 #include "core/texture.hpp"
+#include "bxdfs/specular.hpp"
 
 PALADIN_BEGIN
 

@@ -8,6 +8,7 @@
 #include "mirror.hpp"
 #include "core/interaction.hpp"
 #include "core/bxdf.hpp"
+#include "bxdfs/specular.hpp"
 #include "core/texture.hpp"
 
 PALADIN_BEGIN
