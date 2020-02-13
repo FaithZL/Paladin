@@ -107,10 +107,11 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
 		if (isect.bssrdf && (flags & BSDF_TRANSMISSION)) {
 			// todo 处理bssrdf
 		}
-		// Spectrum rrThroughput = throughput * etaScale;
-		// 可能会由于俄罗斯轮盘而结束当前路径追踪
-		if (throughput.MaxComponentValue() < _rrThreshold && bounces > 3) {
-            Float q = std::max((Float)0.05, 1 - throughput.MaxComponentValue());
+        // 为何不直接使用throughput，包含的是radiance，radiance是经过折射缩放的
+        // 但rrThroughput没有经过折射缩放，包含的是power，我们需要根据能量去筛选路径
+        Spectrum rrThroughput = throughput * etaScale;
+		if (rrThroughput.MaxComponentValue() < _rrThreshold && bounces > 3) {
+            Float q = std::max((Float)0.05, 1 - rrThroughput.MaxComponentValue());
             if (sampler.get1D() < q) {
                 break;
 			}

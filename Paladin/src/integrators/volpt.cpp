@@ -142,9 +142,11 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
                 // todo 处理bssrdf
             }
         }
-        
-        if (throughput.MaxComponentValue() < _rrThreshold && bounce > 3) {
-            Float q = std::max((Float)0.05, 1 - throughput.MaxComponentValue());
+        // 为何不直接使用throughput，包含的是radiance，radiance是经过折射缩放的
+        // 但rrThroughput没有经过折射缩放，包含的是power，我们需要根据能量去筛选路径
+        Spectrum rrThroughput = throughput * etaScale;
+        if (rrThroughput.MaxComponentValue() < _rrThreshold && bounce > 3) {
+            Float q = std::max((Float)0.05, 1 - rrThroughput.MaxComponentValue());
             if (sampler.get1D() < q) {
                 break;
             }
