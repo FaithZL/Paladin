@@ -12,6 +12,7 @@
 #include "core/texture.hpp"
 #include "textures/constant.hpp"
 #include "bxdfs/lambert.hpp"
+#include "materials/bxdfs/bsdf.hpp"
 
 PALADIN_BEGIN
 

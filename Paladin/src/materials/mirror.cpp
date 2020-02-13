@@ -10,6 +10,7 @@
 #include "core/bxdf.hpp"
 #include "bxdfs/specular.hpp"
 #include "core/texture.hpp"
+#include "materials/bxdfs/bsdf.hpp"
 
 PALADIN_BEGIN
 

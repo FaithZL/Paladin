@@ -10,6 +10,7 @@
 #include "math/sampling.hpp"
 #include "core/sampler.hpp"
 #include "core/bxdf.hpp"
+#include "materials/bxdfs/bsdf.hpp"
 
 PALADIN_BEGIN
 

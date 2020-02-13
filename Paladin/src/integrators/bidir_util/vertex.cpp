@@ -13,6 +13,7 @@
 #include "core/scene.hpp"
 #include "core/bxdf.hpp"
 #include "func.hpp"
+#include "materials/bxdfs/bsdf.hpp"
 
 PALADIN_BEGIN
 

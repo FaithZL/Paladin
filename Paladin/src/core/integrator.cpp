@@ -10,6 +10,7 @@
 #include "camera.hpp"
 #include "tools/parallel.hpp"
 #include "tools/progressreporter.hpp"
+#include "materials/bxdfs/bsdf.hpp"
 
 PALADIN_BEGIN
 

@@ -8,6 +8,7 @@
 #include "volpt.hpp"
 #include "core/camera.hpp"
 #include "core/medium.hpp"
+#include "materials/bxdfs/bsdf.hpp"
 
 PALADIN_BEGIN
 

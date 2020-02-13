@@ -8,6 +8,7 @@
 #include "mix.hpp"
 #include "core/bxdf.hpp"
 #include "core/texture.hpp"
+#include "materials/bxdfs/bsdf.hpp"
 PALADIN_BEGIN
 
 void MixMaterial::computeScatteringFunctions(SurfaceInteraction *si,

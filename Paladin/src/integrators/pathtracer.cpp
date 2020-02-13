@@ -8,6 +8,7 @@
 
 #include "pathtracer.hpp"
 #include "core/camera.hpp"
+#include "materials/bxdfs/bsdf.hpp"
 
 PALADIN_BEGIN
 

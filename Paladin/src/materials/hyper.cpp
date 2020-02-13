@@ -11,6 +11,7 @@
 #include "core/texture.hpp"
 #include "bxdfs/lambert.hpp"
 #include "bxdfs/specular.hpp"
+#include "materials/bxdfs/bsdf.hpp"
 
 PALADIN_BEGIN
 
