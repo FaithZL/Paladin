@@ -360,7 +360,6 @@
 		E892E0DE3131432EB8BCBCE9 /* IlmThreadMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD73478D7E0E462A94D01268 /* IlmThreadMutex.cpp */; settings = {COMPILER_FLAGS = ""; }; };
 		E8CF897A21364A388D13FE9B /* ImfChannelListAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D357A90D53D49C491C94887 /* ImfChannelListAttribute.cpp */; settings = {COMPILER_FLAGS = ""; }; };
 		EAF70C49C9284C50B707DC86 /* spot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EFBC9AAB60B349559F80EEF1 /* spot.cpp */; settings = {COMPILER_FLAGS = ""; }; };
-		EC198EE5FFE749CAB7F16895 /* microfacet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE736DE43EBF4F3E8CB9A667 /* microfacet.cpp */; settings = {COMPILER_FLAGS = ""; }; };
 		ED2E4239FDAF435EB5197C02 /* IexMathFpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB9C653CB3F145B69FAD9B15 /* IexMathFpu.cpp */; settings = {COMPILER_FLAGS = ""; }; };
 		ED585DA2ECEF46F3A89628B6 /* stl_logging_unittest.cc in Sources */ = {isa = PBXBuildFile; fileRef = F370877C9BC4429594E3B40F /* stl_logging_unittest.cc */; settings = {COMPILER_FLAGS = ""; }; };
 		EF9B1EE4D996403C844E0946 /* ldebug.c in Sources */ = {isa = PBXBuildFile; fileRef = F902E0AD003F4BB3B7A64D9A /* ldebug.c */; settings = {COMPILER_FLAGS = ""; }; };
@@ -371,6 +370,10 @@
 		F5304BFDC59F4F208D7B7AF8 /* ImfStandardAttributes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F5684FEF3D74445A5D72DCB /* ImfStandardAttributes.cpp */; settings = {COMPILER_FLAGS = ""; }; };
 		F618B36923ED9CC1004E0727 /* vertex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F618B36723ED9CC1004E0727 /* vertex.cpp */; };
 		F618B36C23EDA86D004E0727 /* func.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F618B36A23EDA86D004E0727 /* func.cpp */; };
+		F618CC9023F64C40005648D9 /* reflection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F618CC8E23F64C40005648D9 /* reflection.cpp */; };
+		F618CC9323F64C78005648D9 /* transmission.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F618CC9123F64C78005648D9 /* transmission.cpp */; };
+		F618CC9623F65606005648D9 /* fresnelblend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F618CC9423F65606005648D9 /* fresnelblend.cpp */; };
+		F618CC9723F658F8005648D9 /* distribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F618CC8C23F64B1D005648D9 /* distribute.cpp */; };
 		F619E5D823F3DB96007F35EF /* lambert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F619E5D623F3DB96007F35EF /* lambert.cpp */; };
 		F619E5DB23F3DEA9007F35EF /* specular.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F619E5D923F3DEA9007F35EF /* specular.cpp */; };
 		F62D230123F5117F008B3C98 /* bsdf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F62D22FF23F5117F008B3C98 /* bsdf.cpp */; };
@@ -1153,7 +1156,6 @@
 		7D09954FFBF4496BAF9AC355 /* bdpt.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = bdpt.cpp; path = src/integrators/bdpt/bdpt.cpp; sourceTree = SOURCE_ROOT; };
 		7D31DF2B56634A0E802A6312 /* diffuse.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = diffuse.cpp; path = src/lights/diffuse.cpp; sourceTree = SOURCE_ROOT; };
 		7D3CA689C4564296AB9748A9 /* testrender.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = testrender.h; path = src/alltest/testrender.h; sourceTree = SOURCE_ROOT; };
-		7DDA9DC6C72042E29C03448A /* microfacet.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = microfacet.hpp; path = src/core/microfacet.hpp; sourceTree = SOURCE_ROOT; };
 		7EB079591C6940E195D65116 /* ImfEnvmapAttribute.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfEnvmapAttribute.cpp; path = third/openexr/OpenEXR/IlmImf/ImfEnvmapAttribute.cpp; sourceTree = SOURCE_ROOT; };
 		7EDC08691596456BB55340E9 /* stb_voxel_render.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_voxel_render.h; path = third/stblib/stb/stb_voxel_render.h; sourceTree = SOURCE_ROOT; };
 		7F0EBA1C4B9449ECA9FB4DF9 /* ImfTileDescriptionAttribute.o */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.objfile"; fileEncoding = 4; name = ImfTileDescriptionAttribute.o; path = "../xcode/third/openexr/OpenEXR/IlmImf/$(PROJECT_NAME).build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/IlmImf-obj.build/Objects-normal/$(CURRENT_ARCH)/ImfTileDescriptionAttribute.o"; sourceTree = SOURCE_ROOT; };
@@ -1250,7 +1252,6 @@
 		ADA1093A6224445DBB467F22 /* ImfGenericOutputFile.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImfGenericOutputFile.cpp; path = third/openexr/OpenEXR/IlmImf/ImfGenericOutputFile.cpp; sourceTree = SOURCE_ROOT; };
 		ADED9B8289E04DF3A05AF000 /* envmap.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = envmap.hpp; path = src/lights/envmap.hpp; sourceTree = SOURCE_ROOT; };
 		AE16E8C14BBA4048AF1E064D /* perspective.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = perspective.cpp; path = src/cameras/perspective.cpp; sourceTree = SOURCE_ROOT; };
-		AE736DE43EBF4F3E8CB9A667 /* microfacet.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = microfacet.cpp; path = src/core/microfacet.cpp; sourceTree = SOURCE_ROOT; };
 		AE78450888EE423F96EC28E9 /* ImfDeepScanLineInputFile.o */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.objfile"; fileEncoding = 4; name = ImfDeepScanLineInputFile.o; path = "../xcode/third/openexr/OpenEXR/IlmImf/$(PROJECT_NAME).build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/IlmImf-obj.build/Objects-normal/$(CURRENT_ARCH)/ImfDeepScanLineInputFile.o"; sourceTree = SOURCE_ROOT; };
 		AF8710EF5A694A51BDDD40FF /* ImfRational.o */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.objfile"; fileEncoding = 4; name = ImfRational.o; path = "../xcode/third/openexr/OpenEXR/IlmImf/$(PROJECT_NAME).build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/IlmImf-obj.build/Objects-normal/$(CURRENT_ARCH)/ImfRational.o"; sourceTree = SOURCE_ROOT; };
 		AFAAAB7482FF40529CF52AF8 /* bdpt.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = bdpt.hpp; path = src/integrators/bdpt/bdpt.hpp; sourceTree = SOURCE_ROOT; };
@@ -1427,6 +1428,14 @@
 		F618B36823ED9CC1004E0727 /* vertex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vertex.hpp; sourceTree = "<group>"; };
 		F618B36A23EDA86D004E0727 /* func.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = func.cpp; sourceTree = "<group>"; };
 		F618B36B23EDA86D004E0727 /* func.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = func.hpp; sourceTree = "<group>"; };
+		F618CC8C23F64B1D005648D9 /* distribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = distribute.cpp; sourceTree = "<group>"; };
+		F618CC8D23F64B1D005648D9 /* distribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = distribute.hpp; sourceTree = "<group>"; };
+		F618CC8E23F64C40005648D9 /* reflection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = reflection.cpp; sourceTree = "<group>"; };
+		F618CC8F23F64C40005648D9 /* reflection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = reflection.hpp; sourceTree = "<group>"; };
+		F618CC9123F64C78005648D9 /* transmission.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transmission.cpp; sourceTree = "<group>"; };
+		F618CC9223F64C78005648D9 /* transmission.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transmission.hpp; sourceTree = "<group>"; };
+		F618CC9423F65606005648D9 /* fresnelblend.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fresnelblend.cpp; sourceTree = "<group>"; };
+		F618CC9523F65606005648D9 /* fresnelblend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fresnelblend.hpp; sourceTree = "<group>"; };
 		F619E5D623F3DB96007F35EF /* lambert.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = lambert.cpp; sourceTree = "<group>"; };
 		F619E5D723F3DB96007F35EF /* lambert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = lambert.hpp; sourceTree = "<group>"; };
 		F619E5D923F3DEA9007F35EF /* specular.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = specular.cpp; sourceTree = "<group>"; };
@@ -1861,8 +1870,6 @@
 				F1FC90347B6C442BA751AF42 /* material.hpp */,
 				309E196AB47E46A3A8A3E996 /* medium.cpp */,
 				05C68FE416544FACB4FC32CE /* medium.hpp */,
-				AE736DE43EBF4F3E8CB9A667 /* microfacet.cpp */,
-				7DDA9DC6C72042E29C03448A /* microfacet.hpp */,
 				DBB52A3EA56249599EDB681D /* mipmap.h */,
 				BB229CA90C544CE3A9C6478A /* paladin.cpp */,
 				6DE362C163194DF2BC84CC9F /* paladin.hpp */,
@@ -2688,9 +2695,25 @@
 			name = "Header Files";
 			sourceTree = "<group>";
 		};
+		F618CC8B23F64B1D005648D9 /* microfacet */ = {
+			isa = PBXGroup;
+			children = (
+				F618CC8C23F64B1D005648D9 /* distribute.cpp */,
+				F618CC8D23F64B1D005648D9 /* distribute.hpp */,
+				F618CC8E23F64C40005648D9 /* reflection.cpp */,
+				F618CC8F23F64C40005648D9 /* reflection.hpp */,
+				F618CC9123F64C78005648D9 /* transmission.cpp */,
+				F618CC9223F64C78005648D9 /* transmission.hpp */,
+				F618CC9423F65606005648D9 /* fresnelblend.cpp */,
+				F618CC9523F65606005648D9 /* fresnelblend.hpp */,
+			);
+			path = microfacet;
+			sourceTree = "<group>";
+		};
 		F619E5D323F3DB3F007F35EF /* bxdfs */ = {
 			isa = PBXGroup;
 			children = (
+				F618CC8B23F64B1D005648D9 /* microfacet */,
 				F619E5D623F3DB96007F35EF /* lambert.cpp */,
 				F619E5D723F3DB96007F35EF /* lambert.hpp */,
 				F619E5D923F3DEA9007F35EF /* specular.cpp */,
@@ -3551,6 +3574,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F618CC9723F658F8005648D9 /* distribute.cpp in Sources */,
 				93958F53AD7E4168AA61EA32 /* bvh.cpp in Sources */,
 				5F45D2EEBD2D4C65ADEC7132 /* kdtree.cpp in Sources */,
 				5DFDFACE86C7486E8DF886DA /* perspective.cpp in Sources */,
@@ -3563,7 +3587,6 @@
 				57ECC26009BB4AB18505E35B /* light.cpp in Sources */,
 				0D0F13ACFE1840B2802E2115 /* material.cpp in Sources */,
 				F4E589C9155849F8B26DA8AD /* medium.cpp in Sources */,
-				EC198EE5FFE749CAB7F16895 /* microfacet.cpp in Sources */,
 				A25C0F0263F24B49B2DC0269 /* paladin.cpp in Sources */,
 				0DDCBB217771403E8666DFEE /* primitive.cpp in Sources */,
 				4279537EC11346608BC8CCB8 /* sampler.cpp in Sources */,
@@ -3634,7 +3657,10 @@
 				11F298EFF47C4348BB76DE4C /* fileutil.cpp in Sources */,
 				B3EEF1834888449D8CED9712 /* memory.cpp in Sources */,
 				E85321A2ABF540C0B3A43383 /* parallel.cpp in Sources */,
+				F618CC9323F64C78005648D9 /* transmission.cpp in Sources */,
 				06E4AD970E73472D933951AE /* progressreporter.cpp in Sources */,
+				F618CC9623F65606005648D9 /* fresnelblend.cpp in Sources */,
+				F618CC9023F64C40005648D9 /* reflection.cpp in Sources */,
 				CC3FF1E9C7EC4859A9E86FD3 /* statistics.cpp in Sources */,
 				88C122123A7F4A269903C299 /* stb_vorbis.c in Sources */,
 			);

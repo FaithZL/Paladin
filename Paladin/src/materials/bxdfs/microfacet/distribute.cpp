@@ -1,12 +1,12 @@
 //
-//  microfacet.cpp
+//  distribute.cpp
 //  Paladin
 //
 //  Created by SATAN_Z on 2019/9/20.
 //
 
-#include "microfacet.hpp"
-#include "bxdf.hpp"
+#include "distribute.hpp"
+#include "core/bxdf.hpp"
 
 PALADIN_BEGIN
 
@@ -139,7 +139,7 @@ Vector3f BeckmannDistribution::sample_wh(const Vector3f &wo,
         if (flip) {
             wh = -wh;
         }
-        return wh;        
+        return wh;
     } else {
         // 忽略遮挡
         Float tan2Theta, phi;
@@ -168,7 +168,7 @@ Vector3f BeckmannDistribution::sample_wh(const Vector3f &wo,
         if (!sameHemisphere(wo, wh)) {
             wh = -wh;
         }
-        return wh;        
+        return wh;
     }
 }
 
@@ -208,7 +208,7 @@ Float GGXDistribution::D(const Vector3f &wh) const {
 
     Float term1 = 1 + (cosPhi2 / alphax2 + sinPhi2 / alphay2) * _tanTheta2;
     Float term2 = term1 * term1;
-    return 1.0 / (Pi * _alphax * _alphay * cosTheta4 * term2);    
+    return 1.0 / (Pi * _alphax * _alphay * cosTheta4 * term2);
 }
 
 static void TrowbridgeReitzSample11(Float cosTheta, Float U1, Float U2,
@@ -290,11 +290,11 @@ Vector3f GGXDistribution::sample_wh(const Vector3f &wo,
     Vector3f wh;
     if (_sampleVisibleArea) {
         // 不忽略几何遮挡
-        // 这个不忽略阻挡的采样太TMD复杂了，暂时不管推导过程了，暂时认怂，搞完主线再说todo        
+        // 这个不忽略阻挡的采样太TMD复杂了，暂时不管推导过程了，暂时认怂，搞完主线再说todo
         bool flip = wo.z < 0;
         wh = TrowbridgeReitzSample(flip ? -wo : wo, _alphax, _alphay, u[0], u[1]);
         if (flip) {
-            wh = -wh;        
+            wh = -wh;
         }
     } else {
         Float cosTheta = 0, phi = (2 * Pi) * u[1];
@@ -317,10 +317,10 @@ Vector3f GGXDistribution::sample_wh(const Vector3f &wo,
         Float sinTheta = std::sqrt(std::max((Float)0., (Float)1. - cosTheta * cosTheta));
         wh = sphericalDirection(sinTheta, cosTheta, phi);
         if (!sameHemisphere(wo, wh)) {
-            wh = -wh;        
+            wh = -wh;
         }
     }
-    return wh;    
+    return wh;
 }
 
 PALADIN_END

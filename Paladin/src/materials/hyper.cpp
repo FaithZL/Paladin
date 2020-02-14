@@ -12,6 +12,7 @@
 #include "bxdfs/lambert.hpp"
 #include "bxdfs/specular.hpp"
 #include "materials/bxdfs/bsdf.hpp"
+#include "bxdfs/microfacet/reflection.hpp"
 
 PALADIN_BEGIN
 

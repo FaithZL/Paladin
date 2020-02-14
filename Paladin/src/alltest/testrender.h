@@ -15,6 +15,7 @@
 #include "cameras/perspective.hpp"
 #include "integrators/pathtracer.hpp"
 #include "samplers/stratified.hpp"
+#include "samplers/random.hpp"
 #include "core/primitive.hpp"
 
 #include "materials/matte.hpp"
@@ -30,77 +31,70 @@
 
 #include "tools/parallel.hpp"
 #include "lights/envmap.hpp"
+#include "ext/nlohmann/json.hpp"
 
 
 using namespace paladin;
 using namespace std;
+using namespace nlohmann;
 
 void testscene() {
-//    parallelInit();
-//    auto pos = Point3f(0,0,-5);
-//    auto target = Point3f(0,0,0);
-//    auto up = Vector3f(0,1,0);
-//    auto c2w = Transform::lookAt(pos,target,up).getInverse_ptr();
-//    auto aniTrans = AnimatedTransform(shared_ptr<const Transform>(c2w), 0, shared_ptr<const Transform>(c2w), 0);
-//
-//    auto res = Point2i(400,400);
-//    auto windows = AABB2f(Point2f(0,0), Point2f(1,1));
-//    std::string fn = "pathtracing.png";
-//    auto filter = std::unique_ptr<Filter>(new BoxFilter(Vector2f(2,2)));
-//    auto pFilm = new Film(res, windows, std::move(filter), 45, fn, 1);
-//
-//    auto camera = std::shared_ptr<Camera>(new PerspectiveCamera(aniTrans, AABB2f(Point2f(-1,-1), Point2f(1,1)), 0, 0, 0, 1e6, 45, std::shared_ptr<Film>(pFilm), nullptr));
-//
-//    auto sampler = std::shared_ptr<Sampler>(new StratifiedSampler(1, 1, true, 20));
-//
-//    auto pt = new PathTracer(6, camera, sampler, AABB2i(Point2i(0,0), res));
-//
-//    auto lightTrans = shared_ptr<const Transform>(Transform::identity_ptr());
-//    Float srgb[3] = {1, 0.2, 0.5};
-//    auto pLight = std::shared_ptr<Light>(new DistantLight(lightTrans,Spectrum::FromRGB(srgb),Vector3f(1,1,0)));
-//    Float color[3] = {0.1, 0.9, 0.1};
-//    auto colorKd = std::shared_ptr<ConstantTexture<Spectrum>>(new ConstantTexture<Spectrum>(Spectrum::FromRGB(color, SpectrumType::Illuminant)));
-//    auto sig = std::shared_ptr<ConstantTexture<Float>>(new ConstantTexture<Float>(0));
-//    auto matte = std::shared_ptr<Material>(new MatteMaterial(colorKd, sig, nullptr));
-//
-//    auto tralst = shared_ptr<const Transform>(Transform::translate_ptr(Vector3f(0,0, 0)));
-//    auto scale = Transform::scale(1.2, 1, 1);
-//
-//    auto envpath = "res/derelict_overpass_1k.hdr";
-//    auto el = Spectrum(1.0f);
-//    auto env2w = shared_ptr<const Transform>(Transform::rotateX_ptr(-90));
-//    auto env = std::shared_ptr<Light>(new EnvironmentMap(env2w, el,10, envpath));
-//
-//    auto inverse = tralst->getInverse_ptr();
-//    auto sphere = std::shared_ptr<Shape>(new Sphere(tralst, shared_ptr<const Transform>(inverse), false, 0.75, 0.75, -0.75, 360));
-//
-//    auto gSphere = std::shared_ptr<Primitive>(new GeometricPrimitive(sphere, matte, nullptr, nullptr));
-//    auto mi = MediumInterface(nullptr);
-//
-//    auto t2 = Transform::translate_ptr(Vector3f(-2,0,0));
-//    auto int2 = t2->getInverse_ptr();
-//    auto lsphere = std::shared_ptr<Shape>(new Sphere(shared_ptr<const Transform>(t2), shared_ptr<const Transform>(int2), false, 0.75, 0.75, -0.75, 360));
-//
-//
-//
-//    auto areaL = std::shared_ptr<AreaLight>(new DiffuseAreaLight((tralst), mi, Spectrum(1), 10, lsphere));
-//    auto l2 = std::shared_ptr<Primitive>(new GeometricPrimitive
-//                                         (lsphere, nullptr, areaL, nullptr));
-//    std::vector<std::shared_ptr<Primitive>> lst;
-//    lst.push_back(l2);
-//    lst.push_back(gSphere);
-//
-//    auto bvh = std::shared_ptr<Primitive>(new BVHAccel(lst));
-//    std::vector<std::shared_ptr<Light>> lights;
-//    lights.push_back(areaL);
-//    lights.push_back(pLight);
-//
-////    lights.push_back(env);
-//
-//    auto scene = paladin::Scene(bvh, lights);
-//
-//    pt->render(scene);
-//    parallelCleanup();
+    
+    BoxFilter * flt = new BoxFilter(Vector2f(1.0, 1.0));
+    
+    json filmData = R"(
+        {
+            "resolution" : [500, 500],
+            "cropWindow" : [0,0,1,1],
+            "fileName" : "paladin.png",
+            "diagonal" : 1,
+            "scale" : 1
+        }
+    )"_json;
+    
+    auto film = dynamic_cast<Film *>(createFilm(filmData, {flt}));
+    
+    json patch = R"({
+        "shutterOpen" : 0,
+        "shutterClose" : 1,
+        "lensRadius" : 0,
+        "focalDistance" : 100,
+        "fov" : 45,
+        "aspect" : 1,
+        "lookAt" : [
+            [0,0,-5],
+            [0,0,0],
+            [0,1,0]
+        ],
+        "lookAtEnd" : [
+            [0,0,-5],
+            [0,0,0],
+            [0,1,0]
+        ]
+    })"_json;
+    
+    
+    auto camera = dynamic_cast<PerspectiveCamera *>(createPerspectiveCamera(patch, {film}));
+    
+    json samplerData = R"( {
+         "spp" : 8
+    })"_json;
+    
+    Sampler * sampler = dynamic_cast<Sampler*>(createRandomSampler(samplerData));
+    
+    Interaction intr;
+    Spectrum sum;
+    int n = 100;
+    Vector3f wi;
+    Float pdf;
+    VisibilityTester vis;
+//    intr.pos.z += 10;
+    for(int i = 0; i < n ; ++i) {
+        auto we = camera->sample_Wi(intr, sampler->get2D(), &wi, &pdf, nullptr, &vis);
+        sum += we / pdf;
+    }
+    COUT << sum;
+    
 }
 
 #endif /* testrender_h */

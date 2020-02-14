@@ -7,6 +7,7 @@
 
 #include "plastic.hpp"
 #include "core/bxdf.hpp"
+#include "bxdfs/microfacet/reflection.hpp"
 #include "core/spectrum.hpp"
 #include "core/texture.hpp"
 #include "bxdfs/lambert.hpp"

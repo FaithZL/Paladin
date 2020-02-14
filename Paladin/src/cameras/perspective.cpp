@@ -254,7 +254,7 @@ Spectrum PerspectiveCamera::sample_Wi(const Interaction &ref, const Point2f &u,
                           Vector3f *wi, Float *pdfDir, Point2f *pRaster,
                           VisibilityTester *vis) const {
     
-    Point2f pLens = uniformSampleDisk(u);
+    Point2f pLens = _lensRadius * uniformSampleDisk(u);
     Point3f pLensWorld = cameraToWorld.exec(ref.time, Point3f(pLens.x, pLens.y, 0));
     Interaction pLensIntr(pLensWorld, ref.time, medium);
     pLensIntr.normal = cameraToWorld.exec(ref.time, Normal3f(0, 0, 1));
