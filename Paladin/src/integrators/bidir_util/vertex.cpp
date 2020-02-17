@@ -266,7 +266,7 @@ Float Vertex::pdfLightOrigin(const Scene &scene, const Vertex &v,
         CHECK(lightToDistrIndex.find(light) != lightToDistrIndex.end());
         size_t index = lightToDistrIndex.find(light)->second;
         pdfChoice = lightDistr.discretePDF(index);
-
+        // 采样到光源表面某个点的PDF，所以不需要pdfDir
         light->pdf_Le(Ray(pos(), w, Infinity, time()), ng(), &pdfPos, &pdfDir);
         return pdfPos * pdfChoice;
     }

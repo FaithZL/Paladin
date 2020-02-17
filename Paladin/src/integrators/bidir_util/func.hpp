@@ -42,6 +42,7 @@ int generateLightSubpath(const Scene &scene, Sampler &sampler, MemoryArena &aren
                                 const std::unordered_map<const Light *, size_t> &lightToIndex,
                                 Vertex *path);
 
+// 推导过程详见bdpt.hpp文件中
 Float MISWeight(const Scene &scene, Vertex *lightVertices,
                 Vertex *cameraVertices, Vertex &sampled, int s, int t,
                 const Distribution1D &lightPdf,

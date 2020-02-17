@@ -226,6 +226,94 @@ Spectrum connectPath(const Scene &scene, Vertex *lightVertices,
                     const Camera &camera, Sampler &sampler, Point2f *pRaster,
                     Float *misWeight) {
     
+    Spectrum L(0.f);
+    // 如果相机路径最后一个顶点是环境光，则记作无效链接
+    if (t > 1 && s != 0 && cameraVertices[t - 1].type == VertexType::Light) {
+        return Spectrum(0.f);
+    }
+    
+    Vertex sampled;
+    if (s == 0) {
+        // 判断相机路径是否直接击中光源
+        const Vertex &pt = cameraVertices[t - 1];
+        if (pt.isLight()) {
+            // 将路径解释为一个完整路径
+            L = pt.Le(scene, cameraVertices[t - 2]) * pt.throughput;
+        }
+        DCHECK(!L.HasNaNs());
+    } else if (s == 1) {
+        // 相机路径顶点直连光源
+        const Vertex &pt = cameraVertices[t - 1];
+        if (pt.isConnectible()) {
+            Float lightPdf;
+            VisibilityTester vis;
+            Vector3f wi;
+            Float pdfDir;
+            int lightIdx = lightDistr.sampleDiscrete(sampler.get1D(), &lightPdf);
+            const shared_ptr<Light> &light = scene.lights[lightIdx];
+            Spectrum lightWeight = light->sample_Li(pt.getInteraction(), sampler.get2D(), &wi, &pdfDir, &vis);
+            if (pdfDir > 0 && !lightWeight.IsBlack()) {
+                EndpointInteraction ei(vis.P1(), light.get());
+                sampled = Vertex::createLight(ei, lightWeight/(pdfDir * lightPdf), 0);
+                sampled.pdfFwd = sampled.pdfLightOrigin(scene, pt, lightDistr, lightToIndex);
+                L = pt.throughput * pt.f(sampled, TransportMode::Radiance) * sampled.throughput;
+                if (pt.isOnSurface()) {
+                    L *= absDot(pt.ns(), wi);
+                }
+                if (!L.IsBlack()) {
+                    L *= vis.Tr(scene, sampler);
+                }
+                DCHECK(!L.HasNaNs());
+            }
+        }
+    } else if (t == 1) {
+        // 光源路径中的点直连相机
+        const Vertex &qs = lightVertices[s - 1];
+        if (qs.isConnectible()) {
+            VisibilityTester vis;
+            Vector3f wi;
+            Float pdf;
+            Spectrum Wi = camera.sample_Wi(qs.getInteraction(), sampler.get2D(), &wi, &pdf, pRaster, &vis);
+            if (pdf > 0 && !Wi.IsBlack()) {
+                sampled = Vertex::createCamera(&camera, vis.P0(), Wi / pdf);
+                L = qs.throughput * qs.f(sampled, TransportMode::Importance) * sampled.throughput;
+                if (qs.isOnSurface()) {
+                    L *= absDot(qs.ns(), wi);
+                }
+                if (!L.IsBlack()) {
+                    L *= vis.Tr(scene, sampler);
+                }
+                DCHECK(!L.HasNaNs());
+            }
+        }
+    } else {
+        const Vertex &qs = lightVertices[s - 1];
+        const Vertex &pt = cameraVertices[t - 1];
+        if (qs.isConnectible() && pt.isConnectible()) {
+            L = qs.throughput * qs.f(pt, TransportMode::Importance)
+                * pt.f(qs, TransportMode::Radiance) * pt.throughput;
+            if (!L.IsBlack()) {
+                L *= G(scene, sampler, qs, pt);
+            }
+            DCHECK(!L.HasNaNs());
+        }
+    }
+    
+    Float weight = L.IsBlack() ? 0.f : MISWeight(scene, lightVertices, cameraVertices,
+                                            sampled, s, t, lightDistr, lightToIndex);
+    DCHECK(!isNaN(weight));
+    *misWeight = weight;
+    L *= weight;
+    
+    return L;
+}
+
+Float MISWeight(const Scene &scene, Vertex *lightVertices,
+                Vertex *cameraVertices, Vertex &sampled, int s, int t,
+                const Distribution1D &lightPdf,
+                const std::unordered_map<const Light *, size_t> &lightToIndex) {
+    
+    auto remap0 = [](Float f) -> Float { return f != 0 ? f : 1; };
 }
 
 PALADIN_END
