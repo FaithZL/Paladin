@@ -157,8 +157,8 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
         if (!f.IsBlack() && scatteringPdf > 0) {
             // 为何高光采样权重就是1？
             // 因为如果是高光，scatteringPdf实际上应为正无穷
-            // weight自然也是正无穷
-            // 所以特殊处理之后weight与scatteringPdf都取1
+            // weight中的分母自然也是正无穷
+            // 所以特殊处理之后weight取1
             Float weight = 1;
             // 如果采集到的样本不是高光反射，则修改权重
             if (!sampledSpecular) {

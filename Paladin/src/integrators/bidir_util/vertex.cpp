@@ -58,6 +58,9 @@ Vertex Vertex::createSurface(const SurfaceInteraction &si,
 }
 
 Float Vertex::convertPdf(Float pdf, const Vertex &next) const {
+    if (pdf == 0.f) {
+        return 0.f;
+    }
     // 如果下一个点在infinitylight上，直接返回
     // 因为相当于直接在单位半球上采样
     if (next.isInfiniteLight()) {
