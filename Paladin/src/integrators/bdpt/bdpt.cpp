@@ -19,7 +19,13 @@ void BidirectionalPathTracer::render(const Scene &scene) {
         lightToIndex[scene.lights[i].get()] = i;
     }
     
+    Film *film = _camera->film.get();
+    const AABB2i sampleBounds = film->getSampleBounds();
+    const Vector2i sampleExtent = sampleBounds.diagonal();
     
+    const int tileSize = 16;
+    const int nXTiles = (sampleExtent.x + tileSize - 1) / tileSize;
+    const int nYTiles = (sampleExtent.y + tileSize - 1) / tileSize;
 }
 
 PALADIN_END

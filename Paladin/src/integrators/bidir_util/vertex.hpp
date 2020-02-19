@@ -114,8 +114,10 @@ struct Vertex {
     Float pdfDir(const Scene &scene, const Vertex *prev,
                  const Vertex &next) const;
     
+    // 在光源处采样指定顶点的PDF
     Float pdfLight(const Scene &scene, const Vertex &v) const;
     
+    // 采样到当前光源顶点的PDF
     Float pdfLightOrigin(const Scene &scene, const Vertex &v,
                          const Distribution1D &lightDistr,
                          const std::unordered_map<const Light *, size_t>

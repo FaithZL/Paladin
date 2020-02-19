@@ -312,8 +312,89 @@ Float MISWeight(const Scene &scene, Vertex *lightVertices,
                 Vertex *cameraVertices, Vertex &sampled, int s, int t,
                 const Distribution1D &lightPdf,
                 const std::unordered_map<const Light *, size_t> &lightToIndex) {
-    
+    if (s + t == 2) {
+        return 1;
+    }
+    Float sumRi = 0;
+    // 将0重映射为1
     auto remap0 = [](Float f) -> Float { return f != 0 ? f : 1; };
+    
+    // 对于同一系列的顶点，不同的s,t组成了不同的连接策略，连接策略的改变
+    // 可能导致前后PDF的改变
+    Vertex * pt = t > 0 ? &cameraVertices[t - 1] : nullptr;
+    Vertex * ptMinus = t > 1 ? &cameraVertices[t - 2] : nullptr;
+    Vertex * qs = s > 0 ? &lightVertices[s - 1] : nullptr;
+    Vertex * qsMinus = s > 1 ? &lightVertices[s - 2] : nullptr;
+    
+    ScopedAssignment<Vertex> a1;
+    
+    if (s == 1) {
+        // 直连光源
+        // 临时把光源顶点换成sampled顶点
+        a1 = {qs, sampled};
+    } else if (t == 1) {
+        // 直连相机
+        // 临时把相机顶点换成sampled顶点
+        a1 = {pt, sampled};
+    }
+    
+    // 如果pt与qs可以连接，说明这两个顶点都包含非specular分量
+    // 在计算MIS时，是不能忽略的，所以要临时把delta改为false
+    ScopedAssignment<bool> a2, a3;
+    if (pt)
+        a2 = {&pt->delta, false};
+    if (qs)
+        a3 = {&qs->delta, false};
+    
+    ScopedAssignment<Float> a4;
+    if (pt) {
+        // 当s=0时，pt落在光源上，pdfRev为采样到当前光源的pdf
+        // 当s>0时，为qs采样到pt的PDF
+        a4 = {&pt->pdfRev, s > 0
+            ? qs->pdfDir(scene, qsMinus, *pt)
+            : pt->pdfLightOrigin(scene, *ptMinus, lightPdf,
+                             lightToIndex)};
+    }
+    
+    ScopedAssignment<Float> a5;
+    if (ptMinus) {
+        // 当s=0时，pt落在光源上
+        a5 = {&ptMinus->pdfRev, s > 0
+            ? pt->pdfDir(scene, qs, *ptMinus)
+            : pt->pdfLight(scene, *ptMinus)};
+    }
+    
+    ScopedAssignment<Float> a6;
+    if (qs) {
+        a6 = {&qs->pdfRev, pt->pdfDir(scene, ptMinus, *qs)};
+    }
+    ScopedAssignment<Float> a7;
+    if (qsMinus) {
+        a7 = {&qsMinus->pdfRev, qs->pdfDir(scene, pt, *qsMinus)};
+    }
+    
+    // 先把ri赋值为rs的值，为1
+    Float ri = 1;
+    for (int i = s - 1; i >= 0; --i) {
+        auto v = lightVertices[i];
+        ri = ri * (remap0(v.pdfRev) / remap0(v.pdfFwd));
+        bool deltaLightvertex = i > 0 ? lightVertices[i - 1].delta
+                                : lightVertices[0].isDeltaLight();
+        
+        if (!deltaLightvertex && !v.delta) {
+            sumRi += ri;
+        }
+    }
+    // 先把ri赋值为rs的值，为1
+    ri = 1;
+    for (int i = t; i > 0; --i) {
+        auto v = cameraVertices[i];
+        ri = ri * (remap0(v.pdfRev) / remap0(v.pdfFwd));
+        if (!cameraVertices[i].delta && !cameraVertices[i - 1].delta) {
+            sumRi += ri;
+        }
+    }
+    return 1 / (sumRi + 1);
 }
 
 PALADIN_END

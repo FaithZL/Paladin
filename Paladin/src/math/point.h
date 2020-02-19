@@ -148,17 +148,9 @@ public:
         return x == 0 && y == 0;
     }
     
-    union {
-        T x;
-        T u;
-        T s;
-    };
+    T x;
     
-    union {
-        T y;
-        T v;
-        T t;
-    };
+    T y;
 };
 
 template <typename T>

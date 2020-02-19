@@ -300,8 +300,8 @@ private:
     T triangle(int level, const Point2f &st) const {
         level = clamp(level, 0, levels() - 1);
         // 离散坐标转为连续坐标
-        Float s = st.s * _pyramid[level]->uSize() - 0.5f;
-        Float t = st.t * _pyramid[level]->vSize() - 0.5f;
+        Float s = st[0] * _pyramid[level]->uSize() - 0.5f;
+        Float t = st[1] * _pyramid[level]->vSize() - 0.5f;
         int s0 = std::floor(s);
         int t0 = std::floor(t);
         Float ds = s - s0;
@@ -332,8 +332,8 @@ private:
 
         // 先把st坐标从[0,1)范围转到对应级别纹理的分辨率上
         // 对应的偏导数也要进行转换
-        st.s = st.s * _pyramid[level]->uSize() - 0.5f;
-        st.t = st.t * _pyramid[level]->vSize() - 0.5f;
+        st.x = st.x * _pyramid[level]->uSize() - 0.5f;
+        st.y = st.y * _pyramid[level]->vSize() - 0.5f;
         dst0 = dst0 * _pyramid[level]->uSize();
         dst1 = dst1 * _pyramid[level]->vSize();
 
@@ -373,9 +373,9 @@ private:
         T sum(0.0f);
         Float sumWts = 0;
         for (int it = t0; it <= t1; ++it) {
-            Float tt = it - st.t;
+            Float tt = it - st.x;
             for (int is = s0; is <= s1; ++is) {
-                Float ss = is - st.s;
+                Float ss = is - st.y;
                 Float r2 = A * ss * ss + B * ss * tt + C * tt * tt;
                 // e(s,t) = A s^2 + B s t + C t^2 < 1
                 if (r2 < 1) {
