@@ -317,10 +317,12 @@
         }
 	],
 	"integrator" : {
-        "type" : "PathTracer",
+        "type" : "pt",
         "param" : {
         	"maxBounce" : 5,
         	"rrThreshold" : 1,
+            "strategies" : false,
+            "weights" : false,
         	"lightSampleStrategy" : "power"
         }
     },

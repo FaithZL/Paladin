@@ -185,8 +185,10 @@ int randomWalk(const Scene &scene, RayDifferential ray, Sampler &sampler,
                                                  throughput, pdfFwd);
                     ++bounces;
                 }
+                break;
             }
             
+            isect.computeScatteringFunctions(ray, arena, true, mode);
             if (isect.bsdf == nullptr) {
                 ray = isect.spawnRay(ray.dir);
                 continue;
@@ -387,7 +389,7 @@ Float MISWeight(const Scene &scene, Vertex *lightVertices,
     }
     // 先把ri赋值为rs的值，为1
     ri = 1;
-    for (int i = t; i > 0; --i) {
+    for (int i = t - 1; i > 0; --i) {
         auto v = cameraVertices[i];
         ri = ri * (remap0(v.pdfRev) / remap0(v.pdfFwd));
         if (!cameraVertices[i].delta && !cameraVertices[i - 1].delta) {

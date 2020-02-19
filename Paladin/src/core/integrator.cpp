@@ -284,6 +284,7 @@ void MonteCarloIntegrator::render(const Scene &scene) {
     	_camera->film->mergeFilmTile(std::move(filmTile));
     };
     parallelFor2D(renderTile, nTile);
+    reporter.done();
     _camera->film->writeImage();
 }
 

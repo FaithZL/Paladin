@@ -3,7 +3,7 @@
     "transforms" :{
         "name1" : [
             {
-                "tpye" : "translate",
+                "type" : "translate",
                 "param" :[0,0,0]
             }
         ]
@@ -352,7 +352,7 @@
         }
 	],
 	"integrator" : {
-        "type" : "PathTracer",
+        "type" : "pt",
         "param" : {
         	"maxBounce" : 5,
         	"rrThreshold" : 1,
@@ -362,7 +362,7 @@
     "sampler" : {
     	"type" : "halton",
     	"param" : {
-    		"spp" : 16
+    		"spp" : 1
     	}
     },
     "camera" : {

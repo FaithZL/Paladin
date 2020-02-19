@@ -286,17 +286,20 @@ PALADIN_BEGIN
 
 class BidirectionalPathTracer : public Integrator {
     
+public:
     BidirectionalPathTracer(std::shared_ptr<Sampler> sampler,
-                   std::shared_ptr<const Camera> camera, int maxDepth,
-                   bool visualizeStrategies, bool visualizeWeights,
-                   const AABB2i &pixelBounds,
-                   const std::string &lightSampleStrategy = "power")
+                            std::shared_ptr<const Camera> camera, int maxDepth,
+                            bool visualizeStrategies, bool visualizeWeights,
+                            const AABB2i &pixelBounds,
+                            Float rrThreshold,
+                            const std::string &lightSampleStrategy = "power")
     : _sampler(sampler),
     _camera(camera),
     _maxDepth(maxDepth),
     _visualizeStrategies(visualizeStrategies),
     _visualizeWeights(visualizeWeights),
     _pixelBounds(pixelBounds),
+    _rrThreshold(rrThreshold),
     _lightSampleStrategy(lightSampleStrategy) {
       
     }
@@ -314,6 +317,7 @@ private:
     const bool _visualizeStrategies;
     const bool _visualizeWeights;
     const AABB2i _pixelBounds;
+    Float _rrThreshold;
     const std::string _lightSampleStrategy;
 };
 

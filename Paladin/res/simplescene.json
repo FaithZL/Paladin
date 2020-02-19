@@ -352,7 +352,7 @@
         }
     ],
     "integrator" : {
-        "type" : "pt",
+        "type" : "bdpt",
         "param" : {
             "maxBounce" : 5,
             "rrThreshold" : 1,
@@ -362,7 +362,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 16
+            "spp" : 1
         }
     },
     "camera" : {
@@ -382,7 +382,7 @@
     },
     "film" : {
         "param" : {
-            "resolution" : [1024, 1024],
+            "resolution" : [500, 500],
             "cropWindow" : [0,0,1,1],
             "fileName" : "conelbox.png",
             "diagonal" : 1,

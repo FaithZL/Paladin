@@ -109,7 +109,7 @@ void Film::addSplat(const Point2f &p, Spectrum v) {
     }
 }
 
-void Film::writeImage(Float splatScale) {
+void Film::writeImage(Float splatScale/* = 1*/) {
     std::unique_ptr<Float[]> rgb(new Float[3 * croppedPixelBounds.area()]);
     int offset = 0;
     for (Point2i p : croppedPixelBounds) {
