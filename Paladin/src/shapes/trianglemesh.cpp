@@ -883,7 +883,7 @@ vector<shared_ptr<Primitive>> createPrimitive(const vector<shared_ptr<Shape>> &t
     vector<shared_ptr<Primitive>> ret;
     for (int i = 0; i < triLst.size(); ++i) {
         auto shape = triLst.at(i);
-        shared_ptr<DiffuseAreaLight> areaLight(createDiffuseAreaLight(emissionData, shape));
+        shared_ptr<DiffuseAreaLight> areaLight(createDiffuseAreaLight(emissionData, shape, mediumInterface));
         if (areaLight) {
             lights.push_back(areaLight);
         }

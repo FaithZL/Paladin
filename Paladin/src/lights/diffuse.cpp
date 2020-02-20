@@ -115,12 +115,12 @@ shared_ptr<DiffuseAreaLight> DiffuseAreaLight::create(Float rgb[3], const std::s
 //    "twoSided" : false
 //}
 DiffuseAreaLight * createDiffuseAreaLight(const nloJson &param,
-                                 const std::shared_ptr<Shape> &shape) {
+                                          const std::shared_ptr<Shape> &shape,
+                                          const MediumInterface &mi) {
     if (param.is_null()) {
         return nullptr;
     }
     shared_ptr<const Transform> l2w = shape->objectToWorld;
-    MediumInterface mi(nullptr);
     nloJson _Le = param.value("Le", nloJson::object());
     Spectrum Le = Spectrum::FromJson(_Le);
     bool twoSided = param.value("twoSided", false);

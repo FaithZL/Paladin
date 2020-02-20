@@ -3,7 +3,7 @@
     "transforms" :{
         "name1" : [
             {
-                "tpye" : "translate",
+                "type" : "translate",
                 "param" :[0,0,0]
             }
         ]
@@ -395,7 +395,8 @@
                     "color" : [17, 12, 4]
                 },
                 "twoSided" : false
-            }
+            },
+            "mediumInterface" : ["", "fog"],
         },
         {
             "type" : "triMesh",
@@ -417,7 +418,7 @@
                 "y" : 1.2,
                 "z" : 0.6
             },
-            "material" : "glass"
+            "material" : "matte1"
         },
         {
             "type" : "triMesh",
@@ -439,11 +440,11 @@
                 "y" : 0.6,
                 "z" : 0.6
             },
-            "material" : "glass"
+            "material" : "matte1"
         }
 	],
 	"integrator" : {
-        "type" : "volpt",
+        "type" : "bdpt",
         "param" : {
         	"maxBounce" : 5,
         	"rrThreshold" : 1,
@@ -453,7 +454,7 @@
     "sampler" : {
     	"type" : "halton",
     	"param" : {
-    		"spp" : 16
+    		"spp" : 1
     	}
     },
     "camera" : {

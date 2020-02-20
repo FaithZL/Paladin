@@ -304,13 +304,14 @@ void SceneParser::parseSimpleShape(const nloJson &data, const string &type) {
     auto creator = GET_CREATOR(type);
     auto shape = shared_ptr<Shape>(dynamic_cast<Shape *>(creator(param, {})));
     auto mat = getMaterial(data.value("material", nloJson()));
-    auto tmpLight = createDiffuseAreaLight(data.value("emission", nloJson()), shape);
+    nloJson medIntfceData = data.value("mediumInterface", nloJson());
+    MediumInterface mediumInterface = getMediumIntetface(medIntfceData);
+    auto tmpLight = createDiffuseAreaLight(data.value("emission", nloJson()), shape, mediumInterface);
     shared_ptr<AreaLight> areaLight(tmpLight);
     if (areaLight) {
         _lights.push_back(areaLight);
     }
-    nloJson medIntfceData = data.value("mediumInterface", nloJson());
-    MediumInterface mediumInterface = getMediumIntetface(medIntfceData);
+    
     shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, mediumInterface);
     _primitives.push_back(primitives);
     // 如果需要克隆的话，则保存在_cloneMap中

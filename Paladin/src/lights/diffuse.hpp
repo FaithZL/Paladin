@@ -73,7 +73,8 @@ private:
 
 
 DiffuseAreaLight * createDiffuseAreaLight(const nloJson &param,
-                                const std::shared_ptr<Shape> &shape);
+                                          const std::shared_ptr<Shape> &shape,
+                                          const MediumInterface &mediumInterface);
 
 PALADIN_END
 

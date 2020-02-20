@@ -8,8 +8,17 @@
             }
         ]
     },
+    "mediums" : {
+        "fog" : {
+            "type" : "homo",
+            "param" : {
+                "g" : 0,
+                "sigma_a" : [0.0,0.0,0.0],
+                "sigma_s" : [0.8,0.8,0.8]
+            }
+        }
+    },
     "lights" : [
-         
         {
             "type" : "pointLight",
             "enable" : false,
@@ -28,11 +37,21 @@
         "matte1" : {
             "type" : "matte",
             "param" : {
+                "Kd" : [0.725, 0.71, 0.68],
+                "sigma" : 0,
+                "bumpMap" : 0
+            }
+        },
+        "matte2" : {
+            "type" : "matte",
+            "param" : {
                 "Kd" : {
-                    "type" : "constant",
+                    "type" : "bilerp",
                     "param" : {
-                        "colorType" : 0,
-                        "color" : [0.725, 0.71, 0.68]
+                        "v00" : [1, 0, 0],
+                        "v01" : [0, 1, 0],
+                        "v10" : [0, 0, 1],
+                        "v11" : [0.1, 0.9, 0.5]
                     }
                 },
                 "sigma" : {
@@ -105,6 +124,25 @@
                 }
             }
         },
+        "image" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : {
+                    "type" : "image",
+                    "param" : {
+                        "fileName" : "res/HelloWorld.png"
+                    }
+                },
+                "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                }
+            }
+        },
         "glass" : {
             "type" : "glass",
             "param" : {
@@ -119,26 +157,62 @@
                     "type" : "constant",
                     "param" : {
                         "colorType" : 0,
-                        "color" : [0, 0, 0]
+                        "color" : [1, 1, 1]
                     }
                 },
                 "uRough" : {
                     "type" : "constant",
-                    "param" : 0.5
+                    "param" : 0.0
                 },
                 "vRough" : {
                     "type" : "constant",
-                    "param" : 0.5
+                    "param" : 0.0
                 },
                 "eta" : {
                     "type" : "constant",
-                    "param" : 0.5
+                    "param" : 1.5
                 },
                 "bumpMap" : {
                     "type" : "constant",
-                    "param" : 0.5
+                    "param" : 0
                 },
                 "remapRough" : false 
+            }
+        },
+        "metal" : {
+            "type" : "metal",
+            "param" : {
+                "eta" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [0.6, 1, 1]
+                    }
+                },
+                "k" : {
+                    "type" : "constant",
+                    "param" : {
+                        "colorType" : 0,
+                        "color" : [1, 1, 1]
+                    }
+                },
+                "rough" : {
+                    "type" : "constant",
+                    "param" : 0.1
+                },
+                "uRough" : {
+                    "type" : "constant",
+                    "param" : 0.1
+                },
+                "vRough" : {
+                    "type" : "constant",
+                    "param" : 0.1
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "remapRough" : false
             }
         },
         "mirror" : {
@@ -166,17 +240,17 @@
                 "transform" : [
                     {
                         "type" : "rotateX",
-                        "param" : [-90]
+                        "param" : [170]
                     },
                     {
                         "type" : "translate",
-                        "param" : [0,0,1000]
+                        "param" : [0,-0.1,0]
                     }
                 ],
-                "radius" : 999,
+                "radius" : 0.3,
                 "phiMax" : 360
             },
-            "material" : "matte1"
+            "material" : "glass"
         },
         {
             "type" : "triMesh",
@@ -281,6 +355,23 @@
         {
             "type" : "triMesh",
             "subType" : "quad",
+            "name" : "front",
+            "enable" : true,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "translate",
+                        "param" : [0,0,-1]
+                    }
+                ],
+                "width" : 2
+            },
+            "mediumInterface" : ["", "fog"],
+            "material" : null
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "quad",
             "name" : "light",
             "enable" : true,
             "param" : {
@@ -304,12 +395,13 @@
                     "color" : [17, 12, 4]
                 },
                 "twoSided" : false
-            }
+            },
+            "mediumInterface" : ["fog", "fog"]
         },
         {
             "type" : "triMesh",
             "subType" : "cube",
-            "name" : "cube1",
+            "name" : "cube2",
             "enable" : true,
             "param" : {
                 "transform" :[
@@ -354,15 +446,15 @@
     "integrator" : {
         "type" : "bdpt",
         "param" : {
-            "maxBounce" : 5,
+            "maxBounce" : 10,
             "rrThreshold" : 1,
             "lightSampleStrategy" : "power"
         }
     },
     "sampler" : {
-        "type" : "halton",
+        "type" : "random",
         "param" : {
-            "spp" : 1
+            "spp" : 2
         }
     },
     "camera" : {
@@ -382,9 +474,9 @@
     },
     "film" : {
         "param" : {
-            "resolution" : [500, 500],
+            "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "conelbox.png",
+            "fileName" : "connellbox-fog-bdpt-6spp.png",
             "diagonal" : 1,
             "scale" : 1
         }
