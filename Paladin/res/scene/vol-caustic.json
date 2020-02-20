@@ -402,9 +402,9 @@
         }
     },
     "sampler" : {
-        "type" : "halton",
+        "type" : "random",
         "param" : {
-            "spp" : 5
+            "spp" : 64
         }
     },
     "camera" : {
@@ -426,7 +426,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "vol-caustic-bdpt-1-spp.png",
+            "fileName" : "vol-caustic-bdpt-64spp.png",
             "diagonal" : 1,
             "scale" : 1
         }

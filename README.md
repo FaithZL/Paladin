@@ -21,7 +21,7 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
 - 渲染算法，效果
   - [x] 路径追踪(PT,path tracing)
   - [x] 体路径追踪(VPT,volume path tracing)
-  - [ ] 双向路径追踪(BDPT,bidirectional path tracing)
+  - [x] 双向路径追踪(BDPT,bidirectional path tracing)
   - [ ] 梅特波利斯光照传输(MLT,metropolis light transport)
   - [ ] 随机渐进光子映射(SPPM,stochastic progress photon mapping)
   - [ ] 光子映射与双向路径追踪结合(VCM,vertex connection and merging)
@@ -108,6 +108,8 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-pt-16spp-halton.png)
  * connell box fog 128spp halton
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-fog-halton-128spp.png)
+ * vol-caustic-bdpt-64spp random
+   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/vol-caustic-bdpt-64spp.png)
  * standford bunny 128spp halton
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/standford_bunny-halton-128spp.png)
  * instance and depth of field 32spp halton

@@ -85,6 +85,17 @@ void BidirectionalPathTracer::render(const Scene &scene) {
                             
                             Point2f pFilmNew = pFilm;
                             Float misWeight = 0.f;
+                            // 渲染方程转化为路径形式
+                            // 可以理解为Le加上一个路径长度为2的一重积分加上路径长度为3的二重积分
+                            // 加上路径长度为4的三重积分。。。。。等 n 个积分方程的和
+                            // Lpath的理解如下
+                            // 假设一条路径的顶点数量为5，那么有5种采样策略可以构成该路径
+                            // Lpath就可以理解为其中一种采样策略经过mis计算之后是值，
+                            // balance heuristic需要知道同一条路径的其他策略的pdf，从而计算mis
+                            // 5种策略的Lpath求和就是对这个5重积分的估计值
+                            // connectPath根据传入的s,t来决定路径的长度
+                            // 内部再根据同一列顶点的不同采样策略进行mis的估计
+                            // 所谓不同采样策略就是5个相机顶点与6个光源顶点，或者6个相机顶点与5个光源顶点
                             Spectrum Lpath = connectPath(scene, lightVertices, cameraVertices,
                                                          s, t, *lightDistr, lightToIndex,
                                                          *_camera, *tileSampler,

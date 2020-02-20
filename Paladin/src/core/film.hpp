@@ -245,10 +245,6 @@ private:
         DCHECK(insideExclusive(p, croppedPixelBounds));
         int width = croppedPixelBounds.pMax.x - croppedPixelBounds.pMin.x;
         int offset = (p.x - croppedPixelBounds.pMin.x) + (p.y - croppedPixelBounds.pMin.y) * width;
-        if (offset > 125000) {
-            int a;
-            a = 1;
-        }
         return _pixels[offset];
     }
 };
