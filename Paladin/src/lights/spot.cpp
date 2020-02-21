@@ -81,13 +81,16 @@ Float SpotLight::pdf_Li(const Interaction &, const Vector3f &) const {
 //        "color" : [0.1, 0.9, 0.5]
 //    },
 //    "falloffStart" : 45,
-//    "totalAngle" : 60
+//    "totalAngle" : 60,
+//    "scale" : 1.f,
 //}
 CObject_ptr createSpot(const nloJson &param, const Arguments &lst) {
     nloJson l2w_data = param.value("transform", nloJson());
     auto l2w = shared_ptr<const Transform>(createTransform(l2w_data));
     nloJson Idata = param.value("I", nloJson::object());
+    nloJson scale = param.value("scale", 1.f);
     Spectrum I = Spectrum::FromJson(Idata);
+    I *= (Float)scale;
     Float falloffStart = param.value("falloffStart", 45.f);
     Float totalAngle = param.value("totalAngle", 60.f);
     auto ret = new SpotLight(l2w, nullptr, I, totalAngle, falloffStart);

@@ -376,6 +376,7 @@
 		F618CC9723F658F8005648D9 /* distribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F618CC8C23F64B1D005648D9 /* distribute.cpp */; };
 		F619E5D823F3DB96007F35EF /* lambert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F619E5D623F3DB96007F35EF /* lambert.cpp */; };
 		F619E5DB23F3DEA9007F35EF /* specular.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F619E5D923F3DEA9007F35EF /* specular.cpp */; };
+		F61B0F1824000E7200213277 /* pm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F61B0F1624000E7200213277 /* pm.cpp */; };
 		F62D230123F5117F008B3C98 /* bsdf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F62D22FF23F5117F008B3C98 /* bsdf.cpp */; };
 		F63925CF23E92196007C6659 /* mlt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63925CD23E92196007C6659 /* mlt.cpp */; };
 		F63925D323E9B797007C6659 /* mcmc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63925D123E9B797007C6659 /* mcmc.cpp */; };
@@ -1442,6 +1443,8 @@
 		F619E5D723F3DB96007F35EF /* lambert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = lambert.hpp; sourceTree = "<group>"; };
 		F619E5D923F3DEA9007F35EF /* specular.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = specular.cpp; sourceTree = "<group>"; };
 		F619E5DA23F3DEA9007F35EF /* specular.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = specular.hpp; sourceTree = "<group>"; };
+		F61B0F1624000E7200213277 /* pm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pm.cpp; sourceTree = "<group>"; };
+		F61B0F1724000E7200213277 /* pm.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = pm.hpp; sourceTree = "<group>"; };
 		F62D22FF23F5117F008B3C98 /* bsdf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bsdf.cpp; sourceTree = "<group>"; };
 		F62D230023F5117F008B3C98 /* bsdf.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bsdf.hpp; sourceTree = "<group>"; };
 		F63925CA23E918BB007C6659 /* endpoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = endpoint.h; sourceTree = "<group>"; };
@@ -2313,6 +2316,7 @@
 		A9B037B405A74406BD9CCC54 /* integrators */ = {
 			isa = PBXGroup;
 			children = (
+				F61B0F1524000E6300213277 /* pm */,
 				F63925CC23E92154007C6659 /* mlt */,
 				F63925C623E915E8007C6659 /* bidir_util */,
 				F3DF6F12E47F4934810ADDA8 /* bdpt */,
@@ -2727,6 +2731,16 @@
 			);
 			name = bxdfs;
 			path = src/materials/bxdfs;
+			sourceTree = "<group>";
+		};
+		F61B0F1524000E6300213277 /* pm */ = {
+			isa = PBXGroup;
+			children = (
+				F61B0F1624000E7200213277 /* pm.cpp */,
+				F61B0F1724000E7200213277 /* pm.hpp */,
+			);
+			name = pm;
+			path = src/integrators/pm;
 			sourceTree = "<group>";
 		};
 		F63925C623E915E8007C6659 /* bidir_util */ = {
@@ -3648,6 +3662,7 @@
 				9B8A068A80264B71A58D3164 /* curve.cpp in Sources */,
 				E6B463F92BDF4193A1FCE81B /* cylinder.cpp in Sources */,
 				11ACE164FB7E4308BCD4968C /* disk.cpp in Sources */,
+				F61B0F1824000E7200213277 /* pm.cpp in Sources */,
 				F62D230123F5117F008B3C98 /* bsdf.cpp in Sources */,
 				B0F860327FC5492E83913556 /* sphere.cpp in Sources */,
 				582BE42EBF194E1A8F09D5B1 /* trianglemesh.cpp in Sources */,
