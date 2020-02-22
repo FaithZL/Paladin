@@ -150,14 +150,14 @@
                     "type" : "constant",
                     "param" : {
                         "colorType" : 0,
-                        "color" : [1, 1, 1]
+                        "color" : [0.3, 0.66, 0.82]
                     }
                 },
                 "Kt" : {
                     "type" : "constant",
                     "param" : {
                         "colorType" : 0,
-                        "color" : [1, 1, 1]
+                        "color" : [0.3, 0.66, 0.82]
                     }
                 },
                 "uRough" : {
@@ -404,8 +404,7 @@
     "sampler" : {
         "type" : "stratified",
         "param" : {
-            "xSamples" : 16,
-            "ySamples" : 16
+            "xSamples" : 2
         }
     },
     "camera" : {
@@ -427,7 +426,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "vol-caustic-bdpt-256spp-s.png",
+            "fileName" : "vol-caustic-bdpt-4spp-s3.png",
             "diagonal" : 1,
             "scale" : 1
         }

@@ -59,7 +59,7 @@ void BidirectionalPathTracer::render(const Scene &scene) {
                     Vertex *lightVertices = arena.alloc<Vertex>(_maxDepth + 1);
                     
                     int nCamera = generateCameraSubpath(scene, *tileSampler, arena, _maxDepth + 2,
-                                                        *_camera, pFilm, cameraVertices);
+                                                        *_camera, pFilm, cameraVertices, _rrThreshold);
                     // 生成光源分布，因为ray可能会反弹很多次
                     // 所以任何一个顶点的spatial光源分布都未必是好的分布
                     // 所以在这里我们默认使用power分布
@@ -68,7 +68,7 @@ void BidirectionalPathTracer::render(const Scene &scene) {
                     
                     int nLight = generateLightSubpath(scene, *tileSampler, arena, _maxDepth + 1,
                                                     cameraVertices[0].time(), *lightDistr,
-                                                    lightToIndex, lightVertices);
+                                                    lightToIndex, lightVertices, _rrThreshold);
                     
                     // 遍历相机光源顶点列表，逐个策略尝试连接计算贡献
                     Spectrum L(0.f);

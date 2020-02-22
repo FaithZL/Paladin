@@ -73,7 +73,7 @@ Spectrum G(const Scene &scene, Sampler &sampler, const Vertex &v0,
 int generateCameraSubpath(const Scene &scene, Sampler &sampler,
                             MemoryArena &arena, int maxDepth,
                             const Camera &camera, const Point2f &pFilm,
-                          Vertex *path) {
+                          Vertex *path, Float rrThreshold/* = 1*/) {
     if (maxDepth == 0)
         return 0;
     CameraSample cameraSample;
@@ -97,7 +97,7 @@ int generateCameraSubpath(const Scene &scene, Sampler &sampler,
 int generateLightSubpath(const Scene &scene, Sampler &sampler, MemoryArena &arena,
                         int maxDepth,Float time, const Distribution1D &lightDistr,
                         const std::unordered_map<const Light *, size_t> &lightToIndex,
-                         Vertex *path) {
+                         Vertex *path, Float rrThreshold/* = 1*/) {
     if (maxDepth == 0)
         return 0;
     Float lightPdf;
@@ -141,7 +141,7 @@ int generateLightSubpath(const Scene &scene, Sampler &sampler, MemoryArena &aren
 
 int randomWalk(const Scene &scene, RayDifferential ray, Sampler &sampler,
                 MemoryArena &arena, Spectrum throughput, Float pdf, int maxDepth,
-               TransportMode mode, Vertex *path) {
+               TransportMode mode, Vertex *path, Float rrThreshold/* = 1*/) {
     
     if (maxDepth == 0)
         return 0;
@@ -150,6 +150,9 @@ int randomWalk(const Scene &scene, RayDifferential ray, Sampler &sampler,
     // 基本思路
     // 根据指定的ray，按照衰减分布采样medium
     // 则根据采样到的点的p函数或者bsdf函数分布生成下一个顶点
+    
+    Float etaScale = 1;
+    
     while (true) {
         
         MediumInteraction mi;
@@ -203,6 +206,16 @@ int randomWalk(const Scene &scene, RayDifferential ray, Sampler &sampler,
             BxDFType type;
             Spectrum f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(), 
                                             &pdfFwd, BSDF_ALL, &type);
+            
+            if ((type & BSDF_SPECULAR) && (type & BSDF_TRANSMISSION)) {
+                Float eta = isect.bsdf->eta;
+                if (mode == TransportMode::Radiance) {
+                    etaScale *= (dot(wo, isect.normal) > 0) ? (eta * eta) : 1 / (eta * eta);
+                } else {
+                    etaScale *= (dot(wo, isect.normal) < 0) ? (eta * eta) : 1 / (eta * eta);
+                }
+            }
+            
             if (f.IsBlack() || pdfFwd == 0.f) {
                 break;
             }
@@ -217,6 +230,15 @@ int randomWalk(const Scene &scene, RayDifferential ray, Sampler &sampler,
             ray = isect.spawnRay(wi);
         }
         prev.pdfRev = vertex.convertPdf(pdfRev, prev);
+        Spectrum rrThroughput = etaScale * throughput;
+        if (bounces >= 2 && rrThroughput.MaxComponentValue() < rrThreshold) {
+            Float q = std::max((Float).05, 1 - rrThroughput.MaxComponentValue());
+            if (sampler.get1D() < q) {
+                break;
+            }
+            throughput /= 1 - q;
+            DCHECK(!std::isinf(throughput.y()));
+        }
     }
     return bounces;
 }
@@ -383,6 +405,12 @@ Float MISWeight(const Scene &scene, Vertex *lightVertices,
         bool deltaLightvertex = i > 0 ? lightVertices[i - 1].delta
                                 : lightVertices[0].isDeltaLight();
         
+        // 这里需要说明一下，按照同一条路径的不同采样策略进行估计权重
+        // 假设一条路径上有p0,p1...p5六个顶点，假设每个顶点都是D属性
+        // 则有5种采样策略，假设p2顶点为S属性，那么将导致s2(x),s3(x)
+        // 这两个策略不可用，因为p2不能与p1或p3直接相连，导致损失两个策略
+        // 所以要保证 ri 项有效，则 p_i-1,p_i这两个顶点不能是delta属性
+        // (veach的论文有提到，D属性就是非delta分布，S属性就是delta分布)
         if (!deltaLightvertex && !v.delta) {
             sumRi += ri;
         }

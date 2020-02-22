@@ -30,17 +30,17 @@ PALADIN_BEGIN
  */
 int randomWalk(const Scene &scene, RayDifferential ray, Sampler &sampler,
                 MemoryArena &arena, Spectrum throughput, Float pdf, int maxDepth,
-                TransportMode mode, Vertex *path);
+                TransportMode mode, Vertex *path, Float rrThreshold = 1);
 
 int generateCameraSubpath(const Scene &scene, Sampler &sampler,
                                  MemoryArena &arena, int maxDepth,
                                  const Camera &camera, const Point2f &pFilm,
-                                 Vertex *path);
+                                 Vertex *path, Float rrThreshold = 1);
 
 int generateLightSubpath(const Scene &scene, Sampler &sampler, MemoryArena &arena,
                                 int maxDepth,Float time, const Distribution1D &lightDistr,
                                 const std::unordered_map<const Light *, size_t> &lightToIndex,
-                                Vertex *path);
+                                Vertex *path, Float rrThreshold = 1);
 
 // 推导过程详见bdpt.hpp文件中
 Float MISWeight(const Scene &scene, Vertex *lightVertices,
