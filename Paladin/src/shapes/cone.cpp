@@ -218,7 +218,7 @@ Interaction Cone::samplePos(const Point2f &u, Float *pdf) const {
 	}
 	// 转为世界空间
 	ret.pos = objectToWorld->exec(pObj, pObjError, &ret.pError);
-	ret.normal = objectToWorld->exec(nObj);
+    ret.normal = normalize(objectToWorld->exec(nObj));
 	if (reverseOrientation) {
 		ret.normal *= -1;
 	}

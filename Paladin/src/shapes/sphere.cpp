@@ -306,8 +306,14 @@ Interaction Sphere::sampleDir(const paladin::Interaction &ref, const Point2f &u,
     
     ret.pos = pWorld;
     ret.pError = gamma(5) * abs(Vector3f(pWorld));
-    ret.normal = Normal3f(nWorld);
+    // sphere的默认法线如果是正向的话，是指向圆心
+    // 是根据dp/dv,dp/du这两个偏导数向量的cross来计算的，是指向圆心
+    // nWorld是背离圆心的，为了统一，取反
+    ret.normal = -Normal3f(nWorld);
     *pdf = uniformConePdf(cosThetaMax);
+    if (reverseOrientation) {
+        ret.normal *= -1;
+    }
     
     return ret;
 }

@@ -13,7 +13,7 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
 	考虑到也许这些代码以及注释可能会对比我还要新手的新手有一些微不足道的帮助，做了跨平台。
 	或者如果发现有什么不对的地方，希望各位大侠不吝赐教
 
-	基本的框架已经搭好，场景是用json文件来描述，目前实现的渲染算法也只有路径追踪，
+	基本的框架已经搭好，场景是用json文件来描述，
 	其他的部分待后续完善，各种效果图陆续奉上(可以在gallery目录下查看)
 
 # Feature
@@ -31,7 +31,7 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
 - 场景模型解析
   - [x] 自定义json格式场景，场景解析
   - [x] 简单反射机制 
-  - [ ] 加载obj模型(已完成加载，材质接入需要实现Disney材质)
+  - [x] 加载obj模型(已完成加载，接入自定义hyper材质)
 
 - 几何相关
   - [x] watertight三角形与ray求交算法
@@ -103,7 +103,9 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
 - 其他
   - [ ] 统计机制
   - [ ] 图形交互界面(GUI)
-
+ 
+ * bdpt(2spp 10.6秒) vs pt(100spp 197.7秒) 
+   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/bdpt-vs-pt.jpeg)
  * connell box 16spp halton
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-pt-16spp-halton.png)
  * connell box fog 128spp halton

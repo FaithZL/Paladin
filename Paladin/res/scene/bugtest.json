@@ -1,5 +1,5 @@
 {
-    "threadNum" : 1,
+    "threadNum" : 0,
     "transforms" :{
         "name1" : [
             {
@@ -362,12 +362,13 @@
                     },
                     {
                         "type" : "translate",
-                        "param" : [0,0,0]
+                        "param" : [0,1.1,0]
                     }
                 ],
-                "reverseOrientation" : false,
+                "zMin" : 0,
                 "radius" : 0.3
             },
+            "reverseOrientation" : false,
             "material" : "black",
             "emission" : {
                 "nSamples" : 1,
@@ -383,7 +384,7 @@
             "type" : "triMesh",
             "subType" : "cube",
             "name" : "cube1",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -405,7 +406,7 @@
             "type" : "triMesh",
             "subType" : "cube",
             "name" : "cube1",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -449,7 +450,7 @@
         "type" : "halton",
         "param" : {
             "xSamples" : 4,
-            "spp" : 1
+            "spp" : 4
         }
     },
     "camera" : {
@@ -469,7 +470,7 @@
     },
     "film" : {
         "param" : {
-            "resolution" : [500, 500],
+            "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
             "fileName" : "bdpt-4spp.png",
             "diagonal" : 1,
