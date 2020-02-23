@@ -12,9 +12,9 @@
         "fog" : {
             "type" : "homo",
             "param" : {
-                "g" : 0,
+                "g" : 0.8,
                 "sigma_a" : [0.0,0.0,0.0],
-                "sigma_s" : [0.8,0.8,0.8]
+                "sigma_s" : [1,1,1]
             }
         }
     },
@@ -404,7 +404,7 @@
     "sampler" : {
         "type" : "stratified",
         "param" : {
-            "xSamples" : 2
+            "xSamples" : 4
         }
     },
     "camera" : {
@@ -426,7 +426,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "vol-caustic-bdpt-4spp-s3.png",
+            "fileName" : "vol-caustic-bdpt-4spp-s32.png",
             "diagonal" : 1,
             "scale" : 1
         }

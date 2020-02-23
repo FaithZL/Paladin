@@ -93,6 +93,7 @@ Spectrum Vertex::f(const Vertex &next, TransportMode mode) const {
     if (w.lengthSquared() == 0) {
         return 0.;
     }
+    w = normalize(w);
     switch (type) {
         case VertexType::Medium:
             return mi.phase->p(mi.wo, w);
