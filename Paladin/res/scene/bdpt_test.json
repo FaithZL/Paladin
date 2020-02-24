@@ -8,17 +8,8 @@
             }
         ]
     },
-    "mediums" : {
-        "fog" : {
-            "type" : "homo",
-            "param" : {
-                "g" : 0.8,
-                "sigma_a" : [0.0,0.0,0.0],
-                "sigma_s" : [1,1,1]
-            }
-        }
-    },
     "lights" : [
+         
         {
             "type" : "pointLight",
             "enable" : false,
@@ -37,21 +28,11 @@
         "matte1" : {
             "type" : "matte",
             "param" : {
-                "Kd" : [0.725, 0.71, 0.68],
-                "sigma" : 0,
-                "bumpMap" : 0
-            }
-        },
-        "matte2" : {
-            "type" : "matte",
-            "param" : {
                 "Kd" : {
-                    "type" : "bilerp",
+                    "type" : "constant",
                     "param" : {
-                        "v00" : [1, 0, 0],
-                        "v01" : [0, 1, 0],
-                        "v10" : [0, 0, 1],
-                        "v11" : [0.1, 0.9, 0.5]
+                        "colorType" : 0,
+                        "color" : [0.725, 0.71, 0.68]
                     }
                 },
                 "sigma" : {
@@ -124,25 +105,6 @@
                 }
             }
         },
-        "image" : {
-            "type" : "matte",
-            "param" : {
-                "Kd" : {
-                    "type" : "image",
-                    "param" : {
-                        "fileName" : "res/HelloWorld.png"
-                    }
-                },
-                "sigma" : {
-                    "type" : "constant",
-                    "param" : 0
-                },
-                "bumpMap" : {
-                    "type" : "constant",
-                    "param" : 0
-                }
-            }
-        },
         "glass" : {
             "type" : "glass",
             "param" : {
@@ -150,69 +112,33 @@
                     "type" : "constant",
                     "param" : {
                         "colorType" : 0,
-                        "color" : [0.3, 0.66, 0.82]
+                        "color" : [1, 1, 1]
                     }
                 },
                 "Kt" : {
                     "type" : "constant",
                     "param" : {
                         "colorType" : 0,
-                        "color" : [0.3, 0.66, 0.82]
+                        "color" : [0, 0, 0]
                     }
                 },
                 "uRough" : {
                     "type" : "constant",
-                    "param" : 0.0
+                    "param" : 0.5
                 },
                 "vRough" : {
                     "type" : "constant",
-                    "param" : 0.0
+                    "param" : 0.5
                 },
                 "eta" : {
                     "type" : "constant",
-                    "param" : 1.5
+                    "param" : 0.5
                 },
                 "bumpMap" : {
                     "type" : "constant",
-                    "param" : 0
+                    "param" : 0.5
                 },
                 "remapRough" : false 
-            }
-        },
-        "metal" : {
-            "type" : "metal",
-            "param" : {
-                "eta" : {
-                    "type" : "constant",
-                    "param" : {
-                        "colorType" : 0,
-                        "color" : [0.6, 1, 1]
-                    }
-                },
-                "k" : {
-                    "type" : "constant",
-                    "param" : {
-                        "colorType" : 0,
-                        "color" : [1, 1, 1]
-                    }
-                },
-                "rough" : {
-                    "type" : "constant",
-                    "param" : 0.1
-                },
-                "uRough" : {
-                    "type" : "constant",
-                    "param" : 0.1
-                },
-                "vRough" : {
-                    "type" : "constant",
-                    "param" : 0.1
-                },
-                "bumpMap" : {
-                    "type" : "constant",
-                    "param" : 0
-                },
-                "remapRough" : false
             }
         },
         "mirror" : {
@@ -233,6 +159,25 @@
         }
     },
     "shapes" : [
+        {
+            "type" : "sphere",
+            "enable" : false,
+            "param" : {
+                "transform" : [
+                    {
+                        "type" : "rotateX",
+                        "param" : [-90]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,0,1000]
+                    }
+                ],
+                "radius" : 999,
+                "phiMax" : 360
+            },
+            "material" : "matte1"
+        },
         {
             "type" : "triMesh",
             "subType" : "quad",
@@ -336,48 +281,31 @@
         {
             "type" : "triMesh",
             "subType" : "quad",
-            "name" : "front",
-            "enable" : false,
-            "param" : {
-                "transform" :[
-                    {
-                        "type" : "translate",
-                        "param" : [0,0,-1]
-                    }
-                ],
-                "width" : 2
-            },
-            "mediumInterface" : ["", ""],
-            "material" : null
-        },
-        {
-            "type" : "sphere",
             "name" : "light",
             "enable" : true,
             "param" : {
-                "transform" : [
+                "transform" :[
                     {
                         "type" : "rotateX",
                         "param" : [90]
                     },
                     {
                         "type" : "translate",
-                        "param" : [0,1.1,0]
+                        "param" : [0,0.95,0]
                     }
                 ],
-                "reverseOrientation" : false,
-                "zMin" : 0,
-                "radius" : 0.3
+                "reverseOrientation" : true,
+                "width" : 0.5
             },
             "material" : "black",
             "emission" : {
                 "nSamples" : 1,
                 "Le" : {
                     "colorType" : 1,
-                    "color" : [181.126, 131.971,37.323]
+                    "color" : [17, 12, 4]
                 },
-                "scale" : 0.1,
-                "twoSided" : false
+                "twoSided" : false,
+                "scale" : 3
             }
         },
         {
@@ -423,23 +351,10 @@
                 "z" : 0.6
             },
             "material" : "matte1"
-        },
-        {
-            "type" : "sphere",
-            "enable" : false,
-            "param" : {
-                "transform" : {
-                    "type" : "translate",
-                    "param" : [-0.22,0.27,0.3]
-                },
-                "radius" : 0.3,
-                "phiMax" : 360
-            },
-            "material" : "glass"
         }
     ],
     "integrator" : {
-        "type" : "pt",
+        "type" : "bdpt",
         "param" : {
             "maxBounce" : 5,
             "rrThreshold" : 1,
@@ -447,10 +362,9 @@
         }
     },
     "sampler" : {
-        "type" : "halton",
+        "type" : "random",
         "param" : {
-            "xSamples" : 4,
-            "spp" : 4
+            "spp" : 20
         }
     },
     "camera" : {
@@ -472,7 +386,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "bdpt-4spp.png",
+            "fileName" : "conelbox-bdpt-5spp.png",
             "diagonal" : 1,
             "scale" : 1
         }
