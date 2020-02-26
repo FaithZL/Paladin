@@ -377,8 +377,6 @@
 		F619E5D823F3DB96007F35EF /* lambert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F619E5D623F3DB96007F35EF /* lambert.cpp */; };
 		F619E5DB23F3DEA9007F35EF /* specular.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F619E5D923F3DEA9007F35EF /* specular.cpp */; };
 		F61B0F1824000E7200213277 /* pm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F61B0F1624000E7200213277 /* pm.cpp */; };
-		F61D0C252405738200A8437C /* unityparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F61D0C232405738200A8437C /* unityparser.cpp */; };
-		F61D0C28240573DF00A8437C /* unity2json.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F61D0C26240573DE00A8437C /* unity2json.cpp */; };
 		F61D0C2B2405788000A8437C /* unitymat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F61D0C292405788000A8437C /* unitymat.cpp */; };
 		F62D230123F5117F008B3C98 /* bsdf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F62D22FF23F5117F008B3C98 /* bsdf.cpp */; };
 		F63925CF23E92196007C6659 /* mlt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63925CD23E92196007C6659 /* mlt.cpp */; };
@@ -1448,10 +1446,6 @@
 		F619E5DA23F3DEA9007F35EF /* specular.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = specular.hpp; sourceTree = "<group>"; };
 		F61B0F1624000E7200213277 /* pm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pm.cpp; sourceTree = "<group>"; };
 		F61B0F1724000E7200213277 /* pm.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = pm.hpp; sourceTree = "<group>"; };
-		F61D0C232405738200A8437C /* unityparser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unityparser.cpp; sourceTree = "<group>"; };
-		F61D0C242405738200A8437C /* unityparser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = unityparser.hpp; sourceTree = "<group>"; };
-		F61D0C26240573DE00A8437C /* unity2json.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unity2json.cpp; sourceTree = "<group>"; };
-		F61D0C27240573DE00A8437C /* unity2json.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = unity2json.hpp; sourceTree = "<group>"; };
 		F61D0C292405788000A8437C /* unitymat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unitymat.cpp; path = src/materials/unitymat.cpp; sourceTree = "<group>"; };
 		F61D0C2A2405788000A8437C /* unitymat.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = unitymat.hpp; path = src/materials/unitymat.hpp; sourceTree = "<group>"; };
 		F62D22FF23F5117F008B3C98 /* bsdf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bsdf.cpp; sourceTree = "<group>"; };
@@ -1851,7 +1845,6 @@
 		65000D5448E94583A8295ADB /* parser */ = {
 			isa = PBXGroup;
 			children = (
-				F61D0C22240572E700A8437C /* unity */,
 				82CF00BD91E44536A561707E /* modelparser.cpp */,
 				C7FBA701D5A24969814AABFB /* modelparser.hpp */,
 				DA6A12DE4F1443268E41A68F /* sceneparser.cpp */,
@@ -2328,7 +2321,7 @@
 			children = (
 				F61B0F1524000E6300213277 /* pm */,
 				F63925CC23E92154007C6659 /* mlt */,
-				F63925C623E915E8007C6659 /* bidir_util */,
+				F63925C623E915E8007C6659 /* bidir */,
 				F3DF6F12E47F4934810ADDA8 /* bdpt */,
 				7385B92D8B5D45C099794549 /* geometry.cpp */,
 				F4CE65A834F54968B29D3A5E /* geometry.hpp */,
@@ -2755,19 +2748,7 @@
 			path = src/integrators/pm;
 			sourceTree = "<group>";
 		};
-		F61D0C22240572E700A8437C /* unity */ = {
-			isa = PBXGroup;
-			children = (
-				F61D0C232405738200A8437C /* unityparser.cpp */,
-				F61D0C242405738200A8437C /* unityparser.hpp */,
-				F61D0C26240573DE00A8437C /* unity2json.cpp */,
-				F61D0C27240573DE00A8437C /* unity2json.hpp */,
-			);
-			name = unity;
-			path = src/parser/unity;
-			sourceTree = "<group>";
-		};
-		F63925C623E915E8007C6659 /* bidir_util */ = {
+		F63925C623E915E8007C6659 /* bidir */ = {
 			isa = PBXGroup;
 			children = (
 				F63925CA23E918BB007C6659 /* endpoint.h */,
@@ -2777,8 +2758,8 @@
 				F618B36A23EDA86D004E0727 /* func.cpp */,
 				F618B36B23EDA86D004E0727 /* func.hpp */,
 			);
-			name = bidir_util;
-			path = src/integrators/bidir_util;
+			name = bidir;
+			path = src/integrators/bidir;
 			sourceTree = "<group>";
 		};
 		F63925CC23E92154007C6659 /* mlt */ = {
@@ -3640,7 +3621,6 @@
 				C8C06FE08F794076A06BC52A /* box.cpp in Sources */,
 				B1DCEA44AE164E6DA1A579B0 /* gaussian.cpp in Sources */,
 				2AF2C7877E284CF8BEF13098 /* mitchell.cpp in Sources */,
-				F61D0C28240573DF00A8437C /* unity2json.cpp in Sources */,
 				32FD494FE0B5439092CFEEAE /* sinc.cpp in Sources */,
 				BAE86EFAFE2E4D86AEC0716C /* triangle.cpp in Sources */,
 				41F53012AD8A4FF9A043459E /* bdpt.cpp in Sources */,
@@ -3652,7 +3632,6 @@
 				F736D2717E1446CD87D6DB68 /* distant.cpp in Sources */,
 				6F1A1F262AA64B14963A3132 /* envmap.cpp in Sources */,
 				6F63BF3E7A63423E8FD375D6 /* pointlight.cpp in Sources */,
-				F61D0C252405738200A8437C /* unityparser.cpp in Sources */,
 				3871D12182984FFA8A15E66E /* projection.cpp in Sources */,
 				EAF70C49C9284C50B707DC86 /* spot.cpp in Sources */,
 				DDBB210B1BEA4A8FA10E911B /* main.cpp in Sources */,

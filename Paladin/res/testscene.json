@@ -72,6 +72,14 @@
                 }  
             }
         },
+        "unity" : {
+            "type" : "unity",
+            "param" : {
+                "albedo" : [0.725, 0.71, 0.68],
+                "roughness" : 0.2,
+                "metallic" : 0.8
+            }
+        },
         "matte2" : {
             "type" : "matte",
             "param" : {

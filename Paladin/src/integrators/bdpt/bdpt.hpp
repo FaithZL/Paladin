@@ -280,7 +280,7 @@
  */
 
 #include "core/integrator.hpp"
-#include "../bidir_util/func.hpp"
+#include "../bidir/func.hpp"
 
 PALADIN_BEGIN
 

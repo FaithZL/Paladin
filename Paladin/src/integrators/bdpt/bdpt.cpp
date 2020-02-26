@@ -8,7 +8,7 @@
 #include "bdpt.hpp"
 #include "math/lightdistribute.hpp"
 #include "tools/progressreporter.hpp"
-#include "../bidir_util/func.hpp"
+#include "../bidir/func.hpp"
 
 
 PALADIN_BEGIN

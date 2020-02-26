@@ -833,6 +833,7 @@ vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &data,
 //                "param" : [0.35,-0.7,-0.4]
 //            }
 //        ],
+//        "swapHandness" : true,
 //        "fileName" : "res/box.obj"
 //    },
 //    "material" : "matte1"
@@ -844,14 +845,21 @@ vector<shared_ptr<Primitive>> createModelPrimitive(const nloJson &data,
     nloJson param = data.value("param", nloJson::object());
     string fileName = param.value("fileName", "");
     string basePath = param.value("basePath", "");
-    auto l2w = shared_ptr<const Transform>(createTransform(param.value("transform", nloJson())));
+    bool swapHandness = param.value("swapHandness", true);
+    auto l2w = createTransform(param.value("transform", nloJson()));
+    if (swapHandness) {
+        Transform swapHand = Transform::scale(-1, 1, 1);
+        *l2w = swapHand * (*l2w);
+    }
+    auto s_l2w = shared_ptr<const Transform>(l2w);
+    
     bool ro = param.value("reverseOrientation", false);
     nloJson emissionData = data.value("emission", nloJson());
     // 如果没有发光属性，并且没有指定材质，则使用模型原有材质
     if (emissionData.is_null() && mat == nullptr) {
-        return getPrimitiveFromObj(fileName, l2w, lights, mediumInterface, ro);
+        return getPrimitiveFromObj(fileName, s_l2w, lights, mediumInterface, ro);
     }
-    vector<shared_ptr<Shape>> triLst = createTriFromFile(fileName, l2w, ro, basePath);
+    vector<shared_ptr<Shape>> triLst = createTriFromFile(fileName, s_l2w, ro, basePath);
     return createPrimitive(triLst, lights, mat, mediumInterface, emissionData);
 }
 
