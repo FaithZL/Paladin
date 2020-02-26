@@ -210,7 +210,7 @@ public:
                0.0171201f * x * x * x + 0.000640711f * x * x * x * x;
     }
 
-    BeckmannDistribution(Float alphax, Float alphay, bool samplevis = true)
+    BeckmannDistribution(Float alphax, Float alphay, bool samplevis = false)
     : MicrofacetDistribution(samplevis),
     _alphax(alphax),
     _alphay(alphay) {
@@ -354,7 +354,7 @@ public:
     }
     
     GGXDistribution(Float alphax, Float alphay,
-                                bool samplevis = true)
+                                bool samplevis = false)
     : MicrofacetDistribution(samplevis),
     _alphax(alphax),
     _alphay(alphay) {

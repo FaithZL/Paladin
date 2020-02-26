@@ -19,7 +19,9 @@ public:
     UnityMaterial(const std::shared_ptr<Texture<Spectrum>>& albedo,
                   const std::shared_ptr<Texture<Float>>& metallic,
                   const std::shared_ptr<Texture<Float>>& roughness)
-    :_albedo(albedo),_metallic(metallic),_roughness(roughness){
+    :_albedo(albedo),
+    _metallic(metallic),
+    _roughness(roughness){
         
     }
     
@@ -36,6 +38,8 @@ private:
     std::shared_ptr<Texture<Float>> _metallic;
     std::shared_ptr<Texture<Float>> _roughness;
 };
+
+CObject_ptr createUnityMaterial(const nloJson &, const Arguments &lst);
 
 PALADIN_END
 

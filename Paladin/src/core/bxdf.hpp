@@ -320,6 +320,11 @@ inline bool sameHemisphere(const Vector3f &w, const Normal3f &wp) {
     return w.z * wp.z > 0;
 }
 
+inline Spectrum schlickFresnel(const Spectrum &R, Float cosTheta) {
+    auto pow5 = [](Float a) { return (a * a) * (a * a) * a; };
+    return R + (Spectrum(1) - R) * pow5(1 - cosTheta);
+}
+
 /**
  * 反射类型
  * 一个bxdf的类型至少要有一个BSDF_REFLECTION 或 BSDF_TRANSMISSION
@@ -581,7 +586,25 @@ public:
     }
 };
 
+class FresnelSchlick : public Fresnel {
 
+public:
+    FresnelSchlick(const Spectrum &F0)
+    : _F0(F0) {
+        
+    }
+
+    virtual Spectrum evaluate(Float cosI) const override {
+        return schlickFresnel(_F0, cosI);
+    }
+    
+    virtual std::string toString() const {
+        return std::string("[ FresnelSchlick etaI: ") + _F0.ToString() + std::string(" ]");
+    }
+    
+private:
+    Spectrum _F0;
+};
 
 
 /**
