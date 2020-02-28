@@ -150,11 +150,43 @@ RGBSpectrum * _readImageHDR(const std::string &name, int *width, int *height) {
     return ret;
 }
 
+static inline int isWhitespace(char c) {
+    return c == ' ' || c == '\n' || c == '\t';
+}
+
+static int readWord(FILE *fp, char *buffer, int bufferLength) {
+    int n;
+    int c;
+
+    if (bufferLength < 1) return -1;
+
+    n = 0;
+    c = fgetc(fp);
+    while (c != EOF && !isWhitespace(c) && n < bufferLength) {
+        buffer[n] = c;
+        ++n;
+        c = fgetc(fp);
+    }
+
+    if (n < bufferLength) {
+        buffer[n] = '\0';
+        return n;
+    }
+
+    return -1;
+}
+
+RGBSpectrum * _readImagePFM(const std::string &filename, int *xres, int *yres) {
+    
+}
+
 std::unique_ptr<RGBSpectrum[]> readImage(const std::string &name, Point2i *resolution) {
     if (hasExtension(name, "hdr")) {
         return std::unique_ptr<RGBSpectrum []>(_readImageHDR(name, &resolution->x, &resolution->y));
     } else if (hasExtension(name, "exr")) {
         return std::unique_ptr<RGBSpectrum []>(_readImageEXR(name, &resolution->x, &resolution->y));
+    } else if (hasExtension(name, "pfm")) {
+        return std::unique_ptr<RGBSpectrum []>(_readImagePFM(name, &resolution->x, &resolution->y));
     }
     // 暂时支持png，jpg，tga
     return std::unique_ptr<RGBSpectrum []>(_readImage(name, &resolution->x, &resolution->y));
