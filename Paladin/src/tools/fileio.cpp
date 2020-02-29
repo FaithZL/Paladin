@@ -150,11 +150,11 @@ RGBSpectrum * _readImageHDR(const std::string &name, int *width, int *height) {
     return ret;
 }
 
-static inline int isWhitespace(char c) {
+inline int isWhitespace(char c) {
     return c == ' ' || c == '\n' || c == '\t';
 }
 
-static int readWord(FILE *fp, char *buffer, int bufferLength) {
+int readWord(FILE *fp, char *buffer, int bufferLength) {
     int n;
     int c;
 
@@ -176,8 +176,94 @@ static int readWord(FILE *fp, char *buffer, int bufferLength) {
     return -1;
 }
 
+static constexpr bool hostLittleEndian = true;
+
+#define BUFFER_SIZE 80
+
 RGBSpectrum * _readImagePFM(const std::string &filename, int *xres, int *yres) {
-    
+    float *data = nullptr;
+        RGBSpectrum *rgb = nullptr;
+        char buffer[BUFFER_SIZE];
+        unsigned int nFloats;
+        int nChannels, width, height;
+        float scale;
+        bool fileLittleEndian;
+
+        FILE *fp = fopen(filename.c_str(), "rb");
+        if (!fp) goto fail;
+
+        // read either "Pf" or "PF"
+        if (readWord(fp, buffer, BUFFER_SIZE) == -1) goto fail;
+
+        if (strcmp(buffer, "Pf") == 0)
+            nChannels = 1;
+        else if (strcmp(buffer, "PF") == 0)
+            nChannels = 3;
+        else
+            goto fail;
+
+        // read the rest of the header
+        // read width
+        if (readWord(fp, buffer, BUFFER_SIZE) == -1) goto fail;
+        width = atoi(buffer);
+        *xres = width;
+
+        // read height
+        if (readWord(fp, buffer, BUFFER_SIZE) == -1) goto fail;
+        height = atoi(buffer);
+        *yres = height;
+
+        // read scale
+        if (readWord(fp, buffer, BUFFER_SIZE) == -1) goto fail;
+        sscanf(buffer, "%f", &scale);
+
+        // read the data
+        nFloats = nChannels * width * height;
+        data = new float[nFloats];
+        // Flip in Y, as P*M has the origin at the lower left.
+        for (int y = height - 1; y >= 0; --y) {
+            if (fread(&data[y * nChannels * width], sizeof(float),
+                      nChannels * width, fp) != nChannels * width)
+                goto fail;
+        }
+
+        // apply endian conversian and scale if appropriate
+        fileLittleEndian = (scale < 0.f);
+        if (hostLittleEndian ^ fileLittleEndian) {
+            uint8_t bytes[4];
+            for (unsigned int i = 0; i < nFloats; ++i) {
+                memcpy(bytes, &data[i], 4);
+                std::swap(bytes[0], bytes[3]);
+                std::swap(bytes[1], bytes[2]);
+                memcpy(&data[i], bytes, 4);
+            }
+        }
+        if (std::abs(scale) != 1.f)
+            for (unsigned int i = 0; i < nFloats; ++i) data[i] *= std::abs(scale);
+
+        // create RGBs...
+        rgb = new RGBSpectrum[width * height];
+        if (nChannels == 1) {
+            for (int i = 0; i < width * height; ++i) rgb[i] = RGBSpectrum(data[i]);
+        } else {
+            for (int i = 0; i < width * height; ++i) {
+                Float frgb[3] = {data[3 * i], data[3 * i + 1], data[3 * i + 2]};
+                rgb[i] = RGBSpectrum::FromRGB(frgb);
+            }
+        }
+
+        delete[] data;
+        fclose(fp);
+        LOG(INFO) << StringPrintf("Read PFM image %s (%d x %d)",
+                                  filename.c_str(), *xres, *yres);
+        return rgb;
+
+    fail:
+        LOG(ERROR) << ("Error reading PFM file \"%s\"", filename.c_str());
+        if (fp) fclose(fp);
+        delete[] data;
+        delete[] rgb;
+        return nullptr;
 }
 
 std::unique_ptr<RGBSpectrum[]> readImage(const std::string &name, Point2i *resolution) {
