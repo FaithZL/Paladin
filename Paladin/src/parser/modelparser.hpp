@@ -18,7 +18,10 @@ PALADIN_BEGIN
 
 using namespace tinyobj;
 
-
+struct SurfaceData {
+    shared_ptr<const Material> material;
+    Float emission[3];
+};
 
 class ModelParser {
     
@@ -27,11 +30,6 @@ public:
     ModelParser() {
         
     }
-    
-    struct SurfaceData {
-        shared_ptr<const Material> material;
-        Float emission[3];
-    };
     
     bool load(const string &fn, const string &basePath = "",
               bool triangulate = true);

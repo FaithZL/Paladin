@@ -21,6 +21,7 @@
 #include "materials/matte.hpp"
 #include "textures/constant.hpp"
 #include "lights/distant.hpp"
+#include "meshparser.hpp"
 
 PALADIN_BEGIN
 
@@ -350,8 +351,12 @@ void SceneParser::parseTriMesh(const nloJson &data) {
         prims = createQuadPrimitive(data, mat, _lights, mediumInterface);
     } else if (subType == "cube") {
         prims = createCubePrimitive(data, mat, _lights, mediumInterface);
-    } else if (subType == "model"){
+    } else if (subType == "model") {
         prims = createModelPrimitive(data, mat, _lights, mediumInterface);
+    } else if (subType == "mesh") {
+        TriangleParser tp;
+        tp.load(data);
+        prims = tp.getPrimitiveLst();
     }
     if (data.value("clone", false)) {
         string name = data.value("name", "");

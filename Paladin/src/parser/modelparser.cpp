@@ -124,7 +124,7 @@ shared_ptr<Texture<Spectrum>> createKr(const material_t &mat, const string &base
     return nullptr;
 }
 
-ModelParser::SurfaceData ModelParser::fromObjMaterial(const material_t &mat) {
+SurfaceData ModelParser::fromObjMaterial(const material_t &mat) {
     SurfaceData ret;
     ret.emission[0] = mat.emission[0];
     ret.emission[1] = mat.emission[1];

@@ -368,6 +368,7 @@
 		F4E589C9155849F8B26DA8AD /* medium.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 309E196AB47E46A3A8A3E996 /* medium.cpp */; settings = {COMPILER_FLAGS = ""; }; };
 		F5304BFDC59F4F208D7B7AF8 /* ImfStandardAttributes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F5684FEF3D74445A5D72DCB /* ImfStandardAttributes.cpp */; settings = {COMPILER_FLAGS = ""; }; };
 		F615DF4123F8326D004197AA /* fourierbsdf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F615DF3F23F8326D004197AA /* fourierbsdf.cpp */; };
+		F6160232240BDD5D00515131 /* meshparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6160230240BDD5D00515131 /* meshparser.cpp */; };
 		F618B36923ED9CC1004E0727 /* vertex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F618B36723ED9CC1004E0727 /* vertex.cpp */; };
 		F618B36C23EDA86D004E0727 /* func.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F618B36A23EDA86D004E0727 /* func.cpp */; };
 		F618CC9023F64C40005648D9 /* reflection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F618CC8E23F64C40005648D9 /* reflection.cpp */; };
@@ -1428,6 +1429,8 @@
 		F615DF3E23F83238004197AA /* bssrdf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bssrdf.cpp; sourceTree = "<group>"; };
 		F615DF3F23F8326D004197AA /* fourierbsdf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fourierbsdf.cpp; sourceTree = "<group>"; };
 		F615DF4023F8326D004197AA /* fourierbsdf.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fourierbsdf.hpp; sourceTree = "<group>"; };
+		F6160230240BDD5D00515131 /* meshparser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = meshparser.cpp; path = src/parser/meshparser.cpp; sourceTree = "<group>"; };
+		F6160231240BDD5D00515131 /* meshparser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = meshparser.hpp; path = src/parser/meshparser.hpp; sourceTree = "<group>"; };
 		F618B36723ED9CC1004E0727 /* vertex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vertex.cpp; sourceTree = "<group>"; };
 		F618B36823ED9CC1004E0727 /* vertex.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vertex.hpp; sourceTree = "<group>"; };
 		F618B36A23EDA86D004E0727 /* func.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = func.cpp; sourceTree = "<group>"; };
@@ -1850,6 +1853,8 @@
 				DA6A12DE4F1443268E41A68F /* sceneparser.cpp */,
 				1DFCCE8FE6A541249911FC55 /* sceneparser.hpp */,
 				F54621DA48AF4D75A00B5D74 /* transformcache.h */,
+				F6160230240BDD5D00515131 /* meshparser.cpp */,
+				F6160231240BDD5D00515131 /* meshparser.hpp */,
 			);
 			name = parser;
 			sourceTree = "<group>";
@@ -3643,6 +3648,7 @@
 				F619E5D823F3DB96007F35EF /* lambert.cpp in Sources */,
 				82F07DF45A2B4A60AB216AC7 /* matte.cpp in Sources */,
 				C438D495EBF843DE8A6B4BA2 /* metal.cpp in Sources */,
+				F6160232240BDD5D00515131 /* meshparser.cpp in Sources */,
 				BF64169454C44A8796B1F0D3 /* mirror.cpp in Sources */,
 				F618B36923ED9CC1004E0727 /* vertex.cpp in Sources */,
 				BB8352CCE820496284781743 /* mix.cpp in Sources */,
