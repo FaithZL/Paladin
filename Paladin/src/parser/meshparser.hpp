@@ -44,7 +44,7 @@ private:
     vector<int> _faceIndices;
     
     // 顶点索引列表
-    vector<Index> _verts;
+    vector<int> _verts;
     // 材质列表
     vector<SurfaceData> _materialLst;
     // 材质索引列表

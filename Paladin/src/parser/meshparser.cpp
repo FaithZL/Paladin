@@ -28,7 +28,7 @@ PALADIN_BEGIN
 //        "material" : {
 //
 //        },
-//        "index" : [
+//        "indexes" : [
 //            1,2,3,
 //            3,5,6
 //        ],
@@ -38,6 +38,35 @@ PALADIN_BEGIN
 //    }
 //},
 void TriangleParser::load(const nloJson &data) {
+    nloJson param = data.value("param", nloJson());
+    nloJson normals = param.value("normals", nloJson::array());
+    for (auto iter = normals.cbegin(); iter != normals.cend(); iter += 3) {
+        Float nx = iter[0];
+        Float ny = iter[1];
+        Float nz = iter[2];
+        _normals.emplace_back(nx, ny, nz);
+    }
+    
+    nloJson verts = param.value("verts", nloJson::array());
+    for (auto iter = verts.cbegin(); iter != verts.cend(); iter += 3) {
+        Float px = iter[0];
+        Float py = iter[1];
+        Float pz = iter[2];
+        _points.emplace_back(px, py, pz);
+    }
+    
+    nloJson UVs = param.value("UVs", nloJson::array());
+    for (auto iter = UVs.cbegin(); iter != UVs.cend(); iter += 2) {
+        Float u = iter[0];
+        Float v = iter[1];
+        _UVs.emplace_back(u, v);
+    }
+    
+    nloJson indexes = param.value("indexes", nloJson::array());
+    for (auto iter = indexes.cbegin(); iter != indexes.cend(); ++iter) {
+        _verts.emplace_back(*iter);
+    }
+    
     
 }
 
