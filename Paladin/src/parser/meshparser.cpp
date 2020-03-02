@@ -9,6 +9,34 @@
 
 PALADIN_BEGIN
 
+//data : {
+//    "type" : "triMesh",
+//    "subType" : "mesh",
+//    "param" : {
+//        "normals" : [
+//            1,0,0,
+//            2,0,0
+//        ],
+//        "verts" : [
+//            2,1,1,
+//            3,2,1
+//        ],
+//        "UVs" : [
+//            0.9,0.3,
+//            0.5,0.6
+//        ],
+//        "material" : {
+//
+//        },
+//        "index" : [
+//            1,2,3,
+//            3,5,6
+//        ],
+//        "transform" : [
+//
+//        ]
+//    }
+//},
 void TriangleParser::load(const nloJson &data) {
     
 }
