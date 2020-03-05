@@ -355,6 +355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21089af8ed2e34747a5c2e88e3d6086d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threadNum: 0
   filterName: 0
   filterRadius: {x: 1, y: 1}
   alpha: 2
@@ -368,7 +369,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
-  outputName: paladin.png
+  outputName: paladin
   fileFormat: 0
   scale: 1
   diagonal: 1
@@ -376,6 +377,8 @@ MonoBehaviour:
   spp: 2
   xSpp: 1
   ySpp: 1
+  dimensions: 6
+  jitter: 1
   integratorName: 0
   maxBounce: 6
   rrThreshold: 1

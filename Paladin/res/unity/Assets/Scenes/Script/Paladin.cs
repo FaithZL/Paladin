@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using LitJson;
+using UnityEngine.Assertions;
+using System.IO;
 
 public class Paladin : MonoBehaviour {
 
     public int threadNum = 0;
-
-    static private String _sign = "-----------";
 
     [Header("--------filter param--------")]
     public Filter filterName;
@@ -15,8 +16,8 @@ public class Paladin : MonoBehaviour {
     [Header("Gaussian")]
     public float alpha = 2;
     [Header("Mitchell")]
-    public float b = 1.0f / 3.0f;
-    public float c = 1.0f / 3.0f;
+    public float B = 1.0f / 3.0f;
+    public float C = 1.0f / 3.0f;
     [Header("Sinc")]
     public float tau = 3.0f;
 
@@ -31,11 +32,16 @@ public class Paladin : MonoBehaviour {
     [Range(0, 1)]
     public float diagonal = 1.0f;
 
+    [Header("Halton,Random")]
     [Header("--------sampler param--------")]
+
     public Sampler samplerName;
     public int spp = 2;
+    [Header("Stratified")]
     public int xSpp = 1;
     public int ySpp = 1;
+    public int dimensions = 6;
+    public bool jitter = true;
 
     [Header("--------integrator param--------")]
     public Integrator integratorName;
@@ -62,23 +68,95 @@ public class Paladin : MonoBehaviour {
 
     private Camera _camera;
 
-    private System.Object _output;
+    private JsonData _output = new JsonData();
 
 
     void Start() {
         Debug.Log("导出");
-        Export();
+        exec();
+        export();
+        Debug.Log("导出完毕");
+    }
+
+    void exec() {
+        handleCamera();
+        handleFilm();
+        handleFilter();
+        handleSampler();
+        handlePrimitives();
+        handleIntegrator();
+        handleLights();
+        handleAccelerator();
+        handleThreadNum();
     }
 
     void handleCamera() {
         
     }
 
-    void handleSampler() {
+    void handleThreadNum() {
+        _output["threadNum"] = threadNum;
+    }
 
+    void handleSampler() {
+        var samplerData = new JsonData();
+
+        var param = new JsonData();
+
+        samplerData["param"] = param;
+        
+        switch (samplerName) {
+            case Sampler.halton:
+                samplerData["type"] = "halton";
+                param["spp"] = spp;
+                break;
+            case Sampler.random:
+                samplerData["type"] = "random";
+                param["spp"] = spp;
+                break;
+            case Sampler.stratified:
+                samplerData["type"] = "stratified";
+                param["xsamples"] = xSpp;
+                param["ysamples"] = ySpp;
+                param["dimensions"] = dimensions;
+                param["jitter"] = jitter;
+                break;
+        }
+        _output["sampler"] = samplerData;
     }
 
     void handleFilter() {
+        var filterData = new JsonData();
+        var param = new JsonData();
+        filterData["param"] = param;
+
+        var radius = new JsonData();
+        radius.Add((double)filterRadius.x);
+        radius.Add((double)filterRadius.y);
+        param["radius"] = radius;
+
+        switch (filterName) {
+            case Filter.box:
+                filterData["type"] = "box";
+                break;
+            case Filter.triange:
+                filterData["type"] = "triangle";
+                break;
+            case Filter.gaussian:
+                filterData["type"] = "gaussian";
+                param["alpha"] = alpha;
+                break;
+            case Filter.mitchell:
+                filterData["type"] = "mitchell";
+                param["B"] = B;
+                param["C"] = C;
+                break;
+            case Filter.sinc:
+                filterData["type"] = "sinc";
+                param["tau"] = tau;
+                break;
+        }
+        _output["filter"] = filterData;
 
     }
 
@@ -102,17 +180,16 @@ public class Paladin : MonoBehaviour {
 
     }
 
-    void Export() {
-        Camera camera = GameObject.FindObjectOfType<Camera>() as Camera;
-        
-        MeshFilter[] primitives = GameObject.FindObjectsOfType<MeshFilter>() as MeshFilter[];
-        var shape = primitives[0];
-        _primitives.Add(shape);
+    void export() {
+        string json = _output.ToJson(true);
+        var dir = "paladin_output";
+        if (!Directory.Exists(dir)) {
+            Directory.CreateDirectory(dir);
+        }
+        string SceneFileName = outputName;
+        var sr = File.CreateText("./" + dir + "/" + SceneFileName + ".json");
 
-        
-
-        Material material = shape.GetComponent<Renderer>().sharedMaterial;
-
-        Light[] lights = GameObject.FindObjectsOfType<Light>() as Light[];
+        sr.WriteLine(json);
+        sr.Close();
     }
 }
