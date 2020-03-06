@@ -334,7 +334,7 @@ Float Sphere::pdfDir(const paladin::Interaction &ref, const Vector3f &wi) const 
 }
 
 //"param" : {
-//    "worldToLocal" : {
+//    "transform" : {
 //        "type" : "translate",
 //        "param" : [1,1,1]
 //    },

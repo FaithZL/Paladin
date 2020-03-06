@@ -33,7 +33,7 @@ public:
     }
     
     Matrix4x4(const Float * value) {
-        for (int i = 0 ;i< 16 ; ++ i) {
+        for (int i = 0; i < 16 ; ++ i) {
             _a[i] = value[i];
         }
     }
@@ -588,6 +588,8 @@ CObject_ptr createRotate(const nloJson &, const Arguments &);
 CObject_ptr createLookAt(const nloJson &, const Arguments &);
         
 CObject_ptr createIdentity(const nloJson &, const Arguments &);
+
+CObject_ptr createMatrix(const nloJson &, const Arguments &);
 
 Transform * createTransform(const nloJson &);
 

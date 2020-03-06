@@ -693,6 +693,21 @@ CObject_ptr createIdentity(const nloJson &, const Arguments &) {
     return Transform::identity_ptr();
 }
 
+//"param" : [
+//    1,0,0,0,
+//    0,1,0,0,
+//    0,0,1,0,
+//    0,0,0,1
+//]
+CObject_ptr createMatrix(const nloJson &param, const Arguments &) {
+    Float a[16] = {};
+    for (size_t i = 0; i < 16; ++i) {
+        a[i] = param[i];
+    }
+    return new Transform(a);
+}
+    
+
 //data : {
 //    "type" : "translate",
 //    "param" : [0,0,0]
@@ -729,6 +744,7 @@ REGISTER("rotateZ", createRotateZ);
 REGISTER("rotate", createRotate);
 REGISTER("lookAt", createLookAt);
 REGISTER("identity", createIdentity);
+REGISTER("matrix", createMatrix);
 
 
 
