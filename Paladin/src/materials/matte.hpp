@@ -52,7 +52,7 @@ private:
  * 为光源创建的默认材质
  * @return
  */
-shared_ptr<MatteMaterial> createLightMat();
+shared_ptr<const MatteMaterial> createLightMat();
 
 CObject_ptr createMatte(const nloJson &, const Arguments&);
 

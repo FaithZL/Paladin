@@ -38,7 +38,7 @@ void MatteMaterial::computeScatteringFunctions(SurfaceInteraction *si,
 	}
 }
 
-shared_ptr<MatteMaterial> createLightMat() {
+shared_ptr<const MatteMaterial> createLightMat() {
     ConstantTexture<Spectrum> * Kd = new ConstantTexture<Spectrum>(Spectrum(0.f));
     return make_shared<MatteMaterial>(shared_ptr<Texture<Spectrum>>(Kd), nullptr, nullptr);
 }

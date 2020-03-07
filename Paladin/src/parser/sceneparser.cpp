@@ -304,7 +304,15 @@ void SceneParser::parseSimpleShape(const nloJson &data, const string &type) {
     nloJson param = data.value("param", nloJson::object());
     auto creator = GET_CREATOR(type);
     auto shape = shared_ptr<Shape>(dynamic_cast<Shape *>(creator(param, {})));
-    auto mat = getMaterial(data.value("material", nloJson()));
+    nloJson matData = data.value("material", nloJson());
+    shared_ptr<const Material> mat;
+        
+    if (matData.is_object()) {
+        mat.reset(createMaterial(matData));
+    } else {
+        mat = getMaterial(matData);
+    }
+    
     nloJson medIntfceData = data.value("mediumInterface", nloJson());
     MediumInterface mediumInterface = getMediumIntetface(medIntfceData);
     auto tmpLight = createDiffuseAreaLight(data.value("emission", nloJson()), shape, mediumInterface);
@@ -354,9 +362,9 @@ void SceneParser::parseTriMesh(const nloJson &data) {
     } else if (subType == "model") {
         prims = createModelPrimitive(data, mat, _lights, mediumInterface);
     } else if (subType == "mesh") {
-        TriangleParser tp;
-        tp.load(data);
-        prims = tp.getPrimitiveLst();
+        MeshParser mp;
+        mp.load(data);
+        prims = mp.getPrimitiveLst();
     }
     if (data.value("clone", false)) {
         string name = data.value("name", "");

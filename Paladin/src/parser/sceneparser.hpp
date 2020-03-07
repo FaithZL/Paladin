@@ -73,11 +73,6 @@ public:
     Film * parseFilm(const nloJson &param, Filter *);
     
     Transform * getTransform(const string &key) const {
-//        auto iter = _transformCache.find(key);
-//        cout << &iter << endl;
-//        if (iter == _transformCache.end()) {
-//            return nullptr;
-//        }
         return _transformCache.at(key);
     }
     
