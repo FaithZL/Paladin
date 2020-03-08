@@ -21,7 +21,7 @@ class SceneParser {
     
 public:
     void loadFromJson(const std::string &fn) {
-        try {
+//        try {
             std::ifstream fst;
             fst.open(fn.c_str());
             stringstream buffer;
@@ -29,10 +29,10 @@ public:
             string str = buffer.str();
             nloJson json = nloJson::parse(str);
             parse(json);
-        } catch (const std::exception &exc) {
-            cout << exc.what();
-            return;
-        }
+//        } catch (const std::exception &exc) {
+//            cout << exc.what();
+//            return;
+//        }
     }
     
     void parse(const nloJson &);

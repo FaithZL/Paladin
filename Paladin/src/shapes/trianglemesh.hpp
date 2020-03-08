@@ -27,6 +27,14 @@ struct Index {
         
     }
     
+    Index(int idx)
+    : uv(idx),
+    pos(idx),
+    normal(idx),
+    edge(idx) {
+        
+    }
+    
     Index() {
         uv = 0;
         pos = 0;

@@ -210,7 +210,6 @@ vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<cons
     size_t nTriangles = _verts.size() / 3;
     auto mesh = TriangleMesh::create(o2w, nTriangles, _verts, &_points, &_normals, &_UVs);
     shared_ptr<Transform> w2o(o2w->getInverse_ptr());
-    vector<shared_ptr<Shape>> triLst;
     for (size_t i = 0; i < nTriangles; ++i) {
         auto tri = createTri(o2w, w2o, reverseOrientation, mesh, i);
         int matIdx = _matIndices[i];

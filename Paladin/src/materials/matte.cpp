@@ -65,7 +65,7 @@ CObject_ptr createMatte(const nloJson &param, const Arguments& lst) {
     auto Kd = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_Kd));
     nloJson _sigma = param.value("sigma", nloJson::object());
     auto sigma = shared_ptr<Texture<Float>>(createFloatTexture(_sigma));
-    nloJson _bumpMap = param.value("bumpMap", nloJson::object());
+    nloJson _bumpMap = param.value("bumpMap", nloJson());
     auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
     auto ret = new MatteMaterial(Kd, sigma, bumpMap);
     return ret;

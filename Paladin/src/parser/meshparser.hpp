@@ -23,14 +23,15 @@ class MeshParser {
 public:
     
     MeshParser()
-    : _material(nullptr),
+    :_transform(nullptr),
+    _material(nullptr),
     _emissionData(nullptr) {
         
     }
     
     void load(const nloJson &data);
     
-    vector<shared_ptr<Primitive>> getPrimitiveLst();
+    vector<shared_ptr<Primitive>> getPrimitiveLst(vector<shared_ptr<Light>> &lights);
     
 private:
     // 顶点列表
@@ -44,10 +45,13 @@ private:
     // 面索引列表
     vector<int> _faceIndices;
     
+    shared_ptr<const Transform> _transform;
+    
     // 顶点索引列表
-    vector<int> _verts;
+    vector<Index> _verts;
     // 材质列表
     shared_ptr<const Material> _material;
+
     // 发光参数
     nloJson _emissionData;
     // 材质索引列表

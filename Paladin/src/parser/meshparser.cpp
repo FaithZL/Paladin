@@ -7,6 +7,8 @@
 
 #include "meshparser.hpp"
 #include "materials/matte.hpp"
+#include "lights/diffuse.hpp"
+#include "core/primitive.hpp"
 
 PALADIN_BEGIN
 
@@ -89,18 +91,39 @@ void MeshParser::load(const nloJson &data) {
     
     _emissionData = data.value("emission", nloJson());
     if (_emissionData.is_null()) {
-        nloJson matData = param.value("material", nullptr);
+        nloJson matData = param.value("material", nloJson());
         _material.reset(createMaterial(matData));
     } else {
         _material = createLightMat();
     }
+    
+    nloJson transformData = param.value("transform", nloJson());
+    _transform.reset(createTransform(transformData));
 }
 
-vector<shared_ptr<Primitive>> MeshParser::getPrimitiveLst() {
+vector<shared_ptr<Primitive>> MeshParser::getPrimitiveLst(vector<shared_ptr<Light>> &lights) {
     vector<shared_ptr<Primitive>> ret;
     
     size_t nTriangles = _verts.size() / 3;
     
+    auto mesh = TriangleMesh::create(_transform, nTriangles, _verts,
+                                     &_points, &_normals, &_UVs);
+    shared_ptr<Transform> w2o(_transform->getInverse_ptr());
+    vector<shared_ptr<Shape>> triLst;
+    MediumInterface mi(nullptr);
+    for (size_t i = 0; i < nTriangles; ++i) {
+        auto tri = createTri(_transform, w2o, false, mesh, i);
+        shared_ptr<DiffuseAreaLight> light;
+        shared_ptr<GeometricPrimitive> prim;
+        if (!_emissionData.is_null()) {
+            light.reset(createDiffuseAreaLight(_emissionData, tri, mi));
+            prim = GeometricPrimitive::create(tri, _material, light, mi);
+            lights.push_back(light);
+        } else {
+            prim = GeometricPrimitive::create(tri, nullptr, nullptr, mi);
+        }
+        ret.push_back(prim);
+    }
     return ret;
 }
 

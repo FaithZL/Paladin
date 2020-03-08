@@ -364,7 +364,7 @@ void SceneParser::parseTriMesh(const nloJson &data) {
     } else if (subType == "mesh") {
         MeshParser mp;
         mp.load(data);
-        prims = mp.getPrimitiveLst();
+        prims = mp.getPrimitiveLst(_lights);
     }
     if (data.value("clone", false)) {
         string name = data.value("name", "");
