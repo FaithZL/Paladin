@@ -273,6 +273,23 @@
         {
             "type" : "triMesh",
             "subType" : "mesh",
+            "material" : {
+                "type" : "unity",
+                "param" : {
+                    "albedo" : [0.725, 0.71, 0.68],
+                    "roughness" : 0.2,
+                    "metallic" : 0.8
+                }
+            },
+            "transform" : {
+                "type" : "matrix",
+                "param" : [
+                    1,0,0,0,
+                    0,1,0,0,
+                    0,0,1,0,
+                    0,0,0,1
+                ]
+            },
             "param" : {
                 "normals" : [
                     1,0,0,
@@ -286,27 +303,10 @@
                     0.9,0.3,
                     0.5,0.6
                 ],
-                "material" : {
-                    "type" : "unity",
-                    "param" : {
-                        "albedo" : [0.725, 0.71, 0.68],
-                        "roughness" : 0.2,
-                        "metallic" : 0.8
-                    }
-                },
                 "indexes" : [
                     1,2,3,
                     3,5,6
-                ],
-                "transform" : {
-                    "type" : "matrix",
-                    "param" : [
-                        1,0,0,0,
-                        0,1,0,0,
-                        0,0,1,0,
-                        0,0,0,1
-                    ]
-                }
+                ]
             }
         },
         {

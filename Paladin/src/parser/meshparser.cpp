@@ -15,6 +15,23 @@ PALADIN_BEGIN
 //data : {
 //    "type" : "triMesh",
 //    "subType" : "mesh",
+//    "material" : {
+//        "type" : "unity",
+//        "param" : {
+//            "albedo" : [0.725, 0.71, 0.68],
+//            "roughness" : 0.2,
+//            "metallic" : 0.8
+//        }
+//    },
+//    "transform" : {
+//        "type" : "matrix",
+//        "param" : [
+//            1,0,0,0,
+//            0,1,0,0,
+//            0,0,1,0,
+//            0,0,0,1
+//        ]
+//    },
 //    "param" : {
 //        "normals" : [
 //            1,0,0,
@@ -28,35 +45,10 @@ PALADIN_BEGIN
 //            0.9,0.3,
 //            0.5,0.6
 //        ],
-//        "material" : {
-//            "type" : "unity",
-//            "param" : {
-//                "albedo" : [0.725, 0.71, 0.68],
-//                "roughness" : 0.2,
-//                "metallic" : 0.8
-//            }
-//        },
 //        "indexes" : [
 //            1,2,3,
 //            3,5,6
-//        ],
-//        "transform" : {
-//            "type" : "matrix",
-//            "param" : [
-//                1,0,0,0,
-//                0,1,0,0,
-//                0,0,1,0,
-//                0,0,0,1
-//            ]
-//        }
-//    }
-//    "emission" : {
-//        "nSamples" : 1,
-//        "Le" : {
-//            "colorType" : 1,
-//            "color" : [1,1,1]
-//        },
-//        "twoSided" : false
+//        ]
 //    }
 //},
 void MeshParser::load(const nloJson &data) {
@@ -91,13 +83,13 @@ void MeshParser::load(const nloJson &data) {
     
     _emissionData = data.value("emission", nloJson());
     if (_emissionData.is_null()) {
-        nloJson matData = param.value("material", nloJson());
+        nloJson matData = data.value("material", nloJson());
         _material.reset(createMaterial(matData));
     } else {
         _material = createLightMat();
     }
     
-    nloJson transformData = param.value("transform", nloJson());
+    nloJson transformData = data.value("transform", nloJson());
     _transform.reset(createTransform(transformData));
 }
 

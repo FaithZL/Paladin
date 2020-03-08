@@ -56,4 +56,6 @@ CObject_ptr createUnityMaterial(const nloJson &param, const Arguments &lst) {
     return new UnityMaterial(albedo, metallic, roughness);
 }
 
+REGISTER("unity", createUnityMaterial);
+
 PALADIN_END
