@@ -120,7 +120,7 @@ vector<shared_ptr<Primitive>> MeshParser::getPrimitiveLst(vector<shared_ptr<Ligh
             prim = GeometricPrimitive::create(tri, _material, light, mi);
             lights.push_back(light);
         } else {
-            prim = GeometricPrimitive::create(tri, nullptr, nullptr, mi);
+            prim = GeometricPrimitive::create(tri, _material, nullptr, mi);
         }
         ret.push_back(prim);
     }
