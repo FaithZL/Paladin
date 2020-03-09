@@ -21,8 +21,9 @@ public:
         return 0;
     }
     
-    void render(const std::string &fileName) {
-        _sceneParser.loadFromJson(fileName);
+    void render(const std::string &fn) {
+        _basePath = fn.substr(0, fn.find_last_of("/"));
+        _sceneParser.loadFromJson(fn);
         parallelCleanup();
     }
     
@@ -30,6 +31,10 @@ public:
     
     const SceneParser * getSceneParser() const {
         return & _sceneParser;
+    }
+    
+    inline string getBasePath() {
+        return _basePath;
     }
     
 private:
@@ -41,6 +46,8 @@ private:
     static Paladin * s_paladin;
     
     SceneParser _sceneParser;
+    
+    string _basePath = "";
 
 };
 

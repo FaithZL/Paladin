@@ -8,7 +8,7 @@
             }
         ]
     },
-	"lights" : [
+    "lights" : [
          
         {
             "type" : "pointLight",
@@ -23,7 +23,7 @@
                 }
             }
         }
-	],
+    ],
     "materials" : {
         "matte1" : {
             "type" : "matte",
@@ -158,9 +158,9 @@
             }
         }
     },
-	"shapes" : [
-		{
-			"type" : "sphere",
+    "shapes" : [
+        {
+            "type" : "sphere",
             "enable" : false,
             "param" : {
                 "transform" : [
@@ -176,8 +176,8 @@
                 "radius" : 999,
                 "phiMax" : 360
             },
-			"material" : "matte1"
-		},
+            "material" : "matte1"
+        },
         {
             "type" : "triMesh",
             "subType" : "quad",
@@ -214,6 +214,7 @@
                         "param" : [0,-1,0]
                     }
                 ],
+                "reverseOrientation" : true,
                 "width" : 2
             },
             "material" : "matte1"
@@ -234,6 +235,7 @@
                         "param" : [0,1,0]
                     }
                 ],
+                "reverseOrientation" : true,
                 "width" : 2
             },
             "material" : "matte1"
@@ -254,6 +256,7 @@
                         "param" : [-1,0,0]
                     }
                 ],
+                "reverseOrientation" : true,
                 "width" : 2
             },
             "material" : "matteRed"
@@ -274,6 +277,7 @@
                         "param" : [1,0,0]
                     }
                 ],
+                "reverseOrientation" : true,
                 "width" : 2
             },
             "material" : "matteGreen"
@@ -294,6 +298,7 @@
                         "param" : [0,0.98,0]
                     }
                 ],
+                "reverseOrientation" : true,
                 "width" : 0.5
             },
             "material" : "black",
@@ -322,6 +327,7 @@
                         "param" : [-0.3,-0.4,0.2]
                     }
                 ],
+                "reverseOrientation" : true,
                 "x" : 0.6,
                 "y" : 1.2,
                 "z" : 0.6
@@ -344,62 +350,64 @@
                         "param" : [0.35,-0.7,-0.4]
                     }
                 ],
+                "reverseOrientation" : true,
                 "x" : 0.6,
                 "y" : 0.6,
                 "z" : 0.6
             },
             "material" : "matte1"
         }
-	],
-	"integrator" : {
+    ],
+    "integrator" : {
         "type" : "pt",
         "param" : {
-        	"maxBounce" : 5,
-        	"rrThreshold" : 1,
-        	"lightSampleStrategy" : "power"
+            "maxBounce" : 5,
+            "rrThreshold" : 1,
+            "type" : "normal",
+            "lightSampleStrategy" : "power"
         }
     },
     "sampler" : {
-    	"type" : "halton",
-    	"param" : {
-    		"spp" : 1
-    	}
+        "type" : "halton",
+        "param" : {
+            "spp" : 1
+        }
     },
     "camera" : {
-    	"type" : "perspective",
-    	"param" : {
-    		"shutterOpen" : 0,
-    		"shutterClose" : 1,
-    		"lensRadius" : 0,
-    		"focalDistance" : 100,
-    		"fov" : 20,
+        "type" : "perspective",
+        "param" : {
+            "shutterOpen" : 0,
+            "shutterClose" : 1,
+            "lensRadius" : 0,
+            "focalDistance" : 100,
+            "fov" : 20,
             "lookAt" : [
                 [0,0,-6.6],
                 [0,0,0],
                 [0,1,0]
             ]
-    	}
+        }
     },
     "film" : {
-    	"param" : {
-			"resolution" : [1024, 1024],
-	    	"cropWindow" : [0,0,1,1],
-	    	"fileName" : "conelbox.png",
-	    	"diagonal" : 1,
-	    	"scale" : 1
-    	}
+        "param" : {
+            "resolution" : [1024, 1024],
+            "cropWindow" : [0,0,1,1],
+            "fileName" : "conelbox.png",
+            "diagonal" : 1,
+            "scale" : 1
+        }
     },
     "filter" : {
-    	"type" : "triangle",
-    	"param" : {
-    		"radius" : [1,1]
-    	}
+        "type" : "triangle",
+        "param" : {
+            "radius" : [1,1]
+        }
     },
     "accelerator" : {
-    	"type" : "bvh",
-    	"param" : {
-    		"maxPrimsInNode" : 1,
-    		"splitMethod" : "SAH"
-    	}
+        "type" : "bvh",
+        "param" : {
+            "maxPrimsInNode" : 1,
+            "splitMethod" : "SAH"
+        }
     }
 }

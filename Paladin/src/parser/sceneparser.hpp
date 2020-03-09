@@ -11,6 +11,7 @@
 #include "transformcache.h"
 #include <fstream>
 #include "core/integrator.hpp"
+#include "tools/fileio.hpp"
 
 
 PALADIN_BEGIN
@@ -22,13 +23,7 @@ class SceneParser {
 public:
     void loadFromJson(const std::string &fn) {
 //        try {
-            std::ifstream fst;
-            fst.open(fn.c_str());
-            stringstream buffer;
-            buffer << fst.rdbuf();
-            string str = buffer.str();
-            nloJson json = nloJson::parse(str);
-            parse(json);
+            parse(createJsonFromFile(fn));
 //        } catch (const std::exception &exc) {
 //            cout << exc.what();
 //            return;

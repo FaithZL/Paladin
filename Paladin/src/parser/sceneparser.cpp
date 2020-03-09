@@ -190,7 +190,7 @@ Camera * SceneParser::parseCamera(const nloJson &data, Film * film) {
 }
 
 //"integrator" : {
-//    "type" : "PathTracer",
+//    "type" : "pt",
 //    "param" : {
 //        "maxBounce" : 5,
 //        "rrThreshold" : 1,
@@ -198,7 +198,7 @@ Camera * SceneParser::parseCamera(const nloJson &data, Film * film) {
 //    }
 //}
 Integrator * SceneParser::parseIntegrator(const nloJson &data, Sampler * sampler, Camera * camera) {
-    string type = data.value("type", "PathTracer");
+    string type = data.value("type", "pt");
     nloJson param = data.value("param", nloJson());
     auto creator = GET_CREATOR(type);
     auto ret = dynamic_cast<Integrator *>(creator(param,{sampler, camera}));

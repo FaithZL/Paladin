@@ -9,6 +9,7 @@
 #include "materials/matte.hpp"
 #include "lights/diffuse.hpp"
 #include "core/primitive.hpp"
+#include "core/paladin.hpp"
 
 PALADIN_BEGIN
 
@@ -53,6 +54,16 @@ PALADIN_BEGIN
 //},
 void MeshParser::load(const nloJson &data) {
     nloJson param = data.value("param", nloJson());
+    
+    // 如果param为字符串，则表示文件名
+    // todo 这里需要实例化处理
+    if (param.is_string()) {
+        string basePath = Paladin::getInstance()->getBasePath();
+        string fn = param;
+        fn = basePath + "/" + fn;
+        param = createJsonFromFile(fn);
+    }
+    
     nloJson normals = param.value("normals", nloJson::array());
     for (auto iter = normals.cbegin(); iter != normals.cend(); iter += 3) {
         Float nx = iter[0];
@@ -101,7 +112,6 @@ vector<shared_ptr<Primitive>> MeshParser::getPrimitiveLst(vector<shared_ptr<Ligh
     auto mesh = TriangleMesh::create(_transform, nTriangles, _verts,
                                      &_points, &_normals, &_UVs);
     shared_ptr<Transform> w2o(_transform->getInverse_ptr());
-    vector<shared_ptr<Shape>> triLst;
     MediumInterface mi(nullptr);
     for (size_t i = 0; i < nTriangles; ++i) {
         auto tri = createTri(_transform, w2o, false, mesh, i);
