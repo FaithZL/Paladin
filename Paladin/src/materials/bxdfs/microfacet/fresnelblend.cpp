@@ -16,14 +16,13 @@ Spectrum FresnelBlend::f(const Vector3f &wo, const Vector3f &wi) const {
                         (1 - pow5(1 - .5f * absCosTheta(wi))) *
                         (1 - pow5(1 - .5f * absCosTheta(wo)));
     Vector3f wh = wi + wo;
-    if (wh.x == 0 && wh.y == 0 && wh.z == 0) {
+    if (wh.isZero()) {
         return Spectrum(0);
     }
     wh = normalize(wh);
-    Spectrum specular =
-        _distribution->D(wh) /
+    Spectrum specular = _distribution->D(wh) /
         (4 * absDot(wi, wh) * std::max(absCosTheta(wi), absCosTheta(wo))) *
-        schlickFresnel(dot(wi, wh));
+        schlickFresnel(dot(wo, wh));
     return diffuse + specular;
 }
 

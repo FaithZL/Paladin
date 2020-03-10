@@ -94,7 +94,7 @@ void MeshParser::load(const nloJson &data) {
     
     _emissionData = data.value("emission", nloJson());
     if (_emissionData.is_null()) {
-        nloJson matData = data.value("material", nloJson());
+        nloJson matData = param.value("material", nloJson());
         _material.reset(createMaterial(matData));
     } else {
         _material = createLightMat();

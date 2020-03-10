@@ -18,8 +18,19 @@ class ClearCoatedMaterial : public Material {
 public:
     
     ClearCoatedMaterial(const std::shared_ptr<Texture<Spectrum>> &Ks,
-                   const std::shared_ptr<Texture<Spectrum>> &Kd,
-                   const std::shared_ptr<Texture<Float>> &bumpMap);
+                        const std::shared_ptr<Texture<Spectrum>> &Kd,
+                        const std::shared_ptr<Texture<Float>> &urough,
+                        const std::shared_ptr<Texture<Float>> &vrough,
+                        bool remapRough,
+                        const std::shared_ptr<Texture<Float>> &bumpMap)
+    : _Ks(Ks),
+    _Kd(Kd),
+    _uRoughness(urough),
+    _vRoughness(vrough),
+    _remapRoughness(remapRough),
+    _bumpMap(bumpMap) {
+        
+    }
     
     virtual nloJson toJson() const override {
         return nloJson();
@@ -31,8 +42,14 @@ public:
     
 private:
     std::shared_ptr<Texture<Spectrum>> _Ks, _Kd;
+    bool _remapRoughness;
+    std::shared_ptr<Texture<Float>> _uRoughness, _vRoughness;
     std::shared_ptr<Texture<Float>> _bumpMap;
 };
+
+CObject_ptr createClearCoated(const nloJson &param, const Arguments &lst);
+
+REGISTER("clearcoated", createClearCoated);
 
 PALADIN_END
 

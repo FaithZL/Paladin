@@ -598,7 +598,7 @@ public:
         return schlickFresnel(_F0, cosI);
     }
     
-    virtual std::string toString() const {
+    virtual std::string toString() const override {
         return std::string("[ FresnelSchlick etaI: ") + _F0.ToString() + std::string(" ]");
     }
     
