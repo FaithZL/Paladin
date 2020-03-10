@@ -18,10 +18,14 @@ public:
     
     UnityMaterial(const std::shared_ptr<Texture<Spectrum>>& albedo,
                   const std::shared_ptr<Texture<Float>>& metallic,
-                  const std::shared_ptr<Texture<Float>>& roughness)
+                  const std::shared_ptr<Texture<Float>>& roughness,
+                  bool remapRoughness,
+                  std::shared_ptr<Texture<Float>> bumpMap = nullptr)
     :_albedo(albedo),
     _metallic(metallic),
-    _roughness(roughness){
+    _roughness(roughness),
+    _remapRoughness(remapRoughness),
+    _bumpMap(bumpMap) {
         
     }
     
@@ -37,6 +41,9 @@ private:
     std::shared_ptr<Texture<Spectrum>> _albedo;
     std::shared_ptr<Texture<Float>> _metallic;
     std::shared_ptr<Texture<Float>> _roughness;
+    bool _remapRoughness;
+    // bump贴图
+    std::shared_ptr<Texture<Float>> _bumpMap;
 };
 
 CObject_ptr createUnityMaterial(const nloJson &, const Arguments &lst);

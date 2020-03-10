@@ -17,10 +17,17 @@ PALADIN_BEGIN
 
 void UnityMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryArena &arena,
                                           TransportMode mode, bool allowMultipleLobes) const {
+    
+    if (_bumpMap) {
+        bump(_bumpMap, si);
+    }
     si->bsdf = ARENA_ALLOC(arena, BSDF)(*si);
     
     Float metallic = _metallic->evaluate(*si);
-    Float alpha = GGXDistribution::RoughnessToAlpha(_roughness->evaluate(*si));
+    Float alpha = _roughness->evaluate(*si);
+    if (_remapRoughness) {
+        alpha = GGXDistribution::RoughnessToAlpha(alpha);
+    }
     auto albedo = _albedo->evaluate(*si);
     
     // 如果完全光滑
@@ -49,11 +56,20 @@ void UnityMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryAre
 CObject_ptr createUnityMaterial(const nloJson &param, const Arguments &lst) {
     nloJson _albedo = param.value("albedo", nloJson::array({1.f, 1.f, 1.f}));
     auto albedo = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_albedo));
+    
     nloJson _roughness = param.value("roughness", nloJson::object());
     auto roughness = shared_ptr<Texture<Float>>(createFloatTexture(_roughness));
+    
     nloJson _metallic = param.value("metallic", nloJson::object());
     auto metallic = shared_ptr<Texture<Float>>(createFloatTexture(_metallic));
-    return new UnityMaterial(albedo, metallic, roughness);
+    
+    bool remapRoughness = param.value("remapRough", false);
+    
+    nloJson _bumpMap = param.value("bumpMap", nloJson());
+    auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
+    
+    return new UnityMaterial(albedo, metallic, roughness,
+                             remapRoughness, bumpMap);
 }
 
 REGISTER("unity", createUnityMaterial);

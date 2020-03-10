@@ -27,10 +27,10 @@ void ClearCoatedMaterial::computeScatteringFunctions(SurfaceInteraction *si,
     Spectrum Rs = _Ks->evaluate(*si).clamp();
     
     if (_remapRoughness) {
-        urough = GGXDistribution::RoughnessToAlpha(urough);
-        vrough = GGXDistribution::RoughnessToAlpha(vrough);
+        urough = BeckmannDistribution::RoughnessToAlpha(urough);
+        vrough = BeckmannDistribution::RoughnessToAlpha(vrough);
     }
-    auto distrib = ARENA_ALLOC(arena, GGXDistribution)(urough, vrough);
+    auto distrib = ARENA_ALLOC(arena, BeckmannDistribution)(urough, vrough);
     BxDF * bxdf = ARENA_ALLOC(arena, FresnelBlend)(Rd, Rs, distrib);
     si->bsdf->add(bxdf);
     
