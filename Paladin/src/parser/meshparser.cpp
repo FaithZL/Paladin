@@ -14,44 +14,52 @@
 PALADIN_BEGIN
 
 //data : {
-//    "type" : "triMesh",
-//    "subType" : "mesh",
-//    "material" : {
-//        "type" : "unity",
-//        "param" : {
-//            "albedo" : [0.725, 0.71, 0.68],
-//            "roughness" : 0.2,
-//            "metallic" : 0.8
-//        }
-//    },
-//    "transform" : {
-//        "type" : "matrix",
-//        "param" : [
-//            1,0,0,0,
-//            0,1,0,0,
-//            0,0,1,0,
-//            0,0,0,1
-//        ]
-//    },
-//    "param" : {
-//        "normals" : [
-//            1,0,0,
-//            2,0,0
-//        ],
-//        "verts" : [
-//            2,1,1,
-//            3,2,1
-//        ],
-//        "UVs" : [
-//            0.9,0.3,
-//            0.5,0.6
-//        ],
-//        "indexes" : [
-//            1,2,3,
-//            3,5,6
-//        ]
-//    }
-//},
+//     "type" : "triMesh",
+//     "subType" : "mesh",
+//     "param" : {
+//         "normals" : [
+//             1,0,0,
+//             2,0,0
+//         ],
+//         "verts" : [
+//             2,1,1,
+//             3,2,1
+//         ],
+//         "UVs" : [
+//             0.9,0.3,
+//             0.5,0.6
+//         ],
+//         "indexes" : [
+//             1,2,3,
+//             3,5,6
+//         ],
+//         "material" : {
+//             "type" : "unity",
+//             "param" : {
+//                 "albedo" : [0.725, 0.71, 0.68],
+//                 "roughness" : 0.2,
+//                 "metallic" : 0.8
+//             }
+//         },
+//         "transform" : {
+//             "type" : "matrix",
+//             "param" : [
+//                 1,0,0,0,
+//                 0,1,0,0,
+//                 0,0,1,0,
+//                 0,0,0,1
+//             ]
+//         },
+//         "emission" : {
+//             "nSamples" : 1,
+//             "Le" : {
+//                 "colorType" : 1,
+//                 "color" : [1,1,1]
+//             },
+//             "twoSided" : false
+//         }
+//     }
+// },
 void MeshParser::load(const nloJson &data) {
     nloJson param = data.value("param", nloJson());
     
@@ -100,7 +108,7 @@ void MeshParser::load(const nloJson &data) {
         _material = createLightMat();
     }
     
-    nloJson transformData = data.value("transform", nloJson());
+    nloJson transformData = param.value("transform", nloJson());
     _transform.reset(createTransform(transformData));
 }
 
