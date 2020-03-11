@@ -12,6 +12,7 @@
 #include "core/texture.hpp"
 #include "bxdfs/lambert.hpp"
 #include "materials/bxdfs/bsdf.hpp"
+#include "bxdfs/specular.hpp"
 
 PALADIN_BEGIN
 
@@ -36,10 +37,14 @@ void PlasticMaterial::computeScatteringFunctions(
         if (_remapRoughness) {
             rough = GGXDistribution::RoughnessToAlpha(rough);
         }
-        MicrofacetDistribution *distrib =
-            ARENA_ALLOC(arena, GGXDistribution)(rough, rough);
-        BxDF *spec =
-            ARENA_ALLOC(arena, MicrofacetReflection)(ks, distrib, fresnel);
+        BxDF * spec = nullptr;
+        if (rough == 0) {
+            spec = ARENA_ALLOC(arena, SpecularReflection)(ks, fresnel);
+        } else {
+            rough = correctRoughness(rough);
+            MicrofacetDistribution *distrib = ARENA_ALLOC(arena, GGXDistribution)(rough, rough);
+            spec = ARENA_ALLOC(arena, MicrofacetReflection)(ks, distrib, fresnel);
+        }
         si->bsdf->add(spec);
     }
 }

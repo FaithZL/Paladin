@@ -11,6 +11,7 @@
 #include "core/texture.hpp"
 #include "bxdfs/microfacet/distribute.hpp"
 #include "bxdfs/lambert.hpp"
+#include "bxdfs/specular.hpp"
 #include "bxdfs/microfacet/reflection.hpp"
 
 PALADIN_BEGIN
@@ -29,22 +30,26 @@ void UnityMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryAre
         alpha = GGXDistribution::RoughnessToAlpha(alpha);
     }
     auto albedo = _albedo->evaluate(*si);
+    Fresnel * fresnel = ARENA_ALLOC(arena, FresnelSchlick)(albedo);
     
+    BxDF * diffuse = nullptr;
+    BxDF * spec = nullptr;
+
     // 如果完全光滑
-    if (alpha == 0) {
-        auto diffuse = ARENA_ALLOC(arena,LambertianReflection(albedo));
-        auto scaled_diffuse = ARENA_ALLOC(arena,ScaledBxDF(diffuse, 1 - metallic));
-        si->bsdf->add(scaled_diffuse);
+    if (alpha != 0) {
+        alpha = correctRoughness(alpha);
+        diffuse= ARENA_ALLOC(arena, OrenNayar(albedo, alpha));
+        GGXDistribution * ggx = ARENA_ALLOC(arena, GGXDistribution)(alpha, alpha);
+        spec = ARENA_ALLOC(arena, MicrofacetReflection)(1.0, ggx, fresnel);
     } else {
-        auto diffuse= ARENA_ALLOC(arena,OrenNayar(albedo, alpha));
-        auto scaled_diffuse=ARENA_ALLOC(arena,ScaledBxDF(diffuse, 1 - metallic));
-        si->bsdf->add(scaled_diffuse);
+        diffuse = ARENA_ALLOC(arena, LambertianReflection(albedo));
+        spec = ARENA_ALLOC(arena, SpecularReflection)(1.0, fresnel);
     }
     
-    GGXDistribution * ggx = ARENA_ALLOC(arena, GGXDistribution)(alpha, alpha);
-    Fresnel * fresnel = ARENA_ALLOC(arena, FresnelSchlick)(albedo);
-    auto specular = ARENA_ALLOC(arena, MicrofacetReflection)(1.0, ggx, fresnel);
-    auto scaled_specular = ARENA_ALLOC(arena,ScaledBxDF(specular, metallic));
+    auto scaled_diffuse = ARENA_ALLOC(arena, ScaledBxDF(diffuse, 1 - metallic));
+    si->bsdf->add(scaled_diffuse);
+    
+    auto scaled_specular = ARENA_ALLOC(arena, ScaledBxDF(spec, metallic));
     si->bsdf->add(scaled_specular);
 }
 

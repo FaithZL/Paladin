@@ -371,6 +371,11 @@ inline Float Erf(Float x) {
     return sign * y;
 }
 
+// 当粗糙度低到一个阈值以下时，渲染效果不好，故做此校正
+inline Float correctRoughness(Float roughness) {
+    return std::max(roughness, (Float)0.001);
+}
+
 inline int Log2Int(uint32_t v) {
 #if defined(_MSC_VER)
     unsigned long lz = 0;

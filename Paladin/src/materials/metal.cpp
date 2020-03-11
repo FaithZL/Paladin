@@ -30,9 +30,13 @@ void MetalMaterial::computeScatteringFunctions(SurfaceInteraction *si,
     }
     Fresnel *frMf = ARENA_ALLOC(arena, FresnelConductor)(1., _eta->evaluate(*si),
                                                          _k->evaluate(*si));
-    MicrofacetDistribution *distrib =
-    ARENA_ALLOC(arena, GGXDistribution)(uRough, vRough);
-    si->bsdf->add(ARENA_ALLOC(arena, MicrofacetReflection)(1., distrib, frMf));
+    uRough = correctRoughness(uRough);
+    vRough = correctRoughness(vRough);
+    
+    auto *distrib = ARENA_ALLOC(arena, GGXDistribution)(uRough, vRough);
+    BxDF * bxdf = ARENA_ALLOC(arena, MicrofacetReflection)(1., distrib, frMf);
+    
+    si->bsdf->add(bxdf);
 }
 
 const int CopperSamples = 56;

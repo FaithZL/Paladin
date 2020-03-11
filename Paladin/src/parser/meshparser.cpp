@@ -92,7 +92,7 @@ void MeshParser::load(const nloJson &data) {
         _verts.emplace_back(*iter);
     }
     
-    _emissionData = data.value("emission", nloJson());
+    _emissionData = param.value("emission", nloJson());
     if (_emissionData.is_null()) {
         nloJson matData = param.value("material", nloJson());
         _material.reset(createMaterial(matData));
