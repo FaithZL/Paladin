@@ -1456,6 +1456,7 @@
 		F62D230023F5117F008B3C98 /* bsdf.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bsdf.hpp; sourceTree = "<group>"; };
 		F62D69A9241A168200B79805 /* modelcache.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = modelcache.cpp; path = src/parser/modelcache.cpp; sourceTree = "<group>"; };
 		F62D69AA241A168200B79805 /* modelcache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = modelcache.hpp; path = src/parser/modelcache.hpp; sourceTree = "<group>"; };
+		F62D69AC241A89F700B79805 /* frame.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = frame.hpp; path = src/math/frame.hpp; sourceTree = "<group>"; };
 		F63925CA23E918BB007C6659 /* endpoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = endpoint.h; sourceTree = "<group>"; };
 		F63925CB23E91D93007C6659 /* assignment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = assignment.h; sourceTree = "<group>"; };
 		F63925CD23E92196007C6659 /* mlt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mlt.cpp; path = src/integrators/mlt/mlt.cpp; sourceTree = SOURCE_ROOT; };
@@ -1828,6 +1829,7 @@
 				7374EE66783646EC8244781E /* transform.cpp */,
 				405424E9EBC8444EA8847DF8 /* transform.hpp */,
 				4823F24D9A30489C911D9C45 /* vector.h */,
+				F62D69AC241A89F700B79805 /* frame.hpp */,
 			);
 			name = math;
 			sourceTree = "<group>";

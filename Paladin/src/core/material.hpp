@@ -30,6 +30,9 @@ public:
     virtual ~Material() {
     	
     }
+    
+    static void correctNormal(const shared_ptr<Texture<Spectrum>> &normalMap,
+                              SurfaceInteraction * si);
 
     /**
      * bump函数，用于更新SurfaceInteraction变量

@@ -220,7 +220,7 @@
                 ],
                 "width" : 2
             },
-            "material" : "wall"
+            "material" : "matte1"
         },
         {
             "type" : "triMesh",
@@ -383,7 +383,7 @@
         }
     ],
     "integrator" : {
-        "type" : "Geometry",
+        "type" : "pt",
         "param" : {
             "maxBounce" : 5,
             "rrThreshold" : 1,

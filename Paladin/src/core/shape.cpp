@@ -8,6 +8,8 @@
 
 #include "core/shape.hpp"
 #include "math/lowdiscrepancy.hpp"
+#include "math/frame.hpp"
+
 
 PALADIN_BEGIN
 

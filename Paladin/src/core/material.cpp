@@ -70,6 +70,13 @@ void Material::bump(const std::shared_ptr<Texture<Float>> &d, SurfaceInteraction
     
 }
 
+void Material::correctNormal(const shared_ptr<Texture<Spectrum> > &normalMap,
+                             SurfaceInteraction *si) {
+    SurfaceInteraction siEval = *si;
+    
+    
+}
+
 //"matte" : {
 //    "type" : "matte",
 //    "param" : {
