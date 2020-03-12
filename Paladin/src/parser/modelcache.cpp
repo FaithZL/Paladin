@@ -66,6 +66,7 @@ ModelCache * ModelCache::getInstance() {
 //     }
 // },
 vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
+                                                          const shared_ptr<const Transform> &transform,
                                                           vector<shared_ptr<Light>> &lights) {
     vector<shared_ptr<Primitive>> ret;
     
@@ -78,7 +79,7 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
     vector<Index> _verts;
     // 发光参数
     nloJson _emissionData;
-    shared_ptr<const Transform> _transform;
+    shared_ptr<Transform> _transform;
     shared_ptr<const Material> _material;
     
     nloJson normals = param.value("normals", nloJson::array());
@@ -121,7 +122,7 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
     _transform.reset(createTransform(transformData));
     
     size_t nTriangles = _verts.size() / 3;
-    
+    * _transform = (*transform) * (*_transform);
     auto mesh = TriangleMesh::create(_transform, nTriangles, _verts,
                                      &_points, &_normals, &_UVs);
     shared_ptr<Transform> w2o(_transform->getInverse_ptr());
@@ -151,7 +152,7 @@ vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
     nloJson meshList = createJsonFromFile(fn);
     vector<shared_ptr<Primitive>> ret;
     for(const nloJson &meshData : meshList) {
-        vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, lights);
+        vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights);
         ret.insert(ret.end(), tmp.begin(), tmp.end());
     }
     
@@ -168,7 +169,8 @@ vector<shared_ptr<Primitive>> ModelCache::getPrimitives(const string &fn,
         return primLst;
     }
     vector<shared_ptr<Primitive>> tmpLst = _modelMap[fn];
-    vector<shared_ptr<Primitive>> ret(tmpLst.size());
+    vector<shared_ptr<Primitive>> ret;
+    ret.reserve(tmpLst.size());
     for (auto iter = tmpLst.cbegin(); iter != tmpLst.cend(); ++iter) {
         auto transformPrim = TransformedPrimitive::create(*iter, transform);
         ret.push_back(transformPrim);

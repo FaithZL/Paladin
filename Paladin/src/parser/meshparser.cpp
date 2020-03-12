@@ -10,6 +10,7 @@
 #include "lights/diffuse.hpp"
 #include "core/primitive.hpp"
 #include "core/paladin.hpp"
+#include "modelcache.hpp"
 
 PALADIN_BEGIN
 
@@ -77,7 +78,11 @@ vector<shared_ptr<Primitive>> MeshParser::getPrimitiveLst(const nloJson &data,
     nloJson transformData = data.value("transform", nloJson());
     shared_ptr<Transform> transform(createTransform(transformData));
     
-    
+    if (param.is_string()) {
+        string fn = param;
+        fn = Paladin::getInstance()->getBasePath() + fn;
+        return ModelCache::getInstance()->getPrimitives(fn, transform, lights);
+    }
     
     return getPrimitiveLst(param, lights, transform);
 }
