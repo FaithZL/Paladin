@@ -1,63 +1,50 @@
 //
-//  meshparser.cpp
+//  modelcache.cpp
 //  Paladin
 //
-//  Created by SATAN_Z on 2020/3/1.
+//  Created by SATAN_Z on 2020/3/12.
 //
 
-#include "meshparser.hpp"
+#include "modelcache.hpp"
+#include "tools/fileio.hpp"
 #include "materials/matte.hpp"
-#include "lights/diffuse.hpp"
 #include "core/primitive.hpp"
-#include "core/paladin.hpp"
+#include "lights/diffuse.hpp"
 
 PALADIN_BEGIN
 
+ModelCache * ModelCache::s_modelCache = nullptr;
 
-// data : {
-//     "type" : "triMesh",
-//     "subType" : "mesh",
-//     "param" : {
-//         "normals" : [
-//             1,0,0,
-//             2,0,0
-//         ],
-//         "verts" : [
-//             2,1,1,
-//             3,2,1
-//         ],
-//         "UVs" : [
-//             0.9,0.3,
-//             0.5,0.6
-//         ],
-//         "indexes" : [
-//             1,2,3,
-//             3,5,6
-//         ],
-//         "material" : {
-//             "type" : "unity",
-//             "param" : {
-//                 "albedo" : [0.725, 0.71, 0.68],
-//                 "roughness" : 0.2,
-//                 "metallic" : 0.8
-//             }
-//         },
-//         "transform" : {
-//             "type" : "matrix",
-//             "param" : [
-//                 1,0,0,0,
-//                 0,1,0,0,
-//                 0,0,1,0,
-//                 0,0,0,1
-//             ]
-//         },
-//         "emission" : {
-//             "nSamples" : 1,
-//             "Le" : {
-//                 "colorType" : 1,
-//                 "color" : [1,1,1]
-//             },
-//             "twoSided" : false
+ModelCache * ModelCache::getInstance() {
+    if (s_modelCache == nullptr) {
+        s_modelCache = new ModelCache();
+    }
+    return s_modelCache;
+}
+
+// "param" : {
+//     "normals" : [
+//         1,0,0,
+//         2,0,0
+//     ],
+//     "verts" : [
+//         2,1,1,
+//         3,2,1
+//     ],
+//     "UVs" : [
+//         0.9,0.3,
+//         0.5,0.6
+//     ],
+//     "indexes" : [
+//         1,2,3,
+//         3,5,6
+//     ],
+//     "material" : {
+//         "type" : "unity",
+//         "param" : {
+//             "albedo" : [0.725, 0.71, 0.68],
+//             "roughness" : 0.2,
+//             "metallic" : 0.8
 //         }
 //     },
 //     "transform" : {
@@ -69,22 +56,17 @@ PALADIN_BEGIN
 //             0,0,0,1
 //         ]
 //     },
+//     "emission" : {
+//         "nSamples" : 1,
+//         "Le" : {
+//             "colorType" : 1,
+//             "color" : [1,1,1]
+//         },
+//         "twoSided" : false
+//     }
 // },
-vector<shared_ptr<Primitive>> MeshParser::getPrimitiveLst(const nloJson &data,
+vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
                                                           vector<shared_ptr<Light>> &lights) {
-    nloJson param = data.value("param", nloJson());
-    
-    nloJson transformData = data.value("transform", nloJson());
-    shared_ptr<Transform> transform(createTransform(transformData));
-    
-    
-    
-    return getPrimitiveLst(param, lights, transform);
-}
-
-vector<shared_ptr<Primitive>> MeshParser::getPrimitiveLst(const nloJson &param,
-                                            vector<shared_ptr<Light>> &lights,
-                                            const shared_ptr<Transform> &transform) {
     vector<shared_ptr<Primitive>> ret;
     
     vector<Point3f> _points;
@@ -96,7 +78,7 @@ vector<shared_ptr<Primitive>> MeshParser::getPrimitiveLst(const nloJson &param,
     vector<Index> _verts;
     // 发光参数
     nloJson _emissionData;
-    shared_ptr<Transform> _transform;
+    shared_ptr<const Transform> _transform;
     shared_ptr<const Material> _material;
     
     nloJson normals = param.value("normals", nloJson::array());
@@ -135,12 +117,10 @@ vector<shared_ptr<Primitive>> MeshParser::getPrimitiveLst(const nloJson &param,
         _material = createLightMat();
     }
     
-    nloJson transformData2 = param.value("transform", nloJson());
-    _transform.reset(createTransform(transformData2));
+    nloJson transformData = param.value("transform", nloJson());
+    _transform.reset(createTransform(transformData));
     
     size_t nTriangles = _verts.size() / 3;
-    
-    * _transform = (*transform) * (*_transform);
     
     auto mesh = TriangleMesh::create(_transform, nTriangles, _verts,
                                      &_points, &_normals, &_UVs);
@@ -163,5 +143,37 @@ vector<shared_ptr<Primitive>> MeshParser::getPrimitiveLst(const nloJson &param,
     return ret;
 }
 
+vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
+                                                         const shared_ptr<const Transform> &transform,
+                                                         vector<shared_ptr<Light>> &lights) {
+    
+    
+    nloJson meshList = createJsonFromFile(fn);
+    vector<shared_ptr<Primitive>> ret;
+    for(const nloJson &meshData : meshList) {
+        vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, lights);
+        ret.insert(ret.end(), tmp.begin(), tmp.end());
+    }
+    
+    return ret;
+}
+
+vector<shared_ptr<Primitive>> ModelCache::getPrimitives(const string &fn,
+                                                        const shared_ptr<const Transform> &transform,
+                                                        vector<shared_ptr<Light>> &lights) {
+    auto iter = _modelMap.find(fn);
+    if (iter == _modelMap.end()) {
+        auto primLst = loadPrimitives(fn, transform, lights);
+        _modelMap[fn] = primLst;
+        return primLst;
+    }
+    vector<shared_ptr<Primitive>> tmpLst = _modelMap[fn];
+    vector<shared_ptr<Primitive>> ret(tmpLst.size());
+    for (auto iter = tmpLst.cbegin(); iter != tmpLst.cend(); ++iter) {
+        auto transformPrim = TransformedPrimitive::create(*iter, transform);
+        ret.push_back(transformPrim);
+    }
+    return ret;
+}
 
 PALADIN_END

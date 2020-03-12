@@ -380,6 +380,7 @@
 		F61B0F1824000E7200213277 /* pm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F61B0F1624000E7200213277 /* pm.cpp */; };
 		F61D0C2B2405788000A8437C /* unitymat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F61D0C292405788000A8437C /* unitymat.cpp */; };
 		F62D230123F5117F008B3C98 /* bsdf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F62D22FF23F5117F008B3C98 /* bsdf.cpp */; };
+		F62D69AB241A168200B79805 /* modelcache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F62D69A9241A168200B79805 /* modelcache.cpp */; };
 		F63925CF23E92196007C6659 /* mlt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63925CD23E92196007C6659 /* mlt.cpp */; };
 		F63925D323E9B797007C6659 /* mcmc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F63925D123E9B797007C6659 /* mcmc.cpp */; };
 		F736D2717E1446CD87D6DB68 /* distant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9138C620B527494C9C145B59 /* distant.cpp */; settings = {COMPILER_FLAGS = ""; }; };
@@ -1453,6 +1454,8 @@
 		F61D0C2A2405788000A8437C /* unitymat.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = unitymat.hpp; path = src/materials/unitymat.hpp; sourceTree = "<group>"; };
 		F62D22FF23F5117F008B3C98 /* bsdf.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bsdf.cpp; sourceTree = "<group>"; };
 		F62D230023F5117F008B3C98 /* bsdf.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bsdf.hpp; sourceTree = "<group>"; };
+		F62D69A9241A168200B79805 /* modelcache.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = modelcache.cpp; path = src/parser/modelcache.cpp; sourceTree = "<group>"; };
+		F62D69AA241A168200B79805 /* modelcache.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = modelcache.hpp; path = src/parser/modelcache.hpp; sourceTree = "<group>"; };
 		F63925CA23E918BB007C6659 /* endpoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = endpoint.h; sourceTree = "<group>"; };
 		F63925CB23E91D93007C6659 /* assignment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = assignment.h; sourceTree = "<group>"; };
 		F63925CD23E92196007C6659 /* mlt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mlt.cpp; path = src/integrators/mlt/mlt.cpp; sourceTree = SOURCE_ROOT; };
@@ -1855,6 +1858,8 @@
 				F54621DA48AF4D75A00B5D74 /* transformcache.h */,
 				F6160230240BDD5D00515131 /* meshparser.cpp */,
 				F6160231240BDD5D00515131 /* meshparser.hpp */,
+				F62D69A9241A168200B79805 /* modelcache.cpp */,
+				F62D69AA241A168200B79805 /* modelcache.hpp */,
 			);
 			name = parser;
 			sourceTree = "<group>";
@@ -3607,6 +3612,7 @@
 				5F45D2EEBD2D4C65ADEC7132 /* kdtree.cpp in Sources */,
 				5DFDFACE86C7486E8DF886DA /* perspective.cpp in Sources */,
 				53641017D8B24D49B7A65932 /* bxdf.cpp in Sources */,
+				F62D69AB241A168200B79805 /* modelcache.cpp in Sources */,
 				3A9091DE06C04459AF771C3E /* camera.cpp in Sources */,
 				5AB11AF97A914FCF81F86555 /* film.cpp in Sources */,
 				E23481DEB3684AB2AFF7F7C2 /* integrator.cpp in Sources */,
