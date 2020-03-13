@@ -150,8 +150,6 @@ public:
         return 0.5 * cross(p1 - p0, p2 - p0).length();
     }
     
-    virtual Frame computeTangentSpace(const Normal3f &normal) const;
-    
     virtual Interaction samplePos(const Point2f &u, Float *pdf) const override;
     
     /**

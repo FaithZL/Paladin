@@ -1,30 +1,15 @@
 {
     "threadNum" : 0,
     "transforms" :{
-        "translate" : [
+        "name1" : [
             {
                 "type" : "translate",
-                "param" :[0,1,0]
-            }
-        ],
-        "t2" : [
-            {
-                "type" : "translate",
-                "param" :[0,0.3,0]
+                "param" :[0,0,0]
             }
         ]
     },
-    "mediums" : {
-        "fog" : {
-            "type" : "homo",
-            "param" : {
-                "g" : 0,
-                "sigma_a" : [0.0,0.0,0.0],
-                "sigma_s" : [0.8,0.8,0.8]
-            }
-        }
-    },
     "lights" : [
+         
         {
             "type" : "pointLight",
             "enable" : false,
@@ -43,21 +28,11 @@
         "matte1" : {
             "type" : "matte",
             "param" : {
-                "Kd" : [0.725, 0.71, 0.68],
-                "sigma" : 0,
-                "bumpMap" : 0
-            }
-        },
-        "matte2" : {
-            "type" : "matte",
-            "param" : {
                 "Kd" : {
-                    "type" : "bilerp",
+                    "type" : "constant",
                     "param" : {
-                        "v00" : [1, 0, 0],
-                        "v01" : [0, 1, 0],
-                        "v10" : [0, 0, 1],
-                        "v11" : [0.1, 0.9, 0.5]
+                        "colorType" : 0,
+                        "color" : [0.725, 0.71, 0.68]
                     }
                 },
                 "sigma" : {
@@ -88,6 +63,27 @@
                     "type" : "constant",
                     "param" : 0
                 } 
+            }
+        },
+        "wall" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : [0.725, 0.71, 0.68],
+                "normalMap" : {
+                    "type" : "image",
+                    "param" : {
+                        "fileName" : "res/pic/brickwall_normal.jpg",
+                        "doTri" : true,
+                        "maxAniso" : 8,
+                        "wrapMode" : 0,
+                        "scale" : 1,
+                        "gamma" : false
+                    }
+                },
+                "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                }
             }
         },
         "matteGreen" : {
@@ -130,25 +126,6 @@
                 }
             }
         },
-        "image" : {
-            "type" : "matte",
-            "param" : {
-                "Kd" : {
-                    "type" : "image",
-                    "param" : {
-                        "fileName" : "res/HelloWorld.png"
-                    }
-                },
-                "sigma" : {
-                    "type" : "constant",
-                    "param" : 0
-                },
-                "bumpMap" : {
-                    "type" : "constant",
-                    "param" : 0
-                }
-            }
-        },
         "glass" : {
             "type" : "glass",
             "param" : {
@@ -163,62 +140,26 @@
                     "type" : "constant",
                     "param" : {
                         "colorType" : 0,
-                        "color" : [1, 1, 1]
+                        "color" : [0, 0, 0]
                     }
                 },
                 "uRough" : {
                     "type" : "constant",
-                    "param" : 0.0
+                    "param" : 0.5
                 },
                 "vRough" : {
                     "type" : "constant",
-                    "param" : 0.0
+                    "param" : 0.5
                 },
                 "eta" : {
                     "type" : "constant",
-                    "param" : 1.5
+                    "param" : 0.5
                 },
                 "bumpMap" : {
                     "type" : "constant",
-                    "param" : 0
+                    "param" : 0.5
                 },
                 "remapRough" : false 
-            }
-        },
-        "metal" : {
-            "type" : "metal",
-            "param" : {
-                "eta" : {
-                    "type" : "constant",
-                    "param" : {
-                        "colorType" : 0,
-                        "color" : [0.6, 1, 1]
-                    }
-                },
-                "k" : {
-                    "type" : "constant",
-                    "param" : {
-                        "colorType" : 0,
-                        "color" : [1, 1, 1]
-                    }
-                },
-                "rough" : {
-                    "type" : "constant",
-                    "param" : 0.1
-                },
-                "uRough" : {
-                    "type" : "constant",
-                    "param" : 0.1
-                },
-                "vRough" : {
-                    "type" : "constant",
-                    "param" : 0.1
-                },
-                "bumpMap" : {
-                    "type" : "constant",
-                    "param" : 0
-                },
-                "remapRough" : false
             }
         },
         "mirror" : {
@@ -240,6 +181,29 @@
     },
     "shapes" : [
         {
+            "type" : "sphere",
+            "enable" : true,
+            "param" : {
+                "transform" : [
+                    {
+                        "type" : "rotateX",
+                        "param" : [-90]
+                    },
+                    {
+                        "type" : "rotateY",
+                        "param" : [0]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,0,0.3]
+                    }
+                ],
+                "radius" : 0.2,
+                "phiMax" : 360
+            },
+            "material" : "wall"
+        },
+        {
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "back",
@@ -253,12 +217,11 @@
                     {
                         "type" : "translate",
                         "param" : [0,0,1]
-                    },
-                    "translate"
+                    }
                 ],
                 "width" : 2
             },
-            "material" : "matte1"
+            "material" : "wall"
         },
         {
             "type" : "triMesh",
@@ -274,9 +237,9 @@
                     {
                         "type" : "translate",
                         "param" : [0,-1,0]
-                    },
-                    "translate"
+                    }
                 ],
+                "reverseOrientation" : false,
                 "width" : 2
             },
             "material" : "matte1"
@@ -295,9 +258,9 @@
                     {
                         "type" : "translate",
                         "param" : [0,1,0]
-                    },
-                    "t2"
+                    }
                 ],
+                "reverseOrientation" : false,
                 "width" : 2
             },
             "material" : "matte1"
@@ -316,9 +279,9 @@
                     {
                         "type" : "translate",
                         "param" : [-1,0,0]
-                    },
-                    "translate"
+                    }
                 ],
+                "reverseOrientation" : false,
                 "width" : 2
             },
             "material" : "matteRed"
@@ -337,30 +300,12 @@
                     {
                         "type" : "translate",
                         "param" : [1,0,0]
-                    },
-                    "translate"
+                    }
                 ],
+                "reverseOrientation" : false,
                 "width" : 2
             },
             "material" : "matteGreen"
-        },
-        {
-            "type" : "triMesh",
-            "subType" : "quad",
-            "name" : "front",
-            "enable" : false,
-            "param" : {
-                "transform" :[
-                    {
-                        "type" : "translate",
-                        "param" : [0,0,-1]
-                    },
-                    "translate"
-                ],
-                "width" : 2
-            },
-            "mediumInterface" : ["", "fog"],
-            "material" : null
         },
         {
             "type" : "triMesh",
@@ -376,9 +321,9 @@
                     {
                         "type" : "translate",
                         "param" : [0,0.98,0]
-                    },
-                    "t2"
+                    }
                 ],
+                "reverseOrientation" : false,
                 "width" : 0.5
             },
             "material" : "black",
@@ -393,27 +338,49 @@
         },
         {
             "type" : "triMesh",
-            "subType" : "model",
-            "name" : "box",
-            "enable" : true,
+            "subType" : "cube",
+            "name" : "cube1",
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
                         "type" : "rotateY",
-                        "param" : [30]
+                        "param" : [-20]
                     },
                     {
                         "type" : "translate",
-                        "param" : [0,0,-100]
-                    },
-                    {
-                        "type" : "scale",
-                        "param" : 0.0017
+                        "param" : [-0.3,-0.4,0.2]
                     }
                 ],
-                "fileName" : "res/model/ka50s/ka50s.obj"
+                "reverseOrientation" : false,
+                "x" : 0.6,
+                "y" : 1.2,
+                "z" : 0.6
             },
-            "material" : null
+            "material" : "matte1"
+        },
+        {
+            "type" : "triMesh",
+            "subType" : "cube",
+            "name" : "cube1",
+            "enable" : false,
+            "param" : {
+                "transform" :[
+                    {
+                        "type" : "rotateY",
+                        "param" : [15]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0.35,-0.7,-0.4]
+                    }
+                ],
+                "reverseOrientation" : false,
+                "x" : 0.6,
+                "y" : 0.6,
+                "z" : 0.6
+            },
+            "material" : "matte1"
         }
     ],
     "integrator" : {
@@ -421,13 +388,14 @@
         "param" : {
             "maxBounce" : 5,
             "rrThreshold" : 1,
+            "type" : "normal",
             "lightSampleStrategy" : "power"
         }
     },
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 128
+            "spp" : 8
         }
     },
     "camera" : {
@@ -437,37 +405,27 @@
             "shutterClose" : 1,
             "lensRadius" : 0,
             "focalDistance" : 100,
-            "fov" : 29,
+            "fov" : 20,
             "lookAt" : [
                 [0,0,-6.6],
                 [0,0,0],
                 [0,1,0]
-            ],
-            "transform" : [
-                {
-                    "type" : "rotateX",
-                    "param" : [8]
-                },
-                {
-                    "type" : "translate",
-                    "param" : [0,0.75,-2.6]
-                }
             ]
         }
     },
     "film" : {
         "param" : {
-            "resolution" : [1050, 600],
+            "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "ka50-pt-128spp.png",
+            "fileName" : "conelbox.png",
             "diagonal" : 1,
             "scale" : 1
         }
     },
     "filter" : {
-        "type" : "gaussian",
+        "type" : "triangle",
         "param" : {
-            "radius" : [2,2]
+            "radius" : [1,1]
         }
     },
     "accelerator" : {

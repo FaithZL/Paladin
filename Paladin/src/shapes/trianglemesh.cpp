@@ -134,36 +134,6 @@ AABB3f Triangle::objectBound() const {
     return unionSet(b1, worldToObject->exec(p2));;
 }
 
-Frame Triangle::computeTangentSpace(const Normal3f &normal) const {
-    
-    const Point3f &p0 = _mesh->points[_vertexIdx[0].pos];
-    const Point3f &p1 = _mesh->points[_vertexIdx[1].pos];
-    const Point3f &p2 = _mesh->points[_vertexIdx[2].pos];
-    
-    Point2f uv[3];
-    getUVs(uv);
-    
-    Vector3f edge0 = p1 - p0;
-    Vector3f edge1 = p2 - p0;
-    Vector2f deltaUV0 = uv[1] - uv[0];
-    Vector2f deltaUV1 = uv[2] - uv[0];
-    Vector3f tangent;
-    Vector3f bitangent;
-    
-    Float f = 1.f / (deltaUV0.x * deltaUV1.y - deltaUV1.x * deltaUV0.y);
-    tangent.x = f / (deltaUV1.y * edge0.x - deltaUV0.y * edge1.x);
-    tangent.y = f * (deltaUV1.y * edge0.y - deltaUV0.y * edge1.y);
-    tangent.z = f * (deltaUV1.y * edge0.z - deltaUV0.y * edge1.z);
-    tangent = normalize(tangent);
-    
-    bitangent.x = f * (-deltaUV1.x * edge0.x + deltaUV0.x * edge1.x);
-    bitangent.y = f * (-deltaUV1.x * edge0.y + deltaUV0.x * edge1.y);
-    bitangent.z = f * (-deltaUV1.x * edge0.z + deltaUV0.x * edge1.z);
-    bitangent = normalize(bitangent);
-    
-    return Frame(tangent, bitangent, normal);
-}
-
 bool Triangle::watertightIntersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
                          bool testAlphaTexture) const {
     const Point3f &p0 = _mesh->points[_vertexIdx[0].pos];
