@@ -31,6 +31,10 @@ struct Frame {
         coordinateSystem(n, &s, &t);
     }
     
+    inline bool isValid() const {
+        return !(n.isZero() || s.isZero() || t.isZero());
+    }
+    
     inline Vector3f toLocal(const Vector3f &v) const {
         return Vector3f(
             dot(v, s),

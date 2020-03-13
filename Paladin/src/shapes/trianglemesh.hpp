@@ -13,6 +13,7 @@
 #include "core/shape.hpp"
 #include "core/texture.hpp"
 #include <vector>
+#include "math/frame.hpp"
 
 PALADIN_BEGIN
 
@@ -148,6 +149,8 @@ public:
         const Point3f &p2 = _mesh->points[_vertexIdx[2].pos];
         return 0.5 * cross(p1 - p0, p2 - p0).length();
     }
+    
+    virtual Frame computeTangentSpace(const Normal3f &normal) const;
     
     virtual Interaction samplePos(const Point2f &u, Float *pdf) const override;
     

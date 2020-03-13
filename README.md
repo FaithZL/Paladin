@@ -55,6 +55,8 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
   - [x] fresnel 高光
   - [x] Oren-Nayer
   - [x] Fresnel Blend(用于模拟漫反射物体表面有一层光泽反射层)
+  - [x] bump map
+  - [x] normal map
 
 - 相机
   - [x] 透视相机
@@ -105,7 +107,6 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
 
 - 其他
   - [ ] 统计机制
-  - [ ] 图形交互界面(GUI)
  
  * bdpt(2spp 10.6秒) vs pt(100spp 197.7秒) 
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/bdpt-vs-pt.jpeg)

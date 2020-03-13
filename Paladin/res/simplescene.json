@@ -71,7 +71,7 @@
                 "Kd" : {
                     "type" : "image",
                     "param" : {
-                        "fileName" : "res/pic/brickwall.jpg",
+                        "fileName" : "res/pic/Brick_Diffuse.jpg",
                         "doTri" : true,
                         "maxAniso" : 8,
                         "wrapMode" : 0,
@@ -79,11 +79,8 @@
                         "gamma" : false
                     }
                 },
+                
                 "sigma" : {
-                    "type" : "constant",
-                    "param" : 0
-                },
-                "bumpMap" : {
                     "type" : "constant",
                     "param" : 0
                 }
@@ -383,9 +380,9 @@
         }
     ],
     "integrator" : {
-        "type" : "Geometry",
+        "type" : "pt",
         "param" : {
-            "maxBounce" : 5,
+            "maxBounce" : 6,
             "rrThreshold" : 1,
             "type" : "normal",
             "lightSampleStrategy" : "power"
@@ -394,7 +391,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 1
+            "spp" : 8
         }
     },
     "camera" : {

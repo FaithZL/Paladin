@@ -24,6 +24,11 @@ void MatteMaterial::computeScatteringFunctions(SurfaceInteraction *si,
 	if (_bumpMap) {
 		bump(_bumpMap, si);
 	}
+    
+    if (_normalMap) {
+        correctNormal(_normalMap, si);
+    }
+    
 
 	si->bsdf = ARENA_ALLOC(arena, BSDF)(*si);
 	Spectrum r = _Kd->evaluate(*si).clamp();
@@ -63,11 +68,17 @@ shared_ptr<const MatteMaterial> createLightMat() {
 CObject_ptr createMatte(const nloJson &param, const Arguments& lst) {
     nloJson _Kd = param.value("Kd", nloJson::array({1.f, 1.f, 1.f}));
     auto Kd = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_Kd));
+    
     nloJson _sigma = param.value("sigma", nloJson::object());
     auto sigma = shared_ptr<Texture<Float>>(createFloatTexture(_sigma));
+    
     nloJson _bumpMap = param.value("bumpMap", nloJson());
     auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
-    auto ret = new MatteMaterial(Kd, sigma, bumpMap);
+    
+    nloJson _normalMap = param.value("normalMap", nloJson());
+    auto normalMap = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_normalMap));
+    
+    auto ret = new MatteMaterial(Kd, sigma, normalMap, bumpMap);
     return ret;
 }
 

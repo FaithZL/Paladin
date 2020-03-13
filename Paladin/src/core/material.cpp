@@ -72,9 +72,18 @@ void Material::bump(const std::shared_ptr<Texture<Float>> &d, SurfaceInteraction
 
 void Material::correctNormal(const shared_ptr<Texture<Spectrum> > &normalMap,
                              SurfaceInteraction *si) {
-    SurfaceInteraction siEval = *si;
     
-    
+    si->computeTangentSpace();
+    if (!si->tangentSpace.isValid()) {
+        return;
+    }
+    Spectrum color = normalMap->evaluate(*si);
+    Float rgb[3];
+    color.ToRGB(rgb);
+    Vector3f normal(color[0], color[1], color[2]);
+    normal = normalize(-normal * 2.0f - Vector3f(1, 1, 1));
+    si->shading.normal = Normal3f(si->tangentSpace.toWorld(normal));
+    si->normal = faceforward(si->normal, si->shading.normal);
 }
 
 //"matte" : {

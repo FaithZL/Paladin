@@ -121,6 +121,13 @@ void SurfaceInteraction::computeDifferentials(const RayDifferential &ray) const 
     }
 }
 
+void SurfaceInteraction::computeTangentSpace() {
+    if (shape == nullptr) {
+        return;
+    }
+    tangentSpace = shape->computeTangentSpace(shading.normal);
+}
+
 void SurfaceInteraction::computeScatteringFunctions(const RayDifferential &ray,
                                                     MemoryArena &arena,
                                                     bool allowMultipleLobes,/* = false*/

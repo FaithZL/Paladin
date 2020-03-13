@@ -12,6 +12,7 @@
 #include "core/header.h"
 #include "medium.hpp"
 #include "core/material.hpp"
+#include "math/frame.hpp"
 
 PALADIN_BEGIN
 
@@ -171,6 +172,12 @@ public:
                                     bool allowMultipleLobes = false,
                                     TransportMode mode = TransportMode::Radiance);
     
+    void computeTangentSpace();
+    
+    inline void faceForward() {
+        normal = faceforward(normal, shading.normal);
+    }
+    
     Spectrum Le(const Vector3f &w) const;
 	
     // 表面坐标
@@ -198,6 +205,8 @@ public:
     当屏幕坐标x变化时，表面交点p随x的变化率，y同理
      */
     mutable Vector3f dpdx, dpdy;
+    
+    mutable Frame tangentSpace;
 
     /*
     表面坐标对屏幕坐标对屏幕坐标的一阶导数

@@ -79,11 +79,18 @@
                         "gamma" : false
                     }
                 },
-                "sigma" : {
-                    "type" : "constant",
-                    "param" : 0
+                "normalMap" : {
+                    "type" : "image",
+                    "param" : {
+                        "fileName" : "res/pic/brickwall_normal.jpg",
+                        "doTri" : true,
+                        "maxAniso" : 8,
+                        "wrapMode" : 0,
+                        "scale" : 1,
+                        "gamma" : false
+                    }
                 },
-                "bumpMap" : {
+                "sigma" : {
                     "type" : "constant",
                     "param" : 0
                 }
@@ -220,7 +227,7 @@
                 ],
                 "width" : 2
             },
-            "material" : "matte1"
+            "material" : "wall"
         },
         {
             "type" : "triMesh",

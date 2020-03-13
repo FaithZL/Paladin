@@ -24,8 +24,12 @@ class MatteMaterial : public Material {
 public:
 	MatteMaterial(const std::shared_ptr<Texture<Spectrum>> &Kd,
                   const std::shared_ptr<Texture<Float>> &sigma,
-                  const std::shared_ptr<Texture<Float>> &bumpMap)
-    : _Kd(Kd), _sigma(sigma), _bumpMap(bumpMap) {
+                  const std::shared_ptr<Texture<Spectrum>> &normalMap = nullptr,
+                  const std::shared_ptr<Texture<Float>> &bumpMap = nullptr)
+    : _Kd(Kd),
+    _sigma(sigma),
+    _normalMap(normalMap),
+    _bumpMap(bumpMap) {
 
     }
     
@@ -43,6 +47,8 @@ private:
     std::shared_ptr<Texture<Spectrum>> _Kd;
     // 粗糙度
     std::shared_ptr<Texture<Float>> _sigma;
+    // 法线贴图
+    std::shared_ptr<Texture<Spectrum>> _normalMap;
     // bump贴图
     std::shared_ptr<Texture<Float>> _bumpMap;    
 	
