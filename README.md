@@ -110,6 +110,8 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
  
  * bdpt(2spp 10.6秒) vs pt(100spp 197.7秒) 
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/bdpt-vs-pt.jpeg)
+ * connell box normal map 
+   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/conelbox-normalMap.png)
  * connell box 16spp halton
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-pt-16spp-halton.png)
  * connell box fog 128spp halton

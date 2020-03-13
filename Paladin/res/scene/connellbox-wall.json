@@ -35,6 +35,17 @@
                         "color" : [0.725, 0.71, 0.68]
                     }
                 },
+                "normalMap" : {
+                    "type" : "image",
+                    "param" : {
+                        "fileName" : "res/pic/brickwall_normal.jpg",
+                        "doTri" : true,
+                        "maxAniso" : 8,
+                        "wrapMode" : 0,
+                        "scale" : 1,
+                        "gamma" : false
+                    }
+                },
                 "sigma" : {
                     "type" : "constant",
                     "param" : 0
@@ -53,6 +64,17 @@
                     "param" : {
                         "colorType" : 0,
                         "color" : [0.75, 0.25, 0.25]
+                    }
+                },
+                "normalMap" : {
+                    "type" : "image",
+                    "param" : {
+                        "fileName" : "res/pic/brickwall_normal.jpg",
+                        "doTri" : true,
+                        "maxAniso" : 8,
+                        "wrapMode" : 0,
+                        "scale" : 1,
+                        "gamma" : false
                     }
                 },
                 "sigma" : {
@@ -104,6 +126,17 @@
                     "param" : {
                         "colorType" : 0,
                         "color" : [0.25, 0.25, 0.75]
+                    }
+                },
+                "normalMap" : {
+                    "type" : "image",
+                    "param" : {
+                        "fileName" : "res/pic/brickwall_normal.jpg",
+                        "doTri" : true,
+                        "maxAniso" : 8,
+                        "wrapMode" : 0,
+                        "scale" : 1,
+                        "gamma" : false
                     }
                 },
                 "sigma" : {
@@ -227,7 +260,7 @@
                 ],
                 "width" : 2
             },
-            "material" : "wall"
+            "material" : "matte1"
         },
         {
             "type" : "triMesh",
@@ -238,7 +271,7 @@
                 "transform" :[
                     {
                         "type" : "rotateX",
-                        "param" : [-90]
+                        "param" : [90]
                     },
                     {
                         "type" : "translate",
@@ -259,7 +292,7 @@
                 "transform" :[
                     {
                         "type" : "rotateX",
-                        "param" : [90]
+                        "param" : [-90]
                     },
                     {
                         "type" : "translate",
@@ -358,7 +391,7 @@
                         "param" : [-0.3,-0.4,0.2]
                     }
                 ],
-                "reverseOrientation" : false,
+                "reverseOrientation" : true,
                 "x" : 0.6,
                 "y" : 1.2,
                 "z" : 0.6
@@ -381,7 +414,7 @@
                         "param" : [0.35,-0.7,-0.4]
                     }
                 ],
-                "reverseOrientation" : false,
+                "reverseOrientation" : true,
                 "x" : 0.6,
                 "y" : 0.6,
                 "z" : 0.6
@@ -401,7 +434,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 1
+            "spp" : 32
         }
     },
     "camera" : {
@@ -423,7 +456,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "conelbox.png",
+            "fileName" : "conelbox-normalMap.png",
             "diagonal" : 1,
             "scale" : 1
         }
