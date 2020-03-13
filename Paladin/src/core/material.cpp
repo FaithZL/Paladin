@@ -82,7 +82,8 @@ void Material::correctNormal(const shared_ptr<Texture<Spectrum> > &normalMap,
     color.ToRGB(rgb);
     Vector3f normal(color[0], color[1], color[2]);
     normal = normalize(-normal * 2.0f - Vector3f(1, 1, 1));
-    si->shading.normal = Normal3f(si->tangentSpace.toWorld(normal));
+    Vector3f worldNormal = si->tangentSpace.toWorld(normal);
+    si->shading.normal = Normal3f(worldNormal);
     si->normal = faceforward(si->normal, si->shading.normal);
 }
 

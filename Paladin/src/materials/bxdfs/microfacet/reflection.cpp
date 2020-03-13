@@ -46,8 +46,10 @@ Float MicrofacetReflection::pdfDir(const Vector3f &wo, const Vector3f &wi) const
     if (!sameHemisphere(wo, wi)) {
         return 0;
     }
-    Vector3f wh = normalize(wo + wi);
-    return _distribution->pdfDir(wo, wh) / (4 * dot(wo, wh));
+    Vector3f tmpWo = normalize(wo);
+    Vector3f wh = normalize(tmpWo + wi);
+    Float d = dot(tmpWo, wh);
+    return _distribution->pdfDir(tmpWo, wh) / (4 * d);
 }
 
 std::string MicrofacetReflection::toString() const {

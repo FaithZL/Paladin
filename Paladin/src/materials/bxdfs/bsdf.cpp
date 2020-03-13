@@ -119,7 +119,9 @@ Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
     if (!(bxdf->type & BSDF_SPECULAR) && matchingComps > 1) {
         for (int i = 0; i < nBxDFs; ++i) {
             if (bxdfs[i] != bxdf && bxdfs[i]->matchesFlags(type)) {
-                *pdf += bxdfs[i]->pdfDir(wo, wi);
+                Float tmp = bxdfs[i]->pdfDir(wo, wi);
+                DCHECK(tmp >= 0);
+                *pdf += tmp;
             }
         }
     }
@@ -141,6 +143,7 @@ Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
     }
     VLOG(2) << "Overall f = " << f << ", pdf = " << *pdf << ", ratio = "
     << ((*pdf > 0) ? (f / *pdf) : Spectrum(0.));
+    DCHECK(*pdf >= 0);
     return f;
 }
 

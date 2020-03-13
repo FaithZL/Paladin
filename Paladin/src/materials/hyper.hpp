@@ -33,6 +33,7 @@ public:
 				const std::shared_ptr<Texture<Spectrum>> &opacity,
 				const std::shared_ptr<Texture<Float>> &eta,
 				const std::shared_ptr<Texture<Float>> &bumpMap,
+                const std::shared_ptr<Texture<Spectrum>> &normalMap,
 				bool remapRoughness)
     : _Kd(Kd),
 	_Ks(Ks),
@@ -44,6 +45,7 @@ public:
 	_roughness_v(roughnessv),
 	_eta(eta),
 	_bumpMap(bumpMap),
+    _normalMap(normalMap),
     _remapRoughness(remapRoughness) {
         
     }
@@ -66,12 +68,14 @@ public:
                                             const std::shared_ptr<Texture<Spectrum>> &opacity,
                                             const std::shared_ptr<Texture<Float>> &eta,
                                             const std::shared_ptr<Texture<Float>> &bumpMap,
+                                            const std::shared_ptr<Texture<Spectrum>> &normalMap,
                                             bool remapRoughness = false);
 
 private:
     std::shared_ptr<Texture<Spectrum>> _Kd, _Ks, _Kr, _Kt, _opacity;
     std::shared_ptr<Texture<Float>> _roughness, _roughness_u,_roughness_v; 
     std::shared_ptr<Texture<Float>> _eta, _bumpMap;
+    std::shared_ptr<Texture<Spectrum>> _normalMap;
     bool _remapRoughness;
 };
 

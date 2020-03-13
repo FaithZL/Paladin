@@ -108,6 +108,14 @@ shared_ptr<Texture<Spectrum>> createKd(const material_t &mat, const string &base
     return ConstantTexture<Spectrum>::create(mat.diffuse);
 }
 
+shared_ptr<Texture<Spectrum>> createNormalMap(const material_t &mat, const string &basePath) {
+    if (!mat.bump_texname.empty()) {
+        string fn = basePath + "/" + mat.bump_texname;
+        return createImageMap(fn);
+    }
+    return nullptr;
+}
+
 shared_ptr<Texture<Spectrum>> createKs(const material_t &mat, const string &basePath) {
     if (!mat.specular_texname.empty()) {
         string fn = basePath + "/" + mat.specular_texname;
@@ -138,8 +146,11 @@ SurfaceData ModelParser::fromObjMaterial(const material_t &mat) {
     shared_ptr<Texture<Float>> eta = ConstantTexture<Float>::create(mat.ior);
     float roughness = (mat.shininess == 0) ? 0. : (1.f / mat.shininess);
     shared_ptr<Texture<Float>> rough = ConstantTexture<Float>::create(roughness);
+    shared_ptr<Texture<Spectrum>> normalMap = createNormalMap(mat, _basePath);
     
-    ret.material = HyperMaterial::create(Kd, Ks, Kr, Kt, rough, nullptr, nullptr, op, eta, nullptr);
+    ret.material = HyperMaterial::create(Kd, Ks, Kr, Kt, rough,
+                                         nullptr, nullptr, op,
+                                         eta, nullptr, normalMap);
     return ret;
 }
 

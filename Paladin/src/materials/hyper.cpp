@@ -22,6 +22,10 @@ void HyperMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryAre
         bump(_bumpMap, si);
     }
     
+    if (_normalMap) {
+        correctNormal(_normalMap, si);
+    }
+    
     Float eta = _eta->evaluate(*si);
     // opacity不透明度
     Spectrum opacity = _opacity->evaluate(*si).clamp();
@@ -96,8 +100,9 @@ shared_ptr<HyperMaterial> HyperMaterial::create(const std::shared_ptr<Texture<Sp
                                                 const std::shared_ptr<Texture<Spectrum>> &opacity,
                                                 const std::shared_ptr<Texture<Float>> &eta,
                                                 const std::shared_ptr<Texture<Float>> &bumpMap,
+                                                const std::shared_ptr<Texture<Spectrum>> &normalMap,
                                                 bool remapRoughness) {
-    return make_shared<HyperMaterial>(Kd, Ks, Kr, Kt, roughness, roughnessu, roughnessv, opacity, eta, bumpMap, remapRoughness);
+    return make_shared<HyperMaterial>(Kd, Ks, Kr, Kt, roughness, roughnessu, roughnessv, opacity, eta, bumpMap, normalMap, remapRoughness);
 }
 
 PALADIN_END

@@ -208,7 +208,8 @@ Float GGXDistribution::D(const Vector3f &wh) const {
 
     Float term1 = 1 + (cosPhi2 / alphax2 + sinPhi2 / alphay2) * _tanTheta2;
     Float term2 = term1 * term1;
-    return 1.0 / (Pi * _alphax * _alphay * cosTheta4 * term2);
+    Float ret = 1.0 / (Pi * _alphax * _alphay * cosTheta4 * term2);
+    return ret;
 }
 
 static void TrowbridgeReitzSample11(Float cosTheta, Float U1, Float U2,

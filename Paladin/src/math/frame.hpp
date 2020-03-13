@@ -24,15 +24,19 @@ struct Frame {
     
     inline Frame(const Vector3f &x, const Vector3f &y, const Vector3f &z)
     : s(x), t(y), n(z) {
-         
+        
     }
 
     inline Frame(const Vector3f &n) : n(n) {
         coordinateSystem(n, &s, &t);
     }
     
+    inline bool hasNaNs() const {
+        return n.hasNaNs() || s.hasNaNs() || t.hasNaNs();
+    }
+    
     inline bool isValid() const {
-        return !(n.isZero() || s.isZero() || t.isZero());
+        return !(n.isZero() || s.isZero() || t.isZero()) && !hasNaNs();
     }
     
     inline Vector3f toLocal(const Vector3f &v) const {
