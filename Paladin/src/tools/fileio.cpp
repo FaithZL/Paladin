@@ -110,16 +110,10 @@ static RGBSpectrum * _readImageEXR(const std::string &name, int *width,
                             *width);
         file.readPixels(dw.min.y, dw.max.y);
         
-        // 这里做个临时容错处理todo
-        RGBSpectrum prePixel(1.f);
         RGBSpectrum *ret = new RGBSpectrum[*width * *height];
         for (int i = 0; i < *width * *height; ++i) {
             Float frgb[3] = {pixels[i].r, pixels[i].g, pixels[i].b};
             ret[i] = RGBSpectrum::FromRGB(frgb);
-            if (ret[i].HasInfs()) {
-                ret[i] = prePixel;
-            }
-            prePixel = ret[i];
         }
         LOG(INFO) << StringPrintf("Read EXR image %s (%d x %d)",
                                   name.c_str(), *width, *height);
@@ -145,9 +139,9 @@ RGBSpectrum * _readImageHDR(const std::string &name, int *width, int *height) {
     for (unsigned int y = 0; y < h; ++y) {
         for (unsigned int x = 0; x < w; ++x, src += 3) {
             Float c[3];
-            c[0] = src[0] / 255.f;
-            c[1] = src[1] / 255.f;
-            c[2] = src[2] / 255.f;
+            c[0] = src[0];
+            c[1] = src[1];
+            c[2] = src[2] ;
             ret[y * *width + x] = RGBSpectrum::FromRGB(c);
         }
     }
@@ -294,7 +288,7 @@ void writeImage(const std::string &name,
         float *dst = rgb24.get();
         for (int y = 0; y < resolution.y; ++y) {
             for (int x = 0; x < resolution.x; ++x) {
-#define TO_FLOAT(v) (float) (255.f * gammaCorrect(v))
+#define TO_FLOAT(v) (float) (gammaCorrect(v))
                 dst[0] = TO_FLOAT(rgb[3 * (y * resolution.x + x) + 0]);
                 dst[1] = TO_FLOAT(rgb[3 * (y * resolution.x + x) + 1]);
                 dst[2] = TO_FLOAT(rgb[3 * (y * resolution.x + x) + 2]);

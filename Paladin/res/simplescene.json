@@ -39,10 +39,10 @@
                         "param" : [0]       
                     }
                 ],
-                "scale" : 2,
+                "scale" : 1,
                 "L" : [1,1,1],
                 "nSamples" : 1,
-                "fn" : "res/hdr/derelict_overpass_1k.exr" 
+                "fn" : "res/hdr/derelict_overpass_1k.hdr" 
             }
         }
     ],
@@ -435,7 +435,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 128
+            "spp" : 16
         }
     },
     "camera" : {
@@ -467,7 +467,7 @@
         "param" : {
             "resolution" : [1050, 600],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "mi28-pt-128spp.png",
+            "fileName" : "mi28-pt-16spp.png",
             "diagonal" : 1,
             "scale" : 1
         }
