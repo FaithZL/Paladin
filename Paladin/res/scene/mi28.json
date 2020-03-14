@@ -26,18 +26,25 @@
     },
     "lights" : [
         {
-            "type" : "pointLight",
-            "enable" : false,
+            "type" : "envmap",
+            "enable" : true,
             "param" : {
-                "transform" : {
-                    
-                },
-                "I" : {
-                    "colorType" : 1,
-                    "color" : [1,1,1]
-                }
+                "transform" : [
+                    {
+                        "type" : "rotateX",
+                        "param" : [-90]       
+                    },
+                    {
+                        "type" : "rotateY",
+                        "param" : [0]       
+                    }
+                ],
+                "scale" : 2,
+                "L" : [1,1,1],
+                "nSamples" : 1,
+                "fn" : "res/hdr/derelict_overpass_1k.exr" 
             }
-        }
+        },
     ],
     "materials" : {
         "matte1" : {

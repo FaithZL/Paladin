@@ -109,11 +109,17 @@ static RGBSpectrum * _readImageEXR(const std::string &name, int *width,
         file.setFrameBuffer(&pixels[0] - dw.min.x - dw.min.y * *width, 1,
                             *width);
         file.readPixels(dw.min.y, dw.max.y);
-
+        
+        // 这里做个临时容错处理todo
+        RGBSpectrum prePixel(1.f);
         RGBSpectrum *ret = new RGBSpectrum[*width * *height];
         for (int i = 0; i < *width * *height; ++i) {
             Float frgb[3] = {pixels[i].r, pixels[i].g, pixels[i].b};
             ret[i] = RGBSpectrum::FromRGB(frgb);
+            if (ret[i].HasInfs()) {
+                ret[i] = prePixel;
+            }
+            prePixel = ret[i];
         }
         LOG(INFO) << StringPrintf("Read EXR image %s (%d x %d)",
                                   name.c_str(), *width, *height);

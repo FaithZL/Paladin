@@ -226,6 +226,14 @@ public:
             if (std::isnan(c[i])) return true;
         return false;
     }
+    bool HasInfs() const {
+        for (int i = 0; i < nSpectrumSamples; ++i) {
+            if(std::isinf(c[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
     bool Write(FILE *f) const {
         for (int i = 0; i < nSpectrumSamples; ++i)
             if (fprintf(f, "%f ", c[i]) < 0) return false;

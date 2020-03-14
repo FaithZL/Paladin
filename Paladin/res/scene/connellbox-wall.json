@@ -43,7 +43,8 @@
                         "maxAniso" : 8,
                         "wrapMode" : 0,
                         "scale" : 1,
-                        "gamma" : false
+                        "gamma" : false,
+                        "doFilter" : false
                     }
                 },
                 "sigma" : {
@@ -74,7 +75,8 @@
                         "maxAniso" : 8,
                         "wrapMode" : 0,
                         "scale" : 1,
-                        "gamma" : false
+                        "gamma" : false,
+                        "doFilter" : false
                     }
                 },
                 "sigma" : {
@@ -109,7 +111,8 @@
                         "maxAniso" : 8,
                         "wrapMode" : 0,
                         "scale" : 1,
-                        "gamma" : false
+                        "gamma" : false,
+                        "doFilter" : false
                     }
                 },
                 "sigma" : {
@@ -136,7 +139,8 @@
                         "maxAniso" : 8,
                         "wrapMode" : 0,
                         "scale" : 1,
-                        "gamma" : false
+                        "gamma" : false,
+                        "doFilter" : false
                     }
                 },
                 "sigma" : {
@@ -456,7 +460,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "conelbox-normalMap.png",
+            "fileName" : "conelbox-normalMap-2.png",
             "diagonal" : 1,
             "scale" : 1
         }
