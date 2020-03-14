@@ -15,11 +15,12 @@ std::map<TexInfo, std::unique_ptr<MIPMap<Tmemory>>>
 
 shared_ptr<ImageTexture<RGBSpectrum, Spectrum>> createImageMap(const string &filename, bool gamma, bool doTri,
                                                                     Float maxAniso, ImageWrap wm, Float scale,
+                                                                    bool doFilter,
                                                                     unique_ptr<TextureMapping2D> mapping) {
     return make_shared<ImageTexture<RGBSpectrum, Spectrum>>(move(mapping),
                                                             filename,
                                                             doTri, maxAniso,
-                                                            wm, scale, gamma);
+                                                            wm, scale, gamma,doFilter);
 }
 
 
@@ -40,7 +41,11 @@ CObject_ptr createImageMap(const nloJson &param, const Arguments &lst) {
     int wrapMode = param.value("wrapMode", 0);
     Float scale = param.value("scale", 1.f);
     bool gamma = param.value("gamma", false);
-    auto ret = new ImageTexture<RGBSpectrum, Spectrum>(move(mapping), fileName, doTri, maxAniso, (ImageWrap)wrapMode, scale, gamma);
+    bool doFilter = param.value("doFilter", true);
+    auto ret = new ImageTexture<RGBSpectrum, Spectrum>(move(mapping), fileName,
+                                                       doTri, maxAniso,
+                                                       (ImageWrap)wrapMode,
+                                                       scale, gamma, doFilter);
     return ret;
 }
 

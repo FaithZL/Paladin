@@ -69,22 +69,28 @@ class ImageTexture : public Texture<Treturn> {
 public:
 	ImageTexture(std::unique_ptr<TextureMapping2D> mapping,
 	            const std::string &filename, bool doTri, Float maxAniso,
-	            ImageWrap wm, Float scale, bool gamma)
+	            ImageWrap wm, Float scale, bool gamma, bool doFilter = true)
 	: _mapping(std::move(mapping)) {
+        _doFilter = doFilter;
 		_mipmap = getTexture(filename, doTri, maxAniso, wm, scale, gamma);
 	}
 
 	static void clearCache() {
-	   _imageCache.erase(_imageCache.begin(), _imageCache.end());
+	    _imageCache.erase(_imageCache.begin(), _imageCache.end());
 	}
 
 	virtual Treturn evaluate(const SurfaceInteraction &si) const override {
-	   Vector2f dstdx, dstdy;
-	   Point2f st = _mapping->map(si, &dstdx, &dstdy);
-	   Tmemory mem = _mipmap->lookup(st, dstdx, dstdy);
-	   Treturn ret;
-	   convertOut(mem, &ret);
-	   return ret;
+        Tmemory mem;
+        Vector2f dstdx, dstdy;
+        Point2f st = _mapping->map(si, &dstdx, &dstdy);
+        if(_doFilter) {
+            mem = _mipmap->lookup(st, dstdx, dstdy);
+        } else {
+            mem = _mipmap->lookup(st);
+        }
+	    Treturn ret;
+	    convertOut(mem, &ret);
+	    return ret;
 	}
             
     virtual nloJson toJson() const override {
@@ -154,6 +160,8 @@ private:
     static void convertOut(Float from, Float *to) { 
     	*to = from; 
     }
+            
+    bool _doFilter;
 
 	// 纹理映射方式
 	std::unique_ptr<TextureMapping2D> _mapping;
@@ -165,7 +173,8 @@ private:
 
 
 shared_ptr<ImageTexture<RGBSpectrum, Spectrum>> createImageMap(const string &filename, bool gamma = false, bool doTri = true,
-                                        Float maxAniso = 8, ImageWrap wm = ImageWrap::Repeat, Float scale = 1,
+                                        Float maxAniso = 8, ImageWrap wm = ImageWrap::Repeat,
+                                        Float scale = 1, bool doFilter = true,
                                         unique_ptr<TextureMapping2D> mapping = unique_ptr<TextureMapping2D>(new UVMapping2D()));
             
 CObject_ptr createImageMap(const nloJson &param, const Arguments &lst);

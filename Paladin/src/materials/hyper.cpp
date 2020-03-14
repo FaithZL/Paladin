@@ -102,7 +102,9 @@ shared_ptr<HyperMaterial> HyperMaterial::create(const std::shared_ptr<Texture<Sp
                                                 const std::shared_ptr<Texture<Float>> &bumpMap,
                                                 const std::shared_ptr<Texture<Spectrum>> &normalMap,
                                                 bool remapRoughness) {
-    return make_shared<HyperMaterial>(Kd, Ks, Kr, Kt, roughness, roughnessu, roughnessv, opacity, eta, bumpMap, normalMap, remapRoughness);
+    return make_shared<HyperMaterial>(Kd, Ks, Kr, Kt, roughness, roughnessu,
+                                      roughnessv, opacity, eta, bumpMap,
+                                      normalMap, remapRoughness);
 }
 
 PALADIN_END
