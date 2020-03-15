@@ -16,7 +16,7 @@
 PALADIN_BEGIN
 
 
-void Material::bump(const std::shared_ptr<Texture<Float>> &d, SurfaceInteraction *si) {
+void Material::bumpMapping(const std::shared_ptr<Texture<Float>> &d, SurfaceInteraction *si) {
 	SurfaceInteraction siEval = *si;
 
 	//todo 这里不是很理解为何要将两个方向相加
@@ -66,11 +66,11 @@ void Material::bump(const std::shared_ptr<Texture<Float>> &d, SurfaceInteraction
                            dpdv,
                            si->shading.dndu,
                            si->shading.dndv,
-                           false);    
+                           false);
     
 }
 
-void Material::correctNormal(const shared_ptr<Texture<Spectrum> > &normalMap,
+void Material::normalMapping(const shared_ptr<Texture<Spectrum> > &normalMap,
                              SurfaceInteraction *si) {
     si->computeTangentSpace();
     if (!si->tangentSpace.isValid()) {
@@ -92,6 +92,7 @@ void Material::correctNormal(const shared_ptr<Texture<Spectrum> > &normalMap,
     
     Vector3f worldNormal = si->tangentSpace.toWorld(normal);
     si->shading.normal = Normal3f(worldNormal);
+    coordinateSystem((Vector3f)si->shading.normal, &si->shading.dpdu, &si->shading.dpdv);
     si->normal = faceforward(si->normal, si->shading.normal);
 }
 

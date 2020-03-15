@@ -426,7 +426,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 16
+            "spp" : 64
         }
     },
     "camera" : {
@@ -448,7 +448,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "conelbox-normalbumpMap.png",
+            "fileName" : "conelbox-normalMap.png",
             "diagonal" : 1,
             "scale" : 1
         }

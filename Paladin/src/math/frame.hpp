@@ -121,7 +121,7 @@ struct Frame {
         return !operator == (frame);
     }
 
-private:
+//private:
     
     Vector3f s,t;
     

@@ -40,16 +40,14 @@ public:
     }
     
     virtual void processNormal(SurfaceInteraction * si) const {
-        if (_bumpMap) {
-            bump(_bumpMap, si);
-        }
-        
         if (_normalMap) {
-            correctNormal(_normalMap, si);
+            normalMapping(_normalMap, si);
+        } else if (_bumpMap) {
+            bumpMapping(_bumpMap, si);
         }
     }
     
-    static void correctNormal(const shared_ptr<Texture<Spectrum>> &normalMap,
+    static void normalMapping(const shared_ptr<Texture<Spectrum>> &normalMap,
                               SurfaceInteraction * si);
 
     /**
@@ -99,7 +97,7 @@ public:
      * @param d  [description]
      * @param si [description]
      */
-    static void bump(const std::shared_ptr<Texture<Float>> &d,
+    static void bumpMapping(const std::shared_ptr<Texture<Float>> &d,
                      SurfaceInteraction *si);
     
 protected:
