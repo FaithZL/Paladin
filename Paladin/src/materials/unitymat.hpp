@@ -20,12 +20,13 @@ public:
                   const std::shared_ptr<Texture<Float>>& metallic,
                   const std::shared_ptr<Texture<Float>>& roughness,
                   bool remapRoughness,
+                  const std::shared_ptr<Texture<Spectrum>> &normalMap,
                   std::shared_ptr<Texture<Float>> bumpMap = nullptr)
-    :_albedo(albedo),
+    : Material(normalMap, bumpMap),
+    _albedo(albedo),
     _metallic(metallic),
     _roughness(roughness),
-    _remapRoughness(remapRoughness),
-    _bumpMap(bumpMap) {
+    _remapRoughness(remapRoughness) {
         
     }
     

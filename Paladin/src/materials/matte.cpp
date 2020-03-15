@@ -22,13 +22,7 @@ void MatteMaterial::computeScatteringFunctions(SurfaceInteraction *si,
                                                TransportMode mode,
                                                bool allowMultipleLobes) const {
     
-	if (_bumpMap) {
-		bump(_bumpMap, si);
-	}
-    
-    if (_normalMap) {
-        correctNormal(_normalMap, si);
-    }
+    processNormal(si);
 
 	si->bsdf = ARENA_ALLOC(arena, BSDF)(*si);
 	Spectrum r = _Kd->evaluate(*si).clamp();

@@ -20,9 +20,8 @@ void GlassMaterial::computeScatteringFunctions(SurfaceInteraction *si,
                                                MemoryArena &arena,
                                                TransportMode mode,
                                                bool allowMultipleLobes) const {
-    if (_bumpMap) {
-        bump(_bumpMap, si);
-    }
+    processNormal(si);
+    
     Float eta = _eta->evaluate(*si);
     Float urough = _uRoughness->evaluate(*si);
     Float vrough = _vRoughness->evaluate(*si);
@@ -124,12 +123,15 @@ CObject_ptr createGlass(const nloJson &param, const Arguments &lst) {
     nloJson _eta = param.value("eta", nloJson(1.f));
     auto eta = shared_ptr<Texture<Float>>(createFloatTexture(_eta));
     
+    nloJson _normalMap = param.value("normalMap", nloJson());
+    auto normalMap = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_normalMap));
+    
     nloJson _bumpMap = param.value("bumpMap", nloJson(0.f));
     auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
     
     bool remap = param.value("remapRough", false);
     
-    auto ret = new GlassMaterial(Kr, Kt, uRough, vRough, eta, bumpMap, remap);
+    auto ret = new GlassMaterial(Kr, Kt, uRough, vRough, eta, normalMap, bumpMap, remap);
     return ret;
 }
 

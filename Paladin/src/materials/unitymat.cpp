@@ -19,9 +19,7 @@ PALADIN_BEGIN
 void UnityMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryArena &arena,
                                           TransportMode mode, bool allowMultipleLobes) const {
     
-    if (_bumpMap) {
-        bump(_bumpMap, si);
-    }
+    processNormal(si);
     si->bsdf = ARENA_ALLOC(arena, BSDF)(*si);
     
     Float metallic = _metallic->evaluate(*si);
@@ -70,11 +68,14 @@ CObject_ptr createUnityMaterial(const nloJson &param, const Arguments &lst) {
     
     bool remapRoughness = param.value("remapRough", false);
     
+    nloJson _normalMap = param.value("normalMap", nloJson());
+    auto normalMap = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_normalMap));
+    
     nloJson _bumpMap = param.value("bumpMap", nloJson());
     auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
     
     return new UnityMaterial(albedo, metallic, roughness,
-                             remapRoughness, bumpMap);
+                             remapRoughness, normalMap, bumpMap);
 }
 
 REGISTER("unity", createUnityMaterial);

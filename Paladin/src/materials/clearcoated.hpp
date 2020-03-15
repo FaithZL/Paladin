@@ -22,13 +22,14 @@ public:
                         const std::shared_ptr<Texture<Float>> &urough,
                         const std::shared_ptr<Texture<Float>> &vrough,
                         bool remapRough,
+                        const std::shared_ptr<Texture<Spectrum>> &normalMap,
                         const std::shared_ptr<Texture<Float>> &bumpMap)
-    : _Ks(Ks),
+    : Material(normalMap, bumpMap),
+    _Ks(Ks),
     _Kd(Kd),
     _uRoughness(urough),
     _vRoughness(vrough),
-    _remapRoughness(remapRough),
-    _bumpMap(bumpMap) {
+    _remapRoughness(remapRough) {
         
     }
     
@@ -44,7 +45,6 @@ private:
     std::shared_ptr<Texture<Spectrum>> _Ks, _Kd;
     std::shared_ptr<Texture<Float>> _uRoughness, _vRoughness;
     bool _remapRoughness;
-    std::shared_ptr<Texture<Float>> _bumpMap;
 };
 
 CObject_ptr createClearCoated(const nloJson &param, const Arguments &lst);

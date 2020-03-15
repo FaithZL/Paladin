@@ -38,7 +38,7 @@
                 "normalMap" : {
                     "type" : "image",
                     "param" : {
-                        "fileName" : "res/pic/Wall_Normal.tga",
+                        "fileName" : "res/pic/bricks2_normal.jpg",
                         "doTri" : true,
                         "maxAniso" : 8,
                         "wrapMode" : 0,
@@ -50,6 +50,18 @@
                 "sigma" : {
                     "type" : "constant",
                     "param" : 0
+                },
+                "bumpMap" :  {
+                    "type" : "image",
+                    "param" : {
+                        "fileName" : "res/pic/bricks2_disp.jpg",
+                        "doTri" : true,
+                        "maxAniso" : 8,
+                        "wrapMode" : 0,
+                        "scale" : 1,
+                        "gamma" : false,
+                        "doFilter" : false
+                    }
                 }
             }
         },
@@ -78,11 +90,7 @@
                 "sigma" : {
                     "type" : "constant",
                     "param" : 0
-                },
-                "bumpMap" : {
-                    "type" : "constant",
-                    "param" : 0
-                } 
+                }
             }
         },
         "wall" : {
@@ -142,10 +150,6 @@
                 "sigma" : {
                     "type" : "constant",
                     "param" : 0
-                },
-                "bumpMap" : {
-                    "type" : "constant",
-                    "param" : 0
                 }
             }
         },
@@ -160,10 +164,6 @@
                     }
                 },
                 "sigma" : {
-                    "type" : "constant",
-                    "param" : 0
-                },
-                "bumpMap" : {
                     "type" : "constant",
                     "param" : 0
                 }
@@ -198,10 +198,6 @@
                     "type" : "constant",
                     "param" : 0.5
                 },
-                "bumpMap" : {
-                    "type" : "constant",
-                    "param" : 0.5
-                },
                 "remapRough" : false 
             }
         },
@@ -214,10 +210,6 @@
                         "colorType" : 0,
                         "color" : [1, 1, 1]
                     }
-                },
-                "bumpMap" : {
-                    "type" : "constant",
-                    "param" : 0
                 }
             }
         }
@@ -434,7 +426,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 4
+            "spp" : 16
         }
     },
     "camera" : {
@@ -456,7 +448,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "conelbox-normalMap-2.png",
+            "fileName" : "conelbox-normalbumpMap.png",
             "diagonal" : 1,
             "scale" : 1
         }

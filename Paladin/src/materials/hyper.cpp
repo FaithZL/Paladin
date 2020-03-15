@@ -18,13 +18,7 @@ PALADIN_BEGIN
 
 void HyperMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryArena &arena, TransportMode mode, bool allowMultipleLobes) const {
     
-    if (_bumpMap) {
-        bump(_bumpMap, si);
-    }
-    
-    if (_normalMap) {
-        correctNormal(_normalMap, si);
-    }
+    processNormal(si);
     
     Float eta = _eta->evaluate(*si);
     // opacity不透明度

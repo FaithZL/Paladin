@@ -16,9 +16,10 @@ class MirrorMaterial : public Material {
     
 public:
     MirrorMaterial(const std::shared_ptr<Texture<Spectrum>> &r,
+                   const std::shared_ptr<Texture<Spectrum>> &normalMap,
                    const std::shared_ptr<Texture<Float>> &bump)
-    :_Kr(r),
-    _bumpMap(bump) {
+    :Material(normalMap, bump),
+    _Kr(r) {
         
     }
     
@@ -32,7 +33,6 @@ public:
     
 private:
     std::shared_ptr<Texture<Spectrum>> _Kr;
-    std::shared_ptr<Texture<Float>> _bumpMap;
 };
 
 CObject_ptr createMirror(const nloJson &param, const Arguments &lst);

@@ -17,9 +17,8 @@ void MetalMaterial::computeScatteringFunctions(SurfaceInteraction *si,
                                                MemoryArena &arena,
                                                TransportMode mode,
                                                bool allowMultipleLobes) const {
-    if (_bumpMap) {
-        bump(_bumpMap, si);
-    }
+    processNormal(si);
+    
     si->bsdf = ARENA_ALLOC(arena, BSDF)(*si);
     
     Float uRough = _uRoughness ? _uRoughness->evaluate(*si) : _roughness->evaluate(*si);
@@ -122,12 +121,17 @@ CObject_ptr createMetal(const nloJson &param, const Arguments &lst) {
     nloJson _vRough = param.value("vRough", nloJson(0.f));
     auto vRough = shared_ptr<Texture<Float>>(createFloatTexture(_vRough));
     
+    nloJson _normalMap = param.value("normalMap", nloJson());
+    auto normalMap = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_normalMap));
+    
     nloJson _bumpMap = param.value("bumpMap", nloJson(0.f));
     auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
     
     bool remap = param.value("remapRough", false);
     
-    auto ret = new MetalMaterial(eta, k, rough, uRough, vRough, bumpMap, remap);
+    auto ret = new MetalMaterial(eta, k, rough, uRough,
+                                 vRough,normalMap,
+                                 bumpMap, remap);
     
     return ret;
 }

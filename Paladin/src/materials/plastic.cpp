@@ -20,9 +20,7 @@ void PlasticMaterial::computeScatteringFunctions(
     SurfaceInteraction *si, MemoryArena &arena, TransportMode mode,
     bool allowMultipleLobes) const {
     
-    if (_bumpMap) {
-    	bump(_bumpMap, si);
-    }
+    processNormal(si);
     si->bsdf = ARENA_ALLOC(arena, BSDF)(*si);
     Spectrum kd = _Kd->evaluate(*si).clamp();
     if (!kd.IsBlack()) {
@@ -84,12 +82,15 @@ CObject_ptr createPlastic(const nloJson &param, const Arguments &lst) {
     nloJson _rough = param.value("rough", nloJson::object());
     auto rough = shared_ptr<Texture<Float>>(createFloatTexture(_rough));
     
+    nloJson _normalMap = param.value("normalMap", nloJson());
+    auto normalMap = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_normalMap));
+    
     nloJson _bumpMap = param.value("bumpMap", nloJson::object());
     auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
     
     bool remap = param.value("remapRough", false);
     
-    auto ret = new PlasticMaterial(Kd, Ks, rough, bumpMap, remap);
+    auto ret = new PlasticMaterial(Kd, Ks, rough, normalMap, bumpMap, remap);
     return ret;
 }
 

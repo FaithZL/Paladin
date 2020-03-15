@@ -19,9 +19,8 @@ void MirrorMaterial::computeScatteringFunctions(SurfaceInteraction *si,
                                                 MemoryArena &arena,
                                                 TransportMode mode,
                                                 bool allowMultipleLobes) const {
-    if (_bumpMap) {
-        bump(_bumpMap, si);
-    }
+    processNormal(si);
+    
     si->bsdf = ARENA_ALLOC(arena, BSDF)(*si);
     Spectrum R = _Kr->evaluate(*si).clamp();
     if (!R.IsBlack()) {
@@ -43,10 +42,13 @@ CObject_ptr createMirror(const nloJson &param, const Arguments &lst) {
     nloJson _Kr = param.value("Kr", nloJson::object());
     auto Kr = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_Kr));
     
+    nloJson _normalMap = param.value("normalMap", nloJson());
+    auto normalMap = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_normalMap));
+    
     nloJson _bumpMap = param.value("bumpMap", nloJson());
     auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
     
-    auto ret = new MirrorMaterial(Kr, bumpMap);
+    auto ret = new MirrorMaterial(Kr, normalMap, bumpMap);
     return ret;
 }
 

@@ -23,12 +23,13 @@ public:
     PlasticMaterial(const std::shared_ptr<Texture<Spectrum>> &Kd,
                     const std::shared_ptr<Texture<Spectrum>> &Ks,
                     const std::shared_ptr<Texture<Float>> &roughness,
+                    const std::shared_ptr<Texture<Spectrum>> &normalMap,
                     const std::shared_ptr<Texture<Float>> &bumpMap,
                     bool remapRoughness)
-	:_Kd(Kd),
+	: Material(normalMap, bumpMap),
+    _Kd(Kd),
 	_Ks(Ks),
 	_roughness(roughness),
-	_bumpMap(bumpMap),
 	_remapRoughness(remapRoughness) {
 
 	}

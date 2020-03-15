@@ -22,6 +22,14 @@ enum class TransportMode { Radiance, Importance };
  */
 class Material : public CObject {
 public:
+    
+    Material(const shared_ptr<Texture<Spectrum>> &normalMap = nullptr,
+             const shared_ptr<Texture<Float>> &bumpMap = nullptr)
+    : _normalMap(normalMap),
+    _bumpMap(bumpMap) {
+        
+    }
+    
     virtual void computeScatteringFunctions(SurfaceInteraction *si,
                                             MemoryArena &arena,
                                             TransportMode mode,
@@ -29,6 +37,16 @@ public:
     
     virtual ~Material() {
     	
+    }
+    
+    virtual void processNormal(SurfaceInteraction * si) const {
+        if (_bumpMap) {
+            bump(_bumpMap, si);
+        }
+        
+        if (_normalMap) {
+            correctNormal(_normalMap, si);
+        }
     }
     
     static void correctNormal(const shared_ptr<Texture<Spectrum>> &normalMap,
@@ -83,6 +101,12 @@ public:
      */
     static void bump(const std::shared_ptr<Texture<Float>> &d,
                      SurfaceInteraction *si);
+    
+protected:
+    // 法线贴图
+    std::shared_ptr<Texture<Spectrum>> _normalMap;
+    // bump贴图
+    std::shared_ptr<Texture<Float>> _bumpMap;
 };
 
 Material * createMaterial(const nloJson &);

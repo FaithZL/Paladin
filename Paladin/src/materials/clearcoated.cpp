@@ -17,9 +17,8 @@ void ClearCoatedMaterial::computeScatteringFunctions(SurfaceInteraction *si,
                                                      MemoryArena &arena,
                                                      TransportMode mode,
                                                      bool allowMultipleLobes) const {
-    if (_bumpMap) {
-        bump(_bumpMap, si);
-    }
+    processNormal(si);
+    
     si->bsdf = ARENA_ALLOC(arena, BSDF)(*si);
     Float urough = _uRoughness->evaluate(*si);
     Float vrough = _vRoughness->evaluate(*si);
@@ -63,10 +62,13 @@ CObject_ptr createClearCoated(const nloJson &param, const Arguments &lst) {
     nloJson _bumpMap = param.value("bumpMap", nloJson());
     auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
     
+    nloJson _normalMap = param.value("normalMap", nloJson());
+    auto normalMap = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_normalMap));
+    
     bool remapRough = param.value("remapRough", false);
     
     return new ClearCoatedMaterial(Ks, Kd, uRough, vRough,
-                                   remapRough, bumpMap);
+                                   remapRough, normalMap, bumpMap);
 }
 
 PALADIN_END
