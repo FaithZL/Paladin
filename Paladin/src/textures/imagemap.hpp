@@ -177,6 +177,14 @@ shared_ptr<ImageTexture<RGBSpectrum, Spectrum>> createImageMap(const string &fil
                                         Float scale = 1, bool doFilter = true,
                                         unique_ptr<TextureMapping2D> mapping = unique_ptr<TextureMapping2D>(new UVMapping2D()));
             
+shared_ptr<ImageTexture<Float, Float>> createFloatMap(const string &filename,
+                                        bool gamma = false, bool doTri = true,
+                                        Float maxAniso = 8, ImageWrap wm = ImageWrap::Repeat,
+                                        Float scale = 1, bool doFilter = true,
+                                        unique_ptr<TextureMapping2D> mapping = unique_ptr<TextureMapping2D>(new UVMapping2D()));
+            
+CObject_ptr createFloatMap(const nloJson &param, const Arguments &lst);
+            
 CObject_ptr createImageMap(const nloJson &param, const Arguments &lst);
             
 PALADIN_END

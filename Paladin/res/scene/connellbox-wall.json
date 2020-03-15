@@ -38,7 +38,7 @@
                 "normalMap" : {
                     "type" : "image",
                     "param" : {
-                        "fileName" : "res/pic/brickwall_normal.jpg",
+                        "fileName" : "res/pic/Wall_Normal.tga",
                         "doTri" : true,
                         "maxAniso" : 8,
                         "wrapMode" : 0,
@@ -48,10 +48,6 @@
                     }
                 },
                 "sigma" : {
-                    "type" : "constant",
-                    "param" : 0
-                },
-                "bumpMap" : {
                     "type" : "constant",
                     "param" : 0
                 }
@@ -438,7 +434,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 32
+            "spp" : 4
         }
     },
     "camera" : {
