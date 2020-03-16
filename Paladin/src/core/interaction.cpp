@@ -125,9 +125,9 @@ void SurfaceInteraction::computeTangentSpace() {
     if (shape == nullptr) {
         return;
     }
-    Vector3f tangent = normalize(dpdu);
-    Vector3f bitangent = normalize(dpdv);
-    tangentSpace = Frame(tangent, bitangent, normal);
+    Vector3f tangent = normalize(shading.dpdu);
+    Vector3f bitangent = normalize(shading.dpdv);
+    tangentSpace = Frame(tangent, bitangent, shading.normal);
 }
 
 void SurfaceInteraction::computeScatteringFunctions(const RayDifferential &ray,

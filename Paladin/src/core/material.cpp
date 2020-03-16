@@ -91,7 +91,8 @@ void Material::normalMapping(const shared_ptr<Texture<Spectrum> > &normalMap,
     normal.z = std::sqrt((Float)(1.f - clamp(v2.lengthSquared(), 0.f, 1.f)));
     
     Vector3f worldNormal = si->tangentSpace.toWorld(normal);
-    si->shading.normal = Normal3f(worldNormal);
+    
+    si->shading.normal = normalize(Normal3f(worldNormal));
     coordinateSystem((Vector3f)si->shading.normal, &si->shading.dpdu, &si->shading.dpdv);
     si->normal = faceforward(si->normal, si->shading.normal);
 }
