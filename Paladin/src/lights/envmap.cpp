@@ -8,6 +8,7 @@
 #include "envmap.hpp"
 #include "math/sampling.hpp"
 #include "tools/fileio.hpp"
+#include "core/paladin.hpp"
 
 PALADIN_BEGIN
 
@@ -170,8 +171,9 @@ CObject_ptr createEnvironmentMap(const nloJson &param, const Arguments &lst) {
     L *= Float(scale);
     int nSamples = param.value("nSamples", 1);
     string fn = param.value("fn", "");
+    string basePath = Paladin::getInstance()->getBasePath();
     return new EnvironmentMap(shared_ptr<const Transform>(l2w),
-                              L, nSamples, fn);
+                              L, nSamples, basePath + fn);
 }
 
 REGISTER("envmap", createEnvironmentMap);
