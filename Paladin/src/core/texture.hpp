@@ -179,6 +179,10 @@ Texture<Float> * createFloatTexture(const nloJson &data);
 
 Texture<Spectrum> * createSpectrumTexture(const nloJson &data);
 
+CObject_ptr _createTexture(const nloJson &data);
+
+CObject_ptr createTexture(const nloJson &data);
+
 PALADIN_END
 
 #endif /* texture_hpp */

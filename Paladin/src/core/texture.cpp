@@ -8,6 +8,7 @@
 
 #include "texture.hpp"
 #include "textures/constant.hpp"
+#include "textures/scale.hpp"
 
 PALADIN_BEGIN
 
@@ -208,6 +209,54 @@ Texture<Spectrum> * createSpectrumTexture(const nloJson &data) {
     nloJson param = data.value("param", nloJson::array({}));
     CObject_ptr tmp = creator(param, {});
     return dynamic_cast<Texture<Spectrum> *>(tmp);
+}
+
+CObject_ptr _createTexture(const nloJson &data) {
+    string subtype = data.value("subtype", "float");
+    if (subtype == "float") {
+        return createFloatTexture(data);
+    } else if (subtype == "spectrum") {
+        return createSpectrumTexture(data);
+    }
+    DCHECK(false);
+    return nullptr;
+}
+
+//"data" : [
+//    {
+//        "type" : "constant",
+//        "subtype" : "spectrum",
+//        "param" : {
+//            "colorType" : 0,
+//            "color" : [0.1, 0.9, 0.5]
+//        }
+//    },
+//    {
+//        "type" : "constant",
+//        "subtype" : "spectrum",
+//        "param" : {
+//            "colorType" : 0,
+//            "color" : [0.1, 0.9, 0.5]
+//        }
+//    }
+//]
+CObject_ptr createTexture(const nloJson &data) {
+    if (data.is_object()) {
+        return _createTexture(data);
+    }
+    // else data.is_array()
+    nloJson t1Data = data.at(0);
+    string subtype1 = t1Data.value("subtype", "");
+    nloJson t2Data = data.at(0);
+    string subtype2 = t2Data.value("subtype", "");
+    if (subtype1 == "spectrum" && subtype2 == "spectrum") {
+        auto t1 = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(t1Data));
+        auto t2 = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(t2Data));
+        auto ret = new ScaleTexture<Spectrum, Spectrum>(t1, t2);
+        return ret;
+    }
+    DCHECK(false);
+    return nullptr;
 }
 
 PALADIN_END

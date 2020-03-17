@@ -92,6 +92,24 @@
                         "v11" : [0.1, 0.9, 0.5]
                     }
                 },
+                "Ks" : [
+                    {
+                        "type" : "constant",
+                        "subtype" : "spectrum",
+                        "param" : {
+                            "colorType" : 0,
+                            "color" : [0.1, 0.9, 0.5]
+                        }
+                    },
+                    {
+                        "type" : "constant",
+                        "subtype" : "spectrum",
+                        "param" : {
+                            "colorType" : 0,
+                            "color" : [0.1, 0.9, 0.5]
+                        }                        
+                    }
+                ],
                 "sigma" : {
                     "type" : "bilerp",
                     "param" : {

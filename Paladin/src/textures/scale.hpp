@@ -13,6 +13,7 @@
 
 PALADIN_BEGIN
 
+// 用于两个纹理相乘的情况
 template <typename T1, typename T2>
 class ScaleTexture : public Texture<T2> {
 public:
