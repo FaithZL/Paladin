@@ -44,7 +44,7 @@ public:
 
 private:
     std::shared_ptr<Texture<Spectrum>> _Kd, _Ks;
-    std::shared_ptr<Texture<Float>> _roughness, _bumpMap;
+    std::shared_ptr<Texture<Float>> _roughness;
     const bool _remapRoughness;
 };
 

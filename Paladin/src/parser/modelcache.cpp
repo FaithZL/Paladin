@@ -10,6 +10,8 @@
 #include "materials/matte.hpp"
 #include "core/primitive.hpp"
 #include "lights/diffuse.hpp"
+#include "tools/fileutil.hpp"
+#include "shapes/trianglemesh.hpp"
 
 PALADIN_BEGIN
 
@@ -148,9 +150,12 @@ vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
                                                          const shared_ptr<const Transform> &transform,
                                                          vector<shared_ptr<Light>> &lights) {
     
+    if (hasExtension(fn, "obj")) {
+        return getPrimitiveFromObj(fn, transform, lights, nullptr, false);
+    }
     
-    nloJson meshList = createJsonFromFile(fn);
     vector<shared_ptr<Primitive>> ret;
+    nloJson meshList = createJsonFromFile(fn);
     for(const nloJson &meshData : meshList) {
         vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights);
         ret.insert(ret.end(), tmp.begin(), tmp.end());

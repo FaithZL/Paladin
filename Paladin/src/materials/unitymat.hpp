@@ -43,8 +43,6 @@ private:
     std::shared_ptr<Texture<Float>> _metallic;
     std::shared_ptr<Texture<Float>> _roughness;
     bool _remapRoughness;
-    // bump贴图
-    std::shared_ptr<Texture<Float>> _bumpMap;
 };
 
 CObject_ptr createUnityMaterial(const nloJson &, const Arguments &lst);
