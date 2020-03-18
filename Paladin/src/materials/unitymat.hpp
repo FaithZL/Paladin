@@ -9,6 +9,7 @@
 #define unitymat_hpp
 
 #include "core/material.hpp"
+#include "textures/scale.hpp"
 
 PALADIN_BEGIN
 
@@ -42,6 +43,12 @@ private:
     std::shared_ptr<Texture<Spectrum>> _albedo;
     std::shared_ptr<Texture<Float>> _metallic;
     std::shared_ptr<Texture<Float>> _roughness;
+    std::shared_ptr<Texture<Spectrum>> _opacity;
+    
+    shared_ptr<ScaleTexture<Texture<Spectrum>, Spectrum>> _albedo1;
+    shared_ptr<ScaleTexture<Texture<Spectrum>, Spectrum>> _specular;
+    shared_ptr<Texture<Spectrum>> _F0;
+    
     bool _remapRoughness;
 };
 
