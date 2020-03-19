@@ -160,7 +160,7 @@ Float EnvironmentMap::pdf_Li(const Interaction &, const Vector3f &w) const {
 //    "scale" : 1,
 //    "L" : [0.5,0.6,0.6],
 //    "nSamples" : 1,
-//    "fromBasePath" : true,
+//    "fromBasePath" : false,
 //    "fn" : "",
 //}
 CObject_ptr createEnvironmentMap(const nloJson &param, const Arguments &lst) {
@@ -172,7 +172,7 @@ CObject_ptr createEnvironmentMap(const nloJson &param, const Arguments &lst) {
     L *= Float(scale);
     int nSamples = param.value("nSamples", 1);
     string fn = param.value("fn", "");
-    if (param.value("fromBasePath", true)) {
+    if (param.value("fromBasePath", false)) {
         string basePath = Paladin::getInstance()->getBasePath();
         fn = basePath + fn;
     }
