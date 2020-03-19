@@ -246,10 +246,11 @@ CObject_ptr createTexture(const nloJson &data) {
     }
     // else data.is_array()
     nloJson t1Data = data.at(0);
-    string subtype1 = t1Data.value("subtype", "");
-    nloJson t2Data = data.at(0);
-    string subtype2 = t2Data.value("subtype", "");
-    if (subtype1 == "spectrum" && subtype2 == "spectrum") {
+    nloJson t2Data = data.at(1);
+    auto isSpectrum = [](const nloJson &data)-> bool {
+        return data.is_array() || data.value("subtype", "") == "spectrum";
+    };
+    if (isSpectrum(t1Data) && isSpectrum(t2Data)) {
         auto t1 = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(t1Data));
         auto t2 = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(t2Data));
         auto ret = new ScaleTexture<Spectrum, Spectrum>(t1, t2);

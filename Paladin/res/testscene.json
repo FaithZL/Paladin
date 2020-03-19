@@ -75,7 +75,25 @@
         "unity" : {
             "type" : "unity",
             "param" : {
-                "albedo" : [0.725, 0.71, 0.68],
+                // "albedo" : [0.725, 0.71, 0.68],
+                "albedo" :  [
+                    {
+                        "type" : "constant",
+                        "subtype" : "spectrum",
+                        "param" : {
+                            "colorType" : 0,
+                            "color" : [0.1, 0.9, 0.5]
+                        }
+                    },
+                    {
+                        "type" : "constant",
+                        "subtype" : "spectrum",
+                        "param" : {
+                            "colorType" : 0,
+                            "color" : [0.1, 0.9, 0.5]
+                        }
+                    }
+                ],
                 "roughness" : 0.2,
                 "metallic" : 0.8
             }

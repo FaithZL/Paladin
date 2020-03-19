@@ -58,7 +58,8 @@ void UnityMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryAre
 //}
 CObject_ptr createUnityMaterial(const nloJson &param, const Arguments &lst) {
     nloJson _albedo = param.value("albedo", nloJson::array({1.f, 1.f, 1.f}));
-    auto albedo = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_albedo));
+    auto tmp = dynamic_cast<ScaleTexture<Spectrum, Spectrum>*>(createTexture(_albedo));
+    auto albedo = shared_ptr<ScaleTexture<Spectrum, Spectrum>>(tmp);
     
     nloJson _roughness = param.value("roughness", nloJson::object());
     auto roughness = shared_ptr<Texture<Float>>(createFloatTexture(_roughness));

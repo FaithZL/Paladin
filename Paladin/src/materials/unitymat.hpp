@@ -17,7 +17,7 @@ class UnityMaterial : public Material {
     
 public:
     
-    UnityMaterial(const std::shared_ptr<Texture<Spectrum>>& albedo,
+    UnityMaterial(const shared_ptr<ScaleTexture<Spectrum, Spectrum>>& albedo,
                   const std::shared_ptr<Texture<Float>>& metallic,
                   const std::shared_ptr<Texture<Float>>& roughness,
                   bool remapRoughness,
@@ -40,12 +40,11 @@ public:
                                     bool allowMultipleLobes) const override;
 private:
     
-    std::shared_ptr<Texture<Spectrum>> _albedo;
+    shared_ptr<ScaleTexture<Spectrum, Spectrum>> _albedo;
     std::shared_ptr<Texture<Float>> _metallic;
     std::shared_ptr<Texture<Float>> _roughness;
     std::shared_ptr<Texture<Spectrum>> _opacity;
     
-    shared_ptr<ScaleTexture<Texture<Spectrum>, Spectrum>> _albedo1;
     shared_ptr<ScaleTexture<Texture<Spectrum>, Spectrum>> _specular;
     shared_ptr<Texture<Spectrum>> _F0;
     
