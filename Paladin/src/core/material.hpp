@@ -24,9 +24,11 @@ class Material : public CObject {
 public:
     
     Material(const shared_ptr<Texture<Spectrum>> &normalMap = nullptr,
-             const shared_ptr<Texture<Float>> &bumpMap = nullptr)
+             const shared_ptr<Texture<Float>> &bumpMap = nullptr,
+             Float scale = -1)
     : _normalMap(normalMap),
-    _bumpMap(bumpMap) {
+    _bumpMap(bumpMap),
+    _normalMapScale(scale) {
         
     }
     
@@ -41,14 +43,14 @@ public:
     
     virtual void processNormal(SurfaceInteraction * si) const {
         if (_normalMap) {
-            normalMapping(_normalMap, si);
+            normalMapping(_normalMap, si, _normalMapScale);
         } else if (_bumpMap) {
             bumpMapping(_bumpMap, si);
         }
     }
     
     static void normalMapping(const shared_ptr<Texture<Spectrum>> &normalMap,
-                              SurfaceInteraction * si);
+                              SurfaceInteraction * si, Float scale = -1);
 
     /**
      * bump函数，用于更新SurfaceInteraction变量
@@ -105,6 +107,8 @@ protected:
     std::shared_ptr<Texture<Spectrum>> _normalMap;
     // bump贴图
     std::shared_ptr<Texture<Float>> _bumpMap;
+    // [-1,1]
+    Float _normalMapScale;
 };
 
 Material * createMaterial(const nloJson &);

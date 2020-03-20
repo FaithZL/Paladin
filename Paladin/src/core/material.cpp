@@ -71,12 +71,11 @@ void Material::bumpMapping(const std::shared_ptr<Texture<Float>> &d, SurfaceInte
 }
 
 void Material::normalMapping(const shared_ptr<Texture<Spectrum> > &normalMap,
-                             SurfaceInteraction *si) {
+                             SurfaceInteraction *si, Float scale/* = -1*/) {
     si->computeTangentSpace();
     if (!si->tangentSpace.isValid()) {
         return;
     }
-    Float scale = -1;
     
     Spectrum color = normalMap->evaluate(*si);
     Float rgb[3];

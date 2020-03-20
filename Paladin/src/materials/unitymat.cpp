@@ -28,7 +28,8 @@ void UnityMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryAre
         alpha = GGXDistribution::RoughnessToAlpha(alpha);
     }
     auto albedo = _albedo->evaluate(*si);
-    Fresnel * fresnel = ARENA_ALLOC(arena, FresnelSchlick)(albedo);
+    auto F0 = _F0->evaluate(*si);
+    Fresnel * fresnel = ARENA_ALLOC(arena, FresnelSchlick)(F0);
     
     BxDF * diffuse = nullptr;
     BxDF * spec = nullptr;
@@ -52,9 +53,25 @@ void UnityMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryAre
 }
 
 //"param" : {
-//    "albedo" : [0.725, 0.71, 0.68],
-//    "roughness" : 0.2,
-//    "metallic" : 0.8
+//    "albedo" : [
+//        [
+//            0.185608759522438,
+//            0.915094316005707,
+//            0.894712090492249
+//        ],
+//        [
+//            1,
+//            1,
+//            1
+//        ]
+//    ],
+//    "F0"     : [
+//        0.185608759522438,
+//        0.915094316005707,
+//        0.894712090492249
+//    ],
+//    "roughness" : 0.0,
+//    "metallic"  : 1.0
 //}
 CObject_ptr createUnityMaterial(const nloJson &param, const Arguments &lst) {
     nloJson _albedo = param.value("albedo", nloJson::array({1.f, 1.f, 1.f}));
@@ -69,14 +86,20 @@ CObject_ptr createUnityMaterial(const nloJson &param, const Arguments &lst) {
     
     bool remapRoughness = param.value("remapRough", false);
     
+    nloJson _F0 = param.value("F0", nloJson::array({1,1,1}));
+    auto F0 = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_F0));
+    
     nloJson _normalMap = param.value("normalMap", nloJson());
     auto normalMap = shared_ptr<Texture<Spectrum>>(createSpectrumTexture(_normalMap));
     
     nloJson _bumpMap = param.value("bumpMap", nloJson());
     auto bumpMap = shared_ptr<Texture<Float>>(createFloatTexture(_bumpMap));
     
+    Float scale = param.value("scale", -1);
+    
     return new UnityMaterial(albedo, metallic, roughness,
-                             remapRoughness, normalMap, bumpMap);
+                             remapRoughness, F0, normalMap,
+                             bumpMap, scale);
 }
 
 REGISTER("unity", createUnityMaterial);

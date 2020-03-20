@@ -21,12 +21,15 @@ public:
                   const std::shared_ptr<Texture<Float>>& metallic,
                   const std::shared_ptr<Texture<Float>>& roughness,
                   bool remapRoughness,
+                  const shared_ptr<Texture<Spectrum>> &F0,
                   const std::shared_ptr<Texture<Spectrum>> &normalMap,
-                  std::shared_ptr<Texture<Float>> bumpMap = nullptr)
-    : Material(normalMap, bumpMap),
+                  const shared_ptr<Texture<Float>> &bumpMap = nullptr,
+                  Float scale = -1)
+    : Material(normalMap, bumpMap, scale),
     _albedo(albedo),
     _metallic(metallic),
     _roughness(roughness),
+    _F0(F0),
     _remapRoughness(remapRoughness) {
         
     }
@@ -44,10 +47,7 @@ private:
     std::shared_ptr<Texture<Float>> _metallic;
     std::shared_ptr<Texture<Float>> _roughness;
     std::shared_ptr<Texture<Spectrum>> _opacity;
-    
-    shared_ptr<ScaleTexture<Texture<Spectrum>, Spectrum>> _specular;
     shared_ptr<Texture<Spectrum>> _F0;
-    
     bool _remapRoughness;
 };
 
