@@ -20,7 +20,7 @@ public:
     static ModelCache * getInstance();
     
     vector<shared_ptr<Primitive>> getPrimitives(const string &fn,
-                                                const shared_ptr<const Transform> &transform,
+                                                const shared_ptr<Transform> &transform,
                                                 vector<shared_ptr<Light>> &lights);
     
     vector<shared_ptr<Primitive>> createPrimitive(const nloJson &meshData,
@@ -28,7 +28,7 @@ public:
                                                   vector<shared_ptr<Light>> &lights);
     
     vector<shared_ptr<Primitive>> loadPrimitives(const string &fn,
-                                                 const shared_ptr<const Transform> &transform,
+                                                 const shared_ptr< Transform> &transform,
                                                  vector<shared_ptr<Light>> &lights);
     
 private:

@@ -24,12 +24,8 @@ void UnityMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryAre
     
     Float metallic = _metallic->evaluate(*si);
     Float alpha = _roughness->evaluate(*si);
-    if (_remapRoughness) {
-        alpha = GGXDistribution::RoughnessToAlpha(alpha);
-    }
     auto albedo = _albedo->evaluate(*si);
-    auto F0 = _F0->evaluate(*si);
-    Fresnel * fresnel = ARENA_ALLOC(arena, FresnelSchlick)(F0);
+    Fresnel * fresnel = ARENA_ALLOC(arena, FresnelSchlick)(albedo);
     
     BxDF * diffuse = nullptr;
     BxDF * spec = nullptr;
@@ -37,7 +33,7 @@ void UnityMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryAre
     // 如果完全光滑
     if (alpha != 0) {
         alpha = correctRoughness(alpha);
-        diffuse= ARENA_ALLOC(arena, OrenNayar(albedo, alpha));
+        diffuse= ARENA_ALLOC(arena, OrenNayar(albedo, alpha * 90));
         GGXDistribution * ggx = ARENA_ALLOC(arena, GGXDistribution)(alpha, alpha);
         spec = ARENA_ALLOC(arena, MicrofacetReflection)(1.0, ggx, fresnel);
     } else {

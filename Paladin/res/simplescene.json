@@ -250,6 +250,7 @@
                         "param" : [0,0,1]
                     }
                 ],
+                "reverseOrientation" : false,
                 "width" : 2
             },
             "material" : "matte1"
@@ -415,7 +416,7 @@
         }
     ],
     "integrator" : {
-        "type" : "pt",
+        "type" : "Geometry",
         "param" : {
             "maxBounce" : 5,
             "rrThreshold" : 1,
@@ -426,7 +427,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 32
+            "spp" : 8
         }
     },
     "camera" : {
@@ -448,7 +449,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "conelbox-normalMap-32.png",
+            "fileName" : "conelbox-normalMap.png",
             "diagonal" : 1,
             "scale" : 1
         }

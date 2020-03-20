@@ -147,10 +147,12 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
 }
 
 vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
-                                                         const shared_ptr<const Transform> &transform,
+                                                         const shared_ptr< Transform> &transform,
                                                          vector<shared_ptr<Light>> &lights) {
     
     if (hasExtension(fn, "obj")) {
+        Transform swapHand = Transform::scale(-1, 1, 1);
+        *transform = swapHand * (*transform);
         return getPrimitiveFromObj(fn, transform, lights, nullptr, false);
     }
     
@@ -165,7 +167,7 @@ vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
 }
 
 vector<shared_ptr<Primitive>> ModelCache::getPrimitives(const string &fn,
-                                                        const shared_ptr<const Transform> &transform,
+                                                        const shared_ptr<Transform> &transform,
                                                         vector<shared_ptr<Light>> &lights) {
     auto iter = _modelMap.find(fn);
     if (iter == _modelMap.end()) {
