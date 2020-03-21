@@ -617,13 +617,14 @@ class FresnelSpecular : public BxDF {
 public:
 
     FresnelSpecular(const Spectrum &R, const Spectrum &T, Float etaA,
-                    Float etaB, TransportMode mode)
+                    Float etaB, TransportMode mode, bool thin = false)
     : BxDF(BxDFType(BSDF_REFLECTION | BSDF_TRANSMISSION | BSDF_SPECULAR)),
-      _R(R),
-      _T(T),
-      _etaA(etaA),
-      _etaB(etaB),
-      _mode(mode) {
+    _R(R),
+    _T(T),
+    _etaA(etaA),
+    _etaB(etaB),
+    _mode(mode),
+    _thin(thin) {
         DCHECK(!isNaN(_etaA) && !isNaN(_etaB));
     }
 
@@ -644,6 +645,7 @@ private:
     const Spectrum _R, _T;
     const Float _etaA, _etaB;
     const TransportMode _mode;
+    const bool _thin;
 };
 
 

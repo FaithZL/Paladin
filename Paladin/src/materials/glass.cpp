@@ -38,9 +38,9 @@ void GlassMaterial::computeScatteringFunctions(SurfaceInteraction *si,
 
     Float etaMedium = 1.0f;
     
-    if (isSpecular && allowMultipleLobes) {
+    if (_thin || (isSpecular && allowMultipleLobes)) {
         // 这里的介质折射率不应该固定为1.0f，应该根据介质  todo
-        FresnelSpecular * fr = ARENA_ALLOC(arena, FresnelSpecular)(R, T, etaMedium, eta, mode);
+        FresnelSpecular * fr = ARENA_ALLOC(arena, FresnelSpecular)(R, T, etaMedium, eta, mode, _thin);
         si->bsdf->add(fr);
     } else {
         if (_remapRoughness) {
@@ -131,7 +131,9 @@ CObject_ptr createGlass(const nloJson &param, const Arguments &lst) {
     
     bool remap = param.value("remapRough", false);
     
-    auto ret = new GlassMaterial(Kr, Kt, uRough, vRough, eta, normalMap, bumpMap, remap);
+    bool thin = param.value("thin", true);
+    
+    auto ret = new GlassMaterial(Kr, Kt, uRough, vRough, eta, normalMap, bumpMap, remap, thin);
     return ret;
 }
 

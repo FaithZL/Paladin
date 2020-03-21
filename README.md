@@ -114,10 +114,12 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/conelbox-normalMap.png)
  * connell box 16spp halton
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-pt-16spp-halton.png)
- * connell box fog 128spp halton
-   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-fog-halton-128spp.png)
  * vol-caustic-bdpt-64spp random
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/vol-caustic-bdpt-64spp.png)
+ * paladin-pt-256spp-halton
+   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/paladin-pt-256spp.png)
+ * connell box fog 128spp halton
+   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/connellbox-fog-halton-128spp.png)
  * standford bunny 128spp halton
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/standford_bunny-halton-128spp.png)
  * instance and depth of field 32spp halton

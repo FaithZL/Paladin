@@ -131,6 +131,9 @@ Spectrum FresnelSpecular::sample_f(const Vector3f &wo, Vector3f *wi, const Point
         bool entering = cosTheta(wo) > 0;
         Float etaI = entering ? _etaA : _etaB;
         Float etaT = entering ? _etaB : _etaA;
+        if (_thin) {
+            etaI = etaT = 1.f;
+        }
         
         if (!refract(wo, faceforward(Normal3f(0, 0, 1), wo), etaI / etaT, wi))
             return 0;

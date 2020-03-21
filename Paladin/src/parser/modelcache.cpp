@@ -152,7 +152,7 @@ vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
     
     if (hasExtension(fn, "obj")) {
         Transform swapHand = Transform::scale(-1, 1, 1);
-        *transform = swapHand * (*transform);
+        *transform = (*transform) * swapHand;
         return getPrimitiveFromObj(fn, transform, lights, nullptr, false);
     }
     

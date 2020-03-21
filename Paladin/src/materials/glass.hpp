@@ -22,14 +22,16 @@ public:
                   const std::shared_ptr<Texture<Float>> &eta,
                   const std::shared_ptr<Texture<Spectrum>> &normalMap,
                   const std::shared_ptr<Texture<Float>> &bumpMap,
-                  bool remapRoughness)
+                  bool remapRoughness,
+                  bool thin = false)
     : Material(normalMap, bumpMap),
     _Kr(Kr),
     _Kt(Kt),
     _uRoughness(uRoughness),
     _vRoughness(vRoughness),
     _eta(eta),
-    _remapRoughness(remapRoughness) {
+    _remapRoughness(remapRoughness),
+    _thin(thin) {
         
     }
     
@@ -47,6 +49,7 @@ private:
     std::shared_ptr<Texture<Float>> _uRoughness, _vRoughness;
     std::shared_ptr<Texture<Float>> _eta;
     bool _remapRoughness;
+    bool _thin;
 };
 
 CObject_ptr createGlass(const nloJson &param, const Arguments &lst);
