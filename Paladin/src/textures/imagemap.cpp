@@ -75,14 +75,19 @@ CObject_ptr createImageMap(const nloJson &param, const Arguments &lst) {
 //}
 CObject_ptr createFloatMap(const nloJson &param, const Arguments &lst) {
     auto mapping = unique_ptr<TextureMapping2D>(new UVMapping2D());
-    string fileName = param.value("fileName", "");
+    string fn = param.value("fileName", "");
+    bool fromBasePath = param.value("fromBasePath", false);
+    if (fromBasePath) {
+        string basePath = Paladin::getInstance()->getBasePath();
+        fn = basePath + fn;
+    }
     bool doTri = param.value("doTri", true);
     Float maxAniso = param.value("maxAniso", 8.f);
     int wrapMode = param.value("wrapMode", 0);
     Float scale = param.value("scale", 1.f);
     bool gamma = param.value("gamma", false);
     bool doFilter = param.value("doFilter", true);
-    auto ret = new ImageTexture<Float, Float>(move(mapping), fileName,
+    auto ret = new ImageTexture<Float, Float>(move(mapping), fn,
                                                        doTri, maxAniso,
                                                        (ImageWrap)wrapMode,
                                                        scale, gamma, doFilter);
