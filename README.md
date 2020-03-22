@@ -108,6 +108,8 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
 - 其他
   - [ ] 统计机制
  
+ * bmw-pt-512spp
+   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/bmw-pt-512spp.png.png)
  * bdpt(2spp 10.6秒) vs pt(100spp 197.7秒) 
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/bdpt-vs-pt.jpeg)
  * connell box normal map 
@@ -124,10 +126,7 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/standford_bunny-halton-128spp.png)
  * instance and depth of field 32spp halton
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/instance-dof-32spp-halton.png)
- * 1024-spp-random path tracing
-   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/breakfast_room_1024spp_pt.png)
- * 卡50 256-spp-halton-pt
-   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/ka50-pt-256spp.png)
+
 
 # 获取仓库
 	git clone --recursive https://github.com/FaithZL/Paladin.git
