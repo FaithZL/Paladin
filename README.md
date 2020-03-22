@@ -109,7 +109,7 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
   - [ ] 统计机制
  
  * bmw-pt-512spp
-   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/bmw-pt-512spp.png.png)
+   ![](https://github.com/FaithZL/Paladin/blob/master/gallery/bmw-pt-512spp.png)
  * bdpt(2spp 10.6秒) vs pt(100spp 197.7秒) 
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/bdpt-vs-pt.jpeg)
  * connell box normal map 
