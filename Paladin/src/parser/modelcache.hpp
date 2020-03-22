@@ -23,7 +23,7 @@ public:
                                                 const shared_ptr<Transform> &transform,
                                                 vector<shared_ptr<Light>> &lights);
     
-    vector<shared_ptr<Primitive>> createPrimitive(const nloJson &meshData,
+    static vector<shared_ptr<Primitive>> createPrimitive(const nloJson &meshData,
                                                   const shared_ptr<const Transform> &transform,
                                                   vector<shared_ptr<Light>> &lights);
     

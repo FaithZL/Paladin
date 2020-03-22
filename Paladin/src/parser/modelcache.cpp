@@ -79,10 +79,14 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
     vector<Point2f> _UVs;
     // 顶点索引列表
     vector<Index> _verts;
+
+    vector<int> startIdxs;
+    
     // 发光参数
     nloJson _emissionData;
     shared_ptr<Transform> _transform;
     shared_ptr<const Material> _material;
+    vector<shared_ptr<const Material>> _materials;
     
     nloJson normals = param.value("normals", nloJson::array());
     for (auto iter = normals.cbegin(); iter != normals.cend(); iter += 3) {
@@ -108,14 +112,24 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
     }
     
     nloJson indexes = param.value("indexes", nloJson::array());
+    int counter = 0;
     for (auto iter = indexes.cbegin(); iter != indexes.cend(); ++iter) {
-        _verts.emplace_back(*iter);
+        nloJson subIndexes = *iter;
+        
+        for(auto _iter = subIndexes.cbegin(); _iter != subIndexes.cend(); ++_iter) {
+            _verts.emplace_back(*_iter);
+            ++counter;
+        }
+        startIdxs.push_back(counter);
     }
     
     _emissionData = param.value("emission", nloJson());
     if (_emissionData.is_null()) {
-        nloJson matData = param.value("material", nloJson());
-        _material.reset(createMaterial(matData));
+        nloJson matLst = param.value("materials", nloJson());
+        for (auto iter = matLst.cbegin(); iter != matLst.cend(); ++iter) {
+            shared_ptr<const Material> pMat(createMaterial(*iter));
+            _materials.push_back(pMat);
+        }
     } else {
         _material = createLightMat();
     }
@@ -129,6 +143,8 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
                                      &_points, &_normals, &_UVs);
     shared_ptr<Transform> w2o(_transform->getInverse_ptr());
     MediumInterface mi(nullptr);
+    
+    int matIdx = 0;
     for (size_t i = 0; i < nTriangles; ++i) {
         auto tri = createTri(_transform, w2o, false, mesh, i);
         shared_ptr<DiffuseAreaLight> light;
@@ -138,7 +154,11 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
             prim = GeometricPrimitive::create(tri, _material, light, mi);
             lights.push_back(light);
         } else {
-            prim = GeometricPrimitive::create(tri, _material, nullptr, mi);
+            int vertIdx = i * 3;
+            if (vertIdx > startIdxs[matIdx]) {
+                ++matIdx;
+            }
+            prim = GeometricPrimitive::create(tri, _materials[matIdx], nullptr, mi);
         }
         ret.push_back(prim);
     }

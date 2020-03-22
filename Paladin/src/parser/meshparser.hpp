@@ -29,9 +29,6 @@ public:
     vector<shared_ptr<Primitive>> getPrimitiveLst(const nloJson &data, vector<shared_ptr<Light>> &lights);
     
     
-    vector<shared_ptr<Primitive>> getPrimitiveLst(const nloJson &param,
-                                                  vector<shared_ptr<Light>> &lights,
-                                                  const shared_ptr<Transform> &);
     
     
 };
