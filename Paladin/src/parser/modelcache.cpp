@@ -24,49 +24,59 @@ ModelCache * ModelCache::getInstance() {
     return s_modelCache;
 }
 
-// "param" : {
-//     "normals" : [
-//         1,0,0,
-//         2,0,0
-//     ],
-//     "verts" : [
-//         2,1,1,
-//         3,2,1
-//     ],
-//     "UVs" : [
-//         0.9,0.3,
-//         0.5,0.6
-//     ],
-//     "indexes" : [
-//         1,2,3,
-//         3,5,6
-//     ],
-//     "material" : {
-//         "type" : "unity",
-//         "param" : {
-//             "albedo" : [0.725, 0.71, 0.68],
-//             "roughness" : 0.2,
-//             "metallic" : 0.8
-//         }
-//     },
-//     "transform" : {
-//         "type" : "matrix",
-//         "param" : [
-//             1,0,0,0,
-//             0,1,0,0,
-//             0,0,1,0,
-//             0,0,0,1
-//         ]
-//     },
-//     "emission" : {
-//         "nSamples" : 1,
-//         "Le" : {
-//             "colorType" : 1,
-//             "color" : [1,1,1]
-//         },
-//         "twoSided" : false
-//     }
-// },
+//"param" : {
+//    "normals" : [
+//        1,0,0,
+//        2,0,0
+//    ],
+//    "verts" : [
+//        2,1,1,
+//        3,2,1
+//    ],
+//    "UVs" : [
+//        0.9,0.3,
+//        0.5,0.6
+//    ],
+//    "indexes" : [
+//        [1,2,3],
+//        [3,5,6]
+//    ],
+//    "material" : [
+//        {
+//            "type" : "unity",
+//            "param" : {
+//                "albedo" : [0.725, 0.71, 0.68],
+//                "roughness" : 0.2,
+//                "metallic" : 0.8
+//            }
+//        },
+//        {
+//            "type" : "unity",
+//            "param" : {
+//                "albedo" : [0.725, 0.71, 0.68],
+//                "roughness" : 0.2,
+//                "metallic" : 0.8
+//            }
+//        }
+//    ],
+//    "transform" : {
+//        "type" : "matrix",
+//        "param" : [
+//            1,0,0,0,
+//            0,1,0,0,
+//            0,0,1,0,
+//            0,0,0,1
+//        ]
+//    },
+//    "emission" : {
+//        "nSamples" : 1,
+//        "Le" : {
+//            "colorType" : 1,
+//            "color" : [1,1,1]
+//        },
+//        "twoSided" : false
+//    }
+//},
 vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
                                                           const shared_ptr<const Transform> &transform,
                                                           vector<shared_ptr<Light>> &lights) {
@@ -124,13 +134,7 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
     }
     
     _emissionData = param.value("emission", nloJson());
-    if (_emissionData.is_null()) {
-        nloJson matLst = param.value("materials", nloJson());
-        for (auto iter = matLst.cbegin(); iter != matLst.cend(); ++iter) {
-            shared_ptr<const Material> pMat(createMaterial(*iter));
-            _materials.push_back(pMat);
-        }
-    } else {
+    if (!_emissionData.is_null()) {
         _material = createLightMat();
     }
     
@@ -145,6 +149,7 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
     MediumInterface mi(nullptr);
     
     int matIdx = 0;
+    nloJson matLst = param.value("materials", nloJson());
     for (size_t i = 0; i < nTriangles; ++i) {
         auto tri = createTri(_transform, w2o, false, mesh, i);
         shared_ptr<DiffuseAreaLight> light;
@@ -158,7 +163,13 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
             if (vertIdx > startIdxs[matIdx]) {
                 ++matIdx;
             }
-            prim = GeometricPrimitive::create(tri, _materials[matIdx], nullptr, mi);
+            nloJson matData = matLst[matIdx];
+            nloJson emissionData = matData.value("emission", nloJson());
+            if (!emissionData.is_null()) {
+                light.reset(createDiffuseAreaLight(_emissionData, tri, mi));
+            }
+            shared_ptr<const Material> pMat(createMaterial(matData));
+            prim = GeometricPrimitive::create(tri, pMat, light, mi);
         }
         ret.push_back(prim);
     }

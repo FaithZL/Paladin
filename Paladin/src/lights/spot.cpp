@@ -91,8 +91,9 @@ CObject_ptr createSpot(const nloJson &param, const Arguments &lst) {
     nloJson scale = param.value("scale", 1.f);
     Spectrum I = Spectrum::FromJson(Idata);
     I *= (Float)scale;
-    Float falloffStart = param.value("falloffStart", 45.f);
     Float totalAngle = param.value("totalAngle", 60.f);
+    Float falloffStart = param.value("falloffStart", 0);
+    falloffStart = falloffStart == 0 ? totalAngle * 0.8 : falloffStart;
     auto ret = new SpotLight(l2w, nullptr, I, totalAngle, falloffStart);
     return ret;
 }

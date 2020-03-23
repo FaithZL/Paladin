@@ -32,17 +32,27 @@ PALADIN_BEGIN
 //             0.5,0.6
 //         ],
 //         "indexes" : [
-//             1,2,3,
-//             3,5,6
+//             [1,2,3],
+//             [3,5,6]
 //         ],
-//         "material" : {
-//             "type" : "unity",
-//             "param" : {
-//                 "albedo" : [0.725, 0.71, 0.68],
-//                 "roughness" : 0.2,
-//                 "metallic" : 0.8
+//         "material" : [
+//             {
+//                 "type" : "unity",
+//                 "param" : {
+//                     "albedo" : [0.725, 0.71, 0.68],
+//                     "roughness" : 0.2,
+//                     "metallic" : 0.8
+//                 }
+//             },
+//             {
+//                 "type" : "unity",
+//                 "param" : {
+//                     "albedo" : [0.725, 0.71, 0.68],
+//                     "roughness" : 0.2,
+//                     "metallic" : 0.8
+//                 }
 //             }
-//         },
+//         ],
 //         "transform" : {
 //             "type" : "matrix",
 //             "param" : [
