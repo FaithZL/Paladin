@@ -47,7 +47,7 @@ IF(NOT ZLIB_FOUND)
     SET(ZLIB_LIBRARY zlibstatic)
     SET_PROPERTY(TARGET zlibstatic 
             PROPERTY FOLDER "zlib")
-    include_directories(${ZLIB_INCLUDE_DIR} "${CMAKE_CURRENT_BINARY_DIR}/src/ext/zlib")
+    include_directories(${ZLIB_INCLUDE_DIR} "${CMAKE_CURRENT_BINARY_DIR}/third/zlib")
 ENDIF()
 include_directories(${ZLIB_INCLUDE_DIRS})
 
