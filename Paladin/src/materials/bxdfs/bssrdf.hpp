@@ -8,7 +8,7 @@
 #ifndef bssrdf_hpp
 #define bssrdf_hpp
 
-#include "interaction.hpp"
+#include "core/interaction.hpp"
 #include "core/spectrum.hpp"
 #include "core/bxdf.hpp"
 
