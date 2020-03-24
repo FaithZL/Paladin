@@ -12,6 +12,7 @@
 #include "lights/diffuse.hpp"
 #include "tools/fileutil.hpp"
 #include "shapes/trianglemesh.hpp"
+#include "core/paladin.hpp"
 
 PALADIN_BEGIN
 
@@ -146,7 +147,8 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
     auto mesh = TriangleMesh::create(_transform, nTriangles, _verts,
                                      &_points, &_normals, &_UVs);
     shared_ptr<Transform> w2o(_transform->getInverse_ptr());
-    MediumInterface mi(nullptr);
+    nloJson miData = param.value("mediumInterface", nloJson());
+    MediumInterface mi = Paladin::getInstance()->getSceneParser()->getMediumInterface(miData);
     
     int matIdx = 0;
     nloJson matLst = param.value("materials", nloJson());

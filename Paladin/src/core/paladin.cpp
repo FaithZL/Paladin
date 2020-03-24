@@ -19,4 +19,8 @@ Paladin * Paladin::getInstance() {
     return s_paladin;
 }
 
+shared_ptr<const Medium> Paladin::getGlobalMedium() {
+    return _sceneParser.getGlobalMedium();
+}
+
 PALADIN_END

@@ -260,7 +260,7 @@ void SceneParser::parseClonal(const nloJson &data) {
     // paladin的实例化暂时不支持光源
     nloJson param = data.value("param", nloJson::object());
     nloJson medIntfceData = data.value("mediumInterface", nloJson());
-    MediumInterface mediumInterface = getMediumIntetface(medIntfceData);
+    MediumInterface mediumInterface = getMediumInterface(medIntfceData);
     auto mat = getMaterial(data.value("material", nloJson()));
     nloJson from = data.value("from", nloJson());
     if (from.is_null()) {
@@ -314,7 +314,7 @@ void SceneParser::parseSimpleShape(const nloJson &data, const string &type) {
     }
     
     nloJson medIntfceData = data.value("mediumInterface", nloJson());
-    MediumInterface mediumInterface = getMediumIntetface(medIntfceData);
+    MediumInterface mediumInterface = getMediumInterface(medIntfceData);
     auto tmpLight = createDiffuseAreaLight(data.value("emission", nloJson()), shape, mediumInterface);
     shared_ptr<AreaLight> areaLight(tmpLight);
     if (areaLight) {
@@ -353,7 +353,7 @@ void SceneParser::parseTriMesh(const nloJson &data) {
     string subType = data.value("subType", "");
     vector<shared_ptr<Primitive>> prims;
     nloJson medIntfceData = data.value("mediumInterface", nloJson());
-    MediumInterface mediumInterface = getMediumIntetface(medIntfceData);
+    MediumInterface mediumInterface = getMediumInterface(medIntfceData);
     shared_ptr<const Material> mat = getMaterial(data.value("material", nloJson()));
     if (subType == "quad") {
         prims = createQuadPrimitive(data, mat, _lights, mediumInterface);

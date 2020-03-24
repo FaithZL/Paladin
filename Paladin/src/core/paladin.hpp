@@ -29,13 +29,15 @@ public:
     
     static Paladin * getInstance();
     
-    const SceneParser * getSceneParser() const {
+    SceneParser * getSceneParser() {
         return & _sceneParser;
     }
     
     inline string getBasePath() {
         return _basePath;
     }
+    
+    shared_ptr<const Medium> getGlobalMedium();
     
 private:
     

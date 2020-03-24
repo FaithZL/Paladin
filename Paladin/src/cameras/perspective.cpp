@@ -9,6 +9,7 @@
 #include "cameras/perspective.hpp"
 #include "math/sampling.hpp"
 #include "core/light.hpp"
+#include "core/paladin.hpp"
 
 PALADIN_BEGIN
 
@@ -338,7 +339,7 @@ CObject_ptr createPerspectiveCamera(const nloJson &param, const Arguments &lst) 
                                         shutterOpen,
                                         shared_ptr<const Transform>(lookAtEnd->getInverse_ptr()),
                                         shutterClose);
-    
+    auto medium = Paladin::getInstance()->getGlobalMedium().get();
     PerspectiveCamera * ret(new PerspectiveCamera(animatedTransform,
                                                   scrn,
                                                   shutterOpen,
@@ -347,7 +348,7 @@ CObject_ptr createPerspectiveCamera(const nloJson &param, const Arguments &lst) 
                                                   focalDistance,
                                                   fov,
                                                   film,
-                                                  nullptr));
+                                                  medium));
     
     return ret;
 }
