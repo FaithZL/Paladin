@@ -41,6 +41,9 @@ void SceneParser::parse(const nloJson &data) {
     nloJson samplerData = data.value("sampler", nloJson());
     Sampler * sampler = parseSampler(samplerData, film);
     
+    nloJson mediumDataDict = data.value("mediums", nloJson::object());
+    parseMediums(mediumDataDict);
+    
     nloJson cameraData = data.value("camera", nloJson());
     Camera * camera = parseCamera(cameraData, film);
     
@@ -53,9 +56,6 @@ void SceneParser::parse(const nloJson &data) {
     
     nloJson transformDict = data.value("transforms", nloJson::object());
     parseTransformMap(transformDict);
-    
-    nloJson mediumDataDict = data.value("mediums", nloJson::object());
-    parseMediums(mediumDataDict);
 
     nloJson shapesData = data.value("shapes", nloJson());
     parseShapes(shapesData);
