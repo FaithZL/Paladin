@@ -30,7 +30,7 @@ Float MicrofacetDistribution::pdfDir(const Vector3f &wo, const Vector3f &wh) con
 
 //BeckmannDistribution
 Float BeckmannDistribution::D(const Vector3f &wh) const {
-    Float _tan2Theta = tan2Theta(wh);
+    Float _tan2Theta = Frame::tanTheta2(wh);
     if (std::isinf(_tan2Theta)) {
         // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
         // 我们返回0
@@ -116,11 +116,11 @@ static Vector3f BeckmannSample(const Vector3f &wi, Float alpha_x, Float alpha_y,
     
 
     Float slope_x, slope_y;
-    BeckmannSample11(cosTheta(wiStretched), U1, U2, &slope_x, &slope_y);
+    BeckmannSample11(Frame::cosTheta(wiStretched), U1, U2, &slope_x, &slope_y);
     
 
-    Float tmp = cosPhi(wiStretched) * slope_x - sinPhi(wiStretched) * slope_y;
-    slope_y = sinPhi(wiStretched) * slope_x + cosPhi(wiStretched) * slope_y;
+    Float tmp = Frame::cosPhi(wiStretched) * slope_x - Frame::sinPhi(wiStretched) * slope_y;
+    slope_y = Frame::sinPhi(wiStretched) * slope_x + Frame::cosPhi(wiStretched) * slope_y;
     slope_x = tmp;
 
     slope_x = alpha_x * slope_x;
@@ -199,7 +199,7 @@ Float GGXDistribution::D(const Vector3f &wh) const {
         return 0.;
     }
     Float cosTheta4 = (_cosTheta * _cosTheta) * (_cosTheta * _cosTheta);
-    Float _tanTheta2 = tan2Theta(wh);
+    Float _tanTheta2 = Frame::tanTheta2(wh);
 
     Float sinPhi2 = Frame::sinPhi2(wh);
     Float cosPhi2 = Frame::cosPhi2(wh);
@@ -213,7 +213,7 @@ Float GGXDistribution::D(const Vector3f &wh) const {
     return ret;
 }
 
-static void TrowbridgeReitzSample11(Float cosTheta, Float U1, Float U2,
+static void GGXSample11(Float cosTheta, Float U1, Float U2,
                                     Float *slope_x, Float *slope_y) {
     if (cosTheta > .9999) {
         Float r = std::sqrt(U1 / (1 - U1));
@@ -256,16 +256,16 @@ static void TrowbridgeReitzSample11(Float cosTheta, Float U1, Float U2,
     DCHECK(!std::isnan(*slope_y));
 }
 
-static Vector3f TrowbridgeReitzSample(const Vector3f &wi, Float alpha_x,
+static Vector3f GGXSample(const Vector3f &wi, Float alpha_x,
                                       Float alpha_y, Float U1, Float U2) {
     Vector3f wiStretched =
     normalize(Vector3f(alpha_x * wi.x, alpha_y * wi.y, wi.z));
     
     Float slope_x, slope_y;
-    TrowbridgeReitzSample11(cosTheta(wiStretched), U1, U2, &slope_x, &slope_y);
+    GGXSample11(Frame::cosTheta(wiStretched), U1, U2, &slope_x, &slope_y);
     
-    Float tmp = cosPhi(wiStretched) * slope_x - sinPhi(wiStretched) * slope_y;
-    slope_y = sinPhi(wiStretched) * slope_x + cosPhi(wiStretched) * slope_y;
+    Float tmp = Frame::cosPhi(wiStretched) * slope_x - Frame::sinPhi(wiStretched) * slope_y;
+    slope_y = Frame::sinPhi(wiStretched) * slope_x + Frame::cosPhi(wiStretched) * slope_y;
     slope_x = tmp;
     
     slope_x = alpha_x * slope_x;
@@ -294,7 +294,7 @@ Vector3f GGXDistribution::sample_wh(const Vector3f &wo,
         // 不忽略几何遮挡
         // 这个不忽略阻挡的采样太TMD复杂了，暂时不管推导过程了，暂时认怂，搞完主线再说todo
         bool flip = wo.z < 0;
-        wh = TrowbridgeReitzSample(flip ? -wo : wo, _alphax, _alphay, u[0], u[1]);
+        wh = GGXSample(flip ? -wo : wo, _alphax, _alphay, u[0], u[1]);
         if (flip) {
             wh = -wh;
         }
