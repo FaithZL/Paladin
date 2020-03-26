@@ -54,6 +54,10 @@ struct Frame {
     inline static Float cosTheta2(const Vector3f &v) {
         return v.z * v.z;
     }
+
+    inline static Float absCosTheta(const Vector3f &w) {
+        return std::abs(w.z);
+    }
     
     inline static Float cosTheta(const Vector3f &v) {
         return v.z;

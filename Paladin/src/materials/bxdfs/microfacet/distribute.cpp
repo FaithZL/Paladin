@@ -7,6 +7,7 @@
 
 #include "distribute.hpp"
 #include "core/bxdf.hpp"
+#include "math/frame.hpp"
 
 PALADIN_BEGIN
 
@@ -19,10 +20,10 @@ Float MicrofacetDistribution::pdfDir(const Vector3f &wo, const Vector3f &wh) con
         // 将cos项移到右边，得
         // 1 = ∫[hemisphere]G1(ωo,ωh) max(0, ωo · ωh) D(ωh) / (cosθo) dωh
         // 则概率密度函数为 G1(ωo,ωh) max(0, ωo · ωh) D(ωh) / (cosθo) ,代码如下
-        return D(wh) * G1(wo) * absDot(wo, wh) / absCosTheta(wo);
+        return D(wh) * G1(wo) * absDot(wo, wh) / Frame::absCosTheta(wo);
     } else {
         // 如果忽略几何遮挡，则概率密度函数值就是D(ωh) * cosθh
-        return D(wh) * absCosTheta(wh);
+        return D(wh) * Frame::absCosTheta(wh);
     }
 }
 
@@ -35,9 +36,9 @@ Float BeckmannDistribution::D(const Vector3f &wh) const {
         // 我们返回0
         return 0.;
     }
-    Float cos4Theta = cos2Theta(wh) * cos2Theta(wh);
-    Float ret = std::exp(-_tan2Theta * (cos2Phi(wh) / (_alphax * _alphax) +
-                                        sin2Phi(wh) / (_alphay * _alphay))) /
+    Float cos4Theta = Frame::cosTheta2(wh) * Frame::cosTheta2(wh);
+    Float ret = std::exp(-_tan2Theta * (Frame::cosPhi2(wh) / (_alphax * _alphax) +
+                                        Frame::sinPhi2(wh) / (_alphay * _alphay))) /
     (Pi * _alphax * _alphay * cos4Theta);
     return ret;
 }
@@ -180,7 +181,7 @@ Float BeckmannDistribution::lambda(const Vector3f &w) const {
         return 0.;
     }
     // α^2 = (cosθh)^2/αx^2 + (sinθh)^2/αy^2)
-    Float alpha = std::sqrt(cos2Phi(w) * _alphax * _alphax + sin2Phi(w) * _alphay * _alphay);
+    Float alpha = std::sqrt(Frame::cosPhi2(w) * _alphax * _alphax + Frame::sinPhi2(w) * _alphay * _alphay);
     Float a = 1 / (alpha * absTanTheta);
     if (a >= 1.6f) {
         return 0;
@@ -191,7 +192,7 @@ Float BeckmannDistribution::lambda(const Vector3f &w) const {
 
 //GGXDistribution
 Float GGXDistribution::D(const Vector3f &wh) const {
-    Float _cosTheta = absCosTheta(wh);
+    Float _cosTheta = Frame::absCosTheta(wh);
     if (_cosTheta == 1) {
         // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
         // 我们返回0
@@ -200,8 +201,8 @@ Float GGXDistribution::D(const Vector3f &wh) const {
     Float cosTheta4 = (_cosTheta * _cosTheta) * (_cosTheta * _cosTheta);
     Float _tanTheta2 = tan2Theta(wh);
 
-    Float sinPhi2 = sin2Phi(wh);
-    Float cosPhi2 = cos2Phi(wh);
+    Float sinPhi2 = Frame::sinPhi2(wh);
+    Float cosPhi2 = Frame::cosPhi2(wh);
 
     Float alphax2 = _alphax * _alphax;
     Float alphay2 = _alphay * _alphay;
@@ -281,7 +282,7 @@ Float GGXDistribution::lambda(const Vector3f &w) const {
         return 0.;
     }
     // α^2 = (cosθh)^2/αx^2 + (sinθh)^2/αy^2)
-    Float alpha = std::sqrt(cos2Phi(w) * _alphax * _alphax + sin2Phi(w) * _alphay * _alphay);
+    Float alpha = std::sqrt(Frame::cosPhi2(w) * _alphax * _alphax + Frame::sinPhi2(w) * _alphay * _alphay);
     Float alpha2Tan2Theta = (alpha * absTanTheta) * (alpha * absTanTheta);
     return (-1 + std::sqrt(1.f + alpha2Tan2Theta)) / 2;
 }
