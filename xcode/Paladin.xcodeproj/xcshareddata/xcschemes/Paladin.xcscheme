@@ -57,6 +57,10 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/Users/satan_z/work/git/renderer/PaladinEditor/paladin_output/paladin/paladin.json"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/satan_z/work/git/renderer/PaladinEditor/paladin_output/paladin_spot/paladin_spot.json"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

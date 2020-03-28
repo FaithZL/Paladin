@@ -11,6 +11,7 @@
 
 #include "core/header.h"
 #include <fstream>
+#include "fileutil.hpp"
 
 PALADIN_BEGIN
 
@@ -25,7 +26,11 @@ inline nloJson createJsonFromFile(const std::string &fn) {
     std::stringstream buffer;
     buffer << fst.rdbuf();
     std::string str = buffer.str();
-    return nloJson::parse(str);
+    if (hasExtension(fn, "bson")) {
+        return nloJson::from_bson(str);
+    } else {
+        return nloJson::parse(str);
+    }
 }
 
 PALADIN_END

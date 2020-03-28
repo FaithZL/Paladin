@@ -35,33 +35,13 @@
                         "color" : [0.725, 0.71, 0.68]
                     }
                 },
-                "normalMap" : {
-                    "type" : "image",
-                    "param" : {
-                        "fileName" : "res/pic/bricks2_normal.jpg",
-                        "doTri" : true,
-                        "maxAniso" : 8,
-                        "wrapMode" : 0,
-                        "scale" : 1,
-                        "gamma" : false,
-                        "doFilter" : false
-                    }
-                },
                 "sigma" : {
                     "type" : "constant",
                     "param" : 0
                 },
-                "bumpMap" :  {
-                    "type" : "image",
-                    "param" : {
-                        "fileName" : "res/pic/bricks2_disp.jpg",
-                        "doTri" : true,
-                        "maxAniso" : 8,
-                        "wrapMode" : 0,
-                        "scale" : 1,
-                        "gamma" : false,
-                        "doFilter" : false
-                    }
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
                 }
             }
         },
@@ -72,57 +52,17 @@
                     "type" : "constant",
                     "param" : {
                         "colorType" : 0,
-                        "color" : [0.75, 0.25, 0.25]
-                    }
-                },
-                "normalMap" : {
-                    "type" : "image",
-                    "param" : {
-                        "fileName" : "res/pic/brickwall_normal.jpg",
-                        "doTri" : true,
-                        "maxAniso" : 8,
-                        "wrapMode" : 0,
-                        "scale" : 1,
-                        "gamma" : false,
-                        "doFilter" : false
+                        "color" : [0.63, 0.065, 0.05]
                     }
                 },
                 "sigma" : {
                     "type" : "constant",
                     "param" : 0
-                }
-            }
-        },
-        "wall" : {
-            "type" : "matte",
-            "param" : {
-                "Kd" : {
-                    "type" : "image",
-                    "param" : {
-                        "fileName" : "res/pic/brickwall.jpg",
-                        "doTri" : true,
-                        "maxAniso" : 8,
-                        "wrapMode" : 0,
-                        "scale" : 1,
-                        "gamma" : false
-                    }
                 },
-                "normalMap" : {
-                    "type" : "image",
-                    "param" : {
-                        "fileName" : "res/pic/brickwall_normal.jpg",
-                        "doTri" : true,
-                        "maxAniso" : 8,
-                        "wrapMode" : 0,
-                        "scale" : 1,
-                        "gamma" : false,
-                        "doFilter" : false
-                    }
-                },
-                "sigma" : {
+                "bumpMap" : {
                     "type" : "constant",
                     "param" : 0
-                }
+                } 
             }
         },
         "matteGreen" : {
@@ -132,22 +72,14 @@
                     "type" : "constant",
                     "param" : {
                         "colorType" : 0,
-                        "color" : [0.25, 0.25, 0.75]
-                    }
-                },
-                "normalMap" : {
-                    "type" : "image",
-                    "param" : {
-                        "fileName" : "res/pic/brickwall_normal.jpg",
-                        "doTri" : true,
-                        "maxAniso" : 8,
-                        "wrapMode" : 0,
-                        "scale" : 1,
-                        "gamma" : false,
-                        "doFilter" : false
+                        "color" : [0.14, 0.45, 0.091]
                     }
                 },
                 "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
                     "type" : "constant",
                     "param" : 0
                 }
@@ -164,6 +96,10 @@
                     }
                 },
                 "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
                     "type" : "constant",
                     "param" : 0
                 }
@@ -198,6 +134,10 @@
                     "type" : "constant",
                     "param" : 0.5
                 },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0.5
+                },
                 "remapRough" : false 
             }
         },
@@ -210,6 +150,10 @@
                         "colorType" : 0,
                         "color" : [1, 1, 1]
                     }
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
                 }
             }
         }
@@ -250,7 +194,6 @@
                         "param" : [0,0,1]
                     }
                 ],
-                "reverseOrientation" : false,
                 "width" : 2
             },
             "material" : "matte1"
@@ -264,14 +207,14 @@
                 "transform" :[
                     {
                         "type" : "rotateX",
-                        "param" : [90]
+                        "param" : [-90]
                     },
                     {
                         "type" : "translate",
                         "param" : [0,-1,0]
                     }
                 ],
-                "reverseOrientation" : false,
+                "reverseOrientation" : true,
                 "width" : 2
             },
             "material" : "matte1"
@@ -285,14 +228,14 @@
                 "transform" :[
                     {
                         "type" : "rotateX",
-                        "param" : [-90]
+                        "param" : [90]
                     },
                     {
                         "type" : "translate",
                         "param" : [0,1,0]
                     }
                 ],
-                "reverseOrientation" : false,
+                "reverseOrientation" : true,
                 "width" : 2
             },
             "material" : "matte1"
@@ -313,7 +256,7 @@
                         "param" : [-1,0,0]
                     }
                 ],
-                "reverseOrientation" : false,
+                "reverseOrientation" : true,
                 "width" : 2
             },
             "material" : "matteRed"
@@ -334,7 +277,7 @@
                         "param" : [1,0,0]
                     }
                 ],
-                "reverseOrientation" : false,
+                "reverseOrientation" : true,
                 "width" : 2
             },
             "material" : "matteGreen"
@@ -363,7 +306,7 @@
                 "nSamples" : 1,
                 "Le" : {
                     "colorType" : 1,
-                    "color" : [32, 32, 32]
+                    "color" : [17, 12, 4]
                 },
                 "twoSided" : false
             }
@@ -416,7 +359,7 @@
         }
     ],
     "integrator" : {
-        "type" : "Geometry",
+        "type" : "pt",
         "param" : {
             "maxBounce" : 5,
             "rrThreshold" : 1,
@@ -425,9 +368,9 @@
         }
     },
     "sampler" : {
-        "type" : "halton",
+        "type" : "random",
         "param" : {
-            "spp" : 8
+            "spp" : 16
         }
     },
     "camera" : {
@@ -449,7 +392,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "conelbox-normalMap.png",
+            "fileName" : "conelbox.png",
             "diagonal" : 1,
             "scale" : 1
         }
