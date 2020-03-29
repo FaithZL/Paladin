@@ -14,7 +14,7 @@ Spectrum SpecularReflection::sample_f(const Vector3f &wo, Vector3f *wi, const Po
                   Float *pdf, BxDFType *sampledType) const {
     *wi = Vector3f(-wo.x, -wo.y, wo.z);
     *pdf = 1;
-    return _fresnel->evaluate(cosTheta(*wi)) * _R / Frame::absCosTheta(*wi);
+    return _fresnel->evaluate(Frame::cosTheta(*wi)) * _R / Frame::absCosTheta(*wi);
 }
 
 std::string SpecularReflection::toString() const {
@@ -28,7 +28,7 @@ Spectrum SpecularTransmission::sample_f(const Vector3f &wo, Vector3f *wi, const 
     // 首先确定光线是进入或离开折射介质
     // 对象的法线都是向外的
     // 如果wo.z > 0，则说明，ray trace工作流的光线从物体外部射入物体
-    bool entering = cosTheta(wo) > 0;
+    bool entering = Frame::cosTheta(wo) > 0;
     Float etaI = entering ? _etaA : _etaB;
     Float etaT = entering ? _etaB : _etaA;
     // todo，这里代码可以优化一下
@@ -37,7 +37,7 @@ Spectrum SpecularTransmission::sample_f(const Vector3f &wo, Vector3f *wi, const 
     }
     
     *pdf = 1;
-    Spectrum ft = _T * (Spectrum(1.) - _fresnel.evaluate(cosTheta(*wi)));
+    Spectrum ft = _T * (Spectrum(1.) - _fresnel.evaluate(Frame::cosTheta(*wi)));
     
     // 用于处理双向方法的情况，只有从光源射出的光线才需要乘以这个缩放因子
     if (_mode == TransportMode::Radiance) {

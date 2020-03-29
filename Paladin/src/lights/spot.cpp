@@ -44,7 +44,7 @@ Spectrum SpotLight::sample_Le(const Point2f &u1, const Point2f &u2,
 void SpotLight::pdf_Le(const Ray &ray, const Normal3f &nLight,
                        Float *pdfPos, Float *pdfDir) const {
     *pdfPos = 0;
-    *pdfDir = (cosTheta(_worldToLight->exec(ray.dir)) >= _cosTotalWidth) ?
+    *pdfDir = (Frame::cosTheta(_worldToLight->exec(ray.dir)) >= _cosTotalWidth) ?
                 uniformConePdf(_cosTotalWidth) : 0;
 }
 

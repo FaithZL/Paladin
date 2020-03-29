@@ -16,13 +16,13 @@ Spectrum MicrofacetTransmission::f(const Vector3f &wo, const Vector3f &wi) const
         return 0;
     }
     
-    Float cosThetaO = cosTheta(wo);
-    Float cosThetaI = cosTheta(wi);
+    Float cosThetaO = Frame::cosTheta(wo);
+    Float cosThetaI = Frame::cosTheta(wi);
     if (cosThetaI == 0 || cosThetaO == 0) {
         return Spectrum(0);
     }
     // 确定入射光是从介质进入物体还是从物体离开进入介质
-    Float eta = cosTheta(wo) > 0 ? (_etaB / _etaA) : (_etaA / _etaB);
+    Float eta = Frame::cosTheta(wo) > 0 ? (_etaB / _etaA) : (_etaA / _etaB);
     Vector3f wh = normalize(wo + wi * eta);
     if (wh.z < 0) {
         wh = -wh;
@@ -47,7 +47,7 @@ Spectrum MicrofacetTransmission::sample_f(const Vector3f &wo, Vector3f *wi, cons
     }
     Vector3f wh = _distribution->sample_wh(wo, u);
     // 确定入射光是从介质进入物体还是从物体离开进入介质
-    Float eta = cosTheta(wo) > 0 ? (_etaA / _etaB) : (_etaB / _etaA);
+    Float eta = Frame::cosTheta(wo) > 0 ? (_etaA / _etaB) : (_etaB / _etaA);
     if (!refract(wo, (Normal3f)wh, eta, wi)) {
         return 0;
     }
@@ -59,7 +59,7 @@ Float MicrofacetTransmission::pdfDir(const Vector3f &wo, const Vector3f &wi) con
     if (sameHemisphere(wo, wi)) {
         return 0;
     }
-    Float eta = cosTheta(wo) > 0 ? (_etaB / _etaA) : (_etaA / _etaB);
+    Float eta = Frame::cosTheta(wo) > 0 ? (_etaB / _etaA) : (_etaA / _etaB);
     Vector3f wh = normalize(wo + wi * eta);
     
     Float sqrtDenom = dot(wo, wh) + eta * dot(wi, wh);

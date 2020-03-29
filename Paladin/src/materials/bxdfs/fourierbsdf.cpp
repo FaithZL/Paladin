@@ -16,8 +16,8 @@ Spectrum FourierBSDF::f(const Vector3f &wo, const Vector3f &wi) const {
     // 这里为什么是-wi？
     // 可能外部读取的数据默认是wi是从外部指向入射点的向量
     // 所以要取反
-    Float muI = cosTheta(-wi);
-    Float muO = cosTheta(wo);
+    Float muI = Frame::cosTheta(-wi);
+    Float muO = Frame::cosTheta(wo);
     Float cosPhi = cosDPhi(-wi, wo);
     
     int offsetI, offsetO;

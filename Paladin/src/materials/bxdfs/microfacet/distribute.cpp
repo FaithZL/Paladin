@@ -174,7 +174,7 @@ Vector3f BeckmannDistribution::sample_wh(const Vector3f &wo,
 }
 
 Float BeckmannDistribution::lambda(const Vector3f &w) const {
-    Float absTanTheta = std::abs(tanTheta(w));
+    Float absTanTheta = std::abs(Frame::tanTheta(w));
     if (std::isinf(absTanTheta)) {
         // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
         // 我们返回0
@@ -275,7 +275,7 @@ static Vector3f GGXSample(const Vector3f &wi, Float alpha_x,
 }
 
 Float GGXDistribution::lambda(const Vector3f &w) const {
-    Float absTanTheta = std::abs(tanTheta(w));
+    Float absTanTheta = std::abs(Frame::tanTheta(w));
     if (std::isinf(absTanTheta)) {
         // 当θ为90°时，会出现tan值无穷大的情况，为了避免这种异常发生
         // 我们返回0

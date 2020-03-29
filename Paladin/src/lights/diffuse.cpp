@@ -74,10 +74,10 @@ Spectrum DiffuseAreaLight::sample_Le(const Point2f &u1, const Point2f &u2,
             w = cosineSampleHemisphere(u);
             w.z *= -1;
         }
-        *pdfDir = 0.5 * cosineHemispherePdf(cosTheta(w));
+        *pdfDir = 0.5 * cosineHemispherePdf(Frame::cosTheta(w));
     } else {
         w = cosineSampleHemisphere(u2);
-        *pdfDir = cosineHemispherePdf(cosTheta(w));
+        *pdfDir = cosineHemispherePdf(Frame::cosTheta(w));
     }
     
     Vector3f v1, v2, n(lightIntr.normal);
