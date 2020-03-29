@@ -6,6 +6,7 @@
 //
 
 #include "lambert.hpp"
+#include "math/frame.hpp"
 
 PALADIN_BEGIN
 
@@ -21,7 +22,7 @@ Spectrum LambertianTransmission::sample_f(const Vector3f &wo, Vector3f *wi, cons
 }
 
 Float LambertianTransmission::pdfDir(const Vector3f &wo, const Vector3f &wi) const {
-    return sameHemisphere(wo, wi) ? 0 : absCosTheta(wi) * InvPi;
+    return sameHemisphere(wo, wi) ? 0 : Frame::absCosTheta(wi) * InvPi;
 }
 
 std::string LambertianTransmission::toString() const {

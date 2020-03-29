@@ -12,7 +12,7 @@ PALADIN_BEGIN
 
 // MicrofacetReflection
 Spectrum MicrofacetReflection::f(const Vector3f &wo, const Vector3f &wi) const {
-    Float cosThetaO = absCosTheta(wo), cosThetaI = absCosTheta(wi);
+    Float cosThetaO = Frame::absCosTheta(wo), cosThetaI = Frame::absCosTheta(wi);
     if (cosThetaI == 0 || cosThetaO == 0) {
         return Spectrum(0.);
     }

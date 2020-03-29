@@ -14,7 +14,7 @@ Spectrum SpecularReflection::sample_f(const Vector3f &wo, Vector3f *wi, const Po
                   Float *pdf, BxDFType *sampledType) const {
     *wi = Vector3f(-wo.x, -wo.y, wo.z);
     *pdf = 1;
-    return _fresnel->evaluate(cosTheta(*wi)) * _R / absCosTheta(*wi);
+    return _fresnel->evaluate(cosTheta(*wi)) * _R / Frame::absCosTheta(*wi);
 }
 
 std::string SpecularReflection::toString() const {
@@ -43,7 +43,7 @@ Spectrum SpecularTransmission::sample_f(const Vector3f &wo, Vector3f *wi, const 
     if (_mode == TransportMode::Radiance) {
         ft *= (etaI * etaI) / (etaT * etaT);
     }
-    return ft / absCosTheta(*wi);
+    return ft / Frame::absCosTheta(*wi);
 }
 
 std::string SpecularTransmission::toString() const {

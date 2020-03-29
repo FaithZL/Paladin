@@ -13,6 +13,7 @@
 #include "spectrum.hpp"
 #include "material.hpp"
 #include "math/sampling.hpp"
+#include "math/frame.hpp"
 
 PALADIN_BEGIN
 
@@ -160,9 +161,9 @@ inline Float cos2Theta(const Vector3f &w) {
     return w.z * w.z;
 }
 
-inline Float absCosTheta(const Vector3f &w) {
-    return std::abs(w.z);
-}
+//inline Float absCosTheta(const Vector3f &w) {
+//    return std::abs(w.z);
+//}
 
 inline Float sin2Theta(const Vector3f &w) {
     return std::max((Float)0, (Float)1 - cos2Theta(w));

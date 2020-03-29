@@ -90,7 +90,7 @@ Spectrum BxDF::rho_hd(const Vector3f &wo, int nSamples, const Point2f *samples) 
         Float pdf = 0;
         Spectrum f = sample_f(wo, &wi, samples[i], &pdf);
         if (pdf > 0) {
-            ret += f * absCosTheta(wi) / pdf;
+            ret += f * Frame::absCosTheta(wi) / pdf;
         }
     }
     return ret / nSamples;
@@ -107,14 +107,14 @@ Spectrum BxDF::rho_hh(int nSamples, const Point2f *samplesWo, const Point2f *sam
         Float pdfi = 0;
         Spectrum r = sample_f(wo, &wi, samplesWi[i], &pdfi);
         if (pdfi > 0) {
-            ret += r * absCosTheta(wi) * absCosTheta(wo) / (pdfi * pdfo);
+            ret += r * Frame::absCosTheta(wi) * Frame::absCosTheta(wo) / (pdfi * pdfo);
         }
     }
     return ret / (Pi * nSamples);
 }
 
 Float BxDF::pdfDir(const Vector3f &wo, const Vector3f &wi) const {
-    return sameHemisphere(wo, wi) ? absCosTheta(wi) * InvPi : 0;
+    return sameHemisphere(wo, wi) ? Frame::absCosTheta(wi) * InvPi : 0;
 }
 
 // FresnelSpecular
@@ -126,7 +126,7 @@ Spectrum FresnelSpecular::sample_f(const Vector3f &wo, Vector3f *wi, const Point
         if (sampledType)
             *sampledType = BxDFType(BSDF_SPECULAR | BSDF_REFLECTION);
         *pdf = F;
-        return F * _R / absCosTheta(*wi);
+        return F * _R / Frame::absCosTheta(*wi);
     } else {
         bool entering = cosTheta(wo) > 0;
         Float etaI = entering ? _etaA : _etaB;
@@ -146,7 +146,7 @@ Spectrum FresnelSpecular::sample_f(const Vector3f &wo, Vector3f *wi, const Point
             *sampledType = BxDFType(BSDF_SPECULAR | BSDF_TRANSMISSION);
         }
         *pdf = 1 - F;
-        return ft / absCosTheta(*wi);
+        return ft / Frame::absCosTheta(*wi);
     }
 }
 
@@ -189,19 +189,19 @@ Spectrum OrenNayar::f(const Vector3f &wo, const Vector3f &wi) const {
     // cos(φi-φo) = cosφi * cosφo + sinφi * sinφo
     Float maxCos = 0;
     if (sinThetaI > 1e-4 && sinThetaO > 1e-4) {
-        Float sinPhiI = sinPhi(wi), cosPhiI = cosPhi(wi);
-        Float sinPhiO = sinPhi(wo), cosPhiO = cosPhi(wo);
+        Float sinPhiI = Frame::sinPhi(wi), cosPhiI = Frame::cosPhi(wi);
+        Float sinPhiO = Frame::sinPhi(wo), cosPhiO = Frame::cosPhi(wo);
         Float dCos = cosPhiI * cosPhiO + sinPhiI * sinPhiO;
         maxCos = std::max((Float)0, dCos);
     }
     
     Float sinAlpha, tanBeta;
-    if (absCosTheta(wi) > absCosTheta(wo)) {
+    if (Frame::absCosTheta(wi) > Frame::absCosTheta(wo)) {
         sinAlpha = sinThetaO;
-        tanBeta = sinThetaI / absCosTheta(wi);
+        tanBeta = sinThetaI / Frame::absCosTheta(wi);
     } else {
         sinAlpha = sinThetaI;
-        tanBeta = sinThetaO / absCosTheta(wo);
+        tanBeta = sinThetaO / Frame::absCosTheta(wo);
     }
     return _R * InvPi * (_A + _B * maxCos * sinAlpha * tanBeta);
 }

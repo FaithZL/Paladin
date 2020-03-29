@@ -13,15 +13,15 @@ PALADIN_BEGIN
 Spectrum FresnelBlend::f(const Vector3f &wo, const Vector3f &wi) const {
     auto pow5 = [](Float v) { return (v * v) * (v * v) * v; };
     Spectrum diffuse = (28.f / (23.f * Pi)) * _Rd * (Spectrum(1.f) - _Rs) *
-                        (1 - pow5(1 - .5f * absCosTheta(wi))) *
-                        (1 - pow5(1 - .5f * absCosTheta(wo)));
+                        (1 - pow5(1 - .5f * Frame::absCosTheta(wi))) *
+                        (1 - pow5(1 - .5f * Frame::absCosTheta(wo)));
     Vector3f wh = wi + wo;
     if (wh.isZero()) {
         return Spectrum(0);
     }
     wh = normalize(wh);
     Spectrum specular = _distribution->D(wh) /
-        (4 * absDot(wi, wh) * std::max(absCosTheta(wi), absCosTheta(wo))) *
+        (4 * absDot(wi, wh) * std::max(Frame::absCosTheta(wi), Frame::absCosTheta(wo))) *
         schlickFresnel(dot(wo, wh));
     return diffuse + specular;
 }
@@ -60,7 +60,7 @@ Float FresnelBlend::pdfDir(const Vector3f &wo, const Vector3f &wi) const {
     Vector3f wh = normalize(wo + wi);
     Float pdf_wh = _distribution->pdfDir(wo, wh);
     // 漫反射的pdf与菲涅尔反射的pdf取平均值
-    return .5f * (absCosTheta(wi) * InvPi + pdf_wh / (4 * dot(wo, wh)));
+    return .5f * (Frame::absCosTheta(wi) * InvPi + pdf_wh / (4 * dot(wo, wh)));
 }
 
 std::string FresnelBlend::toString() const {
