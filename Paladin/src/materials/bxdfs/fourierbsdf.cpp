@@ -18,7 +18,7 @@ Spectrum FourierBSDF::f(const Vector3f &wo, const Vector3f &wi) const {
     // 所以要取反
     Float muI = Frame::cosTheta(-wi);
     Float muO = Frame::cosTheta(wo);
-    Float cosPhi = cosDPhi(-wi, wo);
+    Float cosPhi = Frame::cosDPhi(-wi, wo);
     
     int offsetI, offsetO;
     Float weightsI[4], weightsO[4];

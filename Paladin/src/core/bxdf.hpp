@@ -151,60 +151,6 @@ PALADIN_BEGIN
  * 
  */
 
-// 以下函数都默认一个条件，w为单位向量
-// 比较简单，就不写推导过程了
-//inline Float cosTheta(const Vector3f &w) {
-//    return w.z;
-//}
-
-//inline Float cos2Theta(const Vector3f &w) {
-//    return w.z * w.z;
-//}
-
-//inline Float absCosTheta(const Vector3f &w) {
-//    return std::abs(w.z);
-//}
-
-//inline Float sin2Theta(const Vector3f &w) {
-//    return std::max((Float)0, (Float)1 - Frame::cosTheta2(w));
-//}
-
-//inline Float sinTheta(const Vector3f &w) {
-//    return std::sqrt(Frame::sinTheta2(w));
-//}
-
-//inline Float tanTheta(const Vector3f &w) { 
-//    return Frame::sinTheta(w) / cosTheta(w);
-//}
-
-inline Float tan2Theta(const Vector3f &w) {
-    return Frame::sinTheta2(w) / Frame::cosTheta2(w);
-}
-
-inline Float cosPhi(const Vector3f &w) {
-    Float _sinTheta = Frame::sinTheta(w);
-    return (_sinTheta == 0) ? 1 : clamp(w.x / _sinTheta, -1, 1);
-}
-
-inline Float sinPhi(const Vector3f &w) {
-    Float _sinTheta = Frame::sinTheta(w);
-    return (_sinTheta == 0) ? 0 : clamp(w.y / _sinTheta, -1, 1);
-}
-
-inline Float cos2Phi(const Vector3f &w) { 
-    return cosPhi(w) * cosPhi(w);
-}
-
-inline Float sin2Phi(const Vector3f &w) { 
-    return sinPhi(w) * sinPhi(w);
-}
-
-inline Float cosDPhi(const Vector3f &wa, const Vector3f &wb) {
-    return clamp(
-                 (wa.x * wb.x + wa.y * wb.y) / std::sqrt((wa.x * wa.x + wa.y * wa.y) *
-                                                         (wb.x * wb.x + wb.y * wb.y)),
-                 -1, 1);
-}
 
 /**
  * 绝缘体菲涅尔函数

@@ -117,6 +117,13 @@ struct Frame {
         return clamp(v.x * v.x / sinTheta2(v), (Float) 0.0f, (Float) 1.0f);
     }
     
+    inline static Float cosDPhi(const Vector3f &wa, const Vector3f &wb) {
+        return clamp(
+                     (wa.x * wb.x + wa.y * wb.y) / std::sqrt((wa.x * wa.x + wa.y * wa.y) *
+                                                             (wb.x * wb.x + wb.y * wb.y)),
+                     -1, 1);
+    }
+    
     inline bool operator == (const Frame &frame) const {
         return frame.s == s && frame.t == t && frame.n == n;
     }
