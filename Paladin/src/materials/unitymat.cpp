@@ -49,25 +49,27 @@ void UnityMaterial::computeScatteringFunctions(SurfaceInteraction *si, MemoryAre
 }
 
 //"param" : {
-//    "albedo" : [
-//        [
-//            0.185608759522438,
-//            0.915094316005707,
-//            0.894712090492249
-//        ],
-//        [
-//            1,
-//            1,
-//            1
-//        ]
+//    "albedo" :  [
+//        {
+//            "type" : "constant",
+//            "subtype" : "spectrum",
+//            "param" : {
+//                "colorType" : 0,
+//                "color" : [0.1, 0.9, 0.5]
+//            }
+//        },
+//        {
+//            "type" : "constant",
+//            "subtype" : "spectrum",
+//            "param" : {
+//                "colorType" : 0,
+//                "color" : [0.1, 0.9, 0.5]
+//            }
+//        }
 //    ],
-//    "F0"     : [
-//        0.185608759522438,
-//        0.915094316005707,
-//        0.894712090492249
-//    ],
-//    "roughness" : 0.0,
-//    "metallic"  : 1.0
+//    "uvOffset" : [1,1,0,0],
+//    "roughness" : 0.2,
+//    "metallic" : 0.8
 //}
 CObject_ptr createUnityMaterial(const nloJson &param, const Arguments &lst) {
     nloJson _albedo = param.value("albedo", nloJson::array({1.f, 1.f, 1.f}));

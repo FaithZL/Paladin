@@ -45,7 +45,14 @@ template class ImageTexture<RGBSpectrum, Spectrum>;
 //    "gamma" : false
 //}
 CObject_ptr createImageMap(const nloJson &param, const Arguments &lst) {
-    auto mapping = unique_ptr<TextureMapping2D>(new UVMapping2D());
+    nloJson uvOffset = param.value("uvOffset", nloJson::array({1, 1, 0, 0}));
+    
+    Float su = uvOffset[0];
+    Float sv = uvOffset[1];
+    Float du = uvOffset[2];
+    Float dv = uvOffset[3];
+    
+    auto mapping = unique_ptr<TextureMapping2D>(new UVMapping2D(su, sv, du, dv));
     string fn = param.value("fileName", "");
     bool fromBasePath = param.value("fromBasePath", false);
     if (fromBasePath) {
@@ -74,7 +81,14 @@ CObject_ptr createImageMap(const nloJson &param, const Arguments &lst) {
 //    "gamma" : false
 //}
 CObject_ptr createFloatMap(const nloJson &param, const Arguments &lst) {
-    auto mapping = unique_ptr<TextureMapping2D>(new UVMapping2D());
+    nloJson uvOffset = param.value("uvOffset", nloJson::array({1, 1, 0, 0}));
+    
+    Float su = uvOffset[0];
+    Float sv = uvOffset[1];
+    Float du = uvOffset[2];
+    Float dv = uvOffset[3];
+    
+    auto mapping = unique_ptr<TextureMapping2D>(new UVMapping2D(su, sv, du, dv));
     string fn = param.value("fileName", "");
     bool fromBasePath = param.value("fromBasePath", false);
     if (fromBasePath) {

@@ -20,8 +20,14 @@ CObject_ptr createFloatBilerpTexture(const nloJson &param, const Arguments &lst)
     Float v01 = param.value("v01", 1.f);
     Float v10 = param.value("v10", 1.f);
     Float v11 = param.value("v11", 1.f);
-    // todo 这里先用默认格式
-    auto mapping = unique_ptr<TextureMapping2D>(new UVMapping2D());
+    
+    nloJson uvOffset = param.value("uvOffset", nloJson::array({1, 1, 0, 0}));
+    Float su = uvOffset[0];
+    Float sv = uvOffset[1];
+    Float du = uvOffset[2];
+    Float dv = uvOffset[3];
+    
+    auto mapping = unique_ptr<TextureMapping2D>(new UVMapping2D(su, sv, du, dv));
     auto ret = new BilerpTexture<Float>(move(mapping), v00, v01, v10, v11);
     return ret;
 }
@@ -43,7 +49,14 @@ CObject_ptr createSpectrumBilerpTexture(const nloJson &param, const Arguments &l
     Spectrum v01 = Spectrum::FromJsonRGB(_v01);
     Spectrum v10 = Spectrum::FromJsonRGB(_v10);
     Spectrum v11 = Spectrum::FromJsonRGB(_v11);
-    auto mapping = unique_ptr<TextureMapping2D>(new UVMapping2D());
+    
+    nloJson uvOffset = param.value("uvOffset", nloJson::array({1, 1, 0, 0}));
+    Float su = uvOffset[0];
+    Float sv = uvOffset[1];
+    Float du = uvOffset[2];
+    Float dv = uvOffset[3];
+    auto mapping = unique_ptr<TextureMapping2D>(new UVMapping2D(su, sv, du, dv));
+    
     auto ret = new BilerpTexture<Spectrum>(move(mapping), v00, v01, v10, v11);
     return ret;
 }
