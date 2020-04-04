@@ -23,3 +23,10 @@
 	url = https://github.com/mitsuba-renderer/zlib
 	branch = master
 
+[submodule "Paladin/third/embree"]
+	path = Paladin/third/embree
+	url = https://gitee.com/FaithZ/embree
+
+[submodule "Paladin/third/oidn"]
+	path = Paladin/third/oidn
+	url = https://gitee.com/FaithZ/oidn

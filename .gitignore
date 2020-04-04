@@ -17,6 +17,7 @@ Paladin/.idea
 xcuserdata
 
 build
+build__
 
 buildpro/CMakeFiles
 buildpro/bvh
