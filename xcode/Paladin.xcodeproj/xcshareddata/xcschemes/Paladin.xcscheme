@@ -50,6 +50,16 @@
             ReferencedContainer = "container:../xcode/Paladin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "res/simplescene.json"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/zero/work/graphic/renderer/PaladinEditor/paladin_output/paladin_spot/paladin_spot.json"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

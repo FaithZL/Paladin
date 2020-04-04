@@ -11,6 +11,7 @@ xcode/RelWithDebInfo
 xcode/Paladin.build
 xcode/third
 Paladin/res/model
+Paladin/Paladin/build
 Paladin/cmake-build-debug
 Paladin/.idea
 xcuserdata

@@ -33,5 +33,5 @@ for root,dirs,files in os.walk(os.getcwd()):
 		f.close()
 		count += num
 
-print count, com
+print (count, com)
 
