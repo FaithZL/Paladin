@@ -22,3 +22,7 @@
 	path = Paladin/third/zlib
 	url = https://github.com/mitsuba-renderer/zlib
 	branch = master
+[submodule "Paladin/third/oidn"]
+	path = Paladin/third/oidn
+	url = https://github.com/OpenImageDenoise/oidn
+	branch = master

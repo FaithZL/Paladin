@@ -55,10 +55,14 @@ include_directories(${ZLIB_INCLUDE_DIRS})
 add_subdirectory(third/lua53)
 add_subdirectory(third/glog)
 add_subdirectory(third/openexr)
+add_subdirectory(third/oidn)
+add_subdirectory(third/embree)
 # 设置头文件目录
 include_directories ("${PROJECT_SOURCE_DIR}/src")
 include_directories ("${PROJECT_SOURCE_DIR}/src/ext")
 include_directories ("${PROJECT_SOURCE_DIR}/third/lua53/lua")
+include_directories ("${PROJECT_SOURCE_DIR}/third/oidn/include")
+include_directories ("${PROJECT_SOURCE_DIR}/third/embree/include")
 include_directories ("${PROJECT_SOURCE_DIR}/third/stblib/stb")
 include_directories ("${PROJECT_SOURCE_DIR}/third/glog/src")
 include_directories ("${PROJECT_SOURCE_DIR}/third/openexr/IlmBase/Imath")
@@ -68,6 +72,9 @@ include_directories ("${PROJECT_SOURCE_DIR}/third/openexr/OpenEXR/IlmImf")
 include_directories ("${CMAKE_BINARY_DIR}/third/openexr/IlmBase/config")
 include_directories ("${CMAKE_BINARY_DIR}/third/openexr/OpenEXR/config")
 
+
+# target_include_directories(Paladin PRIVATE third/oidn)
+# target_link_libraries(Paladin PRIVATE OpenImageDenoise)
 
 # 设置glog库及相关单元测试的虚拟目录
 SET_PROPERTY(TARGET glog 
@@ -100,7 +107,7 @@ ELSE()
   SET(OPENEXR_LIBS IlmImf Imath Half)
 ENDIF()
 
-set(EXTRA_LIBS ${EXTRA_LIBS} lua53 glog ${OPENEXR_LIBS})
+set(EXTRA_LIBS ${EXTRA_LIBS} lua53 glog ${OPENEXR_LIBS} OpenImageDenoise embree)
 
 # 指定生成目标
 add_executable (${APP_NAME} ${ALL_FILES})
