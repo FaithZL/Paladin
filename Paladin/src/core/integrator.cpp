@@ -73,24 +73,24 @@ Spectrum sampleOneLight(const Interaction &it, const Scene &scene,
     Spectrum dl;
     int nSamples = 1;
     
-    const Point2f *uLightArray = sampler.get2DArray(nSamples);
-    const Point2f *uScatteringArray = sampler.get2DArray(nSamples);
-    
-    if (!uLightArray || !uScatteringArray) {
-        for (size_t i = 0; i < nSamples; ++i) {
+//    const Point2f *uLightArray = sampler.get2DArray(nSamples);
+//    const Point2f *uScatteringArray = sampler.get2DArray(nSamples);
+//    
+//    if (!uLightArray || !uScatteringArray) {
+//        for (size_t i = 0; i < nSamples; ++i) {
             Point2f uLight = sampler.get2D();
             // 均匀采样bsdf函数
             Point2f uScattering = sampler.get2D();
             // 估计当前选中的光源对该点的辐射度
             dl += estimateDirectLighting(it, uScattering, *light, uLight, scene, sampler, arena, handleMedia);
-        }
-    } else {
-        for (size_t i = 0; i < nSamples; ++i) {
-            dl += estimateDirectLighting(it, uScatteringArray[i], *light,
-                                        uLightArray[i], scene, sampler, arena,
-                                        handleMedia);
-        }
-    }
+//        }
+//    } else {
+//        for (size_t i = 0; i < nSamples; ++i) {
+//            dl += estimateDirectLighting(it, uScatteringArray[i], *light,
+//                                        uLightArray[i], scene, sampler, arena,
+//                                        handleMedia);
+//        }
+//    }
     
     
     // 需要注意的是！返回值为dl / lightPdf

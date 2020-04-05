@@ -25,15 +25,15 @@ _lightSampleStrategy(lightSampleStrategy) {
 
 void PathTracer::preprocess(const Scene &scene, Sampler &sampler) {
     _lightDistribution = createLightSampleDistribution(_lightSampleStrategy, scene);
-    for (const auto &light : scene.lights) {
-        _nLightSamples.push_back(sampler.roundCount(light->nSamples));
-    }
-    for (int i = 0; i < _maxDepth; ++i) {
-        for (size_t j = 0; j < scene.lights.size(); ++j) {
-            sampler.request2DArray(_nLightSamples[j]);
-            sampler.request2DArray(_nLightSamples[j]);
-        }
-    }
+//    for (const auto &light : scene.lights) {
+//        _nLightSamples.push_back(sampler.roundCount(light->nSamples));
+//    }
+//    for (int i = 0; i < _maxDepth; ++i) {
+//        for (size_t j = 0; j < scene.lights.size(); ++j) {
+//            sampler.request2DArray(_nLightSamples[j]);
+//            sampler.request2DArray(_nLightSamples[j]);
+//        }
+//    }
 }
 
 Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
