@@ -53,6 +53,8 @@ public:
     Vector3f dir;
     // 光线的最远距离
     mutable Float tMax;
+    
+    mutable Float tMin;
     // 发射的时间，用于做motion blur
     Float time;
     // 光线所在的介质(水，空气，玻璃等)

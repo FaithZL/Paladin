@@ -433,7 +433,7 @@
         }
     },
     "sampler" : {
-        "type" : "halton",
+        "type" : "random",
         "param" : {
             "spp" : 16
         }

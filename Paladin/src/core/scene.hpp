@@ -12,7 +12,7 @@
 #include "core/header.h"
 #include "core/primitive.hpp"
 #include "core/light.hpp"
-
+#include "embree3/rtcore.h"
 
 PALADIN_BEGIN
 
@@ -20,7 +20,9 @@ class Scene {
 public:
     Scene(std::shared_ptr<Primitive> aggregate,
           const std::vector<std::shared_ptr<Light>> &lights)
-    : lights(lights), _aggregate(aggregate) {
+    : lights(lights),
+    _aggregate(aggregate),
+    _rtcScene(nullptr) {
         _worldBound = _aggregate->worldBound();
         for (const auto &light : lights) {
             light->preprocess(*this);
@@ -28,6 +30,13 @@ public:
                 infiniteLights.push_back(light);
             }
         }
+    }
+    
+    Scene(RTCScene rtcScene, const std::vector<std::shared_ptr<Light>> &lights)
+    : lights(lights),
+    _aggregate(nullptr),
+    _rtcScene(rtcScene) {
+        
     }
 
     const AABB3f &worldBound() const { 
@@ -64,6 +73,8 @@ private:
     std::shared_ptr<Primitive> _aggregate;
     // 整个场景的包围盒
     AABB3f _worldBound;
+    
+    RTCScene _rtcScene;
 };
 
 PALADIN_END
