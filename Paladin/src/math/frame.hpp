@@ -31,6 +31,10 @@ struct Frame {
         coordinateSystem(n, &s, &t);
     }
     
+    inline Frame(const Normal3f &n) : n(n) {
+        coordinateSystem((Vector3f)n, &s, &t);
+    }
+    
     inline bool hasNaNs() const {
         return n.hasNaNs() || s.hasNaNs() || t.hasNaNs();
     }

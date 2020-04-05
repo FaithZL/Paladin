@@ -25,6 +25,15 @@ _lightSampleStrategy(lightSampleStrategy) {
 
 void VolumePathTracer::preprocess(const Scene &scene, Sampler &sampler) {
     _lightDistribution = createLightSampleDistribution(_lightSampleStrategy, scene);
+    for (const auto &light : scene.lights) {
+        _nLightSamples.push_back(sampler.roundCount(light->nSamples));
+    }
+    for (int i = 0; i < _maxDepth; ++i) {
+        for (size_t j = 0; j < scene.lights.size(); ++j) {
+            sampler.request2DArray(_nLightSamples[j]);
+            sampler.request2DArray(_nLightSamples[j]);
+        }
+    }
 }
 
 /**
@@ -66,7 +75,7 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
                 break;
             }
             const Distribution1D *lightDistrib = _lightDistribution->lookup(mi.pos);
-            L += throughput * sampleOneLight(mi, scene, arena, sampler, true,
+            L += throughput * sampleOneLight(mi, scene, arena, sampler, _nLightSamples, true,
                                               lightDistrib);
             
             Vector3f wo = -ray.dir;
@@ -107,7 +116,7 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
             // 找到非高光反射comp，如果有，则估计直接光照贡献
             if (isect.bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR))) {
                 Spectrum Ld = throughput * sampleOneLight(isect, scene, arena,
-                                                 sampler, true, distrib);
+                                                 sampler, _nLightSamples, true, distrib);
                 L += Ld;
             }
             Vector3f wo = -ray.dir;

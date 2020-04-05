@@ -47,6 +47,7 @@ Spectrum uniformSampleAllLights(const Interaction &it, const Scene &scene,
 
 Spectrum sampleOneLight(const Interaction &it, const Scene &scene,
                                MemoryArena &arena, Sampler &sampler,
+                               const std::vector<int> &lightSamples,
                                bool handleMedia,
                                const Distribution1D *lightDistrib) {
     // 与uniformSampleAllLights不同的是，
@@ -68,15 +69,33 @@ Spectrum sampleOneLight(const Interaction &it, const Scene &scene,
     	lightPdf = Float(1) / nLights;
     }
     const std::shared_ptr<Light> &light = scene.lights[lightIndex];
-    // 均匀采样光源表面的二维随机变量
-    Point2f uLight = sampler.get2D();
-    // 均匀采样bsdf函数
-    Point2f uScattering = sampler.get2D();
-    // 估计当前选中的光源对该点的辐射度
-    Spectrum dl = estimateDirectLighting(it, uScattering, *light, uLight, scene, sampler, arena, handleMedia);
+    
+    Spectrum dl;
+    int nSamples = 1;
+    
+    const Point2f *uLightArray = sampler.get2DArray(nSamples);
+    const Point2f *uScatteringArray = sampler.get2DArray(nSamples);
+    
+    if (!uLightArray || !uScatteringArray) {
+        for (size_t i = 0; i < nSamples; ++i) {
+            Point2f uLight = sampler.get2D();
+            // 均匀采样bsdf函数
+            Point2f uScattering = sampler.get2D();
+            // 估计当前选中的光源对该点的辐射度
+            dl += estimateDirectLighting(it, uScattering, *light, uLight, scene, sampler, arena, handleMedia);
+        }
+    } else {
+        for (size_t i = 0; i < nSamples; ++i) {
+            dl += estimateDirectLighting(it, uScatteringArray[i], *light,
+                                        uLightArray[i], scene, sampler, arena,
+                                        handleMedia);
+        }
+    }
+    
+    
     // 需要注意的是！返回值为dl / lightPdf
     // 表示对整个场景中的所有光源对it的直接光照估计
-    return  dl / lightPdf;
+    return  dl / (lightPdf * nSamples);
 }
 
 Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScattering,

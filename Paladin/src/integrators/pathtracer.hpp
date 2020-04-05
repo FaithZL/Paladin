@@ -270,6 +270,8 @@ private:
     const std::string _lightSampleStrategy;
     // 光源分布
     std::unique_ptr<LightDistribution> _lightDistribution;
+    
+    std::vector<int> _nLightSamples;
 };
 
 USING_STD;

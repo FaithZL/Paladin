@@ -247,6 +247,7 @@ Spectrum uniformSampleAllLights(const Interaction &it, const Scene &scene,
  */
 Spectrum sampleOneLight(const Interaction &it, const Scene &scene,
                                MemoryArena &arena, Sampler &sampler,
+                               const std::vector<int> &lightSamples,
                                bool handleMedia = false,
                                const Distribution1D *lightDistrib = nullptr);
 

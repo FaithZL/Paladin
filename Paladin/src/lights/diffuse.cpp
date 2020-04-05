@@ -80,10 +80,9 @@ Spectrum DiffuseAreaLight::sample_Le(const Point2f &u1, const Point2f &u2,
         *pdfDir = cosineHemispherePdf(Frame::cosTheta(w));
     }
     
-    Vector3f v1, v2, n(lightIntr.normal);
-    coordinateSystem(n, &v1, &v2);
+    Frame frame(lightIntr.normal);
     // 将w转到世界空间
-    w = w.x * v1 + w.y * v2 + w.z * n;
+    w = frame.toWorld(w);
     *ray = lightIntr.spawnRay(w);
     return L(lightIntr, w);
 }
