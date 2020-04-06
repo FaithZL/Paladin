@@ -22,7 +22,7 @@
 #include "textures/constant.hpp"
 #include "lights/distant.hpp"
 #include "meshparser.hpp"
-#include "embree3/rtcore.h"
+#include "tools/embree_util.hpp"
 
 PALADIN_BEGIN
 
@@ -74,15 +74,9 @@ void SceneParser::parse(const nloJson &data) {
     }
     
     nloJson acceleratorData = data.value("accelerator", nloJson::object());
-    Scene * scene = nullptr;
-    string type = acceleratorData.value("type", "embree");
-    if (type == "embree") {
-        RTCScene rtcScene = nullptr;
-        scene = new Scene(rtcScene, _lights);
-    } else {
-        _aggregate = parseAccelerator(acceleratorData);
-        scene = new Scene(_aggregate, _lights);
-    }
+    Scene * scene = new Scene(_lights);
+    scene->initAccel(acceleratorData, _primitives);
+    
     _scene.reset(scene);
     
     _integrator->render(*scene);

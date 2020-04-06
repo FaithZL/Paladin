@@ -7,6 +7,7 @@
 //
 
 #include "scene.hpp"
+#include "tools/embree_util.hpp"
 
 PALADIN_BEGIN
 
@@ -28,6 +29,28 @@ bool Scene::intersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
         }
         ray = isect->spawnRay(ray.dir);
     }
+}
+
+//"data" : {
+//    "type" : "bvh",
+//    "param" : {
+//        "maxPrimsInNode" : 1,
+//        "splitMethod" : "SAH"
+//    }
+//}
+void Scene::initAccel(const nloJson &data, const vector<shared_ptr<Primitive> > &primitives) {
+    string type = data.value("type", "embree");
+    if (type == "embree") {
+        accelInitEmbree(primitives);
+    } else {
+        accelInitNative(data, primitives);
+    }
+}
+
+void Scene::accelInitEmbree(const vector<shared_ptr<Primitive> > &primitive) {
+    _rtcScene = rtcNewScene(EmbreeUtil::getDevice());
+    
+//    todo
 }
 
 PALADIN_END

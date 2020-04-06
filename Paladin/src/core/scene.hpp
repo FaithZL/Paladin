@@ -32,12 +32,25 @@ public:
         }
     }
     
+    Scene(const std::vector<std::shared_ptr<Light>> &lights)
+    : lights(lights) {
+        
+    }
+    
     Scene(RTCScene rtcScene, const std::vector<std::shared_ptr<Light>> &lights)
     : lights(lights),
     _aggregate(nullptr),
     _rtcScene(rtcScene) {
         
     }
+    
+    inline void accelInitNative(const nloJson &data,
+                                const vector<shared_ptr<Primitive> >&primitives) {
+        _aggregate = createAccelerator(data, primitives);
+    }
+    
+    void initAccel(const nloJson &data,
+                   const vector<shared_ptr<Primitive>> &primitive);
 
     const AABB3f &worldBound() const { 
         return _worldBound;
@@ -67,6 +80,12 @@ public:
     std::vector<std::shared_ptr<Light>> lights;
 
     std::vector<std::shared_ptr<Light>> infiniteLights;
+    
+    inline RTCScene getRTCScene() const {
+        return _rtcScene;
+    }
+    
+    void accelInitEmbree(const vector<shared_ptr<Primitive>>&);
     
 private:
     // 片段的集合

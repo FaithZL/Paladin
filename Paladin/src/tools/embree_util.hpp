@@ -53,6 +53,8 @@ inline RTCRay convert(const Ray &r) {
     return ray;
 }
 
+
+
 }
 
 PALADIN_END
