@@ -13,6 +13,7 @@
 #include "core/material.hpp"
 #include "math/animatedtransform.hpp"
 #include "core/cobject.h"
+#include "embree3/rtcore.h"
 
 PALADIN_BEGIN
 
@@ -32,6 +33,10 @@ public:
     virtual const AreaLight *getAreaLight() const = 0;
     
     virtual const Material *getMaterial() const = 0;
+    
+    virtual RTCGeometry embreeGeometry(Scene * scene) const {
+        return nullptr;
+    }
     
     virtual void computeScatteringFunctions(SurfaceInteraction *isect,
                                             MemoryArena &arena,
@@ -60,6 +65,15 @@ public:
     virtual const AreaLight *getAreaLight() const override;
     
     virtual const Material *getMaterial() const override;
+    
+    virtual RTCGeometry embreeGeometry(Scene * scene) const override {
+        
+    }
+    
+    // 用于构造实例化Scene对象
+    RTCScene embreeScene() const {
+        
+    }
     
     virtual void computeScatteringFunctions(SurfaceInteraction *isect,
                                     MemoryArena &arena, TransportMode mode,
@@ -106,6 +120,10 @@ public:
     virtual bool intersect(const Ray &r, SurfaceInteraction *isect) const override;
     
     virtual bool intersectP(const Ray &r) const override;
+    
+    virtual RTCGeometry embreeGeometry(Scene * scene) const override {
+        
+    }
     
     virtual const Material *getMaterial() const override {
         return _material != nullptr

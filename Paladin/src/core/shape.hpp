@@ -13,6 +13,7 @@
 #include "math/transform.hpp"
 #include "core/interaction.hpp"
 #include "core/cobject.h"
+#include "embree3/rtcore.h"
 
 PALADIN_BEGIN
 
@@ -49,6 +50,15 @@ public:
 	virtual bool intersectP(const Ray &ray,
                             bool testAlphaTexture = true) const {
         return intersect(ray, nullptr, nullptr, testAlphaTexture);
+    }
+    
+    virtual RTCGeometry embreeGeometry(Scene * scene) const {
+        return nullptr;
+    }
+    
+    // 用于构造实例化Scene对象
+    virtual RTCScene embreeScene() const {
+        return nullptr;
     }
 
     // 表面积
