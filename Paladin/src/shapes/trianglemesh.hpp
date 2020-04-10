@@ -124,6 +124,14 @@ public:
         _invArea = 1 / area();
     }
 
+    virtual RTCScene embreeScene(Scene * scene) const override {
+        RTCScene ret = rtcNewScene(EmbreeUtil::getDevice());
+        
+        return ret;
+    }
+    
+    virtual RTCGeometry embreeGeometry(Scene * scene) const override;
+    
     virtual AABB3f objectBound() const override;
 
     virtual AABB3f worldBound() const override;

@@ -66,9 +66,7 @@ public:
     
     virtual const Material *getMaterial() const override;
     
-    virtual RTCGeometry embreeGeometry(Scene * scene) const override {
-        
-    }
+    virtual RTCGeometry embreeGeometry(Scene * scene) const override;
     
     // 用于构造实例化Scene对象
     RTCScene embreeScene() const {

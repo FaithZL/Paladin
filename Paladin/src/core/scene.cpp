@@ -47,10 +47,18 @@ void Scene::initAccel(const nloJson &data, const vector<shared_ptr<Primitive> > 
     }
 }
 
-void Scene::accelInitEmbree(const vector<shared_ptr<Primitive> > &primitive) {
+void Scene::accelInitEmbree(const vector<shared_ptr<Primitive> > &primitives) {
     _rtcScene = rtcNewScene(EmbreeUtil::getDevice());
-    
-//    todo
+    vector<RTCGeometry> gList;
+    for (auto iter = primitives.cbegin(); iter != primitives.cend(); ++iter) {
+        auto prim = *iter;
+        RTCGeometry gid = prim->embreeGeometry(this);
+        if (gid != nullptr) {
+            gList.push_back(gid);
+            rtcAttachGeometry(_rtcScene, gid);
+        }
+    }
+    rtcCommitScene(_rtcScene);
 }
 
 PALADIN_END

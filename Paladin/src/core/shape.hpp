@@ -13,7 +13,7 @@
 #include "math/transform.hpp"
 #include "core/interaction.hpp"
 #include "core/cobject.h"
-#include "embree3/rtcore.h"
+#include "tools/embree_util.hpp"
 
 PALADIN_BEGIN
 
@@ -57,7 +57,7 @@ public:
     }
     
     // 用于构造实例化Scene对象
-    virtual RTCScene embreeScene() const {
+    virtual RTCScene embreeScene(Scene * scene) const {
         return nullptr;
     }
 

@@ -13,6 +13,8 @@
 #include "core/primitive.hpp"
 #include "core/light.hpp"
 #include "embree3/rtcore.h"
+#include "shapes/trianglemesh.hpp"
+#include <set>
 
 PALADIN_BEGIN
 
@@ -87,11 +89,22 @@ public:
     
     void accelInitEmbree(const vector<shared_ptr<Primitive>>&);
     
+    bool add(TriangleMesh * mesh) {
+        _meshes[mesh] = true;
+    }
+    
+    bool has(TriangleMesh * mesh) const {
+        auto iter = _meshes.find(mesh);
+        return iter != _meshes.end();
+    }
+    
 private:
     // 片段的集合
     std::shared_ptr<Primitive> _aggregate;
     // 整个场景的包围盒
     AABB3f _worldBound;
+    
+    std::map<TriangleMesh *, bool> _meshes;
     
     RTCScene _rtcScene;
 };

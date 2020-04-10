@@ -11,6 +11,7 @@
 #include "lights/diffuse.hpp"
 #include "core/primitive.hpp"
 #include "parser/modelparser.hpp"
+#include "core/scene.hpp"
 
 PALADIN_BEGIN
 
@@ -613,6 +614,15 @@ bool Triangle::watertightIntersectP(const Ray &ray, bool testAlphaTexture) const
             return false;
     }
     return true;
+}
+
+RTCGeometry Triangle::embreeGeometry(Scene *scene) const {
+    if (scene->has(_mesh.get())) {
+        return nullptr;
+    }
+    RTCGeometry geom = rtcNewGeometry(EmbreeUtil::getDevice(), RTC_GEOMETRY_TYPE_TRIANGLE);
+//    rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3,
+//                               m_vertices.get(), 0, m_vertex_size, m_vertex_count);
 }
 
 bool Triangle::intersectP(const Ray &ray, bool testAlphaTexture ) const {
