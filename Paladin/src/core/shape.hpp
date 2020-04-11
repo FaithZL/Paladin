@@ -23,7 +23,7 @@ PALADIN_BEGIN
  * 如果没有读过概率密度函数，建议阅读浙大的概率密度函数，经典
  * shape类只是一个形状，不是一个具体的物体，具体的物体是primitive的子类，有材质，形状，是否发光等属性
  */
-class Shape : public CObject {
+class Shape : public EmbreeUtil::EmbreeGeomtry {
 public:
 	Shape(const shared_ptr<const Transform> &ObjectToWorld, const shared_ptr<const Transform>&WorldToObject,
           bool reverseOrientation);

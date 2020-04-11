@@ -112,6 +112,32 @@ shadowAlphaMask(shadowAlphaMask){
     }
 }
 
+Float * TriangleMesh::getVertice() const {
+    Float * ret = (Float *)points.get();
+    return ret;
+}
+
+size_t TriangleMesh::getVerticeNum() const {
+    return nVertices;
+}
+
+size_t TriangleMesh::getVerticeStride() const {
+    return sizeof(Point3f);
+}
+
+int * TriangleMesh::getIndice() const {
+    int * ret = (int *) &vertexIndice[0];
+    return ret;
+}
+
+size_t TriangleMesh::getIndiceNum() const {
+    return vertexIndice.size();
+}
+
+size_t TriangleMesh::getIndiceStride() const {
+    return sizeof(Index);
+}
+
 shared_ptr<TriangleMesh> TriangleMesh::create(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
                                             const vector<Index> &vertexIndices, const vector<Point3f> *P,
                                             const vector<Normal3f> *N, const vector<Point2f> *UV, const vector<Vector3f> *E,
@@ -621,8 +647,20 @@ RTCGeometry Triangle::embreeGeometry(Scene *scene) const {
         return nullptr;
     }
     RTCGeometry geom = rtcNewGeometry(EmbreeUtil::getDevice(), RTC_GEOMETRY_TYPE_TRIANGLE);
-//    rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3,
-//                               m_vertices.get(), 0, m_vertex_size, m_vertex_count);
+    rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0,
+                               RTC_FORMAT_FLOAT3,
+                               _mesh->getVertice(), 0,
+                               _mesh->getVerticeStride(),
+                               _mesh->getVerticeNum());
+    rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0,
+                                RTC_FORMAT_INT3,
+                                _mesh->getIndice(), 0,
+                                _mesh->getIndiceStride(),
+                                _mesh->getIndiceNum() / 3);
+    
+    rtcCommitGeometry(geom);
+    scene->add(_mesh.get());
+    return geom;
 }
 
 bool Triangle::intersectP(const Ray &ray, bool testAlphaTexture ) const {

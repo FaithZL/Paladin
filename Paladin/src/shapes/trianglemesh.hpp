@@ -56,7 +56,7 @@ struct Index {
 /*
  三角形网格，所以的向量法线以及点都是在世界坐标上
  */
-struct TriangleMesh {
+struct TriangleMesh : public EmbreeUtil::EmbreeGeomtry {
 
     TriangleMesh(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
                  const int *vertexIndices, int nVertices, const Point3f *P,
@@ -78,13 +78,38 @@ struct TriangleMesh {
                                         const std::shared_ptr<Texture<Float>> &alphaMask=nullptr,
                                         const std::shared_ptr<Texture<Float>> &shadowAlphaMask=nullptr,
                                         const int *faceIndices=nullptr);
+    
+    virtual nloJson toJson() const override {
+        return nloJson();
+    }
 
+    Float * getVertice() const;
+    
+    size_t getVerticeNum() const;
+    
+    size_t getVerticeStride() const;
+    
+    int * getIndice() const;
+    
+    size_t getIndiceNum() const;
+    
+    size_t getIndiceStride() const;
+    
+    void addTriangle(Triangle * tri) {
+        _triangles.push_back(tri);
+    }
+    
+    Triangle * getTriangleById(int id) {
+        return _triangles.at(id);
+    }
 
 private:
     // 三角形个数，顶点个数
     const int nTriangles, nVertices;
     
     vector<Index> vertexIndice;
+    
+    vector<Triangle *> _triangles;
     
     // 法线索引
     std::vector<int> normalIndices;
@@ -112,6 +137,8 @@ public:
              int triNumber)
     : Shape(objectToWorld, worldToObject, reverseOrientation), _mesh(_mesh) {
         _vertexIdx = &_mesh->vertexIndice[3 * triNumber];
+        
+        _mesh->addTriangle(this);
         
         _faceIndex = _mesh->faceIndices.size() ? _mesh->faceIndices[triNumber] : 0;
     }

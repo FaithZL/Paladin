@@ -10,6 +10,7 @@
 
 #include "core/header.h"
 #include <embree3/rtcore.h>
+#include "core/cobject.h"
 
 PALADIN_BEGIN
 
@@ -17,6 +18,10 @@ namespace EmbreeUtil {
 
 void initDevice();
 RTCDevice getDevice();
+
+class EmbreeGeomtry : public CObject {
+    
+};
 
 inline RTCBounds convert(const AABB3f &b) {
     return RTCBounds{

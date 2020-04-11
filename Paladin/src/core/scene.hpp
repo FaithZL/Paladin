@@ -35,7 +35,9 @@ public:
     }
     
     Scene(const std::vector<std::shared_ptr<Light>> &lights)
-    : lights(lights) {
+    : lights(lights),
+    _aggregate(nullptr),
+    _rtcScene(nullptr) {
         
     }
     
@@ -60,7 +62,14 @@ public:
 
     bool intersect(const Ray &ray, SurfaceInteraction *isect) const {
         CHECK_NE(ray.dir, Vector3f(0,0,0));
+        if (_rtcScene) {
+            return embreeIntersect(ray, isect);
+        }
         return _aggregate->intersect(ray, isect);
+    }
+    
+    bool embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const {
+        
     }
 
     bool intersectP(const Ray &ray) const {
