@@ -31,6 +31,27 @@ bool Scene::intersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
     }
 }
 
+bool Scene::embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const {
+    using namespace EmbreeUtil;
+    RTCRay rtcRay = convert(ray);
+    RTCIntersectContext context;
+    rtcInitIntersectContext(&context);
+    RTCRayHit rh;
+    rh.ray = rtcRay;
+    rh.hit.geomID = RTC_INVALID_GEOMETRY_ID;
+    rh.hit.primID = RTC_INVALID_GEOMETRY_ID;
+    rtcIntersect1(_rtcScene, &context, &rh);
+    int gid = rh.hit.geomID;
+    int pid = rh.hit.primID;
+    
+    auto p = getEmbreeGeomtry(gid, pid);
+}
+
+EmbreeUtil::EmbreeGeomtry * Scene::getEmbreeGeomtry(int geomID, int primID) const {
+    EmbreeUtil::EmbreeGeomtry * ret = _embreeGeometries[geomID];
+    return ret->getShape(primID);
+}
+
 //"data" : {
 //    "type" : "bvh",
 //    "param" : {
@@ -40,21 +61,22 @@ bool Scene::intersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
 //}
 void Scene::initAccel(const nloJson &data, const vector<shared_ptr<Primitive> > &primitives) {
     string type = data.value("type", "embree");
-    if (type == "embree") {
+//    if (type == "embree") {
         accelInitEmbree(primitives);
-    } else {
+//    } else {
         accelInitNative(data, primitives);
-    }
+//    }
 }
 
 void Scene::accelInitEmbree(const vector<shared_ptr<Primitive> > &primitives) {
+    EmbreeUtil::initDevice();
     _rtcScene = rtcNewScene(EmbreeUtil::getDevice());
-    vector<RTCGeometry> gList;
+    int idx = 0;
     for (auto iter = primitives.cbegin(); iter != primitives.cend(); ++iter) {
         auto prim = *iter;
-        RTCGeometry gid = prim->embreeGeometry(this);
+        RTCGeometry gid = prim->rtcGeometry(this);
         if (gid != nullptr) {
-            gList.push_back(gid);
+            _embreeGeometries.push_back(prim->getEmbreeGeometry());
             rtcAttachGeometry(_rtcScene, gid);
         }
     }

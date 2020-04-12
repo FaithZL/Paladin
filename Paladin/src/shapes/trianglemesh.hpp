@@ -99,8 +99,12 @@ struct TriangleMesh : public EmbreeUtil::EmbreeGeomtry {
         _triangles.push_back(tri);
     }
     
-    Triangle * getTriangleById(int id) {
+    Triangle * getTriangleById(int id) const {
         return _triangles.at(id);
+    }
+    
+    virtual Shape * getShape(int primID) const override {
+        return (Shape *)getTriangleById(primID);
     }
 
 private:
@@ -142,6 +146,16 @@ public:
         
         _faceIndex = _mesh->faceIndices.size() ? _mesh->faceIndices[triNumber] : 0;
     }
+    
+    virtual Shape * getShape(int primID) const override {
+        DCHECK(false);
+        // 三角形调用到这里是不正常的
+        return nullptr;
+    }
+    
+    virtual EmbreeGeomtry * getEmbreeGeomtry() const override {
+        return _mesh.get();
+    }
 
     virtual nloJson toJson() const override {
         return nloJson();
@@ -151,13 +165,13 @@ public:
         _invArea = 1 / area();
     }
 
-    virtual RTCScene embreeScene(Scene * scene) const override {
+    virtual RTCScene rtcScene(Scene * scene) const override {
         RTCScene ret = rtcNewScene(EmbreeUtil::getDevice());
         
         return ret;
     }
     
-    virtual RTCGeometry embreeGeometry(Scene * scene) const override;
+    virtual RTCGeometry rtcGeometry(Scene * scene) const override;
     
     virtual AABB3f objectBound() const override;
 

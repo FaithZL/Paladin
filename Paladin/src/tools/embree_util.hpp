@@ -14,12 +14,23 @@
 
 PALADIN_BEGIN
 
+class Shape;
+
 namespace EmbreeUtil {
 
 void initDevice();
 RTCDevice getDevice();
 
 class EmbreeGeomtry : public CObject {
+    
+public:
+    virtual Shape * getShape(int primID) const {
+        return (Shape *)this;
+    }
+    
+    virtual EmbreeGeomtry * getEmbreeGeomtry() const {
+        return (EmbreeGeomtry *)this;
+    }
     
 };
 

@@ -62,8 +62,12 @@ bool GeometricPrimitive::intersect(const Ray &r,
     return true;
 }
 
-RTCGeometry GeometricPrimitive::embreeGeometry(Scene *scene) const {
-    return _shape->embreeGeometry(scene);
+RTCGeometry GeometricPrimitive::rtcGeometry(Scene *scene) const {
+    return _shape->rtcGeometry(scene);
+}
+
+EmbreeUtil::EmbreeGeomtry * GeometricPrimitive::getEmbreeGeometry() const {
+    return _shape->getEmbreeGeomtry();
 }
 
 const AreaLight *GeometricPrimitive::getAreaLight() const {

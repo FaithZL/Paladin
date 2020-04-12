@@ -13,7 +13,7 @@
 #include "core/material.hpp"
 #include "math/animatedtransform.hpp"
 #include "core/cobject.h"
-#include "embree3/rtcore.h"
+#include "tools/embree_util.hpp"
 
 PALADIN_BEGIN
 
@@ -30,11 +30,15 @@ public:
     
     virtual bool intersectP(const Ray &r) const = 0;
     
+    virtual EmbreeUtil::EmbreeGeomtry * getEmbreeGeometry() const {
+        return nullptr;
+    }
+    
     virtual const AreaLight *getAreaLight() const = 0;
     
     virtual const Material *getMaterial() const = 0;
     
-    virtual RTCGeometry embreeGeometry(Scene * scene) const {
+    virtual RTCGeometry rtcGeometry(Scene * scene) const {
         return nullptr;
     }
     
@@ -66,10 +70,12 @@ public:
     
     virtual const Material *getMaterial() const override;
     
-    virtual RTCGeometry embreeGeometry(Scene * scene) const override;
+    virtual RTCGeometry rtcGeometry(Scene * scene) const override;
+    
+    virtual EmbreeUtil::EmbreeGeomtry * getEmbreeGeometry() const override;
     
     // 用于构造实例化Scene对象
-    RTCScene embreeScene() const {
+    RTCScene rtcScene() const {
         
     }
     
@@ -119,8 +125,8 @@ public:
     
     virtual bool intersectP(const Ray &r) const override;
     
-    virtual RTCGeometry embreeGeometry(Scene * scene) const override {
-        
+    virtual RTCGeometry rtcGeometry(Scene * scene) const override {
+        // todo
     }
     
     virtual const Material *getMaterial() const override {

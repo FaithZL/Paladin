@@ -642,7 +642,7 @@ bool Triangle::watertightIntersectP(const Ray &ray, bool testAlphaTexture) const
     return true;
 }
 
-RTCGeometry Triangle::embreeGeometry(Scene *scene) const {
+RTCGeometry Triangle::rtcGeometry(Scene *scene) const {
     if (scene->has(_mesh.get())) {
         return nullptr;
     }

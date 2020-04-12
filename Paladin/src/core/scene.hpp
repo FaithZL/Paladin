@@ -12,7 +12,7 @@
 #include "core/header.h"
 #include "core/primitive.hpp"
 #include "core/light.hpp"
-#include "embree3/rtcore.h"
+#include "tools/embree_util.hpp"
 #include "shapes/trianglemesh.hpp"
 #include <set>
 
@@ -62,15 +62,18 @@ public:
 
     bool intersect(const Ray &ray, SurfaceInteraction *isect) const {
         CHECK_NE(ray.dir, Vector3f(0,0,0));
-        if (_rtcScene) {
-            return embreeIntersect(ray, isect);
+//        if (_rtcScene) {
+//             return embreeIntersect(ray, isect);
+//        }
+        bool ret = _aggregate->intersect(ray, isect);
+        if (ret) {
+            embreeIntersect(ray, isect);
         }
-        return _aggregate->intersect(ray, isect);
+        return ret;
+//        return _aggregate->intersect(ray, isect);
     }
     
-    bool embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const {
-        
-    }
+    bool embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const;
 
     bool intersectP(const Ray &ray) const {
         CHECK_NE(ray.dir, Vector3f(0,0,0));
@@ -104,14 +107,19 @@ public:
     
     bool has(TriangleMesh * mesh) const {
         auto iter = _meshes.find(mesh);
-        return iter != _meshes.end();
+        bool ret = iter != _meshes.end();
+        return ret;
     }
+    
+    EmbreeUtil::EmbreeGeomtry * getEmbreeGeomtry(int geomID, int primID) const;
     
 private:
     // 片段的集合
     std::shared_ptr<Primitive> _aggregate;
     // 整个场景的包围盒
     AABB3f _worldBound;
+    
+    vector<EmbreeUtil::EmbreeGeomtry *> _embreeGeometries;
     
     std::map<TriangleMesh *, bool> _meshes;
     

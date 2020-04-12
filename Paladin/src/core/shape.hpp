@@ -52,12 +52,12 @@ public:
         return intersect(ray, nullptr, nullptr, testAlphaTexture);
     }
     
-    virtual RTCGeometry embreeGeometry(Scene * scene) const {
+    virtual RTCGeometry rtcGeometry(Scene * scene) const {
         return nullptr;
     }
     
     // 用于构造实例化Scene对象
-    virtual RTCScene embreeScene(Scene * scene) const {
+    virtual RTCScene rtcScene(Scene * scene) const {
         return nullptr;
     }
 
