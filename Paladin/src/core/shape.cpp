@@ -20,9 +20,10 @@ Shape::~Shape() {
 Shape::Shape(const shared_ptr<const Transform> &objectToWorld,const shared_ptr<const Transform> &worldToObject,
              bool reverseOrientation)
     : objectToWorld(objectToWorld),
-      worldToObject(worldToObject),
-      reverseOrientation(reverseOrientation),
-      transformSwapsHandedness(objectToWorld->swapsHandedness()) {
+    worldToObject(worldToObject),
+    reverseOrientation(reverseOrientation),
+    transformSwapsHandedness(objectToWorld->swapsHandedness()),
+    _primitive(nullptr) {
 
 }
 

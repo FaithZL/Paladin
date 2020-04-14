@@ -14,8 +14,6 @@
 
 PALADIN_BEGIN
 
-class Shape;
-
 namespace EmbreeUtil {
 
 void initDevice();
@@ -30,6 +28,16 @@ public:
     
     virtual EmbreeGeomtry * getEmbreeGeomtry() const {
         return (EmbreeGeomtry *)this;
+    }
+    
+    virtual RTCGeometry rtcGeometry(Scene * scene) const {
+        DCHECK(false);
+        return nullptr;
+    }
+    
+    // 用于构造实例化Scene对象
+    virtual RTCScene rtcScene(Scene * scene) const {
+        return nullptr;
     }
     
 };

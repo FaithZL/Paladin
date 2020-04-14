@@ -43,8 +43,11 @@ bool Scene::embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const {
     rtcIntersect1(_rtcScene, &context, &rh);
     int gid = rh.hit.geomID;
     int pid = rh.hit.primID;
+    if (gid != RTC_INVALID_GEOMETRY_ID) {
+        int a= 0;
+    }
     
-    auto p = getEmbreeGeomtry(gid, pid);
+//    auto p = getEmbreeGeomtry(gid, pid);
 }
 
 EmbreeUtil::EmbreeGeomtry * Scene::getEmbreeGeomtry(int geomID, int primID) const {

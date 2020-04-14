@@ -21,7 +21,7 @@ GeometricPrimitive::GeometricPrimitive(const std::shared_ptr<Shape> &shape,
 _material(material),
 _areaLight(areaLight),
 _mediumInterface(mediumInterface) {
-    
+    _shape->setPrimitive(this);
 }
 
 AABB3f GeometricPrimitive::worldBound() const { 

@@ -39,6 +39,14 @@ public:
     // 初始化函数，每个子类构造时都要调用
     // 目前用于计算表面积
     virtual void init() = 0;
+    
+    void setPrimitive(Primitive *primitive) {
+        _primitive = primitive;
+    }
+    
+    Primitive * getPrimitive() {
+        return _primitive;
+    }
 
 	// 求交函数，填充SurfaceInteraction数据
     // 几乎所有的shape与ray求交的计算都是将ray转换到object空间中进行的
@@ -50,15 +58,6 @@ public:
 	virtual bool intersectP(const Ray &ray,
                             bool testAlphaTexture = true) const {
         return intersect(ray, nullptr, nullptr, testAlphaTexture);
-    }
-    
-    virtual RTCGeometry rtcGeometry(Scene * scene) const {
-        return nullptr;
-    }
-    
-    // 用于构造实例化Scene对象
-    virtual RTCScene rtcScene(Scene * scene) const {
-        return nullptr;
     }
 
     // 表面积
@@ -108,6 +107,8 @@ protected:
     // 参照mitsuba渲染器，后续优化，保存表面积的倒数，每次图形有变化时更新数据
     // 初始值为零，0为非法值
     Float _invArea = 0;
+    
+    Primitive * _primitive;
 };
 
 PALADIN_END
