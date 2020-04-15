@@ -390,6 +390,20 @@ bool Triangle::watertightIntersect(const Ray &ray, Float *tHit, SurfaceInteracti
     return true;
 }
 
+void Triangle::fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *iesct) const {
+    Float b1 = uv.x;
+    Float b2 = uv.y;
+
+    Float b0 = 1.f - b1 - b2;
+    
+    const Point3f &p0 = _mesh->points[_vertexIdx[0].pos];
+    const Point3f &p1 = _mesh->points[_vertexIdx[1].pos];
+    const Point3f &p2 = _mesh->points[_vertexIdx[2].pos];
+    
+    Vector3f dp0 = p1 - p0,
+    dp1 = p2 - p0;
+}
+
 /**
  * 基本思路
  * 三角形的参数方程如下

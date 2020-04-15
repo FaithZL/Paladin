@@ -59,6 +59,10 @@ public:
                             bool testAlphaTexture = true) const {
         return intersect(ray, nullptr, nullptr, testAlphaTexture);
     }
+    
+    virtual void fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *iesct) const {
+        DCHECK(false);
+    }
 
     // 表面积
     virtual Float area() const = 0;

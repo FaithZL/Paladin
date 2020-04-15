@@ -174,6 +174,8 @@ public:
     virtual RTCGeometry rtcGeometry(Scene * scene) const override;
     
     virtual AABB3f objectBound() const override;
+    
+    virtual void fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *iesct) const override;
 
     virtual AABB3f worldBound() const override;
 
