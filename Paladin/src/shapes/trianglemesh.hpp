@@ -247,6 +247,14 @@ public:
         }
     }
     
+    bool hasVertexUV() const {
+        return bool(_mesh->uv);
+    }
+    
+    bool hasVertexNormal() const {
+        return bool(_mesh->normals);
+    }
+    
 private:
     
     std::shared_ptr<TriangleMesh> _mesh;

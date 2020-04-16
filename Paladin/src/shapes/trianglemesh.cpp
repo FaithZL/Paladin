@@ -400,8 +400,37 @@ void Triangle::fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceI
     const Point3f &p1 = _mesh->points[_vertexIdx[1].pos];
     const Point3f &p2 = _mesh->points[_vertexIdx[2].pos];
     
-    Vector3f dp0 = p1 - p0,
-    dp1 = p2 - p0;
+    
+    Vector3f dp02 = p0 - p2;
+    Vector3f dp12 = p1 - p2;
+    
+    Point3f pHit = b0 * p0 + b1 * p1 + b2 * p2;
+    
+    Point2f uv2[3];
+    getUVs(uv2);
+    
+    Point2f uvHit = b0 * uv2[0] + b1 * uv2[1] + b2 * uv2[2];
+    Normal3f normal(normalize(cross(dp02, dp12)));
+    
+    Vector2f duv02 = uv2[0] - uv2[2];
+    Vector2f duv12 = uv2[1] - uv2[2];
+    
+    Float det = duv02[0] * duv12[1] - duv02[1] * duv12[0];
+    Float invDet = 1 / det;
+    
+    Vector3f dpdu = (duv12[1] * dp02 - duv02[1] * dp12) * invDet;
+    Vector3f dpdv = (-duv12[0] * dp02 + duv02[0] * dp12) * invDet;
+    
+    Normal3f dndu, dndv;
+    if (hasVertexNormal()) {
+        Normal3f dn1 = _mesh->normals[_vertexIdx[0].normal] - _mesh->normals[_vertexIdx[2].normal];
+        Normal3f dn2 = _mesh->normals[_vertexIdx[1].normal] - _mesh->normals[_vertexIdx[2].normal];
+        
+        dndu = (duv12[1] * dn1 - duv02[1] * dn2) * invDet;
+        dndv = (-duv12[0] * dn1 + duv02[0] * dn2) * invDet;
+    } else {
+        dndu = dndv = Normal3f(0, 0, 0);
+    }
 }
 
 /**
