@@ -62,6 +62,12 @@ bool GeometricPrimitive::intersect(const Ray &r,
     return true;
 }
 
+bool GeometricPrimitive::fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const {
+    auto ret = _shape->fillSurfaceInteraction(r, uv, isect);
+    isect->primitive = this;
+    return ret;
+}
+
 RTCGeometry GeometricPrimitive::rtcGeometry(Scene *scene) const {
     return _shape->rtcGeometry(scene);
 }

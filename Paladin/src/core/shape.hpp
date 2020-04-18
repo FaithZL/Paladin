@@ -60,8 +60,9 @@ public:
         return intersect(ray, nullptr, nullptr, testAlphaTexture);
     }
     
-    virtual void fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *iesct) const {
+    virtual bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const {
         DCHECK(false);
+        return true;
     }
 
     // 表面积

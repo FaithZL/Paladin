@@ -41,8 +41,12 @@ bool Scene::embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const {
     }
     uint32_t gid = rh.hit.geomID;
     uint32_t pid = rh.hit.primID;
-//    auto shape = getEmbreeGeomtry(gid, pid);
-//    auto prim = shape
+    Primitive * prim = getPrimitive(gid, pid);
+    
+    Vector2f uv(rh.hit.u, rh.hit.v);
+    
+    bool ret = prim->fillSurfaceInteraction(ray, uv, isect);
+    return true;
 }
 
 
@@ -53,14 +57,14 @@ bool Scene::intersect(const Ray &ray, SurfaceInteraction *isect) const {
 //        }
     Ray ra(ray);
     bool ret = _aggregate->intersect(ray, isect);
-//    bool r = embreeIntersect(ra, isect);
-//    if (ret != r) {
-//        bool r3 = embreeIntersect(ray, isect);
-//        if (r3 != r) {
-//            cout << "fasdfdas" << endl;
-//        }
-//    }
-//
+    bool r = embreeIntersect(ra, isect);
+    if (ret != r) {
+        bool r3 = embreeIntersect(ray, isect);
+        if (r3 != r) {
+            cout << "fasdfdas" << endl;
+        }
+    }
+
     return ret;
 }
 
@@ -82,13 +86,15 @@ bool Scene::embreeIntersectP(const Ray &ray) const {
     return r.tfar < 0;
 }
 
-EmbreeUtil::EmbreeGeomtry * Scene::getEmbreeGeomtry(int geomID, int primID) const {
-    EmbreeUtil::EmbreeGeomtry * ret = _embreeGeometries[geomID];
-    return ret->getShape(primID);
+EmbreeUtil::EmbreeGeomtry * Scene::getEmbreeGeomtry(int geomID) const {
+    return _embreeGeometries[geomID];
 }
 
 Primitive * Scene::getPrimitive(int geomID, int primID) const {
-    
+    EmbreeUtil::EmbreeGeomtry * ret = _embreeGeometries[geomID];
+    auto shape = ret->getShape(primID);
+    auto primitive = shape->getPrimitive();
+    return primitive;
 }
 
 //"data" : {

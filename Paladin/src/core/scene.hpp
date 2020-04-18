@@ -99,7 +99,7 @@ public:
         return ret;
     }
     
-    EmbreeUtil::EmbreeGeomtry * getEmbreeGeomtry(int geomID, int primID) const;
+    EmbreeUtil::EmbreeGeomtry * getEmbreeGeomtry(int geomID) const;
     
     Primitive * getPrimitive(int geomID, int primID) const;
     

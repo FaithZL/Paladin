@@ -175,7 +175,7 @@ public:
     
     virtual AABB3f objectBound() const override;
     
-    virtual void fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *iesct) const override;
+    virtual bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const override;
 
     virtual AABB3f worldBound() const override;
 

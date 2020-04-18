@@ -34,6 +34,11 @@ public:
         return nullptr;
     }
     
+    virtual bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const {
+        DCHECK(false);
+        return true;
+    }
+    
     virtual const AreaLight *getAreaLight() const = 0;
     
     virtual const Material *getMaterial() const = 0;
@@ -78,6 +83,8 @@ public:
     RTCScene rtcScene() const {
         
     }
+    
+    virtual bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const override;
     
     virtual void computeScatteringFunctions(SurfaceInteraction *isect,
                                     MemoryArena &arena, TransportMode mode,

@@ -396,7 +396,7 @@ bool Triangle::watertightIntersect(const Ray &ray, Float *tHit, SurfaceInteracti
     return true;
 }
 
-void Triangle::fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *iesct) const {
+bool Triangle::fillSurfaceInteraction(const Ray &ray, const Vector2f &uv, SurfaceInteraction *isect) const {
     Float b1 = uv.x;
     Float b2 = uv.y;
 
@@ -405,7 +405,6 @@ void Triangle::fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceI
     const Point3f &p0 = _mesh->points[_vertexIdx[0].pos];
     const Point3f &p1 = _mesh->points[_vertexIdx[1].pos];
     const Point3f &p2 = _mesh->points[_vertexIdx[2].pos];
-    
     
     Vector3f dp02 = p0 - p2;
     Vector3f dp12 = p1 - p2;
@@ -422,21 +421,105 @@ void Triangle::fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceI
     Vector2f duv12 = uv2[1] - uv2[2];
     
     Float det = duv02[0] * duv12[1] - duv02[1] * duv12[0];
+    bool degenerateUV = std::abs(det) < 1e-8;
+    
+    Vector3f dpdu;
+    Vector3f dpdv;
+
     Float invDet = 1 / det;
-    
-    Vector3f dpdu = (duv12[1] * dp02 - duv02[1] * dp12) * invDet;
-    Vector3f dpdv = (-duv12[0] * dp02 + duv02[0] * dp12) * invDet;
-    
-    Normal3f dndu, dndv;
-    if (hasVertexNormal()) {
-        Normal3f dn1 = _mesh->normals[_vertexIdx[0].normal] - _mesh->normals[_vertexIdx[2].normal];
-        Normal3f dn2 = _mesh->normals[_vertexIdx[1].normal] - _mesh->normals[_vertexIdx[2].normal];
-        
-        dndu = (duv12[1] * dn1 - duv02[1] * dn2) * invDet;
-        dndv = (-duv12[0] * dn1 + duv02[0] * dn2) * invDet;
-    } else {
-        dndu = dndv = Normal3f(0, 0, 0);
+    if (!degenerateUV) {
+        dpdu = (duv12[1] * dp02 - duv02[1] * dp12) * invDet;
+        dpdv = (-duv12[0] * dp02 + duv02[0] * dp12) * invDet;
     }
+    
+    if (degenerateUV || cross(dpdu, dpdv).lengthSquared() == 0) {
+        Vector3f ng = cross(p2 - p0, p1 - p0);
+        if (ng.lengthSquared() == 0) {
+            return false;
+        }
+        coordinateSystem(normalize(ng), &dpdu, &dpdv);
+    }
+    isect->normal = isect->shading.normal = Normal3f(normalize(cross(dp02, dp12)));
+    
+    Float xAbsSum =
+         (std::abs(b0 * p0.x) + std::abs(b1 * p1.x) + std::abs(b2 * p2.x));
+    Float yAbsSum =
+         (std::abs(b0 * p0.y) + std::abs(b1 * p1.y) + std::abs(b2 * p2.y));
+    Float zAbsSum =
+         (std::abs(b0 * p0.z) + std::abs(b1 * p1.z) + std::abs(b2 * p2.z));
+    Vector3f pError = gamma(7) * Vector3f(xAbsSum, yAbsSum, zAbsSum);
+    
+    *isect = SurfaceInteraction(pHit, pError, uvHit, -ray.dir, dpdu, dpdv,
+                                Normal3f(0, 0, 0), Normal3f(0, 0, 0), ray.time,
+                                this, _faceIndex);
+    
+    isect->normal = isect->shading.normal = Normal3f(normalize(cross(dp02, dp12)));
+    if (_mesh->normals || _mesh->edges) {
+
+        Normal3f ns;
+        if (_mesh->normals) {
+            ns = (b0 * _mesh->normals[_vertexIdx[0].normal] + b1 * _mesh->normals[_vertexIdx[1].normal] + b2 * _mesh->normals[_vertexIdx[2].normal]);
+            if (ns.lengthSquared() > 0)
+                ns = normalize(ns);
+            else
+                ns = isect->normal;
+        } else
+             ns = isect->normal;
+
+        Vector3f ss;
+        if (_mesh->edges) {
+            ss = (b0 * _mesh->edges[_vertexIdx[0].edge] + b1 * _mesh->edges[_vertexIdx[1].edge] + b2 * _mesh->edges[_vertexIdx[2].edge]);
+            if (ss.lengthSquared() > 0)
+                ss = normalize(ss);
+            else
+                ss = normalize(isect->dpdu);
+        } else
+            ss = normalize(isect->dpdu);
+
+        Vector3f ts = cross(ss, ns);
+        if (ts.lengthSquared() > 0.f) {
+            ts = normalize(ts);
+            ss = cross(ts, ns);
+        } else
+            coordinateSystem((Vector3f)ns, &ss, &ts);
+
+        Normal3f dndu, dndv;
+        if (_mesh->normals) {
+            Vector2f duv02 = uv2[0] - uv2[2];
+            Vector2f duv12 = uv2[1] - uv2[2];
+            Normal3f dn1 = _mesh->normals[_vertexIdx[0].normal] - _mesh->normals[_vertexIdx[2].normal];
+            Normal3f dn2 = _mesh->normals[_vertexIdx[1].normal] - _mesh->normals[_vertexIdx[2].normal];
+            Float determinant = duv02[0] * duv12[1] - duv02[1] * duv12[0];
+            bool degenerateUV = std::abs(determinant) < 1e-8;
+            if (degenerateUV) {
+
+                Vector3f dn = cross(Vector3f(_mesh->normals[_vertexIdx[2].normal] - _mesh->normals[_vertexIdx[0].normal]),
+                                     Vector3f(_mesh->normals[_vertexIdx[1].normal] - _mesh->normals[_vertexIdx[0].normal]));
+                if (dn.lengthSquared() == 0)
+                    dndu = dndv = Normal3f(0, 0, 0);
+                else {
+                    Vector3f dnu, dnv;
+                    coordinateSystem(dn, &dnu, &dnv);
+                    dndu = Normal3f(dnu);
+                    dndv = Normal3f(dnv);
+                }
+            } else {
+                Float invDet = 1 / determinant;
+                dndu = (duv12[1] * dn1 - duv02[1] * dn2) * invDet;
+                dndv = (-duv12[0] * dn1 + duv02[0] * dn2) * invDet;
+            }
+        } else
+             dndu = dndv = Normal3f(0, 0, 0);
+        isect->setShadingGeometry(ss, ts, dndu, dndv, true);
+    }
+
+    if (_mesh->normals)
+        isect->normal = faceforward(isect->normal, isect->shading.normal);
+    else if (reverseOrientation ^ transformSwapsHandedness)
+        isect->normal = isect->shading.normal = -isect->normal;
+    return true;
+    
+    
 }
 
 /**
