@@ -60,25 +60,13 @@ public:
         return _worldBound;
     }
 
-    bool intersect(const Ray &ray, SurfaceInteraction *isect) const {
-        CHECK_NE(ray.dir, Vector3f(0,0,0));
-//        if (_rtcScene) {
-//             return embreeIntersect(ray, isect);
-//        }
-        bool ret = _aggregate->intersect(ray, isect);
-        if (ret) {
-            embreeIntersect(ray, isect);
-        }
-        return ret;
-//        return _aggregate->intersect(ray, isect);
-    }
+    bool intersect(const Ray &ray, SurfaceInteraction *isect) const;
     
     bool embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const;
 
-    bool intersectP(const Ray &ray) const {
-        CHECK_NE(ray.dir, Vector3f(0,0,0));
-        return _aggregate->intersectP(ray);
-    }
+    bool intersectP(const Ray &ray) const;
+    
+    bool embreeIntersectP(const Ray &ray) const;
     
     /**
      * 光线在场景中传播的函数
@@ -112,6 +100,8 @@ public:
     }
     
     EmbreeUtil::EmbreeGeomtry * getEmbreeGeomtry(int geomID, int primID) const;
+    
+    Primitive * getPrimitive(int geomID, int primID) const;
     
 private:
     // 片段的集合

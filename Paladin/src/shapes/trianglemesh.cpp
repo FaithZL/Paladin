@@ -125,9 +125,15 @@ size_t TriangleMesh::getVerticeStride() const {
     return sizeof(Point3f);
 }
 
-int * TriangleMesh::getIndice() const {
-    int * ret = (int *) &vertexIndice[0];
-    return ret;
+uint32_t * TriangleMesh::getIndice() const {
+    uint32_t * ret = new uint32_t[vertexIndice.size()]();
+    auto p = ret;
+    for (auto iter = vertexIndice.cbegin(); iter != vertexIndice.cend(); ++iter) {
+        uint32_t pos = iter->pos;
+        * p = pos;
+        ++p;
+    }
+    return (ret);
 }
 
 size_t TriangleMesh::getIndiceNum() const {
@@ -135,7 +141,7 @@ size_t TriangleMesh::getIndiceNum() const {
 }
 
 size_t TriangleMesh::getIndiceStride() const {
-    return sizeof(Index);
+    return sizeof(uint32_t);
 }
 
 shared_ptr<TriangleMesh> TriangleMesh::create(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
@@ -690,15 +696,18 @@ RTCGeometry Triangle::rtcGeometry(Scene *scene) const {
         return nullptr;
     }
     RTCGeometry geom = rtcNewGeometry(EmbreeUtil::getDevice(), RTC_GEOMETRY_TYPE_TRIANGLE);
+    
     rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0,
                                RTC_FORMAT_FLOAT3,
                                _mesh->getVertice(), 0,
                                _mesh->getVerticeStride(),
                                _mesh->getVerticeNum());
+    
+    auto indice = _mesh->getIndice();
     rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0,
-                                RTC_FORMAT_INT3,
-                                _mesh->getIndice(), 0,
-                                _mesh->getIndiceStride(),
+                                RTC_FORMAT_UINT3,
+                                indice, 0,
+                                _mesh->getIndiceStride() * 3,
                                 _mesh->getIndiceNum() / 3);
     
     rtcCommitGeometry(geom);

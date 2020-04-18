@@ -19,17 +19,22 @@ tMax决定了ray的最远距离
 */
 class Ray {
 public:
-    Ray() : tMax(Infinity), time(0.f), medium(nullptr) {
+    Ray() : tMax(Infinity),
+    time(0.f),
+    medium(nullptr),
+    tMin(RayEpsilon) {
         
     }
     
     Ray(const Point3f &ori, const Vector3f &dir, Float tMax = Infinity,
-        Float time = 0.f, const Medium *medium = nullptr)
+        Float time = 0.f, const Medium *medium = nullptr,
+        Float tMin = RayEpsilon)
     : ori(ori),
     dir(dir),
     tMax(tMax),
     time(time),
-    medium(medium) {
+    medium(medium),
+    tMin(tMin) {
         
     }
     // 个人风格，不喜欢重载括号，改用at
@@ -54,11 +59,12 @@ public:
     // 光线的最远距离
     mutable Float tMax;
     
-    mutable Float tMin;
     // 发射的时间，用于做motion blur
     Float time;
     // 光线所在的介质(水，空气，玻璃等)
     const Medium *medium;
+    
+    mutable Float tMin;
 };
 
 /**

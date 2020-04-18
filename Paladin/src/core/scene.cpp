@@ -32,27 +32,63 @@ bool Scene::intersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
 }
 
 bool Scene::embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const {
-    using namespace EmbreeUtil;
-    RTCRay rtcRay = convert(ray);
     RTCIntersectContext context;
     rtcInitIntersectContext(&context);
-    RTCRayHit rh;
-    rh.ray = rtcRay;
-    rh.hit.geomID = RTC_INVALID_GEOMETRY_ID;
-    rh.hit.primID = RTC_INVALID_GEOMETRY_ID;
+    RTCRayHit rh = EmbreeUtil::toRTCRayHit(ray);
     rtcIntersect1(_rtcScene, &context, &rh);
-    int gid = rh.hit.geomID;
-    int pid = rh.hit.primID;
-    if (gid != RTC_INVALID_GEOMETRY_ID) {
-        int a= 0;
+    if (rh.hit.geomID == RTC_INVALID_GEOMETRY_ID) {
+        return false;
     }
-    
-//    auto p = getEmbreeGeomtry(gid, pid);
+    uint32_t gid = rh.hit.geomID;
+    uint32_t pid = rh.hit.primID;
+//    auto shape = getEmbreeGeomtry(gid, pid);
+//    auto prim = shape
+}
+
+
+bool Scene::intersect(const Ray &ray, SurfaceInteraction *isect) const {
+        CHECK_NE(ray.dir, Vector3f(0,0,0));
+//        if (_rtcScene) {
+//             return embreeIntersect(ray, isect);
+//        }
+    Ray ra(ray);
+    bool ret = _aggregate->intersect(ray, isect);
+//    bool r = embreeIntersect(ra, isect);
+//    if (ret != r) {
+//        bool r3 = embreeIntersect(ray, isect);
+//        if (r3 != r) {
+//            cout << "fasdfdas" << endl;
+//        }
+//    }
+//
+    return ret;
+}
+
+
+bool Scene::intersectP(const Ray &ray) const {
+    CHECK_NE(ray.dir, Vector3f(0,0,0));
+    if (_rtcScene) {
+        return embreeIntersectP(ray);
+    }
+    return _aggregate->intersectP(ray);
+}
+
+bool Scene::embreeIntersectP(const Ray &ray) const {
+    using namespace EmbreeUtil;
+    RTCIntersectContext context;
+    rtcInitIntersectContext(&context);
+    RTCRay r = EmbreeUtil::convert(ray);
+    rtcOccluded1(_rtcScene, &context, &r);
+    return r.tfar < 0;
 }
 
 EmbreeUtil::EmbreeGeomtry * Scene::getEmbreeGeomtry(int geomID, int primID) const {
     EmbreeUtil::EmbreeGeomtry * ret = _embreeGeometries[geomID];
     return ret->getShape(primID);
+}
+
+Primitive * Scene::getPrimitive(int geomID, int primID) const {
+    
 }
 
 //"data" : {

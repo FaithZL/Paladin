@@ -89,7 +89,7 @@ struct TriangleMesh : public EmbreeUtil::EmbreeGeomtry {
     
     size_t getVerticeStride() const;
     
-    int * getIndice() const;
+    uint32_t * getIndice() const;
     
     size_t getIndiceNum() const;
     

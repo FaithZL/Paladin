@@ -74,10 +74,18 @@ inline RTCRay convert(const Ray &r) {
     ray.dir_z = r.dir.z;
     ray.tnear = r.tMin;
     ray.tfar  = r.tMax;
+    ray.flags = 0;
     return ray;
 }
 
-
+inline RTCRayHit toRTCRayHit(const Ray &r) {
+    auto ray = convert(r);
+    RTCRayHit rh;
+    rh.ray = ray;
+    rh.hit.geomID = RTC_INVALID_GEOMETRY_ID;
+    rh.hit.primID = RTC_INVALID_GEOMETRY_ID;
+    return rh;
+}
 
 }
 

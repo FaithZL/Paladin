@@ -23,29 +23,52 @@
 
 #include "GLFW/glfw3.h"
 #include "tools/embree_util.hpp"
+#include "shapes/trianglemesh.hpp"
 
 USING_PALADIN
 
 USING_STD
 
+struct Idx {
+    int a;
+    int _;
+    Idx(int a) {
+        this->a = a;
+        this->_ = a;
+    }
+};
 void tt() {
     EmbreeUtil::initDevice();
-    Float vert[] = {
-        1,1,0,
-        -1,1,0,
-        -1,-1,0,
-        1,-1,0
+    float vert[16] = {
+        1,1,0,0,
+        -1,1,0,0,
+        -1,-1,0,0,
+        1,-1,0,0
     };
-    int indice[] = {
+    
+    Point3f ps[4] = {
+        Point3f(-1, 1, -1),
+        Point3f(-1, -1, -1),
+        Point3f(1, -1, -1),
+        Point3f(1, 1, -1),
+    };
+    
+    unsigned int indice[] = {
         0,1,2,
         0,2,3
     };
+    
     auto rtcScene = rtcNewScene(EmbreeUtil::getDevice());
     RTCGeometry geom = rtcNewGeometry(EmbreeUtil::getDevice(), RTC_GEOMETRY_TYPE_TRIANGLE);
-    rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, vert,
-            0, sizeof(Float) * 3, 4);
+    rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3, ps,
+            0, 12, 4);
     rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, indice,
-            0, sizeof(int), 6);
+            0, sizeof(unsigned int) * 3 , 2);
+    
+//    rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, is,
+//                               0, sizeof(Index) * 3 , 2);
+    
+    
     
     rtcAttachGeometry(rtcScene, geom);
 
@@ -53,19 +76,22 @@ void tt() {
     
     rtcCommitScene(rtcScene);
     
-    auto r = Ray(Point3f(0,0,1),Vector3f(0,0,-1));
+    auto r = Ray(Point3f(0.5,0,1),Vector3f(0,0,-1));
     
-    auto ray = EmbreeUtil::convert(r);
     RTCIntersectContext context;
     rtcInitIntersectContext(&context);
-    RTCRayHit rh;
-    rh.ray = ray;
-    rh.hit.geomID = RTC_INVALID_GEOMETRY_ID;
-    rh.hit.primID = RTC_INVALID_GEOMETRY_ID;
+    RTCRayHit rh = EmbreeUtil::toRTCRayHit(r);
     rtcIntersect1(rtcScene, &context, &rh);
+    
+    RTCRay rr = EmbreeUtil::convert(r);
+    
+    RTCIntersectContext context2;
+    rtcInitIntersectContext(&context2);
+    rtcOccluded1(rtcScene, &context2, &rr);
+    
     int gid = rh.hit.geomID;
     int pid = rh.hit.primID;
-    if (gid != RTC_INVALID_GEOMETRY_ID) {
+    if (gid != -1) {
         int a= 0;
     }
     
