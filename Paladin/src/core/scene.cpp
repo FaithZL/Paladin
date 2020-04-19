@@ -11,6 +11,15 @@
 
 PALADIN_BEGIN
 
+void Scene::initEnvmap() {
+    for (const auto &light : lights) {
+        light->preprocess(*this);
+        if (light->flags & (int)LightFlags::Infinite) {
+            infiniteLights.push_back(light);
+        }
+    }
+}
+
 bool Scene::intersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
                         Spectrum *Tr) const {
     *Tr = Spectrum(1.f);
@@ -103,6 +112,13 @@ void Scene::initAccel(const nloJson &data, const vector<shared_ptr<Primitive> > 
     }
 }
 
+void Scene::accelInitNative(const nloJson &data,
+                            const vector<shared_ptr<Primitive> >&primitives) {
+    _aggregate = createAccelerator(data, primitives);
+    _worldBound = _aggregate->worldBound();
+    initEnvmap();
+}
+
 void Scene::accelInitEmbree(const vector<shared_ptr<Primitive> > &primitives) {
     EmbreeUtil::initDevice();
     _rtcScene = rtcNewScene(EmbreeUtil::getDevice());
@@ -117,6 +133,7 @@ void Scene::accelInitEmbree(const vector<shared_ptr<Primitive> > &primitives) {
         }
     }
     rtcCommitScene(_rtcScene);
+    initEnvmap();
 }
 
 PALADIN_END

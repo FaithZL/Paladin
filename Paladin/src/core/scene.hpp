@@ -25,37 +25,27 @@ public:
     : lights(lights),
     _aggregate(aggregate),
     _rtcScene(nullptr) {
-        init();
+        
     }
     
     Scene(const std::vector<std::shared_ptr<Light>> &lights)
     : lights(lights),
     _aggregate(nullptr),
     _rtcScene(nullptr) {
-        init();
+        
     }
     
     Scene(RTCScene rtcScene, const std::vector<std::shared_ptr<Light>> &lights)
     : lights(lights),
     _aggregate(nullptr),
     _rtcScene(rtcScene) {
-        init();
+        
     }
     
-    void init() {
-        for (const auto &light : lights) {
-            light->preprocess(*this);
-            if (light->flags & (int)LightFlags::Infinite) {
-                infiniteLights.push_back(light);
-            }
-        }
-    }
+    void initEnvmap();
     
     inline void accelInitNative(const nloJson &data,
-                                const vector<shared_ptr<Primitive> >&primitives) {
-        _aggregate = createAccelerator(data, primitives);
-        _worldBound = _aggregate->worldBound();
-    }
+                                const vector<shared_ptr<Primitive> >&primitives);
     
     void initAccel(const nloJson &data,
                    const vector<shared_ptr<Primitive>> &primitive);
