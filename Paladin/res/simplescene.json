@@ -1,5 +1,5 @@
 {
-    "threadNum" : 1,
+    "threadNum" : 0,
     "transforms" :{
         "name1" : [
             {
@@ -435,7 +435,7 @@
     "sampler" : {
         "type" : "random",
         "param" : {
-            "spp" : 1
+            "spp" : 8
         }
     },
     "camera" : {
@@ -469,7 +469,7 @@
         }
     },
     "accelerator" : {
-        "type" : "bvh",
+        "type" : "embree",
         "param" : {
             "maxPrimsInNode" : 1,
             "splitMethod" : "SAH"

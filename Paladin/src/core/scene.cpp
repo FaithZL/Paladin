@@ -52,20 +52,10 @@ bool Scene::embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const {
 
 bool Scene::intersect(const Ray &ray, SurfaceInteraction *isect) const {
         CHECK_NE(ray.dir, Vector3f(0,0,0));
-//        if (_rtcScene) {
-//             return embreeIntersect(ray, isect);
-//        }
-    Ray ra(ray);
-    bool ret = _aggregate->intersect(ray, isect);
-    bool r = embreeIntersect(ra, isect);
-    if (ret != r) {
-        bool r3 = embreeIntersect(ray, isect);
-        if (r3 != r) {
-            cout << "fasdfdas" << endl;
-        }
+    if (_rtcScene) {
+         return embreeIntersect(ray, isect);
     }
-
-    return ret;
+    return _aggregate->intersect(ray, isect);
 }
 
 
@@ -106,11 +96,11 @@ Primitive * Scene::getPrimitive(int geomID, int primID) const {
 //}
 void Scene::initAccel(const nloJson &data, const vector<shared_ptr<Primitive> > &primitives) {
     string type = data.value("type", "embree");
-//    if (type == "embree") {
+    if (type == "embree") {
         accelInitEmbree(primitives);
-//    } else {
+    } else {
         accelInitNative(data, primitives);
-//    }
+    }
 }
 
 void Scene::accelInitEmbree(const vector<shared_ptr<Primitive> > &primitives) {
@@ -120,6 +110,7 @@ void Scene::accelInitEmbree(const vector<shared_ptr<Primitive> > &primitives) {
     for (auto iter = primitives.cbegin(); iter != primitives.cend(); ++iter) {
         auto prim = *iter;
         RTCGeometry gid = prim->rtcGeometry(this);
+        _worldBound = unionSet(_worldBound, prim->worldBound());
         if (gid != nullptr) {
             _embreeGeometries.push_back(prim->getEmbreeGeometry());
             rtcAttachGeometry(_rtcScene, gid);
