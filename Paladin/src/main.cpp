@@ -97,17 +97,37 @@ void tt() {
     
 }
 
+void test() {
+    size_t num = 38840 * 27;
+    float * p = new float[num]();
+    size_t stride = 16;
+    
+    int i = num - 1;
+    char * cp = (char*) p;
+    
+    int * p2 = (int*)(cp + i * stride) + 3;
+    int64_t ip1 = reinterpret_cast<int64_t>(p);
+    int64_t ip2 = reinterpret_cast<int64_t>(p2);
+    int64_t ip3 = reinterpret_cast<int64_t>(p + num * stride);
+    cout << "ip3 - ip2:" << ip3 - ip2 << endl;
+    cout << "ip2 - ip1:" << ip2 - ip1 << endl;
+    cout << "ip3 - ip1:" << ip3 - ip1 << endl;
+    cout << *p2 << endl;
+}
+
 int main(int argc, const char * argv[]) {
     // insert code here...
     COUT << "Hello, paladin!\n";
 //    testscene();
 //    glfwInit();
     
-    tt();
+    
+//    tt();
+    test();
     Paladin * paladin = Paladin::getInstance();
     if (argc >= 2) {
         string fileName(argv[1]);
-        paladin->render(fileName);
+//        paladin->render(fileName);
     }
 #ifdef _MSC_VER
     //让VS运行debug时不至于黑屏一闪而过

@@ -123,8 +123,8 @@ void Scene::accelInitEmbree(const vector<shared_ptr<Primitive> > &primitives) {
     EmbreeUtil::initDevice();
     _rtcScene = rtcNewScene(EmbreeUtil::getDevice());
     int idx = 0;
-    for (auto iter = primitives.cbegin(); iter != primitives.cend(); ++iter) {
-        auto prim = *iter;
+    for (size_t i = 0; i < primitives.size(); ++i) {
+        auto prim = primitives[i];
         RTCGeometry gid = prim->rtcGeometry(this);
         _worldBound = unionSet(_worldBound, prim->worldBound());
         if (gid != nullptr) {

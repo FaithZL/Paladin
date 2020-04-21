@@ -191,8 +191,13 @@ vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
     
     vector<shared_ptr<Primitive>> ret;
     nloJson meshList = createJsonFromFile(fn)["data"];
+    int i = 0;
     for(const nloJson &meshData : meshList) {
         vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights);
+        ++i;
+//        if (i == 5) {
+//            continue;
+//        }
         ret.insert(ret.end(), tmp.begin(), tmp.end());
     }
     

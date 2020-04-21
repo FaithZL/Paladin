@@ -35,24 +35,24 @@ shadowAlphaMask(shadowAlphaMask) {
         vertexIndice.push_back(idx);
     }
     
-    points.reset(new Point3f[nVertices]);
+    points.reset(new Point3f[nVertices + 1]);
     for (int i = 0; i < nVertices; ++i) {
         Point3f p = P[i];
         points[i] = ObjectToWorld->exec(p);
     }
     
     if (UV) {
-        uv.reset(new Point2f[nVertices]);
+        uv.reset(new Point2f[nVertices + 1]);
         memcpy(uv.get(), UV, nVertices * sizeof(Point2f));
     }
     if (N) {
-        normals.reset(new Normal3f[nVertices]);
+        normals.reset(new Normal3f[nVertices + 1]);
         for (int i = 0; i < nVertices; ++i) {
             normals[i] = ObjectToWorld->exec(N[i]);
         }
     }
     if (S) {
-        edges.reset(new Vector3f[nVertices]);
+        edges.reset(new Vector3f[nVertices + 1]);
         for (int i = 0; i < nVertices; ++i) {
             edges[i] = ObjectToWorld->exec(S[i]);
         }
@@ -77,7 +77,7 @@ shadowAlphaMask(shadowAlphaMask){
     vertexIndice = verts;
     
     size_t size = P->size();
-    points.reset(new Point3f[size]);
+    points.reset(new Point3f[size + 1]);
     for (int i = 0; i < size; ++i) {
         Point3f p = (*P)[i];
         points[i] = objectToWorld->exec(p);
@@ -85,7 +85,7 @@ shadowAlphaMask(shadowAlphaMask){
     
     if (N && N->size() > 0) {
         size_t size = N->size();
-        normals.reset(new Normal3f[size]);
+        normals.reset(new Normal3f[size + 1]);
         for (int i = 0; i < size; ++i) {
             normals[i] = normalize(objectToWorld->exec((*N)[i]));
         }
@@ -95,7 +95,7 @@ shadowAlphaMask(shadowAlphaMask){
     
     if (UV && UV->size() > 0) {
         size_t size = UV->size();
-        uv.reset(new Point2f[size]);
+        uv.reset(new Point2f[size + 1]);
         memcpy(uv.get(), &UV->at(0), size * sizeof(Point2f));
     } else {
         uv.reset();
@@ -103,7 +103,7 @@ shadowAlphaMask(shadowAlphaMask){
     
     if (E && E->size() > 0) {
         size_t size = E->size();
-        edges.reset(new Vector3f[size]);
+        edges.reset(new Vector3f[size + 1]);
         for (size_t i = 0; i < size; ++i) {
             edges[i] = objectToWorld->exec((*E)[i]);
         }
@@ -779,11 +779,31 @@ RTCGeometry Triangle::rtcGeometry(Scene *scene) const {
         return nullptr;
     }
     RTCGeometry geom = rtcNewGeometry(EmbreeUtil::getDevice(), RTC_GEOMETRY_TYPE_TRIANGLE);
+    Float * p = _mesh->getVertice();
+    size_t stride = _mesh->getVerticeStride();
+    size_t num = 1;
+    int i = num - 1;
+    char * cp = (char*) p;
+    cout << stride << "__00" << endl;
     
+    int * p2 = (int*)(cp + i * stride) + 3;
+    int64_t ip1 = reinterpret_cast<int64_t>(p);
+    int64_t ip2 = reinterpret_cast<int64_t>(p2);
+    int64_t ip3 = reinterpret_cast<int64_t>(p + num * stride);
+    cout << "ip3 - ip2:" << ip3 - ip2 << endl;
+    cout << "ip2 - ip1:" << ip2 - ip1 << endl;
+    cout << "ip3 - ip1:" << ip3 - ip1 << endl;
+    cout << reinterpret_cast<uint64_t>(p2) % 16 << endl;
+    auto w = *(p2);
+    
+    
+
+    cout << w << endl;
+//    *((int*)getPtr(size()-1)+3)
     rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0,
                                RTC_FORMAT_FLOAT3,
-                               _mesh->getVertice(), 0,
-                               _mesh->getVerticeStride(),
+                               p, 0,
+                               stride,
                                _mesh->getVerticeNum());
     
     auto indice = _mesh->getIndice();
