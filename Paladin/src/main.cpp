@@ -122,12 +122,11 @@ int main(int argc, const char * argv[]) {
 //    glfwInit();
     
     
-//    tt();
-    test();
+    tt();
     Paladin * paladin = Paladin::getInstance();
     if (argc >= 2) {
         string fileName(argv[1]);
-//        paladin->render(fileName);
+        paladin->render(fileName);
     }
 #ifdef _MSC_VER
     //让VS运行debug时不至于黑屏一闪而过

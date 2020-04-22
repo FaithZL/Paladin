@@ -13,6 +13,7 @@
 #include "tools/fileutil.hpp"
 #include "shapes/trianglemesh.hpp"
 #include "core/paladin.hpp"
+#include "tools/parallel.hpp"
 
 PALADIN_BEGIN
 
@@ -192,14 +193,26 @@ vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
     vector<shared_ptr<Primitive>> ret;
     nloJson meshList = createJsonFromFile(fn)["data"];
     int i = 0;
-    for(const nloJson &meshData : meshList) {
-        vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights);
-        ++i;
-//        if (i == 5) {
-//            continue;
+    
+    parallelFor([&](int i) {
+        auto meshData = meshList[i];
+//        if (i < 75) {
+//            return;
 //        }
+        vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights);
         ret.insert(ret.end(), tmp.begin(), tmp.end());
-    }
+    }, meshList.size());
+    
+//    for(const nloJson &meshData : meshList) {
+//        ++i;
+//                if (i < 75) {
+//                    continue;
+//                }
+//        vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights);
+//
+//
+//        ret.insert(ret.end(), tmp.begin(), tmp.end());
+//    }
     
     return ret;
 }

@@ -146,7 +146,7 @@ RGBSpectrum * _readImageHDR(const std::string &name, int *width, int *height) {
         }
     }
     free(rgb);
-    COUT << StringPrintf("Read HDR image %s (%d x %d)", name.c_str(), *width, *height);
+//    COUT << StringPrintf("Read HDR image %s (%d x %d)", name.c_str(), *width, *height);
     return ret;
 }
 
