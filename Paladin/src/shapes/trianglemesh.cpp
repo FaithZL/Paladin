@@ -70,7 +70,7 @@ TriangleMesh::TriangleMesh(const shared_ptr<const Transform> &objectToWorld, int
                             const std::shared_ptr<Texture<Float>> &shadowAlphaMask,
                             const int *faceIndices)
 : nTriangles(nTriangles),
-nVertices(verts.size()),
+nVertices(P->size()),
 alphaMask(alphaMask),
 shadowAlphaMask(shadowAlphaMask){
     
@@ -150,6 +150,10 @@ shared_ptr<TriangleMesh> TriangleMesh::create(const shared_ptr<const Transform> 
                                             const std::shared_ptr<Texture<Float>> &alphaMask,
                                             const std::shared_ptr<Texture<Float>> &shadowAlphaMask,
                                             const int *faceIndices) {
+    
+//    return make_shared<TriangleMesh>(objectToWorld,
+//                                     )
+    
     return make_shared<TriangleMesh>(objectToWorld,
                                      nTriangles,
                                      vertexIndices,
@@ -779,37 +783,15 @@ RTCGeometry Triangle::rtcGeometry(Scene *scene) const {
         return nullptr;
     }
     RTCGeometry geom = rtcNewGeometry(EmbreeUtil::getDevice(), RTC_GEOMETRY_TYPE_TRIANGLE);
-    Float * p = _mesh->getVertice();
-    size_t stride = _mesh->getVerticeStride();
-    size_t num = 1;
-    int i = num - 1;
-    char * cp = (char*) p;
-    cout << stride << "__00" << endl;
-    
-    int * p2 = (int*)(cp + i * stride) + 3;
-    int64_t ip1 = reinterpret_cast<int64_t>(p);
-    int64_t ip2 = reinterpret_cast<int64_t>(p2);
-    int64_t ip3 = reinterpret_cast<int64_t>(p + num * stride);
-    cout << "ip3 - ip2:" << ip3 - ip2 << endl;
-    cout << "ip2 - ip1:" << ip2 - ip1 << endl;
-    cout << "ip3 - ip1:" << ip3 - ip1 << endl;
-    cout << reinterpret_cast<uint64_t>(p2) % 16 << endl;
-    auto w = *(p2);
-    
-    
-
-    cout << w << endl;
-//    *((int*)getPtr(size()-1)+3)
     rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0,
                                RTC_FORMAT_FLOAT3,
-                               p, 0,
-                               stride,
+                               _mesh->getVertice(), 0,
+                               _mesh->getVerticeStride(),
                                _mesh->getVerticeNum());
     
-    auto indice = _mesh->getIndice();
     rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0,
                                 RTC_FORMAT_UINT3,
-                                indice, 0,
+                                _mesh->getIndice(), 0,
                                 _mesh->getIndiceStride() * 3,
                                 _mesh->getIndiceNum() / 3);
     

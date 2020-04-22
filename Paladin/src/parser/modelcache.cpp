@@ -192,27 +192,17 @@ vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
     
     vector<shared_ptr<Primitive>> ret;
     nloJson meshList = createJsonFromFile(fn)["data"];
-    int i = 0;
-    
-    parallelFor([&](int i) {
-        auto meshData = meshList[i];
-//        if (i < 75) {
-//            return;
-//        }
+//    size_t size = meshList.size();
+//    parallelFor([&](int i) {
+//        auto meshData = meshList[i];
+//        vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights);
+//        ret.insert(ret.end(), tmp.begin(), tmp.end());
+//    }, size);
+
+    for(const nloJson &meshData : meshList) {
         vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights);
         ret.insert(ret.end(), tmp.begin(), tmp.end());
-    }, meshList.size());
-    
-//    for(const nloJson &meshData : meshList) {
-//        ++i;
-//                if (i < 75) {
-//                    continue;
-//                }
-//        vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights);
-//
-//
-//        ret.insert(ret.end(), tmp.begin(), tmp.end());
-//    }
+    }
     
     return ret;
 }

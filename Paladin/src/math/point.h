@@ -294,7 +294,7 @@ public:
     }
     
     // Point3 Public Data
-    T x, y, z, w;
+    T x, y, z, pad = T(0);
 };
 
 template <typename T>
