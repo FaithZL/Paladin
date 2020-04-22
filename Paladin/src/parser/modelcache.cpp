@@ -81,7 +81,8 @@ ModelCache * ModelCache::getInstance() {
 //},
 vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
                                                           const shared_ptr<const Transform> &transform,
-                                                          vector<shared_ptr<Light>> &lights) {
+                                                          vector<shared_ptr<Light>> &lights,
+                                                          mutex * mtx) {
     vector<shared_ptr<Primitive>> ret;
     
     vector<Point3f> _points;
@@ -171,8 +172,14 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
             if (!emissionData.is_null()) {
                 light.reset(createDiffuseAreaLight(_emissionData, tri, mi));
             }
-            shared_ptr<const Material> pMat(createMaterial(matData));
-            prim = GeometricPrimitive::create(tri, pMat, light, mi);
+            if (mtx) {
+                std::lock_guard<std::mutex> lock(*mtx);
+                shared_ptr<const Material> pMat(createMaterial(matData));
+                prim = GeometricPrimitive::create(tri, pMat, light, mi);
+            } else {
+                shared_ptr<const Material> pMat(createMaterial(matData));
+                prim = GeometricPrimitive::create(tri, pMat, light, mi);
+            }
         }
         ret.push_back(prim);
     }
@@ -192,18 +199,14 @@ vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
     
     vector<shared_ptr<Primitive>> ret;
     nloJson meshList = createJsonFromFile(fn)["data"];
-//    size_t size = meshList.size();
-//    parallelFor([&](int i) {
-//        auto meshData = meshList[i];
-//        vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights);
-//        ret.insert(ret.end(), tmp.begin(), tmp.end());
-//    }, size);
-
-    for(const nloJson &meshData : meshList) {
-        vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights);
+    size_t size = meshList.size();
+    mutex mtx;
+    parallelFor([&](int i) {
+        auto meshData = meshList[i];
+        vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights, &mtx);
+        std::lock_guard<std::mutex> lock(mtx);
         ret.insert(ret.end(), tmp.begin(), tmp.end());
-    }
-    
+    }, size);
     return ret;
 }
 

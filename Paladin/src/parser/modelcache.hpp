@@ -25,7 +25,8 @@ public:
     
     static vector<shared_ptr<Primitive>> createPrimitive(const nloJson &meshData,
                                                   const shared_ptr<const Transform> &transform,
-                                                  vector<shared_ptr<Light>> &lights);
+                                                  vector<shared_ptr<Light>> &lights,
+                                                  mutex * mtx = nullptr);
     
     vector<shared_ptr<Primitive>> loadPrimitives(const string &fn,
                                                  const shared_ptr< Transform> &transform,
