@@ -14,6 +14,7 @@
 #include "shapes/trianglemesh.hpp"
 #include "core/paladin.hpp"
 #include "tools/parallel.hpp"
+#include <time.h>
 
 PALADIN_BEGIN
 
@@ -172,14 +173,14 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
             if (!emissionData.is_null()) {
                 light.reset(createDiffuseAreaLight(_emissionData, tri, mi));
             }
-            if (mtx) {
-                std::lock_guard<std::mutex> lock(*mtx);
+//            if (mtx) {
+//                std::lock_guard<std::mutex> lock(*mtx);
+//                shared_ptr<const Material> pMat(createMaterial(matData));
+//                prim = GeometricPrimitive::create(tri, pMat, light, mi);
+//            } else {
                 shared_ptr<const Material> pMat(createMaterial(matData));
                 prim = GeometricPrimitive::create(tri, pMat, light, mi);
-            } else {
-                shared_ptr<const Material> pMat(createMaterial(matData));
-                prim = GeometricPrimitive::create(tri, pMat, light, mi);
-            }
+//            }
         }
         ret.push_back(prim);
     }
@@ -199,14 +200,20 @@ vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
     
     vector<shared_ptr<Primitive>> ret;
     nloJson meshList = createJsonFromFile(fn)["data"];
-    size_t size = meshList.size();
-    mutex mtx;
-    parallelFor([&](int i) {
-        auto meshData = meshList[i];
-        vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights, &mtx);
-        std::lock_guard<std::mutex> lock(mtx);
+    for (auto meshData : meshList) {
+        vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights);
         ret.insert(ret.end(), tmp.begin(), tmp.end());
-    }, size);
+    }
+    
+//    size_t size = meshList.size();
+//    mutex mtx;
+//    parallelFor([&](int i) {
+//        auto meshData = meshList[i];
+//        vector<shared_ptr<Primitive>> tmp = createPrimitive(meshData, transform, lights, &mtx);
+//        std::lock_guard<std::mutex> lock(mtx);
+//        ret.insert(ret.end(), tmp.begin(), tmp.end());
+//    }, size, 32);
+    
     return ret;
 }
 
