@@ -59,12 +59,12 @@ void ProgressReporter::printProgress() const {
         fputs(buf.get(), stdout);
         printf("progress is %.2f%%",percentDone * 100);
         if (percentDone == 1.f)
-            printf(" (%.1fs)       ", seconds);
+            printf(" (%.2fs)       ", seconds);
         else if (!std::isinf(estRemaining))
-            printf(" (%.1fs|%.1fs)  ", seconds,
+            printf(" (%.2fs|%.2fs)  ", seconds,
                    std::max((Float)0., estRemaining));
         else
-            printf(" (%.1fs|?s)  ", seconds);
+            printf(" (%.2fs|?s)  ", seconds);
         fflush(stdout);
     }
 }

@@ -14,6 +14,7 @@
 #include "bxdfs/lambert.hpp"
 #include "materials/bxdfs/bsdf.hpp"
 #include "bxdfs/microfacet/reflection.hpp"
+#include "tools/parallel.hpp"
 
 PALADIN_BEGIN
 
@@ -23,19 +24,75 @@ void MatteMaterial::computeScatteringFunctions(SurfaceInteraction *si,
                                                bool allowMultipleLobes) const {
     
     processNormal(si);
+    
+    
+    Spectrum r = _Kd->evaluate(*si).clamp();
+    Float sig = _sigma ? clamp(_sigma->evaluate(*si), 0, 90) : 0;
 
-	si->bsdf = ARENA_ALLOC(arena, BSDF)(*si);
-	Spectrum r = _Kd->evaluate(*si).clamp();
-	Float sig = _sigma ? clamp(_sigma->evaluate(*si), 0, 90) : 0;
-	if (!r.IsBlack()) {
-		if (sig == 0) {
-			// 如果粗糙度为零，朗博反射
-			si->bsdf->add(ARENA_ALLOC(arena, LambertianReflection)(r));
-		} else {
-			si->bsdf->add(ARENA_ALLOC(arena, OrenNayar)(r, sig));
-		}
-	}
+    
+    if (!r.IsBlack()) {
+        int idx = getCurThreadIndex();
+        auto bsdf = _bsdfs[idx];
+        bsdf->updateGeometry(*si);
+        bsdf->clearBxDFs();
+        if (sig == 0) {
+            auto lambert = (LambertianReflection *)bsdf->getBxDF(0);
+            lambert->setReflection(r);
+            bsdf->add(lambert);
+        } else {
+            auto lambert = (OrenNayar *)bsdf->getBxDF(1);
+            lambert->setReflection(r);
+            bsdf->add(lambert);
+        }
+        si->bsdf = bsdf.get();
+    }
+    
+//	si->bsdf = ARENA_ALLOC(arena, BSDF)(*si);
+//	if (!r.IsBlack()) {
+//		if (sig == 0) {
+//			// 如果粗糙度为零，朗博反射
+//			si->bsdf->add(ARENA_ALLOC(arena, LambertianReflection)(r));
+//		} else {
+//			si->bsdf->add(ARENA_ALLOC(arena, OrenNayar)(r, sig));
+//		}
+//	}
 }
+
+void MatteMaterial::initBSDF(BSDF *bsdf) {
+    SurfaceInteraction si;
+    auto a = _Kd->evaluate(si);
+    auto lambert = make_shared<LambertianReflection>(a);
+    bsdf->addBxDF(lambert);
+    auto on = make_shared<OrenNayar>(a, 0);
+    bsdf->addBxDF(on);
+}
+
+void MatteMaterial::updateScatteringFunctions(SurfaceInteraction *si,
+                                                MemoryArena &arena,
+                                                TransportMode mode,
+                                                bool allowMultipleLobes) const {
+    Spectrum r = _Kd->evaluate(*si).clamp();
+    Float sig = _sigma ? clamp(_sigma->evaluate(*si), 0, 90) : 0;
+    
+    if (!r.IsBlack()) {
+        int idx = getCurThreadIndex();
+        auto bsdf = _bsdfs[idx];
+        bsdf->updateGeometry(*si);
+        bsdf->clearBxDFs();
+        if (sig == 0) {
+            auto lambert = (LambertianReflection *)bsdf->getBxDF(0);
+            lambert->setReflection(r);
+            bsdf->add(lambert);
+        } else {
+            auto lambert = (OrenNayar *)bsdf->getBxDF(1);
+            lambert->setReflection(r);
+            bsdf->add(lambert);
+        }
+        si->bsdf = bsdf.get();
+    }
+}
+
+
 
 shared_ptr<const MatteMaterial> createLightMat() {
     ConstantTexture<Spectrum> * Kd = new ConstantTexture<Spectrum>(Spectrum(0.f));

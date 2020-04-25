@@ -25,23 +25,32 @@ public:
     
     Material(const shared_ptr<Texture<Spectrum>> &normalMap = nullptr,
              const shared_ptr<Texture<Float>> &bumpMap = nullptr,
-             Float scale = -1)
-    : _normalMap(normalMap),
-    _bumpMap(bumpMap),
-    _normalMapScale(scale) {
-        
-    }
+             Float scale = -1);
     
     virtual void computeScatteringFunctions(SurfaceInteraction *si,
                                             MemoryArena &arena,
                                             TransportMode mode,
                                             bool allowMultipleLobes) const = 0;
     
+    virtual void updateScatteringFunctions(SurfaceInteraction *si,
+                                            MemoryArena &arena,
+                                            TransportMode mode,
+                                            bool allowMultipleLobes) const {
+        
+    }
+    
+    virtual void initScatteringFunctions();
+    
+    virtual void initBSDF(BSDF * bsdf) {
+        
+    }
+    
+    
     virtual ~Material() {
     	
     }
     
-    virtual void processNormal(SurfaceInteraction * si) const {
+    inline void processNormal(SurfaceInteraction * si) const {
         if (_normalMap) {
             normalMapping(_normalMap, si, _normalMapScale);
         } else if (_bumpMap) {
@@ -109,6 +118,8 @@ protected:
     std::shared_ptr<Texture<Float>> _bumpMap;
     // [-1,1]
     Float _normalMapScale;
+    
+    vector<shared_ptr<BSDF>> _bsdfs;
 };
 
 Material * createMaterial(const nloJson &);

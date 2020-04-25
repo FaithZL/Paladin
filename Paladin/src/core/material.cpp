@@ -11,10 +11,29 @@
 #include "texture.hpp"
 #include "spectrum.hpp"
 #include "bxdf.hpp"
-
+#include "tools/parallel.hpp"
+#include "materials/bxdfs/bsdf.hpp"
 
 PALADIN_BEGIN
 
+Material::Material(const shared_ptr<Texture<Spectrum>> &normalMap,
+         const shared_ptr<Texture<Float>> &bumpMap,
+         Float scale)
+: _normalMap(normalMap),
+_bumpMap(bumpMap),
+_normalMapScale(scale) {
+    
+}
+
+void Material::initScatteringFunctions() {
+    int nThread = maxThreadIndex();
+    _bsdfs.reserve(nThread);
+    for (int i = 0; i < nThread; ++i) {
+        auto bsdf = make_shared<BSDF>(1.f);
+        _bsdfs.push_back(bsdf);
+        initBSDF(bsdf.get());
+    }
+}
 
 void Material::bumpMapping(const std::shared_ptr<Texture<Float>> &d, SurfaceInteraction *si) {
 	SurfaceInteraction siEval = *si;

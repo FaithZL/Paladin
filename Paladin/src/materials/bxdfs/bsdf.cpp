@@ -20,6 +20,22 @@ _tTangent(cross(_sNormal, _sTangent)) {
 
 }
 
+BSDF::BSDF(Float eta)
+: eta(eta) {
+    
+}
+
+void BSDF::addBxDF(const shared_ptr<BxDF> &b) {
+    _bxdfs.push_back(b);
+}
+
+void BSDF::updateGeometry(const SurfaceInteraction &si) {
+    _gNormal = si.normal;
+    _sNormal = si.shading.normal;
+    _sTangent = normalize(si.shading.dpdu);
+    _tTangent = cross(_sNormal, _sTangent);
+}
+
 Spectrum BSDF::f(const Vector3f &woW, const Vector3f &wiW, BxDFType flags) const {
     Vector3f wi = worldToLocal(wiW);
     Vector3f wo = worldToLocal(woW);

@@ -22,6 +22,10 @@ PALADIN_BEGIN
 class BSDF {
 public:
     BSDF(const SurfaceInteraction &si, Float eta = 1);
+    
+    BSDF(Float eta = 1);
+    
+    void updateGeometry(const SurfaceInteraction &si);
 
     void add(BxDF *b) {
         CHECK_LT(nBxDFs, MaxBxDFs);
@@ -78,28 +82,42 @@ public:
 
     std::string toString() const;
     
+    PALADIN_INLINE BxDF * getBxDF(int idx) const {
+        return _bxdfs[idx].get();
+    }
+    
     // 折射率，对于不透明物体，这是不用的
     const Float eta;
     
-private:
-
     ~BSDF() {
 
     }
+    
+    void addBxDF(const shared_ptr<BxDF> &b);
+    
+    void clearBxDFs() {
+        nBxDFs = 0;
+    }
+    
+private:
+
+    
     // 几何法线
-    const Normal3f _gNormal;
+    Normal3f _gNormal;
     // 着色法线，bump贴图，法线贴图之类的
-    const Normal3f _sNormal;
+    Normal3f _sNormal;
     // 着色切线(s方向，u方向)
-    const Vector3f _sTangent;
+    Vector3f _sTangent;
     // 着色切线(t方向，v方向)
-    const Vector3f _tTangent;
+    Vector3f _tTangent;
     // BXDF组件的数量
     int nBxDFs = 0;
     // BXDF组件的最大数量
     static CONSTEXPR int MaxBxDFs = 8;
     // BXDF列表
     BxDF *bxdfs[MaxBxDFs];
+    
+    vector<shared_ptr<BxDF>> _bxdfs;
 
     friend class MixMaterial;
 };

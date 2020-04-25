@@ -29,6 +29,10 @@ thread_local int ThreadIndex = 0;
 
 static std::condition_variable workListCondition;
 
+int getCurThreadIndex() {
+    return ThreadIndex;
+}
+
 void parallelFor(std::function<void(int64_t)> func, int64_t count, int chunkSize) {
 	DCHECK(threads.size() > 0 || maxThreadIndex() == 1);
 
@@ -66,7 +70,7 @@ void parallelFor(std::function<void(int64_t)> func, int64_t count, int chunkSize
 			if (loop.func1D) {
 				loop.func1D(index);
 			} else {
-				loop.func2D(Point2i(index % loop.numX, index / loop.numX));
+				loop.func2D(Point2i(index % loop.numX, index / loop.numX), 0);
 			}
 		}
 		lock.lock();
@@ -74,13 +78,13 @@ void parallelFor(std::function<void(int64_t)> func, int64_t count, int chunkSize
     }
 }
 
-void parallelFor2D(std::function<void(Point2i)> func, const Point2i &count) {
+void parallelFor2D(std::function<void(Point2i, int)> func, const Point2i &count) {
 	DCHECK(threads.size() > 0 || maxThreadIndex() == 1);
 
 	if (threads.empty() || count.x * count.y <= 1) {
 		for (int64_t y = 0; y < count.y; ++y) {
 			for (int64_t x = 0; x < count.x; ++x) {
-				func(Point2i(x, y));
+				func(Point2i(x, y), 0);
 			}
 		}
 		return;
@@ -98,6 +102,7 @@ void parallelFor2D(std::function<void(Point2i)> func, const Point2i &count) {
 
     // 一直循环，直到所有线程都执行完毕之后才结束
     // 保证了线程的同步
+    ThreadIndex = 0;
 	while (!loop.finished()) {
     	int64_t indexStart = loop.nextIndex;
     	int64_t indexEnd = std::min(indexStart + loop.chunkSize, loop.maxIndex);
@@ -115,7 +120,7 @@ void parallelFor2D(std::function<void(Point2i)> func, const Point2i &count) {
 			if (loop.func1D) {
 				loop.func1D(index);
 			} else {
-				loop.func2D(Point2i(index % loop.numX, index / loop.numX));
+				loop.func2D(Point2i(index % loop.numX, index / loop.numX), 0);
 			}
 		}
 		lock.lock();
@@ -163,7 +168,7 @@ static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
 				if (loop.func1D) {
 					loop.func1D(index);
 				} else {
-					loop.func2D(Point2i(index % loop.numX, index / loop.numX));
+					loop.func2D(Point2i(index % loop.numX, index / loop.numX), ThreadIndex);
 				}
 			}
 			lock.lock();
@@ -179,6 +184,10 @@ static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
 
 void setThreadNum(int num) {
     nThread = num;
+}
+
+int getThreadNum() {
+    return nThread;
 }
 
 int maxThreadIndex() {

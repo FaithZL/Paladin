@@ -65,10 +65,14 @@ public:
         return std::string("[ LambertianReflection R: ") + _R.ToString() +
            std::string(" ]");
     }
+    
+    PALADIN_INLINE void setReflection(const Spectrum &R) {
+        _R = R;
+    }
 
 private:
     // 反射系数
-    const Spectrum _R;
+    Spectrum _R;
 };
 
 

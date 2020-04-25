@@ -29,17 +29,24 @@ public:
     : Material(normalMap, bumpMap),
     _Kd(Kd),
     _sigma(sigma) {
-
+        initScatteringFunctions();
     }
     
     virtual nloJson toJson() const override {
         return nloJson();
     }
+    
+    virtual void updateScatteringFunctions(SurfaceInteraction *si,
+                                            MemoryArena &arena,
+                                            TransportMode mode,
+                                            bool allowMultipleLobes) const override;
 
 	virtual void computeScatteringFunctions(SurfaceInteraction *si,
 									MemoryArena &arena,
                                     TransportMode mode,
                                     bool allowMultipleLobes) const override;
+    
+    virtual void initBSDF(BSDF * bsdf) override;
 
 private:
     // 漫反射系数

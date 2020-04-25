@@ -161,7 +161,7 @@ public:
         
     }
     
-    ParallelForLoop(const std::function<void(Point2i)> &f, const Point2i &count,
+    ParallelForLoop(const std::function<void(Point2i, int)> &f, const Point2i &count,
                     uint64_t profilerState)
     : func2D(f),
     maxIndex(count.x * count.y),
@@ -174,7 +174,7 @@ public:
     // 一维变量函数
     std::function<void(int64_t)> func1D;
     // 二维变量函数
-    std::function<void(Point2i)> func2D;
+    std::function<void(Point2i, int)> func2D;
     // 最大迭代次数
     const int64_t maxIndex;
 
@@ -203,7 +203,7 @@ extern thread_local int ThreadIndex;
 void parallelFor(std::function<void(int64_t)> func, int64_t count, int chunkSize = 1);
 
 
-void parallelFor2D(std::function<void(Point2i)> func, const Point2i &count);
+void parallelFor2D(std::function<void(Point2i, int)> func, const Point2i &count);
 
 inline int numSystemCores() {
     return std::max(1u, std::thread::hardware_concurrency());
@@ -211,7 +211,11 @@ inline int numSystemCores() {
 
 int maxThreadIndex();
 
+int getCurThreadIndex();
+
 void setThreadNum(int num);
+
+int getThreadNum();
 
 void parallelInit(int num = 0);
 

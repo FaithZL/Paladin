@@ -32,7 +32,7 @@ void BidirectionalPathTracer::render(const Scene &scene) {
     ProgressReporter reporter("rendering", nXTiles * nYTiles);
     
     if (scene.lights.size() > 0) {
-        auto renderTile = [&](Point2i tile) {
+        auto renderTile = [&](Point2i tile, int threadIdx) {
             MemoryArena arena;
             int seed = tile.y * nXTiles + tile.x;
             std::unique_ptr<Sampler> tileSampler = _sampler->clone(seed);

@@ -640,9 +640,13 @@ public:
     
     virtual std::string toString() const;
 
+    PALADIN_INLINE void setReflection(const Spectrum &R) {
+        _R = R;
+    }
+    
 private:
 	// 反射系数
-    const Spectrum _R;
+    Spectrum _R;
     // 表达式中的常数
     Float _A, _B;
 };

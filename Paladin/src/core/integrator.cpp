@@ -228,7 +228,7 @@ void MonteCarloIntegrator::render(const Scene &scene) {
     outputSceneInfo(scene);
     
     ProgressReporter reporter("rendering", nTile.x * nTile.y);
-    auto renderTile = [&](Point2i tile) {
+    auto renderTile = [&](Point2i tile, int threadIdx) {
     	// 内存池对象，预先申请一大段连续内存
     	// 之后所有内存全都通过arena分配
     	MemoryArena arena;
