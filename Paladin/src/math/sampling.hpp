@@ -95,7 +95,12 @@ PALADIN_BEGIN
  * y = sin(2πb) * sqrt(1-a^2)
  * z = a
  */
-Vector3f uniformSampleHemisphere(const Point2f &u);
+static PALADIN_INLINE Vector3f uniformSampleHemisphere(const Point2f &u)  {
+    Float z = u[0];
+    Float r = std::sqrt(std::max((Float)0, (Float)1. - z * z));
+    Float phi = _2Pi * u[1];
+    return Vector3f(r * std::cos(phi), r * std::sin(phi), z);
+}
 
 /**
  * 在一个球表面上生成均匀的随机点
@@ -116,7 +121,12 @@ Vector3f uniformSampleHemisphere(const Point2f &u);
  * y = sin(2πb) * 2 * sqrt(a-a^2)
  * z = 1 - 2a 
  */
-Vector3f uniformSampleSphere(const Point2f &u);
+static PALADIN_INLINE Vector3f uniformSampleSphere(const Point2f &u)  {
+    Float z = 1 - 2 * u[0];
+    Float r = std::sqrt(std::max((Float)0, (Float)1 - z * z));
+    Float phi = _2Pi * u[1];
+    return Vector3f(r * std::cos(phi), r * std::sin(phi), z);
+}
 
 
 /**
@@ -149,7 +159,12 @@ Vector3f uniformSampleSphere(const Point2f &u);
  * @param  cosThetaMax [description]
  * @return             单位向量
  */
-Vector3f uniformSamplePartialSphere(const Point2f &u, Float phiMax, Float cosThetaMin, Float cosThetaMax);
+static PALADIN_INLINE Vector3f uniformSamplePartialSphere(const Point2f &u, Float phiMax, Float cosThetaMin, Float cosThetaMax)  {
+    Float z = cosThetaMin - u[0] * (cosThetaMin - cosThetaMax);
+    Float r = std::sqrt(std::max((Float)0, (Float)1 - z * z));
+    Float phi = phiMax * u[1];
+    return Vector3f(r * std::cos(phi), r * std::sin(phi), z);
+}
 
 /**
  * 均匀采样一个圆锥的pdf函数
@@ -168,7 +183,9 @@ Vector3f uniformSamplePartialSphere(const Point2f &u, Float phiMax, Float cosThe
  * p(w) = p(θ, φ)/sinθ = pθ(θ) * pφ(φ)/sinθ = 1/(2π(1-cosθmax))
  *
  */
-Float uniformConePdf(Float cosThetaMax);
+static PALADIN_INLINE Float uniformConePdf(Float cosThetaMax)  {
+    return 1 / (_2Pi * (1 - cosThetaMax));
+}
 
 /**
  * 均匀采样一个圆锥，默认圆锥的中心轴为(0,0,1)，圆锥顶点为坐标原点
@@ -192,7 +209,13 @@ Float uniformConePdf(Float cosThetaMax);
  * y = sinθsinφ
  * z = cosθ
  */
-Vector3f uniformSampleCone(const Point2f &u, Float cosThetaMax);
+static PALADIN_INLINE Vector3f uniformSampleCone(const Point2f &u, Float cosThetaMax) {
+    Float cosTheta = ((Float)1 - u[0]) + u[0] * cosThetaMax;
+    Float sinTheta = std::sqrt((Float)1 - cosTheta * cosTheta);
+    Float phi = u[1] * _2Pi;
+    return Vector3f(std::cos(phi) * sinTheta, std::sin(phi) * sinTheta,
+                    cosTheta);
+}
 
 /**
  * 均匀分布可得p(x,y) = 1/π
@@ -212,7 +235,11 @@ Vector3f uniformSampleCone(const Point2f &u, Float cosThetaMax);
  * r = √(a)
  * θ = 2πb
  */
-Point2f uniformSampleDisk(const Point2f &u);
+static PALADIN_INLINE Point2f uniformSampleDisk(const Point2f &u) {
+    Float r = std::sqrt(u[0]);
+    Float theta = _2Pi * u[1];
+    return Point2f(r * std::cos(theta), r * std::sin(theta));
+}
 
 
 /**
@@ -237,7 +264,34 @@ Point2f uniformSampleDisk(const Point2f &u);
  * 其实这点很容易理解，如果用一个100 * 100均匀点阵采样一个长宽比为10:1的矩形
  * 显然，效果不会很好
  */
-Point2f concentricSampleDisk(const Point2f &u);
+static PALADIN_INLINE Point2f concentricSampleDisk(const Point2f &u) {
+    // 把[0,1]映射到[-1,1]
+    Point2f uOffset = 2.f * u - Vector2f(1, 1);
+    
+    // 退化到原点的情况
+    if (uOffset.x == 0 && uOffset.y == 0) {
+        return Point2f(0, 0);
+    }
+    
+    /**
+     * r = x
+     * θ = y/x * π/4
+     */
+    Float theta, r;
+
+    if (std::abs(uOffset.x) > std::abs(uOffset.y)) {
+        
+        // 如果x偏移量比y偏移量大
+        r = uOffset.x;
+        theta = PiOver4 * (uOffset.y / uOffset.x);
+    } else {
+
+        // 如果y偏移量比x偏移量大
+        r = uOffset.y;
+        theta = PiOver2 - PiOver4 * (uOffset.x / uOffset.y);
+    }
+    return r * Point2f(std::cos(theta), std::sin(theta));
+}
 
 
 /**
@@ -261,7 +315,11 @@ Point2f concentricSampleDisk(const Point2f &u);
  * r = √(a)
  * θ = θmax * b
  */
-Point2f uniformSampleSector(const Point2f &u, Float thetaMax);
+static PALADIN_INLINE Point2f uniformSampleSector(const Point2f &u, Float thetaMax) {
+    Float r = std::sqrt(u[0]);
+    Float theta = thetaMax * u[1];
+    return Point2f(r * std::cos(theta), r * std::sin(theta));
+}
 
 
 /**
@@ -286,7 +344,12 @@ Point2f uniformSampleSector(const Point2f &u, Float thetaMax);
  * r = √(a(1 - rMin^2) + rMin^2)
  * θ = θmaxb
  */
-Point2f uniformSamplePartialSector(const Point2f &u, Float thetaMax, Float rMin);
+static PALADIN_INLINE Point2f uniformSamplePartialSector(const Point2f &u, Float thetaMax, Float rMin) {
+    Float rMin2 = rMin * rMin;
+    Float r = std::sqrt(u[0] * (1 - rMin2) + rMin2);
+    Float theta = thetaMax * u[1];
+    return Point2f(r * std::cos(theta), r * std::sin(theta));
+}
 
 /**
  *  均匀采样三角形
@@ -306,7 +369,10 @@ Point2f uniformSamplePartialSector(const Point2f &u, Float thetaMax, Float rMin)
  * @param  u 均匀二维随机变量
  * @return   三角形内部uv坐标
  */
-Point2f uniformSampleTriangle(const Point2f &u);
+static PALADIN_INLINE Point2f uniformSampleTriangle(const Point2f &u) {
+    Float su0 = std::sqrt(u[0]);
+    return Point2f(1 - su0, u[1] * su0);
+}
 
 
 
@@ -366,7 +432,13 @@ void shuffle(T *samp, int count, int nDimensions, RNG &rng) {
  * @param rng      随机生成器
  * @param jitter   是否扰动
  */
-void stratifiedSample1D(Float *samples, int nsamples, RNG &rng, bool jitter = true);
+static PALADIN_INLINE void stratifiedSample1D(Float *samp, int nSamples, RNG &rng, bool jitter = true) {
+    Float invNSamples = (Float)1 / nSamples;
+    for (int i = 0; i < nSamples; ++i) {
+        Float delta = jitter ? rng.uniformFloat() : 0.5f;
+        samp[i] = std::min((i + delta) * invNSamples, OneMinusEpsilon);
+    }
+}
 
 /**
  * 二维分层采样
@@ -377,7 +449,18 @@ void stratifiedSample1D(Float *samples, int nsamples, RNG &rng, bool jitter = tr
  * @param rng     随机数生成器
  * @param jitter  是否扰动
  */
-void stratifiedSample2D(Point2f *samples, int nx, int ny, RNG &rng, bool jitter = true);
+static PALADIN_INLINE void stratifiedSample2D(Point2f *samp, int nx, int ny, RNG &rng, bool jitter = true) {
+    Float dx = (Float)1 / nx, dy = (Float)1 / ny;
+    for (int y = 0; y < ny; ++y) {
+        for (int x = 0; x < nx; ++x) {
+            Float jx = jitter ? rng.uniformFloat() : 0.5f;
+            Float jy = jitter ? rng.uniformFloat() : 0.5f;
+            samp->x = std::min((x + jx) * dx, OneMinusEpsilon);
+            samp->y = std::min((y + jy) * dy, OneMinusEpsilon);
+            ++samp;
+        }
+    }
+}
 
 /**
  * 基本思路：
@@ -390,7 +473,25 @@ void stratifiedSample2D(Point2f *samples, int nx, int ny, RNG &rng, bool jitter 
  * @param nDim     维数
  * @param rng      随机数生成器
  */
-void latinHypercube(Float *samples, int nSamples, int nDim, RNG &rng);
+static PALADIN_INLINE void latinHypercube(Float *samples, int nSamples, int nDim, RNG &rng) {
+    // nDim维向量，每个维度采样nSamples个样本
+    // 通常维度都是2，这段代码可以理解为在一个正方形的一条对角线上放置样本
+    Float invNSamples = (Float)1 / nSamples;
+    for (int i = 0; i < nSamples; ++i) {
+        for (int j = 0; j < nDim; ++j) {
+            Float sj = (i + (rng.uniformFloat())) * invNSamples;
+            samples[nDim * i + j] = std::min(sj, OneMinusEpsilon);
+        }
+    }
+    
+    // 打乱每个维度样本顺序
+    for (int i = 0; i < nDim; ++i) {
+        for (int j = 0; j < nSamples; ++j) {
+            int other = j + rng.uniformUInt32(nSamples - j);
+            std::swap(samples[nDim * j + i], samples[nDim * other + i]);
+        }
+    }
+}
 
 
 /**
