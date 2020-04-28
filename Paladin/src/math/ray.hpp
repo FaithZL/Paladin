@@ -8,7 +8,8 @@
 #ifndef ray_hpp
 #define ray_hpp
 
-template <typename _PointType, typename _VectorType> struct TRay {
+template <typename _PointType, typename _VectorType> 
+struct TRay {
     typedef _PointType                  PointType;
     typedef _VectorType                 VectorType;
     typedef typename PointType::Scalar  Scalar;
