@@ -499,6 +499,37 @@ inline Float gamma(int n) {
     return (n * MachineEpsilon) / (1 - n * MachineEpsilon);
 }
 
+//sqrt(a^2 + b^2)
+inline float hypot2(float a, float b) {
+    float r;
+    if (std::abs(a) > std::abs(b)) {
+        r = b / a;
+        r = std::abs(a) * std::sqrt(1.0f + r*r);
+    } else if (b != 0.0f) {
+        r = a / b;
+        r = std::abs(b) * std::sqrt(1.0f + r*r);
+    } else {
+        r = 0.0f;
+    }
+    return r;
+}
+
+//sqrt(a^2 + b^2)
+inline double hypot2(double a, double b) {
+    double r;
+    if (std::abs(a) > std::abs(b)) {
+        r = b / a;
+        r = std::abs(a) * std::sqrt(1.0 + r*r);
+    } else if (b != 0.0) {
+        r = a / b;
+        r = std::abs(b) * std::sqrt(1.0 + r*r);
+    } else {
+        r = 0.0;
+    }
+    return r;
+}
+
+
 
 PALADIN_END
 
