@@ -116,6 +116,34 @@ public:
     Vector3f rxDirection, ryDirection;
 };
 
+constexpr float origin() {
+    return 1.f / 32.f;
+}
+
+constexpr float floatScale() {
+    return 1.f / 65536.f;
+}
+
+constexpr float intScale() {
+    return 256.f;
+}
+
+inline Point3f offsetRay(const Point3f &p, const Normal3f &n) {
+    Vector3i of_i(intScale() * n.x, intScale() * n.y, intScale() * n.z);
+    
+    Vector3f p_i(
+        intToFloat(floatToInt(p.x) + (p.x < 0 ? -of_i.x : of_i.x)),
+        intToFloat(floatToInt(p.y) + (p.y < 0 ? -of_i.y : of_i.y)),
+        intToFloat(floatToInt(p.z) + (p.z < 0 ? -of_i.z : of_i.z))
+    );
+    
+    return Point3f(
+        fabsf(p.x) < origin() ? p.x + floatScale() * n.x : p_i.x,
+        fabsf(p.y) < origin() ? p.y + floatScale() * n.y : p_i.y,
+        fabsf(p.z) < origin() ? p.z + floatScale() * n.z : p_i.z
+    );
+}
+
 /**
  * 由于计算出的交点可能会有误差，如果直接把pos作为光线的起点，可能取到的是shape内部的点
  * 如果从内部的点发出光线，则可能产生自相交，为了避免这种情况，通常会对pos做一定的偏移
@@ -123,8 +151,11 @@ public:
  * 以计算出的交点p为中心，误差偏移量为包围盒的一个顶点，组成一个最小包围盒b
  * 过p点做垂直于法线的平面s，将s沿着法线方向推到于b相交的最远位置，此时s与法线相交的点p'作为光线起点
  */
-static Point3f offsetRayOrigin(const Point3f &p, const Vector3f &pError,
+inline Point3f offsetRayOrigin(const Point3f &p, const Vector3f &pError,
                                const Normal3f &n, const Vector3f &w) {
+    
+    volatile auto tmp = offsetRay(p, n);
+//    return tmp;
     // 包围盒b的八个顶点为 (±δx , ±δy , ±δz)
     // 假设平面s的函数为 ax+by+cz = d，法向量为(a,b,c)
     // 将法线的绝对值带入方程，求得d的最大值(注意此处把pError当成一个点带入函数)
@@ -141,7 +172,7 @@ static Point3f offsetRayOrigin(const Point3f &p, const Vector3f &pError,
         offset = -offset;
     } 
 
-    Point3f po = p + offset;
+    Point3f po = p - offset;
     // 计算更加保守的值
     for (int i = 0; i < 3; ++i) {
         if (offset[i] > 0) {
@@ -150,6 +181,12 @@ static Point3f offsetRayOrigin(const Point3f &p, const Vector3f &pError,
             po[i] = nextFloatDown(po[i]);
         }
     }
+//    using namespace std;
+//    auto delta = po - tmp;
+//    if (delta.length() > 0.0001) {
+//        cout << "tmp is " << tmp << endl;
+//        cout << "po is " << po << endl;
+//    }
     return po;
 }
 

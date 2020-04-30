@@ -179,9 +179,21 @@ inline uint32_t floatToBits(float f) {
     return ui;
 }
 
+inline int32_t floatToInt(float f) {
+    int32_t i;
+    memcpy(&i, &f, sizeof(float));
+    return i;
+}
+
 inline float bitsToFloat(uint32_t ui) {
     float f;
     memcpy(&f, &ui, sizeof(uint32_t));
+    return f;
+}
+
+inline float intToFloat(int32_t i) {
+    float f;
+    memcpy(&f, &i, sizeof(int32_t));
     return f;
 }
 
@@ -191,9 +203,22 @@ inline uint64_t floatToBits(double f) {
     return ui;
 }
 
+inline int64_t floatToInt(double f) {
+    int64_t i;
+    memcpy(&i, &f, sizeof(float));
+    return i;
+}
+
+
 inline double bitsToFloat(uint64_t ui) {
     double f;
     memcpy(&f, &ui, sizeof(uint64_t));
+    return f;
+}
+
+inline double intToFloat(int64_t i) {
+    double f;
+    memcpy(&f, &i, sizeof(int64_t));
     return f;
 }
 
