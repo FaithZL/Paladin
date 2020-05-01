@@ -73,30 +73,17 @@ struct Interaction {
     /**
      * 一般用于在指定交点处根据序列生成ray找到下一个交点
      */
-    Ray spawnRay(const Vector3f &d) const {
-        Point3f o = offsetRayOrigin(pos, pError, normal, d);
-        return Ray(o, d, Infinity, time, getMedium(d));
-    }
+    Ray spawnRay(const Vector3f &d) const;
     
     /**
      * 一般用于生成shadow ray，判断两个点之间是否有阻挡
      */
-    Ray spawnRayTo(const Point3f &p2) const {
-        Point3f origin = offsetRayOrigin(pos, pError, normal, p2 - pos);
-        Vector3f d = p2 - pos;
-        // 这里的tMax为1，因为真实的长度已经在d方向里保存，又因为光线的终点不能在p2点上，所以。。。
-        return Ray(origin, d, 1 - ShadowEpsilon, time, getMedium(d));
-    }
+    Ray spawnRayTo(const Point3f &p2) const;
     
     /**
      * 一般用于生成shadow ray，判断两个点之间是否有阻挡
      */    
-    Ray spawnRayTo(const Interaction &it) const {
-        Point3f origin = offsetRayOrigin(pos, pError, normal, it.pos - pos);
-        Point3f target = offsetRayOrigin(it.pos, it.pError, it.normal, origin - it.pos);
-        Vector3f d = target - origin;
-        return Ray(origin, d, 1 - ShadowEpsilon, time, getMedium(d));
-    }
+    Ray spawnRayTo(const Interaction &it) const;
 
     Point3f pos;
 

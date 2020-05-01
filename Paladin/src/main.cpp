@@ -20,7 +20,7 @@
 #include "math/lowdiscrepancy.hpp"
 #include "alltest/jsontest.h"
 #include "parser/transformcache.h"
-
+#include "math/ray.h"
 #include "GLFW/glfw3.h"
 #include "tools/embree_util.hpp"
 #include "shapes/trianglemesh.hpp"
@@ -97,32 +97,51 @@ void tt() {
     
 }
 
+inline float ToFloat(int32_t i) {
+    float f;
+    memcpy(&f, &i, sizeof(int32_t));
+    return f;
+}
+
+//inline float ToFloat(int32_t i) {
+//    float f;
+//    f = reinterpret_cast<float&>(i);
+//    return f;
+//}
+
+//inline float ToFloat(int32_t i) {
+//    union {
+//        float f;
+//        int32_t i;
+//    } ret;
+//    ret.i = i;
+//    return ret.f;
+//}
+
 void test() {
-    size_t num = 38840 * 27;
-    float * p = new float[num]();
-    size_t stride = 16;
+    auto start = clock();
+    Vector3f w(0,0.5,0.7);
+    Vector3f e(0,0.5,0.7);
     
-    int i = num - 1;
-    char * cp = (char*) p;
-    
-    int * p2 = (int*)(cp + i * stride) + 3;
-    int64_t ip1 = reinterpret_cast<int64_t>(p);
-    int64_t ip2 = reinterpret_cast<int64_t>(p2);
-    int64_t ip3 = reinterpret_cast<int64_t>(p + num * stride);
-    cout << "ip3 - ip2:" << ip3 - ip2 << endl;
-    cout << "ip2 - ip1:" << ip2 - ip1 << endl;
-    cout << "ip3 - ip1:" << ip3 - ip1 << endl;
-    cout << *p2 << endl;
+    for (int i = 0; i < 100000; ++i) {
+//        volatile auto tmp = ToFloat(rand());
+        Point3f p = Point3f(rand(),rand(),rand());
+        Normal3f n = Normal3f(rand(),rand(),rand());
+//        volatile auto tmp = paladin::offsetRayOrigin(p, e, n, w);
+        volatile auto tmp = paladin::offsetRay(p, n, w);
+    }
+    auto end = clock();
+    cout << end - start << endl;
 }
 
 int main(int argc, const char * argv[]) {
     // insert code here...
     COUT << "Hello, paladin!\n";
-//    testscene();
+//    test();
 //    glfwInit();
     
     
-    tt();
+//    tt();
     Paladin * paladin = Paladin::getInstance();
     if (argc >= 2) {
         string fileName(argv[1]);

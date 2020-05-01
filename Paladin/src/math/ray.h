@@ -128,7 +128,11 @@ constexpr float intScale() {
     return 256.f;
 }
 
-inline Point3f offsetRay(const Point3f &p, const Normal3f &n) {
+// ray起点偏移函数，实现参见ray tracing gems chapter 6
+inline Point3f offsetRay(const Point3f &p, Normal3f n, const Vector3f &w) {
+    
+    n = dot(n, w) > 0 ? n : -n;
+    
     Vector3i of_i(intScale() * n.x, intScale() * n.y, intScale() * n.z);
     
     Vector3f p_i(
@@ -154,7 +158,7 @@ inline Point3f offsetRay(const Point3f &p, const Normal3f &n) {
 inline Point3f offsetRayOrigin(const Point3f &p, const Vector3f &pError,
                                const Normal3f &n, const Vector3f &w) {
     
-    volatile auto tmp = offsetRay(p, n);
+//    volatile auto tmp = offsetRay(p, n);
 //    return tmp;
     // 包围盒b的八个顶点为 (±δx , ±δy , ±δz)
     // 假设平面s的函数为 ax+by+cz = d，法向量为(a,b,c)
@@ -170,9 +174,9 @@ inline Point3f offsetRayOrigin(const Point3f &p, const Vector3f &pError,
     if (dot(w, n) < 0) {
         // 判断发射方向是向内还是向外
         offset = -offset;
-    } 
+    }
 
-    Point3f po = p - offset;
+    Point3f po = p + offset;
     // 计算更加保守的值
     for (int i = 0; i < 3; ++i) {
         if (offset[i] > 0) {
@@ -183,9 +187,10 @@ inline Point3f offsetRayOrigin(const Point3f &p, const Vector3f &pError,
     }
 //    using namespace std;
 //    auto delta = po - tmp;
-//    if (delta.length() > 0.0001) {
+//    if (delta.length() > 0.0000001) {
 //        cout << "tmp is " << tmp << endl;
 //        cout << "po is " << po << endl;
+//        cout << endl;
 //    }
     return po;
 }
