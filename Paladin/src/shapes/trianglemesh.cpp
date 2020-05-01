@@ -445,13 +445,14 @@ bool Triangle::fillSurfaceInteraction(const Ray &ray, const Vector2f &uv, Surfac
     }
     isect->normal = isect->shading.normal = Normal3f(normalize(cross(dp02, dp12)));
     
-    Float xAbsSum =
-         (std::abs(b0 * p0.x) + std::abs(b1 * p1.x) + std::abs(b2 * p2.x));
-    Float yAbsSum =
-         (std::abs(b0 * p0.y) + std::abs(b1 * p1.y) + std::abs(b2 * p2.y));
-    Float zAbsSum =
-         (std::abs(b0 * p0.z) + std::abs(b1 * p1.z) + std::abs(b2 * p2.z));
-    Vector3f pError = gamma(7) * Vector3f(xAbsSum, yAbsSum, zAbsSum);
+//    Float xAbsSum =
+//         (std::abs(b0 * p0.x) + std::abs(b1 * p1.x) + std::abs(b2 * p2.x));
+//    Float yAbsSum =
+//         (std::abs(b0 * p0.y) + std::abs(b1 * p1.y) + std::abs(b2 * p2.y));
+//    Float zAbsSum =
+//         (std::abs(b0 * p0.z) + std::abs(b1 * p1.z) + std::abs(b2 * p2.z));
+//    Vector3f pError = gamma(7) * Vector3f(xAbsSum, yAbsSum, zAbsSum);
+    Vector3f pError = Vector3f();
     
     *isect = SurfaceInteraction(pHit, pError, uvHit, -ray.dir, dpdu, dpdv,
                                 Normal3f(0, 0, 0), Normal3f(0, 0, 0), ray.time,
@@ -834,9 +835,9 @@ Interaction Triangle::samplePos(const Point2f &u, Float *pdf) const {
     } else if (reverseOrientation ^ transformSwapsHandedness) {
         ret.normal *= -1;
     }
-    Point3f pAbsSum = abs(b[0] * p0) + abs(b[1] * p1) + abs((1 - b[0] - b[1]) * p2);
+//    Point3f pAbsSum = abs(b[0] * p0) + abs(b[1] * p1) + abs((1 - b[0] - b[1]) * p2);
     //todo 推导过程后续补上
-    ret.pError = gamma(6) * Vector3f(pAbsSum.x, pAbsSum.y, pAbsSum.z);
+//    ret.pError = gamma(6) * Vector3f(pAbsSum.x, pAbsSum.y, pAbsSum.z);
     *pdf = pdfPos();
     return ret;
 }
