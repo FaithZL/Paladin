@@ -457,7 +457,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "connellbox-16spp-r5.png",
+            "fileName" : "connellbox-16spp-r1.png",
             "diagonal" : 1,
             "scale" : 1
         }
@@ -465,7 +465,7 @@
     "filter" : {
         "type" : "triangle",
         "param" : {
-            "radius" : [5,5]
+            "radius" : [1,1]
         }
     },
     "accelerator" : {

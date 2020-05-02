@@ -24,6 +24,7 @@ void Sampler::startPixel(const Point2i &p) {
 
 CameraSample Sampler::getCameraSample(const Point2i &pRaster, Filter * filter) {
     CameraSample ret;
+    ret.weight = 1;
     if (filter) {
         ret.pFilm = (Point2f)pRaster + filter->getPixelOffset(get2D(), &ret.weight);
     } else {
