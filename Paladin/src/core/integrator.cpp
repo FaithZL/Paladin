@@ -256,7 +256,7 @@ void MonteCarloIntegrator::render(const Scene &scene) {
 
     		do {
     			// 循环单个像素，采样spp次
-    			CameraSample cameraSample = tileSampler->getCameraSample(pixel, _camera->film->filter.get());
+    			CameraSample cameraSample = tileSampler->getCameraSample(pixel);
 //                CameraSample cameraSample = tileSampler->getCameraSample(pixel);
 
     			RayDifferential ray;
@@ -296,8 +296,8 @@ void MonteCarloIntegrator::render(const Scene &scene) {
     			}
                 
                 // 将像素样本值与权重保存到pixel像素数据中
-//    			filmTile->addSample(cameraSample.pFilm, L, rayWeight);
-                filmTile->addSample2(pixel, L, rayWeight);
+    			filmTile->addSample(cameraSample.pFilm, L, rayWeight);
+//                filmTile->addSample2(pixel, L, rayWeight);
                 arena.reset();
             } while (tileSampler->startNextSample());
     	}
