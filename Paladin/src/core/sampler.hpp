@@ -13,6 +13,7 @@
 #include "math/rng.h"
 #include "core/cobject.h"
 #include "tools/classfactory.hpp"
+#include "core/filter.h"
 
 PALADIN_BEGIN
 
@@ -65,7 +66,7 @@ public:
      */
     virtual Point2f get2D() = 0;
     
-    CameraSample getCameraSample(const Point2i &pRaster);
+    CameraSample getCameraSample(const Point2i &pRaster, Filter * flter = nullptr);
     
     // 申请一个长度为n的一维随机变量数组
     void request1DArray(int n);

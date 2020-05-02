@@ -99,6 +99,19 @@ public:
         }
     }
     
+    void addSample2(Point2i pFilm, Spectrum L, Float sampleWeight = 1.) {
+        if (L.y() > _maxSampleLuminance) {
+            L *= _maxSampleLuminance / L.y();
+        }
+        
+        pFilm = max(pFilm, _pixelBounds.pMin);
+        pFilm = min(pFilm, (Point2i)(_pixelBounds.pMax - Point2i(1,1)));
+        
+        FilmTilePixel &pixel = getPixel(pFilm);
+        pixel.contribSum += L * sampleWeight;
+        pixel.filterWeightSum += sampleWeight;
+    }
+    
     FilmTilePixel &getPixel(const Point2i &p) {
         DCHECK(insideExclusive(p, _pixelBounds));
         int width = _pixelBounds.pMax.x - _pixelBounds.pMin.x;

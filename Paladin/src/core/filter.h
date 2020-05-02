@@ -11,6 +11,8 @@
 #include "core/header.h"
 #include "core/cobject.h"
 #include "tools/classfactory.hpp"
+#include "math/sampling.hpp"
+
 PALADIN_BEGIN
 
 /**
@@ -45,6 +47,8 @@ PALADIN_BEGIN
  * 		f为滤波函数，返回值也可以理解为权重
  * 
  */
+const Point2f centerPos = Point2f(0.5,0.5);
+
 class Filter : public CObject {
     
 public:
@@ -69,12 +73,31 @@ public:
      */
     virtual Float evaluate(const Point2f &p) const = 0;
     
+    void fillFilterTable();
+    
+    Point2f getPixelOffset(const Point2f &u, Float * weight) const;
+    
     // 过滤半径，xy两个方向，超过半径的部分不处理
     const Vector2f radius;
 
     // 过滤半径的倒数
     const Vector2f invRadius;
+    
+    static CONSTEXPR int _filterTableWidth = 16;
+    
+    union {
+        Float _filterTable[_filterTableWidth * _filterTableWidth];
+        Float _filterTable2D[_filterTableWidth][_filterTableWidth];
+    };
+    
+    
+    Distribution2D _distribute2D;
+    
+    Distribution1D _distributeU;
+    
+    Distribution1D _distributeV;
 };
+
 
 PALADIN_END
 

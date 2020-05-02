@@ -262,7 +262,8 @@ Interaction Sphere::samplePos(const Point2f &u, Float *pdf) const {
 Interaction Sphere::sampleDir(const paladin::Interaction &ref, const Point2f &u, Float *pdf) const {
     Interaction ret;
     Point3f pCenter = objectToWorld->exec(Point3f(0,0,0));
-    Point3f pOrigin = offsetRayOrigin(ref.pos, ref.pError, ref.normal, pCenter - ref.pos);
+//    Point3f pOrigin = offsetRayOrigin(ref.pos, ref.pError, ref.normal, pCenter - ref.pos);
+    Point3f pOrigin = offsetRay(ref.pos, ref.normal, pCenter - ref.pos);
     if (distanceSquared(pOrigin, pCenter) < _radius * _radius) {
         // ref点在球内
         // p(w) = r^2 / cosθ * p(A)
@@ -321,7 +322,8 @@ Interaction Sphere::sampleDir(const paladin::Interaction &ref, const Point2f &u,
 Float Sphere::pdfDir(const paladin::Interaction &ref, const Vector3f &wi) const {
     Point3f pCenter = objectToWorld->exec(Point3f(0,0,0));
     // Point3f origin = ref.pos; todo
-    Point3f origin = offsetRayOrigin(ref.pos, ref.pError, ref.normal, wi);
+//    Point3f origin = offsetRayOrigin(ref.pos, ref.pError, ref.normal, wi);
+    Point3f origin = offsetRay(ref.pos, ref.normal, wi);
     if (distanceSquared(pCenter, origin) <= _radius * _radius) {
         // 如果在球内
         return Shape::pdfDir(ref, wi);

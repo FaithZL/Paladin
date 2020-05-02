@@ -238,14 +238,14 @@ public:
         T zp = _mat._m[2][0] * x + _mat._m[2][1] * y + _mat._m[2][2] * z + _mat._m[2][3];
         T wp = _mat._m[3][0] * x + _mat._m[3][1] * y + _mat._m[3][2] * z + _mat._m[3][3];
         
-        T xErr = (std::abs(_mat._m[0][0] * x) + std::abs(_mat._m[0][1] * y) +
-                  std::abs(_mat._m[0][2] * z) + std::abs(_mat._m[0][3]));
-        T yErr = (std::abs(_mat._m[1][0] * x) + std::abs(_mat._m[1][1] * y) +
-                  std::abs(_mat._m[1][2] * z) + std::abs(_mat._m[1][3]));
-        T zErr = (std::abs(_mat._m[2][0] * x) + std::abs(_mat._m[2][1] * y) +
-                  std::abs(_mat._m[2][2] * z) + std::abs(_mat._m[2][3]));
-
-        *absError = gamma(3) * Vector3f(xErr, yErr, zErr);
+//        T xErr = (std::abs(_mat._m[0][0] * x) + std::abs(_mat._m[0][1] * y) +
+//                  std::abs(_mat._m[0][2] * z) + std::abs(_mat._m[0][3]));
+//        T yErr = (std::abs(_mat._m[1][0] * x) + std::abs(_mat._m[1][1] * y) +
+//                  std::abs(_mat._m[1][2] * z) + std::abs(_mat._m[1][3]));
+//        T zErr = (std::abs(_mat._m[2][0] * x) + std::abs(_mat._m[2][1] * y) +
+//                  std::abs(_mat._m[2][2] * z) + std::abs(_mat._m[2][3]));
+//
+//        *absError = gamma(3) * Vector3f(xErr, yErr, zErr);
         
         CHECK_NE(wp, 0);
         if (wp == 1)
@@ -270,24 +270,24 @@ public:
         T zp = _mat._m[2][0] * x + _mat._m[2][1] * y + _mat._m[2][2] * z + _mat._m[2][3];
         T wp = _mat._m[3][0] * x + _mat._m[3][1] * y + _mat._m[3][2] * z + _mat._m[3][3];
 
-        pTransError->x =
-            (gamma(3) + (T)1) *
-                (std::abs(_mat._m[0][0]) * ptError.x + std::abs(_mat._m[0][1]) * ptError.y +
-                 std::abs(_mat._m[0][2]) * ptError.z) +
-            gamma(3) * (std::abs(_mat._m[0][0] * x) + std::abs(_mat._m[0][1] * y) +
-                        std::abs(_mat._m[0][2] * z) + std::abs(_mat._m[0][3]));
-        pTransError->y =
-            (gamma(3) + (T)1) *
-                (std::abs(_mat._m[1][0]) * ptError.x + std::abs(_mat._m[1][1]) * ptError.y +
-                 std::abs(_mat._m[1][2]) * ptError.z) +
-            gamma(3) * (std::abs(_mat._m[1][0] * x) + std::abs(_mat._m[1][1] * y) +
-                        std::abs(_mat._m[1][2] * z) + std::abs(_mat._m[1][3]));
-        pTransError->z =
-            (gamma(3) + (T)1) *
-                (std::abs(_mat._m[2][0]) * ptError.x + std::abs(_mat._m[2][1]) * ptError.y +
-                 std::abs(_mat._m[2][2]) * ptError.z) +
-            gamma(3) * (std::abs(_mat._m[2][0] * x) + std::abs(_mat._m[2][1] * y) +
-                        std::abs(_mat._m[2][2] * z) + std::abs(_mat._m[2][3]));
+//        pTransError->x =
+//            (gamma(3) + (T)1) *
+//                (std::abs(_mat._m[0][0]) * ptError.x + std::abs(_mat._m[0][1]) * ptError.y +
+//                 std::abs(_mat._m[0][2]) * ptError.z) +
+//            gamma(3) * (std::abs(_mat._m[0][0] * x) + std::abs(_mat._m[0][1] * y) +
+//                        std::abs(_mat._m[0][2] * z) + std::abs(_mat._m[0][3]));
+//        pTransError->y =
+//            (gamma(3) + (T)1) *
+//                (std::abs(_mat._m[1][0]) * ptError.x + std::abs(_mat._m[1][1]) * ptError.y +
+//                 std::abs(_mat._m[1][2]) * ptError.z) +
+//            gamma(3) * (std::abs(_mat._m[1][0] * x) + std::abs(_mat._m[1][1] * y) +
+//                        std::abs(_mat._m[1][2] * z) + std::abs(_mat._m[1][3]));
+//        pTransError->z =
+//            (gamma(3) + (T)1) *
+//                (std::abs(_mat._m[2][0]) * ptError.x + std::abs(_mat._m[2][1]) * ptError.y +
+//                 std::abs(_mat._m[2][2]) * ptError.z) +
+//            gamma(3) * (std::abs(_mat._m[2][0] * x) + std::abs(_mat._m[2][1] * y) +
+//                        std::abs(_mat._m[2][2] * z) + std::abs(_mat._m[2][3]));
         CHECK_NE(wp, 0);
         if (wp == 1.)
             return Point3<T>(xp, yp, zp);
@@ -310,15 +310,15 @@ public:
     template <typename T>
     inline Vector3<T> exec(const Vector3<T> &v, Vector3<T> *absError) const {
         T x = v.x, y = v.y, z = v.z;
-        absError->x =
-            gamma(3) * (std::abs(_mat._m[0][0] * v.x) + std::abs(_mat._m[0][1] * v.y) +
-                        std::abs(_mat._m[0][2] * v.z));
-        absError->y =
-            gamma(3) * (std::abs(_mat._m[1][0] * v.x) + std::abs(_mat._m[1][1] * v.y) +
-                        std::abs(_mat._m[1][2] * v.z));
-        absError->z =
-            gamma(3) * (std::abs(_mat._m[2][0] * v.x) + std::abs(_mat._m[2][1] * v.y) +
-                        std::abs(_mat._m[2][2] * v.z));
+//        absError->x =
+//            gamma(3) * (std::abs(_mat._m[0][0] * v.x) + std::abs(_mat._m[0][1] * v.y) +
+//                        std::abs(_mat._m[0][2] * v.z));
+//        absError->y =
+//            gamma(3) * (std::abs(_mat._m[1][0] * v.x) + std::abs(_mat._m[1][1] * v.y) +
+//                        std::abs(_mat._m[1][2] * v.z));
+//        absError->z =
+//            gamma(3) * (std::abs(_mat._m[2][0] * v.x) + std::abs(_mat._m[2][1] * v.y) +
+//                        std::abs(_mat._m[2][2] * v.z));
         return Vector3<T>(_mat._m[0][0] * x + _mat._m[0][1] * y + _mat._m[0][2] * z,
                       _mat._m[1][0] * x + _mat._m[1][1] * y + _mat._m[1][2] * z,
                       _mat._m[2][0] * x + _mat._m[2][1] * y + _mat._m[2][2] * z);
@@ -328,26 +328,26 @@ public:
     inline Vector3<T> exec(const Vector3<T> &v, const Vector3<T> &vError, Vector3<T> *vTransError) const {
         T x = v.x, y = v.y, z = v.z;
 
-        vTransError->x =
-            (gamma(3) + (T)1) *
-                (std::abs(_mat._m[0][0]) * vError.x + std::abs(_mat._m[0][1]) * vError.y +
-                 std::abs(_mat._m[0][2]) * vError.z) +
-            gamma(3) * (std::abs(_mat._m[0][0] * v.x) + std::abs(_mat._m[0][1] * v.y) +
-                        std::abs(_mat._m[0][2] * v.z));
-
-        vTransError->y =
-            (gamma(3) + (T)1) *
-                (std::abs(_mat._m[1][0]) * vError.x + std::abs(_mat._m[1][1]) * vError.y +
-                 std::abs(_mat._m[1][2]) * vError.z) +
-            gamma(3) * (std::abs(_mat._m[1][0] * v.x) + std::abs(_mat._m[1][1] * v.y) +
-                        std::abs(_mat._m[1][2] * v.z));
-
-        vTransError->z =
-            (gamma(3) + (T)1) *
-                (std::abs(_mat._m[2][0]) * vError.x + std::abs(_mat._m[2][1]) * vError.y +
-                 std::abs(_mat._m[2][2]) * vError.z) +
-            gamma(3) * (std::abs(_mat._m[2][0] * v.x) + std::abs(_mat._m[2][1] * v.y) +
-                        std::abs(_mat._m[2][2] * v.z));
+//        vTransError->x =
+//            (gamma(3) + (T)1) *
+//                (std::abs(_mat._m[0][0]) * vError.x + std::abs(_mat._m[0][1]) * vError.y +
+//                 std::abs(_mat._m[0][2]) * vError.z) +
+//            gamma(3) * (std::abs(_mat._m[0][0] * v.x) + std::abs(_mat._m[0][1] * v.y) +
+//                        std::abs(_mat._m[0][2] * v.z));
+//
+//        vTransError->y =
+//            (gamma(3) + (T)1) *
+//                (std::abs(_mat._m[1][0]) * vError.x + std::abs(_mat._m[1][1]) * vError.y +
+//                 std::abs(_mat._m[1][2]) * vError.z) +
+//            gamma(3) * (std::abs(_mat._m[1][0] * v.x) + std::abs(_mat._m[1][1] * v.y) +
+//                        std::abs(_mat._m[1][2] * v.z));
+//
+//        vTransError->z =
+//            (gamma(3) + (T)1) *
+//                (std::abs(_mat._m[2][0]) * vError.x + std::abs(_mat._m[2][1]) * vError.y +
+//                 std::abs(_mat._m[2][2]) * vError.z) +
+//            gamma(3) * (std::abs(_mat._m[2][0] * v.x) + std::abs(_mat._m[2][1] * v.y) +
+//                        std::abs(_mat._m[2][2] * v.z));
 
         return Vector3<T>(_mat._m[0][0] * x + _mat._m[0][1] * y + _mat._m[0][2] * z,
                       _mat._m[1][0] * x + _mat._m[1][1] * y + _mat._m[1][2] * z,
@@ -385,16 +385,16 @@ public:
         Vector3f dir = exec(ray.dir);
         Float tMax = ray.tMax;
         // todo 这里跟pbrt代码不同，先按照自己的理解写，有问题再说
-        Float length = dir.length();
-        if (length > 0) {
-            // 找到dir方向上在误差范围以外的点
-            // 公式参见ray.h offsetRayOrigin函数注释
-            Float d = dot(abs(dir), oError);
-            Float dt = d / length;
-            ori = ori + dt * dir;
-            // 由于起点前移，为了保持终点不变，tMax缩小
-            tMax = tMax - dt;
-        }
+//        Float length = dir.length();
+//        if (length > 0) {
+//            // 找到dir方向上在误差范围以外的点
+//            // 公式参见ray.h offsetRayOrigin函数注释
+//            Float d = dot(abs(dir), oError);
+//            Float dt = d / length;
+//            ori = ori + dt * dir;
+//            // 由于起点前移，为了保持终点不变，tMax缩小
+//            tMax = tMax - dt;
+//        }
         return Ray(ori, dir, tMax, ray.time, ray.medium);
     }
     

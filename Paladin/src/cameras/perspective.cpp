@@ -108,7 +108,8 @@ Float PerspectiveCamera::generateRayDifferential(const CameraSample &sample, Ray
     ray->medium = medium;
     *ray = cameraToWorld.exec(*ray);
     ray->hasDifferentials = true;
-    return 1;
+//    return 1;
+    return sample.weight;
 }
 
 nloJson PerspectiveCamera::toJson() const {

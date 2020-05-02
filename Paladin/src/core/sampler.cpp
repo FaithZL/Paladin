@@ -22,9 +22,13 @@ void Sampler::startPixel(const Point2i &p) {
     _array1DOffset = _array2DOffset = 0;
 }
 
-CameraSample Sampler::getCameraSample(const Point2i &pRaster) {
+CameraSample Sampler::getCameraSample(const Point2i &pRaster, Filter * filter) {
     CameraSample ret;
-    ret.pFilm = (Point2f)pRaster + get2D();
+    if (filter) {
+        ret.pFilm = (Point2f)pRaster + filter->getPixelOffset(get2D(), &ret.weight);
+    } else {
+        ret.pFilm = (Point2f)pRaster + get2D();
+    }
     ret.pLens = get2D();
     ret.time = get1D();
     return ret;
