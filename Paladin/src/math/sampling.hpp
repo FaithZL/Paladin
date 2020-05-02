@@ -543,6 +543,11 @@ inline Float powerHeuristic(int nf, Float fPdf, int ng, Float gPdf) {
  * 理论上_func函数应该恒大于零
  */
 struct Distribution1D {
+    
+    Distribution1D() {
+        
+    }
+    
     Distribution1D(const Float *f, int num)
     :_func(f, f + num),
     _cdf(num + 1) {
@@ -665,7 +670,11 @@ private:
  */
 struct Distribution2D {
 public:
-    Distribution2D(const Float *data, int nu, int nv) {
+    Distribution2D() {
+        
+    }
+    
+    void init(const Float *data, int nu, int nv) {
         _pConditionalV.reserve(nv);
         // 创建v个长度为u的一维分布，存入列表中
         for (int v = 0; v < nv; ++v) {
@@ -679,13 +688,19 @@ public:
         }
         _pMarginal.reset(new Distribution1D(&_marginalFunc[0], nv));
     }
+    
+    Distribution2D(const Float *data, int nu, int nv) {
+        init(data, nu, nv);
+    }
 
-    Point2f sampleContinuous(const Point2f &u, Float *pdf) const {
+    Point2f sampleContinuous(const Point2f &u, Float *pdf = nullptr) const {
         Float pdfs[2];
         int v;
         Float d1 = _pMarginal->sampleContinuous(u[1], &pdfs[1], &v);
         Float d0 = _pConditionalV[v]->sampleContinuous(u[0], &pdfs[0]);
-        *pdf = pdfs[0] * pdfs[1];
+        if (pdf) {
+            *pdf = pdfs[0] * pdfs[1];
+        }
         return Point2f(d0, d1);
     }
 

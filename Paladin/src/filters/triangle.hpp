@@ -21,13 +21,14 @@ class TriangleFilter : public Filter {
 public:
     
     TriangleFilter(const Vector2f &radius) : Filter(radius) {
-        
+        fillFilterTable();
     }
     
-    virtual Float evaluate(const Point2f &p) const {
+    virtual Float evaluate(const Point2f &p) const override {
         return std::max((Float)0, radius.x - std::abs(p.x)) *
                 std::max((Float)0, radius.y - std::abs(p.y));
     }
+    
 };
 
 USING_STD

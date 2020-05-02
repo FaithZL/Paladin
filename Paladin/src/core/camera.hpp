@@ -77,6 +77,8 @@ struct CameraSample {
     Point2f pLens;
     // 采样时间
     Float time;
+    // 在filter上的权重
+    Float weight;
 };
 
 /**

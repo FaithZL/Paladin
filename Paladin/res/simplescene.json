@@ -435,7 +435,7 @@
     "sampler" : {
         "type" : "random",
         "param" : {
-            "spp" : 8
+            "spp" : 16
         }
     },
     "camera" : {
@@ -457,7 +457,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "connellbox-4spp-1n.png",
+            "fileName" : "connellbox-16spp-r5.png",
             "diagonal" : 1,
             "scale" : 1
         }
@@ -465,7 +465,7 @@
     "filter" : {
         "type" : "triangle",
         "param" : {
-            "radius" : [1,1]
+            "radius" : [5,5]
         }
     },
     "accelerator" : {

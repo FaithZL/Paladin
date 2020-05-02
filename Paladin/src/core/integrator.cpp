@@ -244,7 +244,7 @@ void MonteCarloIntegrator::render(const Scene &scene) {
     	AABB2i tileBounds(Point2i(x0, y0), Point2i(x1, y1));
 
     	std::unique_ptr<FilmTile> filmTile = _camera->film->getFilmTile(tileBounds);
-
+        Float diffScale = 1 / std::sqrt((Float)tileSampler->samplesPerPixel);
     	// tile范围内，逐像素计算辐射度
     	for (Point2i pixel : tileBounds) {
 
@@ -256,12 +256,13 @@ void MonteCarloIntegrator::render(const Scene &scene) {
 
     		do {
     			// 循环单个像素，采样spp次
-    			CameraSample cameraSample = tileSampler->getCameraSample(pixel);
+    			CameraSample cameraSample = tileSampler->getCameraSample(pixel, _camera->film->filter.get());
+//                CameraSample cameraSample = tileSampler->getCameraSample(pixel);
 
     			RayDifferential ray;
     			Float rayWeight = _camera->generateRayDifferential(cameraSample, &ray);
 
-    			ray.scaleDifferentials(1/std::sqrt((Float)tileSampler->samplesPerPixel));
+    			ray.scaleDifferentials(diffScale);
 
     			Spectrum L(0.0f);
     			if (rayWeight > 0) {
@@ -295,7 +296,8 @@ void MonteCarloIntegrator::render(const Scene &scene) {
     			}
                 
                 // 将像素样本值与权重保存到pixel像素数据中
-    			filmTile->addSample(cameraSample.pFilm, L, rayWeight);
+//    			filmTile->addSample(cameraSample.pFilm, L, rayWeight);
+                filmTile->addSample2(pixel, L, rayWeight);
                 arena.reset();
             } while (tileSampler->startNextSample());
     	}
