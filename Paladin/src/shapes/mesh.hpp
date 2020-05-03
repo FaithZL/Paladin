@@ -35,6 +35,7 @@ public:
                                         const std::shared_ptr<Texture<Float>> &shadowAlphaMask=nullptr,
                                         const int *faceIndices=nullptr);
     
+     
     
 private:
     

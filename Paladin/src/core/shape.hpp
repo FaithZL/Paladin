@@ -105,17 +105,17 @@ public:
      */
     virtual Float solidAngle(const Point3f &p, int nSamples = 512) const;
     
-    PALADIN_INLINE void computeScatteringFunctions(SurfaceInteraction *isect,
+    F_INLINE void computeScatteringFunctions(SurfaceInteraction *isect,
                                     MemoryArena &arena, TransportMode mode,
                                     bool allowMultipleLobes) const {
         
     }
     
-    PALADIN_INLINE const Material * getMaterial(int idx = 0) const {
+    F_INLINE const Material * getMaterial(int idx = 0) const {
         return _materials[idx].get();
     }
     
-    PALADIN_INLINE const AreaLight * getAreaLight() {
+    F_INLINE const AreaLight * getAreaLight() {
         return _areaLight.get();
     }
 

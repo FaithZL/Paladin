@@ -82,7 +82,7 @@ public:
 
     std::string toString() const;
     
-    PALADIN_INLINE BxDF * getBxDF(int idx) const {
+    F_INLINE BxDF * getBxDF(int idx) const {
         return _bxdfs[idx].get();
     }
     

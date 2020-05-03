@@ -66,7 +66,7 @@ public:
            std::string(" ]");
     }
     
-    PALADIN_INLINE void setReflection(const Spectrum &R) {
+    F_INLINE void setReflection(const Spectrum &R) {
         _R = R;
     }
 

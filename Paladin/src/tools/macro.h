@@ -43,7 +43,20 @@
     #define PALADIN_NO_INLINE __attribute__((noinline))
 #endif
 
-#define PALADIN_INLINE __attribute__((always_inline))
+#if defined(__GNUC__)
+    #define F_INLINE                inline __attribute__((always_inline))
+    #define NO_INLINE               __attribute__((noinline))
+    #define EXPECT_TAKEN(a)        __builtin_expect(!!(a), true)
+    #define EXPECT_NOT_TAKEN(a)    __builtin_expect(!!(a), false)
+#elif defined(__MSVC__)
+    #define F_INLINE                __forceinline
+    #define NO_INLINE               __declspec(noinline)
+    #define MM_ALIGN16             __declspec(align(16))
+    #define EXPECT_TAKEN(a)        (a)
+    #define EXPECT_NOT_TAKEN(a)    (a)
+#else
+    #error Unsupported compiler!
+#endif
 
 #if defined(_MSC_VER)
     #define PALADIN_HAVE_ALIGNED_MALLOC
