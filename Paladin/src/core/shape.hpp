@@ -76,13 +76,15 @@ public:
     virtual Interaction samplePos(const Point2f &u, Float *pdf) const = 0;
 
     // 概率密度函数，表面某点的pdf，函数空间为表面参数空间
-    virtual Float pdfPos(const Interaction &isect) const {
-    	return 1 / area();
+    inline Float pdfPos(const Interaction &isect) const {
+        DCHECK(_invArea != 0);
+        return _invArea;
     }
 
     // 概率密度函数，表面某点的pdf，函数空间为表面参数空间
-    virtual Float pdfPos() const {
-    	return 1 / area();
+    inline Float pdfPos() const {
+        DCHECK(_invArea != 0);
+    	return _invArea;
     }
 
     /**
@@ -112,6 +114,8 @@ protected:
     // 参照mitsuba渲染器，后续优化，保存表面积的倒数，每次图形有变化时更新数据
     // 初始值为零，0为非法值
     Float _invArea = 0;
+    
+    
     
     Primitive * _primitive;
 };

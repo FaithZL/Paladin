@@ -28,7 +28,7 @@ public:
     _radius(radius),
     _innerRadius(innerRadius),
     _phiMax(degree2radian(clamp(phiMax, 0, 360))) {
-        
+        init();
     }
     
     virtual void init() override {

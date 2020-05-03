@@ -145,6 +145,7 @@ public:
         _mesh->addTriangle(this);
         
         _faceIndex = _mesh->faceIndices.size() ? _mesh->faceIndices[triNumber] : 0;
+        init();
     }
     
     virtual Shape * getShape(int primID) const override {
