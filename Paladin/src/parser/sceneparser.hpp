@@ -162,6 +162,8 @@ private:
     
     vector<shared_ptr<Primitive>> _primitives;
     
+    vector<shared_ptr<Shape>> _shapes;
+    
     map<string, Transform *> _transformCache;
     
     // 克隆map，key为对象名，value为片元列表

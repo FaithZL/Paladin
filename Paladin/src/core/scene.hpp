@@ -62,6 +62,15 @@ public:
     
     bool embreeIntersectP(const Ray &ray) const;
     
+    
+    bool rayIntersect(const Ray &ray, SurfaceInteraction *isect) const;
+    
+    bool rayOccluded(const Ray &ray) const;
+    
+    bool rayIntersectNative(const Ray &ray, SurfaceInteraction *isect) const;
+    
+    bool rayOccludedNative(const Ray &ray) const;
+    
     /**
      * 光线在场景中传播的函数
      * @param  ray     指定的光线对象
@@ -81,7 +90,12 @@ public:
         return _rtcScene;
     }
     
+    void accelInitNative(const nloJson &data,
+                         const vector<shared_ptr<Shape>>&shapes);
+    
     void accelInitEmbree(const vector<shared_ptr<Primitive>>&);
+    
+    void accelInitEmbree(const vector<shared_ptr<Shape>>&shapes);
     
     bool add(TriangleMesh * mesh) {
         _meshes[mesh] = true;

@@ -104,6 +104,20 @@ public:
      * 返回shape对于某个点的立体角大小
      */
     virtual Float solidAngle(const Point3f &p, int nSamples = 512) const;
+    
+    PALADIN_INLINE void computeScatteringFunctions(SurfaceInteraction *isect,
+                                    MemoryArena &arena, TransportMode mode,
+                                    bool allowMultipleLobes) const {
+        
+    }
+    
+    PALADIN_INLINE const Material * getMaterial(int idx = 0) const {
+        return _materials[idx].get();
+    }
+    
+    PALADIN_INLINE const AreaLight * getAreaLight() {
+        return _areaLight.get();
+    }
 
     shared_ptr<const Transform> objectToWorld;
     shared_ptr<const Transform> worldToObject;
@@ -115,7 +129,11 @@ protected:
     // 初始值为零，0为非法值
     Float _invArea = 0;
     
+    vector<shared_ptr<const Material>> _materials;
     
+    // 发光属性
+    std::shared_ptr<AreaLight> _areaLight;
+    MediumInterface _mediumInterface;
     
     Primitive * _primitive;
 };

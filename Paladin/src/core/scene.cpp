@@ -119,6 +119,15 @@ void Scene::accelInitNative(const nloJson &data,
     initEnvmap();
 }
 
+void Scene::accelInitNative(const nloJson &data, const vector<shared_ptr<Shape> > &shapes) {
+    
+    
+}
+
+void Scene::accelInitEmbree(const vector<shared_ptr<Shape>>&shapes) {
+    
+}
+
 void Scene::accelInitEmbree(const vector<shared_ptr<Primitive> > &primitives) {
     EmbreeUtil::initDevice();
     _rtcScene = rtcNewScene(EmbreeUtil::getDevice());
