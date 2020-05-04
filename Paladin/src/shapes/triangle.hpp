@@ -17,19 +17,17 @@
 PALADIN_BEGIN
 
 struct IndexSet {
-    IndexSet(int uv, int pos, int normal, int edge):
+    IndexSet(int uv, int pos, int normal):
     uv(uv),
     pos(pos),
-    normal(normal),
-    edge(edge) {
+    normal(normal) {
         
     }
     
     IndexSet(int idx)
     : uv(idx),
     pos(idx),
-    normal(idx),
-    edge(idx) {
+    normal(idx) {
         
     }
     
@@ -37,7 +35,6 @@ struct IndexSet {
         uv = 0;
         pos = 0;
         normal = 0;
-        edge = 0;
     }
     
     // 顶点uv索引
@@ -46,14 +43,77 @@ struct IndexSet {
     int pos;
     // 顶点法线索引
     int normal;
-    //
-    int edge;
 };
 
 struct TriangleI {
     
+    TriangleI(const IndexSet * p) {
+        indice = p;
+    }
     
+    F_INLINE AABB3f worldBound(const Point3f *positions) const {
+        const Point3f &p0 = positions[indice[0].pos];
+        const Point3f &p1 = positions[indice[1].pos];
+        const Point3f &p2 = positions[indice[2].pos];
+        AABB3f ret(p0);
+        ret = unionSet(ret, p1);
+        return unionSet(ret, p2);
+    }
     
+    F_INLINE Float getArea(const Point3f *positions) const {
+        const Point3f &p0 = positions[indice[0].pos];
+        const Point3f &p1 = positions[indice[1].pos];
+        const Point3f &p2 = positions[indice[2].pos];
+        Vector3f sideA = p1 - p0, sideB = p2 - p0;
+        return 0.5f * cross(sideA, sideB).length();
+    }
+    
+    F_INLINE static bool rayIntersect(const Point3f &p0, const Point3f &p1, const Point3f &p2,
+                                     const Ray &ray, Float &u, Float &v, Float &t) {
+
+        Vector3f edge1 = p1 - p0, edge2 = p2 - p0;
+
+        Vector3f pvec = cross(ray.dir, edge2);
+
+        Float det = dot(edge1, pvec);
+        if (det == 0) {
+            return false;
+        }
+        Float inv_det = 1.0f / det;
+
+        Vector3f tvec = ray.ori - p0;
+
+        u = dot(tvec, pvec) * inv_det;
+        if (u < 0.0 || u > 1.0) {
+            return false;
+        }
+
+        Vector3f qvec = cross(tvec, edge1);
+
+        v = dot(ray.dir, qvec) * inv_det;
+
+        if (v >= 0.0 && u + v <= 1.0) {
+            t = dot(edge2, qvec) * inv_det;
+            return true;
+        }
+
+        return false;
+    }
+    
+    F_INLINE bool rayIntersect(const Point3f *positions, const Ray &ray, Float &u,
+        Float &v, Float &t) const {
+        return rayIntersect(
+            positions[indice[0].pos], positions[indice[1].pos],
+            positions[indice[2].pos], ray, u, v, t);
+    }
+    
+    Point3f sample(const Point3f *positions, const Normal3f *normals,
+                    const Point2f *texCoords, Normal3f * normal, Point2f * uv,
+                    const Point2f &u) const;
+    
+    Point3f sample(const Point3f *positions, const Point2f &u) const;
+
+    const IndexSet * indice;
 };
 
 PALADIN_END

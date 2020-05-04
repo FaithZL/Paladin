@@ -27,6 +27,17 @@ Shape::Shape(const shared_ptr<const Transform> &objectToWorld,const shared_ptr<c
 
 }
 
+Shape::Shape(const Transform * ObjectToWorld,
+             const Transform *WorldToObject,
+             bool reverseOrientation)
+: o2w(ObjectToWorld),
+w2o(WorldToObject),
+reverseOrientation(reverseOrientation),
+transformSwapsHandedness(o2w->swapsHandedness()),
+_invArea(-1) {
+    
+}
+
 AABB3f Shape::worldBound() const {
     return objectToWorld->exec(objectBound());
 }

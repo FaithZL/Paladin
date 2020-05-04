@@ -27,18 +27,25 @@ class Shape : public EmbreeUtil::EmbreeGeomtry {
 public:
 	Shape(const shared_ptr<const Transform> &ObjectToWorld, const shared_ptr<const Transform>&WorldToObject,
           bool reverseOrientation);
+    
+    Shape(const Transform * ObjectToWorld, const Transform *WorldToObject,
+          bool reverseOrientation);
 
 	virtual ~Shape();
 
 	// 返回在对象坐标系中的包围盒
-	virtual AABB3f objectBound() const = 0;
+    virtual AABB3f objectBound() const {
+        DCHECK(false);
+    }
 
 	// 返回在世界坐标系中的包围盒
 	virtual AABB3f worldBound() const;
     
     // 初始化函数，每个子类构造时都要调用
     // 目前用于计算表面积
-    virtual void init() = 0;
+    virtual void init() {
+        DCHECK(false);
+    }
     
     void setPrimitive(Primitive *primitive) {
         _primitive = primitive;
@@ -53,7 +60,9 @@ public:
 	virtual bool intersect(const Ray &ray, 
 							Float *tHit, 
 							SurfaceInteraction * isect, 
-							bool testAlphaTexture = true) const = 0;
+                           bool testAlphaTexture = true) const {
+        DCHECK(false);
+    }
 
 	virtual bool intersectP(const Ray &ray,
                             bool testAlphaTexture = true) const {
@@ -66,7 +75,9 @@ public:
     }
 
     // 表面积
-    virtual Float area() const = 0;
+    virtual Float area() const {
+        DCHECK(false);
+    }
 
     /**
      * 在图形表面采样一个点，返回该点的基于面积的概率密度函数值，与世界坐标中interaction结构
@@ -77,13 +88,13 @@ public:
 
     // 概率密度函数，表面某点的pdf，函数空间为表面参数空间
     inline Float pdfPos(const Interaction &isect) const {
-        DCHECK(_invArea != 0);
+        DCHECK(_invArea > 0);
         return _invArea;
     }
 
     // 概率密度函数，表面某点的pdf，函数空间为表面参数空间
     inline Float pdfPos() const {
-        DCHECK(_invArea != 0);
+        DCHECK(_invArea > 0);
     	return _invArea;
     }
 
@@ -121,13 +132,16 @@ public:
 
     shared_ptr<const Transform> objectToWorld;
     shared_ptr<const Transform> worldToObject;
+    
+    const Transform * o2w;
+    const Transform * w2o;
+    
     // 通常是模型文件指定的属性
     const bool reverseOrientation;
     const bool transformSwapsHandedness;
 protected:
-    // 参照mitsuba渲染器，后续优化，保存表面积的倒数，每次图形有变化时更新数据
-    // 初始值为零，0为非法值
-    Float _invArea = 0;
+    // 初始值为-1，-1为非法值
+    Float _invArea;
     
     vector<shared_ptr<const Material>> _materials;
     

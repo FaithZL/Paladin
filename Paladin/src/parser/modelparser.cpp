@@ -63,7 +63,6 @@ void ModelParser::packageData() {
 }
 
 void ModelParser::generateNormals() {
-    map<string, Float> areaMap;
     vector<Float> areaLst;
     areaLst.resize(_points.size(), 0);
     _normals.resize(_points.size(), Normal3f(0, 0, 0));
