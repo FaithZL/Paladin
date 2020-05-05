@@ -626,8 +626,6 @@ struct Distribution1D {
         }
         if (uRemapped) {
             *uRemapped = (u - _cdf[offset]) / (_cdf[offset + 1] - _cdf[offset]);
-        }
-        if (uRemapped) {
             DCHECK(*uRemapped >= 0.f && *uRemapped <= 1.f);
         }
         return offset;        

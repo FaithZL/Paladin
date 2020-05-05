@@ -51,6 +51,8 @@ public:
     vector<shared_ptr<Shape>> getTriLst(const shared_ptr<const Transform> &o2w,
                                         bool reverseOrientation);
     
+    vector<shared_ptr<Shape>> getShapeLst(const Transform * o2w, bool reverseOrientation);
+    
     vector<shared_ptr<Primitive>> getPrimitiveLst(const shared_ptr<const Transform> &o2w,
                                                   vector<shared_ptr<Light>> &lights,
                                                   bool reverseOrientation,

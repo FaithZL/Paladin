@@ -217,6 +217,12 @@ vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
     return ret;
 }
 
+vector<shared_ptr<Shape>> ModelCache::createShapes(const nloJson &meshData,
+                                                const shared_ptr<const Transform> &transform,
+                                                vector<shared_ptr<Light>> &lights) {
+    
+}
+
 vector<shared_ptr<Primitive>> ModelCache::getPrimitives(const string &fn,
                                                         const shared_ptr<Transform> &transform,
                                                         vector<shared_ptr<Light>> &lights) {

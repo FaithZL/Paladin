@@ -21,24 +21,46 @@ class Mesh : public Shape {
     
 public:
     Mesh(const Transform * objectToWorld,
-                        const vector<IndexSet> &vertexIndices, const vector<Point3f> *P,
-                        const vector<Normal3f> *N=nullptr,
-                        const vector<Point2f> *UV=nullptr, const vector<Vector3f> *E=nullptr,
-                        const std::shared_ptr<Texture<Float>> &alphaMask=nullptr,
-                        const std::shared_ptr<Texture<Float>> &shadowAlphaMask=nullptr,
-                        const int *faceIndices=nullptr);
+                        const vector<IndexSet> &vertexIndices,
+                        const vector<Point3f> *P,
+                        const vector<Normal3f> *N = nullptr,
+                        const vector<Point2f> *UV = nullptr,
+                        const MediumInterface &mi = nullptr);
     
-    static std::shared_ptr<Mesh> create(const Transform * objectToWorld,
-                                        const vector<IndexSet> &vertexIndices, const vector<Point3f> *P,
-                                        const vector<Normal3f> *N=nullptr, const vector<Point2f> *UV=nullptr,
-                                        const vector<Vector3f> *E=nullptr,
-                                        const std::shared_ptr<Texture<Float>> &alphaMask=nullptr,
-                                        const std::shared_ptr<Texture<Float>> &shadowAlphaMask=nullptr,
-                                        const int *faceIndices=nullptr) {
+    static shared_ptr<Mesh> create(const Transform * objectToWorld,
+                                        const vector<IndexSet> &vertexIndices,
+                                        const vector<Point3f> *P,
+                                        const vector<Normal3f> *N=nullptr,
+                                        const vector<Point2f> *UV=nullptr,
+                                        const MediumInterface &mi = nullptr) {
         return make_shared<Mesh>(objectToWorld, vertexIndices,
-                                 P, N,UV, E,alphaMask,
-                                 shadowAlphaMask, faceIndices);
+                                 P, N,UV,mi);
     }
+    
+    
+    
+    static shared_ptr<Mesh> create(const Transform * objectToWorld,
+                                        const vector<int> &vertexIndices,
+                                        const vector<Point3f> *P,
+                                        const vector<Normal3f> *N=nullptr,
+                                        const vector<Point2f> *UV=nullptr,
+                                        const MediumInterface &mi = nullptr) {
+        vector<IndexSet> indice;
+        indice.reserve(vertexIndices.size());
+        for (size_t i = 0; i < vertexIndices.size(); ++i) {
+            int idx = vertexIndices[i];
+            indice.emplace_back(idx);
+        }
+        return make_shared<Mesh>(objectToWorld, indice,
+                                 P, N,UV,mi);
+    }
+    
+    static shared_ptr<Mesh> createQuad(const Transform *o2w, Float width, Float height = 0,
+                                            const MediumInterface &mi = nullptr);
+    
+    static shared_ptr<Mesh> createCube(const Transform *o2w, Float x, Float y = 0, Float z = 0,
+                                            const MediumInterface &mi = nullptr);
+
     
     void initial();
     

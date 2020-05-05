@@ -17,7 +17,7 @@
 PALADIN_BEGIN
 
 struct IndexSet {
-    IndexSet(int uv, int pos, int normal):
+    IndexSet(int pos, int uv, int normal):
     uv(uv),
     pos(pos),
     normal(normal) {
@@ -47,8 +47,9 @@ struct IndexSet {
 
 struct TriangleI {
     
-    TriangleI(const IndexSet * p) {
-        indice = p;
+    TriangleI(const IndexSet * p)
+    : indice(p) {
+        
     }
     
     F_INLINE AABB3f worldBound(const Point3f *positions) const {
@@ -69,7 +70,7 @@ struct TriangleI {
     }
     
     F_INLINE static bool rayIntersect(const Point3f &p0, const Point3f &p1, const Point3f &p2,
-                                     const Ray &ray, Float &u, Float &v, Float &t) {
+                                     const Ray &ray, Float *u, Float *v, Float *t) {
 
         Vector3f edge1 = p1 - p0, edge2 = p2 - p0;
 
@@ -83,25 +84,25 @@ struct TriangleI {
 
         Vector3f tvec = ray.ori - p0;
 
-        u = dot(tvec, pvec) * inv_det;
-        if (u < 0.0 || u > 1.0) {
+        *u = dot(tvec, pvec) * inv_det;
+        if (*u < 0.0 || *u > 1.0) {
             return false;
         }
 
         Vector3f qvec = cross(tvec, edge1);
 
-        v = dot(ray.dir, qvec) * inv_det;
+        *v = dot(ray.dir, qvec) * inv_det;
 
-        if (v >= 0.0 && u + v <= 1.0) {
-            t = dot(edge2, qvec) * inv_det;
+        if (*v >= 0.0 && *u + *v <= 1.0) {
+            *t = dot(edge2, qvec) * inv_det;
             return true;
         }
 
         return false;
     }
     
-    F_INLINE bool rayIntersect(const Point3f *positions, const Ray &ray, Float &u,
-        Float &v, Float &t) const {
+    F_INLINE bool rayIntersect(const Point3f *positions, const Ray &ray, Float *u,
+        Float *v, Float *t) const {
         return rayIntersect(
             positions[indice[0].pos], positions[indice[1].pos],
             positions[indice[2].pos], ray, u, v, t);

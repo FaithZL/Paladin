@@ -29,12 +29,16 @@ Shape::Shape(const shared_ptr<const Transform> &objectToWorld,const shared_ptr<c
 
 Shape::Shape(const Transform * ObjectToWorld,
              const Transform *WorldToObject,
-             bool reverseOrientation)
+             bool reverseOrientation,
+             const MediumInterface &mi,
+             bool isComplex)
 : o2w(ObjectToWorld),
 w2o(WorldToObject),
 reverseOrientation(reverseOrientation),
 transformSwapsHandedness(o2w->swapsHandedness()),
-_invArea(-1) {
+_mediumInterface(mi),
+_invArea(-1),
+_isComplex(isComplex) {
     
 }
 

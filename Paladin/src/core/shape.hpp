@@ -29,8 +29,9 @@ public:
           bool reverseOrientation);
     
     Shape(const Transform * ObjectToWorld, const Transform *WorldToObject,
-          bool reverseOrientation);
-
+          bool reverseOrientation, const MediumInterface &mi = nullptr,
+          bool isComplex = false);
+ 
 	virtual ~Shape();
 
 	// 返回在对象坐标系中的包围盒
@@ -122,8 +123,16 @@ public:
         
     }
     
-    F_INLINE const Material * getMaterial(int idx = 0) const {
-        return _materials[idx].get();
+    F_INLINE void setMaterial(const shared_ptr<const Material> &mat) {
+        _material = mat;
+    }
+    
+    F_INLINE const Material * getMaterial() const {
+        return _material.get();
+    }
+    
+    F_INLINE void setAreaLight(const shared_ptr<const AreaLight> &light) {
+        _areaLight = light;
     }
     
     F_INLINE const AreaLight * getAreaLight() {
@@ -142,11 +151,12 @@ public:
 protected:
     // 初始值为-1，-1为非法值
     Float _invArea;
+    shared_ptr<const Material> _material;
     
-    vector<shared_ptr<const Material>> _materials;
+    // 用于区分网格与简单图形
+    bool _isComplex = false;
     
-    // 发光属性
-    std::shared_ptr<AreaLight> _areaLight;
+    shared_ptr<const AreaLight> _areaLight;
     MediumInterface _mediumInterface;
     
     Primitive * _primitive;

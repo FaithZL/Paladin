@@ -221,6 +221,33 @@ Filter * SceneParser::parseFilter(const nloJson &data) {
     return ret;
 }
 
+//data : {
+//    "type" : "triMesh",
+//    "subType" : "quad",
+//    "name" : "front",
+//    "enable" : true,
+//    "param" : {
+//        "transform" :[
+//            {
+//                "type" : "translate",
+//                "param" : [-1,0,0]
+//            }
+//        ],
+//        "width" : 2
+//    },
+//    "mediumInterface" : [null, "fog"],
+//    "material" : null
+//}
+void SceneParser::parseMesh(const nloJson &data) {
+    string subType = data.value("subType", "");
+    vector<shared_ptr<Primitive>> prims;
+    nloJson medIntfceData = data.value("mediumInterface", nloJson());
+    MediumInterface mediumInterface = getMediumInterface(medIntfceData);
+    if (subType == "quad") {
+        
+    }
+}
+
 void SceneParser::parseShapes(const nloJson &shapeDataList) {
     for (const auto &shapeData : shapeDataList) {
         string type = shapeData.value("type", "sphere");

@@ -32,6 +32,15 @@ public:
                                                  const shared_ptr< Transform> &transform,
                                                  vector<shared_ptr<Light>> &lights);
     
+    
+    vector<shared_ptr<Shape>> loadShapes(const string &fn,
+                                         const shared_ptr< Transform> &transform,
+                                         vector<shared_ptr<Light>> &lights);
+    
+    vector<shared_ptr<Shape>> createShapes(const nloJson &meshData,
+                                           const shared_ptr<const Transform> &transform,
+                                           vector<shared_ptr<Light>> &lights);
+    
 private:
     
     
@@ -43,6 +52,8 @@ private:
     static ModelCache * s_modelCache;
     
     map<string, vector<shared_ptr<Primitive>>> _modelMap;
+    
+    map<string, vector<shared_ptr<Shape>>> _meshMap;
 };
 
 
