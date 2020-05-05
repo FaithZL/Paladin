@@ -16,7 +16,7 @@
 PALADIN_BEGIN
 
 TriangleMesh::TriangleMesh(
-                           const shared_ptr<const Transform> &ObjectToWorld, int nTriangles, const int *vertexIndices,
+                           const Transform * ObjectToWorld, int nTriangles, const int *vertexIndices,
                            int nVertices, const Point3f *P, const Vector3f *S, const Normal3f *N,
                            const Point2f *UV, const std::shared_ptr<Texture<Float>> &alphaMask,
                            const std::shared_ptr<Texture<Float>> &shadowAlphaMask,
@@ -63,7 +63,7 @@ shadowAlphaMask(shadowAlphaMask) {
     }
 }
 
-TriangleMesh::TriangleMesh(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
+TriangleMesh::TriangleMesh(const Transform *objectToWorld, int nTriangles,
                             const vector<Index> &verts, const vector<Point3f> *P,
                             const vector<Normal3f> *N, const vector<Point2f> *UV, const vector<Vector3f> *E,
                             const std::shared_ptr<Texture<Float>> &alphaMask,
@@ -144,7 +144,7 @@ size_t TriangleMesh::getIndiceStride() const {
     return sizeof(uint32_t);
 }
 
-shared_ptr<TriangleMesh> TriangleMesh::create(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
+shared_ptr<TriangleMesh> TriangleMesh::create(const Transform *objectToWorld, int nTriangles,
                                             const vector<Index> &vertexIndices, const vector<Point3f> *P,
                                             const vector<Normal3f> *N, const vector<Point2f> *UV, const vector<Vector3f> *E,
                                             const std::shared_ptr<Texture<Float>> &alphaMask,
@@ -842,7 +842,7 @@ Interaction Triangle::samplePos(const Point2f &u, Float *pdf) const {
     return ret;
 }
 
-shared_ptr<TriangleMesh> createTriMesh(const shared_ptr<const Transform> &o2w, int nTriangles,
+shared_ptr<TriangleMesh> createTriMesh(const Transform *o2w, int nTriangles,
                                     const int *vertexIndices, int nVertices, const Point3f *P,
                                     const Point2f *uv, const Normal3f *N, const Vector3f *S,
                                     const std::shared_ptr<Texture<Float>> &alphaMask,
@@ -857,14 +857,14 @@ shared_ptr<TriangleMesh> createTriMesh(const shared_ptr<const Transform> &o2w, i
                                     faceIndices);
 }
 
-shared_ptr<Triangle> createTri(const shared_ptr<const Transform> &o2w, shared_ptr<const Transform> w2o,
+shared_ptr<Triangle> createTri(const Transform *o2w, const Transform * w2o,
                                 bool reverseOrientation,
                                 const std::shared_ptr<TriangleMesh> &_mesh,
                                 int triNumber) {
     return make_shared<Triangle>(o2w, w2o, reverseOrientation, _mesh, triNumber);
 }
 
-vector<shared_ptr<Shape>> createQuad(const shared_ptr<const Transform> &o2w,
+vector<shared_ptr<Shape>> createQuad(const Transform *o2w,
                                 bool reverseOrientation,
                                 Float width, Float height,
                                 const MediumInterface &mediumInterface) {
@@ -887,7 +887,7 @@ vector<shared_ptr<Shape>> createQuad(const shared_ptr<const Transform> &o2w,
     int nVert = 4;
     auto mesh = createTriMesh(o2w, nTri,vertIndice, nVert, points, UVs);
     vector<shared_ptr<Shape>> ret;
-    shared_ptr<Transform>w2o(o2w->getInverse_ptr());
+    auto w2o(o2w->getInverse_ptr());
     for (int i = 0; i < nTri; ++i) {
         ret.push_back(createTri(o2w, w2o, reverseOrientation, mesh, i));
     }
@@ -910,15 +910,15 @@ vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &data,
     nloJson param = data.value("param", nloJson::object());
     auto l2w = createTransform(param.value("transform", nloJson()));
     bool ro = param.value("reverseOrientation", false);
-    shared_ptr<Transform> o2w(l2w);
+//    shared_ptr<Transform> o2w(l2w);
     Float width = param.value("width", 1.f);
     Float height = param.value("height", width);
-    vector<shared_ptr<Shape>> triLst = createQuad(o2w, ro, width, height);
+    vector<shared_ptr<Shape>> triLst = createQuad(l2w, ro, width, height);
     nloJson emissionData = data.value("emission", nloJson());
     return createPrimitive(triLst, lights, mat, mediumInterface, emissionData);
 }
 
-vector<shared_ptr<Shape>> createCube(const shared_ptr<const Transform> &o2w,
+vector<shared_ptr<Shape>> createCube(const Transform *o2w,
                                      bool reverseOrientation,
                                      Float x, Float y, Float z,
                                      const MediumInterface &mediumInterface) {
@@ -929,36 +929,36 @@ vector<shared_ptr<Shape>> createCube(const shared_ptr<const Transform> &o2w,
     auto znTr(Transform::translate_ptr(0,0,-hz));
     * znTr = (*znTr) * Transform::rotateX(180);
     * znTr = *o2w * (*znTr);
-    auto znTris = createQuad(shared_ptr<const Transform>(znTr), reverseOrientation, x,y,mediumInterface);
+    auto znTris = createQuad(znTr, reverseOrientation, x,y,mediumInterface);
     ret.insert(ret.end(), znTris.begin(), znTris.end());
 
     auto zpTr(Transform::translate_ptr(0,0,hz));
     * zpTr = *o2w * (*zpTr);
-    auto zpTris = createQuad(shared_ptr<const Transform>(zpTr), reverseOrientation, x,y,mediumInterface);
+    auto zpTris = createQuad((zpTr), reverseOrientation, x,y,mediumInterface);
     ret.insert(ret.end(), zpTris.begin(), zpTris.end());
 
     auto ynTr(Transform::translate_ptr(0, -hy, 0));
     * ynTr = (*ynTr) * Transform::rotateX(90);
     * ynTr = *o2w * (*ynTr);
-    auto ynTris = createQuad(shared_ptr<const Transform>(ynTr), reverseOrientation, x,z,mediumInterface);
+    auto ynTris = createQuad((ynTr), reverseOrientation, x,z,mediumInterface);
     ret.insert(ret.end(), ynTris.begin(), ynTris.end());
 
     auto ypTr(Transform::translate_ptr(0, hy, 0));
     * ypTr = (*ypTr) * Transform::rotateX(-90);
     * ypTr = *o2w * (*ypTr);
-    auto ypTris = createQuad(shared_ptr<const Transform>(ypTr), reverseOrientation, x,z,mediumInterface);
+    auto ypTris = createQuad((ypTr), reverseOrientation, x,z,mediumInterface);
     ret.insert(ret.end(), ypTris.begin(), ypTris.end());
 
     auto xnTr(Transform::translate_ptr(-hx, 0, 0));
     * xnTr = (*xnTr) * Transform::rotateY(-90);
     * xnTr = *o2w * (*xnTr);
-    auto xnTris = createQuad(shared_ptr<const Transform>(xnTr), reverseOrientation, z,y,mediumInterface);
+    auto xnTris = createQuad((xnTr), reverseOrientation, z,y,mediumInterface);
     ret.insert(ret.end(), xnTris.begin(), xnTris.end());
 
     auto xpTr(Transform::translate_ptr(hx, 0, 0));
     * xpTr = (*xpTr) * Transform::rotateY(90);
     * xpTr = *o2w * (*xpTr);
-    auto xpTris = createQuad(shared_ptr<const Transform>(xpTr), reverseOrientation, z,y);
+    auto xpTris = createQuad((xpTr), reverseOrientation, z,y);
     ret.insert(ret.end(), xpTris.begin(), xpTris.end());
     
     
@@ -994,7 +994,7 @@ vector<shared_ptr<Primitive>> createCubePrimitive(const nloJson &data,
     nloJson param = data.value("param", nloJson::object());
     auto l2w = createTransform(param.value("transform", nloJson()));
     bool ro = param.value("reverseOrientation", false);
-    shared_ptr<Transform> o2w(l2w);
+    auto o2w(l2w);
     Float x = param.value("x", 1.f);
     Float y = param.value("y", x);
     Float z = param.value("z", y);
@@ -1043,14 +1043,14 @@ vector<shared_ptr<Primitive>> createModelPrimitive(const nloJson &data,
     nloJson emissionData = data.value("emission", nloJson());
     // 如果没有发光属性，并且没有指定材质，则使用模型原有材质
     if (emissionData.is_null() && mat == nullptr) {
-        return getPrimitiveFromObj(fileName, s_l2w, lights, mediumInterface, ro);
+        return getPrimitiveFromObj(fileName, l2w, lights, mediumInterface, ro);
     }
-    vector<shared_ptr<Shape>> triLst = createTriFromFile(fileName, s_l2w, ro, basePath);
+    vector<shared_ptr<Shape>> triLst = createTriFromFile(fileName, l2w, ro, basePath);
     return createPrimitive(triLst, lights, mat, mediumInterface, emissionData);
 }
 
 vector<shared_ptr<Shape>> createTriFromFile(const string &fn,
-                                            const shared_ptr<const Transform> &o2w,
+                                            const Transform *o2w,
                                             bool reverseOrientation,
                                             const string &basePath) {
     ModelParser mp;
@@ -1059,7 +1059,7 @@ vector<shared_ptr<Shape>> createTriFromFile(const string &fn,
 }
 
 vector<shared_ptr<Primitive>> getPrimitiveFromObj(const string &fn,
-                                                const shared_ptr<const Transform> &o2w,
+                                                const Transform *o2w,
                                                 vector<shared_ptr<Light>> &lights,
                                                 const MediumInterface &mediumInterface,
                                                 bool reverseOrientation,

@@ -81,7 +81,7 @@ ModelCache * ModelCache::getInstance() {
 //    }
 //},
 vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
-                                                          const shared_ptr<const Transform> &transform,
+                                                          const Transform *transform,
                                                           vector<shared_ptr<Light>> &lights,
                                                           mutex * mtx) {
     vector<shared_ptr<Primitive>> ret;
@@ -98,7 +98,7 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
     
     // 发光参数
     nloJson _emissionData;
-    shared_ptr<Transform> _transform;
+    Transform * _transform;
     shared_ptr<const Material> _material;
     vector<shared_ptr<const Material>> _materials;
     
@@ -143,13 +143,13 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
     }
     
     nloJson transformData = param.value("transform", nloJson());
-    _transform.reset(createTransform(transformData));
+    _transform = createTransform(transformData);
     
     size_t nTriangles = _verts.size() / 3;
     * _transform = (*transform) * (*_transform);
     auto mesh = TriangleMesh::create(_transform, nTriangles, _verts,
                                      &_points, &_normals, &_UVs);
-    shared_ptr<Transform> w2o(_transform->getInverse_ptr());
+    auto w2o(_transform->getInverse_ptr());
     nloJson miData = param.value("mediumInterface", nloJson());
     MediumInterface mi = Paladin::getInstance()->getSceneParser()->getMediumInterface(miData);
     
@@ -189,12 +189,12 @@ vector<shared_ptr<Primitive>> ModelCache::createPrimitive(const nloJson &param,
 }
 
 vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
-                                                         const shared_ptr< Transform> &transform,
+                                                         const Transform *transform,
                                                          vector<shared_ptr<Light>> &lights) {
     
     if (hasExtension(fn, "obj")) {
-        Transform swapHand = Transform::scale(-1, 1, 1);
-        *transform = (*transform) * swapHand;
+//        Transform swapHand = Transform::scale(-1, 1, 1);
+//        *transform = (*transform) * swapHand;
         return getPrimitiveFromObj(fn, transform, lights, nullptr, false);
     }
     
@@ -218,13 +218,13 @@ vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
 }
 
 vector<shared_ptr<Shape>> ModelCache::createShapes(const nloJson &meshData,
-                                                const shared_ptr<const Transform> &transform,
+                                                const Transform *transform,
                                                 vector<shared_ptr<Light>> &lights) {
     
 }
 
 vector<shared_ptr<Primitive>> ModelCache::getPrimitives(const string &fn,
-                                                        const shared_ptr<Transform> &transform,
+                                                        const Transform *transform,
                                                         vector<shared_ptr<Light>> &lights) {
     auto iter = _modelMap.find(fn);
     if (iter == _modelMap.end()) {

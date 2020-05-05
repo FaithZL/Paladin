@@ -58,21 +58,21 @@ struct Index {
  */
 struct TriangleMesh : public EmbreeUtil::EmbreeGeomtry {
 
-    TriangleMesh(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
+    TriangleMesh(const Transform * objectToWorld, int nTriangles,
                  const int *vertexIndices, int nVertices, const Point3f *P,
                  const Vector3f *S, const Normal3f *N, const Point2f *uv,
                  const std::shared_ptr<Texture<Float>> &alphaMask=nullptr,
                  const std::shared_ptr<Texture<Float>> &shadowAlphaMask=nullptr,
                  const int *faceIndices=nullptr);
     
-    TriangleMesh(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
+    TriangleMesh(const Transform *objectToWorld, int nTriangles,
                  const vector<Index> &vertexIndices, const vector<Point3f> *P,
                  const vector<Normal3f> *N=nullptr, const vector<Point2f> *UV=nullptr, const vector<Vector3f> *E=nullptr,
                  const std::shared_ptr<Texture<Float>> &alphaMask=nullptr,
                  const std::shared_ptr<Texture<Float>> &shadowAlphaMask=nullptr,
                  const int *faceIndices=nullptr);
     
-    static std::shared_ptr<TriangleMesh> create(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
+    static std::shared_ptr<TriangleMesh> create(const Transform *objectToWorld, int nTriangles,
                                         const vector<Index> &vertexIndices, const vector<Point3f> *P,
                                         const vector<Normal3f> *N=nullptr, const vector<Point2f> *UV=nullptr, const vector<Vector3f> *E=nullptr,
                                         const std::shared_ptr<Texture<Float>> &alphaMask=nullptr,
@@ -136,7 +136,7 @@ private:
 class Triangle : public Shape {
 public:
 
-    Triangle(const shared_ptr<const Transform> &objectToWorld, const shared_ptr<const Transform> &worldToObject,
+    Triangle(const Transform *objectToWorld, const Transform *worldToObject,
              bool reverseOrientation, const std::shared_ptr<TriangleMesh> &_mesh,
              int triNumber)
     : Shape(objectToWorld, worldToObject, reverseOrientation), _mesh(_mesh) {
@@ -263,19 +263,19 @@ private:
     int _faceIndex;
 };
 
-shared_ptr<TriangleMesh> createTriMesh(const shared_ptr<const Transform> &objectToWorld, int nTriangles,
+shared_ptr<TriangleMesh> createTriMesh(const Transform *objectToWorld, int nTriangles,
     const int *vertexIndices, int nVertices, const Point3f *P,
     const Point2f *uv=nullptr, const Normal3f *N=nullptr, const Vector3f *S=nullptr,
     const std::shared_ptr<Texture<Float>> &alphaMask=nullptr,
     const std::shared_ptr<Texture<Float>> &shadowAlphaMask=nullptr,
                                   const int *faceIndices=nullptr);
 
-shared_ptr<Triangle> createTri(const shared_ptr<const Transform> &o2w, shared_ptr<const Transform> w2o,
+shared_ptr<Triangle> createTri(const Transform*o2w,const Transform * w2o,
                             bool reverseOrientation,
                             const std::shared_ptr<TriangleMesh> &_mesh,
                             int triNumber);
 
-vector<shared_ptr<Shape>> createQuad(const shared_ptr<const Transform> &o2w,
+vector<shared_ptr<Shape>> createQuad(const Transform *o2w,
                         bool reverseOrientation,
                         Float width, Float height = 0,
                         const MediumInterface &mediumInterface = nullptr);
@@ -286,7 +286,7 @@ vector<shared_ptr<Primitive>> createQuadPrimitive(const nloJson &,
                                                   vector<shared_ptr<Light>> &lights,
                                                   const MediumInterface &mediumInterface);
 
-vector<shared_ptr<Shape>> createCube(const shared_ptr<const Transform> &o2w,
+vector<shared_ptr<Shape>> createCube(const Transform *o2w,
                                      bool reverseOrientation,
                                      Float x, Float y, Float z,
                                      const MediumInterface &mediumInterface);
@@ -302,7 +302,7 @@ vector<shared_ptr<Primitive>> createModelPrimitive(const nloJson &data,
                                                    const MediumInterface &mediumInterface);
 
 vector<shared_ptr<Shape>> createTriFromFile(const string &fn,
-                                            const shared_ptr<const Transform> &o2w,
+                                            const Transform *o2w,
                                             bool reverseOrientation,
                                             const string &basePath = "");
 
@@ -313,7 +313,7 @@ vector<shared_ptr<Primitive>> createPrimitive(const vector<shared_ptr<Shape>> &t
                                               const nloJson &emissionData);
 
 vector<shared_ptr<Primitive>> getPrimitiveFromObj(const string &fn,
-                                                const shared_ptr<const Transform> &o2w,
+                                                const Transform * o2w,
                                                 vector<shared_ptr<Light>> &lights,
                                                 const MediumInterface &mediumInterface,
                                                 bool reverseOrientation,

@@ -37,7 +37,7 @@ public:
         }
         Transform *tCached = hashTable[offset];
         if (tCached) {
-            
+            volatile int a = 0;
         } else {
             tCached = arena.alloc<Transform>();
             *tCached = t;

@@ -12,7 +12,7 @@
 
 PALADIN_BEGIN
 
-DiffuseAreaLight::DiffuseAreaLight(shared_ptr<const Transform> LightToWorld,
+DiffuseAreaLight::DiffuseAreaLight(const Transform * LightToWorld,
                                    const MediumInterface &mediumInterface,
                                    const Spectrum &L, int nSamples,
                                    const std::shared_ptr<Shape> &shape,
@@ -101,7 +101,7 @@ shared_ptr<DiffuseAreaLight> DiffuseAreaLight::create(Float rgb[3], const std::s
         return nullptr;
     }
     Spectrum Le = Spectrum::FromRGB(rgb);
-    shared_ptr<const Transform> l2w = shape->objectToWorld;
+    auto l2w = shape->objectToWorld;
     return make_shared<DiffuseAreaLight>(l2w, mi, Le, 1, shape, false);
 }
 
@@ -120,7 +120,7 @@ DiffuseAreaLight * createDiffuseAreaLight(const nloJson &param,
     if (param.is_null()) {
         return nullptr;
     }
-    shared_ptr<const Transform> l2w = shape->objectToWorld;
+    auto l2w = shape->objectToWorld;
     nloJson _Le = param.value("Le", nloJson::object());
     nloJson scale = param.value("scale", 1.f);
     Spectrum Le = Spectrum::FromJson(_Le);

@@ -59,7 +59,7 @@ Float PointLight::pdf_Li(const Interaction &, const Vector3f &) const {
 //}
 CObject_ptr createPointLight(const nloJson &param, const Arguments &lst) {
     nloJson l2w_data = param.value("transform", nloJson());
-    auto l2w = shared_ptr<const Transform>(createTransform(l2w_data));
+    auto l2w = createTransform(l2w_data);
     nloJson Idata = param.value("I", nloJson::object());
     nloJson scale = param.value("scale", 1.f);
     Spectrum I = Spectrum::FromJson(Idata);

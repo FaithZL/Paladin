@@ -12,7 +12,7 @@
 
 PALADIN_BEGIN
 
-EnvironmentMap::EnvironmentMap(shared_ptr<const Transform> LightToWorld,
+EnvironmentMap::EnvironmentMap(const Transform * LightToWorld,
                                const Spectrum &L,
                                int nSamples, const std::string &texmap)
 :Light((int)LightFlags::Infinite, LightToWorld, MediumInterface(),
@@ -165,7 +165,7 @@ Float EnvironmentMap::pdf_Li(const Interaction &, const Vector3f &w) const {
 //}
 CObject_ptr createEnvironmentMap(const nloJson &param, const Arguments &lst) {
     nloJson l2w_data = param.value("transform", nloJson());
-    auto l2w = shared_ptr<const Transform>(createTransform(l2w_data));
+    auto l2w = createTransform(l2w_data);
     nloJson scale = param.value("scale", 1.0);
     nloJson Ldata = param.value("L", nloJson::object());
     Spectrum L = Spectrum::FromJsonRGB(Ldata);
@@ -176,8 +176,7 @@ CObject_ptr createEnvironmentMap(const nloJson &param, const Arguments &lst) {
         string basePath = Paladin::getInstance()->getBasePath();
         fn = basePath + fn;
     }
-    return new EnvironmentMap(shared_ptr<const Transform>(l2w),
-                              L, nSamples, fn);
+    return new EnvironmentMap(l2w, L, nSamples, fn);
 }
 
 REGISTER("envmap", createEnvironmentMap);

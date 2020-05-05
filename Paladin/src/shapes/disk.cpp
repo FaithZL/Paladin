@@ -119,8 +119,8 @@ CObject_ptr createDisk(const nloJson &param, const Arguments &lst) {
     
     nloJson l2w_data = param.value("transform", nloJson());
     Transform * l2w = createTransform(l2w_data);
-    shared_ptr<Transform> w2o(l2w->getInverse_ptr());
-    shared_ptr<Transform> o2w(l2w);
+    auto w2o(l2w->getInverse_ptr());
+    auto o2w(l2w);
     
     auto ret = new Disk(o2w, w2o, reverseOri, height, radius, innerRadius, phiMax);
     

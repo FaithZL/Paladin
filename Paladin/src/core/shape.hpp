@@ -25,12 +25,12 @@ PALADIN_BEGIN
  */
 class Shape : public EmbreeUtil::EmbreeGeomtry {
 public:
-	Shape(const shared_ptr<const Transform> &ObjectToWorld, const shared_ptr<const Transform>&WorldToObject,
+	Shape(const Transform *ObjectToWorld, const Transform *WorldToObject,
           bool reverseOrientation);
     
     Shape(const Transform * ObjectToWorld, const Transform *WorldToObject,
-          bool reverseOrientation, const MediumInterface &mi = nullptr,
-          bool isComplex = false);
+          bool reverseOrientation, const MediumInterface &mi,
+          bool isComplex);
  
 	virtual ~Shape();
 
@@ -139,8 +139,8 @@ public:
         return _areaLight.get();
     }
 
-    shared_ptr<const Transform> objectToWorld;
-    shared_ptr<const Transform> worldToObject;
+    const Transform * objectToWorld;
+    const Transform * worldToObject;
     
     const Transform * o2w;
     const Transform * w2o;

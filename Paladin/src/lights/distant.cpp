@@ -10,7 +10,7 @@
 
 PALADIN_BEGIN
 
-DistantLight::DistantLight(shared_ptr<const Transform> LightToWorld, const Spectrum &L,
+DistantLight::DistantLight(const Transform * LightToWorld, const Spectrum &L,
                            const Vector3f &wLight)
 : Light((int)LightFlags::DeltaDirection, LightToWorld, MediumInterface()),
 _L(L),
@@ -80,7 +80,7 @@ Float DistantLight::pdf_Li(const Interaction &, const Vector3f &) const {
 //}
 CObject_ptr createDistantLight(const nloJson &param, const Arguments &lst) {
     nloJson l2w_data = param.value("transform", nloJson());
-    auto l2w = shared_ptr<const Transform>(createTransform(l2w_data));
+    auto l2w = createTransform(l2w_data);
     nloJson Ldata = param.value("L", nloJson::object());
     nloJson scale = param.value("scale", 1.f);
     Spectrum L = Spectrum::FromJson(Ldata);

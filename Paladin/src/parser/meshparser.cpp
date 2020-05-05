@@ -86,7 +86,7 @@ vector<shared_ptr<Primitive>> MeshParser::getPrimitiveLst(const nloJson &data,
     nloJson param = data.value("param", nloJson());
     
     nloJson transformData = data.value("transform", nloJson());
-    shared_ptr<Transform> transform(createTransform(transformData));
+    auto transform(createTransform(transformData));
     
     if (param.is_string()) {
         string fn = param;

@@ -536,6 +536,8 @@ public:
 
     static Transform perspective(Float fov, Float zNear, Float zFar, bool bRadian=false);
         
+    static Transform identity();
+        
     static Transform * scale_ptr(Float s);
 
     static Transform * scale_ptr(const Vector3f &);

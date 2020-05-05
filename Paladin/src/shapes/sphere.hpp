@@ -38,8 +38,8 @@ PALADIN_BEGIN
 class Sphere : public Shape {
     
 public:
-    Sphere(const shared_ptr<const Transform> &objectToWorld,
-           const shared_ptr<const Transform> &worldToObject,
+    Sphere(const Transform *objectToWorld,
+           const Transform *worldToObject,
            bool reverseOrientation,
            Float radius,
            Float zMax,

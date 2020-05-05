@@ -170,7 +170,7 @@ void ModelParser::parseMesh(const mesh_t &mesh) {
     }
 }
 
-vector<shared_ptr<Shape>> ModelParser::getTriLst(const shared_ptr<const Transform> &o2w,
+vector<shared_ptr<Shape>> ModelParser::getTriLst(const Transform *o2w,
                                                  bool reverseOrientation) {
     packageData();
     parseShapes();
@@ -182,7 +182,7 @@ vector<shared_ptr<Shape>> ModelParser::getTriLst(const shared_ptr<const Transfor
     auto mesh = TriangleMesh::create(o2w, nTriangles, _verts, &_points, &_normals, &_UVs);
 
     vector<shared_ptr<Shape>> ret;
-    shared_ptr<Transform> w2o(o2w->getInverse_ptr());
+    auto w2o(o2w->getInverse_ptr());
     for (int i = 0; i < nTriangles; ++i) {
         ret.push_back(createTri(o2w, w2o, reverseOrientation, mesh, i));
     }
@@ -202,7 +202,7 @@ void ModelParser::parseShape(const shape_t &shape) {
     }
 }
 
-vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<const Transform> &o2w,
+vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const Transform *o2w,
                                                            vector<shared_ptr<Light>> &lights,
                                                            bool reverseOrientation,
                                                            const MediumInterface &mediumInterface) {
@@ -219,7 +219,7 @@ vector<shared_ptr<Primitive>> ModelParser::getPrimitiveLst(const shared_ptr<cons
     }
     size_t nTriangles = _verts.size() / 3;
     auto mesh = TriangleMesh::create(o2w, nTriangles, _verts, &_points, &_normals, &_UVs);
-    shared_ptr<Transform> w2o(o2w->getInverse_ptr());
+    auto w2o(o2w->getInverse_ptr());
     for (size_t i = 0; i < nTriangles; ++i) {
         auto tri = createTri(o2w, w2o, reverseOrientation, mesh, i);
         int matIdx = _matIndices[i];

@@ -25,7 +25,7 @@ PALADIN_BEGIN
 class Cylinder : public Shape {
 public:
     
-    Cylinder(const shared_ptr<const Transform> &ObjectToWorld, const shared_ptr<const Transform> &WorldToObject,
+    Cylinder(const Transform *ObjectToWorld, const Transform *WorldToObject,
              bool reverseOrientation, Float radius, Float zMin, Float zMax,
              Float _phiMax)
     : Shape(ObjectToWorld, WorldToObject, reverseOrientation),

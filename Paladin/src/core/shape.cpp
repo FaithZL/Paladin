@@ -17,7 +17,7 @@ Shape::~Shape() {
     
 }
 
-Shape::Shape(const shared_ptr<const Transform> &objectToWorld,const shared_ptr<const Transform> &worldToObject,
+Shape::Shape(const Transform *objectToWorld,const Transform* worldToObject,
              bool reverseOrientation)
     : objectToWorld(objectToWorld),
     worldToObject(worldToObject),

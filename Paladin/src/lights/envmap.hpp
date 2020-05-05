@@ -17,7 +17,7 @@ PALADIN_BEGIN
 class EnvironmentMap : public Light {
     
 public:
-    EnvironmentMap(shared_ptr<const Transform> LightToWorld, const Spectrum &L,
+    EnvironmentMap(const Transform *LightToWorld, const Spectrum &L,
                    int nSamples, const std::string &texmap);
     
     virtual void preprocess(const Scene &scene) override {

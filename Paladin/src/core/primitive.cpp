@@ -37,11 +37,11 @@ bool GeometricPrimitive::intersectP(const Ray &r) const {
 }
 
 const Transform & GeometricPrimitive::getWorldToObject() const {
-    return * (_shape->worldToObject.get());
+    return * (_shape->worldToObject);
 }
 
 const Transform & GeometricPrimitive::getObjectToWorld() const {
-    return * (_shape->objectToWorld.get());
+    return * (_shape->objectToWorld);
 }
 
 bool GeometricPrimitive::intersect(const Ray &r,
@@ -103,14 +103,14 @@ void GeometricPrimitive::computeScatteringFunctions(
 
 //TransformedPrimitive
 shared_ptr<TransformedPrimitive> TransformedPrimitive::create(const std::shared_ptr<Primitive> &primitive,
-                                                              const shared_ptr<const Transform> &o2w,
+                                                              const Transform *o2w,
                                                               const std::shared_ptr<const Material> &mat,
                                                               const MediumInterface &mediumInterface) {
     return make_shared<TransformedPrimitive>(primitive, o2w, mat);
 }
 
 TransformedPrimitive::TransformedPrimitive(const std::shared_ptr<Primitive> &primitive,
-                                          const shared_ptr<const Transform> &o2w,
+                                           const Transform *o2w,
                                            const std::shared_ptr<const Material> &mat,
                                            const MediumInterface &mediumInterface):
 _primitive(primitive),
@@ -118,8 +118,8 @@ _material(mat),
 _mediumInterface(mediumInterface) {
     shared_ptr<GeometricPrimitive> prim = dynamic_pointer_cast<GeometricPrimitive>(primitive);
     const Transform & trf = prim->getWorldToObject();
-    auto w2o = (*o2w) * (trf);
-    _objectToWorld = w2o;
+//    auto w2o = (*o2w) * (trf);
+    _objectToWorld = (*o2w) * (trf);
 }
 
 bool TransformedPrimitive::intersect(const Ray &r,

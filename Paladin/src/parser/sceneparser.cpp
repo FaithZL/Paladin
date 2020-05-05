@@ -92,17 +92,16 @@ void SceneParser::autoPlane() {
     auto rotate = Transform::rotateX(-90);
     auto translate = Transform::translate_ptr(Vector3f(0, bound.pMin.y, 0));
     *translate = (*translate) * rotate;
-    shared_ptr<Transform> o2w = shared_ptr<Transform>(translate);
     auto tex = make_shared<ConstantTexture<Spectrum>>(Spectrum(1.f));
     auto sigma = make_shared<ConstantTexture<Float>>(0);
     auto mat = make_shared<MatteMaterial>(tex, sigma, nullptr);
-    auto quad = createQuad(o2w, false, width);
+    auto quad = createQuad(translate, false, width);
     auto prims = createPrimitive(quad, _lights, mat, nullptr, nloJson());
     _primitives.insert(_primitives.end(), prims.begin(), prims.end());
 }
 
 void SceneParser::autoLight() {
-    auto tf = shared_ptr<Transform>(Transform::identity_ptr());
+    auto tf = Transform::identity_ptr();
     Spectrum L(1.f);
     auto light = make_shared<DistantLight>(tf, L, Vector3f(1,1,-1));
     _lights.push_back(light);
@@ -297,9 +296,8 @@ void SceneParser::parseClonal(const nloJson &data) {
     const vector<shared_ptr<Primitive>> & prims = getPrimitives(from);
     vector<shared_ptr<Primitive>> tPrims;
     auto l2w = createTransform(data.value("transform", nloJson()));
-    shared_ptr<Transform> o2w(l2w);
     for (auto iter = prims.cbegin(); iter != prims.cend(); ++iter) {
-        auto tPrim = TransformedPrimitive::create(*iter, o2w, mat, mediumInterface);
+        auto tPrim = TransformedPrimitive::create(*iter, l2w, mat, mediumInterface);
         _primitives.push_back(tPrim);
     };
 }

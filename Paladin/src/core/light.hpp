@@ -90,7 +90,7 @@ public:
 
     }
 
-    Light(int flags, shared_ptr<const Transform> LightToWorld,
+    Light(int flags, const Transform * LightToWorld,
           const MediumInterface &mediumInterface, int nSamples = 1)
         
     : flags(flags),
@@ -168,13 +168,13 @@ public:
     
 protected:
 
-    shared_ptr<const Transform> _lightToWorld;
-    shared_ptr<const Transform> _worldToLight;
+    const Transform * _lightToWorld;
+    const Transform * _worldToLight;
 };
 
 class AreaLight : public Light {
 public:
-    AreaLight(shared_ptr<const Transform> LightToWorld, 
+    AreaLight(const Transform * LightToWorld,
             const MediumInterface &mi,
             int nSamples)
     :Light((int)LightFlags::Area, LightToWorld, mi, nSamples) {

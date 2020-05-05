@@ -119,12 +119,12 @@ private:
 class TransformedPrimitive : public Primitive {
 public:
     TransformedPrimitive(const shared_ptr<Primitive> &primitive,
-                         const shared_ptr<const Transform> &o2w,
+                         const Transform *o2w,
                          const std::shared_ptr<const Material> &mat = nullptr,
                          const MediumInterface &mediumInterface = nullptr);
     
     static shared_ptr<TransformedPrimitive> create(const shared_ptr<Primitive> &primitive,
-                                                   const shared_ptr<const Transform> &o2w,
+                                                   const Transform *o2w,
                                                    const std::shared_ptr<const Material> &mat = nullptr,
                                                    const MediumInterface &mediumInterface = nullptr);
     
