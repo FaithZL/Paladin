@@ -33,6 +33,13 @@ public:
                                                  vector<shared_ptr<Light>> &lights);
     
     
+    
+    static vector<shared_ptr<Shape>> getShapes(const string &fn,
+                                        const Transform *transform,
+                                        vector<shared_ptr<Light>> &lights);
+    
+private:
+    
     vector<shared_ptr<Shape>> loadShapes(const string &fn,
                                          const Transform *transform,
                                          vector<shared_ptr<Light>> &lights);
@@ -41,7 +48,6 @@ public:
                                            const Transform *transform,
                                            vector<shared_ptr<Light>> &lights);
     
-private:
     
     
     

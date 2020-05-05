@@ -155,17 +155,13 @@ public:
         return Transform(_matInv, _mat);
     }
         
-    Transform * getInverse_ptr() const {
-        return new Transform(_matInv, _mat);
-    }
+    Transform * getInverse_ptr() const;
 
     Transform getTranspose() const {
         return Transform(_mat.getTransposeMat(), _matInv.getTransposeMat());
     }
         
-    Transform * getTranspose_ptr() const {
-        return new Transform(_mat.getTransposeMat(), _matInv.getTransposeMat());
-    }
+    Transform * getTranspose_ptr() const;
 
     bool operator == (const Transform &other) const {
         return other._mat == _mat && other._matInv == _matInv;

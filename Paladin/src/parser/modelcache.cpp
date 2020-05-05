@@ -15,6 +15,7 @@
 #include "core/paladin.hpp"
 #include "tools/parallel.hpp"
 #include <time.h>
+#include "shapes/mesh.hpp"
 
 PALADIN_BEGIN
 
@@ -193,8 +194,6 @@ vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
                                                          vector<shared_ptr<Light>> &lights) {
     
     if (hasExtension(fn, "obj")) {
-//        Transform swapHand = Transform::scale(-1, 1, 1);
-//        *transform = (*transform) * swapHand;
         return getPrimitiveFromObj(fn, transform, lights, nullptr, false);
     }
     
@@ -217,12 +216,6 @@ vector<shared_ptr<Primitive>> ModelCache::loadPrimitives(const string &fn,
     return ret;
 }
 
-vector<shared_ptr<Shape>> ModelCache::createShapes(const nloJson &meshData,
-                                                const Transform *transform,
-                                                vector<shared_ptr<Light>> &lights) {
-    
-}
-
 vector<shared_ptr<Primitive>> ModelCache::getPrimitives(const string &fn,
                                                         const Transform *transform,
                                                         vector<shared_ptr<Light>> &lights) {
@@ -239,6 +232,148 @@ vector<shared_ptr<Primitive>> ModelCache::getPrimitives(const string &fn,
         auto transformPrim = TransformedPrimitive::create(*iter, transform);
         ret.push_back(transformPrim);
     }
+    return ret;
+}
+
+//"param" : {
+//    "normals" : [
+//        1,0,0,
+//        2,0,0
+//    ],
+//    "verts" : [
+//        2,1,1,
+//        3,2,1
+//    ],
+//    "UVs" : [
+//        0.9,0.3,
+//        0.5,0.6
+//    ],
+//    "indexes" : [
+//        [1,2,3],
+//        [3,5,6]
+//    ],
+//    "material" : [
+//        {
+//            "type" : "unity",
+//            "param" : {
+//                "albedo" : [0.725, 0.71, 0.68],
+//                "roughness" : 0.2,
+//                "metallic" : 0.8
+//            }
+//        },
+//        {
+//            "type" : "unity",
+//            "param" : {
+//                "albedo" : [0.725, 0.71, 0.68],
+//                "roughness" : 0.2,
+//                "metallic" : 0.8
+//            }
+//        }
+//    ],
+//    "transform" : {
+//        "type" : "matrix",
+//        "param" : [
+//            1,0,0,0,
+//            0,1,0,0,
+//            0,0,1,0,
+//            0,0,0,1
+//        ]
+//    },
+//    "emission" : {
+//        "nSamples" : 1,
+//        "Le" : {
+//            "colorType" : 1,
+//            "color" : [1,1,1]
+//        },
+//        "twoSided" : false
+//    }
+//},
+vector<shared_ptr<Shape>> ModelCache::createShapes(const nloJson &param,
+                                                const Transform *transform,
+                                                vector<shared_ptr<Light>> &lights) {
+    vector<shared_ptr<Shape>> ret;
+    
+    vector<Point3f> points;
+    // 法线列表
+    vector<Normal3f> normals;
+    // uv坐标列表
+    vector<Point2f> UVs;
+    
+    nloJson normalData = param.value("normals", nloJson::array());
+    for (auto iter = normalData.cbegin(); iter != normalData.cend(); iter += 3) {
+        Float nx = iter[0];
+        Float ny = iter[1];
+        Float nz = iter[2];
+        normals.emplace_back(nx, ny, nz);
+    }
+    
+    nloJson pointData = param.value("verts", nloJson::array());
+    for (auto iter = pointData.cbegin(); iter != pointData.cend(); iter += 3) {
+        Float px = iter[0];
+        Float py = iter[1];
+        Float pz = iter[2];
+        points.emplace_back(px, py, pz);
+    }
+    
+    nloJson UVData = param.value("UVs", nloJson::array());
+    for (auto iter = UVData.cbegin(); iter != UVData.cend(); iter += 2) {
+        Float u = iter[0];
+        Float v = iter[1];
+        UVs.emplace_back(u, v);
+    }
+    
+    nloJson indexes = param.value("indexes", nloJson::array());
+    int nMesh = indexes.size();
+    
+    for (auto iter = indexes.cbegin(); iter != indexes.cend(); ++iter) {
+        nloJson subIndexes = *iter;
+        
+        vector<Point3f> subPoints;
+        // 法线列表
+        vector<Normal3f> subNormals;
+        // uv坐标列表
+        vector<Point2f> subUVs;
+        
+        // 顶点索引列表
+        vector<IndexSet> indice;
+        
+        vector<int> checkTable(points.size(), 0);
+        
+        for(auto _iter = subIndexes.cbegin(); _iter != subIndexes.cend(); ++_iter) {
+            int idx = *_iter;
+            Point3f point = points[idx];
+            Point2f uv = UVs[idx];
+            Normal3f normal = normals[idx];
+            checkTable[idx] = 1;
+            
+        }
+    }
+    
+    return ret;
+}
+
+vector<shared_ptr<Shape>> ModelCache::loadShapes(const string &fn,
+                                            const Transform *transform,
+                                            vector<shared_ptr<Light>> &lights) {
+    vector<shared_ptr<Shape>> ret;
+    nloJson meshList = createJsonFromFile(fn)["data"];
+    for (auto meshData : meshList) {
+        vector<shared_ptr<Shape>> tmp = createShapes(meshData, transform, lights);
+        ret.insert(ret.end(), tmp.begin(), tmp.end());
+    }
+    return ret;
+}
+
+vector<shared_ptr<Shape>> ModelCache::getShapes(const string &fn, const Transform *transform, vector<shared_ptr<Light> > &lights) {
+    auto self = getInstance();
+    auto iter = self->_meshMap.find(fn);
+    if (iter == self->_meshMap.end()) {
+        auto shapeLst = self->loadShapes(fn, transform, lights);
+        self->_meshMap[fn] = shapeLst;
+        return shapeLst;
+    }
+    
+    vector<shared_ptr<Shape>> ret;
     return ret;
 }
 

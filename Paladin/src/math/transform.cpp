@@ -12,6 +12,8 @@
 
 PALADIN_BEGIN
 
+static TransformCache transformCache;
+
 //Matrix4x4
 Float Matrix4x4::getDet() const {
     Float result =
@@ -179,6 +181,14 @@ bool Matrix4x4::isIdentity() const {
 
 
 //Transform
+Transform * Transform::getInverse_ptr() const {
+    return transformCache.Lookup(getInverse());
+}
+
+Transform * Transform::getTranspose_ptr() const {
+    return transformCache.Lookup(getTranspose());
+}
+
 Transform Transform::operator * (const Transform &other) const {
     return Transform(_mat * other._mat, other._matInv * _matInv);
 }
@@ -241,8 +251,6 @@ SurfaceInteraction Transform::exec(const paladin::SurfaceInteraction &isect) con
     
     return ret;
 }
-
-static TransformCache transformCache;
 
 Transform Transform::translate(const Vector3f &delta) {
     Float a[16] = {
