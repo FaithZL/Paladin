@@ -10,6 +10,7 @@
 
 #include "core/header.h"
 #include "shapes/trianglemesh.hpp"
+#include "shapes/mesh.hpp"
 
 PALADIN_BEGIN
 
@@ -48,7 +49,11 @@ private:
                                            const Transform *transform,
                                            vector<shared_ptr<Light>> &lights);
     
-    
+    static void remedyData(const vector<int> &checkTable,
+                           vector<Point3f> &points,
+                           vector<Normal3f> &normals,
+                           vector<Point2f> &uv,
+                           vector<IndexSet> &indice);
     
     
     ModelCache() {

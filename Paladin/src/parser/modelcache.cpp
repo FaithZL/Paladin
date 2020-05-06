@@ -15,7 +15,7 @@
 #include "core/paladin.hpp"
 #include "tools/parallel.hpp"
 #include <time.h>
-#include "shapes/mesh.hpp"
+
 
 PALADIN_BEGIN
 
@@ -345,11 +345,33 @@ vector<shared_ptr<Shape>> ModelCache::createShapes(const nloJson &param,
             Point2f uv = UVs[idx];
             Normal3f normal = normals[idx];
             checkTable[idx] = 1;
-            
+            subPoints.push_back(point);
+            subNormals.push_back(normal);
+            subUVs.push_back(uv);
+            indice.push_back(idx);
         }
+        
+        remedyData(checkTable, subPoints, subNormals, subUVs, indice);
+        auto mesh = Mesh::create(transform, indice, &subPoints,
+                                 &subNormals, &subUVs);
+        
+        ret.push_back(mesh);
     }
     
     return ret;
+}
+
+void ModelCache::remedyData(const vector<int> &checkTable,
+                            vector<Point3f> &points,
+                            vector<Normal3f> &normals,
+                            vector<Point2f> &uv,
+                            vector<IndexSet> &indice) {
+    vector<Point3f> tmpPoints = points;
+    vector<Normal3f> tmpNormal = normals;
+    vector<Point2f> tmpUV = uv;
+    vector<IndexSet> tmpIndice = indice;
+    
+    
 }
 
 vector<shared_ptr<Shape>> ModelCache::loadShapes(const string &fn,
