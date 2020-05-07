@@ -61,8 +61,17 @@ public:
     static shared_ptr<Mesh> createCube(const Transform *o2w, Float x, Float y = 0, Float z = 0,
                                             const MediumInterface &mi = nullptr);
 
-    
     void initial();
+    
+    void computeWorldBound();
+
+    virtual AABB3f worldBound() const override {
+        return _worldBound;
+    }
+    
+    virtual AABB3f objectBound() const override {
+        return worldToObject->exec(_worldBound);
+    }
     
     virtual Interaction samplePos(const Point2f &u, Float *pdf) const override;
     
@@ -116,6 +125,8 @@ private:
     std::unique_ptr<Point2f[]> _uv;
     
     Float _surfaceArea;
+    
+    AABB3f _worldBound;
     
     friend class TriangleI;
 };

@@ -7,6 +7,7 @@
 //
 
 #include "bvh.hpp"
+#include "core/shape.hpp"
 
 PALADIN_BEGIN
 
@@ -201,6 +202,27 @@ _primitives(std::move(p)) {
     // 将二叉树结构的bvh转换成连续储存结构
     flattenBVHTree(root, &offset);
     CHECK_EQ(totalNodes, offset);
+}
+
+BVHAccel::BVHAccel(const vector<shared_ptr<Shape>> &shapes,
+                   int maxPrimsInNode,
+                   SplitMethod splitMethod)
+: _maxPrimsInNode(std::min(255, maxPrimsInNode)),
+_splitMethod(splitMethod),
+_shapes(std::move(shapes)) {
+    if (_shapes.empty()) {
+        return;
+    }
+    
+    std::vector<BVHPrimitiveInfo> _primitiveInfo(_shapes.size());
+    
+    // 储存每个aabb的中心以及索引
+    for (size_t i = 0; i < _shapes.size(); ++i) {
+        _primitiveInfo[i] = {i, _shapes[i]->worldBound()};
+    }
+    
+    MemoryArena arena(1024 * 1024);
+    int totalNodes = 0;
 }
 
 BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo, int start, int end, int *totalNodes, std::vector<std::shared_ptr<Primitive> > &orderedPrims) {

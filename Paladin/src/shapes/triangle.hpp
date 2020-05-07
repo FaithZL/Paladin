@@ -45,7 +45,7 @@ struct IndexSet {
     int normal;
 };
 
-struct TriangleI {
+struct TriangleI : EmbreeUtil::EmbreeGeomtry {
     
     TriangleI(const IndexSet * p)
     : indice(p) {
@@ -107,6 +107,15 @@ struct TriangleI {
             positions[indice[0].pos], positions[indice[1].pos],
             positions[indice[2].pos], ray, u, v, t);
     }
+    
+    virtual bool rayIntersect(const Ray &ray,
+                            Float *tHit,
+                            SurfaceInteraction * isect,
+                            bool testAlphaTexture = true,
+                              const CObject * owner = nullptr);
+    
+    virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true,
+                             const CObject * owner = nullptr);
     
     Point3f sample(const Point3f *positions, const Normal3f *normals,
                     const Point2f *texCoords, Normal3f * normal, Point2f * uv,

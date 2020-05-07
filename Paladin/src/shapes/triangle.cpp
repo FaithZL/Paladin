@@ -7,6 +7,7 @@
 
 #include "triangle.hpp"
 #include "math/sampling.hpp"
+#include "mesh.hpp"
 
 PALADIN_BEGIN
 
@@ -47,6 +48,22 @@ Point3f TriangleI::sample(const Point3f *positions, const Normal3f *normals,
     }
     
     return p;
+}
+
+bool TriangleI::rayOccluded(const Ray &ray, bool testAlphaTexture,
+                            const CObject * owner) {
+    auto mesh = (Mesh *)owner;
+    Float u,v,t;
+    return rayIntersect(mesh->_points.get(), ray, &u, &v, &t);
+}
+
+bool TriangleI::rayIntersect(const Ray &ray,
+                            Float *tHit,
+                            SurfaceInteraction * isect,
+                            bool testAlphaTexture,
+                            const CObject * owner) {
+    auto mesh = (Mesh *)owner;
+    
 }
 
 Point3f TriangleI::sample(const Point3f *positions, const Point2f &u) const {

@@ -40,6 +40,19 @@ public:
         return nullptr;
     }
     
+    virtual bool rayIntersect(const Ray &ray,
+                            Float *tHit,
+                            SurfaceInteraction * isect,
+                            bool testAlphaTexture = true,
+                            const CObject * owner = nullptr) {
+        DCHECK(false);
+    }
+    
+    virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true,
+                             const CObject * owner = nullptr) {
+        DCHECK(false);
+    }
+    
 };
 
 inline RTCBounds convert(const AABB3f &b) {

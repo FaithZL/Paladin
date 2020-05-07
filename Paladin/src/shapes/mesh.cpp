@@ -61,6 +61,7 @@ void Mesh::initial() {
     }
     _areaDistrib = Distribution1D(&areaLst[0], _nTriangles);
     _invArea = 1.f / _surfaceArea;
+    computeWorldBound();
 }
 
 Interaction Mesh::samplePos(const Point2f &u, Float *pdf) const {
@@ -73,6 +74,13 @@ Interaction Mesh::samplePos(const Point2f &u, Float *pdf) const {
     *pdf = pdfPos();
     tri.sample(_points.get(), _u);
     return ret;
+}
+
+void Mesh::computeWorldBound() {
+    for (size_t i = 0; i < _triangles.size(); ++i) {
+        TriangleI tri = _triangles[i];
+        _worldBound = unionSet(_worldBound, tri.worldBound(_points.get()));
+    }
 }
 
 shared_ptr<Mesh> Mesh::createQuad(const Transform *o2w, Float width, Float height, const MediumInterface &mi) {
