@@ -125,7 +125,18 @@ void Scene::accelInitNative(const nloJson &data, const vector<shared_ptr<Shape> 
 }
 
 void Scene::accelInitEmbree(const vector<shared_ptr<Shape>>&shapes) {
-    
+    EmbreeUtil::initDevice();
+    _rtcScene = rtcNewScene(EmbreeUtil::getDevice());
+    int idx = 0;
+    for (size_t i = 0; i < shapes.size(); ++i) {
+        auto prim = shapes[i];
+        RTCGeometry gid = prim->rtcGeometry(this);
+        _worldBound = unionSet(_worldBound, prim->worldBound());
+        if (gid != nullptr) {
+            rtcAttachGeometry(_rtcScene, gid);
+        }
+    }
+    rtcCommitScene(_rtcScene);
 }
 
 void Scene::accelInitEmbree(const vector<shared_ptr<Primitive> > &primitives) {

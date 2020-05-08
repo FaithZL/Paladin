@@ -53,7 +53,7 @@ void Mesh::initial() {
     vector<Float> areaLst;
     areaLst.reserve(_nTriangles);
     for (size_t i = 0; i < _vertexIndice.size(); i += 3) {
-        TriangleI tri(&(_vertexIndice[0]));
+        TriangleI tri(&_vertexIndice[i], this);
         _triangles.push_back(tri);
         Float area = tri.getArea(_points.get());
         _surfaceArea += area;
@@ -62,6 +62,24 @@ void Mesh::initial() {
     _areaDistrib = Distribution1D(&areaLst[0], _nTriangles);
     _invArea = 1.f / _surfaceArea;
     computeWorldBound();
+}
+
+RTCGeometry Mesh::rtcGeometry(Scene *scene) const {
+    RTCGeometry geom = rtcNewGeometry(EmbreeUtil::getDevice(), RTC_GEOMETRY_TYPE_TRIANGLE);
+    
+    rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0,
+                               RTC_FORMAT_FLOAT3,
+                               getVertice(), 0,
+                               getVerticeStride(),
+                               getVerticeNum());
+    
+    rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0,
+                                RTC_FORMAT_UINT3,
+                                getIndice(), 0,
+                                getIndiceStride() * 3,
+                                getIndiceNum() / 3);
+    rtcCommitGeometry(geom);
+    return geom;
 }
 
 Interaction Mesh::samplePos(const Point2f &u, Float *pdf) const {

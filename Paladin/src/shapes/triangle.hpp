@@ -45,12 +45,17 @@ struct IndexSet {
     int normal;
 };
 
+class Mesh;
+
 struct TriangleI : EmbreeUtil::EmbreeGeomtry {
     
-    TriangleI(const IndexSet * p)
-    : indice(p) {
+    TriangleI(const IndexSet * p, const Mesh * mesh = nullptr)
+    : indice(p),
+    parent(mesh) {
         
     }
+    
+    virtual AABB3f worldBound() const;
     
     F_INLINE AABB3f worldBound(const Point3f *positions) const {
         const Point3f &p0 = positions[indice[0].pos];
@@ -111,11 +116,9 @@ struct TriangleI : EmbreeUtil::EmbreeGeomtry {
     virtual bool rayIntersect(const Ray &ray,
                             Float *tHit,
                             SurfaceInteraction * isect,
-                            bool testAlphaTexture = true,
-                              const CObject * owner = nullptr);
+                            bool testAlphaTexture = true);
     
-    virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true,
-                             const CObject * owner = nullptr);
+    virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true);
     
     Point3f sample(const Point3f *positions, const Normal3f *normals,
                     const Point2f *texCoords, Normal3f * normal, Point2f * uv,
@@ -123,6 +126,8 @@ struct TriangleI : EmbreeUtil::EmbreeGeomtry {
     
     Point3f sample(const Point3f *positions, const Point2f &u) const;
 
+//private:
+    const Mesh * parent;
     const IndexSet * indice;
 };
 

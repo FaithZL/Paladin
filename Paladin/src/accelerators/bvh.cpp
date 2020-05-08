@@ -8,6 +8,7 @@
 
 #include "bvh.hpp"
 #include "core/shape.hpp"
+#include "shapes/mesh.hpp"
 
 PALADIN_BEGIN
 
@@ -214,15 +215,49 @@ _shapes(std::move(shapes)) {
         return;
     }
     
-    std::vector<BVHPrimitiveInfo> _primitiveInfo(_shapes.size());
+    for (int i = 0; i < _shapes.size(); ++i) {
+        auto shape = _shapes[i];
+        if (shape->isComplex()) {
+            auto mesh = (Mesh *)shape.get();
+            auto triangles = mesh->getTriangles();
+            for (int j = 0; j < triangles.size(); ++j) {
+                auto tri = triangles.at(j);
+                _prims.push_back(&tri);
+            }
+        } else {
+            _prims.push_back(shape.get());
+        }
+    }
+    
+    std::vector<BVHPrimitiveInfo> _primitiveInfo(_prims.size());
     
     // 储存每个aabb的中心以及索引
-    for (size_t i = 0; i < _shapes.size(); ++i) {
-        _primitiveInfo[i] = {i, _shapes[i]->worldBound()};
+    for (size_t i = 0; i < _prims.size(); ++i) {
+        _primitiveInfo[i] = {i, _prims[i]->worldBound()};
     }
     
     MemoryArena arena(1024 * 1024);
     int totalNodes = 0;
+    
+    std::vector<EmbreeUtil::EmbreeGeomtry *> orderedPrims;
+    orderedPrims.reserve(_primitives.size());
+    BVHBuildNode *root;
+    
+    if (_splitMethod == SplitMethod::HLBVH) {
+        // 暂时不实现
+        DCHECK(false);
+    } else {
+        root = recursiveBuild(arena, _primitiveInfo, 0, _primitiveInfo.size(), &totalNodes, orderedPrims);
+    }
+    
+    _prims.swap(orderedPrims);
+    _primitiveInfo.resize(0);
+    
+    _nodes = allocAligned<LinearBVHNode>(totalNodes);
+    int offset = 0;
+    // 将二叉树结构的bvh转换成连续储存结构
+    flattenBVHTree(root, &offset);
+    CHECK_EQ(totalNodes, offset);
 }
 
 BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo, int start, int end, int *totalNodes, std::vector<std::shared_ptr<Primitive> > &orderedPrims) {
@@ -414,6 +449,189 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
         }
     }
     return node;
+}
+
+BVHBuildNode * BVHAccel::recursiveBuild(MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo, int start, int end, int *totalNodes, std::vector<EmbreeUtil::EmbreeGeomtry *> &orderedPrims) {
+    BVHBuildNode *node = ARENA_ALLOC(arena, BVHBuildNode);
+    AABB3f bounds;
+    for (int i = start; i < end; ++ i) {
+        bounds = unionSet(bounds, primitiveInfo[i].bounds);
+    }
+    (*totalNodes)++;
+    int numPrimitives = end - start;
+    if (numPrimitives == 1) {
+        int firstPrimOffset = orderedPrims.size();
+        int primNum = primitiveInfo[start].primitiveNumber;
+        orderedPrims.push_back(_prims[primNum]);
+        node->initLeaf(firstPrimOffset, numPrimitives, bounds);
+        return node;
+    } else {
+        AABB3f centroidBounds;
+        for (int i = start; i < end; ++i) {
+            centroidBounds = unionSet(centroidBounds, primitiveInfo[i].centroid);
+        }
+        // 范围最广的维度
+        int maxDim = centroidBounds.maximumExtent();
+        int mid = (start + end) / 2;
+        // 如果最centroidBounds为一个点，则初始化叶子节点
+        if (centroidBounds.pMax[maxDim] == centroidBounds.pMin[maxDim]) {
+            int firstPrimOffset = orderedPrims.size();
+            for (int i = start; i < end; ++i) {
+                int primNum = primitiveInfo[i].primitiveNumber;
+                orderedPrims.push_back(_prims[primNum]);
+            }
+            node->initLeaf(firstPrimOffset, numPrimitives, bounds);
+            return node;
+        } else {
+            switch (_splitMethod) {
+                case Middle: {
+                    // 选择范围最大的维度的中点进行划分
+                    Float pmid = (centroidBounds.pMin[maxDim] + centroidBounds.pMax[maxDim]) / 2;
+                    auto func = [maxDim, pmid](const BVHPrimitiveInfo &pi) {
+                        return pi.centroid[maxDim] < pmid;
+                    };
+                    // std::partition会将区间[first,last)中的元素重新排列，
+                    //满足判断条件的元素会被放在区间的前段，不满足的元素会被放在区间的后段。
+                    // 返回中间指针
+                    BVHPrimitiveInfo *midPtr = std::partition(&primitiveInfo[start], &primitiveInfo[end - 1] + 1,func);
+                    mid = midPtr - &primitiveInfo[0];
+                    if (mid != start && mid != end) {
+                        break;
+                    }
+                }
+                    
+                case EqualCounts: {
+                    // 相等数量划分
+                    mid = (start + end) / 2;
+                    auto func = [maxDim](const BVHPrimitiveInfo &a,
+                                      const BVHPrimitiveInfo &b) {
+                        return a.centroid[maxDim] < b.centroid[maxDim];
+                    };
+                    //将迭代器指向的从_First 到 _last 之间的元素进行二分排序，
+                    //以_Nth 为分界，前面都比 _Nth 小（大），后面都比之大（小）；
+                    //但是两段内并不有序。
+                    std::nth_element(&primitiveInfo[start],
+                                     &primitiveInfo[mid],
+                                     &primitiveInfo[end - 1] + 1,
+                                     func);
+                    break;
+                }
+                case SAH: {
+                     // 表面启发式划分
+                     // 假设每个片元的求交耗时都相等
+                     // 求交消耗的时间为 C = ∑[t=i,N]t(i)
+                     // N为片元的数量，t(i)为第i个片元求交耗时
+                     // C(A,B) = t1 + p(A) * C(A) + p(B) * C(B)
+                     // t1为遍历内部节点所需要的时间加上确定光线通过哪个子节点的时间
+                     // p为概率，C为求交耗时
+                     // 概率与表面积成正比
+                    if (numPrimitives <= 2) {
+                        mid = (start + end) / 2;
+                        auto func = [maxDim](const BVHPrimitiveInfo &a,
+                                          const BVHPrimitiveInfo &b) {
+                            return a.centroid[maxDim] < b.centroid[maxDim];
+                        };
+                        std::nth_element(&primitiveInfo[start],
+                                         &primitiveInfo[mid],
+                                         &primitiveInfo[end - 1] + 1,
+                                         func);
+                    } else {
+                        // 在范围最广的维度上等距离添加n-1个平面
+                        // 把空间分为n个部分，可以理解为n个桶
+                        struct BucketInfo {
+                            int count = 0;
+                            AABB3f bounds;
+                        };
+                        // 默认12个桶
+                        CONSTEXPR int nBuckets = 12;
+                        BucketInfo buckets[nBuckets];
+                        // 统计每个桶中的bounds以及片元数量
+                        for (int i = start; i < end; ++i) {
+                            int b = nBuckets * centroidBounds.offset(primitiveInfo[i].centroid)[maxDim];
+                            if (b == nBuckets) {
+                                b = nBuckets - 1;
+                            }
+                            buckets[b].count++;
+                            buckets[b].bounds = unionSet(buckets[b].bounds, primitiveInfo[i].bounds);
+                        }
+                        
+                        // 找出最优的分割方式，目前假设12个桶，则分割方式有11种
+                        // 1与11，2与10，3与9，等等11个组合，估计出每个组合的计算耗时
+                        // 从而找出最优的分割方式
+                        Float cost[nBuckets - 1];
+                        for (int i = 0; i < nBuckets - 1; ++i) {
+                            AABB3f b0, b1;
+                            int count0 = 0, count1 = 0;
+                            // 计算第一部分
+                            for (int j = 0; j <= i; ++j) {
+                                b0 = unionSet(b0, buckets[j].bounds);
+                                count0 += buckets[j].count;
+                            }
+                            // 计算第二部分
+                            for (int j = i + 1; j < nBuckets; ++j) {
+                                b1 = unionSet(b1, buckets[j].bounds);
+                                count1 += buckets[j].count;
+                            }
+
+                            // 参见公式  C(A,B) = t1 + p(A) * C(A) + p(B) * C(B)
+                            // p(A) = S(A) / S, p(B) = S(B) / S
+                            // 概率与表面积成正比，耗时与片元个数成，
+                            // 假设C(A) = count(A)
+                            // 则可以写成以下形式
+
+                            // 第一部分的总面积
+                            Float s0 = count0 * b0.surfaceArea();
+                            // 第二部分的总面积
+                            Float s1 = count1 * b1.surfaceArea();
+                            // pbrt最新代码把0.125改成了1
+                            cost[i] = 1 + (s0 + s1) / bounds.surfaceArea();
+                        }
+                        
+                        // 找到最小耗时的分割方式
+                        Float minCost = cost[0];
+                        int minCostSplitBucket = 0;
+                        for (int i = 1; i < nBuckets - 1; ++i) {
+                            if (cost[i] < minCost) {
+                                minCost = cost[i];
+                                minCostSplitBucket = i;
+                            }
+                        }
+                        // 假设叶子节点的求交耗时等于片元个数
+                        Float leafCost = numPrimitives;
+                        auto func = [=](const BVHPrimitiveInfo &pi) {
+                            int b = nBuckets * centroidBounds.offset(pi.centroid)[maxDim];
+                            if (b == nBuckets) {
+                                b = nBuckets - 1;
+                            }
+                            CHECK_GE(b, 0);
+                            CHECK_LT(b, nBuckets);
+                            return b <= minCostSplitBucket;
+                        };
+
+                        
+                        if (numPrimitives > _maxPrimsInNode || minCost < leafCost) {
+                            // pmid指向第一个func为false的元素的
+                            BVHPrimitiveInfo *pmid = std::partition(&primitiveInfo[start],
+                                                                &primitiveInfo[end - 1] + 1,
+                                                                func);
+                            mid = pmid - &primitiveInfo[0];
+                        } else {
+                            // 创建叶子节点
+                            int firstPrimOffset = orderedPrims.size();
+                            for (int i = start; i < end; ++i) {
+                                int primNum = primitiveInfo[i].primitiveNumber;
+                                orderedPrims.push_back(_prims[primNum]);
+                            }
+                            node->initLeaf(firstPrimOffset, numPrimitives, bounds);
+                            return node;
+                        }
+                    }
+                }
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 BVHBuildNode * BVHAccel::HLBVHBuild(paladin::MemoryArena &arena, const std::vector<BVHPrimitiveInfo> &primitiveInfo, int *totalNodes, std::vector<std::shared_ptr<Primitive> > &orderedPrims) const {

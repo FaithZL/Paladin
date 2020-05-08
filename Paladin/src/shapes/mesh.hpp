@@ -63,6 +63,12 @@ public:
 
     void initial();
     
+    RTCGeometry rtcGeometry(Scene *scene) const override;
+    
+    const vector<TriangleI>& getTriangles() const {
+        return _triangles;
+    }
+    
     void computeWorldBound();
 
     virtual AABB3f worldBound() const override {

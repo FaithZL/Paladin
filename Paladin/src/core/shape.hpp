@@ -40,7 +40,7 @@ public:
     }
 
 	// 返回在世界坐标系中的包围盒
-	virtual AABB3f worldBound() const;
+	virtual AABB3f worldBound() const override;
     
     // 初始化函数，每个子类构造时都要调用
     // 目前用于计算表面积
@@ -138,12 +138,14 @@ public:
     F_INLINE const AreaLight * getAreaLight() {
         return _areaLight.get();
     }
+    
+    F_INLINE bool isComplex() const {
+        return _isComplex;
+    }
 
     const Transform * objectToWorld;
     const Transform * worldToObject;
-    
-    const Transform * o2w;
-    const Transform * w2o;
+
     
     // 通常是模型文件指定的属性
     const bool reverseOrientation;

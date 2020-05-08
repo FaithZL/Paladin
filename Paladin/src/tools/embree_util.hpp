@@ -40,16 +40,18 @@ public:
         return nullptr;
     }
     
-    virtual bool rayIntersect(const Ray &ray,
-                            Float *tHit,
-                            SurfaceInteraction * isect,
-                            bool testAlphaTexture = true,
-                            const CObject * owner = nullptr) {
+    virtual AABB3f worldBound() const {
         DCHECK(false);
     }
     
-    virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true,
-                             const CObject * owner = nullptr) {
+    virtual bool rayIntersect(const Ray &ray,
+                            Float *tHit,
+                            SurfaceInteraction * isect,
+                            bool testAlphaTexture = true) {
+        DCHECK(false);
+    }
+    
+    virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true) {
         DCHECK(false);
     }
     

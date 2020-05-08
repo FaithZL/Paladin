@@ -50,19 +50,20 @@ Point3f TriangleI::sample(const Point3f *positions, const Normal3f *normals,
     return p;
 }
 
-bool TriangleI::rayOccluded(const Ray &ray, bool testAlphaTexture,
-                            const CObject * owner) {
-    auto mesh = (Mesh *)owner;
+bool TriangleI::rayOccluded(const Ray &ray, bool testAlphaTexture) {
     Float u,v,t;
-    return rayIntersect(mesh->_points.get(), ray, &u, &v, &t);
+    return rayIntersect(parent->_points.get(), ray, &u, &v, &t);
+}
+
+AABB3f TriangleI::worldBound() const {
+    return worldBound(parent->_points.get());
 }
 
 bool TriangleI::rayIntersect(const Ray &ray,
                             Float *tHit,
                             SurfaceInteraction * isect,
-                            bool testAlphaTexture,
-                            const CObject * owner) {
-    auto mesh = (Mesh *)owner;
+                            bool testAlphaTexture) {
+    
     
 }
 

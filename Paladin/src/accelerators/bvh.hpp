@@ -140,7 +140,7 @@ private:
     
     BVHBuildNode * recursiveBuild(MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo,
                                   int start, int end, int *totalNodes,
-                                  std::vector<std::shared_ptr<EmbreeUtil::EmbreeGeomtry>> &orderedPrims);
+                                  vector<EmbreeUtil::EmbreeGeomtry *> &orderedPrims);
     
     int flattenBVHTree(BVHBuildNode *node, int *offset);
     
@@ -150,6 +150,8 @@ private:
     LinearBVHNode *_nodes = nullptr;
     
     vector<shared_ptr<Shape>> _shapes;
+    
+    vector<EmbreeUtil::EmbreeGeomtry *> _prims;
 };
 
 shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Primitive>> &prims);

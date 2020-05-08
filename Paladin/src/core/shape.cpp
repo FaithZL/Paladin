@@ -32,10 +32,10 @@ Shape::Shape(const Transform * ObjectToWorld,
              bool reverseOrientation,
              const MediumInterface &mi,
              bool isComplex)
-: o2w(ObjectToWorld),
-w2o(WorldToObject),
+: objectToWorld(ObjectToWorld),
+worldToObject(WorldToObject),
 reverseOrientation(reverseOrientation),
-transformSwapsHandedness(o2w->swapsHandedness()),
+transformSwapsHandedness(objectToWorld->swapsHandedness()),
 _mediumInterface(mi),
 _invArea(-1),
 _isComplex(isComplex) {
