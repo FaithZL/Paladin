@@ -198,6 +198,8 @@ public:
 shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared_ptr<Primitive>> &);
 
 
+shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared_ptr<Shape>> &);
+
 PALADIN_END
 
 #endif /* primitive_hpp */

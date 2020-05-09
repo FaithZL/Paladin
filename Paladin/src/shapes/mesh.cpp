@@ -64,6 +64,8 @@ void Mesh::initial() {
     computeWorldBound();
 }
 
+
+
 RTCGeometry Mesh::rtcGeometry(Scene *scene) const {
     RTCGeometry geom = rtcNewGeometry(EmbreeUtil::getDevice(), RTC_GEOMETRY_TYPE_TRIANGLE);
     

@@ -688,5 +688,22 @@ shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Pri
     return make_shared<BVHAccel>(prims, maxPrimsInNode, splitMethod);
 }
 
+//"param" : {
+//    "maxPrimsInNode" : 1,
+//    "splitMethod" : "SAH"
+//}
+shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Shape>> &shapes) {
+    int maxPrimsInNode = param.value("maxPrimsInNode", 1);
+    BVHAccel::SplitMethod splitMethod;
+    string sm = param.value("splitMethod", "SAH");
+    if (sm == "SAH") {
+        splitMethod = BVHAccel::SplitMethod::SAH;
+    } else if (sm == "Middle") {
+        splitMethod = BVHAccel::SplitMethod::Middle;
+    } else if (sm == "EqualCounts") {
+        splitMethod = BVHAccel::SplitMethod::EqualCounts;
+    }
+    return make_shared<BVHAccel>(shapes, maxPrimsInNode, splitMethod);
+}
 
 PALADIN_END

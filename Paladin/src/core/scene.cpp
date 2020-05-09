@@ -119,7 +119,7 @@ void Scene::accelInitNative(const nloJson &data,
     initEnvmap();
 }
 
-void Scene::accelInitNative(const nloJson &data, const vector<shared_ptr<Shape> > &shapes) {
+void Scene::accelInitNative(const nloJson &data, const vector<shared_ptr<Shape>> &shapes) {
     
     
 }

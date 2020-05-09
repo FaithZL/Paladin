@@ -23,6 +23,7 @@
 #include "lights/distant.hpp"
 #include "meshparser.hpp"
 #include "tools/embree_util.hpp"
+#include "shapes/mesh.hpp"
 
 PALADIN_BEGIN
 

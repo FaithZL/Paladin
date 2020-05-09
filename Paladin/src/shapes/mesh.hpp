@@ -55,6 +55,19 @@ public:
                                  P, N,UV,mi);
     }
     
+    //"param" : {
+    //    "transform" : {
+    //        "type" : "translate",
+    //        "param" : [0,0,0]
+    //    },
+    //    "width" : 1,
+    //    "height" : 1,
+    //    "reverseOrientation" : false
+    //}
+    static shared_ptr<Mesh> createQuad(const nloJson &param) {
+        
+    }
+    
     static shared_ptr<Mesh> createQuad(const Transform *o2w, Float width, Float height = 0,
                                             const MediumInterface &mi = nullptr);
     

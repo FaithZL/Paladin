@@ -469,7 +469,7 @@
         }
     },
     "accelerator" : {
-        "type" : "embree",
+        "type" : "bvh",
         "param" : {
             "maxPrimsInNode" : 1,
             "splitMethod" : "SAH"

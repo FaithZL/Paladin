@@ -156,6 +156,8 @@ private:
 
 shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Primitive>> &prims);
 
+shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Shape>> &shapes);
+
 PALADIN_END
 
 #endif /* bvh_hpp */
