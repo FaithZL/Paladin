@@ -30,7 +30,7 @@ public:
     
     Shape(const Transform * ObjectToWorld, const Transform *WorldToObject,
           bool reverseOrientation, const MediumInterface &mi,
-          bool isComplex);
+          bool isComplex, const shared_ptr<const Material> &mat = nullptr);
  
 	virtual ~Shape();
 

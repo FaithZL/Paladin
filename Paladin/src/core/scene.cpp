@@ -112,6 +112,22 @@ void Scene::initAccel(const nloJson &data, const vector<shared_ptr<Primitive> > 
     }
 }
 
+//"data" : {
+//    "type" : "bvh",
+//    "param" : {
+//        "maxPrimsInNode" : 1,
+//        "splitMethod" : "SAH"
+//    }
+//}
+void Scene::initAccel(const nloJson &data, const vector<shared_ptr<Shape> > &shapes) {
+    string type = data.value("type", "embree");
+    if (type == "embree") {
+        InitAccelEmbree(shapes);
+    } else {
+        InitAccelNative(data, shapes);
+    }
+}
+
 void Scene::accelInitNative(const nloJson &data,
                             const vector<shared_ptr<Primitive> >&primitives) {
     _aggregate = createAccelerator(data, primitives);
@@ -119,12 +135,14 @@ void Scene::accelInitNative(const nloJson &data,
     initEnvmap();
 }
 
-void Scene::accelInitNative(const nloJson &data, const vector<shared_ptr<Shape>> &shapes) {
+void Scene::InitAccelNative(const nloJson &data, const vector<shared_ptr<Shape>> &shapes) {
     
-    
+    _aggregate = createAccelerator(data, shapes);
+    _worldBound = _aggregate->worldBound();
+    initEnvmap();
 }
 
-void Scene::accelInitEmbree(const vector<shared_ptr<Shape>>&shapes) {
+void Scene::InitAccelEmbree(const vector<shared_ptr<Shape>>&shapes) {
     EmbreeUtil::initDevice();
     _rtcScene = rtcNewScene(EmbreeUtil::getDevice());
     int idx = 0;

@@ -31,14 +31,16 @@ Shape::Shape(const Transform * ObjectToWorld,
              const Transform *WorldToObject,
              bool reverseOrientation,
              const MediumInterface &mi,
-             bool isComplex)
+             bool isComplex,
+             const shared_ptr<const Material> &mat)
 : objectToWorld(ObjectToWorld),
 worldToObject(WorldToObject),
 reverseOrientation(reverseOrientation),
 transformSwapsHandedness(objectToWorld->swapsHandedness()),
 _mediumInterface(mi),
 _invArea(-1),
-_isComplex(isComplex) {
+_isComplex(isComplex),
+_material(mat){
     
 }
 

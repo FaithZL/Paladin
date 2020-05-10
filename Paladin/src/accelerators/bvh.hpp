@@ -116,6 +116,10 @@ public:
     
     virtual bool intersectP(const Ray &ray) const override;
     
+    virtual bool rayIntersect(const Ray &ray, SurfaceInteraction *isect) const override;
+    
+    virtual bool rayOccluded(const Ray &ray) const override;
+    
 private:
     BVHBuildNode *recursiveBuild(
                                  MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo,
@@ -140,7 +144,7 @@ private:
     
     BVHBuildNode * recursiveBuild(MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo,
                                   int start, int end, int *totalNodes,
-                                  vector<EmbreeUtil::EmbreeGeomtry *> &orderedPrims);
+                                  vector<const EmbreeUtil::EmbreeGeomtry *> &orderedPrims);
     
     int flattenBVHTree(BVHBuildNode *node, int *offset);
     
@@ -151,7 +155,7 @@ private:
     
     vector<shared_ptr<Shape>> _shapes;
     
-    vector<EmbreeUtil::EmbreeGeomtry *> _prims;
+    vector<const EmbreeUtil::EmbreeGeomtry *> _prims;
 };
 
 shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Primitive>> &prims);

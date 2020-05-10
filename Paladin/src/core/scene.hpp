@@ -49,6 +49,9 @@ public:
     
     void initAccel(const nloJson &data,
                    const vector<shared_ptr<Primitive>> &primitive);
+    
+    void initAccel(const nloJson &data,
+                   const vector<shared_ptr<Shape>> &shape);
 
     const AABB3f &worldBound() const { 
         return _worldBound;
@@ -90,12 +93,12 @@ public:
         return _rtcScene;
     }
     
-    void accelInitNative(const nloJson &data,
+    void InitAccelNative(const nloJson &data,
                          const vector<shared_ptr<Shape>>&shapes);
     
     void accelInitEmbree(const vector<shared_ptr<Primitive>>&);
     
-    void accelInitEmbree(const vector<shared_ptr<Shape>>&shapes);
+    void InitAccelEmbree(const vector<shared_ptr<Shape>>&shapes);
     
     bool add(TriangleMesh * mesh) {
         _meshes[mesh] = true;

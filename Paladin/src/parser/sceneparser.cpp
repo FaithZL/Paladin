@@ -78,6 +78,8 @@ void SceneParser::parse(const nloJson &data) {
     Scene * scene = new Scene(_lights);
     scene->initAccel(acceleratorData, _primitives);
     
+    scene->initAccel(acceleratorData, _shapes);
+    
     _scene.reset(scene);
     
     _integrator->render(*scene);
@@ -240,11 +242,16 @@ Filter * SceneParser::parseFilter(const nloJson &data) {
 //}
 void SceneParser::parseMesh(const nloJson &data) {
     string subType = data.value("subType", "");
-    vector<shared_ptr<Primitive>> prims;
+    vector<shared_ptr<Shape>> shapes;
     nloJson medIntfceData = data.value("mediumInterface", nloJson());
     MediumInterface mediumInterface = getMediumInterface(medIntfceData);
+    shared_ptr<const Material> mat = getMaterial(data.value("material", nloJson()));
     if (subType == "quad") {
-        
+        auto shape = Mesh::createQuad(data, mat, _lights, mediumInterface);
+        _shapes.push_back(shape);
+    } else if (subType == "cube") {
+        auto shape = Mesh::createCube(data, mat, _lights, mediumInterface);
+        _shapes.push_back(shape);
     }
 }
 
@@ -257,6 +264,7 @@ void SceneParser::parseShapes(const nloJson &shapeDataList) {
         }
         if (type == "triMesh") {
             parseTriMesh(shapeData);
+            parseMesh(shapeData);
         } else if (type == "clonal") {
             parseClonal(shapeData);
         } else {

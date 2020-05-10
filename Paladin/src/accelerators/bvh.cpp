@@ -215,13 +215,14 @@ _shapes(std::move(shapes)) {
         return;
     }
     
+    
     for (int i = 0; i < _shapes.size(); ++i) {
         auto shape = _shapes[i];
         if (shape->isComplex()) {
             auto mesh = (Mesh *)shape.get();
-            auto triangles = mesh->getTriangles();
+            const vector<const TriangleI> &triangles = mesh->getTriangles();
             for (int j = 0; j < triangles.size(); ++j) {
-                auto tri = triangles.at(j);
+                const TriangleI &tri = triangles.at(j);
                 _prims.push_back(&tri);
             }
         } else {
@@ -233,13 +234,14 @@ _shapes(std::move(shapes)) {
     
     // 储存每个aabb的中心以及索引
     for (size_t i = 0; i < _prims.size(); ++i) {
-        _primitiveInfo[i] = {i, _prims[i]->worldBound()};
+        auto aabb = _prims[i]->worldBound();
+        _primitiveInfo[i] = {i, aabb};
     }
     
     MemoryArena arena(1024 * 1024);
     int totalNodes = 0;
     
-    std::vector<EmbreeUtil::EmbreeGeomtry *> orderedPrims;
+    std::vector<const EmbreeUtil::EmbreeGeomtry *> orderedPrims;
     orderedPrims.reserve(_primitives.size());
     BVHBuildNode *root;
     
@@ -451,7 +453,69 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
     return node;
 }
 
-BVHBuildNode * BVHAccel::recursiveBuild(MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo, int start, int end, int *totalNodes, std::vector<EmbreeUtil::EmbreeGeomtry *> &orderedPrims) {
+bool BVHAccel::rayOccluded(const Ray &ray) const {
+    if (!_nodes) {
+        return false;
+    }
+    Vector3f invDir(1.f / ray.dir.x, 1.f / ray.dir.y, 1.f / ray.dir.z);
+    int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
+
+    // 即将访问的节点，栈结构
+    int nodesToVisit[64];
+
+    // 即将要访问到的节点
+    int toVisitOffset = 0;
+
+    // 储存在包围盒在_node数组中节点的位置
+    int currentNodeIndex = 0;
+    
+    // 从根节点开始遍历
+    // 从根节点开始遍历
+    while (true) {
+        const LinearBVHNode *node = &_nodes[currentNodeIndex];
+        if (node->bounds.rayOccluded(ray, invDir, dirIsNeg)) {
+            
+            if (node->nPrimitives > 0) {
+                // 叶子节点
+                for (int i = 0; i < node->nPrimitives; ++i) {
+                    // 逐个片元判断求交
+                    if (_prims[node->primitivesOffset + i]->rayOccluded(ray)) {
+                        return true;
+                    }
+                }
+                if (toVisitOffset == 0) {
+                    break;
+                }
+
+                // 取出栈中的节点求交
+                currentNodeIndex = nodesToVisit[--toVisitOffset];
+            } else {
+                // 内部节点
+                if (dirIsNeg[node->axis]) {
+                    // 如果ray的方向为负，则先判断右子树，把左子树压入栈中
+                    // 下次循环时直接判断与右子树是否有相交，如果没有相交
+                    // 则访问栈中的节点求交
+                    nodesToVisit[toVisitOffset++] = currentNodeIndex + 1;
+                    currentNodeIndex = node->secondChildOffset;
+                } else {
+                    // 如果ray的方向为正，则先判断左子树，把右子树压入栈中
+                    nodesToVisit[toVisitOffset++] = node->secondChildOffset;
+                    currentNodeIndex = currentNodeIndex + 1;
+                }
+            }
+        } else {
+
+            //如果没有相交 则访问栈中的节点求交
+            if (toVisitOffset == 0) {
+                break;
+            }
+            currentNodeIndex = nodesToVisit[--toVisitOffset];
+        }
+    }
+    return false;
+}
+
+BVHBuildNode * BVHAccel::recursiveBuild(MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo, int start, int end, int *totalNodes, std::vector<const EmbreeUtil::EmbreeGeomtry *> &orderedPrims) {
     BVHBuildNode *node = ARENA_ALLOC(arena, BVHBuildNode);
     AABB3f bounds;
     for (int i = start; i < end; ++ i) {
@@ -630,8 +694,59 @@ BVHBuildNode * BVHAccel::recursiveBuild(MemoryArena &arena, std::vector<BVHPrimi
                 default:
                     break;
             }
+            node->initInterior(maxDim,
+                            recursiveBuild(arena, primitiveInfo, start, mid,
+                                           totalNodes, orderedPrims),
+                            recursiveBuild(arena, primitiveInfo, mid, end,
+                                           totalNodes, orderedPrims));
         }
     }
+    return node;
+}
+
+bool BVHAccel::rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
+    if (!_nodes) {
+        return false;
+    }
+
+    bool hit = false;
+    Vector3f invDir(1 / ray.dir.x, 1 / ray.dir.y, 1 / ray.dir.z);
+    int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
+
+    int toVisitOffset = 0, currentNodeIndex = 0;
+    int nodesToVisit[64];
+    while (true) {
+        const LinearBVHNode *node = &_nodes[currentNodeIndex];
+
+        if (node->bounds.rayOccluded(ray, invDir, dirIsNeg)) {
+            if (node->nPrimitives > 0) {
+     
+                for (int i = 0; i < node->nPrimitives; ++i)
+                    if (_primitives[node->primitivesOffset + i]->rayIntersect(ray, isect)) {
+                        hit = true;
+                    }
+                if (toVisitOffset == 0) {
+                    break;
+                }
+                currentNodeIndex = nodesToVisit[--toVisitOffset];
+            } else {
+                
+                if (dirIsNeg[node->axis]) {
+                    nodesToVisit[toVisitOffset++] = currentNodeIndex + 1;
+                    currentNodeIndex = node->secondChildOffset;
+                } else {
+                    nodesToVisit[toVisitOffset++] = node->secondChildOffset;
+                    currentNodeIndex = currentNodeIndex + 1;
+                }
+            }
+        } else {
+            if (toVisitOffset == 0) {
+                break;
+            }
+            currentNodeIndex = nodesToVisit[--toVisitOffset];
+        }
+    }
+    return hit;
 }
 
 BVHBuildNode * BVHAccel::HLBVHBuild(paladin::MemoryArena &arena, const std::vector<BVHPrimitiveInfo> &primitiveInfo, int *totalNodes, std::vector<std::shared_ptr<Primitive> > &orderedPrims) const {

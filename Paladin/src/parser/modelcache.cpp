@@ -290,7 +290,9 @@ vector<shared_ptr<Primitive>> ModelCache::getPrimitives(const string &fn,
 //},
 vector<shared_ptr<Shape>> ModelCache::createShapes(const nloJson &param,
                                                 const Transform *transform,
-                                                vector<shared_ptr<Light>> &lights) {
+                                                vector<shared_ptr<Light>> &lights,
+                                                   const shared_ptr<const Material> &mat,
+                                                   const MediumInterface &mi) {
     vector<shared_ptr<Shape>> ret;
     
     vector<Point3f> points;
@@ -376,7 +378,9 @@ void ModelCache::remedyData(const vector<int> &checkTable,
 
 vector<shared_ptr<Shape>> ModelCache::loadShapes(const string &fn,
                                             const Transform *transform,
-                                            vector<shared_ptr<Light>> &lights) {
+                                            vector<shared_ptr<Light>> &lights,
+                                                 const shared_ptr<const Material> &mat,
+                                                 const MediumInterface &mi) {
     vector<shared_ptr<Shape>> ret;
     nloJson meshList = createJsonFromFile(fn)["data"];
     for (auto meshData : meshList) {

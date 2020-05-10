@@ -12,6 +12,7 @@
 #include "core/shape.hpp"
 #include "shapes/triangle.hpp"
 #include "math/sampling.hpp"
+#include "core/material.hpp"
 
 PALADIN_BEGIN
 
@@ -25,6 +26,7 @@ public:
                         const vector<Point3f> *P,
                         const vector<Normal3f> *N = nullptr,
                         const vector<Point2f> *UV = nullptr,
+                        const shared_ptr<const Material> &mat = nullptr,
                         const MediumInterface &mi = nullptr);
     
     static shared_ptr<Mesh> create(const Transform * objectToWorld,
@@ -32,9 +34,10 @@ public:
                                         const vector<Point3f> *P,
                                         const vector<Normal3f> *N=nullptr,
                                         const vector<Point2f> *UV=nullptr,
+                                        const shared_ptr<const Material> &mat = nullptr,
                                         const MediumInterface &mi = nullptr) {
         return make_shared<Mesh>(objectToWorld, vertexIndices,
-                                 P, N,UV,mi);
+                                 P, N, UV, nullptr, mi);
     }
     
     
@@ -44,6 +47,7 @@ public:
                                         const vector<Point3f> *P,
                                         const vector<Normal3f> *N=nullptr,
                                         const vector<Point2f> *UV=nullptr,
+                                        const shared_ptr<const Material> &mat = nullptr,
                                         const MediumInterface &mi = nullptr) {
         vector<IndexSet> indice;
         indice.reserve(vertexIndices.size());
@@ -52,33 +56,42 @@ public:
             indice.emplace_back(idx);
         }
         return make_shared<Mesh>(objectToWorld, indice,
-                                 P, N,UV,mi);
+                                 P, N,UV,mat,mi);
     }
     
-    //"param" : {
-    //    "transform" : {
-    //        "type" : "translate",
-    //        "param" : [0,0,0]
-    //    },
-    //    "width" : 1,
-    //    "height" : 1,
-    //    "reverseOrientation" : false
-    //}
-    static shared_ptr<Mesh> createQuad(const nloJson &param) {
-        
-    }
+
+    static shared_ptr<Mesh> createQuad(const nloJson &data,
+                                        const shared_ptr<const Material>& mat,
+                                        vector<shared_ptr<Light>> &lights,
+                                       const MediumInterface &mi = nullptr);
     
     static shared_ptr<Mesh> createQuad(const Transform *o2w, Float width, Float height = 0,
+                                        const shared_ptr<const Material> &mat = nullptr,
                                             const MediumInterface &mi = nullptr);
     
+    static vector<shared_ptr<Mesh>> createModel(const nloJson &data,
+                                   const shared_ptr<const Material> &mat,
+                                   vector<shared_ptr<Light> > &lights,
+                                   const MediumInterface &mi);
+    
+    static shared_ptr<Mesh> createCube(const nloJson &data,
+                                        const shared_ptr<const Material>& mat,
+                                        vector<shared_ptr<Light>> &lights,
+                                       const MediumInterface &mi = nullptr);
+    
     static shared_ptr<Mesh> createCube(const Transform *o2w, Float x, Float y = 0, Float z = 0,
+                                       const shared_ptr<const Material> &mat = nullptr,
                                             const MediumInterface &mi = nullptr);
 
     void initial();
     
     RTCGeometry rtcGeometry(Scene *scene) const override;
     
-    const vector<TriangleI>& getTriangles() const {
+    virtual Float area() const override {
+        return _surfaceArea;
+    }
+    
+    const vector<const TriangleI>& getTriangles() const {
         return _triangles;
     }
     
@@ -132,7 +145,7 @@ private:
     
     vector<IndexSet> _vertexIndice;
     
-    vector<TriangleI> _triangles;
+    vector<const TriangleI> _triangles;
     
     Distribution1D _areaDistrib;
     

@@ -6,6 +6,8 @@
 //
 
 #include "mesh.hpp"
+#include "core/material.hpp"
+#include "lights/diffuse.hpp"
 
 PALADIN_BEGIN
 
@@ -14,17 +16,19 @@ Mesh::Mesh(const Transform * objectToWorld,
                 const vector<Point3f> *P,
                 const vector<Normal3f> *N,
                 const vector<Point2f> *UV,
+                const shared_ptr<const Material> &mat,
                 const MediumInterface &mi)
-: Shape(objectToWorld, nullptr, false,mi, true),
+: Shape(objectToWorld, nullptr, false,mi, true, mat),
 _nTriangles(vertexIndices.size() / 3),
 _nVertices(P->size()),
-_surfaceArea(-1) {
+_surfaceArea(0) {
     _vertexIndice = vertexIndices;
     size_t size = P->size();
     _points.reset(new Point3f[size + 1]);
     for (int i = 0; i < size; ++i) {
         Point3f p = (*P)[i];
-        _points[i] = objectToWorld->exec(p);
+        p = objectToWorld->exec(p);
+        _points[i] = p;
     }
     
     if (N && N->size() > 0) {
@@ -103,7 +107,35 @@ void Mesh::computeWorldBound() {
     }
 }
 
-shared_ptr<Mesh> Mesh::createQuad(const Transform *o2w, Float width, Float height, const MediumInterface &mi) {
+//"param" : {
+//    "transform" : {
+//        "type" : "translate",
+//        "param" : [0,0,0]
+//    },
+//    "width" : 1,
+//    "height" : 1,
+//    "reverseOrientation" : false
+//}
+shared_ptr<Mesh> Mesh::createQuad(const nloJson &data,
+                                  const shared_ptr<const Material> &mat,
+                                  vector<shared_ptr<Light> > &lights,
+                                  const MediumInterface &mi) {
+    nloJson param = data["param"];
+    auto l2w = createTransform(param.value("transform", nloJson()));
+    bool ro = param.value("reverseOrientation", false);
+    Float width = param.value("width", 1.f);
+    Float height = param.value("height", width);
+    auto ret = createQuad(l2w, width, height, mat, mi);
+    nloJson emissionData = data.value("emission", nloJson());
+    shared_ptr<DiffuseAreaLight> areaLight(createDiffuseAreaLight(emissionData, ret, mi));
+    if (areaLight) {
+        lights.push_back(areaLight);
+    }
+    return ret;
+}
+
+shared_ptr<Mesh> Mesh::createQuad(const Transform *o2w, Float width, Float height,
+                                  const shared_ptr<const Material> &mat, const MediumInterface &mi) {
     height = height == 0 ? width : height;
     width /= 2.f;
     height /= 2.f;
@@ -116,14 +148,61 @@ shared_ptr<Mesh> Mesh::createQuad(const Transform *o2w, Float width, Float heigh
     auto points = vector<Point3f>{tl, bl, br, tr};
     auto vertIndice = vector<int>{0,1,2, 0,2,3};
     auto UVs = vector<Point2f>{Point2f(0, 1), Point2f(0, 0), Point2f(1, 0), Point2f(1,1)};
-    int nTri = 2;
-    int nVert = 4;
-    
-    auto ret = Mesh::create(o2w, vertIndice, &points, nullptr, &UVs);
+    auto ret = Mesh::create(o2w, vertIndice, &points, nullptr, &UVs, mat);
     return ret;
 }
 
-shared_ptr<Mesh> Mesh::createCube(const Transform *o2w, Float x, Float y, Float z, const MediumInterface &mi) {
+static vector<shared_ptr<Mesh>> createModel(const nloJson &data,
+                            const shared_ptr<const Material> &mat,
+                            vector<shared_ptr<Light> > &lights,
+                               const MediumInterface &mi) {
+    // todo 创建模型
+}
+
+//data : {
+//    "type" : "mesh",
+//    "subType" : "cube",
+//    "name" : "cube1",
+//    "enable" : true,
+//    "param" : {
+//        "transform" :[
+//            {
+//                "type" : "rotateY",
+//                "param" : [-20]
+//            },
+//            {
+//                "type" : "translate",
+//                "param" : [-0.3,-0.4,0.2]
+//            }
+//        ],
+//        "x" : 0.6,
+//        "y" : 1.2,
+//        "z" : 0.6
+//    },
+//    "material" : "matte1"
+//}
+shared_ptr<Mesh> Mesh::createCube(const nloJson &data,
+                                  const shared_ptr<const Material> &mat,
+                                  vector<shared_ptr<Light> > &lights,
+                                  const MediumInterface &mi) {
+    nloJson param = data.value("param", nloJson::object());
+    auto l2w = createTransform(param.value("transform", nloJson()));
+    bool ro = param.value("reverseOrientation", false);
+    auto o2w(l2w);
+    Float x = param.value("x", 1.f);
+    Float y = param.value("y", x);
+    Float z = param.value("z", y);
+    auto ret = createCube(l2w, x, y, z, mat, mi);
+    nloJson emissionData = data.value("emission", nloJson());
+    shared_ptr<DiffuseAreaLight> areaLight(createDiffuseAreaLight(emissionData, ret, mi));
+    if (areaLight) {
+        lights.push_back(areaLight);
+    }
+    return ret;
+}
+
+shared_ptr<Mesh> Mesh::createCube(const Transform *o2w, Float x, Float y, Float z,
+                                  const shared_ptr<const Material> &mat, const MediumInterface &mi) {
     y = y == 0 ? x : y;
     z = z == 0 ? y : z;
     x = x / 2.f;
@@ -155,15 +234,15 @@ shared_ptr<Mesh> Mesh::createCube(const Transform *o2w, Float x, Float y, Float 
     };
     
     auto Indice = vector<IndexSet>{
-        IndexSet(0, 3, 4), IndexSet(1, 0, 4), IndexSet(2, 2, 4), IndexSet(4, 1, 4), // + z
-        IndexSet(3, 3, 5), IndexSet(5, 2, 5), IndexSet(6, 0, 5), IndexSet(7, 1, 5), // - z
-        IndexSet(0, 3, 2), IndexSet(1, 0, 2), IndexSet(3, 2, 2), IndexSet(6, 1, 2), // + y
-        IndexSet(2, 3, 3), IndexSet(4, 0, 3), IndexSet(5, 2, 3), IndexSet(7, 1, 3), // - y
-        IndexSet(0, 3, 0), IndexSet(2, 0, 0), IndexSet(3, 2, 0), IndexSet(5, 1, 0), // + x
-        IndexSet(1, 3, 1), IndexSet(4, 0, 1), IndexSet(6, 2, 1), IndexSet(7, 1, 1)  // - x
+        IndexSet(0, 3, 4), IndexSet(1, 0, 4), IndexSet(2, 2, 4), IndexSet(1, 0, 4), IndexSet(2, 2, 4), IndexSet(4, 1, 4), // + z
+        IndexSet(3, 3, 5), IndexSet(5, 2, 5), IndexSet(6, 0, 5), IndexSet(5, 2, 5), IndexSet(6, 0, 5), IndexSet(7, 1, 5), // - z
+        IndexSet(0, 3, 2), IndexSet(1, 0, 2), IndexSet(3, 2, 2), IndexSet(1, 0, 2), IndexSet(3, 2, 2), IndexSet(6, 1, 2), // + y
+        IndexSet(2, 3, 3), IndexSet(4, 0, 3), IndexSet(5, 2, 3), IndexSet(4, 0, 3), IndexSet(5, 2, 3), IndexSet(7, 1, 3), // - y
+        IndexSet(0, 3, 0), IndexSet(2, 0, 0), IndexSet(3, 2, 0), IndexSet(2, 0, 0), IndexSet(3, 2, 0), IndexSet(5, 1, 0), // + x
+        IndexSet(1, 3, 1), IndexSet(4, 0, 1), IndexSet(6, 2, 1), IndexSet(4, 0, 1), IndexSet(6, 2, 1), IndexSet(7, 1, 1)  // - x
     };
     
-    auto ret = Mesh::create(o2w, Indice, &points, &normals, &UVs, mi);
+    auto ret = Mesh::create(o2w, Indice, &points, &normals, &UVs, mat, mi);
     return ret;
 }
 

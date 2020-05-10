@@ -30,6 +30,15 @@ public:
     
     virtual bool intersectP(const Ray &r) const = 0;
     
+    
+    virtual bool rayIntersect(const Ray &ray, SurfaceInteraction * isect) const {
+        DCHECK(false);
+    }
+    
+    virtual bool rayOccluded(const Ray &ray) const {
+        DCHECK(false);
+    }
+    
     virtual EmbreeUtil::EmbreeGeomtry * getEmbreeGeometry() const {
         return nullptr;
     }

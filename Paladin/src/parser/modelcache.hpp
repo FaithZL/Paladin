@@ -43,11 +43,15 @@ private:
     
     vector<shared_ptr<Shape>> loadShapes(const string &fn,
                                          const Transform *transform,
-                                         vector<shared_ptr<Light>> &lights);
+                                         vector<shared_ptr<Light>> &lights,
+                                         const shared_ptr<const Material> &mat = nullptr,
+                                         const MediumInterface &mi = nullptr);
     
     vector<shared_ptr<Shape>> createShapes(const nloJson &meshData,
                                            const Transform *transform,
-                                           vector<shared_ptr<Light>> &lights);
+                                           vector<shared_ptr<Light>> &lights,
+                                           const shared_ptr<const Material> &mat = nullptr,
+                                           const MediumInterface &mi = nullptr);
     
     static void remedyData(const vector<int> &checkTable,
                            vector<Point3f> &points,

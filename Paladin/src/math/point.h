@@ -169,8 +169,11 @@ template <typename T>
 class Point3 {
 public:
     // Point3 Public Methods
-    Point3() { x = y = z = 0; }
-    Point3(T x, T y, T z) : x(x), y(y), z(z) { DCHECK(!hasNaNs()); }
+    Point3() { pad = x = y = z = 0; }
+    Point3(T x, T y, T z) : x(x), y(y), z(z) {
+        DCHECK(!hasNaNs());
+        pad = 0;
+    }
     template <typename U>
     explicit Point3(const Point3<U> &p)
     : x((T)p.x), y((T)p.y), z((T)p.z) {

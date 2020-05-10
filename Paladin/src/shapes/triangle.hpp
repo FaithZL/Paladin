@@ -63,7 +63,8 @@ struct TriangleI : EmbreeUtil::EmbreeGeomtry {
         const Point3f &p2 = positions[indice[2].pos];
         AABB3f ret(p0);
         ret = unionSet(ret, p1);
-        return unionSet(ret, p2);
+        ret = unionSet(ret, p2);
+        return ret;
     }
     
     F_INLINE Float getArea(const Point3f *positions) const {
@@ -114,11 +115,10 @@ struct TriangleI : EmbreeUtil::EmbreeGeomtry {
     }
     
     virtual bool rayIntersect(const Ray &ray,
-                            Float *tHit,
                             SurfaceInteraction * isect,
-                            bool testAlphaTexture = true);
+                            bool testAlphaTexture = true) const;
     
-    virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true);
+    virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true) const;
     
     Point3f sample(const Point3f *positions, const Normal3f *normals,
                     const Point2f *texCoords, Normal3f * normal, Point2f * uv,

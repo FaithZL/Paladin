@@ -45,13 +45,12 @@ public:
     }
     
     virtual bool rayIntersect(const Ray &ray,
-                            Float *tHit,
                             SurfaceInteraction * isect,
-                            bool testAlphaTexture = true) {
+                            bool testAlphaTexture = true) const {
         DCHECK(false);
     }
     
-    virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true) {
+    virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true) const {
         DCHECK(false);
     }
     
