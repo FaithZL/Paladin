@@ -60,11 +60,140 @@ AABB3f TriangleI::worldBound() const {
     return ret;
 }
 
+void TriangleI::getUVs(Point2f uv[3]) const {
+    if (parent->_uv) {
+        uv[0] = indice[0].uv < 0 ? Point2f(0, 0) : parent->_uv[indice[0].uv];
+        uv[1] = indice[1].uv < 0 ? Point2f(1, 0) : parent->_uv[indice[1].uv];
+        uv[2] = indice[2].uv < 0 ? Point2f(1, 1) : parent->_uv[indice[2].uv];
+    } else {
+        uv[0] = Point2f(0, 0);
+        uv[1] = Point2f(1, 0);
+        uv[2] = Point2f(1, 1);
+    }
+}
+
+bool TriangleI::fillSurfaceInteraction(const Ray &ray, const Vector2f &uv, SurfaceInteraction *isect) const {
+    Float b1 = uv.x;
+    Float b2 = uv.y;
+    Float b0 = 1.f - b1 - b2;
+    
+    const Point3f &p0 = parent->_points[indice[0].pos];
+    const Point3f &p1 = parent->_points[indice[1].pos];
+    const Point3f &p2 = parent->_points[indice[2].pos];
+    
+    Vector3f dp02 = p0 - p2;
+    Vector3f dp12 = p1 - p2;
+    
+    Point3f pHit = b0 * p0 + b1 * p1 + b2 * p2;
+    
+    Point2f uv2[3];
+    getUVs(uv2);
+    
+    Point2f uvHit = b0 * uv2[0] + b1 * uv2[1] + b2 * uv2[2];
+    Normal3f normal(normalize(cross(dp02, dp12)));
+    
+    Vector2f duv02 = uv2[0] - uv2[2];
+    Vector2f duv12 = uv2[1] - uv2[2];
+    
+    Float det = duv02[0] * duv12[1] - duv02[1] * duv12[0];
+    bool degenerateUV = std::abs(det) < 1e-8;
+    
+    Vector3f dpdu;
+    Vector3f dpdv;
+
+    Float invDet = 1 / det;
+    if (!degenerateUV) {
+        dpdu = (duv12[1] * dp02 - duv02[1] * dp12) * invDet;
+        dpdv = (-duv12[0] * dp02 + duv02[0] * dp12) * invDet;
+    }
+    
+    if (degenerateUV || cross(dpdu, dpdv).lengthSquared() == 0) {
+        Vector3f ng = cross(p2 - p0, p1 - p0);
+        if (ng.lengthSquared() == 0) {
+            return false;
+        }
+        coordinateSystem(normalize(ng), &dpdu, &dpdv);
+    }
+    isect->normal = isect->shading.normal = Normal3f(normalize(cross(dp02, dp12)));
+    
+    
+    Vector3f pError = Vector3f();
+    
+    *isect = SurfaceInteraction(pHit, pError, uvHit, -ray.dir, dpdu, dpdv,
+                                Normal3f(0, 0, 0), Normal3f(0, 0, 0), ray.time,
+                                parent, 0);
+    
+    isect->normal = isect->shading.normal = Normal3f(normalize(cross(dp02, dp12)));
+    if (parent->_normals) {
+        Normal3f ns;
+        if (parent->_normals) {
+            ns = (b0 * parent->_normals[indice[0].normal] + b1 * parent->_normals[indice[1].normal] + b2 * parent->_normals[indice[2].normal]);
+            if (ns.lengthSquared() > 0) {
+                ns = normalize(ns);
+            } else {
+                ns = isect->normal;
+            }
+        } else {
+             ns = isect->normal;
+        }
+        
+        Vector3f ss = normalize(isect->dpdu);
+        Vector3f ts = cross(ss, ns);
+        
+        if (ts.lengthSquared() > 0.f) {
+            ts = normalize(ts);
+            ss = cross(ts, ns);
+        } else {
+            coordinateSystem((Vector3f)ns, &ss, &ts);
+        }
+        
+        Normal3f dndu, dndv;
+        if (parent->_normals) {
+            Vector2f duv02 = uv2[0] - uv2[2];
+            Vector2f duv12 = uv2[1] - uv2[2];
+            Normal3f dn1 = parent->_normals[indice[0].normal] - parent->_normals[indice[2].normal];
+            Normal3f dn2 = parent->_normals[indice[1].normal] - parent->_normals[indice[2].normal];
+            Float determinant = duv02[0] * duv12[1] - duv02[1] * duv12[0];
+            bool degenerateUV = std::abs(determinant) < 1e-8;
+            if (degenerateUV) {
+
+                Vector3f dn = cross(Vector3f(parent->_normals[indice[2].normal] - parent->_normals[indice[0].normal]),
+                                     Vector3f(parent->_normals[indice[1].normal] - parent->_normals[indice[0].normal]));
+                if (dn.lengthSquared() == 0)
+                    dndu = dndv = Normal3f(0, 0, 0);
+                else {
+                    Vector3f dnu, dnv;
+                    coordinateSystem(dn, &dnu, &dnv);
+                    dndu = Normal3f(dnu);
+                    dndv = Normal3f(dnv);
+                }
+            } else {
+                Float invDet = 1 / determinant;
+                dndu = (duv12[1] * dn1 - duv02[1] * dn2) * invDet;
+                dndv = (-duv12[0] * dn1 + duv02[0] * dn2) * invDet;
+            }
+        } else {
+            dndu = dndv = Normal3f(0, 0, 0);
+        }
+        isect->setShadingGeometry(ss, ts, dndu, dndv, true);
+    }
+    if (parent->_normals)
+        isect->normal = faceforward(isect->normal, isect->shading.normal);
+    else if (parent->reverseOrientation ^ parent->transformSwapsHandedness)
+        isect->normal = isect->shading.normal = -isect->normal;
+    return true;
+}
+
 bool TriangleI::rayIntersect(const Ray &ray,
                             SurfaceInteraction * isect,
                             bool testAlphaTexture) const {
-    
-    
+    Float u,v,t;
+    bool ret = rayIntersect(parent->_points.get(), ray, &u, &v, &t);
+    ray.tMax = t;
+    if (ret) {
+        fillSurfaceInteraction(ray, Vector2f(u, v), isect);
+    }
+    return ret;
 }
 
 Point3f TriangleI::sample(const Point3f *positions, const Point2f &u) const {

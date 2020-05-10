@@ -64,7 +64,20 @@ bool Scene::intersect(const Ray &ray, SurfaceInteraction *isect) const {
     if (_rtcScene) {
          return embreeIntersect(ray, isect);
     }
-    return _aggregate->intersect(ray, isect);
+    auto r = ray;
+    SurfaceInteraction si;
+    bool r2 = _aggregate->intersect(ray, isect);
+    bool ret = _prims->rayIntersect(r, &si);
+    
+    
+//    if (ret != r2) {
+//        cout << ret << endl;
+//        cout << isect->uv << endl;
+//    } else {
+//
+//    }
+    
+    return r2;
 }
 
 
@@ -73,7 +86,8 @@ bool Scene::intersectP(const Ray &ray) const {
     if (_rtcScene) {
         return embreeIntersectP(ray);
     }
-    return _aggregate->intersectP(ray);
+//    return _aggregate->intersectP(ray);
+    return _prims->rayOccluded(ray);
 }
 
 bool Scene::embreeIntersectP(const Ray &ray) const {
@@ -137,7 +151,7 @@ void Scene::accelInitNative(const nloJson &data,
 
 void Scene::InitAccelNative(const nloJson &data, const vector<shared_ptr<Shape>> &shapes) {
     
-    _aggregate = createAccelerator(data, shapes);
+    _prims = createAccelerator(data, shapes);
     _worldBound = _aggregate->worldBound();
     initEnvmap();
 }

@@ -129,7 +129,7 @@ shared_ptr<Mesh> Mesh::createQuad(const nloJson &data,
     nloJson emissionData = data.value("emission", nloJson());
     shared_ptr<DiffuseAreaLight> areaLight(createDiffuseAreaLight(emissionData, ret, mi));
     if (areaLight) {
-        lights.push_back(areaLight);
+//        lights.push_back(areaLight);
     }
     return ret;
 }
@@ -196,7 +196,7 @@ shared_ptr<Mesh> Mesh::createCube(const nloJson &data,
     nloJson emissionData = data.value("emission", nloJson());
     shared_ptr<DiffuseAreaLight> areaLight(createDiffuseAreaLight(emissionData, ret, mi));
     if (areaLight) {
-        lights.push_back(areaLight);
+//        lights.push_back(areaLight);
     }
     return ret;
 }

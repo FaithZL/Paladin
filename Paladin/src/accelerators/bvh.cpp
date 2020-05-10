@@ -722,7 +722,7 @@ bool BVHAccel::rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
             if (node->nPrimitives > 0) {
      
                 for (int i = 0; i < node->nPrimitives; ++i)
-                    if (_primitives[node->primitivesOffset + i]->rayIntersect(ray, isect)) {
+                    if (_prims[node->primitivesOffset + i]->rayIntersect(ray, isect)) {
                         hit = true;
                     }
                 if (toVisitOffset == 0) {

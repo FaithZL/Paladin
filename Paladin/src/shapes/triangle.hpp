@@ -107,6 +107,8 @@ struct TriangleI : EmbreeUtil::EmbreeGeomtry {
         return false;
     }
     
+    virtual bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const;
+    
     F_INLINE bool rayIntersect(const Point3f *positions, const Ray &ray, Float *u,
         Float *v, Float *t) const {
         return rayIntersect(
@@ -126,6 +128,8 @@ struct TriangleI : EmbreeUtil::EmbreeGeomtry {
     
     Point3f sample(const Point3f *positions, const Point2f &u) const;
 
+    F_INLINE void getUVs(Point2f uv[3]) const;
+    
 //private:
     const Mesh * parent;
     const IndexSet * indice;

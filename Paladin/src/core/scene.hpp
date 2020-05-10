@@ -120,6 +120,9 @@ private:
     // 整个场景的包围盒
     AABB3f _worldBound;
     
+    // 片段的集合
+    std::shared_ptr<Primitive> _prims;
+    
     vector<EmbreeUtil::EmbreeGeomtry *> _embreeGeometries;
     
     std::map<TriangleMesh *, bool> _meshes;
