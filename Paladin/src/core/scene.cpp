@@ -66,8 +66,8 @@ bool Scene::intersect(const Ray &ray, SurfaceInteraction *isect) const {
     }
     auto r = ray;
     SurfaceInteraction si;
-    bool r2 = _aggregate->intersect(ray, isect);
-    bool ret = _prims->rayIntersect(r, &si);
+//    bool r2 = _aggregate->intersect(ray, isect);
+    bool ret = _prims->rayIntersect(ray, isect);
     
     
 //    if (ret != r2) {
@@ -77,7 +77,7 @@ bool Scene::intersect(const Ray &ray, SurfaceInteraction *isect) const {
 //
 //    }
     
-    return r2;
+    return ret;
 }
 
 
