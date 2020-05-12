@@ -34,8 +34,9 @@ public:
                                 int depth = 0) const override{
         SurfaceInteraction ref;//和表面的交互点
         RGBSpectrum ret(0.0f);
-        
+        auto r = ray;
         if (scene.intersect(ray, &ref)) {
+            
             if(_type == GeometryIntegratorType::Normal){
                 ref.computeTangentSpace();
 //                auto mat = ref.primitive->getMaterial();
@@ -44,6 +45,12 @@ public:
 //                }
                 Normal3f nn = normalize(ref.shading.normal);
                 nn = mapTo01(nn);
+                if (nn.y == 1) {
+                    scene.intersect(r, &ref);
+                } else {
+                    scene.intersect(r, &ref);
+                }
+                
                 ret[0] = nn.x;
                 ret[1] = nn.y;
                 ret[2] = nn.z;

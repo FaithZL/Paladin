@@ -524,6 +524,7 @@ BVHBuildNode * BVHAccel::recursiveBuild(MemoryArena &arena, std::vector<BVHPrimi
     (*totalNodes)++;
     int numPrimitives = end - start;
     if (numPrimitives == 1) {
+        // 生成叶子节点
         int firstPrimOffset = orderedPrims.size();
         int primNum = primitiveInfo[start].primitiveNumber;
         orderedPrims.push_back(_prims[primNum]);
@@ -563,7 +564,7 @@ BVHBuildNode * BVHAccel::recursiveBuild(MemoryArena &arena, std::vector<BVHPrimi
                         break;
                     }
                 }
-                    
+                
                 case EqualCounts: {
                     // 相等数量划分
                     mid = (start + end) / 2;
@@ -580,6 +581,7 @@ BVHBuildNode * BVHAccel::recursiveBuild(MemoryArena &arena, std::vector<BVHPrimi
                                      func);
                     break;
                 }
+                    
                 case SAH: {
                      // 表面启发式划分
                      // 假设每个片元的求交耗时都相等
@@ -695,10 +697,10 @@ BVHBuildNode * BVHAccel::recursiveBuild(MemoryArena &arena, std::vector<BVHPrimi
                     break;
             }
             node->initInterior(maxDim,
-                            recursiveBuild(arena, primitiveInfo, start, mid,
-                                           totalNodes, orderedPrims),
-                            recursiveBuild(arena, primitiveInfo, mid, end,
-                                           totalNodes, orderedPrims));
+                               recursiveBuild(arena, primitiveInfo, start, mid,
+                                              totalNodes, orderedPrims),
+                               recursiveBuild(arena, primitiveInfo, mid, end,
+                                              totalNodes, orderedPrims));
         }
     }
     return node;
@@ -718,12 +720,25 @@ bool BVHAccel::rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
     while (true) {
         const LinearBVHNode *node = &_nodes[currentNodeIndex];
 
+//        if (currentNodeIndex == 23) {
+//            cout << "23 ";
+//            cout << node->bounds << endl;
+//        } else if (currentNodeIndex == 50) {
+//            cout << "50 ";
+//            cout << node->bounds << endl;
+//        }
+        
         if (node->bounds.rayOccluded(ray, invDir, dirIsNeg)) {
             if (node->nPrimitives > 0) {
      
                 for (int i = 0; i < node->nPrimitives; ++i)
                     if (_prims[node->primitivesOffset + i]->rayIntersect(ray, isect)) {
                         hit = true;
+                        if (isect->shading.normal.y == 1) {
+                            int a = 0;
+                        } else {
+                            int b = 0;
+                        }
                     }
                 if (toVisitOffset == 0) {
                     break;

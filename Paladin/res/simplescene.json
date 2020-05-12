@@ -238,7 +238,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "bottom",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -258,7 +258,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "top",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -278,7 +278,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "left",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -364,7 +364,7 @@
             "type" : "triMesh",
             "subType" : "cube",
             "name" : "cube2",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
