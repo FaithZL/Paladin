@@ -263,7 +263,7 @@ void SceneParser::parseShapes(const nloJson &shapeDataList) {
             continue;
         }
         if (type == "triMesh") {
-            parseTriMesh(shapeData);
+//            parseTriMesh(shapeData);
             parseMesh(shapeData);
         } else if (type == "clonal") {
             parseClonal(shapeData);

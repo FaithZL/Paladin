@@ -190,6 +190,7 @@ bool TriangleI::rayIntersect(const Ray &ray,
     Float u,v,t;
     bool ret = rayIntersect(parent->_points.get(), ray, &u, &v, &t);
     if (ret) {
+        ray.tMax = t;
         fillSurfaceInteraction(ray, Vector2f(u, v), isect);
     }
     return ret;

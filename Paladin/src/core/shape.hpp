@@ -62,7 +62,8 @@ public:
 							Float *tHit, 
 							SurfaceInteraction * isect, 
                            bool testAlphaTexture = true) const {
-        DCHECK(false);
+//        DCHECK(false);
+        return false;
     }
 
 	virtual bool intersectP(const Ray &ray,
@@ -135,7 +136,7 @@ public:
         _areaLight = light;
     }
     
-    F_INLINE const AreaLight * getAreaLight() {
+    F_INLINE const AreaLight * getAreaLight() const {
         return _areaLight.get();
     }
     

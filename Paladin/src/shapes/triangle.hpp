@@ -100,11 +100,7 @@ struct TriangleI : EmbreeUtil::EmbreeGeomtry {
 
         if (*v >= 0.0 && *u + *v <= 1.0) {
             *t = dot(edge2, qvec) * inv_det;
-            if (*t <= ray.tMax) {
-                ray.tMax = *t;
-                return true;
-            }
-            return false;
+            return *t <= ray.tMax;
         }
         return false;
     }

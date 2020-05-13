@@ -37,7 +37,7 @@ public:
                                         const shared_ptr<const Material> &mat = nullptr,
                                         const MediumInterface &mi = nullptr) {
         return make_shared<Mesh>(objectToWorld, vertexIndices,
-                                 P, N, UV, nullptr, mi);
+                                 P, N, UV, mat, mi);
     }
     
     

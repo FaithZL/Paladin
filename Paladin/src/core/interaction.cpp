@@ -158,11 +158,12 @@ void SurfaceInteraction::computeScatteringFunctions(const RayDifferential &ray,
                                                     bool allowMultipleLobes,/* = false*/
                                                     TransportMode mode/* = TransportMode::Radiance*/) {
     computeDifferentials(ray);
-    primitive->computeScatteringFunctions(this, arena, mode, allowMultipleLobes);
+//    shape->getMaterial()->
+    shape->getMaterial()->computeScatteringFunctions(this, arena, mode, allowMultipleLobes);
 }
 
 Spectrum SurfaceInteraction::Le(const Vector3f &w) const {
-    const AreaLight *area = primitive->getAreaLight();
+    const AreaLight *area = shape->getAreaLight();
     return area ? area->L(*this, w) : Spectrum(0.f);
 }
 

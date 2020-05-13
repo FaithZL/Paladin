@@ -129,7 +129,7 @@ shared_ptr<Mesh> Mesh::createQuad(const nloJson &data,
     nloJson emissionData = data.value("emission", nloJson());
     shared_ptr<DiffuseAreaLight> areaLight(createDiffuseAreaLight(emissionData, ret, mi));
     if (areaLight) {
-//        lights.push_back(areaLight);
+        lights.push_back(areaLight);
     }
     return ret;
 }
@@ -196,7 +196,7 @@ shared_ptr<Mesh> Mesh::createCube(const nloJson &data,
     nloJson emissionData = data.value("emission", nloJson());
     shared_ptr<DiffuseAreaLight> areaLight(createDiffuseAreaLight(emissionData, ret, mi));
     if (areaLight) {
-//        lights.push_back(areaLight);
+        lights.push_back(areaLight);
     }
     return ret;
 }
@@ -233,24 +233,14 @@ shared_ptr<Mesh> Mesh::createCube(const Transform *o2w, Float x, Float y, Float 
         Normal3f(-1,0,0)  // 5
     };
     
-//    auto Indice = vector<IndexSet>{
-//        IndexSet(0, 3, 4), IndexSet(1, 0, 4), IndexSet(2, 2, 4), IndexSet(1, 0, 4), IndexSet(2, 2, 4), IndexSet(4, 1, 4), // + z
-//        IndexSet(3, 3, 5), IndexSet(5, 2, 5), IndexSet(6, 0, 5), IndexSet(5, 2, 5), IndexSet(6, 0, 5), IndexSet(7, 1, 5), // - z
-//        IndexSet(0, 3, 2), IndexSet(1, 0, 2), IndexSet(3, 2, 2), IndexSet(1, 0, 2), IndexSet(3, 2, 2), IndexSet(6, 1, 2), // + y
-//        IndexSet(2, 3, 3), IndexSet(4, 0, 3), IndexSet(5, 2, 3), IndexSet(4, 0, 3), IndexSet(5, 2, 3), IndexSet(7, 1, 3), // - y
-//        IndexSet(0, 3, 0), IndexSet(2, 0, 0), IndexSet(3, 2, 0), IndexSet(2, 0, 0), IndexSet(3, 2, 0), IndexSet(5, 1, 0), // + x
-//        IndexSet(1, 3, 1), IndexSet(4, 0, 1), IndexSet(6, 2, 1), IndexSet(4, 0, 1), IndexSet(6, 2, 1), IndexSet(7, 1, 1)  // - x
-//    };
+
     auto Indice = vector<IndexSet>{
-//        IndexSet(0, 0, 0), IndexSet(1, 1, 0), IndexSet(2, 2, 0),
-//        IndexSet(2, 2, 0), IndexSet(1, 1, 0), IndexSet(3, 3, 0), // + z
-        IndexSet(2, 0, 1), IndexSet(3,1,1), IndexSet(4,2,1),
-//        IndexSet(4,2,1), IndexSet(3,1,1), IndexSet(5,3,1), // - z
-//        IndexSet(4,3,2), IndexSet(5,2,2), IndexSet(6,1,2), IndexSet(6,1,2), IndexSet(5,2,2), IndexSet(7,0,2), // + y
-//        IndexSet(6,0,3), IndexSet(7,1,3), IndexSet(0,2,3), IndexSet(0,2,3), IndexSet(7,1,3), IndexSet(1,3,3), // - y
-//        IndexSet(1,0,4), IndexSet(7,1,4), IndexSet(3,2,4), IndexSet(3,2,4), IndexSet(7,1,4), IndexSet(5,3,4), // + x
-//        IndexSet(6,0,5), IndexSet(0,1,5), IndexSet(4,2,5),
-        IndexSet(4,2,5), IndexSet(0,1,5), IndexSet(2,3,5)  // - x
+        IndexSet(0, 0, 0), IndexSet(1, 1, 0), IndexSet(2, 2, 0), IndexSet(2, 2, 0), IndexSet(1, 1, 0), IndexSet(3, 3, 0), // + z
+        IndexSet(2, 0, 1), IndexSet(3, 1, 1), IndexSet(4, 2, 1), IndexSet(4, 2, 1), IndexSet(3, 1, 1), IndexSet(5, 3, 1), // + y
+        IndexSet(4, 3, 2), IndexSet(5, 2, 2), IndexSet(6, 1, 2), IndexSet(6, 1, 2), IndexSet(5, 2, 2), IndexSet(7, 0, 2), // - z
+        IndexSet(6, 0, 3), IndexSet(7, 1, 3), IndexSet(0, 2, 3), IndexSet(0, 2, 3), IndexSet(7, 1, 3), IndexSet(1, 3, 3), // - y
+        IndexSet(1, 0, 4), IndexSet(7, 1, 4), IndexSet(3, 2, 4), IndexSet(3, 2, 4), IndexSet(7, 1, 4), IndexSet(5, 3, 4), // + x
+        IndexSet(6, 0, 5), IndexSet(0, 1, 5), IndexSet(4, 2, 5), IndexSet(4, 2, 5), IndexSet(0, 1, 5), IndexSet(2, 3, 5)  // - x
     };
     
     auto ret = Mesh::create(o2w, Indice, &points, &normals, &UVs, mat, mi);
