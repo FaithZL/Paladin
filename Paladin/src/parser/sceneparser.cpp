@@ -76,7 +76,7 @@ void SceneParser::parse(const nloJson &data) {
     
     nloJson acceleratorData = data.value("accelerator", nloJson::object());
     Scene * scene = new Scene(_lights);
-    scene->initAccel(acceleratorData, _primitives);
+//    scene->initAccel(acceleratorData, _primitives);
     
     scene->initAccel(acceleratorData, _shapes);
     

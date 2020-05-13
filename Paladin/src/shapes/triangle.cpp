@@ -189,7 +189,6 @@ bool TriangleI::rayIntersect(const Ray &ray,
                             bool testAlphaTexture) const {
     Float u,v,t;
     bool ret = rayIntersect(parent->_points.get(), ray, &u, &v, &t);
-    ray.tMax = t;
     if (ret) {
         fillSurfaceInteraction(ray, Vector2f(u, v), isect);
     }

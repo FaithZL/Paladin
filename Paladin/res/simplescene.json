@@ -1,5 +1,5 @@
 {
-    "threadNum" : 0,
+    "threadNum" : 1,
     "transforms" :{
         "name1" : [
             {
@@ -437,7 +437,7 @@
     "film" : {
         "param" : {
             "resolution" : [1024, 1024],
-            "cropWindow" : [0.5362,0.67,0.56,0.689],
+            "cropWindow" : [0,0,1,1],
             "fileName" : "connellbox-16spp-r1.png",
             "diagonal" : 1,
             "scale" : 1

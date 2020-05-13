@@ -720,41 +720,39 @@ bool BVHAccel::rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
     while (true) {
         const LinearBVHNode *node = &_nodes[currentNodeIndex];
 
-//        if (currentNodeIndex == 23) {
-//            cout << "23 ";
-//            cout << node->bounds << endl;
-//        } else if (currentNodeIndex == 50) {
-//            cout << "50 ";
-//            cout << node->bounds << endl;
-//        }
-        
         if (node->bounds.rayOccluded(ray, invDir, dirIsNeg)) {
             if (node->nPrimitives > 0) {
-     
-                for (int i = 0; i < node->nPrimitives; ++i)
+                // 叶子节点
+                for (int i = 0; i < node->nPrimitives; ++i) {
+                    // 逐个片元判断求交
                     if (_prims[node->primitivesOffset + i]->rayIntersect(ray, isect)) {
                         hit = true;
-                        if (isect->shading.normal.y == 1) {
-                            int a = 0;
-                        } else {
-                            int b = 0;
-                        }
                     }
+                }
                 if (toVisitOffset == 0) {
                     break;
                 }
+                // 取出栈中的节点求交
                 currentNodeIndex = nodesToVisit[--toVisitOffset];
+                if (currentNodeIndex == 1) {
+                    
+                }
             } else {
-                
+                // 内部节点
                 if (dirIsNeg[node->axis]) {
+                    // 如果ray的方向为负，则先判断右子树，把左子树压入栈中
+                    // 下次循环时直接判断与右子树是否有相交，如果没有相交
+                    // 则访问栈中的节点求交
                     nodesToVisit[toVisitOffset++] = currentNodeIndex + 1;
                     currentNodeIndex = node->secondChildOffset;
                 } else {
+                    // 如果ray的方向为正，则先判断左子树，把右子树压入栈中
                     nodesToVisit[toVisitOffset++] = node->secondChildOffset;
                     currentNodeIndex = currentNodeIndex + 1;
                 }
             }
         } else {
+            //如果没有相交 则访问栈中的节点求交
             if (toVisitOffset == 0) {
                 break;
             }

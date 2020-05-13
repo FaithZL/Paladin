@@ -61,8 +61,7 @@ struct TriangleI : EmbreeUtil::EmbreeGeomtry {
         const Point3f &p0 = positions[indice[0].pos];
         const Point3f &p1 = positions[indice[1].pos];
         const Point3f &p2 = positions[indice[2].pos];
-        AABB3f ret(p0);
-        ret = unionSet(ret, p1);
+        AABB3f ret(p0, p1);
         ret = unionSet(ret, p2);
         return ret;
     }
@@ -101,9 +100,12 @@ struct TriangleI : EmbreeUtil::EmbreeGeomtry {
 
         if (*v >= 0.0 && *u + *v <= 1.0) {
             *t = dot(edge2, qvec) * inv_det;
-            return true;
+            if (*t <= ray.tMax) {
+                ray.tMax = *t;
+                return true;
+            }
+            return false;
         }
-
         return false;
     }
     

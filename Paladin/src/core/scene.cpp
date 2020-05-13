@@ -152,7 +152,8 @@ void Scene::accelInitNative(const nloJson &data,
 void Scene::InitAccelNative(const nloJson &data, const vector<shared_ptr<Shape>> &shapes) {
     
     _prims = createAccelerator(data, shapes);
-    _worldBound = _aggregate->worldBound();
+//    _worldBound = _aggregate->worldBound();
+    _worldBound = _prims->worldBound();
     initEnvmap();
 }
 
