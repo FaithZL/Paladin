@@ -96,7 +96,7 @@ Interaction Mesh::samplePos(const Point2f &u, Float *pdf) const {
     TriangleI tri = _triangles[idx];
     Interaction ret;
     *pdf = pdfPos();
-    tri.sample(_points.get(), _u);
+    ret = tri.sample(_u);
     return ret;
 }
 
@@ -130,6 +130,7 @@ shared_ptr<Mesh> Mesh::createQuad(const nloJson &data,
     shared_ptr<DiffuseAreaLight> areaLight(createDiffuseAreaLight(emissionData, ret, mi));
     if (areaLight) {
         lights.push_back(areaLight);
+        ret->setAreaLight(areaLight);
     }
     return ret;
 }
@@ -197,6 +198,7 @@ shared_ptr<Mesh> Mesh::createCube(const nloJson &data,
     shared_ptr<DiffuseAreaLight> areaLight(createDiffuseAreaLight(emissionData, ret, mi));
     if (areaLight) {
         lights.push_back(areaLight);
+        ret->setAreaLight(areaLight);
     }
     return ret;
 }

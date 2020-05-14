@@ -125,6 +125,8 @@ struct TriangleI : EmbreeUtil::EmbreeGeomtry {
                     const Point2f &u) const;
     
     Point3f sample(const Point3f *positions, const Point2f &u) const;
+    
+    Interaction sample(const Point2f &u) const;
 
     F_INLINE void getUVs(Point2f uv[3]) const;
     

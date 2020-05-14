@@ -416,7 +416,7 @@
     "sampler" : {
         "type" : "random",
         "param" : {
-            "spp" : 3
+            "spp" : 1
         }
     },
     "camera" : {
@@ -437,7 +437,7 @@
     "film" : {
         "param" : {
             "resolution" : [1024, 1024],
-            "cropWindow" : [0,0,1,1],
+            "cropWindow" : [0.3,0.5,0.5,0.8],
             "fileName" : "connellbox-16spp-r1.png",
             "diagonal" : 1,
             "scale" : 1

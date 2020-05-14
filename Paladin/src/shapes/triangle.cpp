@@ -206,4 +206,14 @@ Point3f TriangleI::sample(const Point3f *positions, const Point2f &u) const {
     return p;
 }
 
+Interaction TriangleI::sample(const Point2f &u) const {
+    Interaction ret;
+    Point2f uv;
+    ret.pos = sample(parent->_points.get(),
+                     parent->_normals.get(),
+                     parent->_uv.get(),
+                     &ret.normal, &uv, u);
+    return ret;
+}
+
 PALADIN_END
