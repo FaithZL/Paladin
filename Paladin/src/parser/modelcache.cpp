@@ -288,12 +288,12 @@ vector<shared_ptr<Primitive>> ModelCache::getPrimitives(const string &fn,
 //        "twoSided" : false
 //    }
 //},
-vector<shared_ptr<Shape>> ModelCache::createShapes(const nloJson &param,
+vector<shared_ptr<Mesh>> ModelCache::createMeshes(const nloJson &param,
                                                 const Transform *transform,
                                                 vector<shared_ptr<Light>> &lights,
                                                    const shared_ptr<const Material> &mat,
                                                    const MediumInterface &mi) {
-    vector<shared_ptr<Shape>> ret;
+    vector<shared_ptr<Mesh>> ret;
     
     vector<Point3f> points;
     // 法线列表
@@ -327,8 +327,15 @@ vector<shared_ptr<Shape>> ModelCache::createShapes(const nloJson &param,
     nloJson indexes = param.value("indexes", nloJson::array());
     int nMesh = indexes.size();
     
-    for (auto iter = indexes.cbegin(); iter != indexes.cend(); ++iter) {
-        nloJson subIndexes = *iter;
+    nloJson transformData = param.value("transform", nloJson());
+    Transform * transform2 = createTransform(transformData);
+    
+    nloJson materialDatas = param.value("material", nloJson::array());
+    
+    * transform2 = (*transform) * (*transform2);
+    
+    for (size_t i = 0; i < indexes.size(); ++i) {
+        nloJson subIndexes = indexes[i];
         
         vector<Point3f> subPoints;
         // 法线列表
@@ -341,6 +348,8 @@ vector<shared_ptr<Shape>> ModelCache::createShapes(const nloJson &param,
         
         vector<int> checkTable(points.size(), 0);
         
+        auto material = mat ? mat : shared_ptr<const Material>(createMaterial(materialDatas[i]));
+        
         for(auto _iter = subIndexes.cbegin(); _iter != subIndexes.cend(); ++_iter) {
             int idx = *_iter;
             Point3f point = points[idx];
@@ -352,10 +361,9 @@ vector<shared_ptr<Shape>> ModelCache::createShapes(const nloJson &param,
             subUVs.push_back(uv);
             indice.push_back(idx);
         }
-        
-        remedyData(checkTable, subPoints, subNormals, subUVs, indice);
-        auto mesh = Mesh::create(transform, indice, &subPoints,
-                                 &subNormals, &subUVs);
+    
+        auto mesh = Mesh::create(transform2, indice, &subPoints,
+                                 &subNormals, &subUVs, mat);
         
         ret.push_back(mesh);
     }
@@ -376,31 +384,32 @@ void ModelCache::remedyData(const vector<int> &checkTable,
     
 }
 
-vector<shared_ptr<Shape>> ModelCache::loadShapes(const string &fn,
+vector<shared_ptr<Mesh>> ModelCache::loadMeshes(const string &fn,
                                             const Transform *transform,
                                             vector<shared_ptr<Light>> &lights,
                                                  const shared_ptr<const Material> &mat,
                                                  const MediumInterface &mi) {
-    vector<shared_ptr<Shape>> ret;
-    nloJson meshList = createJsonFromFile(fn)["data"];
+    vector<shared_ptr<Mesh>> ret;
+    string basePath = Paladin::getInstance()->getBasePath();
+    
+    nloJson meshList = createJsonFromFile(basePath + fn)["data"];
     for (auto meshData : meshList) {
-        vector<shared_ptr<Shape>> tmp = createShapes(meshData, transform, lights);
+        vector<shared_ptr<Mesh>> tmp = createMeshes(meshData, transform, lights);
         ret.insert(ret.end(), tmp.begin(), tmp.end());
     }
     return ret;
 }
 
-vector<shared_ptr<Shape>> ModelCache::getShapes(const string &fn, const Transform *transform, vector<shared_ptr<Light> > &lights) {
+vector<shared_ptr<Mesh>> ModelCache::getMeshes(const string &fn, const Transform *transform, vector<shared_ptr<Light> > &lights) {
     auto self = getInstance();
     auto iter = self->_meshMap.find(fn);
     if (iter == self->_meshMap.end()) {
-        auto shapeLst = self->loadShapes(fn, transform, lights);
+        auto shapeLst = self->loadMeshes(fn, transform, lights);
         self->_meshMap[fn] = shapeLst;
         return shapeLst;
     }
     
-    vector<shared_ptr<Shape>> ret;
-    return ret;
+    return self->_meshMap[fn];
 }
 
 PALADIN_END

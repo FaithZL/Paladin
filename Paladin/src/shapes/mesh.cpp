@@ -8,6 +8,7 @@
 #include "mesh.hpp"
 #include "core/material.hpp"
 #include "lights/diffuse.hpp"
+#include "parser/modelcache.hpp"
 
 PALADIN_BEGIN
 
@@ -68,7 +69,17 @@ void Mesh::initial() {
     computeWorldBound();
 }
 
-
+vector<shared_ptr<Mesh>> Mesh::createMeshes(const nloJson &data,
+                                            vector<shared_ptr<Light> > &lights,
+                                            const MediumInterface &mi) {
+    nloJson transformData = data.value("transform", nloJson());
+    Transform * transform = createTransform(transformData);
+    
+    nloJson param = data.value("param", nloJson());
+    return param.is_string() ?
+        ModelCache::getMeshes(param, transform, lights):
+        ModelCache::createMeshes(param, transform, lights);
+}
 
 RTCGeometry Mesh::rtcGeometry(Scene *scene) const {
     RTCGeometry geom = rtcNewGeometry(EmbreeUtil::getDevice(), RTC_GEOMETRY_TYPE_TRIANGLE);

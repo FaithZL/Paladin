@@ -35,23 +35,23 @@ public:
     
     
     
-    static vector<shared_ptr<Shape>> getShapes(const string &fn,
+    static vector<shared_ptr<Mesh>> getMeshes(const string &fn,
                                         const Transform *transform,
                                         vector<shared_ptr<Light>> &lights);
     
-private:
-    
-    vector<shared_ptr<Shape>> loadShapes(const string &fn,
-                                         const Transform *transform,
-                                         vector<shared_ptr<Light>> &lights,
-                                         const shared_ptr<const Material> &mat = nullptr,
-                                         const MediumInterface &mi = nullptr);
-    
-    vector<shared_ptr<Shape>> createShapes(const nloJson &meshData,
+    static vector<shared_ptr<Mesh>> createMeshes(const nloJson &param,
                                            const Transform *transform,
                                            vector<shared_ptr<Light>> &lights,
                                            const shared_ptr<const Material> &mat = nullptr,
                                            const MediumInterface &mi = nullptr);
+    
+private:
+    
+    vector<shared_ptr<Mesh>> loadMeshes(const string &fn,
+                                         const Transform *transform,
+                                         vector<shared_ptr<Light>> &lights,
+                                         const shared_ptr<const Material> &mat = nullptr,
+                                         const MediumInterface &mi = nullptr);
     
     static void remedyData(const vector<int> &checkTable,
                            vector<Point3f> &points,
@@ -68,7 +68,7 @@ private:
     
     map<string, vector<shared_ptr<Primitive>>> _modelMap;
     
-    map<string, vector<shared_ptr<Shape>>> _meshMap;
+    map<string, vector<shared_ptr<Mesh>>> _meshMap;
 };
 
 

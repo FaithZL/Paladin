@@ -74,6 +74,10 @@ public:
                                    vector<shared_ptr<Light> > &lights,
                                    const MediumInterface &mi);
     
+    static vector<shared_ptr<Mesh>> createMeshes(const nloJson &data,
+                                            vector<shared_ptr<Light>> &lights,
+                                            const MediumInterface &mi = nullptr);
+    
     static shared_ptr<Mesh> createCube(const nloJson &data,
                                         const shared_ptr<const Material>& mat,
                                         vector<shared_ptr<Light>> &lights,

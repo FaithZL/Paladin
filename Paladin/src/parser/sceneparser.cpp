@@ -252,6 +252,9 @@ void SceneParser::parseMesh(const nloJson &data) {
     } else if (subType == "cube") {
         auto shape = Mesh::createCube(data, mat, _lights, mediumInterface);
         _shapes.push_back(shape);
+    } else if (subType == "mesh") {
+        auto shapes = Mesh::createMeshes(data, _lights, mediumInterface);
+        _shapes.insert(_shapes.end(), shapes.begin(), shapes.end());
     }
 }
 
