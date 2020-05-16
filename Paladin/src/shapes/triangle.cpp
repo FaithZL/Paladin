@@ -52,7 +52,11 @@ Point3f TriangleI::sample(const Point3f *positions, const Normal3f *normals,
 
 bool TriangleI::rayOccluded(const Ray &ray, bool testAlphaTexture) const {
     Float u,v,t;
-    return rayIntersect(parent->_points.get(), ray, &u, &v, &t);
+    bool ret = rayIntersect(parent->_points.get(), ray, &u, &v, &t);
+    if (ret) {
+        ray.tMax = t;
+    }
+    return ret;
 }
 
 AABB3f TriangleI::worldBound() const {
