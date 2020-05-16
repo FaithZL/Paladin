@@ -48,7 +48,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
 
 	for (bounces = 0;; ++bounces) {
 		SurfaceInteraction isect;
-		bool foundIntersection = scene.intersect(ray, &isect);
+		bool foundIntersection = scene.rayIntersect(ray, &isect);
 		// 如果当前ray是直接从相机发射，
 		// 判断光线是否与场景几何图元相交
 		if (bounces == 0 || specularBounce) {

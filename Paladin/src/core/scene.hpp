@@ -66,13 +66,47 @@ public:
     bool embreeIntersectP(const Ray &ray) const;
     
     
-    bool rayIntersect(const Ray &ray, SurfaceInteraction *isect) const;
+    F_INLINE bool rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
+        return _rtcScene ?
+            rayIntersectEmbree(ray, isect):
+            rayIntersectNative(ray, isect);
+    }
     
-    bool rayOccluded(const Ray &ray) const;
+    F_INLINE bool rayOccluded(const Ray &ray) const {
+        return _rtcScene ?
+            rayOccludedEmbree(ray):
+            rayOccludedNative(ray);
+    }
     
-    bool rayIntersectNative(const Ray &ray, SurfaceInteraction *isect) const;
+    F_INLINE bool rayIntersectNative(const Ray &ray, SurfaceInteraction *isect) const {
+        return _prims->rayIntersect(ray, isect);
+    }
     
-    bool rayOccludedNative(const Ray &ray) const;
+    F_INLINE bool rayOccludedNative(const Ray &ray) const {
+        return _prims->rayOccluded(ray);
+    }
+    
+    F_INLINE bool rayIntersectEmbree(const Ray &ray, SurfaceInteraction *isect) const {
+        RTCIntersectContext context;
+        rtcInitIntersectContext(&context);
+        RTCRayHit rh = EmbreeUtil::toRTCRayHit(ray);
+        rtcIntersect1(_rtcScene, &context, &rh);
+        if (rh.hit.geomID == RTC_INVALID_GEOMETRY_ID) {
+            return false;
+        }
+        uint32_t gid = rh.hit.geomID;
+        uint32_t pid = rh.hit.primID;
+        // TODO
+    }
+    
+    F_INLINE bool rayOccludedEmbree(const Ray &ray) const {
+        using namespace EmbreeUtil;
+        RTCIntersectContext context;
+        rtcInitIntersectContext(&context);
+        RTCRay r = EmbreeUtil::convert(ray);
+        rtcOccluded1(_rtcScene, &context, &r);
+        return r.tfar < 0;
+    }
     
     /**
      * 光线在场景中传播的函数
@@ -83,6 +117,17 @@ public:
      * @return         返回ray与isect是否有交点
      */
     bool intersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
+                     Spectrum *Tr) const;
+    
+    /**
+     * 光线在场景中传播的函数
+     * @param  ray     指定的光线对象
+     * @param  sampler 采样器
+     * @param  isect   指定物体表面交点
+     * @param  Tr      可以理解为传播的百分比
+     * @return         返回ray与isect是否有交点
+     */
+    bool rayIntersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
                      Spectrum *Tr) const;
     
     std::vector<std::shared_ptr<Light>> lights;

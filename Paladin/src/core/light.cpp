@@ -14,7 +14,7 @@ PALADIN_BEGIN
 
 
 bool VisibilityTester::unoccluded(const Scene &scene) const {
-    return !scene.intersectP(_p0.spawnRayTo(_p1));
+    return !scene.rayOccluded(_p0.spawnRayTo(_p1));
 }
 
 Spectrum VisibilityTester::Tr(const Scene &scene, Sampler &sampler) const {

@@ -40,6 +40,26 @@ bool Scene::intersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
     }
 }
 
+bool Scene::rayIntersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
+                        Spectrum *Tr) const {
+    *Tr = Spectrum(1.f);
+    while (true) {
+        bool hitSurface = rayIntersect(ray, isect);
+        if (ray.medium) {
+            *Tr = ray.medium->Tr(ray, sampler);
+        }
+        
+        if (!hitSurface) {
+            return false;
+        }
+        
+        if (isect->shape->getMaterial() != nullptr) {
+             return true;
+        }
+        ray = isect->spawnRay(ray.dir);
+    }
+}
+
 bool Scene::embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const {
     RTCIntersectContext context;
     rtcInitIntersectContext(&context);
@@ -64,20 +84,7 @@ bool Scene::intersect(const Ray &ray, SurfaceInteraction *isect) const {
     if (_rtcScene) {
          return embreeIntersect(ray, isect);
     }
-    auto r = ray;
-    SurfaceInteraction si;
-//    bool r2 = _aggregate->intersect(ray, isect);
-    bool ret = _prims->rayIntersect(ray, isect);
-    
-    
-//    if (ret != r2) {
-//        cout << ret << endl;
-//        cout << isect->uv << endl;
-//    } else {
-//
-//    }
-    
-    return ret;
+    return _aggregate->intersect(ray, isect);
 }
 
 
@@ -86,8 +93,7 @@ bool Scene::intersectP(const Ray &ray) const {
     if (_rtcScene) {
         return embreeIntersectP(ray);
     }
-//    return _aggregate->intersectP(ray);
-    return _prims->rayOccluded(ray);
+    return _aggregate->intersectP(ray);
 }
 
 bool Scene::embreeIntersectP(const Ray &ray) const {
@@ -152,7 +158,6 @@ void Scene::accelInitNative(const nloJson &data,
 void Scene::InitAccelNative(const nloJson &data, const vector<shared_ptr<Shape>> &shapes) {
     
     _prims = createAccelerator(data, shapes);
-//    _worldBound = _aggregate->worldBound();
     _worldBound = _prims->worldBound();
     initEnvmap();
 }

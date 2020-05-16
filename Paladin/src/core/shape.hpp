@@ -121,7 +121,9 @@ public:
     F_INLINE void computeScatteringFunctions(SurfaceInteraction *isect,
                                     MemoryArena &arena, TransportMode mode,
                                     bool allowMultipleLobes) const {
-        
+        if (_material) {
+            _material->computeScatteringFunctions(isect, arena, mode, allowMultipleLobes);
+        }
     }
     
     F_INLINE void setMaterial(const shared_ptr<const Material> &mat) {
