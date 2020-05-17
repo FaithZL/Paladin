@@ -252,7 +252,7 @@ vector<shared_ptr<Primitive>> ModelCache::getPrimitives(const string &fn,
 //        [1,2,3],
 //        [3,5,6]
 //    ],
-//    "material" : [
+//    "materials" : [
 //        {
 //            "type" : "unity",
 //            "param" : {
@@ -330,40 +330,29 @@ vector<shared_ptr<Mesh>> ModelCache::createMeshes(const nloJson &param,
     nloJson transformData = param.value("transform", nloJson());
     Transform * transform2 = createTransform(transformData);
     
-    nloJson materialDatas = param.value("material", nloJson::array());
+    nloJson materialDatas = param.value("materials", nloJson::array());
+    
+    nloJson emissionData = param.value("emission", nloJson());
+    shared_ptr<const Material> material;
+    if (!emissionData.is_null()) {
+        material = createLightMat();
+    }
     
     * transform2 = (*transform) * (*transform2);
     
     for (size_t i = 0; i < indexes.size(); ++i) {
         nloJson subIndexes = indexes[i];
         
-        vector<Point3f> subPoints;
-        // 法线列表
-        vector<Normal3f> subNormals;
-        // uv坐标列表
-        vector<Point2f> subUVs;
-        
-        // 顶点索引列表
-        vector<IndexSet> indice;
-        
-        vector<int> checkTable(points.size(), 0);
-        
         auto material = mat ? mat : shared_ptr<const Material>(createMaterial(materialDatas[i]));
-        
-        for(auto _iter = subIndexes.cbegin(); _iter != subIndexes.cend(); ++_iter) {
-            int idx = *_iter;
-            Point3f point = points[idx];
-            Point2f uv = UVs[idx];
-            Normal3f normal = normals[idx];
-            checkTable[idx] = 1;
-            subPoints.push_back(point);
-            subNormals.push_back(normal);
-            subUVs.push_back(uv);
-            indice.push_back(idx);
-        }
     
-        auto mesh = Mesh::create(transform2, indice, &subPoints,
-                                 &subNormals, &subUVs, mat);
+        auto mesh = Mesh::create(transform2, subIndexes, &points,
+                                 &normals, &UVs, material);
+        
+        if (!emissionData.is_null()) {
+            auto al = shared_ptr<DiffuseAreaLight>(createDiffuseAreaLight(emissionData, mesh, mi));
+            mesh->setAreaLight(al);
+            lights.push_back(al);
+        }
         
         ret.push_back(mesh);
     }

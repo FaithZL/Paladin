@@ -35,22 +35,16 @@ public:
         SurfaceInteraction ref;//和表面的交互点
         RGBSpectrum ret(0.0f);
         auto r = ray;
-        if (scene.intersect(ray, &ref)) {
+        if (scene.rayIntersect(ray, &ref)) {
             
             if(_type == GeometryIntegratorType::Normal){
                 ref.computeTangentSpace();
-//                auto mat = ref.primitive->getMaterial();
-//                if (mat) {
-//                    mat->computeScatteringFunctions(&ref, arena, TransportMode::Radiance, true);
-//                }
+                auto mat = ref.shape->getMaterial();
+                if (mat) {
+                    mat->computeScatteringFunctions(&ref, arena, TransportMode::Radiance, true);
+                }
                 Normal3f nn = normalize(ref.shading.normal);
                 nn = mapTo01(nn);
-                if (nn.y == 1) {
-                    scene.intersect(r, &ref);
-                } else {
-                    scene.intersect(r, &ref);
-                }
-                
                 ret[0] = nn.x;
                 ret[1] = nn.y;
                 ret[2] = nn.z;
