@@ -492,6 +492,22 @@ Transform * Transform::identity_ptr() {
     return transformCache.Lookup(identity());
 }
 
+const Transform * mult_ptr(const Transform &t1, const Transform &t2) {
+    return transformCache.Lookup(t1 * t2);
+}
+
+const Transform * mult_ptr(const Transform *t1, const Transform *t2) {
+    return transformCache.Lookup((*t1) * (*t2));
+}
+
+const Transform * mult_ptr(const Transform &t1, const Transform *t2) {
+    return transformCache.Lookup(t1 * (*t2));
+}
+
+const Transform * mult_ptr(const Transform *t1, const Transform &t2) {
+    return transformCache.Lookup((*t1) * t2);
+}
+
 // 反射机制工厂函数
 // 
 

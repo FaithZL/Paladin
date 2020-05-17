@@ -53,13 +53,6 @@ private:
                                          const shared_ptr<const Material> &mat = nullptr,
                                          const MediumInterface &mi = nullptr);
     
-    static void remedyData(const vector<int> &checkTable,
-                           vector<Point3f> &points,
-                           vector<Normal3f> &normals,
-                           vector<Point2f> &uv,
-                           vector<IndexSet> &indice);
-    
-    
     ModelCache() {
         
     }

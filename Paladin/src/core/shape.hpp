@@ -71,7 +71,7 @@ public:
         return intersect(ray, nullptr, nullptr, testAlphaTexture);
     }
     
-    virtual bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const {
+    virtual bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const override {
         DCHECK(false);
         return true;
     }

@@ -193,12 +193,12 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
             Spectrum Tr(1.0f);
             
             bool foundSurfaceInteraction = handleMedia
-                            ? scene.intersectTr(ray, sampler, &lightIsect, &Tr)
-                            : scene.intersect(ray, &lightIsect);
+                            ? scene.rayIntersectTr(ray, sampler, &lightIsect, &Tr)
+                            : scene.rayIntersect(ray, &lightIsect);
             Spectrum Li(0.0f);
             if (foundSurfaceInteraction) {
                 // 如果找到的交点是light光源上的点，则计算光照
-                if (lightIsect.primitive->getAreaLight() == &light) {
+                if (lightIsect.shape->getAreaLight() == &light) {
                     Li = lightIsect.Le(-wi);
                 }
             } else {

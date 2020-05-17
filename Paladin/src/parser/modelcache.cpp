@@ -360,19 +360,6 @@ vector<shared_ptr<Mesh>> ModelCache::createMeshes(const nloJson &param,
     return ret;
 }
 
-void ModelCache::remedyData(const vector<int> &checkTable,
-                            vector<Point3f> &points,
-                            vector<Normal3f> &normals,
-                            vector<Point2f> &uv,
-                            vector<IndexSet> &indice) {
-    vector<Point3f> tmpPoints = points;
-    vector<Normal3f> tmpNormal = normals;
-    vector<Point2f> tmpUV = uv;
-    vector<IndexSet> tmpIndice = indice;
-    
-    
-}
-
 vector<shared_ptr<Mesh>> ModelCache::loadMeshes(const string &fn,
                                             const Transform *transform,
                                             vector<shared_ptr<Light>> &lights,

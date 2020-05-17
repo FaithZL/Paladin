@@ -567,7 +567,13 @@ private:
         
 USING_STD
 
+F_INLINE const Transform * mult_ptr(const Transform &t1, const Transform &t2);
+        
+F_INLINE const Transform * mult_ptr(const Transform *t1, const Transform *t2);
+        
+F_INLINE const Transform * mult_ptr(const Transform &t1, const Transform *t2);
 
+F_INLINE const Transform * mult_ptr(const Transform *t1, const Transform &t2);
 
 
 // 反射机制工厂函数
