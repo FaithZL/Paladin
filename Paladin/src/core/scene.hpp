@@ -38,9 +38,6 @@ public:
     void initEnvmap();
     
     void initAccel(const nloJson &data,
-                   const vector<shared_ptr<Primitive>> &primitive);
-    
-    void initAccel(const nloJson &data,
                    const vector<shared_ptr<const Shape>> &shape);
 
     const AABB3f &worldBound() const { 
@@ -68,19 +65,7 @@ public:
         return _aggregate->rayOccluded(ray);
     }
     
-    F_INLINE bool rayIntersectEmbree(const Ray &ray, SurfaceInteraction *isect) const {
-        RTCIntersectContext context;
-        rtcInitIntersectContext(&context);
-        RTCRayHit rh = EmbreeUtil::toRTCRayHit(ray);
-        rtcIntersect1(_rtcScene, &context, &rh);
-        if (rh.hit.geomID == RTC_INVALID_GEOMETRY_ID) {
-            return false;
-        }
-        uint32_t gid = rh.hit.geomID;
-        uint32_t pid = rh.hit.primID;
-        
-        
-    }
+    bool rayIntersectEmbree(const Ray &ray, SurfaceInteraction *isect) const;
     
     F_INLINE bool rayOccludedEmbree(const Ray &ray) const {
         using namespace EmbreeUtil;

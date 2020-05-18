@@ -9,6 +9,7 @@
 #include "core/shape.hpp"
 #include "math/lowdiscrepancy.hpp"
 #include "math/frame.hpp"
+#include "shapes/mesh.hpp"
 
 
 PALADIN_BEGIN
@@ -107,6 +108,14 @@ Float Shape::solidAngle(const Point3f &p, int nSamples) const {
         }
     }
     return solidAngle / nSamples;
+}
+
+const EmbreeUtil::EmbreeGeomtry * Shape::getPrimitive(uint32_t primID) const {
+    if (_isComplex) {
+        Mesh * self = (Mesh *)this;
+        return self->getTriangle(primID);
+    }
+    return this;
 }
 
 PALADIN_END

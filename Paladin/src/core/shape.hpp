@@ -145,6 +145,8 @@ public:
     F_INLINE bool isComplex() const {
         return _isComplex;
     }
+    
+    const EmbreeUtil::EmbreeGeomtry * getPrimitive(uint32_t primID) const;
 
     const Transform * objectToWorld;
     const Transform * worldToObject;

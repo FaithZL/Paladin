@@ -50,6 +50,26 @@ void Scene::initAccel(const nloJson &data, const vector<shared_ptr<const Shape> 
     }
 }
 
+bool Scene::rayIntersectEmbree(const Ray &ray, SurfaceInteraction *isect) const {
+    RTCIntersectContext context;
+    rtcInitIntersectContext(&context);
+    RTCRayHit rh = EmbreeUtil::toRTCRayHit(ray);
+    rtcIntersect1(_rtcScene, &context, &rh);
+    if (rh.hit.geomID == RTC_INVALID_GEOMETRY_ID) {
+        return false;
+    }
+    uint32_t gid = rh.hit.geomID;
+    uint32_t pid = rh.hit.primID;
+   
+    auto shape = _shapes.at(gid).get();
+    auto prim = shape->getPrimitive(pid);
+    
+    Vector2f uv(rh.hit.u, rh.hit.v);
+    
+    prim->fillSurfaceInteraction(ray, uv, isect);
+    
+    return true;
+}
 
 void Scene::InitAccelNative(const nloJson &data, const vector<shared_ptr<const Shape>> &shapes) {
     

@@ -95,8 +95,12 @@ public:
         return _surfaceArea;
     }
     
-    const vector<const TriangleI>& getTriangles() const {
+    F_INLINE const vector<const TriangleI>& getTriangles() const {
         return _triangles;
+    }
+    
+    F_INLINE const TriangleI * getTriangle(uint32_t primID) const {
+        return &_triangles[primID];
     }
     
     void computeWorldBound();
