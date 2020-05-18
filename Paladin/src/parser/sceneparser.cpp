@@ -410,18 +410,6 @@ void SceneParser::parseTriMesh(const nloJson &data) {
 }
 
 
-
-//"data" : {
-//    "type" : "bvh",
-//    "param" : {
-//        "maxPrimsInNode" : 1,
-//        "splitMethod" : "SAH"
-//    }
-//}
-shared_ptr<Aggregate> SceneParser::parseAccelerator(const nloJson &data) {
-    return createAccelerator(data, _primitives);
-}
-
 Film * SceneParser::parseFilm(const nloJson &data, Filter * filt) {
     nloJson param = data.value("param", nloJson());
     Film * film = dynamic_cast<Film *>(createFilm(param,{filt}));

@@ -155,24 +155,24 @@ bool TransformedPrimitive::intersectP(const Ray &r) const {
     return _primitive->intersectP(InterpolatedWorldToPrim.exec(r));
 }
 
-//"data" : {
-//    "type" : "bvh",
-//    "param" : {
-//        "maxPrimsInNode" : 1,
-//        "splitMethod" : "SAH"
+////"data" : {
+////    "type" : "bvh",
+////    "param" : {
+////        "maxPrimsInNode" : 1,
+////        "splitMethod" : "SAH"
+////    }
+////}
+//shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared_ptr<Primitive>> &prims){
+//    string type = data.value("type", "bvh");
+//    if (type == "bvh") {
+//        nloJson param = data.value("param", nloJson::object());
+//        return createBVH(param, prims);
+//    } else if (type == "kdTree") {
+//        return nullptr;
 //    }
+//    DCHECK(false);
+//    return nullptr;
 //}
-shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared_ptr<Primitive>> &prims){
-    string type = data.value("type", "bvh");
-    if (type == "bvh") {
-        nloJson param = data.value("param", nloJson::object());
-        return createBVH(param, prims);
-    } else if (type == "kdTree") {
-        return nullptr;
-    }
-    DCHECK(false);
-    return nullptr;
-}
 
 //"data" : {
 //    "type" : "bvh",

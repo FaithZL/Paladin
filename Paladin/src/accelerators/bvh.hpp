@@ -96,10 +96,6 @@ class BVHAccel : public Aggregate {
 public:
     enum SplitMethod { SAH, HLBVH, Middle, EqualCounts };
     
-    BVHAccel(std::vector<std::shared_ptr<Primitive>> p,
-             int maxPrimsInNode = 1,
-             SplitMethod splitMethod = SplitMethod::SAH);
-    
     BVHAccel(const vector<shared_ptr<const Shape>> &shapes,
              int maxPrimInNode = 1,
              SplitMethod splitMethod = SplitMethod::SAH);
@@ -112,19 +108,11 @@ public:
     
     virtual ~BVHAccel();
     
-    virtual bool intersect(const Ray &ray, SurfaceInteraction *isect) const override;
-    
-    virtual bool intersectP(const Ray &ray) const override;
-    
     virtual bool rayIntersect(const Ray &ray, SurfaceInteraction *isect) const override;
     
     virtual bool rayOccluded(const Ray &ray) const override;
     
 private:
-    BVHBuildNode *recursiveBuild(
-                                 MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo,
-                                 int start, int end, int *totalNodes,
-                                 std::vector<std::shared_ptr<Primitive>> &orderedPrims);
     
     BVHBuildNode *HLBVHBuild(
                              MemoryArena &arena, const std::vector<BVHPrimitiveInfo> &primitiveInfo,
@@ -150,7 +138,7 @@ private:
     
     const int _maxPrimsInNode;
     const SplitMethod _splitMethod;
-    std::vector<std::shared_ptr<Primitive>> _primitives;
+//    std::vector<std::shared_ptr<Primitive>> _primitives;
     LinearBVHNode *_nodes = nullptr;
     
     vector<shared_ptr<const Shape>> _shapes;
@@ -158,7 +146,7 @@ private:
     vector<const EmbreeUtil::EmbreeGeomtry *> _prims;
 };
 
-shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Primitive>> &prims);
+//shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Primitive>> &prims);
 
 shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<const Shape>> &shapes);
 

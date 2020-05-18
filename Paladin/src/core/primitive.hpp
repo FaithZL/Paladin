@@ -26,9 +26,13 @@ public:
     
     virtual AABB3f worldBound() const = 0;
     
-    virtual bool intersect(const Ray &r, SurfaceInteraction *) const = 0;
+    virtual bool intersect(const Ray &r, SurfaceInteraction *) const {
+        DCHECK(false);
+    }
     
-    virtual bool intersectP(const Ray &r) const = 0;
+    virtual bool intersectP(const Ray &r) const{
+        DCHECK(false);
+    }
     
     
     virtual bool rayIntersect(const Ray &ray, SurfaceInteraction * isect) const {
@@ -204,7 +208,7 @@ public:
     }
 };
 
-shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared_ptr<Primitive>> &);
+//shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared_ptr<Primitive>> &);
 
 
 shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared_ptr<const Shape>> &);

@@ -69,8 +69,6 @@ public:
         return getMedium("global");
     }
     
-    shared_ptr<Aggregate> parseAccelerator(const nloJson &);
-    
     Film * parseFilm(const nloJson &param, Filter *);
     
     Transform * getTransform(const string &key) const {
