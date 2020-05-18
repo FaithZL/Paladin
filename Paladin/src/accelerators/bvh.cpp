@@ -205,7 +205,7 @@ _primitives(std::move(p)) {
     CHECK_EQ(totalNodes, offset);
 }
 
-BVHAccel::BVHAccel(const vector<shared_ptr<Shape>> &shapes,
+BVHAccel::BVHAccel(const vector<shared_ptr<const Shape>> &shapes,
                    int maxPrimsInNode,
                    SplitMethod splitMethod)
 : _maxPrimsInNode(std::min(255, maxPrimsInNode)),
@@ -820,7 +820,7 @@ shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Pri
 //    "maxPrimsInNode" : 1,
 //    "splitMethod" : "SAH"
 //}
-shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Shape>> &shapes) {
+shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<const Shape>> &shapes) {
     int maxPrimsInNode = param.value("maxPrimsInNode", 1);
     BVHAccel::SplitMethod splitMethod;
     string sm = param.value("splitMethod", "SAH");

@@ -100,7 +100,7 @@ public:
              int maxPrimsInNode = 1,
              SplitMethod splitMethod = SplitMethod::SAH);
     
-    BVHAccel(const vector<shared_ptr<Shape>> &shapes,
+    BVHAccel(const vector<shared_ptr<const Shape>> &shapes,
              int maxPrimInNode = 1,
              SplitMethod splitMethod = SplitMethod::SAH);
     
@@ -153,14 +153,14 @@ private:
     std::vector<std::shared_ptr<Primitive>> _primitives;
     LinearBVHNode *_nodes = nullptr;
     
-    vector<shared_ptr<Shape>> _shapes;
+    vector<shared_ptr<const Shape>> _shapes;
     
     vector<const EmbreeUtil::EmbreeGeomtry *> _prims;
 };
 
 shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Primitive>> &prims);
 
-shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Shape>> &shapes);
+shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<const Shape>> &shapes);
 
 PALADIN_END
 

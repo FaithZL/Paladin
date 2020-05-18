@@ -78,7 +78,7 @@ void SceneParser::parse(const nloJson &data) {
     Scene * scene = new Scene(_lights);
 //    scene->initAccel(acceleratorData, _primitives);
     
-    scene->initAccel(acceleratorData, _shapes);
+    scene->initAccel(acceleratorData, move(_shapes));
     
     _scene.reset(scene);
     
@@ -266,7 +266,6 @@ void SceneParser::parseShapes(const nloJson &shapeDataList) {
             continue;
         }
         if (type == "triMesh") {
-//            parseTriMesh(shapeData);
             parseMesh(shapeData);
         } else if (type == "clonal") {
             parseClonal(shapeData);

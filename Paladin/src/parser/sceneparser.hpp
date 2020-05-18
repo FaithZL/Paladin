@@ -164,7 +164,7 @@ private:
     
     vector<shared_ptr<Primitive>> _primitives;
     
-    vector<shared_ptr<Shape>> _shapes;
+    vector<shared_ptr<const Shape>> _shapes;
     
     map<string, Transform *> _transformCache;
     

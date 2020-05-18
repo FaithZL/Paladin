@@ -20,26 +20,6 @@ void Scene::initEnvmap() {
     }
 }
 
-bool Scene::intersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
-                        Spectrum *Tr) const {
-    *Tr = Spectrum(1.f);
-    while (true) {
-        bool hitSurface = intersect(ray, isect);
-        if (ray.medium) {
-            *Tr = ray.medium->Tr(ray, sampler);
-        }
-        
-        if (!hitSurface) {
-            return false;
-        }
-        
-        if (isect->primitive->getMaterial() != nullptr) {
-             return true;
-        }
-        ray = isect->spawnRay(ray.dir);
-    }
-}
-
 bool Scene::rayIntersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
                         Spectrum *Tr) const {
     *Tr = Spectrum(1.f);
@@ -60,87 +40,9 @@ bool Scene::rayIntersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
     }
 }
 
-bool Scene::embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const {
-    RTCIntersectContext context;
-    rtcInitIntersectContext(&context);
-    RTCRayHit rh = EmbreeUtil::toRTCRayHit(ray);
-    rtcIntersect1(_rtcScene, &context, &rh);
-    if (rh.hit.geomID == RTC_INVALID_GEOMETRY_ID) {
-        return false;
-    }
-    uint32_t gid = rh.hit.geomID;
-    uint32_t pid = rh.hit.primID;
-    Primitive * prim = getPrimitive(gid, pid);
-    
-    Vector2f uv(rh.hit.u, rh.hit.v);
-    
-    bool ret = prim->fillSurfaceInteraction(ray, uv, isect);
-    return true;
-}
-
-
-bool Scene::intersect(const Ray &ray, SurfaceInteraction *isect) const {
-        CHECK_NE(ray.dir, Vector3f(0,0,0));
-    if (_rtcScene) {
-         return embreeIntersect(ray, isect);
-    }
-    return _aggregate->intersect(ray, isect);
-}
-
-
-bool Scene::intersectP(const Ray &ray) const {
-    CHECK_NE(ray.dir, Vector3f(0,0,0));
-    if (_rtcScene) {
-        return embreeIntersectP(ray);
-    }
-    return _aggregate->intersectP(ray);
-}
-
-bool Scene::embreeIntersectP(const Ray &ray) const {
-    using namespace EmbreeUtil;
-    RTCIntersectContext context;
-    rtcInitIntersectContext(&context);
-    RTCRay r = EmbreeUtil::convert(ray);
-    rtcOccluded1(_rtcScene, &context, &r);
-    return r.tfar < 0;
-}
-
-EmbreeUtil::EmbreeGeomtry * Scene::getEmbreeGeomtry(int geomID) const {
-    return _embreeGeometries[geomID];
-}
-
-Primitive * Scene::getPrimitive(int geomID, int primID) const {
-    EmbreeUtil::EmbreeGeomtry * ret = _embreeGeometries[geomID];
-    auto shape = ret->getShape(primID);
-    auto primitive = shape->getPrimitive();
-    return primitive;
-}
-
-//"data" : {
-//    "type" : "bvh",
-//    "param" : {
-//        "maxPrimsInNode" : 1,
-//        "splitMethod" : "SAH"
-//    }
-//}
-void Scene::initAccel(const nloJson &data, const vector<shared_ptr<Primitive> > &primitives) {
+void Scene::initAccel(const nloJson &data, const vector<shared_ptr<const Shape> > &shapes) {
     string type = data.value("type", "embree");
-    if (type == "embree") {
-        accelInitEmbree(primitives);
-    } else {
-        accelInitNative(data, primitives);
-    }
-}
-
-//"data" : {
-//    "type" : "bvh",
-//    "param" : {
-//        "maxPrimsInNode" : 1,
-//        "splitMethod" : "SAH"
-//    }
-//}
-void Scene::initAccel(const nloJson &data, const vector<shared_ptr<Shape> > &shapes) {
-    string type = data.value("type", "embree");
+    _shapes = shapes;
     if (type == "embree") {
         InitAccelEmbree(shapes);
     } else {
@@ -148,21 +50,15 @@ void Scene::initAccel(const nloJson &data, const vector<shared_ptr<Shape> > &sha
     }
 }
 
-void Scene::accelInitNative(const nloJson &data,
-                            const vector<shared_ptr<Primitive> >&primitives) {
-    _aggregate = createAccelerator(data, primitives);
+
+void Scene::InitAccelNative(const nloJson &data, const vector<shared_ptr<const Shape>> &shapes) {
+    
+    _aggregate = createAccelerator(data, shapes);
     _worldBound = _aggregate->worldBound();
     initEnvmap();
 }
 
-void Scene::InitAccelNative(const nloJson &data, const vector<shared_ptr<Shape>> &shapes) {
-    
-    _prims = createAccelerator(data, shapes);
-    _worldBound = _prims->worldBound();
-    initEnvmap();
-}
-
-void Scene::InitAccelEmbree(const vector<shared_ptr<Shape>>&shapes) {
+void Scene::InitAccelEmbree(const vector<shared_ptr<const Shape>>&shapes) {
     EmbreeUtil::initDevice();
     _rtcScene = rtcNewScene(EmbreeUtil::getDevice());
     int idx = 0;
@@ -175,23 +71,6 @@ void Scene::InitAccelEmbree(const vector<shared_ptr<Shape>>&shapes) {
         }
     }
     rtcCommitScene(_rtcScene);
-}
-
-void Scene::accelInitEmbree(const vector<shared_ptr<Primitive> > &primitives) {
-    EmbreeUtil::initDevice();
-    _rtcScene = rtcNewScene(EmbreeUtil::getDevice());
-    int idx = 0;
-    for (size_t i = 0; i < primitives.size(); ++i) {
-        auto prim = primitives[i];
-        RTCGeometry gid = prim->rtcGeometry(this);
-        _worldBound = unionSet(_worldBound, prim->worldBound());
-        if (gid != nullptr) {
-            _embreeGeometries.push_back(prim->getEmbreeGeometry());
-            rtcAttachGeometry(_rtcScene, gid);
-        }
-    }
-    rtcCommitScene(_rtcScene);
-    initEnvmap();
 }
 
 PALADIN_END

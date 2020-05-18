@@ -22,7 +22,7 @@ Spectrum VisibilityTester::Tr(const Scene &scene, Sampler &sampler) const {
     Ray ray = _p0.spawnRayTo(_p1);
     while (true) {
         SurfaceInteraction isect;
-        bool hitSurface = scene.intersect(ray, &isect);
+        bool hitSurface = scene.rayIntersect(ray, &isect);
         // 如果有交点，且交点处材质不为空，则返回0，透明材质不在此处理
         if (hitSurface && isect.primitive->getMaterial() != nullptr) {
             return Spectrum(0.f);

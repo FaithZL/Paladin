@@ -780,9 +780,9 @@ bool Triangle::watertightIntersectP(const Ray &ray, bool testAlphaTexture) const
 }
 
 RTCGeometry Triangle::rtcGeometry(Scene *scene) const {
-    if (scene->has(_mesh.get())) {
-        return nullptr;
-    }
+//    if (scene->has(_mesh.get())) {
+//        return nullptr;
+//    }
     RTCGeometry geom = rtcNewGeometry(EmbreeUtil::getDevice(), RTC_GEOMETRY_TYPE_TRIANGLE);
     rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0,
                                RTC_FORMAT_FLOAT3,
@@ -797,7 +797,7 @@ RTCGeometry Triangle::rtcGeometry(Scene *scene) const {
                                 _mesh->getIndiceNum() / 3);
     
     rtcCommitGeometry(geom);
-    scene->add(_mesh.get());
+//    scene->add(_mesh.get());
     return geom;
 }
 

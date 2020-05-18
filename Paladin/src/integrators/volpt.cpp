@@ -55,7 +55,7 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
 
     for (bounce = 0; ; ++bounce) {
         SurfaceInteraction isect;
-        bool foundIntersection = scene.intersect(ray, &isect);
+        bool foundIntersection = scene.rayIntersect(ray, &isect);
         
         MediumInteraction mi;
         if (ray.medium) {

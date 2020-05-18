@@ -181,7 +181,7 @@ shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared
 //        "splitMethod" : "SAH"
 //    }
 //}
-shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared_ptr<Shape>> &shapes){
+shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared_ptr<const Shape>> &shapes){
     string type = data.value("type", "bvh");
     if (type == "bvh") {
         nloJson param = data.value("param", nloJson::object());
