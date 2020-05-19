@@ -105,7 +105,7 @@ struct TriangleI : EmbreeUtil::EmbreeGeomtry {
         return false;
     }
     
-    virtual bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const;
+    bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const;
     
     F_INLINE bool rayIntersect(const Point3f *positions, const Ray &ray, Float *u,
         Float *v, Float *t) const {

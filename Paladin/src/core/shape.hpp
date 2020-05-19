@@ -17,6 +17,14 @@
 
 PALADIN_BEGIN
 
+enum ShapeType {
+    EMesh,
+    ESphere,
+    EDisk,
+    ECone,
+    ECylinder
+};
+
 /**
  * 所有图形的基类，假设读者已经掌握概率论基础知识
  * 科普一下，pdf为概率密度函数，pdf在定义域上积分为1，且恒不小于零
@@ -30,7 +38,7 @@ public:
     
     Shape(const Transform * ObjectToWorld, const Transform *WorldToObject,
           bool reverseOrientation, const MediumInterface &mi,
-          bool isComplex, const shared_ptr<const Material> &mat = nullptr);
+          ShapeType type, const shared_ptr<const Material> &mat = nullptr);
  
 	virtual ~Shape();
 
@@ -71,7 +79,7 @@ public:
         return intersect(ray, nullptr, nullptr, testAlphaTexture);
     }
     
-    virtual bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const override {
+    virtual bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const {
         DCHECK(false);
         return true;
     }
@@ -142,11 +150,9 @@ public:
         return _areaLight.get();
     }
     
-    F_INLINE bool isComplex() const {
-        return _isComplex;
+    F_INLINE ShapeType getType() const {
+        return _type;
     }
-    
-    const EmbreeUtil::EmbreeGeomtry * getPrimitive(uint32_t primID) const;
 
     const Transform * objectToWorld;
     const Transform * worldToObject;
@@ -160,8 +166,7 @@ protected:
     Float _invArea;
     shared_ptr<const Material> _material;
     
-    // 用于区分网格与简单图形
-    bool _isComplex = false;
+    ShapeType _type;
     
     shared_ptr<const AreaLight> _areaLight;
     MediumInterface _mediumInterface;

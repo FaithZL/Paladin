@@ -64,7 +64,7 @@ _shapes(std::move(shapes)) {
     
     for (int i = 0; i < _shapes.size(); ++i) {
         auto shape = _shapes[i];
-        if (shape->isComplex()) {
+        if (shape->getType() == ShapeType::EMesh) {
             auto mesh = (Mesh *)shape.get();
             const vector<const TriangleI> &triangles = mesh->getTriangles();
             for (int j = 0; j < triangles.size(); ++j) {

@@ -32,7 +32,7 @@ Shape::Shape(const Transform * ObjectToWorld,
              const Transform *WorldToObject,
              bool reverseOrientation,
              const MediumInterface &mi,
-             bool isComplex,
+             ShapeType type,
              const shared_ptr<const Material> &mat)
 : objectToWorld(ObjectToWorld),
 worldToObject(WorldToObject),
@@ -40,7 +40,7 @@ reverseOrientation(reverseOrientation),
 transformSwapsHandedness(objectToWorld->swapsHandedness()),
 _mediumInterface(mi),
 _invArea(-1),
-_isComplex(isComplex),
+_type(type),
 _material(mat){
     
 }
@@ -108,14 +108,6 @@ Float Shape::solidAngle(const Point3f &p, int nSamples) const {
         }
     }
     return solidAngle / nSamples;
-}
-
-const EmbreeUtil::EmbreeGeomtry * Shape::getPrimitive(uint32_t primID) const {
-    if (_isComplex) {
-        Mesh * self = (Mesh *)this;
-        return self->getTriangle(primID);
-    }
-    return this;
 }
 
 PALADIN_END

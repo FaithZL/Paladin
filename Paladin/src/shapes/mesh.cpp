@@ -19,7 +19,7 @@ Mesh::Mesh(const Transform * objectToWorld,
                 const vector<Point2f> *UV,
                 const shared_ptr<const Material> &mat,
                 const MediumInterface &mi)
-: Shape(objectToWorld, nullptr, false,mi, true, mat),
+: Shape(objectToWorld, nullptr, false,mi, ShapeType::EMesh, mat),
 _nTriangles(vertexIndices.size() / 3),
 _nVertices(P->size()),
 _surfaceArea(0) {

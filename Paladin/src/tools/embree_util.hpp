@@ -30,11 +30,6 @@ public:
         return (EmbreeGeomtry *)this;
     }
     
-    virtual bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const {
-        DCHECK(false);
-        return true;
-    }
-    
     virtual RTCGeometry rtcGeometry(Scene * scene) const {
         DCHECK(false);
         return nullptr;

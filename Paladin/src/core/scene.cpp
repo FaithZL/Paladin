@@ -8,6 +8,7 @@
 
 #include "scene.hpp"
 #include "tools/embree_util.hpp"
+#include "shapes/mesh.hpp"
 
 PALADIN_BEGIN
 
@@ -60,14 +61,19 @@ bool Scene::rayIntersectEmbree(const Ray &ray, SurfaceInteraction *isect) const 
     }
     uint32_t gid = rh.hit.geomID;
     uint32_t pid = rh.hit.primID;
-   
-    auto shape = _shapes.at(gid).get();
-    auto prim = shape->getPrimitive(pid);
-    
     Vector2f uv(rh.hit.u, rh.hit.v);
     
-    prim->fillSurfaceInteraction(ray, uv, isect);
-    
+    const Shape * shape = _shapes.at(gid).get();
+    switch (shape->getType()) {
+        case EMesh: {
+            auto mesh = static_cast<const Mesh *>(shape);
+            auto tri = mesh->getTriangle(pid);
+            tri->fillSurfaceInteraction(ray, uv, isect);
+            break;
+        }
+        default:
+            break;
+    }
     return true;
 }
 
