@@ -101,78 +101,7 @@ void GeometricPrimitive::computeScatteringFunctions(
     CHECK_GE(dot(isect->normal, isect->shading.normal), 0.);
 }
 
-//TransformedPrimitive
-shared_ptr<TransformedPrimitive> TransformedPrimitive::create(const std::shared_ptr<Primitive> &primitive,
-                                                              const Transform *o2w,
-                                                              const std::shared_ptr<const Material> &mat,
-                                                              const MediumInterface &mediumInterface) {
-    return make_shared<TransformedPrimitive>(primitive, o2w, mat);
-}
 
-TransformedPrimitive::TransformedPrimitive(const std::shared_ptr<Primitive> &primitive,
-                                           const Transform *o2w,
-                                           const std::shared_ptr<const Material> &mat,
-                                           const MediumInterface &mediumInterface):
-_primitive(primitive),
-_material(mat),
-_mediumInterface(mediumInterface) {
-    shared_ptr<GeometricPrimitive> prim = dynamic_pointer_cast<GeometricPrimitive>(primitive);
-    const Transform & trf = prim->getWorldToObject();
-//    auto w2o = (*o2w) * (trf);
-    _objectToWorld = (*o2w) * (trf);
-}
-
-bool TransformedPrimitive::intersect(const Ray &r,
-                                     SurfaceInteraction *isect) const {
-    // 插值获取primitive到world的变换
-
-    // 将局部坐标转换为世界坐标
-    Ray ray = _objectToWorld.getInverse().exec(r);
-    
-    if (!_primitive->intersect(ray, isect)) {
-        return false;
-    }
-    // 更新tMax
-    r.tMax = ray.tMax;
-
-    if (!_objectToWorld.isIdentity()) {
-        *isect = _objectToWorld.exec(*isect);
-    }
-    
-    if (_mediumInterface.isMediumTransition()){
-        isect->mediumInterface = _mediumInterface;
-    } else {
-        isect->mediumInterface = MediumInterface(r.medium);
-    }
-    isect->primitive = this;
-    CHECK_GE(dot(isect->normal, isect->shading.normal), 0);
-    return true;
-}
-
-bool TransformedPrimitive::intersectP(const Ray &r) const {
-    Transform InterpolatedPrimToWorld = _objectToWorld;
-    Transform InterpolatedWorldToPrim = InterpolatedPrimToWorld.getInverse();
-    return _primitive->intersectP(InterpolatedWorldToPrim.exec(r));
-}
-
-////"data" : {
-////    "type" : "bvh",
-////    "param" : {
-////        "maxPrimsInNode" : 1,
-////        "splitMethod" : "SAH"
-////    }
-////}
-//shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared_ptr<Primitive>> &prims){
-//    string type = data.value("type", "bvh");
-//    if (type == "bvh") {
-//        nloJson param = data.value("param", nloJson::object());
-//        return createBVH(param, prims);
-//    } else if (type == "kdTree") {
-//        return nullptr;
-//    }
-//    DCHECK(false);
-//    return nullptr;
-//}
 
 //"data" : {
 //    "type" : "bvh",

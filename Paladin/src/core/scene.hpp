@@ -44,6 +44,13 @@ public:
         return _worldBound;
     }
 
+    Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScattering,
+                                    const Light &light, const Point2f &uLight,
+                                    Sampler &sampler, bool handleMedia,
+                                    bool specular);
+    
+    Spectrum estimateDirectLightingByOne(const Interaction &it, Sampler &sampler,
+                                         const Distribution1D *lightDistrib = nullptr);
     
     F_INLINE bool rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
         return _rtcScene ?

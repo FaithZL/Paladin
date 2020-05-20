@@ -228,10 +228,10 @@ vector<shared_ptr<Primitive>> ModelCache::getPrimitives(const string &fn,
     vector<shared_ptr<Primitive>> tmpLst = _modelMap[fn];
     vector<shared_ptr<Primitive>> ret;
     ret.reserve(tmpLst.size());
-    for (auto iter = tmpLst.cbegin(); iter != tmpLst.cend(); ++iter) {
-        auto transformPrim = TransformedPrimitive::create(*iter, transform);
-        ret.push_back(transformPrim);
-    }
+//    for (auto iter = tmpLst.cbegin(); iter != tmpLst.cend(); ++iter) {
+//        auto transformPrim = TransformedPrimitive::create(*iter, transform);
+//        ret.push_back(transformPrim);
+//    }
     return ret;
 }
 

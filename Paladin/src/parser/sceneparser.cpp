@@ -307,10 +307,7 @@ void SceneParser::parseClonal(const nloJson &data) {
     const vector<shared_ptr<Primitive>> & prims = getPrimitives(from);
     vector<shared_ptr<Primitive>> tPrims;
     auto l2w = createTransform(data.value("transform", nloJson()));
-    for (auto iter = prims.cbegin(); iter != prims.cend(); ++iter) {
-        auto tPrim = TransformedPrimitive::create(*iter, l2w, mat, mediumInterface);
-        _primitives.push_back(tPrim);
-    };
+
 }
 
 //"data" : {
