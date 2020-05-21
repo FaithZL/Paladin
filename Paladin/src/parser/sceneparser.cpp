@@ -15,13 +15,11 @@
 #include "core/material.hpp"
 #include "core/light.hpp"
 #include "lights/diffuse.hpp"
-#include "shapes/trianglemesh.hpp"
 #include "tools/parallel.hpp"
 #include "core/medium.hpp"
 #include "materials/matte.hpp"
 #include "textures/constant.hpp"
 #include "lights/distant.hpp"
-#include "meshparser.hpp"
 #include "tools/embree_util.hpp"
 #include "shapes/mesh.hpp"
 
@@ -65,14 +63,6 @@ void SceneParser::parse(const nloJson &data) {
     nloJson lightDataList = data.value("lights", nloJson::array());
     parseLights(lightDataList);
     
-    bool autolight = data.value("autolight", false);
-    if (autolight) {
-        autoLight();
-    }
-    bool autoplane = data.value("autoplane", false);
-    if (autoplane) {
-        autoPlane();
-    }
     
     nloJson acceleratorData = data.value("accelerator", nloJson::object());
     Scene * scene = new Scene(_lights);
@@ -86,29 +76,29 @@ void SceneParser::parse(const nloJson &data) {
     
 }
 
-void SceneParser::autoPlane() {
-    AABB3f bound = getPrimsBound();
-    std::cout << "scene bound box is:" << bound << endl;
-    auto d = bound.diagonal();
-    float width = std::max(d.x, d.z);
-    width *= 5;
-    auto rotate = Transform::rotateX(-90);
-    auto translate = Transform::translate_ptr(Vector3f(0, bound.pMin.y, 0));
-    *translate = (*translate) * rotate;
-    auto tex = make_shared<ConstantTexture<Spectrum>>(Spectrum(1.f));
-    auto sigma = make_shared<ConstantTexture<Float>>(0);
-    auto mat = make_shared<MatteMaterial>(tex, sigma, nullptr);
-    auto quad = createQuad(translate, false, width);
-    auto prims = createPrimitive(quad, _lights, mat, nullptr, nloJson());
-    _primitives.insert(_primitives.end(), prims.begin(), prims.end());
-}
+//void SceneParser::autoPlane() {
+//    AABB3f bound = getPrimsBound();
+//    std::cout << "scene bound box is:" << bound << endl;
+//    auto d = bound.diagonal();
+//    float width = std::max(d.x, d.z);
+//    width *= 5;
+//    auto rotate = Transform::rotateX(-90);
+//    auto translate = Transform::translate_ptr(Vector3f(0, bound.pMin.y, 0));
+//    *translate = (*translate) * rotate;
+//    auto tex = make_shared<ConstantTexture<Spectrum>>(Spectrum(1.f));
+//    auto sigma = make_shared<ConstantTexture<Float>>(0);
+//    auto mat = make_shared<MatteMaterial>(tex, sigma, nullptr);
+//    auto quad = createQuad(translate, false, width);
+//    auto prims = createPrimitive(quad, _lights, mat, nullptr, nloJson());
+//    _primitives.insert(_primitives.end(), prims.begin(), prims.end());
+//}
 
-void SceneParser::autoLight() {
-    auto tf = Transform::identity_ptr();
-    Spectrum L(1.f);
-    auto light = make_shared<DistantLight>(tf, L, Vector3f(1,1,-1));
-    _lights.push_back(light);
-}
+//void SceneParser::autoLight() {
+//    auto tf = Transform::identity_ptr();
+//    Spectrum L(1.f);
+//    auto light = make_shared<DistantLight>(tf, L, Vector3f(1,1,-1));
+//    _lights.push_back(light);
+//}
 
 void SceneParser::parseLights(const nloJson &list) {
     for (auto iter = list.cbegin(); iter != list.cend(); ++iter) {
@@ -267,8 +257,6 @@ void SceneParser::parseShapes(const nloJson &shapeDataList) {
         }
         if (type == "triMesh") {
             parseMesh(shapeData);
-        } else if (type == "clonal") {
-            parseClonal(shapeData);
         } else {
             parseSimpleShape(shapeData, type);
         }
@@ -294,21 +282,21 @@ void SceneParser::parseShapes(const nloJson &shapeDataList) {
 //    "from" : "cube1",
 //    "material" : "glass"
 //},
-void SceneParser::parseClonal(const nloJson &data) {
-    // paladin的实例化暂时不支持光源
-    nloJson param = data.value("param", nloJson::object());
-    nloJson medIntfceData = data.value("mediumInterface", nloJson());
-    MediumInterface mediumInterface = getMediumInterface(medIntfceData);
-    auto mat = getMaterial(data.value("material", nloJson()));
-    nloJson from = data.value("from", nloJson());
-    if (from.is_null()) {
-        return;
-    }
-    const vector<shared_ptr<Primitive>> & prims = getPrimitives(from);
-    vector<shared_ptr<Primitive>> tPrims;
-    auto l2w = createTransform(data.value("transform", nloJson()));
-
-}
+//void SceneParser::parseClonal(const nloJson &data) {
+//    // paladin的实例化暂时不支持光源
+//    nloJson param = data.value("param", nloJson::object());
+//    nloJson medIntfceData = data.value("mediumInterface", nloJson());
+//    MediumInterface mediumInterface = getMediumInterface(medIntfceData);
+//    auto mat = getMaterial(data.value("material", nloJson()));
+//    nloJson from = data.value("from", nloJson());
+//    if (from.is_null()) {
+//        return;
+//    }
+//    const vector<shared_ptr<Primitive>> & prims = getPrimitives(from);
+//    vector<shared_ptr<Primitive>> tPrims;
+//    auto l2w = createTransform(data.value("transform", nloJson()));
+//
+//}
 
 //"data" : {
 //    "type" : "sphere",
@@ -355,15 +343,15 @@ void SceneParser::parseSimpleShape(const nloJson &data, const string &type) {
         _lights.push_back(areaLight);
     }
     
-    shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, mediumInterface);
-    _primitives.push_back(primitives);
-    // 如果需要克隆的话，则保存在_cloneMap中
-    if (data.value("clone", false)) {
-        string name = data.value("name", "");
-        vector<shared_ptr<Primitive>> v;
-        v.push_back(primitives);
-        addPrimitivesToCloneMap(name, v);
-    }
+//    shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, mediumInterface);
+//    _primitives.push_back(primitives);
+//    // 如果需要克隆的话，则保存在_cloneMap中
+//    if (data.value("clone", false)) {
+//        string name = data.value("name", "");
+//        vector<shared_ptr<Primitive>> v;
+//        v.push_back(primitives);
+//        addPrimitivesToCloneMap(name, v);
+//    }
 }
 
 //data : {
@@ -383,28 +371,28 @@ void SceneParser::parseSimpleShape(const nloJson &data, const string &type) {
 //    "mediumInterface" : [null, "fog"],
 //    "material" : null
 //}
-void SceneParser::parseTriMesh(const nloJson &data) {
-    string subType = data.value("subType", "");
-    vector<shared_ptr<Primitive>> prims;
-    nloJson medIntfceData = data.value("mediumInterface", nloJson());
-    MediumInterface mediumInterface = getMediumInterface(medIntfceData);
-    shared_ptr<const Material> mat = getMaterial(data.value("material", nloJson()));
-    if (subType == "quad") {
-        prims = createQuadPrimitive(data, mat, _lights, mediumInterface);
-    } else if (subType == "cube") {
-        prims = createCubePrimitive(data, mat, _lights, mediumInterface);
-    } else if (subType == "model") {
-        prims = createModelPrimitive(data, mat, _lights, mediumInterface);
-    } else if (subType == "mesh") {
-        MeshParser mp;
-        prims = mp.getPrimitiveLst(data, _lights);
-    }
-    if (data.value("clone", false)) {
-        string name = data.value("name", "");
-        addPrimitivesToCloneMap(name, prims);
-    }
-    _primitives.insert(_primitives.end(), prims.begin(), prims.end());
-}
+//void SceneParser::parseTriMesh(const nloJson &data) {
+//    string subType = data.value("subType", "");
+//    vector<shared_ptr<Primitive>> prims;
+//    nloJson medIntfceData = data.value("mediumInterface", nloJson());
+//    MediumInterface mediumInterface = getMediumInterface(medIntfceData);
+//    shared_ptr<const Material> mat = getMaterial(data.value("material", nloJson()));
+//    if (subType == "quad") {
+//        prims = createQuadPrimitive(data, mat, _lights, mediumInterface);
+//    } else if (subType == "cube") {
+//        prims = createCubePrimitive(data, mat, _lights, mediumInterface);
+//    } else if (subType == "model") {
+//        prims = createModelPrimitive(data, mat, _lights, mediumInterface);
+//    } else if (subType == "mesh") {
+//        MeshParser mp;
+//        prims = mp.getPrimitiveLst(data, _lights);
+//    }
+//    if (data.value("clone", false)) {
+//        string name = data.value("name", "");
+//        addPrimitivesToCloneMap(name, prims);
+//    }
+//    _primitives.insert(_primitives.end(), prims.begin(), prims.end());
+//}
 
 
 Film * SceneParser::parseFilm(const nloJson &data, Filter * filt) {

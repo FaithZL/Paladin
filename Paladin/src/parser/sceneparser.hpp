@@ -34,9 +34,9 @@ public:
     
     void parseShapes(const nloJson &);
     
-    void autoPlane();
-    
-    void autoLight();
+//    void autoPlane();
+//
+//    void autoLight();
     
     Sampler * parseSampler(const nloJson &param, Film *);
     
@@ -55,8 +55,8 @@ public:
     // 解析简单物体，球体，圆柱，圆锥等
     void parseSimpleShape(const nloJson &data, const string &type);
     
-    // 解析模型
-    void parseTriMesh(const nloJson &data);
+//    // 解析模型
+//    void parseTriMesh(const nloJson &data);
     
     void parseMesh(const nloJson &data);
     

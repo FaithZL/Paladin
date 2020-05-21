@@ -13,7 +13,6 @@
 #include "core/primitive.hpp"
 #include "core/light.hpp"
 #include "tools/embree_util.hpp"
-#include "shapes/trianglemesh.hpp"
 #include <set>
 
 PALADIN_BEGIN

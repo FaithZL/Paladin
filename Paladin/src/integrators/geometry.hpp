@@ -9,6 +9,7 @@
 #define geometry_hpp
 
 #include "core/integrator.hpp"
+#include "core/shape.hpp"
 
 PALADIN_BEGIN
 

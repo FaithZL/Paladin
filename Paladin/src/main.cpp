@@ -23,7 +23,6 @@
 #include "math/ray.h"
 #include "GLFW/glfw3.h"
 #include "tools/embree_util.hpp"
-#include "shapes/trianglemesh.hpp"
 
 USING_PALADIN
 

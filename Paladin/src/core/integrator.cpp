@@ -11,6 +11,7 @@
 #include "tools/parallel.hpp"
 #include "tools/progressreporter.hpp"
 #include "materials/bxdfs/bsdf.hpp"
+#include "core/shape.hpp"
 
 PALADIN_BEGIN
 

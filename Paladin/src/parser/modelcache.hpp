@@ -9,7 +9,6 @@
 #define modelcache_hpp
 
 #include "core/header.h"
-#include "shapes/trianglemesh.hpp"
 #include "shapes/mesh.hpp"
 
 PALADIN_BEGIN
@@ -20,20 +19,20 @@ public:
     
     static ModelCache * getInstance();
     
-    vector<shared_ptr<Primitive>> getPrimitives(const string &fn,
-                                                const Transform *transform,
-                                                vector<shared_ptr<Light>> &lights);
+//    vector<shared_ptr<Primitive>> getPrimitives(const string &fn,
+//                                                const Transform *transform,
+//                                                vector<shared_ptr<Light>> &lights);
+//
+//    static vector<shared_ptr<Primitive>> createPrimitive(const nloJson &meshData,
+//                                                  const Transform *transform,
+//                                                  vector<shared_ptr<Light>> &lights,
+//                                                  mutex * mtx = nullptr);
     
-    static vector<shared_ptr<Primitive>> createPrimitive(const nloJson &meshData,
-                                                  const Transform *transform,
-                                                  vector<shared_ptr<Light>> &lights,
-                                                  mutex * mtx = nullptr);
-    
-    vector<shared_ptr<Primitive>> loadPrimitives(const string &fn,
-                                                 const Transform *transform,
-                                                 vector<shared_ptr<Light>> &lights);
-    
-    
+//    vector<shared_ptr<Primitive>> loadPrimitives(const string &fn,
+//                                                 const Transform *transform,
+//                                                 vector<shared_ptr<Light>> &lights);
+//    
+//    
     
     static vector<shared_ptr<Mesh>> getMeshes(const string &fn,
                                         const Transform *transform,
