@@ -26,6 +26,8 @@ DirectSamplingRecord::DirectSamplingRecord(const Interaction &refIt,const Surfac
 : PositionSamplingRecord(targetSi, measure),
 ref(refIt.pos),
 refNormal(refIt.normal) {
+    dir = pos - ref;
+    dist = dir.length();
     
 }
 

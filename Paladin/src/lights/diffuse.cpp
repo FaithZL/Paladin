@@ -56,6 +56,10 @@ Float DiffuseAreaLight::pdf_Li(const Interaction &ref,
     return _shape->pdfDir(ref, wi);
 }
 
+Float DiffuseAreaLight::pdf_Li(const DirectSamplingRecord &rcd) const {
+    return _shape->pdfDir(rcd);
+}
+
 Spectrum DiffuseAreaLight::sample_Le(const Point2f &u1, const Point2f &u2,
                                      Float time, Ray *ray, Normal3f *nLight,
                                      Float *pdfPos, Float *pdfDir) const {

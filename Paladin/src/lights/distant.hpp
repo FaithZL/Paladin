@@ -41,6 +41,8 @@ public:
     
     virtual Float pdf_Li(const Interaction &, const Vector3f &) const override;
     
+    virtual Float pdf_Li(const DirectSamplingRecord &) const override;
+    
 private:
     const Spectrum _L;
     // 光源方向，指的是光源在物体的_wLight方向

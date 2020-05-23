@@ -151,6 +151,10 @@ public:
     // 用于估计直接光照时，采样bsdf时生成的wi方向，对应的pdf函数值
     virtual Float pdf_Li(const Interaction &ref, const Vector3f &wi) const = 0;
     
+    virtual Float pdf_Li(const DirectSamplingRecord &) const {
+        NotImplementedError("pdf_li");
+    }
+    
     // // 双向方法需要用的函数，暂时不理
     // virtual Spectrum sampleLe(const Point2f &u1, const Point2f &u2, Float time,
     //                            Ray *ray, Normal3f *nLight, Float *pdfPos,

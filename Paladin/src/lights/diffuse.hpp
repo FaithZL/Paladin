@@ -53,7 +53,9 @@ public:
     Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wo,
                        Float *pdf, VisibilityTester *vis) const override;
     
-    Float pdf_Li(const Interaction &, const Vector3f &) const override;
+    virtual Float pdf_Li(const Interaction &, const Vector3f &) const override;
+    
+    virtual Float pdf_Li(const DirectSamplingRecord &rcd) const override;
     
     static shared_ptr<DiffuseAreaLight> create(Float rgb[3], const std::shared_ptr<Shape> &,
                                                const MediumInterface &mi = nullptr,

@@ -152,6 +152,17 @@ Float EnvironmentMap::pdf_Li(const Interaction &, const Vector3f &w) const {
            (2 * Pi * Pi * sinTheta);
 }
 
+Float EnvironmentMap::pdf_Li(const DirectSamplingRecord &rcd) const {
+    Vector3f wi = _worldToLight->exec(rcd.dir);
+    Float theta = sphericalTheta(wi), phi = sphericalPhi(wi);
+    Float sinTheta = std::sin(theta);
+    if (sinTheta == 0) {
+        return 0;
+    }
+    return _distribution->pdf(Point2f(phi * Inv2Pi, theta * InvPi)) /
+           (2 * Pi * Pi * sinTheta);
+}
+
 //"param" : {
 //    "transform" : {
 //        "type" : "rotateX",

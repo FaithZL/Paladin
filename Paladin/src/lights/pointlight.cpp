@@ -46,6 +46,12 @@ Float PointLight::pdf_Li(const Interaction &, const Vector3f &) const {
     return 0;
 }
 
+// 狄拉克函数
+// 特殊处理
+Float PointLight::pdf_Li(const DirectSamplingRecord &) const {
+    return 0;
+}
+
 //"param" : {
 //    "transform" : {
 //        "type" : "translate",

@@ -14,6 +14,7 @@
 #include "core/interaction.hpp"
 #include "core/cobject.h"
 #include "tools/embree_util.hpp"
+#include "core/sample_record.hpp"
 
 PALADIN_BEGIN
 
@@ -120,6 +121,18 @@ public:
 	 * 函数空间为向量空间
 	 */
     virtual Float pdfDir(const Interaction &ref, const Vector3f &wi) const;
+    
+    F_INLINE Float pdfDir(const DirectSamplingRecord &rcd) const {
+        Float pdf = pdfPos();
+        switch (rcd.measure) {
+            case ESolidAngle:
+                return pdf * rcd.dist * rcd.dist / absDot(-rcd.dir, rcd.normal);
+            case EArea:
+                return pdf;
+            default:
+                return 0;
+        }
+    }
     
     /**
      * 返回shape对于某个点的立体角大小

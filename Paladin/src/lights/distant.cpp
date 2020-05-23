@@ -63,6 +63,10 @@ Float DistantLight::pdf_Li(const Interaction &, const Vector3f &) const {
     return 0.f;
 }
 
+Float DistantLight::pdf_Li(const DirectSamplingRecord &) const {
+    return 0.f;
+}
+
 // "data" : {
 //    "type" : "distant",
 //    "param" : {

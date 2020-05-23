@@ -71,6 +71,10 @@ Float SpotLight::pdf_Li(const Interaction &, const Vector3f &) const {
     return 0.f;
 }
 
+Float SpotLight::pdf_Li(const DirectSamplingRecord &) const {
+    return 0.f;
+}
+
 //"param" : {
 //    "transform" : {
 //        "type" : "translate",

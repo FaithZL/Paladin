@@ -55,7 +55,22 @@ public:
      * p(u, v) / p(ω) = sinθ 2π^2
      * 
      */
-    Float pdf_Li(const Interaction &, const Vector3f &) const override;
+    virtual Float pdf_Li(const Interaction &, const Vector3f &) const override;
+    
+    /**
+     * 求基于方向的pdf，要把uv空间的pdf转为立体角空间的pdf
+     * 推导过程如下所示
+     *
+     * u = φ / 2π
+     * v = θ / π
+     * p(u, v) du dv = p(ω) dω
+     *
+     * p(u, v) / p(ω) = dω / dudv = (sinθ dθ dφ) / dudv
+     *
+     * p(u, v) / p(ω) = sinθ 2π^2
+     *
+     */
+    virtual Float pdf_Li(const DirectSamplingRecord &) const override;
     
 private:
     // 环境贴图的纹理

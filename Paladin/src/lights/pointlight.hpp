@@ -45,7 +45,7 @@ public:
 
     virtual Float pdf_Li(const Interaction &, const Vector3f &) const override;
 
-
+    virtual Float pdf_Li(const DirectSamplingRecord &) const override;
 private:
     // 光源位置
     const Point3f _pos;
