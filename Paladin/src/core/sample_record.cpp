@@ -18,9 +18,20 @@ PositionSamplingRecord::PositionSamplingRecord(const SurfaceInteraction &it, EMe
 time(it.time),
 normal(it.normal),
 uv(it.uv),
-measure(measure) {
+measure(measure),
+shape(it.shape) {
 
 }
+
+void PositionSamplingRecord::updateSurface(const SurfaceInteraction &si) {
+    pos = si.pos;
+    time = si.time;
+    normal = si.normal;
+    uv = si.uv;
+    shape = si.shape;
+}
+
+
 
 DirectSamplingRecord::DirectSamplingRecord(const Interaction &refIt,const SurfaceInteraction &targetSi,  EMeasure measure)
 : PositionSamplingRecord(targetSi, measure),
@@ -31,5 +42,18 @@ refNormal(refIt.normal) {
     
 }
 
+DirectSamplingRecord::DirectSamplingRecord(const Interaction &refIt, EMeasure measure)
+: ref(refIt.pos),
+refNormal(refIt.normal) {
+    
+}
+
+void DirectSamplingRecord::updateTarget(const SurfaceInteraction &si) {
+    updateSurface(si);
+    dir = pos - ref;
+    dist = dir.length();
+    dir = normalize(dir);
+    pdfDir = pdfPos * dist * dist / absDot(normal, -dir);
+}
 
 PALADIN_END

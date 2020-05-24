@@ -17,16 +17,16 @@ Paladin/.idea
 xcuserdata
 
 build
-buildpro
+dev
 
-buildpro/CMakeFiles
-buildpro/bvh
-buildpro/builders
-buildpro/CMakeCache.txt
-buildpro/cmake_install.cmake
-buildpro/CMakeScripts
-buildpro/Debug
-buildpro/Release
-buildpro/RelWithDebInfo
-buildpro/Paladin.build
-buildpro/third
+dev/CMakeFiles
+dev/bvh
+dev/builders
+dev/CMakeCache.txt
+dev/cmake_install.cmake
+dev/CMakeScripts
+dev/Debug
+dev/Release
+dev/RelWithDebInfo
+dev/Paladin.build
+dev/third

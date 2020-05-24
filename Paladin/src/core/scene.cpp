@@ -51,6 +51,27 @@ void Scene::initAccel(const nloJson &data, const vector<shared_ptr<const Shape> 
     }
 }
 
+Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
+                                  const Distribution1D *lightDistrib) const {
+    Point2f u(_u);
+    Float pmf = 0;
+    Float index = lightDistrib->sampleDiscrete(u.x, &pmf, &u.x);
+    const Light * light = lights.at(index).get();
+    Spectrum val;
+    Interaction intr;
+    intr.pos = rcd->ref;
+    VisibilityTester vis;
+    val = light->sample_Li(intr, u, &rcd->dir, &rcd->pdfDir, &vis);
+    if (!vis.unoccluded(*this)) {
+        return 0;
+    }
+    return val;
+}
+
+Float Scene::pdfLightDirect(const DirectSamplingRecord &rcd) const {
+    
+}
+
 bool Scene::rayIntersectEmbree(const Ray &ray, SurfaceInteraction *isect) const {
     RTCIntersectContext context;
     rtcInitIntersectContext(&context);

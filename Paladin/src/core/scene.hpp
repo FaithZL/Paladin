@@ -42,14 +42,12 @@ public:
     const AABB3f &worldBound() const { 
         return _worldBound;
     }
-
-    Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScattering,
-                                    const Light &light, const Point2f &uLight,
-                                    Sampler &sampler, bool handleMedia,
-                                    bool specular);
     
-    Spectrum estimateDirectLightingByOne(const Interaction &it, Sampler &sampler,
-                                         const Distribution1D *lightDistrib = nullptr);
+    Spectrum sampleLightDirect(DirectSamplingRecord *rcd,
+                               const Point2f _u,
+                               const Distribution1D * lightDistrib) const;
+    
+    Float pdfLightDirect(const DirectSamplingRecord &rcd) const;
     
     F_INLINE bool rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
         return _rtcScene ?

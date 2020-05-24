@@ -9,6 +9,7 @@
 #include "pathtracer.hpp"
 #include "core/camera.hpp"
 #include "materials/bxdfs/bsdf.hpp"
+#include "core/shape.hpp"
 
 PALADIN_BEGIN
 
@@ -45,6 +46,88 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
 	int bounces;
 
 	Float etaScale = 1;
+    
+    for (bounces = 0; ; ++bounces) {
+        SurfaceInteraction isect;
+        bool foundIntersection = scene.rayIntersect(ray, &isect);
+        if (bounces == 0 || specularBounce) {
+            // 如果与几何图元有交点，则判断是否为光源，估计Le
+            if (foundIntersection) {
+                L += throughput * isect.Le(-ray.dir);
+            } else {
+                // 如果没有交点，则采样环境光
+                for (const auto &light : scene.infiniteLights) {
+                    L += throughput * light->Le(ray);
+                }
+            }
+        }
+        
+        if (!foundIntersection || bounces >= _maxDepth) {
+            break;
+        }
+        
+        isect.computeScatteringFunctions(ray, arena, true);
+        // 如果没有bsdf，则不计算反射次数
+        // 有些几何图元是仅仅是为了限定参与介质的范围
+        // 所以没有bsdf
+        if (!isect.bsdf) {
+            ray = isect.spawnRay(ray.dir);
+            --bounces;
+            continue;
+        }
+        
+        const Distribution1D * distrib = _lightDistribution->lookup(isect.pos);
+        
+        // 直接采样光源
+        if (isect.bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
+            Interaction it;
+            DirectSamplingRecord rcd(isect);
+            Spectrum Ld = scene.sampleLightDirect(&rcd, sampler.get2D(), distrib);
+            if (!Ld.IsBlack()) {
+                Spectrum bsdfVal = isect.bsdf->f(isect.wo, rcd.dir);
+                if (!bsdfVal.IsBlack()) {
+                    const Light * light = rcd.shape->getAreaLight();
+                    Float bsdfPdf = light->isDelta() ? 0 : isect.bsdf->pdfDir(isect.wo, rcd.dir);
+                    Float weight = powerHeuristic(1, rcd.pdfDir, 1, bsdfPdf);
+                    L += throughput * weight * bsdfVal * Ld;
+                }
+            }
+        }
+        
+        // 采样bsdf
+        Vector3f wo = -ray.dir;
+        Vector3f wi;
+        Float bsdfPdf;
+        BxDFType flags;
+        Spectrum bsdfVal = isect.bsdf->sample_f(wo, &wi, sampler.get2D(),
+                                                &bsdfPdf, BSDF_ALL, &flags);
+        if (bsdfVal.IsBlack() || bsdfPdf == 0.f) {
+            break;
+        }
+        
+        
+        L += 
+        
+        /**
+         * 复用之前的路径对吞吐量进行累积
+         *      f(pj+1 → pj → pj-1) |cosθj|
+         *    --------------------------------
+         *             pω(pj+1 - pj)
+         */
+        throughput *= bsdfVal * absDot(wi, isect.shading.normal) / bsdfPdf;
+        CHECK_GE(throughput.y(), 0.0f);
+        DCHECK(!std::isinf(throughput.y()));
+        specularBounce = (flags & BSDF_SPECULAR) != 0;
+        
+        if ((flags & BSDF_TRANSMISSION)) {
+            Float eta = isect.bsdf->eta;
+            // 详见bxdf.hpp文件中SpecularTransmission的注释
+            etaScale *= (dot(wo, isect.normal) > 0) ? (eta * eta) : 1 / (eta * eta);
+        }
+        
+        
+    }
+    
 
 	for (bounces = 0;; ++bounces) {
 		SurfaceInteraction isect;

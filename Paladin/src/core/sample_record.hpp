@@ -32,7 +32,7 @@ struct PositionSamplingRecord {
     
     Normal3f normal;
     
-    Float pdf;
+    Float pdfPos;
     
     Point2f uv;
     
@@ -40,11 +40,13 @@ struct PositionSamplingRecord {
     
     EMeasure measure;
     
-    inline PositionSamplingRecord() {
+    void updateSurface(const SurfaceInteraction &si);
+    
+    PositionSamplingRecord() {
         
     }
     
-    inline PositionSamplingRecord(const SurfaceInteraction &it,
+    PositionSamplingRecord(const SurfaceInteraction &it,
                                   EMeasure measure = EArea);
 };
 
@@ -66,15 +68,22 @@ struct DirectionSamplingRecord {
 };
 
 struct DirectSamplingRecord : public PositionSamplingRecord {
-    Point3f ref;
+    const Point3f ref;
     
-    Normal3f refNormal;
+    const Normal3f refNormal;
     
+    // ref指向pos,单位向量
     Vector3f dir;
     
     Float dist;
     
-    inline DirectSamplingRecord(const Interaction &refIt,const SurfaceInteraction &targetSi,  EMeasure measure = ESolidAngle);
+    Float pdfDir;
+    
+    void updateTarget(const SurfaceInteraction &si);
+    
+    DirectSamplingRecord(const Interaction &refIt, EMeasure measure = ESolidAngle);
+    
+    DirectSamplingRecord(const Interaction &refIt,const SurfaceInteraction &targetSi,  EMeasure measure = ESolidAngle);
 };
 
 PALADIN_END

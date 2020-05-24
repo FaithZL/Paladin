@@ -115,6 +115,8 @@ public:
 	 * 基于立体角的采样
      */
     virtual Interaction sampleDir(const Interaction &ref, const Point2f &u, Float *pdf) const;
+    
+    virtual void sampleDir(DirectSamplingRecord * rcd, const Point2f &u) const;
 
 	/**
 	 * 在场景中某处ref处沿着wi方向采样图形上某点的概率密度函数
