@@ -7,6 +7,7 @@
 
 #include "sample_record.hpp"
 #include "interaction.hpp"
+#include "core/shape.hpp"
 
 PALADIN_BEGIN
 
@@ -19,7 +20,7 @@ time(it.time),
 normal(it.normal),
 uv(it.uv),
 measure(measure),
-shape(it.shape) {
+object(it.shape) {
 
 }
 
@@ -28,7 +29,7 @@ void PositionSamplingRecord::updateSurface(const SurfaceInteraction &si) {
     time = si.time;
     normal = si.normal;
     uv = si.uv;
-    shape = si.shape;
+    object = si.shape;
 }
 
 
@@ -43,9 +44,13 @@ refNormal(refIt.normal) {
 }
 
 DirectSamplingRecord::DirectSamplingRecord(const Interaction &refIt, EMeasure measure)
-: ref(refIt.pos),
-refNormal(refIt.normal) {
-    
+: PositionSamplingRecord(),
+ref(refIt.pos),
+refNormal(refIt.normal),
+dir(Vector3f(0,0,0)),
+dist(0),
+pdfDir(0) {
+    measure = ESolidAngle;
 }
 
 void DirectSamplingRecord::updateTarget(const SurfaceInteraction &si) {

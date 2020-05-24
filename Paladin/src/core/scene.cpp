@@ -61,6 +61,7 @@ Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
     Interaction intr;
     intr.pos = rcd->ref;
     VisibilityTester vis;
+    rcd->object = light;
     val = light->sample_Li(intr, u, &rcd->dir, &rcd->pdfDir, &vis);
     if (!vis.unoccluded(*this)) {
         return 0;

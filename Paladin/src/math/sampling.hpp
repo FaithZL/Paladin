@@ -522,17 +522,25 @@ inline Float uniformHemispherePdf() {
  * 单位球体的表面积为4π
  * 概率密度函数值为1/4π
  */
-inline Float uniformSpherePdf() {
+F_INLINE Float uniformSpherePdf() {
     return Inv4Pi;
 }
 
-inline Float balanceHeuristic(int nf, Float fPdf, int ng, Float gPdf) {
+F_INLINE Float balanceHeuristic(int nf, Float fPdf, int ng, Float gPdf) {
     return (nf * fPdf) / (nf * fPdf + ng * gPdf);
 }
 
-inline Float powerHeuristic(int nf, Float fPdf, int ng, Float gPdf) {
+F_INLINE Float balanceHeuristic(Float fPdf, Float gPdf) {
+    return balanceHeuristic(1, fPdf, 1, gPdf);
+}
+
+F_INLINE Float powerHeuristic(int nf, Float fPdf, int ng, Float gPdf) {
     Float f = nf * fPdf, g = ng * gPdf;
     return (f * f) / (f * f + g * g);
+}
+
+F_INLINE Float powerHeuristic(Float fPdf, Float gPdf) {
+    return powerHeuristic(1, fPdf, 1, gPdf);
 }
 
 /**

@@ -36,13 +36,19 @@ struct PositionSamplingRecord {
     
     Point2f uv;
     
-    const Shape * shape;
+    const CObject * object;
     
     EMeasure measure;
     
     void updateSurface(const SurfaceInteraction &si);
     
-    PositionSamplingRecord() {
+    PositionSamplingRecord():
+    pos(Point3f(0,0,0)),
+    time(0),
+    normal(Normal3f(0,0,0)),
+    pdfPos(0),
+    uv(Point2f(0,0)),
+    object(nullptr) {
         
     }
     
