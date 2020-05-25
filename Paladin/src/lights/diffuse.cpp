@@ -51,6 +51,10 @@ Spectrum DiffuseAreaLight::sample_Li(const Interaction &ref, const Point2f &u,
     return L(pShape, -*wi);
 }
 
+Spectrum DiffuseAreaLight::sample_Li(const DirectSamplingRecord &rcd) const {
+    
+}
+
 Float DiffuseAreaLight::pdf_Li(const Interaction &ref,
                                const Vector3f &wi) const {
     return _shape->pdfDir(ref, wi);

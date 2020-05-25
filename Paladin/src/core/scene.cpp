@@ -52,10 +52,11 @@ void Scene::initAccel(const nloJson &data, const vector<shared_ptr<const Shape> 
 }
 
 Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
-                                  const Distribution1D *lightDistrib) const {
+                                  const Distribution1D *lightDistrib,
+                                  Float *pmf) const {
     Point2f u(_u);
-    Float pmf = 0;
-    Float index = lightDistrib->sampleDiscrete(u.x, &pmf, &u.x);
+    *pmf = 0;
+    Float index = lightDistrib->sampleDiscrete(u.x, pmf, &u.x);
     const Light * light = lights.at(index).get();
     Spectrum val;
     Interaction intr;

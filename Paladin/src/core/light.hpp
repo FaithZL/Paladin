@@ -113,6 +113,10 @@ public:
     virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u,
                                Vector3f *wi, Float *pdf,
                                VisibilityTester *vis) const = 0;
+    
+    virtual Spectrum sample_Li(const DirectSamplingRecord &rcd) const {
+        NotImplementedError("sample_Li");
+    }
 
     // 辐射通量，也就是功率
     virtual Spectrum power() const = 0;
@@ -152,7 +156,7 @@ public:
     virtual Float pdf_Li(const Interaction &ref, const Vector3f &wi) const = 0;
     
     virtual Float pdf_Li(const DirectSamplingRecord &) const {
-        NotImplementedError("pdf_li");
+        NotImplementedError("pdf_Li");
     }
     
     // // 双向方法需要用的函数，暂时不理

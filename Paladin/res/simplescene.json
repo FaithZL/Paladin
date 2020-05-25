@@ -24,11 +24,12 @@
             "enable" : false,
             "param" : {
                 "transform" : {
-                    
+                    "type" : "translate",
+                    "param" : [0,0.7,0]
                 },
                 "I" : {
                     "colorType" : 1,
-                    "color" : [1,1,1]
+                    "color" : [5,5,5]
                 }
             }
         }

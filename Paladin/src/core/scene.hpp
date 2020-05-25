@@ -45,7 +45,8 @@ public:
     
     Spectrum sampleLightDirect(DirectSamplingRecord *rcd,
                                const Point2f _u,
-                               const Distribution1D * lightDistrib) const;
+                               const Distribution1D * lightDistrib,
+                               Float *pmf) const;
     
     Float pdfLightDirect(const DirectSamplingRecord &rcd) const;
     

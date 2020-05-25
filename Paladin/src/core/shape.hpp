@@ -57,14 +57,7 @@ public:
         DCHECK(false);
     }
     
-    void setPrimitive(Primitive *primitive) {
-        _primitive = primitive;
-    }
-    
-    Primitive * getPrimitive() {
-        return _primitive;
-    }
-
+   
 	// 求交函数，填充SurfaceInteraction数据
     // 几乎所有的shape与ray求交的计算都是将ray转换到object空间中进行的
 	virtual bool intersect(const Ray &ray, 

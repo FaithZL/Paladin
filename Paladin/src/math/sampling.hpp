@@ -536,7 +536,7 @@ F_INLINE Float balanceHeuristic(Float fPdf, Float gPdf) {
 
 F_INLINE Float powerHeuristic(int nf, Float fPdf, int ng, Float gPdf) {
     Float f = nf * fPdf, g = ng * gPdf;
-    return (f * f) / (f * f + g * g);
+    return f == 0 ? 0 : (f * f) / (f * f + g * g);
 }
 
 F_INLINE Float powerHeuristic(Float fPdf, Float gPdf) {

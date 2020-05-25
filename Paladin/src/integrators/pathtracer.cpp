@@ -83,7 +83,8 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
         const Light * light = nullptr;
         if (isect.bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
             Interaction it;
-            Spectrum Ld = scene.sampleLightDirect(&rcd, sampler.get2D(), distrib);
+            Float pmf;
+            Spectrum Ld = scene.sampleLightDirect(&rcd, sampler.get2D(), distrib, &pmf);
             if (!Ld.IsBlack()) {
                 Spectrum bsdfVal = isect.bsdf->f(isect.wo, rcd.dir);
                 bsdfVal *= absDot(isect.shading.normal, rcd.dir);
@@ -124,15 +125,11 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
 
         Float weight = powerHeuristic(bsdfPdf, lightPdf);
 
-        L += throughput * bsdfVal * Li * weight / bsdfPdf;
-
-        /**
-         * 复用之前的路径对吞吐量进行累积
-         *      f(pj+1 → pj → pj-1) |cosθj|
-         *    --------------------------------
-         *             pω(pj+1 - pj)
-         */
         throughput *= bsdfVal / bsdfPdf;
+        
+        L += throughput * Li * weight;
+
+        
         CHECK_GE(throughput.y(), 0.0f);
         DCHECK(!std::isinf(throughput.y()));
         specularBounce = (flags & BSDF_SPECULAR) != 0;
@@ -153,7 +150,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
         }
     }
-    
+
 
 //	for (bounces = 0;; ++bounces) {
 //		SurfaceInteraction isect;
@@ -190,8 +187,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
 //		// 找到非高光反射comp，如果有，则估计直接光照贡献
 //		if (isect.bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
 //			Spectrum Ld = throughput * sampleOneLight(isect, scene, arena, sampler, _nLightSamples, false, distrib);
-//
-//			L += Ld;
+//            L += Ld;
 //		}
 //
 //		// 开始采样BSDF，生成wi方向，追踪更长的路径
