@@ -73,7 +73,9 @@ Interaction Shape::sampleDir(const Interaction &ref, const Point2f &u, Float *pd
 
 void Shape::sampleDir(DirectSamplingRecord *rcd, const Point2f &u) const {
     Interaction intr = samplePos(u, &rcd->pdfPos);
+    rcd->pos = intr.pos;
     Vector3f wi = intr.pos - rcd->ref;
+    rcd->normal = intr.normal;
     if (wi.lengthSquared() == 0) {
         rcd->pdfPos = 0.f;
     } else {

@@ -25,6 +25,14 @@ public:
         return (_twoSided || dot(intr.normal, w) > 0) ? _L : Spectrum(0.f);
     }
     
+    Spectrum L(const DirectSamplingRecord &rcd) const override {
+//        auto d = dot(-rcd.dir, rcd.normal);
+//        if ((_twoSided || dot(-rcd.dir, rcd.normal) > 0)) {
+//            int i = 0;
+//        }
+        return (_twoSided || dot(-rcd.dir, rcd.normal) > 0) ? _L : Spectrum(0.f);
+    }
+    
     void loadLeMap(const string &texname);
     
     virtual Spectrum sample_Le(const Point2f &u1, const Point2f &u2,
@@ -53,7 +61,7 @@ public:
     Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wo,
                        Float *pdf, VisibilityTester *vis) const override;
     
-    Spectrum sample_Li(const DirectSamplingRecord &rcd) const override;
+    Spectrum sample_Li(DirectSamplingRecord *rcd, const Point2f &u, const Scene &) const override;
     
     virtual Float pdf_Li(const Interaction &, const Vector3f &) const override;
     

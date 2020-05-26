@@ -55,7 +55,6 @@ Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
                                   const Distribution1D *lightDistrib,
                                   Float *pmf) const {
     Point2f u(_u);
-    *pmf = 0;
     Float index = lightDistrib->sampleDiscrete(u.x, pmf, &u.x);
     const Light * light = lights.at(index).get();
     Spectrum val;
@@ -63,11 +62,7 @@ Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
     intr.pos = rcd->ref;
     VisibilityTester vis;
     rcd->object = light;
-    val = light->sample_Li(intr, u, &rcd->dir, &rcd->pdfDir, &vis);
-    if (!vis.unoccluded(*this)) {
-        return 0;
-    }
-    return val;
+    return light->sample_Li(rcd, u, *this);;
 }
 
 Float Scene::pdfLightDirect(const DirectSamplingRecord &rcd) const {

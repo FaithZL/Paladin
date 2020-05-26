@@ -9,6 +9,7 @@
 #include "core/shape.hpp"
 #include "math/sampling.hpp"
 #include "core/bxdf.hpp"
+#include "core/scene.hpp"
 
 PALADIN_BEGIN
 
@@ -51,8 +52,16 @@ Spectrum DiffuseAreaLight::sample_Li(const Interaction &ref, const Point2f &u,
     return L(pShape, -*wi);
 }
 
-Spectrum DiffuseAreaLight::sample_Li(const DirectSamplingRecord &rcd) const {
-    
+Spectrum DiffuseAreaLight::sample_Li(DirectSamplingRecord *rcd, const Point2f &u,
+                                     const Scene &scene) const {
+    _shape->sampleDir(rcd, u);
+    if (rcd->pdfDir == 0) {
+        return 0;
+    }
+    Spectrum ret = L(*rcd);
+    auto vis = VisibilityTester(rcd->ref, rcd->pos);
+    ret = (!ret.IsBlack() && vis.unoccluded(scene)) ? ret : Spectrum(0.f);
+    return ret;
 }
 
 Float DiffuseAreaLight::pdf_Li(const Interaction &ref,

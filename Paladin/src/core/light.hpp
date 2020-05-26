@@ -114,7 +114,7 @@ public:
                                Vector3f *wi, Float *pdf,
                                VisibilityTester *vis) const = 0;
     
-    virtual Spectrum sample_Li(const DirectSamplingRecord &rcd) const {
+    virtual Spectrum sample_Li(DirectSamplingRecord *rcd, const Point2f &u, const Scene &) const {
         NotImplementedError("sample_Li");
     }
 
@@ -189,6 +189,8 @@ public:
 
     }
 
+    virtual Spectrum L(const DirectSamplingRecord &rcd) const = 0;
+    
     virtual Spectrum L(const Interaction &intr, const Vector3f &w) const = 0;
 };
 

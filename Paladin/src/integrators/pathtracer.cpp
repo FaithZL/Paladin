@@ -127,7 +127,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
 
         throughput *= bsdfVal / bsdfPdf;
         
-        L += throughput * Li * weight;
+//        L += throughput * Li * weight;
 
         
         CHECK_GE(throughput.y(), 0.0f);
