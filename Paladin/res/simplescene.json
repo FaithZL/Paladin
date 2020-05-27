@@ -337,7 +337,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "front",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -435,7 +435,7 @@
     "sampler" : {
         "type" : "random",
         "param" : {
-            "spp" : 16
+            "spp" : 8
         }
     },
     "camera" : {
