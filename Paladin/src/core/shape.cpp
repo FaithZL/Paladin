@@ -72,22 +72,8 @@ Interaction Shape::sampleDir(const Interaction &ref, const Point2f &u, Float *pd
 }
 
 void Shape::sampleDir(DirectSamplingRecord *rcd, const Point2f &u) const {
-    Interaction intr = samplePos(u, &rcd->pdfPos);
-    rcd->pos = intr.pos;
-    Vector3f wi = intr.pos - rcd->ref;
-    rcd->normal = intr.normal;
-    if (wi.lengthSquared() == 0) {
-        rcd->pdfPos = 0.f;
-    } else {
-        wi = normalize(wi);
-        Float d2 = distanceSquared(intr.pos, rcd->ref);
-        rcd->dir = wi;
-        rcd->pdfDir = rcd->pdfPos * d2 / absDot(-wi, intr.normal);
-        if (std::isinf(rcd->pdfDir)) {
-            rcd->pdfDir = 0.f;
-        }
-        rcd->dist = std::sqrt(d2);
-    }
+    samplePos(rcd, u);
+    rcd->computeData();
 }
 
 /*

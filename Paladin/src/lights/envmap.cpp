@@ -153,7 +153,7 @@ Float EnvironmentMap::pdf_Li(const Interaction &, const Vector3f &w) const {
 }
 
 Float EnvironmentMap::pdf_Li(const DirectSamplingRecord &rcd) const {
-    Vector3f wi = _worldToLight->exec(rcd.dir);
+    Vector3f wi = _worldToLight->exec(rcd.dir());
     Float theta = sphericalTheta(wi), phi = sphericalPhi(wi);
     Float sinTheta = std::sin(theta);
     if (sinTheta == 0) {

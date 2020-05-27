@@ -30,7 +30,7 @@ public:
 //        if ((_twoSided || dot(-rcd.dir, rcd.normal) > 0)) {
 //            int i = 0;
 //        }
-        return (_twoSided || dot(-rcd.dir, rcd.normal) > 0) ? _L : Spectrum(0.f);
+        return (_twoSided || rcd.cosTargetTheta() > 0) ? _L : Spectrum(0.f);
     }
     
     void loadLeMap(const string &texname);

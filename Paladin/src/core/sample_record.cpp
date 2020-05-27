@@ -8,6 +8,7 @@
 #include "sample_record.hpp"
 #include "interaction.hpp"
 #include "core/shape.hpp"
+#include "core/light.hpp"
 
 PALADIN_BEGIN
 
@@ -15,20 +16,20 @@ PALADIN_BEGIN
 
 
 PositionSamplingRecord::PositionSamplingRecord(const SurfaceInteraction &it, EMeasure measure)
-: pos(it.pos),
+: _pos(it.pos),
 time(it.time),
-normal(it.normal),
-uv(it.uv),
+_normal(it.normal),
+_uv(it.uv),
 measure(measure),
 object(it.shape) {
 
 }
 
 void PositionSamplingRecord::updateSurface(const SurfaceInteraction &si) {
-    pos = si.pos;
+    _pos = si.pos;
     time = si.time;
-    normal = si.normal;
-    uv = si.uv;
+    _normal = si.normal;
+    _uv = si.uv;
     object = si.shape;
 }
 
@@ -36,29 +37,30 @@ void PositionSamplingRecord::updateSurface(const SurfaceInteraction &si) {
 
 DirectSamplingRecord::DirectSamplingRecord(const Interaction &refIt,const SurfaceInteraction &targetSi,  EMeasure measure)
 : PositionSamplingRecord(targetSi, measure),
-ref(refIt.pos),
-refNormal(refIt.normal) {
-    dir = pos - ref;
-    dist = dir.length();
-    
+_ref(refIt.pos),
+_refNormal(refIt.normal) {
+    _dir = _pos - _ref;
+    _dist = _dir.length();
+    _dir = normalize(_dir);
 }
 
 DirectSamplingRecord::DirectSamplingRecord(const Interaction &refIt, EMeasure measure)
 : PositionSamplingRecord(),
-ref(refIt.pos),
-refNormal(refIt.normal),
-dir(Vector3f(0,0,0)),
-dist(0),
+_ref(refIt.pos),
+_refNormal(refIt.normal),
+_dir(Vector3f(0,0,0)),
+_dist(0),
 pdfDir(0) {
     measure = ESolidAngle;
 }
 
 void DirectSamplingRecord::updateTarget(const SurfaceInteraction &si) {
     updateSurface(si);
-    dir = pos - ref;
-    dist = dir.length();
-    dir = normalize(dir);
-    pdfDir = pdfPos * dist * dist / absDot(normal, -dir);
+    computeData();
+}
+
+VisibilityTester DirectSamplingRecord::getVisibilityTester() const {
+    return VisibilityTester(_ref, _pos);
 }
 
 PALADIN_END

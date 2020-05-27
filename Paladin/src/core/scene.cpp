@@ -57,10 +57,6 @@ Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
     Point2f u(_u);
     Float index = lightDistrib->sampleDiscrete(u.x, pmf, &u.x);
     const Light * light = lights.at(index).get();
-    Spectrum val;
-    Interaction intr;
-    intr.pos = rcd->ref;
-    VisibilityTester vis;
     rcd->object = light;
     return light->sample_Li(rcd, u, *this);;
 }

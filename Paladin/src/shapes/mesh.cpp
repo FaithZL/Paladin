@@ -111,6 +111,22 @@ Interaction Mesh::samplePos(const Point2f &u, Float *pdf) const {
     return ret;
 }
 
+void Mesh::samplePos(PositionSamplingRecord *rcd, const Point2f &u) const {
+    DCHECK(_surfaceArea > 0);
+    Point2f _u(u);
+    size_t idx = _areaDistrib.sampleDiscrete(_u.x, nullptr, &_u.x);
+    
+    TriangleI tri = _triangles[idx];
+    Point2f uv;
+    Normal3f normal;
+    Point3f pos;
+    
+    pos = tri.sample(_points.get(), _normals.get(), _uv.get(),
+                     &normal, &uv, u);
+    rcd->pdfPos = pdfPos();
+    rcd->setGeometry(pos, normal, uv);
+}
+
 void Mesh::computeWorldBound() {
     for (size_t i = 0; i < _triangles.size(); ++i) {
         TriangleI tri = _triangles[i];

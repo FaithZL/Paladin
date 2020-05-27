@@ -89,6 +89,10 @@ public:
      * 基于面积的采样
      */
     virtual Interaction samplePos(const Point2f &u, Float *pdf) const = 0;
+    
+    virtual void samplePos(PositionSamplingRecord *rcd, const Point2f &u) const {
+        NotImplementedError("samplePos");
+    }
 
     // 概率密度函数，表面某点的pdf，函数空间为表面参数空间
     inline Float pdfPos(const Interaction &isect) const {
@@ -117,17 +121,17 @@ public:
 	 */
     virtual Float pdfDir(const Interaction &ref, const Vector3f &wi) const;
     
-    F_INLINE Float pdfDir(const DirectSamplingRecord &rcd) const {
-        Float pdf = pdfPos();
-        switch (rcd.measure) {
-            case ESolidAngle:
-                return pdf * rcd.dist * rcd.dist / absDot(-rcd.dir, rcd.normal);
-            case EArea:
-                return pdf;
-            default:
-                return 0;
-        }
-    }
+//    F_INLINE Float pdfDir(const DirectSamplingRecord &rcd) const {
+//        Float pdf = pdfPos();
+//        switch (rcd.measure) {
+//            case ESolidAngle:
+//                return pdf * rcd.dist * rcd.dist / absDot(-rcd.dir, rcd.normal);
+//            case EArea:
+//                return pdf;
+//            default:
+//                return 0;
+//        }
+//    }
     
     /**
      * 返回shape对于某个点的立体角大小

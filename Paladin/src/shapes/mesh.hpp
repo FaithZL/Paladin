@@ -115,6 +115,8 @@ public:
     
     virtual Interaction samplePos(const Point2f &u, Float *pdf) const override;
     
+    virtual void samplePos(PositionSamplingRecord *rcd, const Point2f &u) const override;
+    
     F_INLINE Float * getVertice() const {
         return (Float *)_points.get();
     }

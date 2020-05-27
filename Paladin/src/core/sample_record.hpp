@@ -26,30 +26,61 @@ enum EMeasure {
 };
 
 struct PositionSamplingRecord {
-    Point3f pos;
     
-    Float time;
+protected:
+    Point3f _pos;
     
-    Normal3f normal;
+    Normal3f _normal;
+    
+    Point2f _uv;
+    
+    EMeasure measure;
+public:
+    
+    inline const Point3f &pos() const {
+        return _pos;
+    }
+    
+    inline const Normal3f &normal() const {
+        return _normal;
+    }
+    
+    inline const Point2f &uv() const {
+        return _uv;
+    }
     
     Float pdfPos;
     
-    Point2f uv;
+    Float time;
     
     const CObject * object;
     
-    EMeasure measure;
-    
     void updateSurface(const SurfaceInteraction &si);
     
+    inline void setGeometry(const Point3f &pos,
+                            const Normal3f &normal,
+                            const Point2f &uv) {
+        this->_pos = pos;
+        this->_normal = normal;
+        this->_uv = uv;
+    }
+    
+    const CObject * getObject() const {
+        return object;
+    }
+    
     PositionSamplingRecord():
-    pos(Point3f(0,0,0)),
+    _pos(Point3f(0,0,0)),
     time(0),
-    normal(Normal3f(0,0,0)),
+    _normal(Normal3f(0,0,0)),
     pdfPos(0),
-    uv(Point2f(0,0)),
+    _uv(Point2f(0,0)),
     object(nullptr) {
         
+    }
+    
+    inline bool valid() const {
+        return _normal.isZero();
     }
     
     PositionSamplingRecord(const SurfaceInteraction &it,
@@ -74,18 +105,59 @@ struct DirectionSamplingRecord {
 };
 
 struct DirectSamplingRecord : public PositionSamplingRecord {
-    const Point3f ref;
+private:
     
-    const Normal3f refNormal;
+    const Point3f _ref;
+    
+    const Normal3f _refNormal;
     
     // ref指向pos,单位向量
-    Vector3f dir;
+    Vector3f _dir;
     
-    Float dist;
+    Float _dist;
+    
+public:
+    
+    inline const Point3f &ref() const {
+        return _ref;
+    }
+    
+    inline const Normal3f &refNormal() const {
+        return _refNormal;
+    }
+    
+    inline const Vector3f &dir() const {
+        return _dir;
+    }
+    
+    VisibilityTester getVisibilityTester() const;
+    
+    inline Float cosTargetTheta() const {
+        return dot(-_dir, _normal);
+    }
     
     Float pdfDir;
     
     void updateTarget(const SurfaceInteraction &si);
+    
+    inline void computeData() {
+        _dir = _pos - _ref;
+        _dist = _dir.length();
+        _dir = normalize(_dir);
+        pdfDir = pdfPos * _dist * _dist / absDot(_normal, -_dir);
+        if (_dist == 0) {
+            pdfPos = pdfDir = 0;
+        } else if (std::isinf(pdfDir)) {
+            pdfDir = 0;
+        }
+    }
+    
+    inline void updateTarget(const Point3f &pos,
+                            const Normal3f &normal,
+                            const Point2f &uv) {
+        setGeometry(pos, normal, uv);
+        computeData();
+    }
     
     DirectSamplingRecord(const Interaction &refIt, EMeasure measure = ESolidAngle);
     

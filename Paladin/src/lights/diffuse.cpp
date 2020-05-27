@@ -59,7 +59,7 @@ Spectrum DiffuseAreaLight::sample_Li(DirectSamplingRecord *rcd, const Point2f &u
         return 0;
     }
     Spectrum ret = L(*rcd);
-    auto vis = VisibilityTester(rcd->ref, rcd->pos);
+    auto vis = rcd->getVisibilityTester();
     ret = (!ret.IsBlack() && vis.unoccluded(scene)) ? ret : Spectrum(0.f);
     return ret;
 }
@@ -70,7 +70,7 @@ Float DiffuseAreaLight::pdf_Li(const Interaction &ref,
 }
 
 Float DiffuseAreaLight::pdf_Li(const DirectSamplingRecord &rcd) const {
-    return _shape->pdfDir(rcd);
+    return rcd.pdfDir;
 }
 
 Spectrum DiffuseAreaLight::sample_Le(const Point2f &u1, const Point2f &u2,
