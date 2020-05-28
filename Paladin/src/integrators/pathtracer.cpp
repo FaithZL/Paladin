@@ -91,8 +91,8 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                 if (!bsdfVal.IsBlack()) {
                     light = static_cast<const Light *>(rcd.object);
                     Float bsdfPdf = light->isDelta() ? 0 : isect.bsdf->pdfDir(isect.wo, rcd.dir());
-                    Float weight = powerHeuristic(rcd.pdfDir, bsdfPdf);
-                    L += throughput * weight * bsdfVal * Ld / rcd.pdfDir;
+                    Float weight = powerHeuristic(rcd.pdfDir(), bsdfPdf);
+                    L += throughput * weight * bsdfVal * Ld / rcd.pdfDir();
                 }
             }
         }

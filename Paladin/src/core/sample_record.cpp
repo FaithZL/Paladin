@@ -21,6 +21,7 @@ time(it.time),
 _normal(it.normal),
 _uv(it.uv),
 measure(measure),
+_pdfPos(it.shape->pdfPos()),
 object(it.shape) {
 
 }
@@ -31,6 +32,7 @@ void PositionSamplingRecord::updateSurface(const SurfaceInteraction &si) {
     _normal = si.normal;
     _uv = si.uv;
     object = si.shape;
+    _pdfPos = si.shape->pdfPos();
 }
 
 
@@ -39,9 +41,8 @@ DirectSamplingRecord::DirectSamplingRecord(const Interaction &refIt,const Surfac
 : PositionSamplingRecord(targetSi, measure),
 _ref(refIt.pos),
 _refNormal(refIt.normal) {
-    _dir = _pos - _ref;
-    _dist = _dir.length();
-    _dir = normalize(_dir);
+    measure = ESolidAngle;
+    computeData();
 }
 
 DirectSamplingRecord::DirectSamplingRecord(const Interaction &refIt, EMeasure measure)
@@ -50,8 +51,9 @@ _ref(refIt.pos),
 _refNormal(refIt.normal),
 _dir(Vector3f(0,0,0)),
 _dist(0),
-pdfDir(0) {
-    measure = ESolidAngle;
+_pdfDir(0) {
+    this->measure = ESolidAngle;
+    computeData();
 }
 
 void DirectSamplingRecord::updateTarget(const SurfaceInteraction &si) {
