@@ -122,8 +122,8 @@ void Mesh::samplePos(PositionSamplingRecord *rcd, const Point2f &u) const {
     Point3f pos;
     
     pos = tri.sample(_points.get(), _normals.get(), _uv.get(),
-                     &normal, &uv, u);
-    rcd->setGeometry(pos, normal, uv,pdfPos());
+                     &normal, &uv, _u);
+    rcd->setGeometry(pos, normal, uv, pdfPos());
 }
 
 void Mesh::computeWorldBound() {

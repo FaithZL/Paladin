@@ -48,8 +48,6 @@ public:
                                const Distribution1D * lightDistrib,
                                Float *pmf) const;
     
-    Float pdfLightDirect(const DirectSamplingRecord &rcd) const;
-    
     F_INLINE bool rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
         return _rtcScene ?
             rayIntersectEmbree(ray, isect):
