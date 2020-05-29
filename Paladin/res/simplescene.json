@@ -417,7 +417,7 @@
     "sampler" : {
         "type" : "random",
         "param" : {
-            "spp" : 8
+            "spp" : 32
         }
     },
     "camera" : {

@@ -74,8 +74,8 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
             continue;
         }
         
+        // 采样光源
         const Distribution1D * distrib = _lightDistribution->lookup(isect.pos);
-        
         DirectSamplingRecord rcd(isect);
         const Light * light = nullptr;
         if (isect.bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
@@ -92,11 +92,55 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
                 }
             }
         }
+        
+        // 采样bsdf
+        Vector3f wo = -ray.dir;
+        Vector3f wi;
+        Float bsdfPdf;
+        BxDFType flags;
+        Spectrum f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(), &bsdfPdf, BSDF_ALL, &flags);
+        if (bsdfPdf == 0 || f.IsBlack()) {
+            break;
+        }
+        f *= absDot(wi, isect.shading.normal);
+        
+        specularBounce = (flags & BSDF_SPECULAR) != 0;
+        if ((flags & BSDF_TRANSMISSION)) {
+            Float eta = isect.bsdf->eta;
+            // 详见bxdf.hpp文件中SpecularTransmission的注释
+            etaScale *= (dot(wo, isect.normal) > 0) ? (eta * eta) : 1 / (eta * eta);
+        }
+        ray = isect.spawnRay(wi);
+        foundIntersection = scene.rayIntersect(ray, &isect);
+        if (foundIntersection) {
+            rcd.updateTarget(isect);
+            Spectrum Li(0.f);
+            const Light * target = isect.shape->getAreaLight();
+            if (target && target == light) {
+                Li = isect.Le(-wi);
+                Float lightPdf = rcd.pdfDir();
+                Float weight = powerHeuristic(bsdfPdf, lightPdf);
+                L += throughput * Li * weight / bsdfPdf;
+            }
+        }
+        throughput *= f / bsdfPdf;
+        
+        Spectrum rrThroughput = throughput * etaScale;
+        if (rrThroughput.MaxComponentValue() < _rrThreshold && bounces > 3) {
+            Float q = std::max((Float)0.05, 1 - rrThroughput.MaxComponentValue());
+            if (sampler.get1D() < q) {
+                break;
+            }
+            throughput /= 1 - q;
+            DCHECK(!std::isinf(throughput.y()));
+        }
     }
+    return L;
 }
 
 Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
 						Sampler &sampler, MemoryArena &arena, int depth) const {
+    return _Li(r, scene, sampler, arena, depth);
 	Spectrum L(0.0f);
 	Spectrum throughput(1.0f);
 	RayDifferential ray(r);
