@@ -31,7 +31,6 @@ void PositionSamplingRecord::updateSurface(const SurfaceInteraction &si) {
     time = si.time;
     _normal = si.normal;
     _uv = si.uv;
-    object = si.shape;
     _pdfPos = si.shape->pdfPos();
 }
 

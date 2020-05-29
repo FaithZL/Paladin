@@ -173,6 +173,13 @@ public:
         computeData();
     }
     
+    // 用于更新空中的点，主要是平行光与skylight的采样
+    inline void updateTarget(const Vector3f &dir, Float pdfDir) {
+        _pos = _ref + dir;
+        _dir = normalize(dir);
+        _pdfDir = pdfDir;
+    }
+    
     DirectSamplingRecord(const Interaction &refIt, EMeasure measure = ESolidAngle);
     
     DirectSamplingRecord(const Interaction &refIt,const SurfaceInteraction &targetSi,  EMeasure measure = ESolidAngle);

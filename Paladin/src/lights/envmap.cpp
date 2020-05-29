@@ -141,6 +141,30 @@ Spectrum EnvironmentMap::sample_Li(const Interaction &ref, const Point2f &u,
     return Spectrum(_Lmap->lookup(uv), SpectrumType::Illuminant);
 }
 
+Spectrum EnvironmentMap::sample_Li(DirectSamplingRecord *rcd, const Point2f &u,
+                                   const Scene &scene) const {
+    Float mapPdf;
+    Point2f uv = _distribution->sampleContinuous(u, &mapPdf);
+    if (mapPdf == 0) {
+        return Spectrum(0.f);
+    }
+    Float theta = uv[1] * Pi, phi = uv[0] * 2 * Pi;
+    Float cosTheta = std::cos(theta), sinTheta = std::sin(theta);
+    Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
+    Vector3f wiLight = Vector3f(sinTheta * cosPhi,
+                                sinTheta * sinPhi,
+                                cosTheta);
+    Vector3f wi = _lightToWorld->exec(wiLight);
+    
+    // p(u, v) / p(ω) = sinθ 2π^2
+    Float pdfDir = mapPdf / (2 * Pi * Pi * sinTheta);
+    rcd->updateTarget(wi * (2 * _worldRadius), pdfDir);
+    auto vis = rcd->getVisibilityTester();
+    Spectrum ret = vis.unoccluded(scene) ?
+            Spectrum(_Lmap->lookup(uv), SpectrumType::Illuminant) : 0;
+    return ret;
+}
+
 Float EnvironmentMap::pdf_Li(const Interaction &, const Vector3f &w) const {
     Vector3f wi = _worldToLight->exec(w);
     Float theta = sphericalTheta(wi), phi = sphericalPhi(wi);

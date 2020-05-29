@@ -39,8 +39,11 @@ public:
     virtual void pdf_Le(const Ray &ray, const Normal3f &nLight,
                         Float *pdfPos, Float *pdfDir) const override;
     
-    Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
+    virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
                        Float *pdf, VisibilityTester *vis) const override;
+    
+    virtual Spectrum sample_Li(DirectSamplingRecord *rcd, const Point2f &u,
+                               const Scene &) const override;
     
     /**
      * 求基于方向的pdf，要把uv空间的pdf转为立体角空间的pdf
