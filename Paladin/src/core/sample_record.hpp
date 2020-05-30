@@ -146,6 +146,10 @@ public:
         return _pdfDir;
     }
     
+    inline const Float dist() const {
+        return _dist;
+    }
+    
     VisibilityTester getVisibilityTester() const;
     
     inline Float cosTargetTheta() const {
@@ -176,6 +180,7 @@ public:
     // 用于更新空中的点，主要是平行光与skylight的采样
     inline void updateTarget(const Vector3f &dir, Float pdfDir) {
         _pos = _ref + dir;
+        _dist = dir.length();
         _dir = normalize(dir);
         _pdfDir = pdfDir;
     }

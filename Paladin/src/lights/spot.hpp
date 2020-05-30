@@ -21,6 +21,9 @@ public:
     virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
                        Float *pdf, VisibilityTester *vis) const override;
     
+    virtual Spectrum sample_Li(DirectSamplingRecord *rcd, const Point2f &u,
+                               const Scene &) const override;
+    
     Float falloff(const Vector3f &w) const;
     
     virtual nloJson toJson() const override {

@@ -38,6 +38,9 @@ public:
     
     virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
                        Float *pdf, VisibilityTester *vis) const override;
+    
+    virtual Spectrum sample_Li(DirectSamplingRecord *rcd, const Point2f &u,
+                               const Scene &) const override;
 
     virtual Spectrum power() const override {
         return 4 * Pi * _I;

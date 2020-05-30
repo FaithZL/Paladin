@@ -49,10 +49,9 @@ DirectSamplingRecord::DirectSamplingRecord(const Interaction &refIt, EMeasure me
 _ref(refIt.pos),
 _refNormal(refIt.normal),
 _dir(Vector3f(0,0,0)),
-_dist(0),
-_pdfDir(0) {
+_dist(-1),
+_pdfDir(-1) {
     this->measure = ESolidAngle;
-    computeData();
 }
 
 void DirectSamplingRecord::updateTarget(const SurfaceInteraction &si) {

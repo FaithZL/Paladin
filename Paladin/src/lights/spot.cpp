@@ -31,6 +31,17 @@ Spectrum SpotLight::sample_Li(const Interaction &ref, const Point2f &u,
     return _I * falloff(-*wi) / distanceSquared(_pos, ref.pos);
 }
 
+Spectrum SpotLight::sample_Li(DirectSamplingRecord *rcd,
+                              const Point2f &u,
+                              const Scene &scene) const {
+    Vector3f wi = _pos - rcd->ref();
+    rcd->updateTarget(wi, 1.0f);
+    auto vis = rcd->getVisibilityTester();
+    auto ret = vis.unoccluded(scene) ?
+            _I * falloff(-rcd->dir()) / wi.lengthSquared() : 0;
+    return ret;
+}
+
 Spectrum SpotLight::sample_Le(const Point2f &u1, const Point2f &u2,
                                      Float time, Ray *ray, Normal3f *nLight,
                                      Float *pdfPos, Float *pdfDir) const {

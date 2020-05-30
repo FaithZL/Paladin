@@ -34,6 +34,17 @@ Spectrum PointLight::sample_Le(const Point2f &u1, const Point2f &u2,
     return _I;
 }
 
+Spectrum PointLight::sample_Li(DirectSamplingRecord *rcd,
+                               const Point2f &u,
+                               const Scene &scene) const {
+    Vector3f wi = _pos - rcd->ref();
+    rcd->updateTarget(wi, 1.0f);
+    auto vis = rcd->getVisibilityTester();
+    auto ret = vis.unoccluded(scene) ?
+            _I / wi.lengthSquared() : 0;
+    return ret;
+}
+
 void PointLight::pdf_Le(const Ray &ray, const Normal3f &nLight,
                         Float *pdfPos, Float *pdfDir) const {
     *pdfPos = 0;

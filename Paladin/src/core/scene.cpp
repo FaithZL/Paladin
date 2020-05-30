@@ -58,7 +58,12 @@ Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
     Float index = lightDistrib->sampleDiscrete(u.x, pmf, &u.x);
     const Light * light = lights.at(index).get();
     rcd->object = light;
-    return light->sample_Li(rcd, u, *this);
+    Vector3f wi;
+    Float pdf;
+    VisibilityTester vis;
+    auto r = light->sample_Li(Interaction(rcd->ref()), u, &wi, &pdf, &vis);
+    auto r2 = light->sample_Li(rcd, u, *this);
+    return r2;
 }
 
 bool Scene::rayIntersectEmbree(const Ray &ray, SurfaceInteraction *isect) const {
