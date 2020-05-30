@@ -257,6 +257,9 @@ public:
         return nloJson();
     }
 	
+    virtual Spectrum _Li(const RayDifferential &ray, const Scene &scene,
+                         Sampler &sampler, MemoryArena &arena, int depth) const;
+    
 	virtual Spectrum Li(const RayDifferential &ray, const Scene &scene,
                 Sampler &sampler, MemoryArena &arena, int depth) const override;
 

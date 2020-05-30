@@ -45,6 +45,15 @@ struct Interaction {
         
     }
     
+    Interaction(const Point3f &p, const Normal3f &n, Float time = 0,
+                const MediumInterface &mediumInterface = nullptr)
+    : pos(p),
+    time(time),
+    normal(n),
+    mediumInterface(mediumInterface) {
+        
+    }
+    
     Interaction(const Point3f &p, Float time = 0,
                 const MediumInterface &mediumInterface = nullptr)
     : pos(p),

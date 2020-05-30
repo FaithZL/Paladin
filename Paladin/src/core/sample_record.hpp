@@ -156,6 +156,8 @@ public:
         return dot(-_dir, _normal);
     }
     
+    bool unoccluded(const Scene &scene) const;
+    
     void updateTarget(const SurfaceInteraction &si);
     
     inline void computeData() {

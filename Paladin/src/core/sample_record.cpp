@@ -59,8 +59,22 @@ void DirectSamplingRecord::updateTarget(const SurfaceInteraction &si) {
     computeData();
 }
 
+bool DirectSamplingRecord::unoccluded(const Scene &scene) const {
+    Normal3f refN = _refNormal.isZero() ? Normal3f(_dir) : _refNormal;
+    Interaction refIt(_ref, refN);
+    Normal3f targetNormal = _normal.isZero() ? Normal3f(-_dir) : _normal;
+    Interaction targetIt(_pos, targetNormal);
+    auto vis = VisibilityTester(refIt, targetIt);
+    return vis.unoccluded(scene);
+}
+
 VisibilityTester DirectSamplingRecord::getVisibilityTester() const {
-    return VisibilityTester(_ref, _pos);
+    Normal3f refN = _refNormal.isZero() ? Normal3f(_dir) : _refNormal;
+    Interaction refIt(_ref, refN);
+    Normal3f targetNormal = _normal.isZero() ? Normal3f(-_dir) : _normal;
+    Interaction targetIt(_pos, targetNormal);
+    auto vis = VisibilityTester(refIt, targetIt);
+    return vis;
 }
 
 PALADIN_END
