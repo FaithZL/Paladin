@@ -192,7 +192,7 @@ public:
     
     const Shape * shape = nullptr;
     Shading shading;
-    const Primitive * primitive = nullptr;
+//    const Primitive * primitive = nullptr;
     BSDF * bsdf = nullptr;
     BSSRDF * bssrdf = nullptr;
     

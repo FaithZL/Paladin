@@ -217,7 +217,6 @@ SurfaceInteraction Transform::exec(const paladin::SurfaceInteraction &isect) con
     // 不需要变换的对象
     ret.bsdf = isect.bsdf;
     ret.bssrdf = isect.bssrdf;
-    ret.primitive = isect.primitive;
     ret.shape = isect.shape;
     ret.faceIndex = isect.faceIndex;
     ret.uv = isect.uv;

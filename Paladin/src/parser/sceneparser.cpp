@@ -76,30 +76,6 @@ void SceneParser::parse(const nloJson &data) {
     
 }
 
-//void SceneParser::autoPlane() {
-//    AABB3f bound = getPrimsBound();
-//    std::cout << "scene bound box is:" << bound << endl;
-//    auto d = bound.diagonal();
-//    float width = std::max(d.x, d.z);
-//    width *= 5;
-//    auto rotate = Transform::rotateX(-90);
-//    auto translate = Transform::translate_ptr(Vector3f(0, bound.pMin.y, 0));
-//    *translate = (*translate) * rotate;
-//    auto tex = make_shared<ConstantTexture<Spectrum>>(Spectrum(1.f));
-//    auto sigma = make_shared<ConstantTexture<Float>>(0);
-//    auto mat = make_shared<MatteMaterial>(tex, sigma, nullptr);
-//    auto quad = createQuad(translate, false, width);
-//    auto prims = createPrimitive(quad, _lights, mat, nullptr, nloJson());
-//    _primitives.insert(_primitives.end(), prims.begin(), prims.end());
-//}
-
-//void SceneParser::autoLight() {
-//    auto tf = Transform::identity_ptr();
-//    Spectrum L(1.f);
-//    auto light = make_shared<DistantLight>(tf, L, Vector3f(1,1,-1));
-//    _lights.push_back(light);
-//}
-
 void SceneParser::parseLights(const nloJson &list) {
     for (auto iter = list.cbegin(); iter != list.cend(); ++iter) {
         nloJson data = *iter;

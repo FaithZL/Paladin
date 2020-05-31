@@ -135,6 +135,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             Li = scene.evalEnvironment(ray, &lightPdf, distrib);
             weight = powerHeuristic(bsdfPdf, lightPdf);
             L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+            break;
         }
         
         throughput *= f / bsdfPdf;

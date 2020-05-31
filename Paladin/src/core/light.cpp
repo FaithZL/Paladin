@@ -9,6 +9,7 @@
 #include "light.hpp"
 #include "core/scene.hpp"
 #include "math/sampling.hpp"
+#include "core/shape.hpp"
 
 PALADIN_BEGIN
 
@@ -24,7 +25,7 @@ Spectrum VisibilityTester::Tr(const Scene &scene, Sampler &sampler) const {
         SurfaceInteraction isect;
         bool hitSurface = scene.rayIntersect(ray, &isect);
         // 如果有交点，且交点处材质不为空，则返回0，透明材质不在此处理
-        if (hitSurface && isect.primitive->getMaterial() != nullptr) {
+        if (hitSurface && isect.shape->getMaterial() != nullptr) {
             return Spectrum(0.f);
         }
         

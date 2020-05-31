@@ -117,14 +117,6 @@ private:
         _mediumCache[name] = medium;
     }
     
-    AABB3f getPrimsBound() const {
-        AABB3f ret;
-        for (int i = 0; i < _primitives.size(); ++i) {
-            ret = unionSet(ret, _primitives[i]->worldBound());
-        }
-        return ret;
-    }
-    
     shared_ptr<const Medium> getMedium(const nloJson &name) {
         if (name.is_null()) {
             return nullptr;

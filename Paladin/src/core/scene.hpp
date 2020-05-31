@@ -131,7 +131,7 @@ private:
     vector<shared_ptr<const Shape>> _shapes;
     
     // 片段的集合
-    std::shared_ptr<Primitive> _aggregate;
+    std::shared_ptr<Aggregate> _aggregate;
     
     RTCScene _rtcScene;
 };
