@@ -175,6 +175,8 @@ struct DirectSamplingRecord;
 
 struct PositionSamplingRecord;
 
+class EnvironmentMap;
+
 PALADIN_END
 
 inline uint32_t floatToBits(float f) {

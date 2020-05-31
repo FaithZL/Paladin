@@ -81,8 +81,8 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
         const Distribution1D * distrib = _lightDistribution->lookup(isect.pos);
         DirectSamplingRecord rcd(isect);
         const Light * light = nullptr;
+        Float pmf = 0;
         if (isect.bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
-            Float pmf = 0;
             Spectrum Ld = scene.sampleLightDirect(&rcd, sampler.get2D(), distrib, &pmf);
             light = static_cast<const Light *>(rcd.object);
             if (!Ld.IsBlack()) {
@@ -119,20 +119,24 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
         Spectrum Li(0.f);
         Float lightPdf = 0;
         Float weight = 0;
-        if (foundIntersection && !light->isDelta()) {
-            rcd.updateTarget(isect);
-            const Light * target = isect.shape->getAreaLight();
-            if (target == light) {
-                Li = isect.Le(-wi);
-                lightPdf = rcd.pdfDir();
-                weight = powerHeuristic(bsdfPdf, lightPdf);
+        
+        if (foundIntersection) {
+            if (!light->isDelta()) {
+                rcd.updateTarget(isect);
+                const Light * target = isect.shape->getAreaLight();
+                if (target == light) {
+                    Li = isect.Le(-wi);
+                    lightPdf = rcd.pdfDir() * pmf;
+                    weight = powerHeuristic(bsdfPdf, lightPdf);
+                    L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+                }
             }
         } else {
-            Li = light->Le(ray);
-            lightPdf = rcd.pdfDir();
+            Li = scene.evalEnvironment(ray, &lightPdf, distrib);
             weight = powerHeuristic(bsdfPdf, lightPdf);
+            L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
         }
-        L += Li.IsBlack() ? 0 : throughput * Li * weight / bsdfPdf;
+        
         throughput *= f / bsdfPdf;
 
         Spectrum rrThroughput = throughput * etaScale;

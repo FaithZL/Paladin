@@ -74,7 +74,9 @@ enum class LightFlags {
     DeltaDirection = 2,
     // 面光源
     Area = 4,
-    Infinite = 8
+    Infinite = 8,
+    // 环境光
+    Env = 16
 };
 
 inline bool isDeltaLight(int flags) {
@@ -148,6 +150,11 @@ public:
                         Float *pdfPos, Float *pdfDir) const = 0;
 
     virtual Spectrum Le(const RayDifferential &r) const {
+        return Spectrum(0.f);
+    }
+    
+    virtual Spectrum Le(const RayDifferential &r, Float *pdf) const {
+        *pdf = 0;
         return Spectrum(0.f);
     }
 

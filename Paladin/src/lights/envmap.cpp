@@ -6,17 +6,19 @@
 //
 
 #include "envmap.hpp"
-#include "math/sampling.hpp"
 #include "tools/fileio.hpp"
 #include "core/paladin.hpp"
+#include "core/scene.hpp"
 
 PALADIN_BEGIN
 
 EnvironmentMap::EnvironmentMap(const Transform * LightToWorld,
                                const Spectrum &L,
                                int nSamples, const std::string &texmap)
-:Light((int)LightFlags::Infinite, LightToWorld, MediumInterface(),
-nSamples) {
+:Light((int)LightFlags::Infinite | (int) LightFlags::Env,
+       LightToWorld,
+       MediumInterface(),
+       nSamples) {
     // 先初始化纹理贴图
     Point2i resolution;
     std::unique_ptr<RGBSpectrum[]> texels(nullptr);
@@ -53,6 +55,10 @@ nSamples) {
         },
         height, 32);
     _distribution.reset(new Distribution2D(img.get(), width, height));
+}
+
+void EnvironmentMap::preprocess(const Scene &scene) {
+    scene.worldBound().boundingSphere(&_worldCenter, &_worldRadius);
 }
 
 Spectrum EnvironmentMap::sample_Le(const Point2f &u1, const Point2f &u2,
@@ -112,6 +118,16 @@ Spectrum EnvironmentMap::Le(const RayDifferential &ray) const {
     Vector3f w = normalize(_worldToLight->exec(ray.dir));
     Point2f st(sphericalPhi(w) * Inv2Pi, sphericalTheta(w) * InvPi);
     return Spectrum(_Lmap->lookup(st), SpectrumType::Illuminant);
+}
+
+Spectrum EnvironmentMap::Le(const RayDifferential &ray, Float *pdf) const {
+    Vector3f wi = normalize(_worldToLight->exec(ray.dir));
+    Point2f st(sphericalPhi(wi) * Inv2Pi, sphericalTheta(wi) * InvPi);
+    *pdf = _distribution->pdf(st);
+    Float theta = st[1] * Pi;
+    Float sinTheta = std::sin(theta);
+    *pdf = sinTheta == 0 ? 0 : *pdf / (2 * Pi * Pi * sinTheta);
+    return *pdf == 0 ? 0 : Spectrum(_Lmap->lookup(st), SpectrumType::Illuminant);
 }
 
 Spectrum EnvironmentMap::sample_Li(const Interaction &ref, const Point2f &u,

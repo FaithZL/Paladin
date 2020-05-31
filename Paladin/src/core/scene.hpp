@@ -13,6 +13,7 @@
 #include "core/primitive.hpp"
 #include "core/light.hpp"
 #include "tools/embree_util.hpp"
+#include "lights/envmap.hpp"
 #include <set>
 
 PALADIN_BEGIN
@@ -23,18 +24,20 @@ public:
     Scene(const std::vector<std::shared_ptr<Light>> &lights)
     : lights(lights),
     _aggregate(nullptr),
-    _rtcScene(nullptr) {
+    _rtcScene(nullptr),
+    _envmap(nullptr) {
         
     }
     
     Scene(RTCScene rtcScene, const std::vector<std::shared_ptr<Light>> &lights)
     : lights(lights),
     _aggregate(nullptr),
+    _envmap(nullptr),
     _rtcScene(rtcScene) {
         
     }
     
-    void initEnvmap();
+    void initInfiniteLights();
     
     void initAccel(const nloJson &data,
                    const vector<shared_ptr<const Shape>> &shape);
@@ -79,6 +82,18 @@ public:
         return r.tfar < 0;
     }
     
+    F_INLINE Spectrum evalEnvironment(const Ray &ray, Float *pdf,
+                         const Distribution1D * lightDistrib) const {
+        if (!_envmap) {
+            *pdf = 0;
+            return 0;
+        }
+        Float pmf = lightDistrib->discretePDF(_envIndex);
+        auto ret = _envmap->evalEnvironment(ray, pdf);
+        *pdf *= pmf;
+        return ret;
+    }
+    
     /**
      * 光线在场景中传播的函数
      * @param  ray     指定的光线对象
@@ -108,6 +123,10 @@ public:
 private:
     // 整个场景的包围盒
     AABB3f _worldBound;
+    
+    EnvironmentMap * _envmap;
+    
+    int _envIndex = -1;
     
     vector<shared_ptr<const Shape>> _shapes;
     

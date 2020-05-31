@@ -9,8 +9,8 @@
 #define envmap_hpp
 
 #include "core/light.hpp"
-#include "core/scene.hpp"
 #include "core/mipmap.h"
+#include "math/sampling.hpp"
 
 PALADIN_BEGIN
 
@@ -20,13 +20,23 @@ public:
     EnvironmentMap(const Transform *LightToWorld, const Spectrum &L,
                    int nSamples, const std::string &texmap);
     
-    virtual void preprocess(const Scene &scene) override {
-        scene.worldBound().boundingSphere(&_worldCenter, &_worldRadius);
-    }
+    virtual void preprocess(const Scene &scene) override;
     
     Spectrum power() const override;
     
     Spectrum Le(const RayDifferential &ray) const override;
+    
+    Spectrum Le(const RayDifferential &ray, Float *pdf) const override;
+    
+    F_INLINE Spectrum evalEnvironment(const RayDifferential &ray, Float *pdf) const {
+        Vector3f wi = normalize(_worldToLight->exec(ray.dir));
+        Point2f st(sphericalPhi(wi) * Inv2Pi, sphericalTheta(wi) * InvPi);
+        *pdf = _distribution->pdf(st);
+        Float theta = st[1] * Pi;
+        Float sinTheta = std::sin(theta);
+        *pdf = sinTheta == 0 ? 0 : *pdf / (2 * Pi * Pi * sinTheta);
+        return *pdf == 0 ? 0 : Spectrum(_Lmap->lookup(st), SpectrumType::Illuminant);
+    }
     
     virtual nloJson toJson() const override {
         return nloJson();

@@ -10,13 +10,19 @@
 #include "tools/embree_util.hpp"
 #include "shapes/mesh.hpp"
 
+
 PALADIN_BEGIN
 
-void Scene::initEnvmap() {
-    for (const auto &light : lights) {
+void Scene::initInfiniteLights() {
+    for (auto i = 0; i < lights.size(); ++i) {
+        auto &light = lights.at(i);
         light->preprocess(*this);
         if (light->flags & (int)LightFlags::Infinite) {
             infiniteLights.push_back(light);
+        }
+        if (light->flags & (int)LightFlags::Env) {
+            _envmap = static_cast<EnvironmentMap *>(light.get());
+            _envIndex = i;
         }
     }
 }
@@ -96,7 +102,7 @@ void Scene::InitAccelNative(const nloJson &data, const vector<shared_ptr<const S
     
     _aggregate = createAccelerator(data, shapes);
     _worldBound = _aggregate->worldBound();
-    initEnvmap();
+    initInfiniteLights();
 }
 
 void Scene::InitAccelEmbree(const vector<shared_ptr<const Shape>>&shapes) {
@@ -111,7 +117,7 @@ void Scene::InitAccelEmbree(const vector<shared_ptr<const Shape>>&shapes) {
             rtcAttachGeometry(_rtcScene, gid);
         }
     }
-    initEnvmap();
+    initInfiniteLights();
     rtcCommitScene(_rtcScene);
 }
 
