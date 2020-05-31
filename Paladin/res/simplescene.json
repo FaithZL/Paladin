@@ -20,7 +20,7 @@
     },
     "lights" : [
         {
-            "type" : "pointLight",
+            "type" : "spot",
             "enable" : false,
             "param" : {
                 "transform" : {
@@ -31,6 +31,48 @@
                     "colorType" : 1,
                     "color" : [5,5,5]
                 }
+            }
+        },
+        {
+            "type" : "distant",
+            "enable" : false,
+            "param" : {
+                "transform" : {
+                    "type" : "translate",
+                    "param" : [1,0,1]
+                },
+                "L" : {
+                    "colorType" : 1,
+                    "color" : [1, 1, 1]
+                },
+                "wLight" : [1,1,-1]
+            }
+        },
+        {
+            "type" : "envmap",
+            "enable" : true,
+            "param" : {
+                "scale" : 1,
+                "L"     : [
+                    1,
+                    1,
+                    1
+                ],
+                "nSamples" : 1,
+                "transform" : [
+                    {
+                        "type" : "rotateX",
+                        "param" : [
+                            -90
+                        ]
+                    },
+                    {
+                        "type" : "rotateY",
+                        "param" : [
+                            0
+                        ]
+                    }
+                ]
             }
         }
     ],
@@ -381,7 +423,7 @@
                 "y" : 1.2,
                 "z" : 0.6
             },
-            "material" : "matte1"
+            "material" : "mirror"
         },
         {
             "type" : "triMesh",
@@ -403,7 +445,7 @@
                 "y" : 0.6,
                 "z" : 0.6
             },
-            "material" : "matte1"
+            "material" : "mirror"
         }
     ],
     "integrator" : {
@@ -417,7 +459,7 @@
     "sampler" : {
         "type" : "random",
         "param" : {
-            "spp" : 8
+            "spp" : 16
         }
     },
     "camera" : {
