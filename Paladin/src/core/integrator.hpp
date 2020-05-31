@@ -19,6 +19,7 @@
 #include "material.hpp"
 #include "core/cobject.h"
 #include "tools/classfactory.hpp"
+#include "tools/stats.hpp"
 
 PALADIN_BEGIN
 
@@ -217,6 +218,7 @@ public:
         cout << "total scene bound box is:" << sceneBound << endl;
         int num = scene.lights.size();
         cout << "light num is " << num << endl;
+        cout << "triangle num is " << Stats::getInstance()->getTriangleNum() << endl;
     }
 };
 

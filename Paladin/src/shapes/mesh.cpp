@@ -9,6 +9,7 @@
 #include "core/material.hpp"
 #include "lights/diffuse.hpp"
 #include "parser/modelcache.hpp"
+#include "tools/stats.hpp"
 
 PALADIN_BEGIN
 
@@ -23,6 +24,9 @@ Mesh::Mesh(const Transform * objectToWorld,
 _nTriangles(vertexIndices.size() / 3),
 _nVertices(P->size()),
 _surfaceArea(0) {
+    
+    Stats::getInstance()->addTriangle(_nTriangles);
+    
     _vertexIndice = vertexIndices;
     size_t size = P->size();
     _points.reset(new Point3f[size + 1]);
