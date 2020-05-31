@@ -26,13 +26,43 @@ enum ShapeType {
     ECylinder
 };
 
+class Primitive : public CObject {
+    
+public:
+    
+    virtual RTCGeometry rtcGeometry(Scene * scene) const {
+        DCHECK(false);
+        return nullptr;
+    }
+    
+    // 用于构造实例化Scene对象
+    virtual RTCScene rtcScene(Scene * scene) const {
+        return nullptr;
+    }
+    
+    virtual AABB3f worldBound() const {
+        DCHECK(false);
+    }
+    
+    virtual bool rayIntersect(const Ray &ray,
+                            SurfaceInteraction * isect,
+                            bool testAlphaTexture = true) const {
+        DCHECK(false);
+    }
+    
+    virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true) const {
+        DCHECK(false);
+    }
+    
+};
+
 /**
  * 所有图形的基类，假设读者已经掌握概率论基础知识
  * 科普一下，pdf为概率密度函数，pdf在定义域上积分为1，且恒不小于零
  * 如果没有读过概率密度函数，建议阅读浙大的概率密度函数，经典
  * shape类只是一个形状，不是一个具体的物体，具体的物体是primitive的子类，有材质，形状，是否发光等属性
  */
-class Shape : public EmbreeUtil::EmbreeGeomtry {
+class Shape : public Primitive {
 public:
 	Shape(const Transform *ObjectToWorld, const Transform *WorldToObject,
           bool reverseOrientation);
@@ -60,9 +90,9 @@ public:
    
 	// 求交函数，填充SurfaceInteraction数据
     // 几乎所有的shape与ray求交的计算都是将ray转换到object空间中进行的
-	virtual bool intersect(const Ray &ray, 
-							Float *tHit, 
-							SurfaceInteraction * isect, 
+	virtual bool intersect(const Ray &ray,
+							Float *tHit,
+							SurfaceInteraction * isect,
                            bool testAlphaTexture = true) const {
 //        DCHECK(false);
         return false;

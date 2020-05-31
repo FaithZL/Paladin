@@ -87,7 +87,7 @@ _shapes(std::move(shapes)) {
     MemoryArena arena(1024 * 1024);
     int totalNodes = 0;
     
-    std::vector<const EmbreeUtil::EmbreeGeomtry *> orderedPrims;
+    std::vector<const Primitive *> orderedPrims;
     BVHBuildNode *root;
     
     if (_splitMethod == SplitMethod::HLBVH) {
@@ -176,7 +176,7 @@ bool BVHAccel::rayOccluded(const Ray &ray) const {
     return false;
 }
 
-BVHBuildNode * BVHAccel::recursiveBuild(MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo, int start, int end, int *totalNodes, std::vector<const EmbreeUtil::EmbreeGeomtry *> &orderedPrims) {
+BVHBuildNode * BVHAccel::recursiveBuild(MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo, int start, int end, int *totalNodes, std::vector<const Primitive *> &orderedPrims) {
     BVHBuildNode *node = ARENA_ALLOC(arena, BVHBuildNode);
     AABB3f bounds;
     for (int i = start; i < end; ++ i) {
@@ -423,21 +423,6 @@ bool BVHAccel::rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
     return hit;
 }
 
-BVHBuildNode * BVHAccel::HLBVHBuild(paladin::MemoryArena &arena, const std::vector<BVHPrimitiveInfo> &primitiveInfo, int *totalNodes, std::vector<std::shared_ptr<Primitive> > &orderedPrims) const {
-    // HLBVH构建相关 todo
-    return nullptr;
-}
-
-BVHBuildNode * BVHAccel::buildUpperSAH(paladin::MemoryArena &arena, std::vector<BVHBuildNode *> &treeletRoots, int start, int end, int *totalNodes) const {
-    // HLBVH构建相关 todo
-    return nullptr;
-}
-
-BVHBuildNode * BVHAccel::emitLBVH(paladin::BVHBuildNode *&buildNodes, const std::vector<BVHPrimitiveInfo> &primitiveInfo, paladin::MortonPrimitive *mortonPrims, int nPrimitives, int *totalNodes, std::vector<std::shared_ptr<Primitive> > &orderedPrims, std::atomic<int> *orderedPrimsOffset, int bitIndex) const {
-    // HLBVH构建相关 todo
-    return nullptr;
-}
-
 int BVHAccel::flattenBVHTree(paladin::BVHBuildNode *node, int *offset) {
     LinearBVHNode *linearNode = &_nodes[*offset];
     linearNode->bounds = node->bounds;
@@ -458,24 +443,6 @@ int BVHAccel::flattenBVHTree(paladin::BVHBuildNode *node, int *offset) {
     }
     return myOffset;
 }
-
-////"param" : {
-////    "maxPrimsInNode" : 1,
-////    "splitMethod" : "SAH"
-////}
-//shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Primitive>> &prims) {
-//    int maxPrimsInNode = param.value("maxPrimsInNode", 1);
-//    BVHAccel::SplitMethod splitMethod;
-//    string sm = param.value("splitMethod", "SAH");
-//    if (sm == "SAH") {
-//        splitMethod = BVHAccel::SplitMethod::SAH;
-//    } else if (sm == "Middle") {
-//        splitMethod = BVHAccel::SplitMethod::Middle;
-//    } else if (sm == "EqualCounts") {
-//        splitMethod = BVHAccel::SplitMethod::EqualCounts;
-//    }
-//    return make_shared<BVHAccel>(prims, maxPrimsInNode, splitMethod);
-//}
 
 //"param" : {
 //    "maxPrimsInNode" : 1,

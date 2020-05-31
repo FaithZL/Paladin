@@ -47,7 +47,7 @@ struct IndexSet {
 
 class Mesh;
 
-struct TriangleI : EmbreeUtil::EmbreeGeomtry {
+struct TriangleI : Primitive {
     
     TriangleI(const IndexSet * p, const Mesh * mesh = nullptr)
     : indice(p),

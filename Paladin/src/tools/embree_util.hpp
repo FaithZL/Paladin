@@ -19,43 +19,6 @@ namespace EmbreeUtil {
 void initDevice();
 RTCDevice getDevice();
 
-class EmbreeGeomtry : public CObject {
-    
-public:
-    virtual Shape * getShape(int primID) const {
-        return (Shape *)this;
-    }
-    
-    virtual EmbreeGeomtry * getEmbreeGeomtry() const {
-        return (EmbreeGeomtry *)this;
-    }
-    
-    virtual RTCGeometry rtcGeometry(Scene * scene) const {
-        DCHECK(false);
-        return nullptr;
-    }
-    
-    // 用于构造实例化Scene对象
-    virtual RTCScene rtcScene(Scene * scene) const {
-        return nullptr;
-    }
-    
-    virtual AABB3f worldBound() const {
-        DCHECK(false);
-    }
-    
-    virtual bool rayIntersect(const Ray &ray,
-                            SurfaceInteraction * isect,
-                            bool testAlphaTexture = true) const {
-        DCHECK(false);
-    }
-    
-    virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true) const {
-        DCHECK(false);
-    }
-    
-};
-
 inline RTCBounds convert(const AABB3f &b) {
     return RTCBounds{
         b.pMin.x, b.pMin.y, b.pMin.z, 0.0f,

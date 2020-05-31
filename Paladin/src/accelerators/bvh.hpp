@@ -11,6 +11,7 @@
 
 #include "core/header.h"
 #include "core/aggregate.hpp"
+#include "core/shape.hpp"
 PALADIN_BEGIN
 
 //代表一个图元的部分信息
@@ -114,39 +115,22 @@ public:
     
 private:
     
-    BVHBuildNode *HLBVHBuild(
-                             MemoryArena &arena, const std::vector<BVHPrimitiveInfo> &primitiveInfo,
-                             int *totalNodes,
-                             std::vector<std::shared_ptr<Primitive>> &orderedPrims) const;
-    
-    BVHBuildNode *emitLBVH(
-                           BVHBuildNode *&buildNodes,
-                           const std::vector<BVHPrimitiveInfo> &primitiveInfo,
-                           MortonPrimitive *mortonPrims, int nPrimitives, int *totalNodes,
-                           std::vector<std::shared_ptr<Primitive>> &orderedPrims,
-                           std::atomic<int> *orderedPrimsOffset, int bitIndex) const;
-    
-    BVHBuildNode *buildUpperSAH(MemoryArena &arena,
-                                std::vector<BVHBuildNode *> &treeletRoots,
-                                int start, int end, int *totalNodes) const;
-    
     BVHBuildNode * recursiveBuild(MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo,
                                   int start, int end, int *totalNodes,
-                                  vector<const EmbreeUtil::EmbreeGeomtry *> &orderedPrims);
+                                  vector<const Primitive *> &orderedPrims);
     
     int flattenBVHTree(BVHBuildNode *node, int *offset);
     
     const int _maxPrimsInNode;
+    
     const SplitMethod _splitMethod;
-//    std::vector<std::shared_ptr<Primitive>> _primitives;
+    
     LinearBVHNode *_nodes = nullptr;
     
     vector<shared_ptr<const Shape>> _shapes;
     
-    vector<const EmbreeUtil::EmbreeGeomtry *> _prims;
+    vector<const Primitive *> _prims;
 };
-
-//shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Primitive>> &prims);
 
 shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<const Shape>> &shapes);
 
