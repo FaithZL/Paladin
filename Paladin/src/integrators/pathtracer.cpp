@@ -109,6 +109,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
         f *= absDot(wi, isect.shading.normal);
 
         specularBounce = (flags & BSDF_SPECULAR) != 0;
+        
         if ((flags & BSDF_TRANSMISSION)) {
             Float eta = isect.bsdf->eta;
             // 详见bxdf.hpp文件中SpecularTransmission的注释
@@ -121,7 +122,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
         Float weight = 0;
         
         if (foundIntersection) {
-            if (!light->isDelta()) {
+            if (light && !light->isDelta()) {
                 rcd.updateTarget(isect);
                 const Light * target = isect.shape->getAreaLight();
                 if (target == light) {
@@ -135,7 +136,6 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             Li = scene.evalEnvironment(ray, &lightPdf, distrib);
             weight = powerHeuristic(bsdfPdf, lightPdf);
             L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
-            break;
         }
         
         throughput *= f / bsdfPdf;
