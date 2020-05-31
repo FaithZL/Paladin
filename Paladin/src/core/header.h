@@ -171,6 +171,12 @@ struct Distribution1D;
 
 struct Distribution2D;
 
+struct DirectSamplingRecord;
+
+struct PositionSamplingRecord;
+
+class EnvironmentMap;
+
 PALADIN_END
 
 inline uint32_t floatToBits(float f) {
@@ -444,6 +450,7 @@ inline int Log2Int(int64_t v) {
 #include "math/bounds.h"
 #include "tools/memory.hpp"
 #include "tools/errfloat.h"
+#include "core/sample_record.hpp"
 
 PALADIN_BEGIN
 

@@ -11,6 +11,7 @@
 #include "tools/parallel.hpp"
 #include "tools/progressreporter.hpp"
 #include "materials/bxdfs/bsdf.hpp"
+#include "core/shape.hpp"
 
 PALADIN_BEGIN
 
@@ -49,7 +50,8 @@ Spectrum sampleOneLight(const Interaction &it, const Scene &scene,
                                MemoryArena &arena, Sampler &sampler,
                                const std::vector<int> &lightSamples,
                                bool handleMedia,
-                               const Distribution1D *lightDistrib) {
+                               const Distribution1D *lightDistrib,
+                                Vector3f *wi) {
     // 与uniformSampleAllLights不同的是，
     // 该函数会按照对应分布随机采样一个光源，这个接口会比较常用，也比较科学
     int nLights = int(scene.lights.size());
@@ -82,7 +84,7 @@ Spectrum sampleOneLight(const Interaction &it, const Scene &scene,
             // 均匀采样bsdf函数
             Point2f uScattering = sampler.get2D();
             // 估计当前选中的光源对该点的辐射度
-            dl += estimateDirectLighting(it, uScattering, *light, uLight, scene, sampler, arena, handleMedia);
+            dl += estimateDirectLighting(it, uScattering, *light, uLight, scene, sampler, arena, handleMedia, wi);
 //        }
 //    } else {
 //        for (size_t i = 0; i < nSamples; ++i) {
@@ -102,7 +104,7 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
                                 const Light &light, const Point2f &uLight,
                                 const Scene &scene, Sampler &sampler,
                                 MemoryArena &arena, bool handleMedia,
-                                bool specular) {
+                                bool specular, Vector3f *_wi) {
     // 这个函数比较长，简述一下基本思路
     // 先随机采样光源表面，生成light光源表面点P1，计算从P1发射的光在it点产生的辐射度L1
     // 再随机采样it处的bsdf，生成一个ray，如果顺着ray方向能找到光P1点所在的光源
@@ -193,12 +195,12 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
             Spectrum Tr(1.0f);
             
             bool foundSurfaceInteraction = handleMedia
-                            ? scene.intersectTr(ray, sampler, &lightIsect, &Tr)
-                            : scene.intersect(ray, &lightIsect);
+                            ? scene.rayIntersectTr(ray, sampler, &lightIsect, &Tr)
+                            : scene.rayIntersect(ray, &lightIsect);
             Spectrum Li(0.0f);
             if (foundSurfaceInteraction) {
                 // 如果找到的交点是light光源上的点，则计算光照
-                if (lightIsect.primitive->getAreaLight() == &light) {
+                if (lightIsect.shape->getAreaLight() == &light) {
                     Li = lightIsect.Le(-wi);
                 }
             } else {

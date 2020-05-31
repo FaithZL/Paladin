@@ -17,7 +17,7 @@ PALADIN_BEGIN
 
 class PointLight : public Light {
 public:
-    PointLight(shared_ptr<const Transform> LightToWorld,
+    PointLight(const Transform * LightToWorld,
                const MediumInterface &mediumInterface, const Spectrum &I)
     :Light((int)LightFlags::DeltaPosition, LightToWorld, mediumInterface),
     _pos(LightToWorld->exec(Point3f(0, 0, 0))),
@@ -38,6 +38,9 @@ public:
     
     virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
                        Float *pdf, VisibilityTester *vis) const override;
+    
+    virtual Spectrum sample_Li(DirectSamplingRecord *rcd, const Point2f &u,
+                               const Scene &) const override;
 
     virtual Spectrum power() const override {
         return 4 * Pi * _I;
@@ -45,7 +48,7 @@ public:
 
     virtual Float pdf_Li(const Interaction &, const Vector3f &) const override;
 
-
+    virtual Float pdf_Li(const DirectSamplingRecord &) const override;
 private:
     // 光源位置
     const Point3f _pos;

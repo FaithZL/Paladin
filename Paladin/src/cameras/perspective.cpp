@@ -336,9 +336,9 @@ CObject_ptr createPerspectiveCamera(const nloJson &param, const Arguments &lst) 
         lookAtEnd = dynamic_cast<Transform *>(createLookAt(lookAtEndParam, {}));
     }
     
-    AnimatedTransform animatedTransform(shared_ptr<const Transform>(lookAt->getInverse_ptr()),
+    AnimatedTransform animatedTransform(lookAt->getInverse_ptr(),
                                         shutterOpen,
-                                        shared_ptr<const Transform>(lookAtEnd->getInverse_ptr()),
+                                        lookAtEnd->getInverse_ptr(),
                                         shutterClose);
     auto medium = Paladin::getInstance()->getGlobalMedium().get();
     PerspectiveCamera * ret(new PerspectiveCamera(animatedTransform,

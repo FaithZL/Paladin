@@ -155,17 +155,13 @@ public:
         return Transform(_matInv, _mat);
     }
         
-    Transform * getInverse_ptr() const {
-        return new Transform(_matInv, _mat);
-    }
+    Transform * getInverse_ptr() const;
 
     Transform getTranspose() const {
         return Transform(_mat.getTransposeMat(), _matInv.getTransposeMat());
     }
         
-    Transform * getTranspose_ptr() const {
-        return new Transform(_mat.getTransposeMat(), _matInv.getTransposeMat());
-    }
+    Transform * getTranspose_ptr() const;
 
     bool operator == (const Transform &other) const {
         return other._mat == _mat && other._matInv == _matInv;
@@ -536,6 +532,8 @@ public:
 
     static Transform perspective(Float fov, Float zNear, Float zFar, bool bRadian=false);
         
+    static Transform identity();
+        
     static Transform * scale_ptr(Float s);
 
     static Transform * scale_ptr(const Vector3f &);
@@ -569,7 +567,13 @@ private:
         
 USING_STD
 
+F_INLINE const Transform * mult_ptr(const Transform &t1, const Transform &t2);
+        
+F_INLINE const Transform * mult_ptr(const Transform *t1, const Transform *t2);
+        
+F_INLINE const Transform * mult_ptr(const Transform &t1, const Transform *t2);
 
+F_INLINE const Transform * mult_ptr(const Transform *t1, const Transform &t2);
 
 
 // 反射机制工厂函数

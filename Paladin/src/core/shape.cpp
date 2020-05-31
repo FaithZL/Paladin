@@ -9,6 +9,7 @@
 #include "core/shape.hpp"
 #include "math/lowdiscrepancy.hpp"
 #include "math/frame.hpp"
+#include "shapes/mesh.hpp"
 
 
 PALADIN_BEGIN
@@ -17,7 +18,7 @@ Shape::~Shape() {
     
 }
 
-Shape::Shape(const shared_ptr<const Transform> &objectToWorld,const shared_ptr<const Transform> &worldToObject,
+Shape::Shape(const Transform *objectToWorld,const Transform* worldToObject,
              bool reverseOrientation)
     : objectToWorld(objectToWorld),
     worldToObject(worldToObject),
@@ -25,6 +26,23 @@ Shape::Shape(const shared_ptr<const Transform> &objectToWorld,const shared_ptr<c
     transformSwapsHandedness(objectToWorld->swapsHandedness()),
     _primitive(nullptr) {
 
+}
+
+Shape::Shape(const Transform * ObjectToWorld,
+             const Transform *WorldToObject,
+             bool reverseOrientation,
+             const MediumInterface &mi,
+             ShapeType type,
+             const shared_ptr<const Material> &mat)
+: objectToWorld(ObjectToWorld),
+worldToObject(WorldToObject),
+reverseOrientation(reverseOrientation),
+transformSwapsHandedness(objectToWorld->swapsHandedness()),
+_mediumInterface(mi),
+_invArea(-1),
+_type(type),
+_material(mat){
+    
 }
 
 AABB3f Shape::worldBound() const {
@@ -51,6 +69,11 @@ Interaction Shape::sampleDir(const Interaction &ref, const Point2f &u, Float *pd
         }
     }
     return intr;
+}
+
+void Shape::sampleDir(DirectSamplingRecord *rcd, const Point2f &u) const {
+    samplePos(rcd, u);
+    rcd->computeData();
 }
 
 /*

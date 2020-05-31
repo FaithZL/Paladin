@@ -11,7 +11,7 @@
 
 #include "header.h"
 #include "scene.hpp"
-#include "primitive.hpp"
+#include "aggregate.hpp"
 #include "spectrum.hpp"
 #include "light.hpp"
 #include "bxdf.hpp"
@@ -19,6 +19,7 @@
 #include "material.hpp"
 #include "core/cobject.h"
 #include "tools/classfactory.hpp"
+#include "tools/stats.hpp"
 
 PALADIN_BEGIN
 
@@ -217,6 +218,7 @@ public:
         cout << "total scene bound box is:" << sceneBound << endl;
         int num = scene.lights.size();
         cout << "light num is " << num << endl;
+        cout << "triangle num is " << Stats::getInstance()->getTriangleNum() << endl;
     }
 };
 
@@ -249,7 +251,8 @@ Spectrum sampleOneLight(const Interaction &it, const Scene &scene,
                                MemoryArena &arena, Sampler &sampler,
                                const std::vector<int> &lightSamples,
                                bool handleMedia = false,
-                               const Distribution1D *lightDistrib = nullptr);
+                               const Distribution1D *lightDistrib = nullptr,
+                                Vector3f *wi = nullptr);
 
 /**
  * 用复合重要性采样进行直接光照的估计
@@ -271,7 +274,8 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uShading,
                                 const Light &light, const Point2f &uLight,
                                 const Scene &scene, Sampler &sampler,
                                 MemoryArena &arena, bool handleMedia = false,
-                                bool specular = false);
+                                bool specular = false,
+                                Vector3f *wi = nullptr);
 
 class MonteCarloIntegrator : public Integrator {
     

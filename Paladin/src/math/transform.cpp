@@ -8,8 +8,11 @@
 
 #include "transform.hpp"
 #include "core/paladin.hpp"
+#include "parser/transformcache.h"
 
 PALADIN_BEGIN
+
+static TransformCache transformCache;
 
 //Matrix4x4
 Float Matrix4x4::getDet() const {
@@ -178,6 +181,14 @@ bool Matrix4x4::isIdentity() const {
 
 
 //Transform
+Transform * Transform::getInverse_ptr() const {
+    return transformCache.Lookup(getInverse());
+}
+
+Transform * Transform::getTranspose_ptr() const {
+    return transformCache.Lookup(getTranspose());
+}
+
 Transform Transform::operator * (const Transform &other) const {
     return Transform(_mat * other._mat, other._matInv * _matInv);
 }
@@ -206,7 +217,6 @@ SurfaceInteraction Transform::exec(const paladin::SurfaceInteraction &isect) con
     // 不需要变换的对象
     ret.bsdf = isect.bsdf;
     ret.bssrdf = isect.bssrdf;
-    ret.primitive = isect.primitive;
     ret.shape = isect.shape;
     ret.faceIndex = isect.faceIndex;
     ret.uv = isect.uv;
@@ -426,22 +436,14 @@ Transform Transform::perspective(Float fov, Float zNear, Float zFar, bool bRadia
     return Transform(mat);
 }
 
+Transform Transform::identity() {
+    Matrix4x4 mat;
+    Matrix4x4 matInv;
+    return Transform(mat, matInv);
+}
+
 Transform * Transform::scale_ptr(Float x, Float y, Float z) {
-    Float a[16] = {
-        x, 0, 0, 0,
-        0, y, 0, 0,
-        0, 0, z, 0,
-        0, 0, 0, 1,
-    };
-    Float inv[16] = {
-        1/x, 0,   0,   0,
-        0,   1/y, 0,   0,
-        0,   0,   1/z, 0,
-        0,   0,   0,   1,
-    };
-    Matrix4x4 mat(a);
-    Matrix4x4 matInv(inv);
-    return new Transform(mat, matInv);
+    return transformCache.Lookup(scale(x, y, z));
 }
 
 
@@ -458,134 +460,51 @@ Transform * Transform::translate_ptr(Float x, Float y, Float z) {
 }
 
 Transform * Transform::translate_ptr(const Vector3f &delta) {
-    Float a[16] = {
-        1, 0, 0, delta.x,
-        0, 1, 0, delta.y,
-        0, 0, 1, delta.z,
-        0, 0, 0, 1,
-    };
-    Float inv[16] = {
-        1, 0, 0, -delta.x,
-        0, 1, 0, -delta.y,
-        0, 0, 1, -delta.z,
-        0, 0, 0, 1,
-    };
-    Matrix4x4 mat(a);
-    Matrix4x4 matInv(inv);
-    return new Transform(mat, matInv);
+    return transformCache.Lookup(translate(delta));
 }
 
 Transform * Transform::rotateX_ptr(Float theta, bool bRadian/*=false*/) {
-    theta = bRadian ? theta : degree2radian(theta);
-    Float sinTheta = std::sin(theta);
-    Float cosTheta = std::cos(theta);
-    Float a[16] = {
-        1, 0,        0,         0,
-        0, cosTheta, -sinTheta, 0,
-        0, sinTheta, cosTheta,  0,
-        0, 0,        0,         1
-    };
-    Matrix4x4 mat(a);
-    // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-    return new Transform(mat, mat.getTransposeMat());
+    return transformCache.Lookup(rotateX(theta, bRadian));
 }
 
 Transform * Transform::rotateY_ptr(Float theta, bool bRadian/*=false*/) {
-    theta = bRadian ? theta : degree2radian(theta);
-    Float sinTheta = std::sin(theta);
-    Float cosTheta = std::cos(theta);
-    Float a[16] = {
-        cosTheta,  0, sinTheta, 0,
-        0,         1, 0,        0,
-        -sinTheta, 0, cosTheta, 0,
-        0,         0, 0,        1
-    };
-    Matrix4x4 mat(a);
-    // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-    return new Transform(mat, mat.getTransposeMat());
+    return transformCache.Lookup(rotateY(theta, bRadian));
 }
 
 Transform * Transform::rotateZ_ptr(Float theta, bool bRadian/*=false*/) {
-    theta = bRadian ? theta : degree2radian(theta);
-    Float sinTheta = std::sin(theta);
-    Float cosTheta = std::cos(theta);
-    Float a[16] = {
-        cosTheta, -sinTheta, 0, 0,
-        sinTheta,  cosTheta, 0, 0,
-        0,         0,        1, 0,
-        0,         0,        0, 1
-    };
-    Matrix4x4 mat(a);
-    // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-    return new Transform(mat, mat.getTransposeMat());
+    return transformCache.Lookup(rotateZ(theta, bRadian));
 }
 
 Transform * Transform::rotate_ptr(Float theta, const Vector3f &axis, bool bRadian/*=false*/) {
-   Vector3f a = paladin::normalize(axis);
-   theta = bRadian ? theta : degree2radian(theta);
-   Float sinTheta = std::sin(theta);
-   Float cosTheta = std::cos(theta);
-   Matrix4x4 mat;
-
-   mat._m[0][0] = a.x * a.x + (1 - a.x * a.x) * cosTheta;
-   mat._m[0][1] = a.x * a.y * (1 - cosTheta) - a.z * sinTheta;
-   mat._m[0][2] = a.x * a.z * (1 - cosTheta) + a.y * sinTheta;
-   mat._m[0][3] = 0;
-
-   mat._m[1][0] = a.x * a.y * (1 - cosTheta) + a.z * sinTheta;
-   mat._m[1][1] = a.y * a.y + (1 - a.y * a.y) * cosTheta;
-   mat._m[1][2] = a.y * a.z * (1 - cosTheta) - a.x * sinTheta;
-   mat._m[1][3] = 0;
-
-   mat._m[2][0] = a.x * a.z * (1 - cosTheta) - a.y * sinTheta;
-   mat._m[2][1] = a.y * a.z * (1 - cosTheta) + a.x * sinTheta;
-   mat._m[2][2] = a.z * a.z + (1 - a.z * a.z) * cosTheta;
-   mat._m[2][3] = 0;
-   // 旋转矩阵的逆矩阵为该矩阵的转置矩阵
-   return new Transform(mat, mat.getTransposeMat());
+    return transformCache.Lookup(rotate(theta, axis, bRadian));
 }
 
 Transform * Transform::lookAt_ptr(const Point3f &pos, const Point3f &look, const Vector3f &up) {
-    //基本思路，先用up向量与dir向量确定right向量
-    // right向量与dir向量互相垂直，由此可以确定新的up向量
-    // right，dir，newUp向量两两垂直，可以构成直角坐标系，也就是视图空间
-    Vector3f dir = normalize(look - pos);
-    Vector3f right = cross(normalize(up), dir);
-    if (right.lengthSquared() == 0) {
-        // dir与up向量共线不合法
-        DCHECK(false);
-        return nullptr;
-    }
-    right = normalize(right);
-    Vector3f newUp = cross(dir, right);
-    Float a[16] = {
-        right.x, newUp.x, dir.x, pos.x,
-        right.y, newUp.y, dir.y, pos.y,
-        right.z, newUp.z, dir.z, pos.z,
-        0,       0,       0,     1
-    };
-    Matrix4x4 cameraToWorld(a);
-    return new Transform(cameraToWorld.getInverseMat(), cameraToWorld);
+    return transformCache.Lookup(lookAt(pos, look, up));
 }
 
 Transform * Transform::perspective_ptr(Float fov, Float zNear, Float zFar, bool bRadian/*=false*/) {
-    //这里的透视矩阵没有aspect参数，是因为把光栅空间的变换分离出来了
-    fov = bRadian ? fov : degree2radian(fov);
-    Float invTanAng = 1 / std::tan(fov / 2);
-    Float a[16] = {
-        invTanAng, 0, 0,             0,
-        0, invTanAng, 0,             0,
-        0, 0, zFar / (zFar - zNear), -zFar * zNear / (zFar - zNear),
-        0, 0,         1,             0
-    };
-    Matrix4x4 mat(a);
-    return new Transform(mat);
+    return transformCache.Lookup(perspective(fov, zNear, zFar, bRadian));
 }
 
 Transform * Transform::identity_ptr() {
-    Matrix4x4 mat;
-    Matrix4x4 matInv;
-    return new Transform(mat, matInv);
+    return transformCache.Lookup(identity());
+}
+
+const Transform * mult_ptr(const Transform &t1, const Transform &t2) {
+    return transformCache.Lookup(t1 * t2);
+}
+
+const Transform * mult_ptr(const Transform *t1, const Transform *t2) {
+    return transformCache.Lookup((*t1) * (*t2));
+}
+
+const Transform * mult_ptr(const Transform &t1, const Transform *t2) {
+    return transformCache.Lookup(t1 * (*t2));
+}
+
+const Transform * mult_ptr(const Transform *t1, const Transform &t2) {
+    return transformCache.Lookup((*t1) * t2);
 }
 
 // 反射机制工厂函数
@@ -649,14 +568,14 @@ CObject_ptr createRotateZ(const nloJson &param, const Arguments &lst) {
  * ]
  */
 CObject_ptr createRotate(const nloJson &param, const Arguments &lst) {
-   Float theta = param.value(0, 0);
-   nloJson vec = param.at(1);
-   Float ax = vec.at(0);
-   Float ay = vec.at(1);
-   Float az = vec.at(2);
-   bool bRadian = param.at(2);
-   Vector3f axis(ax, ay, az);
-   return Transform::rotate_ptr(theta, axis, bRadian);
+    Float theta = param.value(0, 0);
+    nloJson vec = param.at(1);
+    Float ax = vec.at(0);
+    Float ay = vec.at(1);
+    Float az = vec.at(2);
+    bool bRadian = param.at(2);
+    Vector3f axis(ax, ay, az);
+    return Transform::rotate_ptr(theta, axis, bRadian);
 }
 
 /**
@@ -704,7 +623,7 @@ CObject_ptr createMatrix(const nloJson &param, const Arguments &) {
     for (size_t i = 0; i < 16; ++i) {
         a[i] = param[i];
     }
-    return new Transform(a);
+    return transformCache.Lookup(Transform(a));
 }
     
 
@@ -724,8 +643,8 @@ Transform * createTransform(const nloJson &data) {
         Transform * ret = Transform::identity_ptr();
         // 如果data是列表，列表元素则为transform参数
         for (const auto &it : data) {
-            shared_ptr<Transform> t(createTransform(it));
-            *ret = (*t.get()) * (*ret);
+            auto t(createTransform(it));
+            *ret = (*t) * (*ret);
         }
         return ret;
     }

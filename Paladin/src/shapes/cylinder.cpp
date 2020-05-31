@@ -232,8 +232,8 @@ Interaction Cylinder::samplePos(const Point2f &u, Float *pdf) const {
 CObject_ptr createCylinder(const nloJson &param, const Arguments &lst){
     nloJson l2w_data = param.value("transform", nloJson());
     Transform * l2w = createTransform(l2w_data);
-    shared_ptr<Transform> w2o(l2w->getInverse_ptr());
-    shared_ptr<Transform> o2w(l2w);
+    auto w2o(l2w->getInverse_ptr());
+    auto o2w(l2w);
     
     Float radius = param.value("radius", 1.f);
     Float phiMax = param.value("phiMax", 360.f);

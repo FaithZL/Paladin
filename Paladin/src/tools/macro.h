@@ -43,7 +43,20 @@
     #define PALADIN_NO_INLINE __attribute__((noinline))
 #endif
 
-#define PALADIN_INLINE __attribute__((always_inline))
+#if defined(__GNUC__)
+    #define F_INLINE                inline __attribute__((always_inline))
+    #define NO_INLINE               __attribute__((noinline))
+    #define EXPECT_TAKEN(a)        __builtin_expect(!!(a), true)
+    #define EXPECT_NOT_TAKEN(a)    __builtin_expect(!!(a), false)
+#elif defined(__MSVC__)
+    #define F_INLINE                __forceinline
+    #define NO_INLINE               __declspec(noinline)
+    #define MM_ALIGN16             __declspec(align(16))
+    #define EXPECT_TAKEN(a)        (a)
+    #define EXPECT_NOT_TAKEN(a)    (a)
+#else
+    #error Unsupported compiler!
+#endif
 
 #if defined(_MSC_VER)
     #define PALADIN_HAVE_ALIGNED_MALLOC
@@ -96,7 +109,8 @@ static CONSTEXPR Float PiOver2 = 1.57079632679489661923;
 static CONSTEXPR Float PiOver4 = 0.78539816339744830961;
 static CONSTEXPR Float Sqrt2 = 1.41421356237309504880;
 
-
+#define NotImplementedError(args) \
+    throw std::runtime_error(StringPrintf("function %s not implemented\n", args));
 
 #endif /* macro_h */
 

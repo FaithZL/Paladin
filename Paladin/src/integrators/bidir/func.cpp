@@ -158,7 +158,7 @@ int randomWalk(const Scene &scene, RayDifferential ray, Sampler &sampler,
         MediumInteraction mi;
         SurfaceInteraction isect;
         
-        bool foundIntr = scene.intersect(ray, &isect);
+        bool foundIntr = scene.rayIntersect(ray, &isect);
         
         if (ray.medium) {
             throughput *= ray.medium->sample(ray, sampler, arena, &mi);

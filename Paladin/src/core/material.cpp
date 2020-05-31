@@ -7,7 +7,7 @@
 //
 
 #include "material.hpp"
-#include "primitive.hpp"
+#include "aggregate.hpp"
 #include "texture.hpp"
 #include "spectrum.hpp"
 #include "bxdf.hpp"

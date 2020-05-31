@@ -16,13 +16,17 @@ PALADIN_BEGIN
 class DiffuseAreaLight : public AreaLight {
     
 public:
-    DiffuseAreaLight(shared_ptr<const Transform> LightToWorld,
+    DiffuseAreaLight(const Transform *LightToWorld,
                      const MediumInterface &mediumInterface, const Spectrum &Le,
                      int nSamples, const std::shared_ptr<Shape> &shape,
                      bool twoSided = false, const string &texname = "");
     
     Spectrum L(const Interaction &intr, const Vector3f &w) const override {
         return (_twoSided || dot(intr.normal, w) > 0) ? _L : Spectrum(0.f);
+    }
+    
+    Spectrum L(const DirectSamplingRecord &rcd) const override {
+        return (_twoSided || rcd.cosTargetTheta() > 0) ? _L : Spectrum(0.f);
     }
     
     void loadLeMap(const string &texname);
@@ -53,7 +57,11 @@ public:
     Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wo,
                        Float *pdf, VisibilityTester *vis) const override;
     
-    Float pdf_Li(const Interaction &, const Vector3f &) const override;
+    Spectrum sample_Li(DirectSamplingRecord *rcd, const Point2f &u, const Scene &) const override;
+    
+    virtual Float pdf_Li(const Interaction &, const Vector3f &) const override;
+    
+    virtual Float pdf_Li(const DirectSamplingRecord &rcd) const override;
     
     static shared_ptr<DiffuseAreaLight> create(Float rgb[3], const std::shared_ptr<Shape> &,
                                                const MediumInterface &mi = nullptr,

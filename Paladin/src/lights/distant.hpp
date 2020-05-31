@@ -16,7 +16,7 @@ PALADIN_BEGIN
 class DistantLight : public Light {
 public:
 
-    DistantLight(shared_ptr<const Transform> LightToWorld, const Spectrum &L,
+    DistantLight(const Transform * LightToWorld, const Spectrum &L,
                  const Vector3f &w);
     
     virtual void preprocess(const Scene &scene) override {
@@ -37,9 +37,14 @@ public:
     virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
                        Float *pdf, VisibilityTester *vis) const override;
     
+    virtual Spectrum sample_Li(DirectSamplingRecord *rcd, const Point2f &u,
+                               const Scene &scene) const override;
+    
     virtual Spectrum power() const override;
     
     virtual Float pdf_Li(const Interaction &, const Vector3f &) const override;
+    
+    virtual Float pdf_Li(const DirectSamplingRecord &) const override;
     
 private:
     const Spectrum _L;

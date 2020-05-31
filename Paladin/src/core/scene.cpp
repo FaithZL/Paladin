@@ -8,23 +8,30 @@
 
 #include "scene.hpp"
 #include "tools/embree_util.hpp"
+#include "shapes/mesh.hpp"
+
 
 PALADIN_BEGIN
 
-void Scene::initEnvmap() {
-    for (const auto &light : lights) {
+void Scene::initInfiniteLights() {
+    for (auto i = 0; i < lights.size(); ++i) {
+        auto &light = lights.at(i);
         light->preprocess(*this);
         if (light->flags & (int)LightFlags::Infinite) {
             infiniteLights.push_back(light);
         }
+        if (light->flags & (int)LightFlags::Env) {
+            _envmap = static_cast<EnvironmentMap *>(light.get());
+            _envIndex = i;
+        }
     }
 }
 
-bool Scene::intersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
+bool Scene::rayIntersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
                         Spectrum *Tr) const {
     *Tr = Spectrum(1.f);
     while (true) {
-        bool hitSurface = intersect(ray, isect);
+        bool hitSurface = rayIntersect(ray, isect);
         if (ray.medium) {
             *Tr = ray.medium->Tr(ray, sampler);
         }
@@ -33,14 +40,39 @@ bool Scene::intersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
             return false;
         }
         
-        if (isect->primitive->getMaterial() != nullptr) {
+        if (isect->shape->getMaterial() != nullptr) {
              return true;
         }
         ray = isect->spawnRay(ray.dir);
     }
 }
 
-bool Scene::embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const {
+void Scene::initAccel(const nloJson &data, const vector<shared_ptr<const Shape> > &shapes) {
+    string type = data.value("type", "embree");
+    _shapes = shapes;
+    if (type == "embree") {
+        InitAccelEmbree(shapes);
+    } else {
+        InitAccelNative(data, shapes);
+    }
+}
+
+Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
+                                  const Distribution1D *lightDistrib,
+                                  Float *pmf) const {
+    Point2f u(_u);
+    Float index = lightDistrib->sampleDiscrete(u.x, pmf, &u.x);
+    const Light * light = lights.at(index).get();
+    rcd->object = light;
+//    Vector3f wi;
+//    Float pdf;
+//    VisibilityTester vis;
+//    auto r = light->sample_Li(Interaction(rcd->ref()), u, &wi, &pdf, &vis);
+    auto r2 = light->sample_Li(rcd, u, *this);
+    return r2;
+}
+
+bool Scene::rayIntersectEmbree(const Ray &ray, SurfaceInteraction *isect) const {
     RTCIntersectContext context;
     rtcInitIntersectContext(&context);
     RTCRayHit rh = EmbreeUtil::toRTCRayHit(ray);
@@ -50,90 +82,43 @@ bool Scene::embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const {
     }
     uint32_t gid = rh.hit.geomID;
     uint32_t pid = rh.hit.primID;
-    Primitive * prim = getPrimitive(gid, pid);
-    
     Vector2f uv(rh.hit.u, rh.hit.v);
     
-    bool ret = prim->fillSurfaceInteraction(ray, uv, isect);
+    const Shape * shape = _shapes.at(gid).get();
+    switch (shape->getType()) {
+        case EMesh: {
+            auto mesh = static_cast<const Mesh *>(shape);
+            auto tri = mesh->getTriangle(pid);
+            tri->fillSurfaceInteraction(ray, uv, isect);
+            break;
+        }
+        default:
+            break;
+    }
     return true;
 }
 
-
-bool Scene::intersect(const Ray &ray, SurfaceInteraction *isect) const {
-        CHECK_NE(ray.dir, Vector3f(0,0,0));
-    if (_rtcScene) {
-         return embreeIntersect(ray, isect);
-    }
-    return _aggregate->intersect(ray, isect);
-}
-
-
-bool Scene::intersectP(const Ray &ray) const {
-    CHECK_NE(ray.dir, Vector3f(0,0,0));
-    if (_rtcScene) {
-        return embreeIntersectP(ray);
-    }
-    return _aggregate->intersectP(ray);
-}
-
-bool Scene::embreeIntersectP(const Ray &ray) const {
-    using namespace EmbreeUtil;
-    RTCIntersectContext context;
-    rtcInitIntersectContext(&context);
-    RTCRay r = EmbreeUtil::convert(ray);
-    rtcOccluded1(_rtcScene, &context, &r);
-    return r.tfar < 0;
-}
-
-EmbreeUtil::EmbreeGeomtry * Scene::getEmbreeGeomtry(int geomID) const {
-    return _embreeGeometries[geomID];
-}
-
-Primitive * Scene::getPrimitive(int geomID, int primID) const {
-    EmbreeUtil::EmbreeGeomtry * ret = _embreeGeometries[geomID];
-    auto shape = ret->getShape(primID);
-    auto primitive = shape->getPrimitive();
-    return primitive;
-}
-
-//"data" : {
-//    "type" : "bvh",
-//    "param" : {
-//        "maxPrimsInNode" : 1,
-//        "splitMethod" : "SAH"
-//    }
-//}
-void Scene::initAccel(const nloJson &data, const vector<shared_ptr<Primitive> > &primitives) {
-    string type = data.value("type", "embree");
-    if (type == "embree") {
-        accelInitEmbree(primitives);
-    } else {
-        accelInitNative(data, primitives);
-    }
-}
-
-void Scene::accelInitNative(const nloJson &data,
-                            const vector<shared_ptr<Primitive> >&primitives) {
-    _aggregate = createAccelerator(data, primitives);
+void Scene::InitAccelNative(const nloJson &data, const vector<shared_ptr<const Shape>> &shapes) {
+    
+    _aggregate = createAccelerator(data, shapes);
     _worldBound = _aggregate->worldBound();
-    initEnvmap();
+    initInfiniteLights();
 }
 
-void Scene::accelInitEmbree(const vector<shared_ptr<Primitive> > &primitives) {
+void Scene::InitAccelEmbree(const vector<shared_ptr<const Shape>>&shapes) {
     EmbreeUtil::initDevice();
     _rtcScene = rtcNewScene(EmbreeUtil::getDevice());
     int idx = 0;
-    for (size_t i = 0; i < primitives.size(); ++i) {
-        auto prim = primitives[i];
+    for (size_t i = 0; i < shapes.size(); ++i) {
+        auto prim = shapes[i];
         RTCGeometry gid = prim->rtcGeometry(this);
         _worldBound = unionSet(_worldBound, prim->worldBound());
         if (gid != nullptr) {
-            _embreeGeometries.push_back(prim->getEmbreeGeometry());
             rtcAttachGeometry(_rtcScene, gid);
         }
     }
+    initInfiniteLights();
     rtcCommitScene(_rtcScene);
-    initEnvmap();
 }
 
 PALADIN_END

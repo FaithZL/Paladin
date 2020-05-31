@@ -10,7 +10,7 @@
 
 PALADIN_BEGIN
 
-DistantLight::DistantLight(shared_ptr<const Transform> LightToWorld, const Spectrum &L,
+DistantLight::DistantLight(const Transform * LightToWorld, const Spectrum &L,
                            const Vector3f &wLight)
 : Light((int)LightFlags::DeltaDirection, LightToWorld, MediumInterface()),
 _L(L),
@@ -55,11 +55,25 @@ Spectrum DistantLight::sample_Li(const Interaction &ref, const Point2f &u,
     return _L;
 }
 
+Spectrum DistantLight::sample_Li(DirectSamplingRecord *rcd,
+                                 const Point2f &u,
+                                 const Scene &scene) const {
+    Vector3f dir = _wLight * (2 * _worldRadius);
+    rcd->updateTarget(dir, 1);
+    auto vis = rcd->getVisibilityTester();
+    auto ret = vis.unoccluded(scene) ? _L : 0;
+    return ret;
+}
+
 Spectrum DistantLight::power() const {
     return _L * Pi * _worldRadius * _worldRadius;
 }
 
 Float DistantLight::pdf_Li(const Interaction &, const Vector3f &) const {
+    return 0.f;
+}
+
+Float DistantLight::pdf_Li(const DirectSamplingRecord &) const {
     return 0.f;
 }
 
@@ -80,7 +94,7 @@ Float DistantLight::pdf_Li(const Interaction &, const Vector3f &) const {
 //}
 CObject_ptr createDistantLight(const nloJson &param, const Arguments &lst) {
     nloJson l2w_data = param.value("transform", nloJson());
-    auto l2w = shared_ptr<const Transform>(createTransform(l2w_data));
+    auto l2w = createTransform(l2w_data);
     nloJson Ldata = param.value("L", nloJson::object());
     nloJson scale = param.value("scale", 1.f);
     Spectrum L = Spectrum::FromJson(Ldata);

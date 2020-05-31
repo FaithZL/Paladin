@@ -234,7 +234,7 @@ std::vector<uint16_t> ComputeRadicalInversePermutations(RNG &rng) {
 
 
 template <int base>
-PALADIN_NO_INLINE static Float ScrambledRadicalInverseSpecialized(const uint16_t *perm, uint64_t a) {
+NO_INLINE static Float ScrambledRadicalInverseSpecialized(const uint16_t *perm, uint64_t a) {
     const Float invBase = (Float)1 / (Float)base;
     uint64_t reversedDigits = 0;
     Float invBaseN = 1;
@@ -2346,7 +2346,7 @@ Float ScrambledRadicalInverse(int baseIndex, uint64_t a, const uint16_t *perm) {
  *
  */
 template <int base>
-PALADIN_NO_INLINE static Float RadicalInverseSpecialized(uint64_t a) {
+NO_INLINE static Float RadicalInverseSpecialized(uint64_t a) {
     const Float invBase = (Float)1 / (Float)base;
     uint64_t reversedDigits = 0;
     Float invBaseN = 1;

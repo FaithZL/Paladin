@@ -9,10 +9,11 @@
 #include "endpoint.h"
 #include "core/camera.hpp"
 #include "core/light.hpp"
-#include "core/primitive.hpp"
+#include "core/aggregate.hpp"
 #include "core/scene.hpp"
 #include "core/bxdf.hpp"
 #include "func.hpp"
+#include "core/shape.hpp"
 #include "materials/bxdfs/bsdf.hpp"
 
 PALADIN_BEGIN
@@ -130,7 +131,7 @@ bool Vertex::isOnSurface() const {
 
 bool Vertex::isLight() const {
     return type == VertexType::Light ||
-           (type == VertexType::Surface && si.primitive->getAreaLight());
+           (type == VertexType::Surface && si.shape->getAreaLight());
 }
 
 bool Vertex::isDeltaLight() const {
@@ -162,7 +163,7 @@ Spectrum Vertex::Le(const Scene &scene, const Vertex &ref) const {
         }
         return Le;
     } else {
-        const AreaLight *light = si.primitive->getAreaLight();
+        const AreaLight *light = si.shape->getAreaLight();
         CHECK(light != nullptr);
         return light->L(si, w);
     }
@@ -236,7 +237,7 @@ Float Vertex::pdfLight(const Scene &scene, const Vertex &v) const {
         CHECK(isLight());
         const Light *light = type == VertexType::Light
                                  ? ei.light
-                                 : si.primitive->getAreaLight();
+                                 : si.shape->getAreaLight();
         CHECK(light != nullptr);
 
         Float pdfPos, pdfDir;
@@ -264,7 +265,7 @@ Float Vertex::pdfLightOrigin(const Scene &scene, const Vertex &v,
         CHECK(isLight());
         const Light *light = type == VertexType::Light
                                  ? ei.light
-                                 : si.primitive->getAreaLight();
+                                 : si.shape->getAreaLight();
         CHECK(light != nullptr);
 
         CHECK(lightToDistrIndex.find(light) != lightToDistrIndex.end());

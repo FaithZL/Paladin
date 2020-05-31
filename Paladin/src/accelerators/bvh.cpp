@@ -7,6 +7,8 @@
 //
 
 #include "bvh.hpp"
+#include "core/shape.hpp"
+#include "shapes/mesh.hpp"
 
 PALADIN_BEGIN
 
@@ -40,63 +42,79 @@ AABB3f BVHAccel::worldBound() const {
     return _nodes ? _nodes[0].bounds : AABB3f();
 }
 
-bool BVHAccel::intersect(const paladin::Ray &ray, paladin::SurfaceInteraction *isect) const {
-    if (!_nodes) {
-        return false;
-    }
-
-    bool hit = false;
-    Vector3f invDir(1 / ray.dir.x, 1 / ray.dir.y, 1 / ray.dir.z);
-    int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
-
-    int toVisitOffset = 0, currentNodeIndex = 0;
-    int nodesToVisit[64];
-    while (true) {
-        const LinearBVHNode *node = &_nodes[currentNodeIndex];
-
-        if (node->bounds.intersectP(ray, invDir, dirIsNeg)) {
-            if (node->nPrimitives > 0) {
-     
-                for (int i = 0; i < node->nPrimitives; ++i)
-                    if (_primitives[node->primitivesOffset + i]->intersect(ray, isect)) {
-                        hit = true;
-                    }
-                if (toVisitOffset == 0) {
-                    break;
-                }
-                currentNodeIndex = nodesToVisit[--toVisitOffset];
-            } else {
-                
-                if (dirIsNeg[node->axis]) {
-                    nodesToVisit[toVisitOffset++] = currentNodeIndex + 1;
-                    currentNodeIndex = node->secondChildOffset;
-                } else {
-                    nodesToVisit[toVisitOffset++] = node->secondChildOffset;
-                    currentNodeIndex = currentNodeIndex + 1;
-                }
-            }
-        } else {
-            if (toVisitOffset == 0) {
-                break;
-            }
-            currentNodeIndex = nodesToVisit[--toVisitOffset];
-        }
-    }
-    return hit;
-}
 
 BVHAccel::~BVHAccel() {
     
 }
 
-/*
- 基本思路
- 根据根据光线的方向以及当前节点的分割轴
- 选择较近的一个子节点求交，远的子节点放入栈中
- 近的子节点如果与光线没有交点，则对栈中的节点求交
- 循环以上过程
-*/
-bool BVHAccel::intersectP(const paladin::Ray &ray) const {
+
+
+
+
+BVHAccel::BVHAccel(const vector<shared_ptr<const Shape>> &shapes,
+                   int maxPrimsInNode,
+                   SplitMethod splitMethod)
+: _maxPrimsInNode(std::min(255, maxPrimsInNode)),
+_splitMethod(splitMethod),
+_shapes(std::move(shapes)) {
+    if (_shapes.empty()) {
+        return;
+    }
+    
+    
+    for (int i = 0; i < _shapes.size(); ++i) {
+        auto shape = _shapes[i];
+        if (shape->getType() == ShapeType::EMesh) {
+            auto mesh = (Mesh *)shape.get();
+            const vector<const TriangleI> &triangles = mesh->getTriangles();
+            for (int j = 0; j < triangles.size(); ++j) {
+                const TriangleI &tri = triangles.at(j);
+                _prims.push_back(&tri);
+            }
+        } else {
+            _prims.push_back(shape.get());
+        }
+    }
+    
+    std::vector<BVHPrimitiveInfo> _primitiveInfo(_prims.size());
+    
+    // 储存每个aabb的中心以及索引
+    for (size_t i = 0; i < _prims.size(); ++i) {
+        auto aabb = _prims[i]->worldBound();
+        _primitiveInfo[i] = {i, aabb};
+    }
+    
+    MemoryArena arena(1024 * 1024);
+    int totalNodes = 0;
+    
+    std::vector<const Primitive *> orderedPrims;
+    BVHBuildNode *root;
+    
+    if (_splitMethod == SplitMethod::HLBVH) {
+        // 暂时不实现
+        DCHECK(false);
+    } else {
+        root = recursiveBuild(arena, _primitiveInfo, 0, _primitiveInfo.size(), &totalNodes, orderedPrims);
+    }
+    
+    _prims.swap(orderedPrims);
+    _primitiveInfo.resize(0);
+    
+    _nodes = allocAligned<LinearBVHNode>(totalNodes);
+    int offset = 0;
+    // 将二叉树结构的bvh转换成连续储存结构
+    flattenBVHTree(root, &offset);
+    CHECK_EQ(totalNodes, offset);
+}
+
+/**
+ * 基本思路
+ * 根据根据光线的方向以及当前节点的分割轴
+ * 选择较近的一个子节点求交，远的子节点放入栈中
+ * 近的子节点如果与光线没有交点，则对栈中的节点求交
+ * 循环以上过程
+ */
+bool BVHAccel::rayOccluded(const Ray &ray) const {
     if (!_nodes) {
         return false;
     }
@@ -109,19 +127,20 @@ bool BVHAccel::intersectP(const paladin::Ray &ray) const {
     // 即将要访问到的节点
     int toVisitOffset = 0;
 
-    // 储存在包围盒在_node数组中节点的位置 
+    // 储存在包围盒在_node数组中节点的位置
     int currentNodeIndex = 0;
     
     // 从根节点开始遍历
+    // 从根节点开始遍历
     while (true) {
         const LinearBVHNode *node = &_nodes[currentNodeIndex];
-        if (node->bounds.intersectP(ray, invDir, dirIsNeg)) {
+        if (node->bounds.rayOccluded(ray, invDir, dirIsNeg)) {
             
             if (node->nPrimitives > 0) {
                 // 叶子节点
                 for (int i = 0; i < node->nPrimitives; ++i) {
                     // 逐个片元判断求交
-                    if (_primitives[node->primitivesOffset + i]->intersectP(ray)) {
+                    if (_prims[node->primitivesOffset + i]->rayOccluded(ray)) {
                         return true;
                     }
                 }
@@ -157,53 +176,7 @@ bool BVHAccel::intersectP(const paladin::Ray &ray) const {
     return false;
 }
 
-BVHAccel::BVHAccel(std::vector<std::shared_ptr<Primitive>> p,
-                   int maxPrimsInNode, SplitMethod splitMethod)
-: _maxPrimsInNode(std::min(255, maxPrimsInNode)),
-_splitMethod(splitMethod),
-_primitives(std::move(p)) {
-
-    // 基本思路，先构建出树形结构
-    // 完成之后再把树形结构转成连续储存
-    if (_primitives.empty()) {
-        return;
-    }
-    
-    std::vector<BVHPrimitiveInfo> _primitiveInfo(_primitives.size());
-
-    // 储存每个aabb的中心以及索引
-    for (size_t i = 0; i < _primitives.size(); ++i) {
-        _primitiveInfo[i] = {i, _primitives[i]->worldBound()};
-    }
-
-    // 先使用内存池分配指定大小空间，函数运行结束之后自动释放
-    MemoryArena arena(1024 * 1024);
-    int totalNodes = 0;
-
-    // 有序的片元列表
-    std::vector<std::shared_ptr<Primitive>> orderedPrims;
-    orderedPrims.reserve(_primitives.size());
-    BVHBuildNode *root;
-    if (splitMethod == SplitMethod::HLBVH) {
-        // HLBVH可以用并行构建
-        root = HLBVHBuild(arena, _primitiveInfo, &totalNodes, orderedPrims);
-    } else {
-        // 其余三种方式
-        root = recursiveBuild(arena, _primitiveInfo, 0, _primitives.size(),
-                              &totalNodes, orderedPrims);
-    }
-    _primitives.swap(orderedPrims);
-    _primitiveInfo.resize(0);
-    
-    
-    _nodes = allocAligned<LinearBVHNode>(totalNodes);
-    int offset = 0;
-    // 将二叉树结构的bvh转换成连续储存结构
-    flattenBVHTree(root, &offset);
-    CHECK_EQ(totalNodes, offset);
-}
-
-BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo, int start, int end, int *totalNodes, std::vector<std::shared_ptr<Primitive> > &orderedPrims) {
+BVHBuildNode * BVHAccel::recursiveBuild(MemoryArena &arena, std::vector<BVHPrimitiveInfo> &primitiveInfo, int start, int end, int *totalNodes, std::vector<const Primitive *> &orderedPrims) {
     BVHBuildNode *node = ARENA_ALLOC(arena, BVHBuildNode);
     AABB3f bounds;
     for (int i = start; i < end; ++ i) {
@@ -215,7 +188,7 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
         // 生成叶子节点
         int firstPrimOffset = orderedPrims.size();
         int primNum = primitiveInfo[start].primitiveNumber;
-        orderedPrims.push_back(_primitives[primNum]);
+        orderedPrims.push_back(_prims[primNum]);
         node->initLeaf(firstPrimOffset, numPrimitives, bounds);
         return node;
     } else {
@@ -231,7 +204,7 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
             int firstPrimOffset = orderedPrims.size();
             for (int i = start; i < end; ++i) {
                 int primNum = primitiveInfo[i].primitiveNumber;
-                orderedPrims.push_back(_primitives[primNum]);
+                orderedPrims.push_back(_prims[primNum]);
             }
             node->initLeaf(firstPrimOffset, numPrimitives, bounds);
             return node;
@@ -374,7 +347,7 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
                             int firstPrimOffset = orderedPrims.size();
                             for (int i = start; i < end; ++i) {
                                 int primNum = primitiveInfo[i].primitiveNumber;
-                                orderedPrims.push_back(_primitives[primNum]);
+                                orderedPrims.push_back(_prims[primNum]);
                             }
                             node->initLeaf(firstPrimOffset, numPrimitives, bounds);
                             return node;
@@ -394,19 +367,60 @@ BVHBuildNode * BVHAccel::recursiveBuild(paladin::MemoryArena &arena, std::vector
     return node;
 }
 
-BVHBuildNode * BVHAccel::HLBVHBuild(paladin::MemoryArena &arena, const std::vector<BVHPrimitiveInfo> &primitiveInfo, int *totalNodes, std::vector<std::shared_ptr<Primitive> > &orderedPrims) const {
-    // HLBVH构建相关 todo
-    return nullptr;
-}
+bool BVHAccel::rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
+    if (!_nodes) {
+        return false;
+    }
 
-BVHBuildNode * BVHAccel::buildUpperSAH(paladin::MemoryArena &arena, std::vector<BVHBuildNode *> &treeletRoots, int start, int end, int *totalNodes) const {
-    // HLBVH构建相关 todo
-    return nullptr;
-}
+    bool hit = false;
+    Vector3f invDir(1 / ray.dir.x, 1 / ray.dir.y, 1 / ray.dir.z);
+    int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
 
-BVHBuildNode * BVHAccel::emitLBVH(paladin::BVHBuildNode *&buildNodes, const std::vector<BVHPrimitiveInfo> &primitiveInfo, paladin::MortonPrimitive *mortonPrims, int nPrimitives, int *totalNodes, std::vector<std::shared_ptr<Primitive> > &orderedPrims, std::atomic<int> *orderedPrimsOffset, int bitIndex) const {
-    // HLBVH构建相关 todo
-    return nullptr;
+    int toVisitOffset = 0, currentNodeIndex = 0;
+    int nodesToVisit[64];
+    while (true) {
+        const LinearBVHNode *node = &_nodes[currentNodeIndex];
+
+        if (node->bounds.rayOccluded(ray, invDir, dirIsNeg)) {
+            if (node->nPrimitives > 0) {
+                // 叶子节点
+                for (int i = 0; i < node->nPrimitives; ++i) {
+                    // 逐个片元判断求交
+                    if (_prims[node->primitivesOffset + i]->rayIntersect(ray, isect)) {
+                        hit = true;
+                    }
+                }
+                if (toVisitOffset == 0) {
+                    break;
+                }
+                // 取出栈中的节点求交
+                currentNodeIndex = nodesToVisit[--toVisitOffset];
+                if (currentNodeIndex == 1) {
+                    
+                }
+            } else {
+                // 内部节点
+                if (dirIsNeg[node->axis]) {
+                    // 如果ray的方向为负，则先判断右子树，把左子树压入栈中
+                    // 下次循环时直接判断与右子树是否有相交，如果没有相交
+                    // 则访问栈中的节点求交
+                    nodesToVisit[toVisitOffset++] = currentNodeIndex + 1;
+                    currentNodeIndex = node->secondChildOffset;
+                } else {
+                    // 如果ray的方向为正，则先判断左子树，把右子树压入栈中
+                    nodesToVisit[toVisitOffset++] = node->secondChildOffset;
+                    currentNodeIndex = currentNodeIndex + 1;
+                }
+            }
+        } else {
+            //如果没有相交 则访问栈中的节点求交
+            if (toVisitOffset == 0) {
+                break;
+            }
+            currentNodeIndex = nodesToVisit[--toVisitOffset];
+        }
+    }
+    return hit;
 }
 
 int BVHAccel::flattenBVHTree(paladin::BVHBuildNode *node, int *offset) {
@@ -434,7 +448,7 @@ int BVHAccel::flattenBVHTree(paladin::BVHBuildNode *node, int *offset) {
 //    "maxPrimsInNode" : 1,
 //    "splitMethod" : "SAH"
 //}
-shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Primitive>> &prims) {
+shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<const Shape>> &shapes) {
     int maxPrimsInNode = param.value("maxPrimsInNode", 1);
     BVHAccel::SplitMethod splitMethod;
     string sm = param.value("splitMethod", "SAH");
@@ -445,8 +459,7 @@ shared_ptr<BVHAccel> createBVH(const nloJson &param, const vector<shared_ptr<Pri
     } else if (sm == "EqualCounts") {
         splitMethod = BVHAccel::SplitMethod::EqualCounts;
     }
-    return make_shared<BVHAccel>(prims, maxPrimsInNode, splitMethod);
+    return make_shared<BVHAccel>(shapes, maxPrimsInNode, splitMethod);
 }
-
 
 PALADIN_END

@@ -34,9 +34,9 @@ public:
     
     void parseShapes(const nloJson &);
     
-    void autoPlane();
-    
-    void autoLight();
+//    void autoPlane();
+//
+//    void autoLight();
     
     Sampler * parseSampler(const nloJson &param, Film *);
     
@@ -55,8 +55,7 @@ public:
     // 解析简单物体，球体，圆柱，圆锥等
     void parseSimpleShape(const nloJson &data, const string &type);
     
-    // 解析模型
-    void parseTriMesh(const nloJson &data);
+    void parseMesh(const nloJson &data);
     
     // 解析clone物体，注意，clone物体暂不支持quad,cube
     void parseClonal(const nloJson &data);
@@ -66,8 +65,6 @@ public:
     shared_ptr<const Medium> getGlobalMedium() {
         return getMedium("global");
     }
-    
-    shared_ptr<Aggregate> parseAccelerator(const nloJson &);
     
     Film * parseFilm(const nloJson &param, Filter *);
     
@@ -117,14 +114,6 @@ private:
         _mediumCache[name] = medium;
     }
     
-    AABB3f getPrimsBound() const {
-        AABB3f ret;
-        for (int i = 0; i < _primitives.size(); ++i) {
-            ret = unionSet(ret, _primitives[i]->worldBound());
-        }
-        return ret;
-    }
-    
     shared_ptr<const Medium> getMedium(const nloJson &name) {
         if (name.is_null()) {
             return nullptr;
@@ -161,6 +150,8 @@ private:
     vector<shared_ptr<Light>> _lights;
     
     vector<shared_ptr<Primitive>> _primitives;
+    
+    vector<shared_ptr<const Shape>> _shapes;
     
     map<string, Transform *> _transformCache;
     

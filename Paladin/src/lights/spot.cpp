@@ -11,7 +11,7 @@
 
 PALADIN_BEGIN
 
-SpotLight::SpotLight(shared_ptr<const Transform> LightToWorld,
+SpotLight::SpotLight(const Transform  * LightToWorld,
                      const MediumInterface &mediumInterface, const Spectrum &I,
                      Float totalWidth, Float falloffStart)
 : Light((int)LightFlags::DeltaPosition, LightToWorld, mediumInterface),
@@ -29,6 +29,17 @@ Spectrum SpotLight::sample_Li(const Interaction &ref, const Point2f &u,
     *pdf = 1.f;
     *vis = VisibilityTester(ref, Interaction(_pos, ref.time, mediumInterface));
     return _I * falloff(-*wi) / distanceSquared(_pos, ref.pos);
+}
+
+Spectrum SpotLight::sample_Li(DirectSamplingRecord *rcd,
+                              const Point2f &u,
+                              const Scene &scene) const {
+    Vector3f wi = _pos - rcd->ref();
+    rcd->updateTarget(wi, 1.0f);
+    auto vis = rcd->getVisibilityTester();
+    auto ret = vis.unoccluded(scene) ?
+            _I * falloff(-rcd->dir()) / wi.lengthSquared() : 0;
+    return ret;
 }
 
 Spectrum SpotLight::sample_Le(const Point2f &u1, const Point2f &u2,
@@ -71,6 +82,10 @@ Float SpotLight::pdf_Li(const Interaction &, const Vector3f &) const {
     return 0.f;
 }
 
+Float SpotLight::pdf_Li(const DirectSamplingRecord &) const {
+    return 0.f;
+}
+
 //"param" : {
 //    "transform" : {
 //        "type" : "translate",
@@ -86,7 +101,7 @@ Float SpotLight::pdf_Li(const Interaction &, const Vector3f &) const {
 //}
 CObject_ptr createSpot(const nloJson &param, const Arguments &lst) {
     nloJson l2w_data = param.value("transform", nloJson());
-    auto l2w = shared_ptr<const Transform>(createTransform(l2w_data));
+    auto l2w = createTransform(l2w_data);
     nloJson Idata = param.value("I", nloJson::object());
     nloJson scale = param.value("scale", 1.f);
     Spectrum I = Spectrum::FromJson(Idata);

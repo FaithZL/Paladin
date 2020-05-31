@@ -16,7 +16,7 @@
 #include "integrators/pathtracer.hpp"
 #include "samplers/stratified.hpp"
 #include "samplers/random.hpp"
-#include "core/primitive.hpp"
+#include "core/aggregate.hpp"
 
 #include "materials/matte.hpp"
 #include "lights/distant.hpp"

@@ -10,7 +10,7 @@
 #define kdtree_hpp
 
 #include "core/header.h"
-#include "core/primitive.hpp"
+#include "core/aggregate.hpp"
 
 PALADIN_BEGIN
 

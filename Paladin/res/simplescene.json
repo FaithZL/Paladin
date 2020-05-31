@@ -20,16 +20,59 @@
     },
     "lights" : [
         {
-            "type" : "pointLight",
+            "type" : "spot",
             "enable" : false,
             "param" : {
                 "transform" : {
-                    
+                    "type" : "translate",
+                    "param" : [0,0.7,0]
                 },
                 "I" : {
                     "colorType" : 1,
-                    "color" : [1,1,1]
+                    "color" : [5,5,5]
                 }
+            }
+        },
+        {
+            "type" : "distant",
+            "enable" : false,
+            "param" : {
+                "transform" : {
+                    "type" : "translate",
+                    "param" : [1,0,1]
+                },
+                "L" : {
+                    "colorType" : 1,
+                    "color" : [1, 1, 1]
+                },
+                "wLight" : [1,1,-1]
+            }
+        },
+        {
+            "type" : "envmap",
+            "enable" : true,
+            "param" : {
+                "scale" : 1,
+                "L"     : [
+                    1,
+                    1,
+                    1
+                ],
+                "nSamples" : 1,
+                "transform" : [
+                    {
+                        "type" : "rotateX",
+                        "param" : [
+                            -90
+                        ]
+                    },
+                    {
+                        "type" : "rotateY",
+                        "param" : [
+                            0
+                        ]
+                    }
+                ]
             }
         }
     ],
@@ -215,25 +258,6 @@
     },
     "shapes" : [
         {
-            "type" : "sphere",
-            "enable" : false,
-            "param" : {
-                "transform" : [
-                    {
-                        "type" : "rotateX",
-                        "param" : [170]
-                    },
-                    {
-                        "type" : "translate",
-                        "param" : [0,-0.1,0]
-                    }
-                ],
-                "radius" : 0.3,
-                "phiMax" : 360
-            },
-            "material" : "glass"
-        },
-        {
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "back",
@@ -399,7 +423,7 @@
                 "y" : 1.2,
                 "z" : 0.6
             },
-            "material" : "matte1"
+            "material" : "mirror"
         },
         {
             "type" : "triMesh",
@@ -421,7 +445,7 @@
                 "y" : 0.6,
                 "z" : 0.6
             },
-            "material" : "matte1"
+            "material" : "mirror"
         }
     ],
     "integrator" : {
@@ -457,7 +481,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "connellbox-16spp-r5.png",
+            "fileName" : "connellbox-8spp.png",
             "diagonal" : 1,
             "scale" : 1
         }
@@ -465,14 +489,14 @@
     "filter" : {
         "type" : "triangle",
         "param" : {
-            "radius" : [5,5]
+            "radius" : [1,1]
         }
     },
     "accelerator" : {
         "type" : "embree",
         "param" : {
             "maxPrimsInNode" : 1,
-            "splitMethod" : "SAH"
+            "splitMethod" : "EqualCounts"
         }
     }
 }

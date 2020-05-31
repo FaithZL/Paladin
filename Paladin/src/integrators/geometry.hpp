@@ -9,6 +9,7 @@
 #define geometry_hpp
 
 #include "core/integrator.hpp"
+#include "core/shape.hpp"
 
 PALADIN_BEGIN
 
@@ -34,11 +35,12 @@ public:
                                 int depth = 0) const override{
         SurfaceInteraction ref;//和表面的交互点
         RGBSpectrum ret(0.0f);
-        
-        if (scene.intersect(ray, &ref)) {
+        auto r = ray;
+        if (scene.rayIntersect(ray, &ref)) {
+            
             if(_type == GeometryIntegratorType::Normal){
                 ref.computeTangentSpace();
-                auto mat = ref.primitive->getMaterial();
+                auto mat = ref.shape->getMaterial();
                 if (mat) {
                     mat->computeScatteringFunctions(&ref, arena, TransportMode::Radiance, true);
                 }

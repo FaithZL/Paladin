@@ -6,17 +6,19 @@
 //
 
 #include "envmap.hpp"
-#include "math/sampling.hpp"
 #include "tools/fileio.hpp"
 #include "core/paladin.hpp"
+#include "core/scene.hpp"
 
 PALADIN_BEGIN
 
-EnvironmentMap::EnvironmentMap(shared_ptr<const Transform> LightToWorld,
+EnvironmentMap::EnvironmentMap(const Transform * LightToWorld,
                                const Spectrum &L,
                                int nSamples, const std::string &texmap)
-:Light((int)LightFlags::Infinite, LightToWorld, MediumInterface(),
-nSamples) {
+:Light((int)LightFlags::Infinite | (int) LightFlags::Env,
+       LightToWorld,
+       MediumInterface(),
+       nSamples) {
     // 先初始化纹理贴图
     Point2i resolution;
     std::unique_ptr<RGBSpectrum[]> texels(nullptr);
@@ -53,6 +55,10 @@ nSamples) {
         },
         height, 32);
     _distribution.reset(new Distribution2D(img.get(), width, height));
+}
+
+void EnvironmentMap::preprocess(const Scene &scene) {
+    scene.worldBound().boundingSphere(&_worldCenter, &_worldRadius);
 }
 
 Spectrum EnvironmentMap::sample_Le(const Point2f &u1, const Point2f &u2,
@@ -141,8 +147,43 @@ Spectrum EnvironmentMap::sample_Li(const Interaction &ref, const Point2f &u,
     return Spectrum(_Lmap->lookup(uv), SpectrumType::Illuminant);
 }
 
+Spectrum EnvironmentMap::sample_Li(DirectSamplingRecord *rcd, const Point2f &u,
+                                   const Scene &scene) const {
+    Float mapPdf;
+    Point2f uv = _distribution->sampleContinuous(u, &mapPdf);
+    if (mapPdf == 0) {
+        return Spectrum(0.f);
+    }
+    Float theta = uv[1] * Pi, phi = uv[0] * 2 * Pi;
+    Float cosTheta = std::cos(theta), sinTheta = std::sin(theta);
+    Float sinPhi = std::sin(phi), cosPhi = std::cos(phi);
+    Vector3f wiLight = Vector3f(sinTheta * cosPhi,
+                                sinTheta * sinPhi,
+                                cosTheta);
+    Vector3f wi = _lightToWorld->exec(wiLight);
+    
+    // p(u, v) / p(ω) = sinθ 2π^2
+    Float pdfDir = mapPdf / (2 * Pi * Pi * sinTheta);
+    rcd->updateTarget(wi * (2 * _worldRadius), pdfDir);
+    auto vis = rcd->getVisibilityTester();
+    Spectrum ret = vis.unoccluded(scene) ?
+            Spectrum(_Lmap->lookup(uv), SpectrumType::Illuminant) : 0;
+    return ret;
+}
+
 Float EnvironmentMap::pdf_Li(const Interaction &, const Vector3f &w) const {
     Vector3f wi = _worldToLight->exec(w);
+    Float theta = sphericalTheta(wi), phi = sphericalPhi(wi);
+    Float sinTheta = std::sin(theta);
+    if (sinTheta == 0) {
+        return 0;
+    }
+    return _distribution->pdf(Point2f(phi * Inv2Pi, theta * InvPi)) /
+           (2 * Pi * Pi * sinTheta);
+}
+
+Float EnvironmentMap::pdf_Li(const DirectSamplingRecord &rcd) const {
+    Vector3f wi = _worldToLight->exec(rcd.dir());
     Float theta = sphericalTheta(wi), phi = sphericalPhi(wi);
     Float sinTheta = std::sin(theta);
     if (sinTheta == 0) {
@@ -165,7 +206,7 @@ Float EnvironmentMap::pdf_Li(const Interaction &, const Vector3f &w) const {
 //}
 CObject_ptr createEnvironmentMap(const nloJson &param, const Arguments &lst) {
     nloJson l2w_data = param.value("transform", nloJson());
-    auto l2w = shared_ptr<const Transform>(createTransform(l2w_data));
+    auto l2w = createTransform(l2w_data);
     nloJson scale = param.value("scale", 1.0);
     nloJson Ldata = param.value("L", nloJson::object());
     Spectrum L = Spectrum::FromJsonRGB(Ldata);
@@ -176,8 +217,7 @@ CObject_ptr createEnvironmentMap(const nloJson &param, const Arguments &lst) {
         string basePath = Paladin::getInstance()->getBasePath();
         fn = basePath + fn;
     }
-    return new EnvironmentMap(shared_ptr<const Transform>(l2w),
-                              L, nSamples, fn);
+    return new EnvironmentMap(l2w, L, nSamples, fn);
 }
 
 REGISTER("envmap", createEnvironmentMap);

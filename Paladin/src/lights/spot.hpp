@@ -15,11 +15,14 @@ PALADIN_BEGIN
 class SpotLight : public Light {
     
 public:
-    SpotLight(shared_ptr<const Transform> LightToWorld, const MediumInterface &m,
+    SpotLight(const Transform * LightToWorld, const MediumInterface &m,
               const Spectrum &I, Float totalWidth, Float falloffStart);
     
     virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
                        Float *pdf, VisibilityTester *vis) const override;
+    
+    virtual Spectrum sample_Li(DirectSamplingRecord *rcd, const Point2f &u,
+                               const Scene &) const override;
     
     Float falloff(const Vector3f &w) const;
     
@@ -37,6 +40,8 @@ public:
     virtual Spectrum power() const override;
     
     virtual Float pdf_Li(const Interaction &, const Vector3f &) const override;
+    
+    virtual Float pdf_Li(const DirectSamplingRecord &) const override;
     
 private:
     const Point3f _pos;

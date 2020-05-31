@@ -32,7 +32,7 @@ public:
         SurfaceInteraction ref;//和表面的交互点
         RGBSpectrum ret(0.0f);
         
-        if (scene.intersect(ray, &ref)) {
+        if (scene.rayIntersect(ray, &ref)) {
             
         }
         

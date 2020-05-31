@@ -45,8 +45,17 @@ struct Interaction {
         
     }
     
-    Interaction(const Point3f &p, Float time,
-                const MediumInterface &mediumInterface)
+    Interaction(const Point3f &p, const Normal3f &n, Float time = 0,
+                const MediumInterface &mediumInterface = nullptr)
+    : pos(p),
+    time(time),
+    normal(n),
+    mediumInterface(mediumInterface) {
+        
+    }
+    
+    Interaction(const Point3f &p, Float time = 0,
+                const MediumInterface &mediumInterface = nullptr)
     : pos(p),
     time(time),
     mediumInterface(mediumInterface) {
@@ -183,7 +192,7 @@ public:
     
     const Shape * shape = nullptr;
     Shading shading;
-    const Primitive * primitive = nullptr;
+//    const Primitive * primitive = nullptr;
     BSDF * bsdf = nullptr;
     BSSRDF * bssrdf = nullptr;
     

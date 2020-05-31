@@ -74,7 +74,9 @@ enum class LightFlags {
     DeltaDirection = 2,
     // 面光源
     Area = 4,
-    Infinite = 8
+    Infinite = 8,
+    // 环境光
+    Env = 16
 };
 
 inline bool isDeltaLight(int flags) {
@@ -90,7 +92,7 @@ public:
 
     }
 
-    Light(int flags, shared_ptr<const Transform> LightToWorld,
+    Light(int flags, const Transform * LightToWorld,
           const MediumInterface &mediumInterface, int nSamples = 1)
         
     : flags(flags),
@@ -113,6 +115,10 @@ public:
     virtual Spectrum sample_Li(const Interaction &ref, const Point2f &u,
                                Vector3f *wi, Float *pdf,
                                VisibilityTester *vis) const = 0;
+    
+    virtual Spectrum sample_Li(DirectSamplingRecord *rcd, const Point2f &u, const Scene &) const {
+        NotImplementedError("sample_Li");
+    }
 
     // 辐射通量，也就是功率
     virtual Spectrum power() const = 0;
@@ -151,6 +157,10 @@ public:
     // 用于估计直接光照时，采样bsdf时生成的wi方向，对应的pdf函数值
     virtual Float pdf_Li(const Interaction &ref, const Vector3f &wi) const = 0;
     
+    virtual Float pdf_Li(const DirectSamplingRecord &) const {
+        NotImplementedError("pdf_Li");
+    }
+    
     // // 双向方法需要用的函数，暂时不理
     // virtual Spectrum sampleLe(const Point2f &u1, const Point2f &u2, Float time,
     //                            Ray *ray, Normal3f *nLight, Float *pdfPos,
@@ -168,19 +178,21 @@ public:
     
 protected:
 
-    shared_ptr<const Transform> _lightToWorld;
-    shared_ptr<const Transform> _worldToLight;
+    const Transform * _lightToWorld;
+    const Transform * _worldToLight;
 };
 
 class AreaLight : public Light {
 public:
-    AreaLight(shared_ptr<const Transform> LightToWorld, 
+    AreaLight(const Transform * LightToWorld,
             const MediumInterface &mi,
             int nSamples)
     :Light((int)LightFlags::Area, LightToWorld, mi, nSamples) {
 
     }
 
+    virtual Spectrum L(const DirectSamplingRecord &rcd) const = 0;
+    
     virtual Spectrum L(const Interaction &intr, const Vector3f &w) const = 0;
 };
 

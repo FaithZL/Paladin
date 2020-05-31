@@ -34,6 +34,17 @@ Spectrum PointLight::sample_Le(const Point2f &u1, const Point2f &u2,
     return _I;
 }
 
+Spectrum PointLight::sample_Li(DirectSamplingRecord *rcd,
+                               const Point2f &u,
+                               const Scene &scene) const {
+    Vector3f wi = _pos - rcd->ref();
+    rcd->updateTarget(wi, 1.0f);
+    auto vis = rcd->getVisibilityTester();
+    auto ret = vis.unoccluded(scene) ?
+            _I / wi.lengthSquared() : 0;
+    return ret;
+}
+
 void PointLight::pdf_Le(const Ray &ray, const Normal3f &nLight,
                         Float *pdfPos, Float *pdfDir) const {
     *pdfPos = 0;
@@ -43,6 +54,12 @@ void PointLight::pdf_Le(const Ray &ray, const Normal3f &nLight,
 // 狄拉克函数
 // 特殊处理
 Float PointLight::pdf_Li(const Interaction &, const Vector3f &) const {
+    return 0;
+}
+
+// 狄拉克函数
+// 特殊处理
+Float PointLight::pdf_Li(const DirectSamplingRecord &) const {
     return 0;
 }
 
@@ -59,7 +76,7 @@ Float PointLight::pdf_Li(const Interaction &, const Vector3f &) const {
 //}
 CObject_ptr createPointLight(const nloJson &param, const Arguments &lst) {
     nloJson l2w_data = param.value("transform", nloJson());
-    auto l2w = shared_ptr<const Transform>(createTransform(l2w_data));
+    auto l2w = createTransform(l2w_data);
     nloJson Idata = param.value("I", nloJson::object());
     nloJson scale = param.value("scale", 1.f);
     Spectrum I = Spectrum::FromJson(Idata);

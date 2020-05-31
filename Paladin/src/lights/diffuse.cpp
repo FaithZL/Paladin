@@ -9,10 +9,11 @@
 #include "core/shape.hpp"
 #include "math/sampling.hpp"
 #include "core/bxdf.hpp"
+#include "core/scene.hpp"
 
 PALADIN_BEGIN
 
-DiffuseAreaLight::DiffuseAreaLight(shared_ptr<const Transform> LightToWorld,
+DiffuseAreaLight::DiffuseAreaLight(const Transform * LightToWorld,
                                    const MediumInterface &mediumInterface,
                                    const Spectrum &L, int nSamples,
                                    const std::shared_ptr<Shape> &shape,
@@ -51,9 +52,25 @@ Spectrum DiffuseAreaLight::sample_Li(const Interaction &ref, const Point2f &u,
     return L(pShape, -*wi);
 }
 
+Spectrum DiffuseAreaLight::sample_Li(DirectSamplingRecord *rcd, const Point2f &u,
+                                     const Scene &scene) const {
+    _shape->sampleDir(rcd, u);
+    if (rcd->pdfDir() == 0) {
+        return 0;
+    }
+    Spectrum ret = L(*rcd);
+    auto vis = rcd->getVisibilityTester();
+    ret = (!ret.IsBlack() && vis.unoccluded(scene)) ? ret : Spectrum(0.f);
+    return ret;
+}
+
 Float DiffuseAreaLight::pdf_Li(const Interaction &ref,
                                const Vector3f &wi) const {
     return _shape->pdfDir(ref, wi);
+}
+
+Float DiffuseAreaLight::pdf_Li(const DirectSamplingRecord &rcd) const {
+    return rcd.pdfDir();
 }
 
 Spectrum DiffuseAreaLight::sample_Le(const Point2f &u1, const Point2f &u2,
@@ -101,7 +118,7 @@ shared_ptr<DiffuseAreaLight> DiffuseAreaLight::create(Float rgb[3], const std::s
         return nullptr;
     }
     Spectrum Le = Spectrum::FromRGB(rgb);
-    shared_ptr<const Transform> l2w = shape->objectToWorld;
+    auto l2w = shape->objectToWorld;
     return make_shared<DiffuseAreaLight>(l2w, mi, Le, 1, shape, false);
 }
 
@@ -120,7 +137,7 @@ DiffuseAreaLight * createDiffuseAreaLight(const nloJson &param,
     if (param.is_null()) {
         return nullptr;
     }
-    shared_ptr<const Transform> l2w = shape->objectToWorld;
+    auto l2w = shape->objectToWorld;
     nloJson _Le = param.value("Le", nloJson::object());
     nloJson scale = param.value("scale", 1.f);
     Spectrum Le = Spectrum::FromJson(_Le);

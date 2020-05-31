@@ -15,7 +15,10 @@ PALADIN_BEGIN
 class CObject {
     
 public:
-    virtual nloJson toJson() const = 0;
+    virtual nloJson toJson() const {
+        DCHECK(false);
+        return nloJson();
+    }
     
     virtual ~CObject() {
         
