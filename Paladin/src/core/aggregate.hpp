@@ -1,5 +1,5 @@
 //
-//  primitive.hpp
+//  aggregate.hpp
 //  Paladin
 //
 //  Created by SATAN_Z on 2019/8/10.
@@ -41,11 +41,8 @@ public:
     }
 };
 
-//shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared_ptr<Primitive>> &);
-
-
 shared_ptr<Aggregate> createAccelerator(const nloJson &data, const vector<shared_ptr<const Shape>> &);
 
 PALADIN_END
 
-#endif /* primitive_hpp */
+#endif /* aggregate_hpp */

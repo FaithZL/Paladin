@@ -11,7 +11,7 @@
 
 #include "header.h"
 #include "scene.hpp"
-#include "primitive.hpp"
+#include "aggregate.hpp"
 #include "spectrum.hpp"
 #include "light.hpp"
 #include "bxdf.hpp"

@@ -55,9 +55,6 @@ public:
     // 解析简单物体，球体，圆柱，圆锥等
     void parseSimpleShape(const nloJson &data, const string &type);
     
-//    // 解析模型
-//    void parseTriMesh(const nloJson &data);
-    
     void parseMesh(const nloJson &data);
     
     // 解析clone物体，注意，clone物体暂不支持quad,cube

@@ -9,7 +9,7 @@
 #include "endpoint.h"
 #include "core/camera.hpp"
 #include "core/light.hpp"
-#include "core/primitive.hpp"
+#include "core/aggregate.hpp"
 #include "core/scene.hpp"
 #include "core/bxdf.hpp"
 #include "func.hpp"

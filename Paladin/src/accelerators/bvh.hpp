@@ -10,7 +10,7 @@
 #define bvh_hpp
 
 #include "core/header.h"
-#include "core/primitive.hpp"
+#include "core/aggregate.hpp"
 PALADIN_BEGIN
 
 //代表一个图元的部分信息

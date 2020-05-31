@@ -26,8 +26,6 @@ public:
     
     Spectrum Le(const RayDifferential &ray) const override;
     
-    Spectrum Le(const RayDifferential &ray, Float *pdf) const override;
-    
     F_INLINE Spectrum evalEnvironment(const RayDifferential &ray, Float *pdf) const {
         Vector3f wi = normalize(_worldToLight->exec(ray.dir));
         Point2f st(sphericalPhi(wi) * Inv2Pi, sphericalTheta(wi) * InvPi);

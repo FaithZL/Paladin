@@ -10,7 +10,7 @@
 #define scene_hpp
 
 #include "core/header.h"
-#include "core/primitive.hpp"
+#include "core/aggregate.hpp"
 #include "core/light.hpp"
 #include "tools/embree_util.hpp"
 #include "lights/envmap.hpp"
@@ -26,14 +26,6 @@ public:
     _aggregate(nullptr),
     _rtcScene(nullptr),
     _envmap(nullptr) {
-        
-    }
-    
-    Scene(RTCScene rtcScene, const std::vector<std::shared_ptr<Light>> &lights)
-    : lights(lights),
-    _aggregate(nullptr),
-    _envmap(nullptr),
-    _rtcScene(rtcScene) {
         
     }
     

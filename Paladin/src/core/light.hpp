@@ -152,11 +152,6 @@ public:
     virtual Spectrum Le(const RayDifferential &r) const {
         return Spectrum(0.f);
     }
-    
-    virtual Spectrum Le(const RayDifferential &r, Float *pdf) const {
-        *pdf = 0;
-        return Spectrum(0.f);
-    }
 
     // 返回在ref处采样光源时，对应的pdf函数值
     // 用于估计直接光照时，采样bsdf时生成的wi方向，对应的pdf函数值

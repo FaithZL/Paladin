@@ -9,7 +9,7 @@
 #include "interaction.hpp"
 #include "shape.hpp"
 #include "light.hpp"
-#include "primitive.hpp"
+#include "aggregate.hpp"
 
 PALADIN_BEGIN
 

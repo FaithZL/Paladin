@@ -120,16 +120,6 @@ Spectrum EnvironmentMap::Le(const RayDifferential &ray) const {
     return Spectrum(_Lmap->lookup(st), SpectrumType::Illuminant);
 }
 
-Spectrum EnvironmentMap::Le(const RayDifferential &ray, Float *pdf) const {
-    Vector3f wi = normalize(_worldToLight->exec(ray.dir));
-    Point2f st(sphericalPhi(wi) * Inv2Pi, sphericalTheta(wi) * InvPi);
-    *pdf = _distribution->pdf(st);
-    Float theta = st[1] * Pi;
-    Float sinTheta = std::sin(theta);
-    *pdf = sinTheta == 0 ? 0 : *pdf / (2 * Pi * Pi * sinTheta);
-    return *pdf == 0 ? 0 : Spectrum(_Lmap->lookup(st), SpectrumType::Illuminant);
-}
-
 Spectrum EnvironmentMap::sample_Li(const Interaction &ref, const Point2f &u,
                                       Vector3f *wi, Float *pdf,
                                       VisibilityTester *vis) const {
