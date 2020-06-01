@@ -57,6 +57,71 @@ _surfaceArea(0) {
     initial();
 }
 
+Mesh::Mesh(const Transform * objectToWorld,
+                const nloJson &indice,
+                const nloJson &points,
+                const nloJson &normals,
+                const nloJson &UV,
+                const shared_ptr<const Material> &mat,
+                const MediumInterface &mi)
+:Shape(objectToWorld, nullptr, false,mi, ShapeType::EMesh, mat),
+_nTriangles(indice.size() / 3),
+_nVertices(points.size()),
+_surfaceArea(0) {
+    Stats::getInstance()->addTriangle(_nTriangles);
+    
+    size_t size = points.size();
+    _points.reset(new Point3f[size + 1]);
+    int i = 0;
+    for (auto iter = points.cbegin(); iter != points.cend(); iter += 3) {
+        Float x = iter[0];
+        Float y = iter[1];
+        Float z = iter[2];
+        Point3f p(x, y, z);
+        _points[i++] = objectToWorld->exec(p);
+    }
+    
+    size = normals.size();
+    if (size > 0) {
+        _normals.reset(new Normal3f[size + 1]);
+        i = 0;
+        for (auto iter = normals.cbegin(); iter != normals.cend(); iter += 3) {
+            Float x = iter[0];
+            Float y = iter[1];
+            Float z = iter[2];
+            Normal3f normal(x, y, z);
+            _normals[i++] = objectToWorld->exec(normal);
+        }
+    } else {
+        _normals.reset();
+    }
+    
+    size = UV.size();
+    if (size > 0) {
+        size_t size = UV.size();
+        _uv.reset(new Point2f[size + 1]);
+        memcpy(_uv.get(), &UV.at(0), size * sizeof(Point2f));
+    }
+    
+    
+    vector<Float> areaLst;
+    areaLst.reserve(_nTriangles);
+    _vertexIndice.reserve(_nTriangles);
+    for (int i = 0; i < indice.size(); i += 3) {
+        _vertexIndice.emplace_back(indice[i]);
+        _vertexIndice.emplace_back(indice[i + 1]);
+        _vertexIndice.emplace_back(indice[i + 2]);
+        TriangleI tri(&_vertexIndice[i], this);
+        _triangles.push_back(tri);
+        Float area = tri.getArea(_points.get());
+        _surfaceArea += area;
+        areaLst.push_back(area);
+    }
+    _areaDistrib = Distribution1D(&areaLst[0], _nTriangles);
+    _invArea = 1.f / _surfaceArea;
+    computeWorldBound();
+}
+
 void Mesh::initial() {
     // 计算表面积，计算面积分布
     vector<Float> areaLst;
