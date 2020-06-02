@@ -22,6 +22,8 @@
 #include "lights/distant.hpp"
 #include "tools/embree_util.hpp"
 #include "shapes/mesh.hpp"
+#include "tools/progressreporter.hpp"
+#include "time.h"
 
 PALADIN_BEGIN
 
@@ -317,57 +319,9 @@ void SceneParser::parseSimpleShape(const nloJson &data, const string &type) {
     if (areaLight) {
         _lights.push_back(areaLight);
     }
-    
-//    shared_ptr<Primitive> primitives = GeometricPrimitive::create(shape, mat, areaLight, mediumInterface);
-//    _primitives.push_back(primitives);
-//    // 如果需要克隆的话，则保存在_cloneMap中
-//    if (data.value("clone", false)) {
-//        string name = data.value("name", "");
-//        vector<shared_ptr<Primitive>> v;
-//        v.push_back(primitives);
-//        addPrimitivesToCloneMap(name, v);
-//    }
 }
 
-//data : {
-//    "type" : "triMesh",
-//    "subType" : "quad",
-//    "name" : "front",
-//    "enable" : true,
-//    "param" : {
-//        "transform" :[
-//            {
-//                "type" : "translate",
-//                "param" : [-1,0,0]
-//            }
-//        ],
-//        "width" : 2
-//    },
-//    "mediumInterface" : [null, "fog"],
-//    "material" : null
-//}
-//void SceneParser::parseTriMesh(const nloJson &data) {
-//    string subType = data.value("subType", "");
-//    vector<shared_ptr<Primitive>> prims;
-//    nloJson medIntfceData = data.value("mediumInterface", nloJson());
-//    MediumInterface mediumInterface = getMediumInterface(medIntfceData);
-//    shared_ptr<const Material> mat = getMaterial(data.value("material", nloJson()));
-//    if (subType == "quad") {
-//        prims = createQuadPrimitive(data, mat, _lights, mediumInterface);
-//    } else if (subType == "cube") {
-//        prims = createCubePrimitive(data, mat, _lights, mediumInterface);
-//    } else if (subType == "model") {
-//        prims = createModelPrimitive(data, mat, _lights, mediumInterface);
-//    } else if (subType == "mesh") {
-//        MeshParser mp;
-//        prims = mp.getPrimitiveLst(data, _lights);
-//    }
-//    if (data.value("clone", false)) {
-//        string name = data.value("name", "");
-//        addPrimitivesToCloneMap(name, prims);
-//    }
-//    _primitives.insert(_primitives.end(), prims.begin(), prims.end());
-//}
+
 
 
 Film * SceneParser::parseFilm(const nloJson &data, Filter * filt) {

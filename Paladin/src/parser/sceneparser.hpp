@@ -34,10 +34,6 @@ public:
     
     void parseShapes(const nloJson &);
     
-//    void autoPlane();
-//
-//    void autoLight();
-    
     Sampler * parseSampler(const nloJson &param, Film *);
     
     Camera * parseCamera(const nloJson &, Film *);

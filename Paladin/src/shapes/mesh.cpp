@@ -66,11 +66,11 @@ Mesh::Mesh(const Transform * objectToWorld,
                 const MediumInterface &mi)
 :Shape(objectToWorld, nullptr, false,mi, ShapeType::EMesh, mat),
 _nTriangles(indice.size() / 3),
-_nVertices(points.size()),
+_nVertices(points.size() / 3),
 _surfaceArea(0) {
     Stats::getInstance()->addTriangle(_nTriangles);
     
-    size_t size = points.size();
+    size_t size = points.size() / 3;
     _points.reset(new Point3f[size + 1]);
     int i = 0;
     for (auto iter = points.cbegin(); iter != points.cend(); iter += 3) {
@@ -81,7 +81,7 @@ _surfaceArea(0) {
         _points[i++] = objectToWorld->exec(p);
     }
     
-    size = normals.size();
+    size = normals.size() / 3;
     if (size > 0) {
         _normals.reset(new Normal3f[size + 1]);
         i = 0;
@@ -96,17 +96,24 @@ _surfaceArea(0) {
         _normals.reset();
     }
     
-    size = UV.size();
+    size = UV.size() / 2;
     if (size > 0) {
-        size_t size = UV.size();
+        i = 0;
         _uv.reset(new Point2f[size + 1]);
-        memcpy(_uv.get(), &UV.at(0), size * sizeof(Point2f));
+//        memcpy(_uv.get(), &UV.at(0), size * sizeof(Point2f));
+        for (auto iter = UV.cbegin(); iter != UV.cend(); iter += 2) {
+            Float u = iter[0];
+            Float v = iter[1];
+            _uv[i++] = Point2f(u, v);
+        }
+    } else {
+        _uv.reset();
     }
     
     
     vector<Float> areaLst;
     areaLst.reserve(_nTriangles);
-    _vertexIndice.reserve(_nTriangles);
+    _vertexIndice.reserve(indice.size());
     for (int i = 0; i < indice.size(); i += 3) {
         _vertexIndice.emplace_back(indice[i]);
         _vertexIndice.emplace_back(indice[i + 1]);
