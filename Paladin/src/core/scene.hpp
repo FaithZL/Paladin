@@ -14,7 +14,7 @@
 #include "core/light.hpp"
 #include "tools/embree_util.hpp"
 #include "lights/envmap.hpp"
-#include <set>
+#include "tools/stats.hpp"
 
 PALADIN_BEGIN
 
@@ -44,12 +44,14 @@ public:
                                Float *pmf) const;
     
     F_INLINE bool rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
+        Stats::getInstance()->addIntersectTestNum();
         return _rtcScene ?
             rayIntersectEmbree(ray, isect):
             rayIntersectNative(ray, isect);
     }
     
     F_INLINE bool rayOccluded(const Ray &ray) const {
+        Stats::getInstance()->addOccludedTestNum();
         return _rtcScene ?
             rayOccludedEmbree(ray):
             rayOccludedNative(ray);

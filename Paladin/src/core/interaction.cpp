@@ -13,8 +13,11 @@
 
 PALADIN_BEGIN
 
-Ray Interaction::spawnRay(const Vector3f &d) const {
-    Point3f o = offsetRay(pos, normal, d);
+Ray Interaction::spawnRay(const Vector3f &d, bool forward) const {
+    Normal3f n = forward ?
+            (dot(d, normal) > 0 ? normal : -normal) :
+            normal;
+    Point3f o = offsetRay(pos, n, d);
     return Ray(o, d, Infinity, time, getMedium(d));
 }
 

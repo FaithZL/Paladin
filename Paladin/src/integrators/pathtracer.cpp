@@ -10,6 +10,7 @@
 #include "core/camera.hpp"
 #include "materials/bxdfs/bsdf.hpp"
 #include "core/shape.hpp"
+#include "tools/stats.hpp"
 
 PALADIN_BEGIN
 
@@ -72,7 +73,8 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
         isect.computeScatteringFunctions(ray, arena);
 
         if (!isect.bsdf) {
-            ray = isect.spawnRay(ray.dir);
+            ray = isect.spawnRay(ray.dir, true);
+            foundIntersection = scene.rayIntersect(ray, &isect);
             --bounces;
             continue;
         }
@@ -151,6 +153,8 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
         }
     }
+    
+    Stats::getInstance()->addPathLen(bounces);
     return L;
 }
 

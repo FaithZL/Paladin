@@ -75,6 +75,7 @@ void SceneParser::parse(const nloJson &data) {
     
     _integrator->render(*scene);
     
+    afterRender();
 }
 
 void SceneParser::parseLights(const nloJson &list) {
