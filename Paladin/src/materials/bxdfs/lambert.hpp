@@ -69,6 +69,8 @@ public:
 private:
     // 反射系数
     Spectrum _R;
+    
+    
 };
 
 

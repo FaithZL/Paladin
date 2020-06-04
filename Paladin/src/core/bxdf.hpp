@@ -272,23 +272,7 @@ inline Spectrum schlickFresnel(const Spectrum &R, Float cosTheta) {
     return R + (Spectrum(1) - R) * pow5(1 - cosTheta);
 }
 
-/**
- * 反射类型
- * 一个bxdf的类型至少要有一个BSDF_REFLECTION 或 BSDF_TRANSMISSION
- * 用于表明是投射还是反射
- */
-enum BxDFType {
-    BSDF_REFLECTION = 1 << 0,
-    BSDF_TRANSMISSION = 1 << 1,
-    BSDF_DIFFUSE = 1 << 2,
-    BSDF_GLOSSY = 1 << 3,
-    BSDF_SPECULAR = 1 << 4,
-    BSDF_ALL = BSDF_DIFFUSE
-            | BSDF_GLOSSY
-            | BSDF_SPECULAR
-            | BSDF_REFLECTION
-            | BSDF_TRANSMISSION,
-};
+
 
 /**
  * BRDF(Bidirectional Reflectance Distribution Function)
@@ -379,6 +363,14 @@ public:
      * @return
      */
     virtual Float pdfDir(const Vector3f &wo, const Vector3f &wi) const;
+    
+    virtual Spectrum eval(BSDFSamplingRecord * rcd) const {
+        NotImplementedError("eval");
+    }
+    
+    virtual Spectrum sample(BSDFSamplingRecord * rcd, Float *pdf) const {
+        NotImplementedError("sample");
+    }
     
     virtual std::string toString() const = 0;
     

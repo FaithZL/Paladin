@@ -15,7 +15,7 @@
 
 PALADIN_BEGIN
 
-enum class TransportMode { Radiance, Importance };
+
 
 /**
  * 材质基类主要实现的是bump函数
