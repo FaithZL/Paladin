@@ -82,18 +82,12 @@ public:
 
     std::string toString() const;
     
-    F_INLINE BxDF * getBxDF(int idx) const {
-        return _bxdfs[idx].get();
-    }
-    
     // 折射率，对于不透明物体，这是不用的
     const Float eta;
     
     ~BSDF() {
 
     }
-    
-    void addBxDF(const shared_ptr<BxDF> &b);
     
     void clearBxDFs() {
         nBxDFs = 0;
@@ -116,8 +110,6 @@ private:
     static CONSTEXPR int MaxBxDFs = 8;
     // BXDF列表
     BxDF *bxdfs[MaxBxDFs];
-    
-    vector<shared_ptr<BxDF>> _bxdfs;
 
     friend class MixMaterial;
 };

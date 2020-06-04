@@ -25,10 +25,6 @@ BSDF::BSDF(Float eta)
     
 }
 
-void BSDF::addBxDF(const shared_ptr<BxDF> &b) {
-    _bxdfs.push_back(b);
-}
-
 void BSDF::updateGeometry(const SurfaceInteraction &si) {
     _gNormal = si.normal;
     _sNormal = si.shading.normal;

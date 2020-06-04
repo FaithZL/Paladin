@@ -32,20 +32,6 @@ public:
                                             TransportMode mode,
                                             bool allowMultipleLobes) const = 0;
     
-    virtual void updateScatteringFunctions(SurfaceInteraction *si,
-                                            MemoryArena &arena,
-                                            TransportMode mode,
-                                            bool allowMultipleLobes) const {
-        
-    }
-    
-    virtual void initScatteringFunctions();
-    
-    virtual void initBSDF(BSDF * bsdf) {
-        
-    }
-    
-    
     virtual ~Material() {
     	
     }
