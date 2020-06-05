@@ -78,10 +78,7 @@ VisibilityTester DirectSamplingRecord::getVisibilityTester() const {
 }
 
 BSDFSamplingRecord::BSDFSamplingRecord(const SurfaceInteraction &si)
-: pos(si.pos),
-Ng(si.normal),
-Ns(si.shading.normal),
-uv(si.uv),
+: si(si),
 wo(si.wo),
 eta(0),
 wi(Vector3f()),

@@ -220,26 +220,7 @@ struct BSDFSamplingRecord {
     
     BSDFSamplingRecord(const SurfaceInteraction &si);
     
-    BSDFSamplingRecord()
-    : pos(),
-    Ng(),
-    Ns(),
-    uv(),
-    wo(),
-    eta(0),
-    wi(Vector3f()),
-    sampleType(BxDFType::BSDF_NONE),
-    mode(TransportMode::Radiance) {
-        
-    }
-    
-    Point3f pos;
-    
-    Point2f uv;
-    
-    Normal3f Ns;
-    
-    Normal3f Ng;
+    const SurfaceInteraction &si;
     
     Vector3f wo;
     

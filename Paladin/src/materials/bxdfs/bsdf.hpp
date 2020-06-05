@@ -57,6 +57,12 @@ public:
 
     Spectrum f(const Vector3f &woW, const Vector3f &wiW,
                BxDFType flags = BSDF_ALL) const;
+    
+    Spectrum eval(const BSDFSamplingRecord &rcd) const;
+    
+    Float pdfDir(const BSDFSamplingRecord &rcd) const;
+    
+    Spectrum sample(BSDFSamplingRecord *rcd, Float *pdf) const;
 
     /**
      * 跟BXDF的rho_hh函数相同，不再赘述

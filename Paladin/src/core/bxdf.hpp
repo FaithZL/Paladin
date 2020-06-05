@@ -364,7 +364,7 @@ public:
      */
     virtual Float pdfDir(const Vector3f &wo, const Vector3f &wi) const;
     
-    virtual Spectrum eval(BSDFSamplingRecord * rcd) const {
+    virtual Spectrum eval(const BSDFSamplingRecord &rcd) const {
         NotImplementedError("eval");
     }
     
