@@ -70,28 +70,33 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             break;
         }
 
-        isect.computeScatteringFunctions(ray, arena);
-
-        if (!isect.bsdf) {
-            ray = isect.spawnRay(ray.dir, true);
-            foundIntersection = scene.rayIntersect(ray, &isect);
-            --bounces;
-            continue;
-        }
-
+//        isect.computeScatteringFunctions(ray, arena);
+        isect.shape->getMaterial()->_bsdf->updateGeometry(isect);
+//        if (!isect.bsdf) {
+//            ray = isect.spawnRay(ray.dir, true);
+//            foundIntersection = scene.rayIntersect(ray, &isect);
+//            --bounces;
+//            continue;
+//        }
+        
+        BSDF * bsdf = isect.shape->getMaterial()->_bsdf.get();
+//        BSDF * bsdf = isect.bsdf;
+        
         // 采样光源
         const Distribution1D * distrib = _lightDistribution->lookup(isect.pos);
         DirectSamplingRecord rcd(isect);
         const Light * light = nullptr;
         Float pmf = 0;
-        if (isect.bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
+        if (bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
             Spectrum Ld = scene.sampleLightDirect(&rcd, sampler.get2D(), distrib, &pmf);
             light = static_cast<const Light *>(rcd.object);
             if (!Ld.IsBlack()) {
-                Spectrum bsdfVal = isect.bsdf->f(isect.wo, rcd.dir());
+                Spectrum bsdfVal = bsdf->f(isect.wo, rcd.dir(), isect);
+//                Spectrum bsdfVal = bsdf->f(isect.wo, rcd.dir());
+                
                 bsdfVal *= absDot(isect.shading.normal, rcd.dir());
                 if (!bsdfVal.IsBlack()) {
-                    Float bsdfPdf = light->isDelta() ? 0 : isect.bsdf->pdfDir(isect.wo, rcd.dir());
+                    Float bsdfPdf = light->isDelta() ? 0 : bsdf->pdfDir(isect.wo, rcd.dir());
                     Float weight = bsdfPdf == 0 ? 1 : powerHeuristic(rcd.pdfDir(), bsdfPdf);
                     L += throughput * weight * bsdfVal * Ld / (rcd.pdfDir() * pmf);
                 }
@@ -101,10 +106,19 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
         // 采样bsdf
         Vector3f wo = -ray.dir;
         Vector3f wi;
+        Vector3f wi2;
         Float bsdfPdf;
+        Float bsdfPdf2;
         BxDFType flags;
-        Spectrum f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(),
-                                          &bsdfPdf, BSDF_ALL, &flags);
+        BxDFType flags2;
+        auto u = sampler.get2D();
+        
+        Spectrum f = bsdf->sample_f(wo, &wi, u,isect,
+                                    &bsdfPdf, BSDF_ALL, &flags);
+        
+//        Spectrum f = bsdf->sample_f(wo, &wi, u,
+//                                    &bsdfPdf, BSDF_ALL, &flags);
+        
         if (bsdfPdf == 0 || f.IsBlack()) {
             break;
         }
@@ -113,7 +127,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
         specularBounce = (flags & BSDF_SPECULAR) != 0;
         
         if ((flags & BSDF_TRANSMISSION)) {
-            Float eta = isect.bsdf->eta;
+            Float eta = bsdf->eta;
             // 详见bxdf.hpp文件中SpecularTransmission的注释
             etaScale *= (dot(wo, isect.normal) > 0) ? (eta * eta) : 1 / (eta * eta);
         }

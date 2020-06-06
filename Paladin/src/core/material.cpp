@@ -25,6 +25,10 @@ _normalMapScale(scale) {
     
 }
 
+void Material::updateSi(const SurfaceInteraction &si) {
+    _bsdf->updateGeometry(si);
+}
+
 void Material::bumpMapping(const std::shared_ptr<Texture<Float>> &d, SurfaceInteraction *si) {
 	SurfaceInteraction siEval = *si;
 

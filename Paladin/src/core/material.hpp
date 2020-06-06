@@ -36,6 +36,8 @@ public:
     	
     }
     
+    void updateSi(const SurfaceInteraction &si);
+    
     inline void processNormal(SurfaceInteraction * si) const {
         if (_normalMap) {
             normalMapping(_normalMap, si, _normalMapScale);
@@ -97,6 +99,8 @@ public:
     static void bumpMapping(const std::shared_ptr<Texture<Float>> &d,
                      SurfaceInteraction *si);
     
+    shared_ptr<BSDF> _bsdf;
+    
 protected:
     // 法线贴图
     std::shared_ptr<Texture<Spectrum>> _normalMap;
@@ -105,7 +109,7 @@ protected:
     // [-1,1]
     Float _normalMapScale;
     
-    vector<shared_ptr<BSDF>> _bsdfs;
+
 };
 
 Material * createMaterial(const nloJson &);

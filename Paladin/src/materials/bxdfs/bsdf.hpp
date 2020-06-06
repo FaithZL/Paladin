@@ -23,6 +23,8 @@ class BSDF {
 public:
     BSDF(const SurfaceInteraction &si, Float eta = 1);
     
+    
+    
     BSDF(Float eta = 1);
     
     void updateGeometry(const SurfaceInteraction &si);
@@ -58,9 +60,11 @@ public:
     Spectrum f(const Vector3f &woW, const Vector3f &wiW,
                BxDFType flags = BSDF_ALL) const;
     
-    Spectrum eval(const BSDFSamplingRecord &rcd) const;
+    Spectrum f(const Vector3f &woW, const Vector3f &wiW,
+               const SurfaceInteraction &si,
+               BxDFType flags = BSDF_ALL) const;
     
-    Float pdfDir(const BSDFSamplingRecord &rcd) const;
+    Spectrum eval(const BSDFSamplingRecord &rcd) const;
     
     Spectrum sample(BSDFSamplingRecord *rcd, Float *pdf) const;
 
@@ -79,6 +83,11 @@ public:
     Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
                       Float *pdf, BxDFType type = BSDF_ALL,
                       BxDFType *sampledType = nullptr) const;
+    
+    Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
+                        const SurfaceInteraction &si,
+                        Float *pdf, BxDFType type = BSDF_ALL,
+                        BxDFType *sampledType = nullptr) const;
     
     /**
      * 跟BXDF的pdfW函数相同，不再赘述

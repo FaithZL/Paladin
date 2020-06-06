@@ -47,10 +47,21 @@ public:
     _R(R) {
 
     }
+    
+    LambertianReflection(const shared_ptr<Texture<Spectrum>> &tex)
+    : BxDF(BxDFType(BSDF_REFLECTION | BSDF_DIFFUSE)),
+    _reflectionTex(tex) {
+        
+    }
 
     // 朗伯反射中任何方向的反射率都相等
     virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const override {
         return _R * InvPi;
+    }
+    
+    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi,
+                       const SurfaceInteraction &si) const override {
+        return _reflectionTex->evaluate(si) * InvPi;
     }
 
     // 朗伯反射中任何方向的反射率都相等
