@@ -68,6 +68,15 @@ bool DirectSamplingRecord::unoccluded(const Scene &scene) const {
     return vis.unoccluded(scene);
 }
 
+Spectrum DirectSamplingRecord::Tr(const Scene &scene, Sampler &sampler) const {
+    Normal3f refN = _refNormal.isZero() ? Normal3f(_dir) : _refNormal;
+    Interaction refIt(_ref, refN);
+    Normal3f targetNormal = _normal.isZero() ? Normal3f(-_dir) : _normal;
+    Interaction targetIt(_pos, targetNormal);
+    auto vis = VisibilityTester(refIt, targetIt);
+    return vis.Tr(scene, sampler);
+}
+
 VisibilityTester DirectSamplingRecord::getVisibilityTester() const {
     Normal3f refN = _refNormal.isZero() ? Normal3f(_dir) : _refNormal;
     Interaction refIt(_ref, refN);

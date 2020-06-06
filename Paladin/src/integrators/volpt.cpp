@@ -9,6 +9,7 @@
 #include "core/camera.hpp"
 #include "core/medium.hpp"
 #include "materials/bxdfs/bsdf.hpp"
+#include "core/shape.hpp"
 
 PALADIN_BEGIN
 
@@ -36,6 +37,182 @@ void VolumePathTracer::preprocess(const Scene &scene, Sampler &sampler) {
 //    }
 }
 
+Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
+                              Sampler &sampler, MemoryArena &arena, int depth) const {
+    Spectrum L(0.0f);
+    Spectrum throughput(1.0f);
+    RayDifferential ray(r);
+    bool specularBounce = false;
+    int bounces;
+
+    Float etaScale = 1;
+
+    SurfaceInteraction isect;
+    bool foundIntersection = scene.rayIntersect(ray, &isect);
+
+    for (bounces = 0; ; ++bounces) {
+
+        MediumInteraction mi;
+        if (ray.medium) {
+            throughput *= ray.medium->sample(ray, sampler, arena, &mi);
+        }
+        
+        if (throughput.IsBlack()) {
+            break;
+        }
+        
+        
+        
+        if (mi.isValid()) {
+            // 如果采样点落在参与介质中
+            // 其实跟采样表面一样的处理方式，
+            // 1.估计直接光照
+            // 2.随机选方向继续追踪
+            if (bounces >= _maxDepth) {
+                break;
+            }
+            
+            const Distribution1D *lightDistrib = _lightDistribution->lookup(mi.pos);
+            DirectSamplingRecord rcd(mi);
+            
+            // 采样光源
+            const Light * light = nullptr;
+            Float pmf = 0;
+            
+            Spectrum Ld = scene.sampleLightDirect(&rcd, sampler.get2D(), lightDistrib, &pmf);
+            light = static_cast<const Light *>(rcd.object);
+            
+            if (!Ld.IsBlack()) {
+                Float p = mi.phase->p(mi.wo, rcd.dir());
+                Spectrum phaseVal(p);
+                Float phasePdf = p;
+                
+                if (!phaseVal.IsBlack()) {
+                    Ld *= rcd.Tr(scene, sampler);
+                    Float weight = phasePdf == 0 ? 1 : powerHeuristic(rcd.pdfDir(), phasePdf);
+                    L += throughput * phaseVal * Ld * weight / (pmf * rcd.pdfDir());
+                }
+            }
+            
+            // 采样phase函数
+            if (!light->isDelta()) {
+                Vector3f wi;
+                Float p = mi.phase->sample_p(mi.wo, &wi, sampler.get2D());
+                Spectrum phaseVal(p);
+                Float phasePdf = p;
+                Float lightPdf = light->pdf_Li(mi, wi);
+                Float weight = powerHeuristic(phasePdf, lightPdf);
+            }
+            
+        }
+        
+        if (bounces == 0 || specularBounce) {
+            if (foundIntersection) {
+                L += throughput * isect.Le(-ray.dir);
+            } else {
+                for (const auto &light : scene.infiniteLights) {
+                    L += throughput * light->Le(ray);
+                }
+            }
+        }
+
+        if (!foundIntersection || bounces >= _maxDepth) {
+            break;
+        }
+
+        isect.computeScatteringFunctions(ray, arena);
+        if (!isect.bsdf) {
+            ray = isect.spawnRay(ray.dir, true);
+            foundIntersection = scene.rayIntersect(ray, &isect);
+            --bounces;
+            continue;
+        }
+
+        BSDF * bsdf = isect.bsdf;
+        
+        // 采样光源
+        const Distribution1D * distrib = _lightDistribution->lookup(isect.pos);
+        DirectSamplingRecord rcd(isect);
+        const Light * light = nullptr;
+        Float pmf = 0;
+        
+        if (bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
+            Spectrum Ld = scene.sampleLightDirect(&rcd, sampler.get2D(), distrib, &pmf);
+            light = static_cast<const Light *>(rcd.object);
+            if (!Ld.IsBlack()) {
+                Spectrum bsdfVal = bsdf->f(isect.wo, rcd.dir());
+                bsdfVal *= absDot(isect.shading.normal, rcd.dir());
+
+                if (!bsdfVal.IsBlack()) {
+                    Float bsdfPdf = light->isDelta() ? 0 : bsdf->pdfDir(isect.wo, rcd.dir());
+                    Float weight = bsdfPdf == 0 ? 1 : powerHeuristic(rcd.pdfDir(), bsdfPdf);
+                    L += throughput * weight * bsdfVal * Ld / (rcd.pdfDir() * pmf);
+                }
+            }
+        }
+
+        // 采样bsdf
+        Vector3f wo = -ray.dir;
+        Vector3f wi;
+        Float bsdfPdf;
+        BxDFType flags;
+        Spectrum f = bsdf->sample_f(wo, &wi, sampler.get2D(),
+                                    &bsdfPdf, BSDF_ALL, &flags);
+        
+        if (bsdfPdf == 0 || f.IsBlack()) {
+            break;
+        }
+        f *= absDot(wi, isect.shading.normal);
+
+        specularBounce = (flags & BSDF_SPECULAR) != 0;
+        
+        if ((flags & BSDF_TRANSMISSION)) {
+            Float eta = bsdf->eta;
+            // 详见bxdf.hpp文件中SpecularTransmission的注释
+            etaScale *= (dot(wo, isect.normal) > 0) ? (eta * eta) : 1 / (eta * eta);
+        }
+        ray = isect.spawnRay(wi);
+        foundIntersection = scene.rayIntersect(ray, &isect);
+        Spectrum Li(0.f);
+        Float lightPdf = 0;
+        Float weight = 0;
+        
+        if (foundIntersection) {
+            if (light && !light->isDelta()) {
+                rcd.updateTarget(isect);
+                const Light * target = isect.shape->getAreaLight();
+                if (target == light) {
+                    Li = isect.Le(-wi);
+                    lightPdf = rcd.pdfDir() * pmf;
+                    weight = powerHeuristic(bsdfPdf, lightPdf);
+                    L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+                }
+            }
+        } else {
+            Li = scene.evalEnvironment(ray, &lightPdf, distrib);
+            weight = powerHeuristic(bsdfPdf, lightPdf);
+            L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+        }
+        
+        throughput *= f / bsdfPdf;
+
+        Spectrum rrThroughput = throughput * etaScale;
+        Float mp = rrThroughput.MaxComponentValue();
+        if (mp < _rrThreshold && bounces > 3) {
+            Float q = std::min((Float)0.05, mp);
+            if (sampler.get1D() >= q) {
+                break;
+            }
+            throughput /= q;
+            DCHECK(!std::isinf(throughput.y()));
+        }
+    }
+    
+    Stats::getInstance()->addPathLen(bounces);
+    return L;
+}
+
+
 /**
  * 体渲染路径追踪跟普通路径追踪的区别主要在于
  * 如果场景中有介质，则对介质进行采样
@@ -45,6 +222,9 @@ void VolumePathTracer::preprocess(const Scene &scene, Sampler &sampler) {
  */
 Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
 						Sampler &sampler, MemoryArena &arena, int depth) const {
+    
+    return _Li(r, scene, sampler, arena, depth);
+    
     Spectrum L(0.f);
     Spectrum throughput(1.f);
     RayDifferential ray(r);

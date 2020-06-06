@@ -150,19 +150,7 @@ public:
 	 * 函数空间为向量空间
 	 */
     virtual Float pdfDir(const Interaction &ref, const Vector3f &wi) const;
-    
-//    F_INLINE Float pdfDir(const DirectSamplingRecord &rcd) const {
-//        Float pdf = pdfPos();
-//        switch (rcd.measure) {
-//            case ESolidAngle:
-//                return pdf * rcd.dist * rcd.dist / absDot(-rcd.dir, rcd.normal);
-//            case EArea:
-//                return pdf;
-//            default:
-//                return 0;
-//        }
-//    }
-    
+
     /**
      * 返回shape对于某个点的立体角大小
      */
@@ -212,8 +200,6 @@ protected:
     
     shared_ptr<const AreaLight> _areaLight;
     MediumInterface _mediumInterface;
-    
-    Primitive * _primitive;
 };
 
 PALADIN_END

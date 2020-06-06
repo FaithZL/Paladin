@@ -145,7 +145,7 @@ vector<shared_ptr<Mesh>> ModelCache::loadMeshes(const string &fn,
     
     nloJson meshList = createJsonFromFile(basePath + fn)["data"];
     for (auto meshData : meshList) {
-        vector<shared_ptr<Mesh>> tmp = createMeshes(meshData, transform, lights);
+        vector<shared_ptr<Mesh>> tmp = createMeshes(meshData, transform, lights, mat, mi);
         ret.insert(ret.end(), tmp.begin(), tmp.end());
     }
     return ret;

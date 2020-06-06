@@ -158,6 +158,8 @@ public:
     
     bool unoccluded(const Scene &scene) const;
     
+    Spectrum Tr(const Scene &scene, Sampler &sampler) const;
+    
     void updateTarget(const SurfaceInteraction &si);
     
     inline void computeData() {

@@ -100,7 +100,6 @@ _surfaceArea(0) {
     if (size > 0) {
         i = 0;
         _uv.reset(new Point2f[size + 1]);
-//        memcpy(_uv.get(), &UV.at(0), size * sizeof(Point2f));
         for (auto iter = UV.cbegin(); iter != UV.cend(); iter += 2) {
             Float u = iter[0];
             Float v = iter[1];
@@ -151,10 +150,12 @@ vector<shared_ptr<Mesh>> Mesh::createMeshes(const nloJson &data,
     nloJson transformData = data.value("transform", nloJson());
     Transform * transform = createTransform(transformData);
     
+    shared_ptr<const Material> mat(nullptr);
+    
     nloJson param = data.value("param", nloJson());
     return param.is_string() ?
         ModelCache::getMeshes(param, transform, lights):
-        ModelCache::createMeshes(param, transform, lights);
+        ModelCache::createMeshes(param, transform, lights, mat, mi);
 }
 
 RTCGeometry Mesh::rtcGeometry(Scene *scene) const {
@@ -251,7 +252,7 @@ shared_ptr<Mesh> Mesh::createQuad(const Transform *o2w, Float width, Float heigh
     auto points = vector<Point3f>{tl, bl, br, tr};
     auto vertIndice = vector<int>{0,1,2, 0,2,3};
     auto UVs = vector<Point2f>{Point2f(0, 1), Point2f(0, 0), Point2f(1, 0), Point2f(1,1)};
-    auto ret = Mesh::create(o2w, vertIndice, &points, nullptr, &UVs, mat);
+    auto ret = Mesh::create(o2w, vertIndice, &points, nullptr, &UVs, mat, mi);
     return ret;
 }
 
