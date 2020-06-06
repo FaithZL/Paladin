@@ -316,11 +316,6 @@ public:
      */
     virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const = 0;
     
-    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi,
-                       const SurfaceInteraction &si) const {
-        
-    }
-    
     /**
      * 这个函数可以理解为:
      * 该BXDF函数的蒙特卡洛估计的一个样本值
@@ -336,24 +331,6 @@ public:
     virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi,
                               const Point2f &sample, Float *pdf,
                               BxDFType *sampledType = nullptr) const;
-    
-    virtual Spectrum sample_f(const Vector3f &wo, Vector3f *wi,
-                                const SurfaceInteraction &si,
-                                const Point2f &sample, Float *pdf,
-                              BxDFType *sampledType = nullptr) const {
-        Spectrum ret = f(wo, *wi, si);
-        if (ret.IsBlack()) {
-            *wi = Vector3f(0,0,0);
-            *pdf = 0;
-        } else {
-            *wi = cosineSampleHemisphere(sample);
-            if (wo.z < 0) {
-                wi->z *= -1;
-            }
-            *pdf = pdfDir(wo, *wi);
-        }
-        return ret;
-    }
     
     /**
      * ρhd(wo) = ∫[hemisphere]f(p,wi,wo)|cosθi|dwi
@@ -386,14 +363,6 @@ public:
      * @return
      */
     virtual Float pdfDir(const Vector3f &wo, const Vector3f &wi) const;
-    
-    virtual Spectrum eval(const BSDFSamplingRecord &rcd) const {
-        NotImplementedError("eval");
-    }
-    
-    virtual Spectrum sample(BSDFSamplingRecord * rcd, Float *pdf) const {
-        NotImplementedError("sample");
-    }
     
     virtual std::string toString() const = 0;
     

@@ -35,8 +35,7 @@ public:
     virtual ~Material() {
     	
     }
-    
-    void updateSi(const SurfaceInteraction &si);
+
     
     inline void processNormal(SurfaceInteraction * si) const {
         if (_normalMap) {
@@ -98,8 +97,6 @@ public:
      */
     static void bumpMapping(const std::shared_ptr<Texture<Float>> &d,
                      SurfaceInteraction *si);
-    
-    shared_ptr<BSDF> _bsdf;
     
 protected:
     // 法线贴图

@@ -14,6 +14,7 @@
 #include "tools/classfactory.hpp"
 #include "materials/bxdfs/bsdf.hpp"
 #include "bxdfs/lambert.hpp"
+#include "tools/parallel.hpp"
 
 PALADIN_BEGIN
 
@@ -31,9 +32,7 @@ public:
     : Material(normalMap, bumpMap),
     _Kd(Kd),
     _sigma(sigma) {
-        _bsdf.reset(new BSDF());
-        LambertianReflection * b = new LambertianReflection(_Kd);
-        _bsdf->add(b);
+        
     }
     
     virtual nloJson toJson() const override {

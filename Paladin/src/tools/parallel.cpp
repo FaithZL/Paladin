@@ -187,7 +187,7 @@ void setThreadNum(int num) {
 }
 
 int getThreadNum() {
-    return nThread;
+    return maxThreadIndex() + 1;
 }
 
 int maxThreadIndex() {

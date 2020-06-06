@@ -47,21 +47,10 @@ public:
     _R(R) {
 
     }
-    
-    LambertianReflection(const shared_ptr<Texture<Spectrum>> &tex)
-    : BxDF(BxDFType(BSDF_REFLECTION | BSDF_DIFFUSE)),
-    _reflectionTex(tex) {
-        
-    }
 
     // 朗伯反射中任何方向的反射率都相等
     virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const override {
         return _R * InvPi;
-    }
-    
-    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi,
-                       const SurfaceInteraction &si) const override {
-        return _reflectionTex->evaluate(si) * InvPi;
     }
 
     // 朗伯反射中任何方向的反射率都相等
@@ -73,19 +62,6 @@ public:
     virtual Spectrum rho_hh(int, const Point2f *, const Point2f *) const override {
         return _R;
     }
-    
-    virtual Spectrum eval(const BSDFSamplingRecord &rcd) const override {
-        return _reflectionTex->evaluate(rcd.si) * InvPi;
-    }
-    
-    virtual Spectrum sample(BSDFSamplingRecord *rcd, Float *pdf) const override {
-        rcd->wi = cosineSampleHemisphere(rcd->sampler->get2D());
-        if (rcd->wo.z > 0) {
-            rcd->wo.z *= -1;
-        }
-        *pdf = pdfDir(rcd->wo, rcd->wi);
-        return eval(*rcd);
-    }
 
     virtual std::string toString() const override {
         return std::string("[ LambertianReflection R: ") + _R.ToString() +
@@ -95,8 +71,6 @@ public:
 private:
     // 反射系数
     Spectrum _R;
-    
-    shared_ptr<Texture<Spectrum>> _reflectionTex;
 };
 
 
