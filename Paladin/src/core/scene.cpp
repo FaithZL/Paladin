@@ -41,7 +41,7 @@ bool Scene::rayIntersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
         }
         
         if (isect->shape->getMaterial() != nullptr) {
-             return true;
+            return true;
         }
         ray = isect->spawnRay(ray.dir);
     }

@@ -61,8 +61,6 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
             break;
         }
         
-        
-        
         if (mi.isValid()) {
             // 如果采样点落在参与介质中
             // 其实跟采样表面一样的处理方式，
@@ -83,118 +81,131 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
             light = static_cast<const Light *>(rcd.object);
             
             if (!Ld.IsBlack()) {
-                Float p = mi.phase->p(mi.wo, rcd.dir());
-                Spectrum phaseVal(p);
-                Float phasePdf = p;
+                Float phasePdf = mi.phase->p(mi.wo, rcd.dir());
+                Spectrum phaseVal(phasePdf);
                 
-                if (!phaseVal.IsBlack()) {
+                if (phasePdf != 0) {
                     Ld *= rcd.Tr(scene, sampler);
-                    Float weight = phasePdf == 0 ? 1 : powerHeuristic(rcd.pdfDir(), phasePdf);
-                    L += throughput * phaseVal * Ld * weight / (pmf * rcd.pdfDir());
+                    Float lightPdf = rcd.pdfDir() * pmf;
+                    Float weight = powerHeuristic(lightPdf, phasePdf);
+                    L += throughput * phaseVal * Ld * weight / lightPdf;
                 }
             }
             
             // 采样phase函数
-            if (!light->isDelta()) {
-                Vector3f wi;
-                Float p = mi.phase->sample_p(mi.wo, &wi, sampler.get2D());
-                Spectrum phaseVal(p);
-                Float phasePdf = p;
-                Float lightPdf = light->pdf_Li(mi, wi);
-                Float weight = powerHeuristic(phasePdf, lightPdf);
-            }
-            
-        }
-        
-        if (bounces == 0 || specularBounce) {
-            if (foundIntersection) {
-                L += throughput * isect.Le(-ray.dir);
-            } else {
-                for (const auto &light : scene.infiniteLights) {
-                    L += throughput * light->Le(ray);
+            Vector3f wi;
+            Float phasePdf = mi.phase->sample_p(mi.wo, &wi, sampler.get2D());
+            Spectrum phaseVal(phasePdf);
+            ray = mi.spawnRay(wi);
+            Spectrum Tr(1.f);
+            Spectrum Li;
+            bool onSurface = scene.rayIntersectTr(ray, sampler, &isect, &Tr);
+            if (onSurface) {
+                if (light && !light->isDelta()) {
+                    const Light * targetLight = isect.shape->getAreaLight();
+                    if (targetLight == light) {
+                        rcd.updateTarget(isect);
+                        Li = isect.Le(-wi) * Tr;
+                        Float lightPdf = pmf * rcd.pdfDir();
+                        Float weight = powerHeuristic(phasePdf, lightPdf);
+                        L += throughput * Li * phaseVal * weight / phasePdf;
+                    }
                 }
             }
-        }
-
-        if (!foundIntersection || bounces >= _maxDepth) {
-            break;
-        }
-
-        isect.computeScatteringFunctions(ray, arena);
-        if (!isect.bsdf) {
-            ray = isect.spawnRay(ray.dir, true);
-            foundIntersection = scene.rayIntersect(ray, &isect);
-            --bounces;
-            continue;
-        }
-
-        BSDF * bsdf = isect.bsdf;
-        
-        // 采样光源
-        const Distribution1D * distrib = _lightDistribution->lookup(isect.pos);
-        DirectSamplingRecord rcd(isect);
-        const Light * light = nullptr;
-        Float pmf = 0;
-        
-        if (bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
-            Spectrum Ld = scene.sampleLightDirect(&rcd, sampler.get2D(), distrib, &pmf);
-            light = static_cast<const Light *>(rcd.object);
-            if (!Ld.IsBlack()) {
-                Spectrum bsdfVal = bsdf->f(isect.wo, rcd.dir());
-                bsdfVal *= absDot(isect.shading.normal, rcd.dir());
-
-                if (!bsdfVal.IsBlack()) {
-                    Float bsdfPdf = light->isDelta() ? 0 : bsdf->pdfDir(isect.wo, rcd.dir());
-                    Float weight = bsdfPdf == 0 ? 1 : powerHeuristic(rcd.pdfDir(), bsdfPdf);
-                    L += throughput * weight * bsdfVal * Ld / (rcd.pdfDir() * pmf);
-                }
-            }
-        }
-
-        // 采样bsdf
-        Vector3f wo = -ray.dir;
-        Vector3f wi;
-        Float bsdfPdf;
-        BxDFType flags;
-        Spectrum f = bsdf->sample_f(wo, &wi, sampler.get2D(),
-                                    &bsdfPdf, BSDF_ALL, &flags);
-        
-        if (bsdfPdf == 0 || f.IsBlack()) {
-            break;
-        }
-        f *= absDot(wi, isect.shading.normal);
-
-        specularBounce = (flags & BSDF_SPECULAR) != 0;
-        
-        if ((flags & BSDF_TRANSMISSION)) {
-            Float eta = bsdf->eta;
-            // 详见bxdf.hpp文件中SpecularTransmission的注释
-            etaScale *= (dot(wo, isect.normal) > 0) ? (eta * eta) : 1 / (eta * eta);
-        }
-        ray = isect.spawnRay(wi);
-        foundIntersection = scene.rayIntersect(ray, &isect);
-        Spectrum Li(0.f);
-        Float lightPdf = 0;
-        Float weight = 0;
-        
-        if (foundIntersection) {
-            if (light && !light->isDelta()) {
-                rcd.updateTarget(isect);
-                const Light * target = isect.shape->getAreaLight();
-                if (target == light) {
-                    Li = isect.Le(-wi);
-                    lightPdf = rcd.pdfDir() * pmf;
-                    weight = powerHeuristic(bsdfPdf, lightPdf);
-                    L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
-                }
-            }
+            specularBounce = false;
         } else {
-            Li = scene.evalEnvironment(ray, &lightPdf, distrib);
-            weight = powerHeuristic(bsdfPdf, lightPdf);
-            L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+            // 采样点落在表面上
+            if (bounces == 0 || specularBounce) {
+                if (foundIntersection) {
+                    L += throughput * isect.Le(-ray.dir);
+                } else {
+                    for (const auto &light : scene.infiniteLights) {
+                        L += throughput * light->Le(ray);
+                    }
+                }
+            }
+
+            if (!foundIntersection || bounces >= _maxDepth) {
+                break;
+            }
+
+            isect.computeScatteringFunctions(ray, arena);
+            if (!isect.bsdf) {
+                ray = isect.spawnRay(ray.dir, true);
+                foundIntersection = scene.rayIntersect(ray, &isect);
+                --bounces;
+                continue;
+            }
+
+            BSDF * bsdf = isect.bsdf;
+            
+            // 采样光源
+            const Distribution1D * distrib = _lightDistribution->lookup(isect.pos);
+            DirectSamplingRecord rcd(isect);
+            const Light * light = nullptr;
+            Float pmf = 0;
+            
+            if (bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
+                Spectrum Ld = scene.sampleLightDirect(&rcd, sampler.get2D(), distrib, &pmf);
+                light = static_cast<const Light *>(rcd.object);
+                if (!Ld.IsBlack()) {
+                    Spectrum bsdfVal = bsdf->f(isect.wo, rcd.dir());
+                    bsdfVal *= absDot(isect.shading.normal, rcd.dir());
+
+                    if (!bsdfVal.IsBlack()) {
+                        Float bsdfPdf = light->isDelta() ? 0 : bsdf->pdfDir(isect.wo, rcd.dir());
+                        Float lightPdf = rcd.pdfDir() * pmf;
+                        Float weight = bsdfPdf == 0 ? 1 : powerHeuristic(lightPdf, bsdfPdf);
+                        L += throughput * weight * bsdfVal * Ld / lightPdf;
+                    }
+                }
+            }
+
+            // 采样bsdf
+            Vector3f wo = -ray.dir;
+            Vector3f wi;
+            Float bsdfPdf;
+            BxDFType flags;
+            Spectrum f = bsdf->sample_f(wo, &wi, sampler.get2D(),
+                                        &bsdfPdf, BSDF_ALL, &flags);
+            
+            if (bsdfPdf == 0 || f.IsBlack()) {
+                break;
+            }
+            f *= absDot(wi, isect.shading.normal);
+
+            specularBounce = (flags & BSDF_SPECULAR) != 0;
+            
+            if ((flags & BSDF_TRANSMISSION)) {
+                Float eta = bsdf->eta;
+                // 详见bxdf.hpp文件中SpecularTransmission的注释
+                etaScale *= (dot(wo, isect.normal) > 0) ? (eta * eta) : 1 / (eta * eta);
+            }
+            ray = isect.spawnRay(wi);
+            Spectrum tr(1.f);
+            foundIntersection = scene.rayIntersectTr(ray, sampler, &isect, &tr);
+            Spectrum Li(0.f);
+            Float lightPdf = 0;
+            Float weight = 0;
+            
+            if (foundIntersection) {
+                if (light && !light->isDelta()) {
+                    rcd.updateTarget(isect);
+                    const Light * target = isect.shape->getAreaLight();
+                    if (target == light) {
+                        Li = isect.Le(-wi) * tr;
+                        lightPdf = rcd.pdfDir() * pmf;
+                        weight = powerHeuristic(bsdfPdf, lightPdf);
+                        L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+                    }
+                }
+            } else {
+                Li = scene.evalEnvironment(ray, &lightPdf, distrib);
+                weight = powerHeuristic(bsdfPdf, lightPdf);
+                L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+            }
+            throughput *= f / bsdfPdf;
         }
-        
-        throughput *= f / bsdfPdf;
 
         Spectrum rrThroughput = throughput * etaScale;
         Float mp = rrThroughput.MaxComponentValue();

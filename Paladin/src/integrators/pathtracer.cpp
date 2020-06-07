@@ -92,11 +92,11 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             if (!Ld.IsBlack()) {
                 Spectrum bsdfVal = bsdf->f(isect.wo, rcd.dir());
                 bsdfVal *= absDot(isect.shading.normal, rcd.dir());
-
                 if (!bsdfVal.IsBlack()) {
                     Float bsdfPdf = light->isDelta() ? 0 : bsdf->pdfDir(isect.wo, rcd.dir());
-                    Float weight = bsdfPdf == 0 ? 1 : powerHeuristic(rcd.pdfDir(), bsdfPdf);
-                    L += throughput * weight * bsdfVal * Ld / (rcd.pdfDir() * pmf);
+                    Float lightPdf = rcd.pdfDir() * pmf;
+                    Float weight = bsdfPdf == 0 ? 1 : powerHeuristic(lightPdf, bsdfPdf);
+                    L += throughput * weight * bsdfVal * Ld / (lightPdf);
                 }
             }
         }
