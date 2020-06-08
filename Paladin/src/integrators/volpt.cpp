@@ -47,6 +47,70 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
 
     Float etaScale = 1;
 
+    for (bounces = 0; ; ++bounces) {
+        
+        SurfaceInteraction isect;
+        bool foundIntersection = scene.rayIntersect(ray, &isect);
+        
+        MediumInteraction mi;
+        if (ray.medium) {
+            throughput *= ray.medium->sample(ray, sampler, arena, &mi);
+        }
+        
+        if (throughput.IsBlack()) {
+            break;
+        }
+        
+        if (mi.isValid()) {
+            if (bounces >= _maxDepth) {
+                break;
+            }
+            const Distribution1D *lightDistrib = _lightDistribution->lookup(mi.pos);
+            DirectSamplingRecord rcd(mi);
+            
+            // 采样光源
+            const Light * light = nullptr;
+            Float pmf = 0;
+            Spectrum Ld = scene.sampleLightDirect(&rcd, sampler.get2D(), lightDistrib, &pmf);
+            light = static_cast<const Light *>(rcd.object);
+            
+            if (!Ld.IsBlack()) {
+                Float phasePdf = mi.phase->p(mi.wo, rcd.dir());
+                Spectrum phaseVal(phasePdf);
+                
+                if (phasePdf != 0) {
+                    Spectrum tr = rcd.Tr(scene, sampler);
+                    Ld *= tr;
+                    Float lightPdf = rcd.pdfDir() * pmf;
+                    Float weight = powerHeuristic(lightPdf, phasePdf);
+                    L += throughput * phaseVal * Ld / lightPdf;
+                }
+            }
+            
+            // 采样phase函数
+            Vector3f wi;
+            Float phasePdf = mi.phase->sample_p(mi.wo, &wi, sampler.get2D());
+            Spectrum phaseVal(phasePdf);
+            ray = mi.spawnRay(wi);
+            Spectrum Tr(1.f);
+            Spectrum Li;
+            
+            bool onSurface = scene.rayIntersectTr(ray, sampler, &isect, &Tr);
+            if (onSurface) {
+                if (light && !light->isDelta()) {
+                    const Light * targetLight = isect.shape->getAreaLight();
+                    if (targetLight == light) {
+                        Spectrum Le = isect.Le(-wi);
+                        Li = Le * Tr;
+                        Float lightPdf = pmf * rcd.pdfDir();
+                        Float weight = powerHeuristic(phasePdf, lightPdf);
+                        L += throughput * Li * phaseVal * weight / phasePdf;
+                    }
+                }
+            }
+        }
+    }
+    
     SurfaceInteraction isect;
     bool foundIntersection = scene.rayIntersect(ray, &isect);
 
@@ -85,10 +149,11 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
                 Spectrum phaseVal(phasePdf);
                 
                 if (phasePdf != 0) {
-                    Ld *= rcd.Tr(scene, sampler);
+                    Spectrum tr = rcd.Tr(scene, sampler);
+                    Ld *= tr;
                     Float lightPdf = rcd.pdfDir() * pmf;
                     Float weight = powerHeuristic(lightPdf, phasePdf);
-                    L += throughput * phaseVal * Ld * weight / lightPdf;
+                    L += throughput * phaseVal * Ld / lightPdf;
                 }
             }
             

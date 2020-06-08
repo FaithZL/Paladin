@@ -37,6 +37,13 @@ protected:
     EMeasure measure;
     
     Float _pdfPos;
+    
+public:
+    
+    Float time;
+    
+    const CObject * object;
+    
 public:
     
     inline const Point3f &pos() const {
@@ -58,10 +65,6 @@ public:
     inline void setPdfPos(Float pdf) {
         _pdfPos = pdf;
     }
-    
-    Float time;
-    
-    const CObject * object;
     
     void updateSurface(const SurfaceInteraction &si);
     
@@ -115,6 +118,7 @@ struct DirectionSamplingRecord {
 };
 
 struct DirectSamplingRecord : public PositionSamplingRecord {
+    
 private:
     
     const Point3f _ref;
@@ -129,6 +133,9 @@ private:
     Float _pdfDir;
     
 public:
+    
+    const Medium * refInside;
+    const Medium * refOutside;
     
     inline const Point3f &ref() const {
         return _ref;
