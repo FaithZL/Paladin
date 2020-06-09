@@ -156,7 +156,7 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
 	    	}
     	}
     }
-
+    return Ld;
     // 对bsdf进行随机采样
     if (!light.isDelta()) {
     	Spectrum f;

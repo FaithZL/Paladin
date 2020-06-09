@@ -444,7 +444,7 @@
         }
     ],
     "integrator" : {
-        "type" : "volpt",
+        "type" : "pt",
         "param" : {
             "maxBounce" : 10,
             "rrThreshold" : 1,
@@ -452,9 +452,9 @@
         }
     },
     "sampler" : {
-        "type" : "random",
+        "type" : "halton",
         "param" : {
-            "spp" : 8
+            "spp" : 1
         }
     },
     "camera" : {
@@ -476,7 +476,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "connellbox-fog-16spp.png",
+            "fileName" : "connellbox-8spp.png",
             "diagonal" : 1,
             "scale" : 1
         }

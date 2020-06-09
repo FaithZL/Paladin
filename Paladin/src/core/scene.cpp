@@ -97,6 +97,8 @@ Spectrum Scene::sampleOneLight(const Interaction &it, MemoryArena &arena,
                                          throughput, foundIntersect,
                                          &rcd,specular, lightDistrib,
                                          handleMedia);
+    *wi = rcd.dir();
+    *pdf = rcd.pdfDir();
     return dl / lightPdf;
 }
 
@@ -116,14 +118,17 @@ Spectrum Scene::estimateDirectLighting(const Interaction &it,
     Vector3f wi;
     Float scatteringPdf = 0;
     Spectrum scatterF;
+    
     // 采样光源
     Spectrum Li = light.sample_Li(rcd, sampler.get2D(), *this);
     wi = rcd->dir();
-    if (rcd->pdfDir() > 0 || ! Li.IsBlack()) {
+    lightPdf = rcd->pdfDir();
+    
+    if (rcd->pdfDir() > 0 && ! Li.IsBlack()) {
         if (it.isSurfaceInteraction()) {
             const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
             scatterF = isect.bsdf->f(isect.wo, wi, bsdfFlags) * absDot(wi, isect.shading.normal);
-            scatteringPdf = rcd->pdfDir();
+            scatteringPdf = isect.bsdf->pdfDir(isect.wo, wi);
         } else {
             const MediumInteraction &mi = (const MediumInteraction &)it;
             Float scatteringPdf = mi.phase->p(mi.wo, wi);
@@ -149,7 +154,8 @@ Spectrum Scene::estimateDirectLighting(const Interaction &it,
             }
         }
     }
-    
+
+    Li = Spectrum(0.f);
     // 对bsdf进行随机采样，向外返回wi,pdf，下次循环复用
     bool sampledSpecular = false;
     if (it.isSurfaceInteraction()) {
@@ -173,20 +179,19 @@ Spectrum Scene::estimateDirectLighting(const Interaction &it,
     *foundIntersect = handleMedia ?
                     rayIntersectTr(ray, sampler, &targetIsect, &tr):
                     rayIntersect(ray, &targetIsect);
-    
+
     if (*foundIntersect) {
         rcd->updateTarget(targetIsect);
     } else {
         rcd->updateTarget(wi, 0);
     }
-    
-    if (!scatterF.IsBlack() && scatteringPdf > 0) {
+    lightPdf = rcd->pdfDir();
+
+    if (!light.isDelta() && !scatterF.IsBlack() && scatteringPdf > 0) {
         Float weight = 1;
         if (!sampledSpecular) {
-            lightPdf = rcd->pdfDir();
             weight = powerHeuristic(scatteringPdf, lightPdf);
         }
-        
         if (*foundIntersect) {
             if (targetIsect.shape->getAreaLight() == &light) {
                 Li = targetIsect.Le(-wi);
@@ -195,7 +200,8 @@ Spectrum Scene::estimateDirectLighting(const Interaction &it,
             Li = light.Le(ray);
         }
         if (!Li.IsBlack()) {
-            Ld += Li * tr * scatterF * weight / scatteringPdf;
+            auto tmp = Li * tr * scatterF * weight / scatteringPdf;
+            Ld += tmp;
         }
     }
     

@@ -41,7 +41,7 @@ void PathTracer::preprocess(const Scene &scene, Sampler &sampler) {
 Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                          Sampler &sampler, MemoryArena &arena, int depth) const {
     
-//    return _Li(r, scene, sampler, arena, depth);
+    return _Li(r, scene, sampler, arena, depth);
     
     Spectrum L(0.0f);
     Spectrum throughput(1.0f);
@@ -206,8 +206,15 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
         const Distribution1D * distrib = _lightDistribution->lookup(isect.pos);
         // 找到非高光反射comp，如果有，则估计直接光照贡献
         if (isect.bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
-            Spectrum Ld = throughput * sampleOneLight(isect, scene, arena, sampler, _nLightSamples, false, distrib);
+            Spectrum Ld;
+//            Ld = throughput * sampleOneLight(isect, scene, arena, sampler, _nLightSamples, false, distrib);
 
+            Spectrum th;
+            bool spc, found;
+            Float pdf;
+            Vector3f wi;
+            Ld = throughput * scene.sampleOneLight(isect, arena, sampler, distrib, &found, &pdf, &spc, &th, &wi);
+            
             L += Ld;
         }
 
