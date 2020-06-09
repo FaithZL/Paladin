@@ -9,7 +9,8 @@
 #include "scene.hpp"
 #include "tools/embree_util.hpp"
 #include "shapes/mesh.hpp"
-
+#include "core/sampler.hpp"
+#include "materials/bxdfs/bsdf.hpp"
 
 PALADIN_BEGIN
 
@@ -70,6 +71,135 @@ Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
 //    auto r = light->sample_Li(Interaction(rcd->ref()), u, &wi, &pdf, &vis);
     auto r2 = light->sample_Li(rcd, u, *this);
     return r2;
+}
+
+Spectrum Scene::sampleOneLight(const Interaction &it, MemoryArena &arena,
+                               Sampler &sampler,
+                               const Distribution1D *lightDistrib,
+                               bool *foundIntersect, Float *pdf,
+                               bool *specular, Spectrum *throughput,
+                               Vector3f *wi, bool handleMedia) const {
+    int nLights = int(lights.size());
+    if (nLights == 0) {
+        return Spectrum(0.0f);
+    }
+    
+    int lightIndex;
+    // 用于储存选中的光源的概率密度函数值
+    Float lightPdf;
+    lightIndex = lightDistrib->sampleDiscrete(sampler.get1D(), &lightPdf);
+    if (lightPdf == 0) {
+        return Spectrum(0.0f);
+    }
+    const Light * light = lights[lightIndex].get();
+    DirectSamplingRecord rcd(it);
+    Spectrum dl = estimateDirectLighting(it, arena, sampler, *light,
+                                         throughput, foundIntersect,
+                                         &rcd,specular, lightDistrib,
+                                         handleMedia);
+    return dl / lightPdf;
+}
+
+Spectrum Scene::estimateDirectLighting(const Interaction &it,
+                                       MemoryArena &arena,
+                                       Sampler &sampler,
+                                       const Light &light,
+                                       Spectrum *throughput,
+                                       bool *foundIntersect,
+                                       DirectSamplingRecord *rcd,
+                                       bool *specular,
+                                       const Distribution1D *lightDistrib,
+                                       bool handleMedia) const {
+    BxDFType bsdfFlags = BSDF_ALL;
+    Spectrum Ld(0.0f);
+    Float lightPdf = 0;
+    Vector3f wi;
+    Float scatteringPdf = 0;
+    Spectrum scatterF;
+    // 采样光源
+    Spectrum Li = light.sample_Li(rcd, sampler.get2D(), *this);
+    wi = rcd->dir();
+    if (rcd->pdfDir() > 0 || ! Li.IsBlack()) {
+        if (it.isSurfaceInteraction()) {
+            const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
+            scatterF = isect.bsdf->f(isect.wo, wi, bsdfFlags) * absDot(wi, isect.shading.normal);
+            scatteringPdf = rcd->pdfDir();
+        } else {
+            const MediumInteraction &mi = (const MediumInteraction &)it;
+            Float scatteringPdf = mi.phase->p(mi.wo, wi);
+            scatterF = Spectrum(scatteringPdf);
+        }
+        if (!scatterF.IsBlack()) {
+            if (handleMedia) {
+                Spectrum tr = rcd->Tr(*this, sampler);
+                Li *= tr;
+            } else {
+                if (!rcd->unoccluded(*this)) {
+                    Li = Spectrum(0.f);
+                }
+            }
+            if (!Li.IsBlack()) {
+                // 如果是delta分布，直接计算辐射度
+                if (light.isDelta()) {
+                    Ld += scatterF * Li / lightPdf;
+                } else {
+                    Float weight = powerHeuristic(lightPdf, scatteringPdf);
+                    Ld += scatterF * Li * weight / lightPdf;
+                }
+            }
+        }
+    }
+    
+    // 对bsdf进行随机采样，向外返回wi,pdf，下次循环复用
+    bool sampledSpecular = false;
+    if (it.isSurfaceInteraction()) {
+        BxDFType sampledType;
+        const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
+        scatterF = isect.bsdf->sample_f(isect.wo, &wi, sampler.get2D(),
+                                        &scatteringPdf,
+                                        bsdfFlags, &sampledType);
+        scatterF *= absDot(wi, isect.shading.normal);
+        sampledSpecular = (sampledType & BSDF_SPECULAR) != 0;
+        *throughput *= scatterF / scatteringPdf;
+    } else {
+        const MediumInteraction &mi = (const MediumInteraction &)it;
+        scatteringPdf = mi.phase->sample_p(mi.wo, &wi, sampler.get2D());
+        scatterF = Spectrum(scatteringPdf);
+    }
+    *specular = sampledSpecular;
+    Ray ray = it.spawnRay(wi);
+    Spectrum tr(1.0);
+    SurfaceInteraction targetIsect;
+    *foundIntersect = handleMedia ?
+                    rayIntersectTr(ray, sampler, &targetIsect, &tr):
+                    rayIntersect(ray, &targetIsect);
+    
+    if (*foundIntersect) {
+        rcd->updateTarget(targetIsect);
+    } else {
+        rcd->updateTarget(wi, 0);
+    }
+    
+    if (!scatterF.IsBlack() && scatteringPdf > 0) {
+        Float weight = 1;
+        if (!sampledSpecular) {
+            lightPdf = rcd->pdfDir();
+            weight = powerHeuristic(scatteringPdf, lightPdf);
+        }
+        
+        if (*foundIntersect) {
+            if (targetIsect.shape->getAreaLight() == &light) {
+                Li = targetIsect.Le(-wi);
+            }
+        } else {
+            Li = light.Le(ray);
+        }
+        if (!Li.IsBlack()) {
+            Ld += Li * tr * scatterF * weight / scatteringPdf;
+        }
+    }
+    
+    return Ld;
 }
 
 bool Scene::rayIntersectEmbree(const Ray &ray, SurfaceInteraction *isect) const {

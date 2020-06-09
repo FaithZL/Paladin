@@ -20,59 +20,16 @@
     },
     "lights" : [
         {
-            "type" : "spot",
+            "type" : "pointLight",
             "enable" : false,
             "param" : {
                 "transform" : {
-                    "type" : "translate",
-                    "param" : [0,0.7,0]
+                    
                 },
                 "I" : {
                     "colorType" : 1,
-                    "color" : [5,5,5]
+                    "color" : [1,1,1]
                 }
-            }
-        },
-        {
-            "type" : "distant",
-            "enable" : false,
-            "param" : {
-                "transform" : {
-                    "type" : "translate",
-                    "param" : [1,0,1]
-                },
-                "L" : {
-                    "colorType" : 1,
-                    "color" : [1, 1, 1]
-                },
-                "wLight" : [1,1,-1]
-            }
-        },
-        {
-            "type" : "envmap",
-            "enable" : true,
-            "param" : {
-                "scale" : 1,
-                "L"     : [
-                    1,
-                    1,
-                    1
-                ],
-                "nSamples" : 1,
-                "transform" : [
-                    {
-                        "type" : "rotateX",
-                        "param" : [
-                            -90
-                        ]
-                    },
-                    {
-                        "type" : "rotateY",
-                        "param" : [
-                            0
-                        ]
-                    }
-                ]
             }
         }
     ],
@@ -155,6 +112,25 @@
                     "param" : {
                         "colorType" : 0,
                         "color" : [0,0,0]
+                    }
+                },
+                "sigma" : {
+                    "type" : "constant",
+                    "param" : 0
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
+                }
+            }
+        },
+        "image" : {
+            "type" : "matte",
+            "param" : {
+                "Kd" : {
+                    "type" : "image",
+                    "param" : {
+                        "fileName" : "res/HelloWorld.png"
                     }
                 },
                 "sigma" : {
@@ -257,6 +233,25 @@
         }
     },
     "shapes" : [
+        {
+            "type" : "sphere",
+            "enable" : false,
+            "param" : {
+                "transform" : [
+                    {
+                        "type" : "rotateX",
+                        "param" : [170]
+                    },
+                    {
+                        "type" : "translate",
+                        "param" : [0,-0.1,0]
+                    }
+                ],
+                "radius" : 0.3,
+                "phiMax" : 360
+            },
+            "material" : "glass"
+        },
         {
             "type" : "triMesh",
             "subType" : "quad",
@@ -361,7 +356,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "front",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -423,7 +418,7 @@
                 "y" : 1.2,
                 "z" : 0.6
             },
-            "material" : "mirror"
+            "material" : "matte1"
         },
         {
             "type" : "triMesh",
@@ -445,13 +440,13 @@
                 "y" : 0.6,
                 "z" : 0.6
             },
-            "material" : "mirror"
+            "material" : "matte1"
         }
     ],
     "integrator" : {
-        "type" : "pt",
+        "type" : "volpt",
         "param" : {
-            "maxBounce" : 13,
+            "maxBounce" : 10,
             "rrThreshold" : 1,
             "lightSampleStrategy" : "power"
         }
@@ -459,7 +454,7 @@
     "sampler" : {
         "type" : "random",
         "param" : {
-            "spp" : 16
+            "spp" : 8
         }
     },
     "camera" : {
@@ -481,7 +476,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "connellbox-8spp.png",
+            "fileName" : "connellbox-fog-16spp.png",
             "diagonal" : 1,
             "scale" : 1
         }
@@ -493,10 +488,10 @@
         }
     },
     "accelerator" : {
-        "type" : "embree",
+        "type" : "bvh",
         "param" : {
             "maxPrimsInNode" : 1,
-            "splitMethod" : "EqualCounts"
+            "splitMethod" : "SAH"
         }
     }
 }

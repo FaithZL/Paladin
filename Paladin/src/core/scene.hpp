@@ -88,6 +88,24 @@ public:
         return ret;
     }
     
+    Spectrum sampleOneLight(const Interaction &it,
+                            MemoryArena &arena,Sampler &sampler,
+                            const Distribution1D *lightDistrib,
+                            bool *foundIntersect, Float *pdf,
+                            bool *specular, Spectrum *throughput,
+                            Vector3f *wi, bool handleMedia = false) const;
+    
+    Spectrum estimateDirectLighting(const Interaction &it,
+                                    MemoryArena &arena,
+                                    Sampler &sampler,
+                                    const Light &light,
+                                    Spectrum *throughput,
+                                    bool *foundIntersect,
+                                    DirectSamplingRecord *rcd,
+                                    bool *specular,
+                                    const Distribution1D *lightDistrib,
+                                    bool handleMedia = false) const;
+    
     /**
      * 光线在场景中传播的函数
      * @param  ray     指定的光线对象
