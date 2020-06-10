@@ -171,9 +171,11 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
     int bounces;
 
     Float etaScale = 1;
+    SurfaceInteraction isect;
+//    bool foundIntersection = scene.rayIntersect(ray, &isect);
 
     for (bounces = 0;; ++bounces) {
-        SurfaceInteraction isect;
+//        SurfaceInteraction isect;
         bool foundIntersection = scene.rayIntersect(ray, &isect);
         // 如果当前ray是直接从相机发射，
         // 判断光线是否与场景几何图元相交
@@ -203,6 +205,11 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
             continue;
         }
 
+        
+        Vector3f wi;
+        Float pdf;
+        BxDFType flags;
+        Spectrum f;
         const Distribution1D * distrib = _lightDistribution->lookup(isect.pos);
         // 找到非高光反射comp，如果有，则估计直接光照贡献
         if (isect.bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
@@ -213,17 +220,18 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
             bool spc, found;
             Float pdf;
             Vector3f wi;
-            Ld = throughput * scene.sampleOneLight(isect, arena, sampler, distrib, &found, &pdf, &spc, &th, &wi);
+            
+            Ld = throughput * scene.sampleOneLight(isect, arena, sampler,
+                                                   distrib, &found, &pdf,
+                                                   &spc, &th, &f, &wi);
             
             L += Ld;
         }
 
         // 开始采样BSDF，生成wi方向，追踪更长的路径
         Vector3f wo = -ray.dir;
-        Vector3f wi;
-        Float pdf;
-        BxDFType flags;
-        Spectrum f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(), &pdf, BSDF_ALL, &flags);
+        
+        f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(), &pdf, BSDF_ALL, &flags);
 
         if (f.IsBlack() || pdf == 0.0f) {
             break;

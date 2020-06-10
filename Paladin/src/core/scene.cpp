@@ -78,6 +78,7 @@ Spectrum Scene::sampleOneLight(const Interaction &it, MemoryArena &arena,
                                const Distribution1D *lightDistrib,
                                bool *foundIntersect, Float *pdf,
                                bool *specular, Spectrum *throughput,
+                               Spectrum *scatterF,
                                Vector3f *wi, bool handleMedia) const {
     int nLights = int(lights.size());
     if (nLights == 0) {
@@ -95,7 +96,8 @@ Spectrum Scene::sampleOneLight(const Interaction &it, MemoryArena &arena,
     DirectSamplingRecord rcd(it);
     Spectrum dl = estimateDirectLighting(it, arena, sampler, *light,
                                          throughput, foundIntersect,
-                                         &rcd,specular, lightDistrib,
+                                         &rcd, scatterF,
+                                         specular, lightDistrib,
                                          handleMedia);
     *wi = rcd.dir();
     *pdf = rcd.pdfDir();
@@ -109,6 +111,7 @@ Spectrum Scene::estimateDirectLighting(const Interaction &it,
                                        Spectrum *throughput,
                                        bool *foundIntersect,
                                        DirectSamplingRecord *rcd,
+                                       Spectrum *f,
                                        bool *specular,
                                        const Distribution1D *lightDistrib,
                                        bool handleMedia) const {
@@ -176,6 +179,7 @@ Spectrum Scene::estimateDirectLighting(const Interaction &it,
     Ray ray = it.spawnRay(wi);
     Spectrum tr(1.0);
     SurfaceInteraction targetIsect;
+    *f = scatterF;
     *foundIntersect = handleMedia ?
                     rayIntersectTr(ray, sampler, &targetIsect, &tr):
                     rayIntersect(ray, &targetIsect);

@@ -93,6 +93,7 @@ public:
                             const Distribution1D *lightDistrib,
                             bool *foundIntersect, Float *pdf,
                             bool *specular, Spectrum *throughput,
+                            Spectrum *scatterF,
                             Vector3f *wi, bool handleMedia = false) const;
     
     Spectrum estimateDirectLighting(const Interaction &it,
@@ -102,6 +103,7 @@ public:
                                     Spectrum *throughput,
                                     bool *foundIntersect,
                                     DirectSamplingRecord *rcd,
+                                    Spectrum *scatterF,
                                     bool *specular,
                                     const Distribution1D *lightDistrib,
                                     bool handleMedia = false) const;
