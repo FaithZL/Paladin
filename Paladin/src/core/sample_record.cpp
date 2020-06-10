@@ -82,14 +82,6 @@ VisibilityTester DirectSamplingRecord::getVisibilityTester() const {
     return vis;
 }
 
-BSDFSamplingRecord::BSDFSamplingRecord(const SurfaceInteraction &si)
-: si(si),
-wo(si.wo),
-eta(0),
-wi(Vector3f()),
-sampleType(BxDFType::BSDF_NONE),
-mode(TransportMode::Radiance) {
-    
-}
+
 
 PALADIN_END

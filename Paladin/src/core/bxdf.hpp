@@ -273,6 +273,33 @@ inline Spectrum schlickFresnel(const Spectrum &R, Float cosTheta) {
 }
 
 
+struct ScatterSamplingRecord {
+    
+    ScatterSamplingRecord(const Interaction &it);
+    
+    F_INLINE bool isSpecular() const {
+        return (sampleType & BSDF_SPECULAR) != 0;;
+    }
+    
+    const Interaction &it;
+    
+    Vector3f wo;
+    
+    Float eta;
+    
+    Vector3f wi;
+    
+    Spectrum scatterF;
+    
+    Float pdf;
+    
+    BxDFType sampleType;
+    
+    TransportMode mode;
+    
+    Sampler * sampler;
+    
+};
 
 /**
  * BRDF(Bidirectional Reflectance Distribution Function)

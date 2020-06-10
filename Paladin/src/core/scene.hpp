@@ -15,6 +15,7 @@
 #include "tools/embree_util.hpp"
 #include "lights/envmap.hpp"
 #include "tools/stats.hpp"
+#include "bxdf.hpp"
 
 PALADIN_BEGIN
 
@@ -92,9 +93,24 @@ public:
                             MemoryArena &arena,Sampler &sampler,
                             const Distribution1D *lightDistrib,
                             bool *foundIntersect, Float *pdf,
-                            bool *specular, Spectrum *throughput,
+                            BxDFType *flags, Spectrum *throughput,
                             Spectrum *scatterF,
                             Vector3f *wi, bool handleMedia = false) const;
+    
+    Spectrum sampleOneLight(ScatterSamplingRecord *bsdfRcd,
+                            MemoryArena &arena,Sampler &sampler,
+                            const Distribution1D *lightDistrib,
+                            bool *foundIntersect,
+                            Spectrum * throughput,
+                            bool handleMedia = false);
+    
+    Spectrum estimateDirectLighting(ScatterSamplingRecord *bsdfRcd,
+                            MemoryArena &arena,Sampler &sampler,
+                            const Light &light,
+                            DirectSamplingRecord *rcd,
+                            bool *foundIntersect,
+                            Spectrum * throughput,
+                            bool handleMedia = false);
     
     Spectrum estimateDirectLighting(const Interaction &it,
                                     MemoryArena &arena,
@@ -104,7 +120,7 @@ public:
                                     bool *foundIntersect,
                                     DirectSamplingRecord *rcd,
                                     Spectrum *scatterF,
-                                    bool *specular,
+                                    BxDFType *flags,
                                     const Distribution1D *lightDistrib,
                                     bool handleMedia = false) const;
     

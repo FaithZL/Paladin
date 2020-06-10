@@ -14,7 +14,6 @@
 #include "core/interaction.hpp"
 #include "core/cobject.h"
 #include "tools/embree_util.hpp"
-#include "core/sample_record.hpp"
 
 PALADIN_BEGIN
 

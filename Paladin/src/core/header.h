@@ -450,6 +450,7 @@ inline int Log2Int(int64_t v) {
 #include "math/bounds.h"
 #include "tools/memory.hpp"
 #include "tools/errfloat.h"
+#include "core/spectrum.hpp"
 #include "core/sample_record.hpp"
 
 PALADIN_BEGIN
@@ -473,6 +474,30 @@ inline Vector3f sphericalDirection(Float sinTheta, Float cosTheta, Float phi,
                                      const Vector3f &z) {
     return sinTheta * std::cos(phi) * x + sinTheta * std::sin(phi) * y + cosTheta * z;
 }
+
+enum TransportMode {
+    Radiance,
+    Importance
+};
+
+/**
+ * 反射类型
+ * 一个bxdf的类型至少要有一个BSDF_REFLECTION 或 BSDF_TRANSMISSION
+ * 用于表明是投射还是反射
+ */
+enum BxDFType {
+    BSDF_NONE = 0,
+    BSDF_REFLECTION = 1 << 0,
+    BSDF_TRANSMISSION = 1 << 1,
+    BSDF_DIFFUSE = 1 << 2,
+    BSDF_GLOSSY = 1 << 3,
+    BSDF_SPECULAR = 1 << 4,
+    BSDF_ALL = BSDF_DIFFUSE
+            | BSDF_GLOSSY
+            | BSDF_SPECULAR
+            | BSDF_REFLECTION
+            | BSDF_TRANSMISSION,
+};
 
 PALADIN_END
 

@@ -201,49 +201,7 @@ public:
     DirectSamplingRecord(const Interaction &refIt,const SurfaceInteraction &targetSi,  EMeasure measure = ESolidAngle);
 };
 
-enum class TransportMode {
-    Radiance,
-    Importance
-};
 
-/**
- * 反射类型
- * 一个bxdf的类型至少要有一个BSDF_REFLECTION 或 BSDF_TRANSMISSION
- * 用于表明是投射还是反射
- */
-enum BxDFType {
-    BSDF_NONE = 0,
-    BSDF_REFLECTION = 1 << 0,
-    BSDF_TRANSMISSION = 1 << 1,
-    BSDF_DIFFUSE = 1 << 2,
-    BSDF_GLOSSY = 1 << 3,
-    BSDF_SPECULAR = 1 << 4,
-    BSDF_ALL = BSDF_DIFFUSE
-            | BSDF_GLOSSY
-            | BSDF_SPECULAR
-            | BSDF_REFLECTION
-            | BSDF_TRANSMISSION,
-};
-
-struct BSDFSamplingRecord {
-    
-    BSDFSamplingRecord(const SurfaceInteraction &si);
-    
-    const SurfaceInteraction &si;
-    
-    Vector3f wo;
-    
-    Float eta;
-    
-    Vector3f wi;
-    
-    BxDFType sampleType;
-    
-    TransportMode mode;
-    
-    Sampler * sampler;
-    
-};
 
 PALADIN_END
 

@@ -172,11 +172,10 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
 
     Float etaScale = 1;
     SurfaceInteraction isect;
-//    bool foundIntersection = scene.rayIntersect(ray, &isect);
+    bool foundIntersection = scene.rayIntersect(ray, &isect);
 
     for (bounces = 0;; ++bounces) {
-//        SurfaceInteraction isect;
-        bool foundIntersection = scene.rayIntersect(ray, &isect);
+        
         // 如果当前ray是直接从相机发射，
         // 判断光线是否与场景几何图元相交
         if (bounces == 0 || specularBounce) {
@@ -196,17 +195,16 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
         }
 
         isect.computeScatteringFunctions(ray, arena, true);
-        // 如果没有bsdf，则不计算反射次数
-        // 有些几何图元是仅仅是为了限定参与介质的范围
-        // 所以没有bsdf
+
         if (!isect.bsdf) {
             ray = isect.spawnRay(ray.dir);
             --bounces;
+            foundIntersection = scene.rayIntersect(ray, &isect);
             continue;
         }
 
-        
         Vector3f wi;
+        Vector3f wo = -ray.dir;
         Float pdf;
         BxDFType flags;
         Spectrum f;
@@ -214,35 +212,19 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
         // 找到非高光反射comp，如果有，则估计直接光照贡献
         if (isect.bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
             Spectrum Ld;
-//            Ld = throughput * sampleOneLight(isect, scene, arena, sampler, _nLightSamples, false, distrib);
 
-            Spectrum th;
-            bool spc, found;
-            Float pdf;
-            Vector3f wi;
-            
-            Ld = throughput * scene.sampleOneLight(isect, arena, sampler,
-                                                   distrib, &found, &pdf,
-                                                   &spc, &th, &f, &wi);
+            Spectrum tmpThroughput = throughput;
+            Ld = tmpThroughput * scene.sampleOneLight(isect, arena, sampler,
+                                                   distrib, &foundIntersection, &pdf,
+                                                   &flags, &throughput, &f, &wi);
             
             L += Ld;
         }
 
-        // 开始采样BSDF，生成wi方向，追踪更长的路径
-        Vector3f wo = -ray.dir;
-        
-        f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(), &pdf, BSDF_ALL, &flags);
-
         if (f.IsBlack() || pdf == 0.0f) {
             break;
         }
-        /**
-         * 复用之前的路径对吞吐量进行累积
-         *      f(pj+1 → pj → pj-1) |cosθj|
-         *    --------------------------------
-         *             pω(pj+1 - pj)
-         */
-        throughput *= f * absDot(wi, isect.shading.normal) / pdf;
+
         CHECK_GE(throughput.y(), 0.0f);
         DCHECK(!std::isinf(throughput.y()));
         specularBounce = (flags & BSDF_SPECULAR) != 0;
@@ -254,9 +236,11 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
         }
 
         ray = isect.spawnRay(wi);
+        
         if (isect.bssrdf && (flags & BSDF_TRANSMISSION)) {
             // todo 处理bssrdf
         }
+        
         // 为何不直接使用throughput，包含的是radiance，radiance是经过折射缩放的
         // 但rrThroughput没有经过折射缩放，包含的是power，我们需要根据能量去筛选路径
         Spectrum rrThroughput = throughput * etaScale;

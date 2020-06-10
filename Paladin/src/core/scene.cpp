@@ -73,11 +73,35 @@ Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
     return r2;
 }
 
+Spectrum Scene::sampleOneLight(ScatterSamplingRecord *bsdfRcd,
+                               MemoryArena &arena, Sampler &sampler,
+                               const Distribution1D *lightDistrib,
+                               bool *foundIntersect, Spectrum *throughput,
+                               bool handleMedia) {
+    int nLights = int(lights.size());
+    if (nLights == 0) {
+        return Spectrum(0.0f);
+    }
+    
+    int lightIndex;
+    // 用于储存选中的光源的概率密度函数值
+    Float lightPdf;
+    lightIndex = lightDistrib->sampleDiscrete(sampler.get1D(), &lightPdf);
+    if (lightPdf == 0) {
+        return Spectrum(0.0f);
+    }
+    const Light * light = lights[lightIndex].get();
+    DirectSamplingRecord rcd(bsdfRcd->it);
+    Spectrum dl = estimateDirectLighting(bsdfRcd, arena, sampler, *light,
+                                         &rcd, foundIntersect, throughput);
+    return dl / lightPdf;
+}
+
 Spectrum Scene::sampleOneLight(const Interaction &it, MemoryArena &arena,
                                Sampler &sampler,
                                const Distribution1D *lightDistrib,
                                bool *foundIntersect, Float *pdf,
-                               bool *specular, Spectrum *throughput,
+                               BxDFType *flags, Spectrum *throughput,
                                Spectrum *scatterF,
                                Vector3f *wi, bool handleMedia) const {
     int nLights = int(lights.size());
@@ -97,11 +121,19 @@ Spectrum Scene::sampleOneLight(const Interaction &it, MemoryArena &arena,
     Spectrum dl = estimateDirectLighting(it, arena, sampler, *light,
                                          throughput, foundIntersect,
                                          &rcd, scatterF,
-                                         specular, lightDistrib,
+                                         flags, lightDistrib,
                                          handleMedia);
     *wi = rcd.dir();
     *pdf = rcd.pdfDir();
     return dl / lightPdf;
+}
+
+Spectrum Scene::estimateDirectLighting(ScatterSamplingRecord *bsdfRcd,
+                                       MemoryArena &arena, Sampler &sampler,
+                                       const Light &light, DirectSamplingRecord *rcd,
+                                       bool *foundIntersect, Spectrum *throughput,
+                                       bool handleMedia) {
+    
 }
 
 Spectrum Scene::estimateDirectLighting(const Interaction &it,
@@ -112,7 +144,7 @@ Spectrum Scene::estimateDirectLighting(const Interaction &it,
                                        bool *foundIntersect,
                                        DirectSamplingRecord *rcd,
                                        Spectrum *f,
-                                       bool *specular,
+                                       BxDFType *flags,
                                        const Distribution1D *lightDistrib,
                                        bool handleMedia) const {
     BxDFType bsdfFlags = BSDF_ALL;
@@ -161,8 +193,8 @@ Spectrum Scene::estimateDirectLighting(const Interaction &it,
     Li = Spectrum(0.f);
     // 对bsdf进行随机采样，向外返回wi,pdf，下次循环复用
     bool sampledSpecular = false;
+    BxDFType sampledType;
     if (it.isSurfaceInteraction()) {
-        BxDFType sampledType;
         const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
         scatterF = isect.bsdf->sample_f(isect.wo, &wi, sampler.get2D(),
                                         &scatteringPdf,
@@ -175,7 +207,8 @@ Spectrum Scene::estimateDirectLighting(const Interaction &it,
         scatteringPdf = mi.phase->sample_p(mi.wo, &wi, sampler.get2D());
         scatterF = Spectrum(scatteringPdf);
     }
-    *specular = sampledSpecular;
+    
+    *flags = sampledType;
     Ray ray = it.spawnRay(wi);
     Spectrum tr(1.0);
     SurfaceInteraction targetIsect;
