@@ -14,6 +14,8 @@
 #include "material.hpp"
 #include "math/sampling.hpp"
 #include "math/frame.hpp"
+#include "core/sampler.hpp"
+#include "interaction.hpp"
 
 PALADIN_BEGIN
 
@@ -275,13 +277,28 @@ inline Spectrum schlickFresnel(const Spectrum &R, Float cosTheta) {
 
 struct ScatterSamplingRecord {
     
-    ScatterSamplingRecord(const Interaction &it);
+    ScatterSamplingRecord(const Interaction &it,
+                          Sampler * sampler = nullptr);
     
     F_INLINE bool isSpecular() const {
         return (sampleType & BSDF_SPECULAR) != 0;;
     }
     
     const Interaction &it;
+    
+    F_INLINE void update(const Vector3f &w,
+                         const Spectrum &f,
+                         Float pdfIn,
+                         BxDFType flags,
+                         TransportMode m,
+                         Float e = 0) {
+        wi = w;
+        scatterF = f;
+        pdf = pdfIn;
+        sampleType = flags;
+        mode = m;
+        eta = e;
+    }
     
     Vector3f wo;
     
@@ -299,6 +316,7 @@ struct ScatterSamplingRecord {
     
     Sampler * sampler;
     
+    SurfaceInteraction nextIsect;
 };
 
 /**

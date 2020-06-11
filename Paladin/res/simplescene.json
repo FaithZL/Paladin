@@ -446,7 +446,7 @@
     "integrator" : {
         "type" : "pt",
         "param" : {
-            "maxBounce" : 10,
+            "maxBounce" : 20,
             "rrThreshold" : 1,
             "lightSampleStrategy" : "power"
         }
@@ -454,7 +454,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 1
+            "spp" : 16
         }
     },
     "camera" : {

@@ -13,14 +13,15 @@
 
 PALADIN_BEGIN
 
-ScatterSamplingRecord::ScatterSamplingRecord(const Interaction &it)
+ScatterSamplingRecord::ScatterSamplingRecord(const Interaction &it,
+                                             Sampler * sampler)
 : it(it),
 wo(it.wo),
 eta(0),
 wi(Vector3f()),
 sampleType(BxDFType::BSDF_NONE),
 mode(TransportMode::Radiance),
-sampler(nullptr),
+sampler(sampler),
 scatterF(0.f) {
     
 }

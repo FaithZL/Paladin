@@ -89,40 +89,21 @@ public:
         return ret;
     }
     
-    Spectrum sampleOneLight(const Interaction &it,
-                            MemoryArena &arena,Sampler &sampler,
-                            const Distribution1D *lightDistrib,
-                            bool *foundIntersect, Float *pdf,
-                            BxDFType *flags, Spectrum *throughput,
-                            Spectrum *scatterF,
-                            Vector3f *wi, bool handleMedia = false) const;
-    
-    Spectrum sampleOneLight(ScatterSamplingRecord *bsdfRcd,
-                            MemoryArena &arena,Sampler &sampler,
+    Spectrum sampleOneLight(ScatterSamplingRecord *scatterRcd,
+                            MemoryArena &arena,
                             const Distribution1D *lightDistrib,
                             bool *foundIntersect,
                             Spectrum * throughput,
-                            bool handleMedia = false);
+                            bool handleMedia = false) const;
     
-    Spectrum estimateDirectLighting(ScatterSamplingRecord *bsdfRcd,
-                            MemoryArena &arena,Sampler &sampler,
+    Spectrum estimateDirectLighting(ScatterSamplingRecord *scatterRcd,
+                            MemoryArena &arena,
                             const Light &light,
                             DirectSamplingRecord *rcd,
                             bool *foundIntersect,
                             Spectrum * throughput,
-                            bool handleMedia = false);
+                            bool handleMedia = false) const;
     
-    Spectrum estimateDirectLighting(const Interaction &it,
-                                    MemoryArena &arena,
-                                    Sampler &sampler,
-                                    const Light &light,
-                                    Spectrum *throughput,
-                                    bool *foundIntersect,
-                                    DirectSamplingRecord *rcd,
-                                    Spectrum *scatterF,
-                                    BxDFType *flags,
-                                    const Distribution1D *lightDistrib,
-                                    bool handleMedia = false) const;
     
     /**
      * 光线在场景中传播的函数
