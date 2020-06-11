@@ -41,7 +41,9 @@ void PathTracer::preprocess(const Scene &scene, Sampler &sampler) {
 Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                          Sampler &sampler, MemoryArena &arena, int depth) const {
     
-    return _Li(r, scene, sampler, arena, depth);
+//    return _Li(r, scene, sampler, arena, depth);
+    
+//    return Li2(r, scene, sampler, arena, depth);
     
     Spectrum L(0.0f);
     Spectrum throughput(1.0f);
@@ -248,18 +250,20 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
         // 为何不直接使用throughput，包含的是radiance，radiance是经过折射缩放的
         // 但rrThroughput没有经过折射缩放，包含的是power，我们需要根据能量去筛选路径
         Spectrum rrThroughput = throughput * etaScale;
-        if (rrThroughput.MaxComponentValue() < _rrThreshold && bounces > 3) {
-            Float q = std::max((Float)0.05, 1 - rrThroughput.MaxComponentValue());
-            if (sampler.get1D() < q) {
+        Float mp = rrThroughput.MaxComponentValue();
+        if (mp < _rrThreshold && bounces > 3) {
+            Float q = std::min((Float)0.05, mp);
+            if (sampler.get1D() >= q) {
                 break;
             }
-            throughput /= 1 - q;
+            throughput /= q;
             DCHECK(!std::isinf(throughput.y()));
         }
     }
     Stats::getInstance()->addPathLen(bounces);
     return L;
 }
+
 
 USING_STD;
 

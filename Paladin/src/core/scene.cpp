@@ -133,10 +133,6 @@ Spectrum Scene::estimateDirectLighting(ScatterSamplingRecord *scatterRcd,
             if (handleMedia) {
                 Spectrum tr = rcd->Tr(*this, sampler);
                 Li *= tr;
-            } else {
-                if (!rcd->unoccluded(*this)) {
-                    Li = Spectrum(0.f);
-                }
             }
             if (!Li.IsBlack()) {
                 // 如果是delta分布，直接计算辐射度

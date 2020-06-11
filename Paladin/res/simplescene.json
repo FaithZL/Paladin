@@ -454,7 +454,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 16
+            "spp" : 2
         }
     },
     "camera" : {
