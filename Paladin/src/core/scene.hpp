@@ -44,19 +44,9 @@ public:
                                const Distribution1D * lightDistrib,
                                Float *pmf) const;
     
-    F_INLINE bool rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
-        Stats::getInstance()->addIntersectTestNum();
-        return _rtcScene ?
-            rayIntersectEmbree(ray, isect):
-            rayIntersectNative(ray, isect);
-    }
+    bool rayIntersect(const Ray &ray, SurfaceInteraction *isect) const;
     
-    F_INLINE bool rayOccluded(const Ray &ray) const {
-        Stats::getInstance()->addOccludedTestNum();
-        return _rtcScene ?
-            rayOccludedEmbree(ray):
-            rayOccludedNative(ray);
-    }
+    bool rayOccluded(const Ray &ray) const;
     
     F_INLINE bool rayIntersectNative(const Ray &ray, SurfaceInteraction *isect) const {
         return _aggregate->rayIntersect(ray, isect);

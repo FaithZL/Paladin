@@ -14,6 +14,10 @@
 
 PALADIN_BEGIN
 
+STAT_COUNTER("Intersections/Regular ray intersection tests",
+             nIntersectionTests);
+STAT_COUNTER("Intersections/Shadow ray intersection tests", nShadowTests);
+
 void Scene::initInfiniteLights() {
     for (auto i = 0; i < lights.size(); ++i) {
         auto &light = lights.at(i);
@@ -26,6 +30,18 @@ void Scene::initInfiniteLights() {
             _envIndex = i;
         }
     }
+}
+
+bool Scene::rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
+    return _rtcScene ?
+            rayIntersectEmbree(ray, isect):
+            rayIntersectNative(ray, isect);
+}
+
+bool Scene::rayOccluded(const Ray &ray) const {
+    return _rtcScene ?
+            rayOccludedEmbree(ray):
+            rayOccludedNative(ray);
 }
 
 bool Scene::rayIntersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,

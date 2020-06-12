@@ -143,6 +143,7 @@ static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
 	std::unique_lock<std::mutex> lock(workListMutex);
 	while (!shutdownThreads) {
 		if (reportWorkerStats) {
+            ReportThreadStats();
 			if (--reporterCount == 0) {
 				reportDoneCondition.notify_one();
 			}
@@ -228,7 +229,20 @@ void parallelCleanup() {
 }
 
 void mergeWorkerThreadStats() {
+    std::unique_lock<std::mutex> lock(workListMutex);
+    std::unique_lock<std::mutex> doneLock(reportDoneMutex);
+    // Set up state so that the worker threads will know that we would like
+    // them to report their thread-specific stats when they wake up.
+    reportWorkerStats = true;
+    reporterCount = threads.size();
 
+    // Wake up the worker threads.
+    workListCondition.notify_all();
+
+    // Wait for all of them to merge their stats.
+    reportDoneCondition.wait(lock, []() { return reporterCount == 0; });
+
+    reportWorkerStats = false;
 }
 
 PALADIN_END

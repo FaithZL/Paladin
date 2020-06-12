@@ -25,8 +25,6 @@ _nTriangles(vertexIndices.size() / 3),
 _nVertices(P->size()),
 _surfaceArea(0) {
     
-    Stats::getInstance()->addTriangle(_nTriangles);
-    
     _vertexIndice = vertexIndices;
     size_t size = P->size();
     _points.reset(new Point3f[size + 1]);
@@ -68,7 +66,6 @@ Mesh::Mesh(const Transform * objectToWorld,
 _nTriangles(indice.size() / 3),
 _nVertices(points.size() / 3),
 _surfaceArea(0) {
-    Stats::getInstance()->addTriangle(_nTriangles);
     
     size_t size = points.size() / 3;
     _points.reset(new Point3f[size + 1]);

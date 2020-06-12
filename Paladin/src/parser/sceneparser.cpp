@@ -75,8 +75,6 @@ void SceneParser::parse(const nloJson &data) {
     _scene.reset(scene);
     
     _integrator->render(*scene);
-    
-    afterRender();
 }
 
 void SceneParser::start() {
@@ -86,7 +84,8 @@ void SceneParser::start() {
 
 void SceneParser::end() {
     
-    
+    mergeWorkerThreadStats();
+    ReportThreadStats();
     PrintStats(stdout);
     ReportProfilerResults(stdout);
     ClearStats();

@@ -69,16 +69,6 @@ public:
         return _transformCache.at(key);
     }
     
-    void afterRender() const {
-        auto stats = Stats::getInstance();
-        auto nIntersect = stats->getIntersectTestNum();
-        auto nOccluded = stats->getOccludedTestNum();
-        cout << "ray intersect times is " << nIntersect / 1000000.f << " M" << endl;
-        cout << "ray occluded times is " << nOccluded / 1000000.f << " M" << endl;
-        cout << "max path length is " << stats->getMaxPathLen() << endl;
-        cout << "average path length is " << stats->getAveragePathLen() << endl;
-    }
-    
     MediumInterface getMediumInterface(const nloJson& data) {
         if (data.is_null() || data.size() == 0) {
             const Medium * inside = getGlobalMedium().get();

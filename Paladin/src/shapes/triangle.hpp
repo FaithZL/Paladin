@@ -16,6 +16,7 @@
 
 PALADIN_BEGIN
 
+
 struct IndexSet {
     IndexSet(int pos, int uv, int normal):
     uv(uv),

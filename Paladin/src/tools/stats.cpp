@@ -23,14 +23,6 @@
 
 PALADIN_BEGIN
 
-Stats * Stats::s_stats = nullptr;
-
-Stats * Stats::getInstance() {
-    if (s_stats == nullptr) {
-        s_stats = new Stats();
-    }
-    return s_stats;
-}
 
 // Statistics Local Variables
 std::vector<std::function<void(StatsAccumulator &)>> *StatRegisterer::funcs;
@@ -70,7 +62,11 @@ void StatRegisterer::CallCallbacks(StatsAccumulator &accum) {
     for (auto func : *funcs) func(accum);
 }
 
-void PrintStats(FILE *dest) { statsAccumulator.Print(dest); }
+void PrintStats(FILE *dest) {
+#ifdef PALADIN_HAVE_ITIMER
+    statsAccumulator.Print(dest);
+#endif  // PALADIN_HAVE_ITIMER
+}
 
 void ClearStats() { statsAccumulator.Clear(); }
 

@@ -9,6 +9,7 @@
 #include "math/sampling.hpp"
 #include "mesh.hpp"
 
+
 PALADIN_BEGIN
 
 Point3f TriangleI::sample(const Point3f *positions, const Normal3f *normals,
@@ -51,7 +52,6 @@ Point3f TriangleI::sample(const Point3f *positions, const Normal3f *normals,
 }
 
 bool TriangleI::rayOccluded(const Ray &ray, bool testAlphaTexture) const {
-    ProfilePhase _(Prof::TriIntersectP);
     Float u,v,t;
     bool ret = rayIntersect(parent->_points.get(), ray, &u, &v, &t);
     if (ret) {

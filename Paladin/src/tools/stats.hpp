@@ -18,79 +18,6 @@
 
 PALADIN_BEGIN
 
-class Stats {
-    
-public:
-    
-    Stats() {
-        _pathLenMax = 0;
-        _nIntersect = 0;
-        _nOccluded = 0;
-        _nTriangle = 0;
-        _pathNum = 0;
-        _totalPathLen = 0;
-        _pathLenMax = 0;
-    }
-    
-    static Stats * getInstance();
-    
-    inline uint64_t getTriangleNum() const {
-        return _nTriangle;
-    }
-    
-    inline void addTriangle(uint64_t num) {
-        _nTriangle += num;
-    }
-    
-    inline void addIntersectTestNum(uint64_t num = 1) {
-        _nIntersect += num;
-    }
-    
-    inline uint64_t getIntersectTestNum() const {
-        return _nIntersect;
-    }
-    
-    inline void addOccludedTestNum(uint64_t num = 1) {
-        _nOccluded += num;
-    }
-    
-    inline uint64_t getOccludedTestNum() const {
-        return _nOccluded;
-    }
-    
-    inline void addPathLen(uint64_t num) {
-        if (num > _pathLenMax) {
-            _pathLenMax = num;
-        }
-        _totalPathLen += num;
-        _pathNum += 1;
-    }
-    
-    inline Float getAveragePathLen() const {
-        return _totalPathLen / (Float)_pathNum;
-    }
-    
-    inline uint64_t getMaxPathLen() const {
-        return _pathLenMax;
-    }
-    
-private:
-    
-    std::atomic<uint64_t> _nIntersect;
-    
-    std::atomic<uint64_t> _nOccluded;
-    
-    std::atomic<uint64_t> _pathLenMax;
-    
-    std::atomic<uint64_t> _totalPathLen;
-    
-    std::atomic<uint64_t> _pathNum;
-    
-    uint64_t _nTriangle;
-    
-    static Stats * s_stats;
-};
-
 
 class StatsAccumulator;
 class StatRegisterer {
@@ -206,18 +133,18 @@ enum class Prof {
     BSSRDFSampling,
     PhaseFuncEvaluation,
     PhaseFuncSampling,
-    AccelIntersect,
-    AccelIntersectP,
+    AccelRayIntersect,
+    AccelRayOccluded,
     LightSample,
     LightPdf,
     MediumSample,
     MediumTr,
-    TriIntersect,
-    TriIntersectP,
-    CurveIntersect,
-    CurveIntersectP,
-    ShapeIntersect,
-    ShapeIntersectP,
+    TriRayIntersect,
+    TriRayOccluded,
+    CurveRayIntersect,
+    CurveRayOccluded,
+    ShapeRayIntersect,
+    ShapeRayOccluded,
     ComputeScatteringFuncs,
     GenerateCameraRay,
     MergeFilmTile,
@@ -242,7 +169,7 @@ static const char *ProfNames[] = {
     "Texture loading",
     "MIP map generation",
 
-    "Integrator::Render()",
+    "Integrator::render()",
     "SamplerIntegrator::Li()",
     "SPPM camera pass",
     "SPPM grid construction",
@@ -255,33 +182,33 @@ static const char *ProfNames[] = {
     "SpatialLightDistribution creation",
     "Direct lighting",
     "BSDF::f()",
-    "BSDF::Sample_f()",
-    "BSDF::PDF()",
+    "BSDF::sample_f()",
+    "BSDF::pdf()",
     "BSSRDF::f()",
-    "BSSRDF::Sample_f()",
+    "BSSRDF::sample_f()",
     "PhaseFunction::p()",
-    "PhaseFunction::Sample_p()",
-    "Accelerator::Intersect()",
-    "Accelerator::IntersectP()",
-    "Light::Sample_*()",
-    "Light::Pdf()",
-    "Medium::Sample()",
+    "PhaseFunction::sample_p()",
+    "Accelerator::rayIntersect()",
+    "Accelerator::rayOccluded()",
+    "Light::sample_*()",
+    "Light::pdf()",
+    "Medium::sample()",
     "Medium::Tr()",
-    "Triangle::Intersect()",
-    "Triangle::IntersectP()",
-    "Curve::Intersect()",
-    "Curve::IntersectP()",
-    "Other Shape::Intersect()",
-    "Other Shape::IntersectP()",
-    "Material::ComputeScatteringFunctions()",
-    "Camera::GenerateRay[Differential]()",
-    "Film::MergeTile()",
-    "Film::AddSplat()",
-    "Film::AddSample()",
-    "Sampler::StartPixelSample()",
-    "Sampler::GetSample[12]D()",
-    "MIPMap::Lookup() (trilinear)",
-    "MIPMap::Lookup() (EWA)",
+    "Triangle::rayIntersect()",
+    "Triangle::rayOccluded()",
+    "Curve::rayIntersect()",
+    "Curve::rayOccluded()",
+    "Other Shape::rayIntersect()",
+    "Other Shape::rayOccluded()",
+    "Material::computeScatteringFunctions()",
+    "Camera::generateRay[Differential]()",
+    "Film::mergeTile()",
+    "Film::addSplat()",
+    "Film::addSample()",
+    "Sampler::startPixelSample()",
+    "Sampler::getSample[12]D()",
+    "MIPMap::lookup() (trilinear)",
+    "MIPMap::lookup() (EWA)",
     "Ptex lookup",
 };
 
@@ -337,16 +264,16 @@ void CleanupProfiler();
     }                                                      \
     static StatRegisterer STATS_REG##var(STATS_FUNC##var)
 
-#ifndef PBRT_HAVE_CONSTEXPR
-#define STATS_INT64_T_MIN LLONG_MAX
-#define STATS_INT64_T_MAX _I64_MIN
-#define STATS_DBL_T_MIN DBL_MAX
-#define STATS_DBL_T_MAX -DBL_MAX
+#ifndef PALADIN_HAVE_CONSTEXPR
+    #define STATS_INT64_T_MIN LLONG_MAX
+    #define STATS_INT64_T_MAX _I64_MIN
+    #define STATS_DBL_T_MIN DBL_MAX
+    #define STATS_DBL_T_MAX -DBL_MAX
 #else
-#define STATS_INT64_T_MIN std::numeric_limits<int64_t>::max()
-#define STATS_INT64_T_MAX std::numeric_limits<int64_t>::lowest()
-#define STATS_DBL_T_MIN std::numeric_limits<double>::max()
-#define STATS_DBL_T_MAX std::numeric_limits<double>::lowest()
+    #define STATS_INT64_T_MIN std::numeric_limits<int64_t>::max()
+    #define STATS_INT64_T_MAX std::numeric_limits<int64_t>::lowest()
+    #define STATS_DBL_T_MIN std::numeric_limits<double>::max()
+    #define STATS_DBL_T_MAX std::numeric_limits<double>::lowest()
 #endif
 
 #define STAT_INT_DISTRIBUTION(title, var)                                  \

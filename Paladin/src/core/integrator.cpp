@@ -227,8 +227,6 @@ void MonteCarloIntegrator::render(const Scene &scene) {
     Point2i nTile((sampleExtent.x + tileSize - 1) / tileSize,
     			(sampleExtent.y + tileSize - 1) / tileSize);
     
-    outputSceneInfo(scene);
-    
     ProgressReporter reporter("rendering", nTile.x * nTile.y);
     auto renderTile = [&](Point2i tile, int threadIdx) {
     	// 内存池对象，预先申请一大段连续内存

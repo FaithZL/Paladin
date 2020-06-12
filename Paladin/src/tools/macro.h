@@ -16,9 +16,9 @@
 //#define OUTPUT_LINENO 1
 
 #ifdef OUTPUT_LINENO
-#define COUT std::cout << __FILE__ << " " << __LINE__ << std::endl
+    #define COUT std::cout << __FILE__ << " " << __LINE__ << std::endl
 #else
-#define COUT std::cout
+    #define COUT std::cout
 #endif
 
 #define USING_PALADIN using namespace paladin;
@@ -36,12 +36,6 @@
 #define PALADIN_HAVE_POSIX_MEMALIGN
 
 #define PALADIN_HAVE_CONSTEXPR
-
-#ifdef _MSC_VER
-    #define PALADIN_NO_INLINE __declspec(noinline)
-#else
-    #define PALADIN_NO_INLINE __attribute__((noinline))
-#endif
 
 #if defined(__GNUC__)
     #define F_INLINE                inline __attribute__((always_inline))
@@ -77,20 +71,20 @@
 #define PALADIN_HAVE_HEX_FP_CONSTANTS
 
 #ifndef PALADIN_HAVE_HEX_FP_CONSTANTS
-static const double DoubleOneMinusEpsilon = 0.99999999999999989;
-static const float FloatOneMinusEpsilon = 0.99999994;
+    static const double DoubleOneMinusEpsilon = 0.99999999999999989;
+    static const float FloatOneMinusEpsilon = 0.99999994;
 #elif _MSC_VER
-static const double DoubleOneMinusEpsilon = 0.99999999999999989;
-static const float FloatOneMinusEpsilon = 0.99999994;
+    static const double DoubleOneMinusEpsilon = 0.99999999999999989;
+    static const float FloatOneMinusEpsilon = 0.99999994;
 #else
-static const double DoubleOneMinusEpsilon = 0x1.fffffffffffffp-1;
-static const float FloatOneMinusEpsilon = 0x1.fffffep-1;
+    static const double DoubleOneMinusEpsilon = 0x1.fffffffffffffp-1;
+    static const float FloatOneMinusEpsilon = 0x1.fffffep-1;
 #endif
 
 #ifdef PALADIN_FLOAT_AS_DOUBLE
-static const Float OneMinusEpsilon = DoubleOneMinusEpsilon;
+    static const Float OneMinusEpsilon = DoubleOneMinusEpsilon;
 #else
-static const Float OneMinusEpsilon = FloatOneMinusEpsilon;
+    static const Float OneMinusEpsilon = FloatOneMinusEpsilon;
 #endif
 
 static CONSTEXPR Float MaxFloat = std::numeric_limits<Float>::max();
@@ -114,7 +108,14 @@ static CONSTEXPR Float Sqrt2 = 1.41421356237309504880;
 #define NotImplementedError(args) \
     throw std::runtime_error(StringPrintf("function %s not implemented\n", args));
 
-#define PALADIN_HAVE_ITIMER
+#define PALADIN_HAVE_ITIMER 1
+
+#ifdef PALADIN_HAVE_ITIMER
+    #define TRY_PROFILE(args) ProfilePhase __pp(args);
+#else
+    #define TRY_PROFILE(args) ;
+#endif
+
 
 #endif /* macro_h */
 

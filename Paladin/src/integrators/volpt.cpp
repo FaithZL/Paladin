@@ -215,8 +215,6 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
         }
     }
-    
-    Stats::getInstance()->addPathLen(bounces);
     return L;
 }
 
