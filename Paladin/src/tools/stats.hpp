@@ -290,7 +290,7 @@ static_assert((int)Prof::NumProfCategories ==
               "ProfNames[] array and Prof enumerant have different "
               "numbers of entries!");
 
-extern PBRT_THREAD_LOCAL uint64_t ProfilerState;
+extern THREAD_LOCAL uint64_t ProfilerState;
 inline uint64_t CurrentProfilerState() { return ProfilerState; }
 
 class ProfilePhase {
@@ -323,14 +323,14 @@ void CleanupProfiler();
 
 // Statistics Macros
 #define STAT_COUNTER(title, var)                           \
-    static PBRT_THREAD_LOCAL int64_t var;                  \
+    static THREAD_LOCAL int64_t var;                  \
     static void STATS_FUNC##var(StatsAccumulator &accum) { \
         accum.ReportCounter(title, var);                   \
         var = 0;                                           \
     }                                                      \
     static StatRegisterer STATS_REG##var(STATS_FUNC##var)
 #define STAT_MEMORY_COUNTER(title, var)                    \
-    static PBRT_THREAD_LOCAL int64_t var;                  \
+    static THREAD_LOCAL int64_t var;                  \
     static void STATS_FUNC##var(StatsAccumulator &accum) { \
         accum.ReportMemoryCounter(title, var);             \
         var = 0;                                           \
@@ -350,10 +350,10 @@ void CleanupProfiler();
 #endif
 
 #define STAT_INT_DISTRIBUTION(title, var)                                  \
-    static PBRT_THREAD_LOCAL int64_t var##sum;                             \
-    static PBRT_THREAD_LOCAL int64_t var##count;                           \
-    static PBRT_THREAD_LOCAL int64_t var##min = (STATS_INT64_T_MIN);       \
-    static PBRT_THREAD_LOCAL int64_t var##max = (STATS_INT64_T_MAX);       \
+    static THREAD_LOCAL int64_t var##sum;                             \
+    static THREAD_LOCAL int64_t var##count;                           \
+    static THREAD_LOCAL int64_t var##min = (STATS_INT64_T_MIN);       \
+    static THREAD_LOCAL int64_t var##max = (STATS_INT64_T_MAX);       \
     static void STATS_FUNC##var(StatsAccumulator &accum) {                 \
         accum.ReportIntDistribution(title, var##sum, var##count, var##min, \
                                     var##max);                             \
@@ -365,10 +365,10 @@ void CleanupProfiler();
     static StatRegisterer STATS_REG##var(STATS_FUNC##var)
 
 #define STAT_FLOAT_DISTRIBUTION(title, var)                                  \
-    static PBRT_THREAD_LOCAL double var##sum;                                \
-    static PBRT_THREAD_LOCAL int64_t var##count;                             \
-    static PBRT_THREAD_LOCAL double var##min = (STATS_DBL_T_MIN);            \
-    static PBRT_THREAD_LOCAL double var##max = (STATS_DBL_T_MAX);            \
+    static THREAD_LOCAL double var##sum;                                \
+    static THREAD_LOCAL int64_t var##count;                             \
+    static THREAD_LOCAL double var##min = (STATS_DBL_T_MIN);            \
+    static THREAD_LOCAL double var##max = (STATS_DBL_T_MAX);            \
     static void STATS_FUNC##var(StatsAccumulator &accum) {                   \
         accum.ReportFloatDistribution(title, var##sum, var##count, var##min, \
                                       var##max);                             \
@@ -388,7 +388,7 @@ void CleanupProfiler();
     } while (0)
 
 #define STAT_PERCENT(title, numVar, denomVar)                 \
-    static PBRT_THREAD_LOCAL int64_t numVar, denomVar;        \
+    static THREAD_LOCAL int64_t numVar, denomVar;        \
     static void STATS_FUNC##numVar(StatsAccumulator &accum) { \
         accum.ReportPercentage(title, numVar, denomVar);      \
         numVar = denomVar = 0;                                \
@@ -396,7 +396,7 @@ void CleanupProfiler();
     static StatRegisterer STATS_REG##numVar(STATS_FUNC##numVar)
 
 #define STAT_RATIO(title, numVar, denomVar)                   \
-    static PBRT_THREAD_LOCAL int64_t numVar, denomVar;        \
+    static THREAD_LOCAL int64_t numVar, denomVar;        \
     static void STATS_FUNC##numVar(StatsAccumulator &accum) { \
         accum.ReportRatio(title, numVar, denomVar);           \
         numVar = denomVar = 0;                                \

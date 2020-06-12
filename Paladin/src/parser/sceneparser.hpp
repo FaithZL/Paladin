@@ -22,15 +22,16 @@ class SceneParser {
     
 public:
     void loadFromJson(const std::string &fn) {
-//        try {
-            parse(createJsonFromFile(fn));
-//        } catch (const std::exception &exc) {
-//            cout << exc.what();
-//            return;
-//        }
+        start();
+        parse(createJsonFromFile(fn));
+        end();
     }
     
+    void start();
+    
     void parse(const nloJson &);
+    
+    void end();
     
     void parseShapes(const nloJson &);
     

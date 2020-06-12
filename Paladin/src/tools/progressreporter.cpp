@@ -15,14 +15,19 @@ _totalWork(total),
 _startTime(chrono::system_clock::now()) {
     _workDone = 0;
     _exitThread = false;
-    
+    SuspendProfiler();
     std::shared_ptr<Barrier> barrier = std::make_shared<Barrier>(2);
     _updateThread = std::thread([this, barrier]() {
+        ProfilerWorkerThreadInit();
+        ProfilerState = 0;
+        
         barrier->wait();
         printProgress();
     });
-
+    
     barrier->wait();
+    
+    ResumeProfiler();
 }
 
 ProgressReporter::~ProgressReporter() {

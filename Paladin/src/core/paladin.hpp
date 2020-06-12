@@ -20,7 +20,6 @@ public:
     void render(const std::string &fn) {
         _basePath = fn.substr(0, fn.find_last_of("/") + 1);
         _sceneParser.loadFromJson(fn);
-        parallelCleanup();
     }
     
     static Paladin * getInstance();

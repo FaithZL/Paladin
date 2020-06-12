@@ -130,6 +130,8 @@ void parallelFor2D(std::function<void(Point2i, int)> func, const Point2i &count)
 
 static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
 	ThreadIndex = tIndex;
+    
+    ProfilerWorkerThreadInit();
 
 	// 等待，最后一个子线程调用此函数之后，全部子线程同时开始往下执行
 	barrier->wait();

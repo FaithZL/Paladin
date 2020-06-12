@@ -109,10 +109,12 @@ static CONSTEXPR Float PiOver2 = 1.57079632679489661923;
 static CONSTEXPR Float PiOver4 = 0.78539816339744830961;
 static CONSTEXPR Float Sqrt2 = 1.41421356237309504880;
 
-#define PBRT_THREAD_LOCAL thread_local
+#define THREAD_LOCAL thread_local
 
 #define NotImplementedError(args) \
     throw std::runtime_error(StringPrintf("function %s not implemented\n", args));
+
+#define PALADIN_HAVE_ITIMER
 
 #endif /* macro_h */
 
