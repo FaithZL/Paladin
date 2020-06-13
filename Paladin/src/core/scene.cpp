@@ -33,12 +33,14 @@ void Scene::initInfiniteLights() {
 }
 
 bool Scene::rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
+    ++nIntersectionTests;
     return _rtcScene ?
             rayIntersectEmbree(ray, isect):
             rayIntersectNative(ray, isect);
 }
 
 bool Scene::rayOccluded(const Ray &ray) const {
+    ++nShadowTests;
     return _rtcScene ?
             rayOccludedEmbree(ray):
             rayOccludedNative(ray);

@@ -12,6 +12,8 @@
 
 PALADIN_BEGIN
 
+STAT_PERCENT("Intersections/Ray-triangle intersection tests", nHits, nTests);
+
 Point3f TriangleI::sample(const Point3f *positions, const Normal3f *normals,
                           const Point2f *texCoords, Normal3f * normal, Point2f * uv,
                           const Point2f &u) const {
@@ -199,9 +201,11 @@ bool TriangleI::fillSurfaceInteraction(const Ray &ray, const Vector2f &uv, Surfa
 bool TriangleI::rayIntersect(const Ray &ray,
                             SurfaceInteraction * isect,
                             bool testAlphaTexture) const {
+    ++nTests;
     Float u,v,t;
     bool ret = rayIntersect(parent->_points.get(), ray, &u, &v, &t);
     if (ret) {
+        ++nHits;
         ray.tMax = t;
         fillSurfaceInteraction(ray, Vector2f(u, v), isect);
     }

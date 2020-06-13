@@ -15,6 +15,8 @@
 
 PALADIN_BEGIN
 
+STAT_COUNTER("Integrator/Camera rays traced", nCameraRays);
+
 Spectrum uniformSampleAllLights(const Interaction &it, const Scene &scene,
                                 MemoryArena &arena, Sampler &sampler,
                                 const std::vector<int> &lightSamples,
@@ -156,7 +158,6 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
 	    	}
     	}
     }
-    return Ld;
     // 对bsdf进行随机采样
     if (!light.isDelta()) {
     	Spectrum f;
@@ -228,84 +229,88 @@ void MonteCarloIntegrator::render(const Scene &scene) {
     			(sampleExtent.y + tileSize - 1) / tileSize);
     
     ProgressReporter reporter("rendering", nTile.x * nTile.y);
-    auto renderTile = [&](Point2i tile, int threadIdx) {
-    	// 内存池对象，预先申请一大段连续内存
-    	// 之后所有内存全都通过arena分配
-    	MemoryArena arena;
-    	// 每个tile使用不同的随机种子，避免关联采样导致的artifact
-    	int seed = tile.y + nTile.x + tile.x;
-    	std::unique_ptr<Sampler> tileSampler = _sampler->clone(seed);
+    {
+        auto renderTile = [&](Point2i tile, int threadIdx) {
+                // 内存池对象，预先申请一大段连续内存
+                // 之后所有内存全都通过arena分配
+                MemoryArena arena;
+                // 每个tile使用不同的随机种子，避免关联采样导致的artifact
+                int seed = tile.y + nTile.x + tile.x;
+                std::unique_ptr<Sampler> tileSampler = _sampler->clone(seed);
 
-    	// 计算当前tile的起始点与结束点
-    	int x0 = samplerBounds.pMin.x + tile.x * tileSize;
-    	int x1 = std::min(x0 + tileSize, samplerBounds.pMax.x);
-    	int y0 = samplerBounds.pMin.y + tile.y * tileSize;
-    	int y1 = std::min(y0 + tileSize, samplerBounds.pMax.y);
-    	AABB2i tileBounds(Point2i(x0, y0), Point2i(x1, y1));
+                // 计算当前tile的起始点与结束点
+                int x0 = samplerBounds.pMin.x + tile.x * tileSize;
+                int x1 = std::min(x0 + tileSize, samplerBounds.pMax.x);
+                int y0 = samplerBounds.pMin.y + tile.y * tileSize;
+                int y1 = std::min(y0 + tileSize, samplerBounds.pMax.y);
+                AABB2i tileBounds(Point2i(x0, y0), Point2i(x1, y1));
 
-    	std::unique_ptr<FilmTile> filmTile = _camera->film->getFilmTile(tileBounds);
-        Float diffScale = 1 / std::sqrt((Float)tileSampler->samplesPerPixel);
-    	// tile范围内，逐像素计算辐射度
-    	for (Point2i pixel : tileBounds) {
+                std::unique_ptr<FilmTile> filmTile = _camera->film->getFilmTile(tileBounds);
+                Float diffScale = 1 / std::sqrt((Float)tileSampler->samplesPerPixel);
+                // tile范围内，逐像素计算辐射度
+                for (Point2i pixel : tileBounds) {
 
-    		tileSampler->startPixel(pixel);
+                    tileSampler->startPixel(pixel);
 
-    		if (!insideExclusive(pixel, _pixelBounds)) {
-    			continue;
-    		}
+                    if (!insideExclusive(pixel, _pixelBounds)) {
+                        continue;
+                    }
 
-    		do {
-    			// 循环单个像素，采样spp次
-    			CameraSample cameraSample = tileSampler->getCameraSample(pixel);
-//                CameraSample cameraSample = tileSampler->getCameraSample(pixel);
+                    do {
+                        // 循环单个像素，采样spp次
+                        CameraSample cameraSample = tileSampler->getCameraSample(pixel);
+        //                CameraSample cameraSample = tileSampler->getCameraSample(pixel);
 
-    			RayDifferential ray;
-    			Float rayWeight = _camera->generateRayDifferential(cameraSample, &ray);
+                        RayDifferential ray;
+                        Float rayWeight = _camera->generateRayDifferential(cameraSample, &ray);
+                        ++nCameraRays;
+                        ray.scaleDifferentials(diffScale);
 
-    			ray.scaleDifferentials(diffScale);
+                        Spectrum L(0.0f);
+                        if (rayWeight > 0) {
+                            L = Li(ray, scene, *tileSampler, arena);
+                        }
 
-    			Spectrum L(0.0f);
-    			if (rayWeight > 0) {
-    				L = Li(ray, scene, *tileSampler, arena);
-    			}
-
-    			if (L.HasNaNs()) {
-					COUT << StringPrintf(
-                            "Not-a-number radiance value returned "
-                            "for pixel (%d, %d), sample %d. Setting to black.",
-                            pixel.x, pixel.y,
-                            (int)tileSampler->currentSampleIndex());
-                    DCHECK(false);
-    				L = Spectrum(0.0f);
-    			} else if (L.y() < -1e-5) {
-    				COUT << StringPrintf(
-                            "Negative luminance value, %f, returned "
-                            "for pixel (%d, %d), sample %d. Setting to black.",
-                            L.y(), pixel.x, pixel.y,
-                            (int)tileSampler->currentSampleIndex());
-                    DCHECK(false);
-    				L = Spectrum(0.0f);
-    			} else if (std::isinf(L.y())) {
-					COUT << StringPrintf(
-                            "Infinite luminance value returned "
-                            "for pixel (%d, %d), sample %d. Setting to black.",
-                            pixel.x, pixel.y,
-                            (int)tileSampler->currentSampleIndex());
-                    DCHECK(false);
-    				L = Spectrum(0.0f);
-    			}
-                
-                // 将像素样本值与权重保存到pixel像素数据中
-    			filmTile->addSample(cameraSample.pFilm, L, rayWeight);
-//                filmTile->addSample2(pixel, L, rayWeight);
-                arena.reset();
-            } while (tileSampler->startNextSample());
-    	}
-        reporter.update();
-    	_camera->film->mergeFilmTile(std::move(filmTile));
-    };
-    parallelFor2D(renderTile, nTile);
-    reporter.done();
+                        if (L.HasNaNs()) {
+                            COUT << StringPrintf(
+                                    "Not-a-number radiance value returned "
+                                    "for pixel (%d, %d), sample %d. Setting to black.",
+                                    pixel.x, pixel.y,
+                                    (int)tileSampler->currentSampleIndex());
+                            DCHECK(false);
+                            L = Spectrum(0.0f);
+                        } else if (L.y() < -1e-5) {
+                            COUT << StringPrintf(
+                                    "Negative luminance value, %f, returned "
+                                    "for pixel (%d, %d), sample %d. Setting to black.",
+                                    L.y(), pixel.x, pixel.y,
+                                    (int)tileSampler->currentSampleIndex());
+                            DCHECK(false);
+                            L = Spectrum(0.0f);
+                        } else if (std::isinf(L.y())) {
+                            COUT << StringPrintf(
+                                    "Infinite luminance value returned "
+                                    "for pixel (%d, %d), sample %d. Setting to black.",
+                                    pixel.x, pixel.y,
+                                    (int)tileSampler->currentSampleIndex());
+                            DCHECK(false);
+                            L = Spectrum(0.0f);
+                        }
+                        
+                        // 将像素样本值与权重保存到pixel像素数据中
+                        filmTile->addSample(cameraSample.pFilm, L, rayWeight);
+        //                filmTile->addSample2(pixel, L, rayWeight);
+                        arena.reset();
+                    } while (tileSampler->startNextSample());
+                }
+                reporter.update();
+                _camera->film->mergeFilmTile(std::move(filmTile));
+            };
+        parallelFor2D(renderTile, nTile);
+        reporter.done();
+    }
+    
+    
     _camera->film->writeImage();
 }
 
