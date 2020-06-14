@@ -13,6 +13,8 @@
 
 PALADIN_BEGIN
 
+STAT_COUNTER("Scene/Triangle num", numTri);
+
 Mesh::Mesh(const Transform * objectToWorld,
                 const vector<IndexSet> &vertexIndices,
                 const vector<Point3f> *P,
@@ -205,6 +207,7 @@ void Mesh::computeWorldBound() {
         TriangleI tri = _triangles[i];
         _worldBound = unionSet(_worldBound, tri.worldBound(_points.get()));
     }
+    numTri += _triangles.size();
 }
 
 //"param" : {

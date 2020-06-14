@@ -63,6 +63,7 @@ faceIndex(faceIndex) {
 }
 
 void SurfaceInteraction::computeDifferentials(const RayDifferential &ray) const {
+    TRY_PROFILE(Prof::siComputeDifferentials)
     if (ray.hasDifferentials) {
         // 平面方程为 ax + by + cz = d
         // 法向量为n(a,b,c),平面上的点p(x,y,z)
@@ -156,6 +157,7 @@ void SurfaceInteraction::computeScatteringFunctions(const RayDifferential &ray,
                                                     MemoryArena &arena,
                                                     bool allowMultipleLobes,/* = false*/
                                                     TransportMode mode/* = TransportMode::Radiance*/) {
+    TRY_PROFILE(Prof::ComputeScatteringFuncs)
     computeDifferentials(ray);
     shape->computeScatteringFunctions(this, arena, mode, allowMultipleLobes);
 }

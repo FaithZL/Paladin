@@ -14,9 +14,9 @@
 
 PALADIN_BEGIN
 
-STAT_COUNTER("Intersections/Regular ray intersection tests",
-             nIntersectionTests);
-STAT_COUNTER("Intersections/Shadow ray intersection tests", nShadowTests);
+
+STAT_COUNTER("Scene/Finity lights", numFinityLights);
+STAT_COUNTER("Scene/Sky lights", numSkyLights);
 
 void Scene::initInfiniteLights() {
     for (auto i = 0; i < lights.size(); ++i) {
@@ -24,26 +24,14 @@ void Scene::initInfiniteLights() {
         light->preprocess(*this);
         if (light->flags & (int)LightFlags::Infinite) {
             infiniteLights.push_back(light);
+            ++numFinityLights;
         }
         if (light->flags & (int)LightFlags::Env) {
             _envmap = static_cast<EnvironmentMap *>(light.get());
+            ++numSkyLights;
             _envIndex = i;
         }
     }
-}
-
-bool Scene::rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
-    ++nIntersectionTests;
-    return _rtcScene ?
-            rayIntersectEmbree(ray, isect):
-            rayIntersectNative(ray, isect);
-}
-
-bool Scene::rayOccluded(const Ray &ray) const {
-    ++nShadowTests;
-    return _rtcScene ?
-            rayOccludedEmbree(ray):
-            rayOccludedNative(ray);
 }
 
 bool Scene::rayIntersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
@@ -79,6 +67,7 @@ void Scene::initAccel(const nloJson &data, const vector<shared_ptr<const Shape> 
 Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
                                   const Distribution1D *lightDistrib,
                                   Float *pmf) const {
+    TRY_PROFILE(Prof::sceneSampleLightDirect)
     Point2f u(_u);
     Float index = lightDistrib->sampleDiscrete(u.x, pmf, &u.x);
     const Light * light = lights.at(index).get();

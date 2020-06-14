@@ -80,6 +80,7 @@ void TriangleI::getUVs(Point2f uv[3]) const {
 }
 
 bool TriangleI::fillSurfaceInteraction(const Ray &ray, const Vector2f &uv, SurfaceInteraction *isect) const {
+    TRY_PROFILE(Prof::triFillSurfaceInteraction)
     Float b1 = uv.x;
     Float b2 = uv.y;
     Float b0 = 1.f - b1 - b2;

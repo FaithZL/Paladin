@@ -16,6 +16,7 @@
 
 PALADIN_BEGIN
 
+STAT_MEMORY_COUNTER("Memory/Triangle meshes", triMeshBytes);
 
 struct IndexSet {
     IndexSet(int pos, int uv, int normal):
@@ -53,7 +54,7 @@ struct TriangleI : Primitive {
     TriangleI(const IndexSet * p, const Mesh * mesh = nullptr)
     : indice(p),
     parent(mesh) {
-        
+        triMeshBytes += sizeof(*this);
     }
     
     virtual AABB3f worldBound() const;

@@ -14,6 +14,10 @@
 
 PALADIN_BEGIN
 
+STAT_MEMORY_COUNTER("Memory/TransformCache", transformCacheBytes);
+STAT_PERCENT("Scene/TransformCache hits", nTransformCacheHits, nTransformCacheLookups);
+STAT_INT_DISTRIBUTION("Scene/Probes per TransformCache lookup", transformCacheProbes);
+
 // 直接照搬了pbrt代码，搞完主线再回头搞搞
 class TransformCache {
 public:
@@ -24,7 +28,7 @@ public:
     }
 
     Transform *Lookup(const Transform &t) {
-
+        ++nTransformCacheLookups;
         int offset = Hash(t) & (hashTable.size() - 1);
         int step = 1;
         while (true) {
@@ -37,7 +41,7 @@ public:
         }
         Transform *tCached = hashTable[offset];
         if (tCached) {
-            volatile int a = 0;
+            ++nTransformCacheHits;
         } else {
             tCached = arena.alloc<Transform>();
             *tCached = t;
@@ -47,6 +51,7 @@ public:
     }
 
     void Clear() {
+        transformCacheBytes += arena.totalAllocated() + hashTable.size() * sizeof(Transform *);
         hashTable.clear();
         hashTable.resize(512);
         hashTableOccupancy = 0;
