@@ -43,7 +43,7 @@ void parallelFor(std::function<void(int64_t)> func, int64_t count, int chunkSize
         return;
 	}
 
-	ParallelForLoop loop(std::move(func), count, chunkSize, 0);
+	ParallelForLoop loop(std::move(func), count, chunkSize, CurrentProfilerState());
 	{
         std::lock_guard<std::mutex> lock(workListMutex);
         loop.next = workList;
@@ -67,11 +67,14 @@ void parallelFor(std::function<void(int64_t)> func, int64_t count, int chunkSize
     	lock.unlock();
 		// 执行[indexStart, indexEnd)区间内的索引
 		for (int64_t index = indexStart; index < indexEnd; ++index) {
+            uint64_t oldState = ProfilerState;
+            ProfilerState = loop.profilerState;
 			if (loop.func1D) {
 				loop.func1D(index);
 			} else {
 				loop.func2D(Point2i(index % loop.numX, index / loop.numX), 0);
 			}
+            ProfilerState = oldState;
 		}
 		lock.lock();
 		--loop.activeWorkers;    	
@@ -90,7 +93,7 @@ void parallelFor2D(std::function<void(Point2i, int)> func, const Point2i &count)
 		return;
 	}
 
-	ParallelForLoop loop(std::move(func), count, 0);
+	ParallelForLoop loop(std::move(func), count, CurrentProfilerState());
 	{
         std::lock_guard<std::mutex> lock(workListMutex);
         loop.next = workList;
@@ -117,11 +120,14 @@ void parallelFor2D(std::function<void(Point2i, int)> func, const Point2i &count)
     	lock.unlock();
 		// 执行[indexStart, indexEnd)区间内的索引
 		for (int64_t index = indexStart; index < indexEnd; ++index) {
+            uint64_t oldState = ProfilerState;
+            ProfilerState = loop.profilerState;
 			if (loop.func1D) {
 				loop.func1D(index);
 			} else {
 				loop.func2D(Point2i(index % loop.numX, index / loop.numX), 0);
 			}
+            ProfilerState = oldState;
 		}
 		lock.lock();
 		--loop.activeWorkers;    	
@@ -168,11 +174,14 @@ static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
 			lock.unlock();
 			// 执行[indexStart, indexEnd)区间内的索引
 			for (int64_t index = indexStart; index < indexEnd; ++index) {
+                uint64_t oldState = ProfilerState;
+                ProfilerState = loop.profilerState;
 				if (loop.func1D) {
 					loop.func1D(index);
 				} else {
 					loop.func2D(Point2i(index % loop.numX, index / loop.numX), ThreadIndex);
 				}
+                ProfilerState = oldState;
 			}
 			lock.lock();
 			--loop.activeWorkers;

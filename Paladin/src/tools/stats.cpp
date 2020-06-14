@@ -59,7 +59,8 @@ void ReportThreadStats() {
 }
 
 void StatRegisterer::CallCallbacks(StatsAccumulator &accum) {
-    for (auto func : *funcs) func(accum);
+    for (auto func : *funcs)
+        func(accum);
 }
 
 void PrintStats(FILE *dest) {
@@ -68,7 +69,9 @@ void PrintStats(FILE *dest) {
 #endif  // PALADIN_HAVE_ITIMER
 }
 
-void ClearStats() { statsAccumulator.Clear(); }
+void ClearStats() {
+    statsAccumulator.Clear();
+}
 
 static void getCategoryAndTitle(const std::string &str, std::string *category,
                                 std::string *title) {
