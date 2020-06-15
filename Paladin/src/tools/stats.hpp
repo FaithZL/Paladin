@@ -115,7 +115,7 @@ enum class Prof {
     MIPMapCreation,
 
     IntegratorRender,
-    SamplerIntegratorLi,
+    MonteCarloIntegratorLi,
     SPPMCameraPass,
     SPPMGridConstruction,
     SPPMPhotonPass,
@@ -152,6 +152,7 @@ enum class Prof {
     GenerateCameraRay,
     triFillSurfaceInteraction,
     siComputeDifferentials,
+    dsRcdComputeData,
     MergeFilmTile,
     SplatFilm,
     AddFilmSample,
@@ -175,7 +176,7 @@ static const char *ProfNames[] = {
     "MIP map generation",
 
     "Integrator::render()",
-    "SamplerIntegrator::Li()",
+    "MonteCarloIntegrator::Li()",
     "SPPM camera pass",
     "SPPM grid construction",
     "SPPM photon pass",
@@ -212,6 +213,7 @@ static const char *ProfNames[] = {
     "Camera::generateRay[Differential]()",
     "TriangleI::fillSurfaceInteraction()",
     "SurfaceInteraction::computeDifferentials()",
+    "DirectSamplingRecord::computeData()",
     "Film::mergeTile()",
     "Film::addSplat()",
     "Film::addSample()",

@@ -96,6 +96,7 @@ bool PixelSampler::setSampleIndex(int64_t sampleNum) {
 }
 
 Float PixelSampler::get1D() {
+    TRY_PROFILE(Prof::GetSample)
     CHECK_LT(_currentPixelSampleIndex, samplesPerPixel);
     if (_curDimension1D < _samples1D.size()) {
         return _samples1D[_curDimension1D++][_currentPixelSampleIndex];
@@ -105,6 +106,7 @@ Float PixelSampler::get1D() {
 }
 
 Point2f PixelSampler::get2D() {
+    TRY_PROFILE(Prof::GetSample)
     CHECK_LT(_currentPixelSampleIndex, samplesPerPixel);
     if (_curDimension2D < _samples2D.size()) {
         return _samples2D[_curDimension2D++][_currentPixelSampleIndex];
@@ -156,6 +158,7 @@ bool GlobalSampler::setSampleIndex(int64_t sampleNum) {
 }
 
 Float GlobalSampler::get1D() {
+    TRY_PROFILE(Prof::GetSample)
     if (_dimension >= _arrayStartDim && _dimension < _arrayEndDim) {
         _dimension = _arrayEndDim;
     }
@@ -163,6 +166,7 @@ Float GlobalSampler::get1D() {
 }
 
 Point2f GlobalSampler::get2D() {
+    TRY_PROFILE(Prof::GetSample)
     if (_dimension + 1 >= _arrayStartDim && _dimension < _arrayEndDim) {
         _dimension = _arrayEndDim;
     }

@@ -451,8 +451,8 @@ inline int Log2Int(int64_t v) {
 #include "tools/memory.hpp"
 #include "tools/errfloat.h"
 #include "core/spectrum.hpp"
-#include "core/sample_record.hpp"
 #include "tools/stats.hpp"
+#include "core/sample_record.hpp"
 
 PALADIN_BEGIN
 

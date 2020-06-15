@@ -67,7 +67,7 @@ void Scene::initAccel(const nloJson &data, const vector<shared_ptr<const Shape> 
 Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
                                   const Distribution1D *lightDistrib,
                                   Float *pmf) const {
-    TRY_PROFILE(Prof::sceneSampleLightDirect)
+//    TRY_PROFILE(Prof::sceneSampleLightDirect)
     Point2f u(_u);
     Float index = lightDistrib->sampleDiscrete(u.x, pmf, &u.x);
     const Light * light = lights.at(index).get();
@@ -94,20 +94,22 @@ Spectrum Scene::sampleOneLight(ScatterSamplingRecord *scatterRcd,
     // 用于储存选中的光源的概率密度函数值
     Float lightPdf;
     Sampler &sampler = *scatterRcd->sampler;
-    lightIndex = lightDistrib->sampleDiscrete(sampler.get1D(), &lightPdf);
+    Point2f u = sampler.get2D();
+    lightIndex = lightDistrib->sampleDiscrete(u[0], &lightPdf, &u[0]);
     if (lightPdf == 0) {
         return Spectrum(0.0f);
     }
     const Light * light = lights[lightIndex].get();
     DirectSamplingRecord rcd(scatterRcd->it);
     Spectrum dl = estimateDirectLighting(scatterRcd, arena, *light,
-                                         &rcd, foundIntersect, throughput);
+                                         &rcd, u, foundIntersect, throughput);
     return dl / lightPdf;
 }
 
 Spectrum Scene::estimateDirectLighting(ScatterSamplingRecord *scatterRcd,
                                        MemoryArena &arena,
                                        const Light &light, DirectSamplingRecord *rcd,
+                                       const Point2f &u,
                                        bool *foundIntersect, Spectrum *throughput,
                                        bool handleMedia) const {
     BxDFType bsdfFlags = BSDF_ALL;
@@ -120,7 +122,7 @@ Spectrum Scene::estimateDirectLighting(ScatterSamplingRecord *scatterRcd,
     Sampler &sampler = *scatterRcd->sampler;
     
     // 采样光源
-    Spectrum Li = light.sample_Li(rcd, sampler.get2D(), *this);
+    Spectrum Li = light.sample_Li(rcd, u, *this);
     wi = rcd->dir();
     lightPdf = rcd->pdfDir();
     

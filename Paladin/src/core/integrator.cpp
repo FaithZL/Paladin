@@ -217,6 +217,7 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
 }
 
 void MonteCarloIntegrator::render(const Scene &scene) {
+    TRY_PROFILE(Prof::IntegratorRender)
     preprocess(scene, *_sampler);
     
 	// 由于是并行计算，先把屏幕分割成m * n块
@@ -250,8 +251,10 @@ void MonteCarloIntegrator::render(const Scene &scene) {
                 // tile范围内，逐像素计算辐射度
                 for (Point2i pixel : tileBounds) {
 
-                    tileSampler->startPixel(pixel);
-
+                    {
+                        TRY_PROFILE(Prof::StartPixel)
+                        tileSampler->startPixel(pixel);
+                    }
                     if (!insideExclusive(pixel, _pixelBounds)) {
                         continue;
                     }

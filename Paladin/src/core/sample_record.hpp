@@ -169,17 +169,7 @@ public:
     
     void updateTarget(const SurfaceInteraction &si);
     
-    inline void computeData() {
-        _dir = _pos - _ref;
-        _dist = _dir.length();
-        _dir = normalize(_dir);
-        _pdfDir = _pdfPos * _dist * _dist / absDot(_normal, -_dir);
-        if (_dist == 0) {
-            _pdfPos = _pdfDir = 0;
-        } else if (std::isinf(_pdfDir)) {
-            _pdfDir = 0;
-        }
-    }
+    void computeData();
     
     inline void updateTarget(const Point3f &pos,
                             const Normal3f &normal,

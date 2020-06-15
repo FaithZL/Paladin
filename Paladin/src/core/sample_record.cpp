@@ -82,6 +82,17 @@ VisibilityTester DirectSamplingRecord::getVisibilityTester() const {
     return vis;
 }
 
-
+void DirectSamplingRecord::computeData() {
+    TRY_PROFILE(Prof::dsRcdComputeData)
+    _dir = _pos - _ref;
+    _dist = _dir.length();
+    _dir = normalize(_dir);
+    _pdfDir = _pdfPos * _dist * _dist / absDot(_normal, -_dir);
+    if (_dist == 0) {
+       _pdfPos = _pdfDir = 0;
+    } else if (std::isinf(_pdfDir)) {
+       _pdfDir = 0;
+    }
+}
 
 PALADIN_END

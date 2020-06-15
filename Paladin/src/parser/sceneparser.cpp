@@ -73,7 +73,6 @@ void SceneParser::parse(const nloJson &data) {
     scene->initAccel(acceleratorData, move(_shapes));
     
     _scene.reset(scene);
-    TRY_PROFILE(Prof::IntegratorRender)
     _integrator->render(*scene);
 }
 

@@ -106,6 +106,7 @@ public:
                             MemoryArena &arena,
                             const Light &light,
                             DirectSamplingRecord *rcd,
+                            const Point2f &u,
                             bool *foundIntersect,
                             Spectrum * throughput,
                             bool handleMedia = false) const;
