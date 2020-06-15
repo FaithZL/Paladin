@@ -356,7 +356,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "front",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -444,9 +444,9 @@
         }
     ],
     "integrator" : {
-        "type" : "pt",
+        "type" : "volpt",
         "param" : {
-            "maxBounce" : 20,
+            "maxBounce" : 5,
             "rrThreshold" : 1,
             "lightSampleStrategy" : "power"
         }
@@ -454,7 +454,7 @@
     "sampler" : {
         "type" : "halton",
         "param" : {
-            "spp" : 5
+            "spp" : 8
         }
     },
     "camera" : {
@@ -474,9 +474,9 @@
     },
     "film" : {
         "param" : {
-            "resolution" : [300, 300],
+            "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "connellbox-8spp.png",
+            "fileName" : "connellbox-fog-16spp.png",
             "diagonal" : 1,
             "scale" : 1
         }
