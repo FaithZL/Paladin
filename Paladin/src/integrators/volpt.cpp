@@ -74,16 +74,16 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
             Float pdf;
             BxDFType flags;
             Spectrum f;
-            ScatterSamplingRecord scatterRcd(mi, &sampler);
-            Spectrum tmpThroughput = throughput;
             Spectrum Ld;
             bool found;
+            Spectrum tmpThroughput;
+            ScatterSamplingRecord scatterRcd(mi, &sampler);
             
-            const Distribution1D *distrib = _lightDistribution->lookup(mi.pos);
-            Ld = throughput * scene.sampleOneLight(&scatterRcd, arena,
-                                    distrib,
-                                    &found,
-                                    &tmpThroughput);
+            const Distribution1D *lightDistrib = _lightDistribution->lookup(mi.pos);
+            
+            Ld = throughput * scene.sampleOneLight(&scatterRcd, arena, lightDistrib, &found, &tmpThroughput, true);
+            
+            L += Ld;
             
             mi.phase->sample_p(wo, &wi, sampler.get2D());
             ray = mi.spawnRay(wi);
@@ -126,20 +126,13 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
                 Float pdf;
                 BxDFType flags;
                 Spectrum f;
-                ScatterSamplingRecord scatterRcd(isect, &sampler);
-                Spectrum tmpThroughput = throughput;
                 Spectrum Ld;
+                Spectrum tmpThroughput;
                 bool found;
+                ScatterSamplingRecord scatterRcd(isect, &sampler);
                 
-                const Distribution1D *distrib = _lightDistribution->lookup(mi.pos);
-                Ld = throughput * scene.sampleOneLight(&scatterRcd, arena,
-                                        distrib,
-                                        &found,
-                                        &tmpThroughput);
+                Ld = throughput * scene.sampleOneLight(&scatterRcd, arena, distrib, &found, &tmpThroughput, true);
                 
-                
-//                Spectrum Ld = throughput * sampleOneLight(isect, scene, arena,
-//                                                 sampler, _nLightSamples, true, distrib);
                 L += Ld;
             }
             Vector3f wo = -ray.dir;
@@ -186,6 +179,7 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
         }
     }
+    
     return L;
 }
 
@@ -200,7 +194,7 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
 Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
 						Sampler &sampler, MemoryArena &arena, int depth) const {
     
-//    return _Li(r, scene, sampler, arena, depth);
+    return _Li(r, scene, sampler, arena, depth);
     
     Spectrum L(0.f);
     Spectrum throughput(1.f);

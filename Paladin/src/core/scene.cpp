@@ -101,8 +101,8 @@ Spectrum Scene::sampleOneLight(ScatterSamplingRecord *scatterRcd,
     }
     const Light * light = lights[lightIndex].get();
     DirectSamplingRecord rcd(scatterRcd->it);
-    Spectrum dl = estimateDirectLighting(scatterRcd, arena, *light,
-                                         &rcd, u, foundIntersect, throughput);
+    Spectrum dl = estimateDirectLighting(scatterRcd, arena, *light,&rcd, u,
+                                         foundIntersect, throughput, handleMedia);
     return dl / lightPdf;
 }
 
