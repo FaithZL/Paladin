@@ -135,7 +135,7 @@ void test() {
 }
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
+    google::InitGoogleLogging(argv[0]);
     COUT << "Hello, paladin!\n";
 //    test();
 //    glfwInit();

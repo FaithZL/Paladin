@@ -11,6 +11,10 @@
 
 PALADIN_BEGIN
 
+STAT_COUNTER("Intersections/Regular ray intersection tests",
+             nIntersectionTests);
+STAT_COUNTER("Intersections/Shadow ray intersection tests", nShadowTests);
+
 void Scene::initEnvmap() {
     for (const auto &light : lights) {
         light->preprocess(*this);
@@ -61,6 +65,7 @@ bool Scene::embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const {
 
 bool Scene::intersect(const Ray &ray, SurfaceInteraction *isect) const {
         CHECK_NE(ray.dir, Vector3f(0,0,0));
+    ++nIntersectionTests;
     if (_rtcScene) {
          return embreeIntersect(ray, isect);
     }
@@ -70,6 +75,7 @@ bool Scene::intersect(const Ray &ray, SurfaceInteraction *isect) const {
 
 bool Scene::intersectP(const Ray &ray) const {
     CHECK_NE(ray.dir, Vector3f(0,0,0));
+    ++nShadowTests;
     if (_rtcScene) {
         return embreeIntersectP(ray);
     }

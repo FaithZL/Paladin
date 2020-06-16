@@ -18,6 +18,7 @@
 
 PALADIN_BEGIN
 
+
 class Scene {
 public:
     Scene(std::shared_ptr<Primitive> aggregate,

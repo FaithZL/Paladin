@@ -32,6 +32,7 @@ void SceneParser::parse(const nloJson &data) {
     
     int threadNum = data.value("threadNum", 0);
     parallelInit(threadNum);
+    InitProfiler();
     
     nloJson filterData = data.value("filter", nloJson());
     Filter * filter = parseFilter(filterData);
@@ -81,6 +82,23 @@ void SceneParser::parse(const nloJson &data) {
     
     _integrator->render(*scene);
     
+}
+
+void SceneParser::start() {
+    SampledSpectrum::Init();
+    
+}
+
+void SceneParser::end() {
+    
+    mergeWorkerThreadStats();
+    ReportThreadStats();
+    PrintStats(stdout);
+    ReportProfilerResults(stdout);
+    ClearStats();
+    ClearProfiler();
+    CleanupProfiler();
+    parallelCleanup();
 }
 
 void SceneParser::autoPlane() {
