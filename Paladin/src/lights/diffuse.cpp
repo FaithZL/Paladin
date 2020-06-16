@@ -41,6 +41,7 @@ Spectrum DiffuseAreaLight::power() const {
 Spectrum DiffuseAreaLight::sample_Li(const Interaction &ref, const Point2f &u,
                                      Vector3f *wi, Float *pdf,
                                      VisibilityTester *vis) const {
+    TRY_PROFILE(Prof::LightSample)
     Interaction pShape = _shape->sampleDir(ref, u, pdf);
     pShape.mediumInterface = mediumInterface;
     if (*pdf == 0 || (pShape.pos - ref.pos).lengthSquared() == 0) {
@@ -54,6 +55,7 @@ Spectrum DiffuseAreaLight::sample_Li(const Interaction &ref, const Point2f &u,
 
 Spectrum DiffuseAreaLight::sample_Li(DirectSamplingRecord *rcd, const Point2f &u,
                                      const Scene &scene) const {
+    TRY_PROFILE(Prof::LightSample)
     _shape->sampleDir(rcd, u);
     if (rcd->pdfDir() == 0) {
         return 0;
@@ -66,10 +68,12 @@ Spectrum DiffuseAreaLight::sample_Li(DirectSamplingRecord *rcd, const Point2f &u
 
 Float DiffuseAreaLight::pdf_Li(const Interaction &ref,
                                const Vector3f &wi) const {
+    TRY_PROFILE(Prof::LightPdf)
     return _shape->pdfDir(ref, wi);
 }
 
 Float DiffuseAreaLight::pdf_Li(const DirectSamplingRecord &rcd) const {
+    TRY_PROFILE(Prof::LightPdf)
     return rcd.pdfDir();
 }
 

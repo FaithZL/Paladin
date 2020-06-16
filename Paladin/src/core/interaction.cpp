@@ -13,8 +13,11 @@
 
 PALADIN_BEGIN
 
-Ray Interaction::spawnRay(const Vector3f &d) const {
-    Point3f o = offsetRay(pos, normal, d);
+Ray Interaction::spawnRay(const Vector3f &d, bool forward) const {
+    Normal3f n = forward ?
+            (dot(d, normal) > 0 ? normal : -normal) :
+            normal;
+    Point3f o = offsetRay(pos, n, d);
     return Ray(o, d, Infinity, time, getMedium(d));
 }
 
@@ -60,6 +63,7 @@ faceIndex(faceIndex) {
 }
 
 void SurfaceInteraction::computeDifferentials(const RayDifferential &ray) const {
+    TRY_PROFILE(Prof::siComputeDifferentials)
     if (ray.hasDifferentials) {
         // 平面方程为 ax + by + cz = d
         // 法向量为n(a,b,c),平面上的点p(x,y,z)
@@ -153,6 +157,7 @@ void SurfaceInteraction::computeScatteringFunctions(const RayDifferential &ray,
                                                     MemoryArena &arena,
                                                     bool allowMultipleLobes,/* = false*/
                                                     TransportMode mode/* = TransportMode::Radiance*/) {
+    TRY_PROFILE(Prof::ComputeScatteringFuncs)
     computeDifferentials(ray);
     shape->computeScatteringFunctions(this, arena, mode, allowMultipleLobes);
 }

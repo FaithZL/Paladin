@@ -13,6 +13,8 @@
 
 PALADIN_BEGIN
 
+STAT_COUNTER("Scene/Triangle num", numTri);
+
 Mesh::Mesh(const Transform * objectToWorld,
                 const vector<IndexSet> &vertexIndices,
                 const vector<Point3f> *P,
@@ -24,8 +26,6 @@ Mesh::Mesh(const Transform * objectToWorld,
 _nTriangles(vertexIndices.size() / 3),
 _nVertices(P->size()),
 _surfaceArea(0) {
-    
-    Stats::getInstance()->addTriangle(_nTriangles);
     
     _vertexIndice = vertexIndices;
     size_t size = P->size();
@@ -57,6 +57,76 @@ _surfaceArea(0) {
     initial();
 }
 
+Mesh::Mesh(const Transform * objectToWorld,
+                const nloJson &indice,
+                const nloJson &points,
+                const nloJson &normals,
+                const nloJson &UV,
+                const shared_ptr<const Material> &mat,
+                const MediumInterface &mi)
+:Shape(objectToWorld, nullptr, false,mi, ShapeType::EMesh, mat),
+_nTriangles(indice.size() / 3),
+_nVertices(points.size() / 3),
+_surfaceArea(0) {
+    
+    size_t size = points.size() / 3;
+    _points.reset(new Point3f[size + 1]);
+    int i = 0;
+    for (auto iter = points.cbegin(); iter != points.cend(); iter += 3) {
+        Float x = iter[0];
+        Float y = iter[1];
+        Float z = iter[2];
+        Point3f p(x, y, z);
+        _points[i++] = objectToWorld->exec(p);
+    }
+    
+    size = normals.size() / 3;
+    if (size > 0) {
+        _normals.reset(new Normal3f[size + 1]);
+        i = 0;
+        for (auto iter = normals.cbegin(); iter != normals.cend(); iter += 3) {
+            Float x = iter[0];
+            Float y = iter[1];
+            Float z = iter[2];
+            Normal3f normal(x, y, z);
+            _normals[i++] = objectToWorld->exec(normal);
+        }
+    } else {
+        _normals.reset();
+    }
+    
+    size = UV.size() / 2;
+    if (size > 0) {
+        i = 0;
+        _uv.reset(new Point2f[size + 1]);
+        for (auto iter = UV.cbegin(); iter != UV.cend(); iter += 2) {
+            Float u = iter[0];
+            Float v = iter[1];
+            _uv[i++] = Point2f(u, v);
+        }
+    } else {
+        _uv.reset();
+    }
+    
+    
+    vector<Float> areaLst;
+    areaLst.reserve(_nTriangles);
+    _vertexIndice.reserve(indice.size());
+    for (int i = 0; i < indice.size(); i += 3) {
+        _vertexIndice.emplace_back(indice[i]);
+        _vertexIndice.emplace_back(indice[i + 1]);
+        _vertexIndice.emplace_back(indice[i + 2]);
+        TriangleI tri(&_vertexIndice[i], this);
+        _triangles.push_back(tri);
+        Float area = tri.getArea(_points.get());
+        _surfaceArea += area;
+        areaLst.push_back(area);
+    }
+    _areaDistrib = Distribution1D(&areaLst[0], _nTriangles);
+    _invArea = 1.f / _surfaceArea;
+    computeWorldBound();
+}
+
 void Mesh::initial() {
     // 计算表面积，计算面积分布
     vector<Float> areaLst;
@@ -79,10 +149,12 @@ vector<shared_ptr<Mesh>> Mesh::createMeshes(const nloJson &data,
     nloJson transformData = data.value("transform", nloJson());
     Transform * transform = createTransform(transformData);
     
+    shared_ptr<const Material> mat(nullptr);
+    
     nloJson param = data.value("param", nloJson());
     return param.is_string() ?
         ModelCache::getMeshes(param, transform, lights):
-        ModelCache::createMeshes(param, transform, lights);
+        ModelCache::createMeshes(param, transform, lights, mat, mi);
 }
 
 RTCGeometry Mesh::rtcGeometry(Scene *scene) const {
@@ -135,6 +207,7 @@ void Mesh::computeWorldBound() {
         TriangleI tri = _triangles[i];
         _worldBound = unionSet(_worldBound, tri.worldBound(_points.get()));
     }
+    numTri += _triangles.size();
 }
 
 //"param" : {
@@ -179,7 +252,7 @@ shared_ptr<Mesh> Mesh::createQuad(const Transform *o2w, Float width, Float heigh
     auto points = vector<Point3f>{tl, bl, br, tr};
     auto vertIndice = vector<int>{0,1,2, 0,2,3};
     auto UVs = vector<Point2f>{Point2f(0, 1), Point2f(0, 0), Point2f(1, 0), Point2f(1,1)};
-    auto ret = Mesh::create(o2w, vertIndice, &points, nullptr, &UVs, mat);
+    auto ret = Mesh::create(o2w, vertIndice, &points, nullptr, &UVs, mat, mi);
     return ret;
 }
 

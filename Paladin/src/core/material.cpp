@@ -25,16 +25,6 @@ _normalMapScale(scale) {
     
 }
 
-void Material::initScatteringFunctions() {
-    int nThread = maxThreadIndex();
-    _bsdfs.reserve(nThread);
-    for (int i = 0; i < nThread; ++i) {
-        auto bsdf = make_shared<BSDF>(1.f);
-        _bsdfs.push_back(bsdf);
-        initBSDF(bsdf.get());
-    }
-}
-
 void Material::bumpMapping(const std::shared_ptr<Texture<Float>> &d, SurfaceInteraction *si) {
 	SurfaceInteraction siEval = *si;
 

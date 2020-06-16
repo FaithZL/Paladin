@@ -94,27 +94,10 @@ vector<shared_ptr<Mesh>> ModelCache::createMeshes(const nloJson &param,
     vector<Point2f> UVs;
     
     nloJson normalData = param.value("normals", nloJson::array());
-    for (auto iter = normalData.cbegin(); iter != normalData.cend(); iter += 3) {
-        Float nx = iter[0];
-        Float ny = iter[1];
-        Float nz = iter[2];
-        normals.emplace_back(nx, ny, nz);
-    }
     
     nloJson pointData = param.value("verts", nloJson::array());
-    for (auto iter = pointData.cbegin(); iter != pointData.cend(); iter += 3) {
-        Float px = iter[0];
-        Float py = iter[1];
-        Float pz = iter[2];
-        points.emplace_back(px, py, pz);
-    }
     
     nloJson UVData = param.value("UVs", nloJson::array());
-    for (auto iter = UVData.cbegin(); iter != UVData.cend(); iter += 2) {
-        Float u = iter[0];
-        Float v = iter[1];
-        UVs.emplace_back(u, v);
-    }
     
     nloJson indexes = param.value("indexes", nloJson::array());
     int nMesh = indexes.size();
@@ -136,9 +119,9 @@ vector<shared_ptr<Mesh>> ModelCache::createMeshes(const nloJson &param,
         nloJson subIndexes = indexes[i];
         
         auto material = mat ? mat : shared_ptr<const Material>(createMaterial(materialDatas[i]));
-    
-        auto mesh = Mesh::create(transform2, subIndexes, &points,
-                                 &normals, &UVs, material);
+        
+        auto mesh = Mesh::create(transform2, subIndexes, pointData, normalData,
+                                 UVData, material, mi);
         
         if (!emissionData.is_null()) {
             auto al = shared_ptr<DiffuseAreaLight>(createDiffuseAreaLight(emissionData, mesh, mi));
@@ -162,7 +145,7 @@ vector<shared_ptr<Mesh>> ModelCache::loadMeshes(const string &fn,
     
     nloJson meshList = createJsonFromFile(basePath + fn)["data"];
     for (auto meshData : meshList) {
-        vector<shared_ptr<Mesh>> tmp = createMeshes(meshData, transform, lights);
+        vector<shared_ptr<Mesh>> tmp = createMeshes(meshData, transform, lights, mat, mi);
         ret.insert(ret.end(), tmp.begin(), tmp.end());
     }
     return ret;

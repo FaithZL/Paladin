@@ -37,6 +37,13 @@ protected:
     EMeasure measure;
     
     Float _pdfPos;
+    
+public:
+    
+    Float time;
+    
+    const CObject * object;
+    
 public:
     
     inline const Point3f &pos() const {
@@ -58,10 +65,6 @@ public:
     inline void setPdfPos(Float pdf) {
         _pdfPos = pdf;
     }
-    
-    Float time;
-    
-    const CObject * object;
     
     void updateSurface(const SurfaceInteraction &si);
     
@@ -115,6 +118,7 @@ struct DirectionSamplingRecord {
 };
 
 struct DirectSamplingRecord : public PositionSamplingRecord {
+    
 private:
     
     const Point3f _ref;
@@ -129,6 +133,9 @@ private:
     Float _pdfDir;
     
 public:
+    
+    const Medium * refInside;
+    const Medium * refOutside;
     
     inline const Point3f &ref() const {
         return _ref;
@@ -158,19 +165,11 @@ public:
     
     bool unoccluded(const Scene &scene) const;
     
+    Spectrum Tr(const Scene &scene, Sampler &sampler) const;
+    
     void updateTarget(const SurfaceInteraction &si);
     
-    inline void computeData() {
-        _dir = _pos - _ref;
-        _dist = _dir.length();
-        _dir = normalize(_dir);
-        _pdfDir = _pdfPos * _dist * _dist / absDot(_normal, -_dir);
-        if (_dist == 0) {
-            _pdfPos = _pdfDir = 0;
-        } else if (std::isinf(_pdfDir)) {
-            _pdfDir = 0;
-        }
-    }
+    void computeData();
     
     inline void updateTarget(const Point3f &pos,
                             const Normal3f &normal,
@@ -191,6 +190,8 @@ public:
     
     DirectSamplingRecord(const Interaction &refIt,const SurfaceInteraction &targetSi,  EMeasure measure = ESolidAngle);
 };
+
+
 
 PALADIN_END
 

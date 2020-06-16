@@ -79,6 +79,9 @@ enum class LightFlags {
     Env = 16
 };
 
+STAT_COUNTER("Scene/Lights", numLights);
+STAT_COUNTER("Scene/AreaLights", numAreaLights);
+
 inline bool isDeltaLight(int flags) {
     return flags & (int)LightFlags::DeltaPosition ||
            flags & (int)LightFlags::DeltaDirection;
@@ -100,7 +103,7 @@ public:
     mediumInterface(mediumInterface),
     _lightToWorld(LightToWorld),
     _worldToLight(LightToWorld->getInverse_ptr()) {
-
+        ++numLights;
     }
     
     /**
@@ -161,14 +164,6 @@ public:
         NotImplementedError("pdf_Li");
     }
     
-    // // 双向方法需要用的函数，暂时不理
-    // virtual Spectrum sampleLe(const Point2f &u1, const Point2f &u2, Float time,
-    //                            Ray *ray, Normal3f *nLight, Float *pdfPos,
-    //                            Float *pdfDir) const = 0;
-    
-    // // 双向方法用的函数，暂时不理
-    // virtual void pdfLe(const Ray &ray, const Normal3f &nLight, Float *pdfPos,
-    //                     Float *pdfDir) const = 0;
     // LightFlags
     const int flags;
     // 为了计算soft shadow的采样数量
@@ -188,7 +183,7 @@ public:
             const MediumInterface &mi,
             int nSamples)
     :Light((int)LightFlags::Area, LightToWorld, mi, nSamples) {
-
+        ++numAreaLights;
     }
 
     virtual Spectrum L(const DirectSamplingRecord &rcd) const = 0;

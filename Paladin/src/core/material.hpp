@@ -15,7 +15,7 @@
 
 PALADIN_BEGIN
 
-enum class TransportMode { Radiance, Importance };
+
 
 /**
  * 材质基类主要实现的是bump函数
@@ -32,23 +32,10 @@ public:
                                             TransportMode mode,
                                             bool allowMultipleLobes) const = 0;
     
-    virtual void updateScatteringFunctions(SurfaceInteraction *si,
-                                            MemoryArena &arena,
-                                            TransportMode mode,
-                                            bool allowMultipleLobes) const {
-        
-    }
-    
-    virtual void initScatteringFunctions();
-    
-    virtual void initBSDF(BSDF * bsdf) {
-        
-    }
-    
-    
     virtual ~Material() {
     	
     }
+
     
     inline void processNormal(SurfaceInteraction * si) const {
         if (_normalMap) {
@@ -119,7 +106,7 @@ protected:
     // [-1,1]
     Float _normalMapScale;
     
-    vector<shared_ptr<BSDF>> _bsdfs;
+
 };
 
 Material * createMaterial(const nloJson &);

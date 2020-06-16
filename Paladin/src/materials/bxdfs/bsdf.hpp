@@ -23,6 +23,8 @@ class BSDF {
 public:
     BSDF(const SurfaceInteraction &si, Float eta = 1);
     
+    
+    
     BSDF(Float eta = 1);
     
     void updateGeometry(const SurfaceInteraction &si);
@@ -74,6 +76,11 @@ public:
                       Float *pdf, BxDFType type = BSDF_ALL,
                       BxDFType *sampledType = nullptr) const;
     
+    Spectrum sample_f(const Vector3f &wo, Vector3f *wi, const Point2f &u,
+                        const SurfaceInteraction &si,
+                        Float *pdf, BxDFType type = BSDF_ALL,
+                        BxDFType *sampledType = nullptr) const;
+    
     /**
      * 跟BXDF的pdfW函数相同，不再赘述
      */
@@ -82,18 +89,12 @@ public:
 
     std::string toString() const;
     
-    F_INLINE BxDF * getBxDF(int idx) const {
-        return _bxdfs[idx].get();
-    }
-    
     // 折射率，对于不透明物体，这是不用的
     const Float eta;
     
     ~BSDF() {
 
     }
-    
-    void addBxDF(const shared_ptr<BxDF> &b);
     
     void clearBxDFs() {
         nBxDFs = 0;
@@ -116,8 +117,6 @@ private:
     static CONSTEXPR int MaxBxDFs = 8;
     // BXDF列表
     BxDF *bxdfs[MaxBxDFs];
-    
-    vector<shared_ptr<BxDF>> _bxdfs;
 
     friend class MixMaterial;
 };

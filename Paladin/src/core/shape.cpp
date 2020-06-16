@@ -23,8 +23,7 @@ Shape::Shape(const Transform *objectToWorld,const Transform* worldToObject,
     : objectToWorld(objectToWorld),
     worldToObject(worldToObject),
     reverseOrientation(reverseOrientation),
-    transformSwapsHandedness(objectToWorld->swapsHandedness()),
-    _primitive(nullptr) {
+    transformSwapsHandedness(objectToWorld->swapsHandedness()) {
 
 }
 

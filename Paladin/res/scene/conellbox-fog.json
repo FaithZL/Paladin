@@ -18,7 +18,7 @@
             }
         }
     },
-	"lights" : [
+    "lights" : [
         {
             "type" : "pointLight",
             "enable" : false,
@@ -32,7 +32,7 @@
                 }
             }
         }
-	],
+    ],
     "materials" : {
         "matte1" : {
             "type" : "matte",
@@ -232,9 +232,9 @@
             }
         }
     },
-	"shapes" : [
-		{
-			"type" : "sphere",
+    "shapes" : [
+        {
+            "type" : "sphere",
             "enable" : false,
             "param" : {
                 "transform" : [
@@ -250,8 +250,8 @@
                 "radius" : 0.3,
                 "phiMax" : 360
             },
-			"material" : "glass"
-		},
+            "material" : "glass"
+        },
         {
             "type" : "triMesh",
             "subType" : "quad",
@@ -396,7 +396,7 @@
                 },
                 "twoSided" : false
             },
-            "mediumInterface" : ["fog", "fog"],
+            "mediumInterface" : ["fog", "fog"]
         },
         {
             "type" : "triMesh",
@@ -442,56 +442,56 @@
             },
             "material" : "matte1"
         }
-	],
-	"integrator" : {
+    ],
+    "integrator" : {
         "type" : "bdpt",
         "param" : {
-        	"maxBounce" : 5,
-        	"rrThreshold" : 1,
-        	"lightSampleStrategy" : "power"
+            "maxBounce" : 5,
+            "rrThreshold" : 1,
+            "lightSampleStrategy" : "power"
         }
     },
     "sampler" : {
-    	"type" : "halton",
-    	"param" : {
-    		"spp" : 1
-    	}
+        "type" : "halton",
+        "param" : {
+            "spp" : 1
+        }
     },
     "camera" : {
-    	"type" : "perspective",
-    	"param" : {
-    		"shutterOpen" : 0,
-    		"shutterClose" : 1,
-    		"lensRadius" : 0,
-    		"focalDistance" : 100,
-    		"fov" : 20,
+        "type" : "perspective",
+        "param" : {
+            "shutterOpen" : 0,
+            "shutterClose" : 1,
+            "lensRadius" : 0,
+            "focalDistance" : 100,
+            "fov" : 20,
             "lookAt" : [
                 [0,0,-6.6],
                 [0,0,0],
                 [0,1,0]
             ]
-    	}
+        }
     },
     "film" : {
-    	"param" : {
-			"resolution" : [1024, 1024],
-	    	"cropWindow" : [0,0,1,1],
-	    	"fileName" : "connellbox-fog-16spp.png",
-	    	"diagonal" : 1,
-	    	"scale" : 1
-    	}
+        "param" : {
+            "resolution" : [1024, 1024],
+            "cropWindow" : [0,0,1,1],
+            "fileName" : "connellbox-fog-16spp.png",
+            "diagonal" : 1,
+            "scale" : 1
+        }
     },
     "filter" : {
-    	"type" : "triangle",
-    	"param" : {
-    		"radius" : [1,1]
-    	}
+        "type" : "triangle",
+        "param" : {
+            "radius" : [1,1]
+        }
     },
     "accelerator" : {
-    	"type" : "bvh",
-    	"param" : {
-    		"maxPrimsInNode" : 1,
-    		"splitMethod" : "SAH"
-    	}
+        "type" : "embree",
+        "param" : {
+            "maxPrimsInNode" : 1,
+            "splitMethod" : "SAH"
+        }
     }
 }

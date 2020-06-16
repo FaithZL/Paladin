@@ -212,14 +212,6 @@ public:
         
     }
     virtual void render(const Scene &) = 0;
-    
-    void outputSceneInfo(const Scene &scene, const Camera * camera = nullptr) const {
-        AABB3f sceneBound = scene.worldBound();
-        cout << "total scene bound box is:" << sceneBound << endl;
-        int num = scene.lights.size();
-        cout << "light num is " << num << endl;
-        cout << "triangle num is " << Stats::getInstance()->getTriangleNum() << endl;
-    }
 };
 
 /**

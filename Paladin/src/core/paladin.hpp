@@ -17,14 +17,9 @@ PALADIN_BEGIN
 class Paladin {
 public:
     
-    int run() {
-        return 0;
-    }
-    
     void render(const std::string &fn) {
         _basePath = fn.substr(0, fn.find_last_of("/") + 1);
         _sceneParser.loadFromJson(fn);
-        parallelCleanup();
     }
     
     static Paladin * getInstance();

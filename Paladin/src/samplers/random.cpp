@@ -11,11 +11,13 @@
 PALADIN_BEGIN
 
 Float RandomSampler::get1D() {
+    TRY_PROFILE(Prof::GetSample)
     CHECK_LT(_currentPixelSampleIndex, samplesPerPixel);
     return _rng.uniformFloat();
 }
 
 Point2f RandomSampler::get2D() {
+    TRY_PROFILE(Prof::GetSample)
     CHECK_LT(_currentPixelSampleIndex, samplesPerPixel);
     return Point2f(_rng.uniformFloat(), _rng.uniformFloat());
 }

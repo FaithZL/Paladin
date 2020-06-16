@@ -29,6 +29,14 @@ public:
                         const shared_ptr<const Material> &mat = nullptr,
                         const MediumInterface &mi = nullptr);
     
+    Mesh(const Transform * objectToWorld,
+                        const nloJson &indice,
+                        const nloJson &points,
+                        const nloJson &normals,
+                        const nloJson &UV,
+                        const shared_ptr<const Material> &mat = nullptr,
+                        const MediumInterface &mi = nullptr);
+    
     static shared_ptr<Mesh> create(const Transform * objectToWorld,
                                         const vector<IndexSet> &vertexIndices,
                                         const vector<Point3f> *P,
@@ -40,6 +48,16 @@ public:
                                  P, N, UV, mat, mi);
     }
     
+    static shared_ptr<Mesh> create(const Transform * objectToWorld,
+                                    const nloJson &indice,
+                                    const nloJson &points,
+                                    const nloJson &normals,
+                                    const nloJson &UV,
+                                    const shared_ptr<const Material> &mat = nullptr,
+                                    const MediumInterface &mi = nullptr) {
+        return make_shared<Mesh>(objectToWorld, indice, points, normals,
+                                 UV, mat, mi);
+    }
     
     
     static shared_ptr<Mesh> create(const Transform * objectToWorld,

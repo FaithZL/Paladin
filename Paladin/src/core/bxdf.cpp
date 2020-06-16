@@ -13,6 +13,19 @@
 
 PALADIN_BEGIN
 
+ScatterSamplingRecord::ScatterSamplingRecord(const Interaction &it,
+                                             Sampler * sampler)
+: it(it),
+wo(it.wo),
+eta(0),
+wi(Vector3f()),
+sampleType(BxDFType::BSDF_NONE),
+mode(TransportMode::Radiance),
+sampler(sampler),
+scatterF(0.f) {
+    
+}
+
 Float FrDielectric(Float cosThetaI, Float etaI, Float etaT) {
     cosThetaI = clamp(cosThetaI, -1, 1);
 

@@ -14,6 +14,8 @@
 #include "material.hpp"
 #include "math/sampling.hpp"
 #include "math/frame.hpp"
+#include "core/sampler.hpp"
+#include "interaction.hpp"
 
 PALADIN_BEGIN
 
@@ -272,22 +274,51 @@ inline Spectrum schlickFresnel(const Spectrum &R, Float cosTheta) {
     return R + (Spectrum(1) - R) * pow5(1 - cosTheta);
 }
 
-/**
- * 反射类型
- * 一个bxdf的类型至少要有一个BSDF_REFLECTION 或 BSDF_TRANSMISSION
- * 用于表明是投射还是反射
- */
-enum BxDFType {
-    BSDF_REFLECTION = 1 << 0,
-    BSDF_TRANSMISSION = 1 << 1,
-    BSDF_DIFFUSE = 1 << 2,
-    BSDF_GLOSSY = 1 << 3,
-    BSDF_SPECULAR = 1 << 4,
-    BSDF_ALL = BSDF_DIFFUSE
-            | BSDF_GLOSSY
-            | BSDF_SPECULAR
-            | BSDF_REFLECTION
-            | BSDF_TRANSMISSION,
+
+struct ScatterSamplingRecord {
+    
+    ScatterSamplingRecord(const Interaction &it,
+                          Sampler * sampler = nullptr);
+    
+    F_INLINE bool isSpecular() const {
+        return (sampleType & BSDF_SPECULAR) != 0;;
+    }
+    
+    const Interaction &it;
+    
+    F_INLINE void update(const Vector3f &w,
+                         const Spectrum &f,
+                         Float pdfIn,
+                         BxDFType flags,
+                         TransportMode m,
+                         Float e = 0) {
+        wi = w;
+        scatterF = f;
+        pdf = pdfIn;
+        sampleType = flags;
+        mode = m;
+        eta = e;
+    }
+    
+    Vector3f wo;
+    
+    Float eta;
+    
+    Vector3f wi;
+    
+    RayDifferential outRay;
+    
+    Spectrum scatterF;
+    
+    Float pdf;
+    
+    BxDFType sampleType;
+    
+    TransportMode mode;
+    
+    Sampler * sampler;
+    
+    SurfaceInteraction nextIsect;
 };
 
 /**

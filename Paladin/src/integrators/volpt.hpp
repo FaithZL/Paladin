@@ -52,6 +52,14 @@ public:
         return nloJson();
     }
 
+    Spectrum _Li(const RayDifferential &ray, const Scene &scene,
+                        Sampler &sampler, MemoryArena &arena, int depth) const;
+    
+    Spectrum rayIntersectAndLookForLight(const Scene &scene,
+                                           Sampler &sampler, const RayDifferential &ray,
+                                           int maxInteraction,  Interaction *intr,
+                                           const Medium &medium) const;
+    
     virtual Spectrum Li(const RayDifferential &ray, const Scene &scene,
                 Sampler &sampler, MemoryArena &arena, int depth) const override;
 

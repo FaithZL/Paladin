@@ -43,7 +43,7 @@ void parallelFor(std::function<void(int64_t)> func, int64_t count, int chunkSize
         return;
 	}
 
-	ParallelForLoop loop(std::move(func), count, chunkSize, 0);
+	ParallelForLoop loop(std::move(func), count, chunkSize, CurrentProfilerState());
 	{
         std::lock_guard<std::mutex> lock(workListMutex);
         loop.next = workList;
@@ -67,11 +67,14 @@ void parallelFor(std::function<void(int64_t)> func, int64_t count, int chunkSize
     	lock.unlock();
 		// 执行[indexStart, indexEnd)区间内的索引
 		for (int64_t index = indexStart; index < indexEnd; ++index) {
+            uint64_t oldState = ProfilerState;
+            ProfilerState = loop.profilerState;
 			if (loop.func1D) {
 				loop.func1D(index);
 			} else {
 				loop.func2D(Point2i(index % loop.numX, index / loop.numX), 0);
 			}
+            ProfilerState = oldState;
 		}
 		lock.lock();
 		--loop.activeWorkers;    	
@@ -90,7 +93,7 @@ void parallelFor2D(std::function<void(Point2i, int)> func, const Point2i &count)
 		return;
 	}
 
-	ParallelForLoop loop(std::move(func), count, 0);
+	ParallelForLoop loop(std::move(func), count, CurrentProfilerState());
 	{
         std::lock_guard<std::mutex> lock(workListMutex);
         loop.next = workList;
@@ -117,11 +120,14 @@ void parallelFor2D(std::function<void(Point2i, int)> func, const Point2i &count)
     	lock.unlock();
 		// 执行[indexStart, indexEnd)区间内的索引
 		for (int64_t index = indexStart; index < indexEnd; ++index) {
+            uint64_t oldState = ProfilerState;
+            ProfilerState = loop.profilerState;
 			if (loop.func1D) {
 				loop.func1D(index);
 			} else {
 				loop.func2D(Point2i(index % loop.numX, index / loop.numX), 0);
 			}
+            ProfilerState = oldState;
 		}
 		lock.lock();
 		--loop.activeWorkers;    	
@@ -130,6 +136,8 @@ void parallelFor2D(std::function<void(Point2i, int)> func, const Point2i &count)
 
 static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
 	ThreadIndex = tIndex;
+    
+    ProfilerWorkerThreadInit();
 
 	// 等待，最后一个子线程调用此函数之后，全部子线程同时开始往下执行
 	barrier->wait();
@@ -141,6 +149,7 @@ static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
 	std::unique_lock<std::mutex> lock(workListMutex);
 	while (!shutdownThreads) {
 		if (reportWorkerStats) {
+            ReportThreadStats();
 			if (--reporterCount == 0) {
 				reportDoneCondition.notify_one();
 			}
@@ -165,11 +174,14 @@ static void workerThreadFunc(int tIndex, std::shared_ptr<Barrier> barrier) {
 			lock.unlock();
 			// 执行[indexStart, indexEnd)区间内的索引
 			for (int64_t index = indexStart; index < indexEnd; ++index) {
+                uint64_t oldState = ProfilerState;
+                ProfilerState = loop.profilerState;
 				if (loop.func1D) {
 					loop.func1D(index);
 				} else {
 					loop.func2D(Point2i(index % loop.numX, index / loop.numX), ThreadIndex);
 				}
+                ProfilerState = oldState;
 			}
 			lock.lock();
 			--loop.activeWorkers;
@@ -187,7 +199,7 @@ void setThreadNum(int num) {
 }
 
 int getThreadNum() {
-    return nThread;
+    return maxThreadIndex() + 1;
 }
 
 int maxThreadIndex() {
@@ -226,7 +238,20 @@ void parallelCleanup() {
 }
 
 void mergeWorkerThreadStats() {
+    std::unique_lock<std::mutex> lock(workListMutex);
+    std::unique_lock<std::mutex> doneLock(reportDoneMutex);
+    // Set up state so that the worker threads will know that we would like
+    // them to report their thread-specific stats when they wake up.
+    reportWorkerStats = true;
+    reporterCount = threads.size();
 
+    // Wake up the worker threads.
+    workListCondition.notify_all();
+
+    // Wait for all of them to merge their stats.
+    reportDoneCondition.wait(lock, []() { return reporterCount == 0; });
+
+    reportWorkerStats = false;
 }
 
 PALADIN_END

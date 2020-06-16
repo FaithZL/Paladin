@@ -14,9 +14,14 @@
 #include "core/light.hpp"
 #include "tools/embree_util.hpp"
 #include "lights/envmap.hpp"
-#include <set>
+#include "tools/stats.hpp"
+#include "bxdf.hpp"
 
 PALADIN_BEGIN
+
+STAT_COUNTER("Intersections/Regular ray intersection tests",
+             nIntersectionTests);
+STAT_COUNTER("Intersections/Shadow ray intersection tests", nShadowTests);
 
 class Scene {
 public:
@@ -44,15 +49,19 @@ public:
                                Float *pmf) const;
     
     F_INLINE bool rayIntersect(const Ray &ray, SurfaceInteraction *isect) const {
+        TRY_PROFILE(Prof::sceneRayIntersect)
+        ++nIntersectionTests;
         return _rtcScene ?
-            rayIntersectEmbree(ray, isect):
-            rayIntersectNative(ray, isect);
+                rayIntersectEmbree(ray, isect):
+                rayIntersectNative(ray, isect);
     }
     
     F_INLINE bool rayOccluded(const Ray &ray) const {
+        TRY_PROFILE(Prof::sceneRayOccluded)
+        ++nShadowTests;
         return _rtcScene ?
-            rayOccludedEmbree(ray):
-            rayOccludedNative(ray);
+                rayOccludedEmbree(ray):
+                rayOccludedNative(ray);
     }
     
     F_INLINE bool rayIntersectNative(const Ray &ray, SurfaceInteraction *isect) const {
@@ -86,6 +95,23 @@ public:
         return ret;
     }
     
+    Spectrum sampleOneLight(ScatterSamplingRecord *scatterRcd,
+                            MemoryArena &arena,
+                            const Distribution1D *lightDistrib,
+                            bool *foundIntersect,
+                            Spectrum * throughput,
+                            bool handleMedia = false) const;
+    
+    Spectrum estimateDirectLighting(ScatterSamplingRecord *scatterRcd,
+                            MemoryArena &arena,
+                            const Light &light,
+                            DirectSamplingRecord *rcd,
+                            const Point2f &u,
+                            bool *foundIntersect,
+                            Spectrum * throughput,
+                            bool handleMedia = false) const;
+    
+    
     /**
      * 光线在场景中传播的函数
      * @param  ray     指定的光线对象
@@ -94,7 +120,7 @@ public:
      * @param  Tr      可以理解为传播的百分比
      * @return         返回ray与isect是否有交点
      */
-    bool rayIntersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
+    bool rayIntersectTr(const Ray &ray, Sampler &sampler, SurfaceInteraction *isect,
                      Spectrum *Tr) const;
     
     std::vector<std::shared_ptr<Light>> lights;

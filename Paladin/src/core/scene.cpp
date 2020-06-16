@@ -9,9 +9,14 @@
 #include "scene.hpp"
 #include "tools/embree_util.hpp"
 #include "shapes/mesh.hpp"
-
+#include "core/sampler.hpp"
+#include "materials/bxdfs/bsdf.hpp"
 
 PALADIN_BEGIN
+
+
+STAT_COUNTER("Scene/Finity lights", numFinityLights);
+STAT_COUNTER("Scene/Sky lights", numSkyLights);
 
 void Scene::initInfiniteLights() {
     for (auto i = 0; i < lights.size(); ++i) {
@@ -19,17 +24,20 @@ void Scene::initInfiniteLights() {
         light->preprocess(*this);
         if (light->flags & (int)LightFlags::Infinite) {
             infiniteLights.push_back(light);
+            ++numFinityLights;
         }
         if (light->flags & (int)LightFlags::Env) {
             _envmap = static_cast<EnvironmentMap *>(light.get());
+            ++numSkyLights;
             _envIndex = i;
         }
     }
 }
 
-bool Scene::rayIntersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
+bool Scene::rayIntersectTr(const Ray &r, Sampler &sampler, SurfaceInteraction *isect,
                         Spectrum *Tr) const {
     *Tr = Spectrum(1.f);
+    Ray ray = r;
     while (true) {
         bool hitSurface = rayIntersect(ray, isect);
         if (ray.medium) {
@@ -41,7 +49,10 @@ bool Scene::rayIntersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
         }
         
         if (isect->shape->getMaterial() != nullptr) {
-             return true;
+            Float dist = (isect->pos - r.ori).length();
+            Float t = dist / r.dir.length();
+            r.tMax = t;
+            return true;
         }
         ray = isect->spawnRay(ray.dir);
     }
@@ -60,6 +71,7 @@ void Scene::initAccel(const nloJson &data, const vector<shared_ptr<const Shape> 
 Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
                                   const Distribution1D *lightDistrib,
                                   Float *pmf) const {
+//    TRY_PROFILE(Prof::sceneSampleLightDirect)
     Point2f u(_u);
     Float index = lightDistrib->sampleDiscrete(u.x, pmf, &u.x);
     const Light * light = lights.at(index).get();
@@ -70,6 +82,144 @@ Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
 //    auto r = light->sample_Li(Interaction(rcd->ref()), u, &wi, &pdf, &vis);
     auto r2 = light->sample_Li(rcd, u, *this);
     return r2;
+}
+
+Spectrum Scene::sampleOneLight(ScatterSamplingRecord *scatterRcd,
+                               MemoryArena &arena,
+                               const Distribution1D *lightDistrib,
+                               bool *foundIntersect, Spectrum *throughput,
+                               bool handleMedia) const {
+    int nLights = int(lights.size());
+    if (nLights == 0) {
+        return Spectrum(0.0f);
+    }
+    
+    int lightIndex;
+    // 用于储存选中的光源的概率密度函数值
+    Float lightPdf;
+    Sampler &sampler = *scatterRcd->sampler;
+    Point2f u = sampler.get2D();
+    lightIndex = lightDistrib->sampleDiscrete(u[0], &lightPdf, &u[0]);
+    if (lightPdf == 0) {
+        return Spectrum(0.0f);
+    }
+    const Light * light = lights[lightIndex].get();
+    DirectSamplingRecord rcd(scatterRcd->it);
+    Spectrum dl = estimateDirectLighting(scatterRcd, arena, *light,&rcd, u,
+                                         foundIntersect, throughput, handleMedia);
+    return dl / lightPdf;
+}
+
+Spectrum Scene::estimateDirectLighting(ScatterSamplingRecord *scatterRcd,
+                                       MemoryArena &arena,
+                                       const Light &light, DirectSamplingRecord *rcd,
+                                       const Point2f &u,
+                                       bool *foundIntersect, Spectrum *throughput,
+                                       bool handleMedia) const {
+    BxDFType bsdfFlags = BSDF_ALL;
+    Spectrum Ld(0.0f);
+    Float lightPdf = 0;
+    Vector3f wi;
+    Float scatteringPdf = 0;
+    Spectrum scatterF;
+    const Interaction &it = scatterRcd->it;
+    Sampler &sampler = *scatterRcd->sampler;
+    
+    // 采样光源
+    Spectrum Li = light.sample_Li(rcd, u, *this);
+    wi = rcd->dir();
+    lightPdf = rcd->pdfDir();
+    
+    
+    if (lightPdf > 0 && !Li.IsBlack()) {
+        if (it.isSurfaceInteraction()) {
+            const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
+            scatterF = isect.bsdf->f(isect.wo, wi, bsdfFlags) *
+                        absDot(wi, isect.shading.normal);
+            scatteringPdf = isect.bsdf->pdfDir(isect.wo, wi);
+        } else {
+            const MediumInteraction &mi = (const MediumInteraction &)it;
+            Float scatteringPdf = mi.phase->p(mi.wo, wi);
+            scatterF = Spectrum(scatteringPdf);
+        }
+        if (!scatterF.IsBlack()) {
+            if (handleMedia) {
+                Spectrum tr = rcd->Tr(*this, sampler);
+                Li *= tr;
+            }
+            if (!Li.IsBlack()) {
+                // 如果是delta分布，直接计算辐射度
+                if (light.isDelta()) {
+                    Ld += scatterF * Li / lightPdf;
+                } else {
+                    Float weight = powerHeuristic(lightPdf, scatteringPdf);
+                    Ld += scatterF * Li * weight / lightPdf;
+                }
+            }
+        }
+    }
+    
+    Li = Spectrum(0.f);
+    bool sampledSpecular = false;
+    BxDFType sampledType;
+    
+    if (it.isSurfaceInteraction()) {
+        const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
+        scatterF = isect.bsdf->sample_f(isect.wo, &wi, sampler.get2D(),
+                                        &scatteringPdf,
+                                        bsdfFlags, &sampledType);
+        scatterF *= absDot(wi, isect.shading.normal);
+        sampledSpecular = (sampledType & BSDF_SPECULAR) != 0;
+        
+    } else {
+        const MediumInteraction &mi = (const MediumInteraction &)it;
+        scatteringPdf = mi.phase->sample_p(mi.wo, &wi, sampler.get2D());
+        scatterF = Spectrum(scatteringPdf);
+    }
+    
+    scatterRcd->update(wi, scatterF, scatteringPdf, sampledType, Radiance);
+    if (scatteringPdf == 0) {
+        return Ld;
+    }
+    *throughput *= scatterF / scatteringPdf;
+    
+    
+    Spectrum tr(1.0);
+    SurfaceInteraction targetIsect;
+    Ray ray = it.spawnRay(wi);
+    
+    *foundIntersect = handleMedia ?
+                    rayIntersectTr(ray, sampler, &targetIsect, &tr):
+                    rayIntersect(ray, &targetIsect);
+    
+    scatterRcd->outRay = ray;
+    
+    if (*foundIntersect) {
+        scatterRcd->nextIsect = targetIsect;
+        rcd->updateTarget(targetIsect);
+    } else {
+        rcd->updateTarget(wi, 0);
+    }
+    lightPdf = rcd->pdfDir();
+    
+    if (!light.isDelta() && !scatterF.IsBlack() && scatteringPdf > 0) {
+        Float weight = 1;
+        if (!sampledSpecular) {
+            weight = powerHeuristic(scatteringPdf, lightPdf);
+        }
+        if (*foundIntersect) {
+            if (targetIsect.shape->getAreaLight() == &light) {
+                Li = targetIsect.Le(-wi);
+            }
+        } else {
+            Li = light.Le(ray);
+        }
+        if (!Li.IsBlack()) {
+            auto tmp = Li * tr * scatterF * weight / scatteringPdf;
+            Ld += tmp;
+        }
+    }
+    return Ld;
 }
 
 bool Scene::rayIntersectEmbree(const Ray &ray, SurfaceInteraction *isect) const {
@@ -83,6 +233,7 @@ bool Scene::rayIntersectEmbree(const Ray &ray, SurfaceInteraction *isect) const 
     uint32_t gid = rh.hit.geomID;
     uint32_t pid = rh.hit.primID;
     Vector2f uv(rh.hit.u, rh.hit.v);
+    ray.tMax = rh.ray.tfar;
     
     const Shape * shape = _shapes.at(gid).get();
     switch (shape->getType()) {

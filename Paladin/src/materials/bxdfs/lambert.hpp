@@ -9,6 +9,8 @@
 #define lambert_hpp
 
 #include "core/bxdf.hpp"
+#include "core/texture.hpp"
+#include "core/sampler.hpp"
 
 PALADIN_BEGIN
 
@@ -47,27 +49,23 @@ public:
     }
 
     // 朗伯反射中任何方向的反射率都相等
-    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const {
+    virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const override {
         return _R * InvPi;
     }
 
     // 朗伯反射中任何方向的反射率都相等
-    virtual Spectrum rho_hd(const Vector3f &, int, const Point2f *) const {
+    virtual Spectrum rho_hd(const Vector3f &, int, const Point2f *) const override {
         return _R;
     }
 
     // 朗伯反射中任何方向的反射率都相等
-    virtual Spectrum rho_hh(int, const Point2f *, const Point2f *) const {
+    virtual Spectrum rho_hh(int, const Point2f *, const Point2f *) const override {
         return _R;
     }
 
-    virtual std::string toString() const {
+    virtual std::string toString() const override {
         return std::string("[ LambertianReflection R: ") + _R.ToString() +
            std::string(" ]");
-    }
-    
-    F_INLINE void setReflection(const Spectrum &R) {
-        _R = R;
     }
 
 private:

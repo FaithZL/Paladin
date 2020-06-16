@@ -9,7 +9,10 @@
 #include "math/sampling.hpp"
 #include "mesh.hpp"
 
+
 PALADIN_BEGIN
+
+STAT_PERCENT("Intersections/Ray-triangle intersection tests", nHits, nTests);
 
 Point3f TriangleI::sample(const Point3f *positions, const Normal3f *normals,
                           const Point2f *texCoords, Normal3f * normal, Point2f * uv,
@@ -77,6 +80,7 @@ void TriangleI::getUVs(Point2f uv[3]) const {
 }
 
 bool TriangleI::fillSurfaceInteraction(const Ray &ray, const Vector2f &uv, SurfaceInteraction *isect) const {
+    TRY_PROFILE(Prof::triFillSurfaceInteraction)
     Float b1 = uv.x;
     Float b2 = uv.y;
     Float b0 = 1.f - b1 - b2;
@@ -181,6 +185,13 @@ bool TriangleI::fillSurfaceInteraction(const Ray &ray, const Vector2f &uv, Surfa
         }
         isect->setShadingGeometry(ss, ts, dndu, dndv, true);
     }
+    
+    if (parent->_mediumInterface.isMediumTransition()){
+        isect->mediumInterface = parent->_mediumInterface;
+    } else {
+        isect->mediumInterface = MediumInterface(ray.medium);
+    }
+    
     if (parent->_normals)
         isect->normal = faceforward(isect->normal, isect->shading.normal);
     else if (parent->reverseOrientation ^ parent->transformSwapsHandedness)
@@ -191,9 +202,11 @@ bool TriangleI::fillSurfaceInteraction(const Ray &ray, const Vector2f &uv, Surfa
 bool TriangleI::rayIntersect(const Ray &ray,
                             SurfaceInteraction * isect,
                             bool testAlphaTexture) const {
+    ++nTests;
     Float u,v,t;
     bool ret = rayIntersect(parent->_points.get(), ray, &u, &v, &t);
     if (ret) {
+        ++nHits;
         ray.tMax = t;
         fillSurfaceInteraction(ray, Vector2f(u, v), isect);
     }

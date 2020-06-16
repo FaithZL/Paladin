@@ -82,7 +82,8 @@ struct Interaction {
     /**
      * 一般用于在指定交点处根据序列生成ray找到下一个交点
      */
-    Ray spawnRay(const Vector3f &d) const;
+    Ray spawnRay(const Vector3f &d, bool forward = false) const;
+    
     
     /**
      * 一般用于生成shadow ray，判断两个点之间是否有阻挡
@@ -192,7 +193,7 @@ public:
     
     const Shape * shape = nullptr;
     Shading shading;
-//    const Primitive * primitive = nullptr;
+    
     BSDF * bsdf = nullptr;
     BSSRDF * bssrdf = nullptr;
     
