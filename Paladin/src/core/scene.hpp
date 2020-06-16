@@ -120,7 +120,7 @@ public:
      * @param  Tr      可以理解为传播的百分比
      * @return         返回ray与isect是否有交点
      */
-    bool rayIntersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
+    bool rayIntersectTr(const Ray &ray, Sampler &sampler, SurfaceInteraction *isect,
                      Spectrum *Tr) const;
     
     std::vector<std::shared_ptr<Light>> lights;

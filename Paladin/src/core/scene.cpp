@@ -34,9 +34,10 @@ void Scene::initInfiniteLights() {
     }
 }
 
-bool Scene::rayIntersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
+bool Scene::rayIntersectTr(const Ray &r, Sampler &sampler, SurfaceInteraction *isect,
                         Spectrum *Tr) const {
     *Tr = Spectrum(1.f);
+    Ray ray = r;
     while (true) {
         bool hitSurface = rayIntersect(ray, isect);
         if (ray.medium) {
@@ -48,6 +49,9 @@ bool Scene::rayIntersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
         }
         
         if (isect->shape->getMaterial() != nullptr) {
+            Float dist = (isect->pos - r.ori).length();
+            Float t = dist / r.dir.length();
+            r.tMax = t;
             return true;
         }
         ray = isect->spawnRay(ray.dir);
@@ -188,6 +192,8 @@ Spectrum Scene::estimateDirectLighting(ScatterSamplingRecord *scatterRcd,
                     rayIntersectTr(ray, sampler, &targetIsect, &tr):
                     rayIntersect(ray, &targetIsect);
     
+    scatterRcd->outRay = ray;
+    
     if (*foundIntersect) {
         scatterRcd->nextIsect = targetIsect;
         rcd->updateTarget(targetIsect);
@@ -227,6 +233,7 @@ bool Scene::rayIntersectEmbree(const Ray &ray, SurfaceInteraction *isect) const 
     uint32_t gid = rh.hit.geomID;
     uint32_t pid = rh.hit.primID;
     Vector2f uv(rh.hit.u, rh.hit.v);
+    ray.tMax = rh.ray.tfar;
     
     const Shape * shape = _shapes.at(gid).get();
     switch (shape->getType()) {

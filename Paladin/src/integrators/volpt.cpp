@@ -228,17 +228,16 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
                 break;
             }
             
-            Vector3f wi;
             Vector3f wo = -ray.dir;
-            Spectrum Ld;
             Spectrum tmpThroughput = throughput;
             ScatterSamplingRecord scatterRcd(mi, &sampler);
             
             const Distribution1D *lightDistrib = _lightDistribution->lookup(mi.pos);
-            L += throughput * scene.sampleOneLight(&scatterRcd, arena, lightDistrib, &foundIntersection, &tmpThroughput, true);
+            L += throughput * scene.sampleOneLight(&scatterRcd, arena, lightDistrib,
+                                                   &foundIntersection, &tmpThroughput, true);
             
-            wi = scatterRcd.wi;
-            ray = mi.spawnRay(wi);
+            
+            ray = scatterRcd.outRay;
             specularBounce = false;
             if (foundIntersection) {
                 isect = scatterRcd.nextIsect;
@@ -276,25 +275,21 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
             const Distribution1D * distrib = _lightDistribution->lookup(isect.pos);
 
             Vector3f wo = -ray.dir;
-            Vector3f wi;
             Float pdf;
             BxDFType flags;
-            Spectrum Ld;
             Spectrum f;
             Spectrum tmpThroughput = throughput;
             ScatterSamplingRecord scatterRcd(isect, &sampler);
             
-            Ld = tmpThroughput * scene.sampleOneLight(&scatterRcd, arena, distrib, &foundIntersection, &throughput, true);
-            
-            L += Ld;
-            
-            wi = scatterRcd.wi;
+            L += tmpThroughput * scene.sampleOneLight(&scatterRcd, arena, distrib,
+                                                      &foundIntersection, &throughput, true);
+        
             pdf = scatterRcd.pdf;
             f = scatterRcd.scatterF;
             specularBounce = scatterRcd.isSpecular();
             flags = scatterRcd.sampleType;
             
-            ray = isect.spawnRay(wi);
+            ray = scatterRcd.outRay;
             if (f.IsBlack() || pdf == 0) {
                 break;
             }
@@ -309,11 +304,12 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
                 etaScale *= (dot(wo, isect.normal) > 0) ? (eta * eta) : 1 / (eta * eta);
             }
             
-            ray = isect.spawnRay(wi);
             if (isect.bssrdf && (flags & BSDF_TRANSMISSION)) {
                 // todo 处理bssrdf
             }
-            isect = scatterRcd.nextIsect;
+            if (foundIntersection) {
+                isect = scatterRcd.nextIsect;
+            }
         }
         
         // 为何不直接使用throughput，包含的是radiance，radiance是经过折射缩放的

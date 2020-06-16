@@ -306,6 +306,8 @@ struct ScatterSamplingRecord {
     
     Vector3f wi;
     
+    RayDifferential outRay;
+    
     Spectrum scatterF;
     
     Float pdf;
