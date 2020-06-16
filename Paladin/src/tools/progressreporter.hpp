@@ -38,9 +38,9 @@ public:
         return (Float)elapsedMS;
     }
     
-private:
-    
     void printProgress() const;
+    
+private:
     
     const string _title;
     const int64_t _totalWork;

@@ -438,12 +438,15 @@ inline int Log2Int(int64_t v) {
     return Log2Int((uint64_t)v);
 }
 
+
 #include "math/vector.h"
 #include "math/point.h"
 #include "math/ray.h"
 #include "math/bounds.h"
 #include "tools/memory.hpp"
 #include "tools/errfloat.h"
+#include "tools/stats.hpp"
+
 
 PALADIN_BEGIN
 
