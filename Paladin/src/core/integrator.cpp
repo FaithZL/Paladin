@@ -14,6 +14,8 @@
 
 PALADIN_BEGIN
 
+STAT_COUNTER("Integrator/Camera rays traced", nCameraRays);
+
 Spectrum uniformSampleAllLights(const Interaction &it, const Scene &scene,
                                 MemoryArena &arena, Sampler &sampler,
                                 const std::vector<int> &lightSamples,
@@ -50,6 +52,7 @@ Spectrum sampleOneLight(const Interaction &it, const Scene &scene,
                                const std::vector<int> &lightSamples,
                                bool handleMedia,
                                const Distribution1D *lightDistrib) {
+    TRY_PROFILE(Prof::DirectLighting)
     // 与uniformSampleAllLights不同的是，
     // 该函数会按照对应分布随机采样一个光源，这个接口会比较常用，也比较科学
     int nLights = int(scene.lights.size());
@@ -214,6 +217,7 @@ Spectrum estimateDirectLighting(const Interaction &it, const Point2f &uScatterin
 }
 
 void MonteCarloIntegrator::render(const Scene &scene) {
+    TRY_PROFILE(Prof::IntegratorRender)
     preprocess(scene, *_sampler);
     
 	// 由于是并行计算，先把屏幕分割成m * n块
@@ -248,7 +252,10 @@ void MonteCarloIntegrator::render(const Scene &scene) {
     	// tile范围内，逐像素计算辐射度
     	for (Point2i pixel : tileBounds) {
 
-    		tileSampler->startPixel(pixel);
+            {
+                TRY_PROFILE(Prof::StartPixel)
+                tileSampler->startPixel(pixel);
+            }
 
     		if (!insideExclusive(pixel, _pixelBounds)) {
     			continue;
@@ -261,7 +268,7 @@ void MonteCarloIntegrator::render(const Scene &scene) {
 
     			RayDifferential ray;
     			Float rayWeight = _camera->generateRayDifferential(cameraSample, &ray);
-
+                ++nCameraRays;
     			ray.scaleDifferentials(diffScale);
 
     			Spectrum L(0.0f);

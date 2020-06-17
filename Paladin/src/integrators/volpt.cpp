@@ -12,6 +12,8 @@
 
 PALADIN_BEGIN
 
+STAT_INT_DISTRIBUTION("Integrator/Path length", pathLength);
+
 VolumePathTracer::VolumePathTracer(int maxDepth, std::shared_ptr<const Camera> camera,
                        std::shared_ptr<Sampler> sampler,
                        const AABB2i &pixelBounds, Float rrThreshold /* = 1*/,
@@ -163,7 +165,7 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
         }
     }
-    
+    ReportValue(pathLength, bounce);
     return L;
 }
 

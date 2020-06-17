@@ -67,6 +67,9 @@ PALADIN_BEGIN
  */
 
 
+STAT_COUNTER("Scene/Lights", numLights);
+STAT_COUNTER("Scene/AreaLights", numAreaLights);
+
 enum class LightFlags {
     // 点光源
     DeltaPosition = 1,
@@ -98,7 +101,7 @@ public:
     mediumInterface(mediumInterface),
     _lightToWorld(LightToWorld),
     _worldToLight(LightToWorld->getInverse_ptr()) {
-
+        ++numLights;
     }
     
     /**
@@ -178,7 +181,7 @@ public:
             const MediumInterface &mi,
             int nSamples)
     :Light((int)LightFlags::Area, LightToWorld, mi, nSamples) {
-
+        ++numAreaLights;
     }
 
     virtual Spectrum L(const Interaction &intr, const Vector3f &w) const = 0;

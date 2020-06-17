@@ -15,6 +15,8 @@ STAT_COUNTER("Intersections/Regular ray intersection tests",
              nIntersectionTests);
 STAT_COUNTER("Intersections/Shadow ray intersection tests", nShadowTests);
 
+STAT_COUNTER("Intersections/rayIntersectTr ray intersection tests", nIntersectTrTests);
+
 void Scene::initEnvmap() {
     for (const auto &light : lights) {
         light->preprocess(*this);
@@ -26,6 +28,8 @@ void Scene::initEnvmap() {
 
 bool Scene::intersectTr(Ray ray, Sampler &sampler, SurfaceInteraction *isect,
                         Spectrum *Tr) const {
+    TRY_PROFILE(Prof::sceneRayIntersectTr)
+    ++nIntersectTrTests;
     *Tr = Spectrum(1.f);
     while (true) {
         bool hitSurface = intersect(ray, isect);
@@ -65,6 +69,7 @@ bool Scene::embreeIntersect(const Ray &ray, SurfaceInteraction *isect) const {
 
 bool Scene::intersect(const Ray &ray, SurfaceInteraction *isect) const {
         CHECK_NE(ray.dir, Vector3f(0,0,0));
+    TRY_PROFILE(Prof::sceneRayIntersect)
     ++nIntersectionTests;
     if (_rtcScene) {
          return embreeIntersect(ray, isect);
@@ -75,6 +80,7 @@ bool Scene::intersect(const Ray &ray, SurfaceInteraction *isect) const {
 
 bool Scene::intersectP(const Ray &ray) const {
     CHECK_NE(ray.dir, Vector3f(0,0,0));
+    TRY_PROFILE(Prof::sceneRayOccluded)
     ++nShadowTests;
     if (_rtcScene) {
         return embreeIntersectP(ray);

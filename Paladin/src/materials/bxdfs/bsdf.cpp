@@ -37,6 +37,7 @@ void BSDF::updateGeometry(const SurfaceInteraction &si) {
 }
 
 Spectrum BSDF::f(const Vector3f &woW, const Vector3f &wiW, BxDFType flags) const {
+    TRY_PROFILE(Prof::BSDFEvaluation)
     Vector3f wi = worldToLocal(wiW);
     Vector3f wo = worldToLocal(woW);
     if (wo.z == 0) {
@@ -79,6 +80,7 @@ Spectrum BSDF::rho_hd(const Vector3f &wo, int nSamples, const Point2f *samples,
 Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
                         const Point2f &u, Float *pdf, BxDFType type,
                         BxDFType *sampledType) const {
+    TRY_PROFILE(Prof::BSDFSampling)
     // 计算符合type反射类型的组件数量
     int matchingComps = numComponents(type);
     if (matchingComps == 0) {
@@ -165,7 +167,7 @@ Spectrum BSDF::sample_f(const Vector3f &woWorld, Vector3f *wiWorld,
 
 Float BSDF::pdfDir(const Vector3f &woWorld, const Vector3f &wiWorld,
                 BxDFType flags) const {
-
+    TRY_PROFILE(Prof::BSDFPdf)
     if (nBxDFs == 0.f) {
         return 0.f;
     }

@@ -12,6 +12,9 @@
 
 PALADIN_BEGIN
 
+STAT_PERCENT("Integrator/Zero-radiance paths", zeroRadiancePaths, totalPaths);
+STAT_INT_DISTRIBUTION("Integrator/Path length", pathLength);
+
 PathTracer::PathTracer(int maxDepth, std::shared_ptr<const Camera> camera,
                        std::shared_ptr<Sampler> sampler,
                        const AABB2i &pixelBounds, Float rrThreshold /* = 1*/,
@@ -38,6 +41,7 @@ void PathTracer::preprocess(const Scene &scene, Sampler &sampler) {
 
 Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
 						Sampler &sampler, MemoryArena &arena, int depth) const {
+    TRY_PROFILE(Prof::MonteCarloIntegratorLi)
 	Spectrum L(0.0f);
 	Spectrum throughput(1.0f);
 	RayDifferential ray(r);
@@ -128,6 +132,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
 		}
 	}
+    ReportValue(pathLength, bounces);
     return L;
 }
 

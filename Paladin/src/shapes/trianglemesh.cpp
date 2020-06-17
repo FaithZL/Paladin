@@ -15,6 +15,8 @@
 
 PALADIN_BEGIN
 
+STAT_PERCENT("Intersections/Ray-triangle intersection tests", nHits, nTests);
+
 TriangleMesh::TriangleMesh(
                            const shared_ptr<const Transform> &ObjectToWorld, int nTriangles, const int *vertexIndices,
                            int nVertices, const Point3f *P, const Vector3f *S, const Normal3f *N,
@@ -173,6 +175,7 @@ AABB3f Triangle::objectBound() const {
 
 bool Triangle::watertightIntersect(const Ray &ray, Float *tHit, SurfaceInteraction *isect,
                          bool testAlphaTexture) const {
+    ++nTests;
     const Point3f &p0 = _mesh->points[_vertexIdx[0].pos];
     const Point3f &p1 = _mesh->points[_vertexIdx[1].pos];
     const Point3f &p2 = _mesh->points[_vertexIdx[2].pos];
@@ -397,6 +400,7 @@ bool Triangle::watertightIntersect(const Ray &ray, Float *tHit, SurfaceInteracti
     else if (reverseOrientation ^ transformSwapsHandedness)
         isect->normal = isect->shading.normal = -isect->normal;
     *tHit = t;
+    ++nHits;
     return true;
 }
 

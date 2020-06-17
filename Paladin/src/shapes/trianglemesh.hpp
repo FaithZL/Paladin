@@ -17,6 +17,10 @@
 
 PALADIN_BEGIN
 
+STAT_MEMORY_COUNTER("Memory/Triangle meshes", triMeshBytes);
+
+STAT_COUNTER("Scene/Triangle num", numTri);
+
 class Triangle;
 
 struct Index {
@@ -141,9 +145,9 @@ public:
              int triNumber)
     : Shape(objectToWorld, worldToObject, reverseOrientation), _mesh(_mesh) {
         _vertexIdx = &_mesh->vertexIndice[3 * triNumber];
-        
+        triMeshBytes += sizeof(*this);
         _mesh->addTriangle(this);
-        
+        ++numTri;
         _faceIndex = _mesh->faceIndices.size() ? _mesh->faceIndices[triNumber] : 0;
     }
     
