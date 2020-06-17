@@ -61,19 +61,18 @@ Spectrum DiffuseAreaLight::sample_Li(DirectSamplingRecord *rcd, const Point2f &u
         return 0;
     }
     Spectrum ret = L(*rcd);
-    auto vis = rcd->getVisibilityTester();
-    ret = (!ret.IsBlack() && vis.unoccluded(scene)) ? ret : Spectrum(0.f);
+    if (rcd->checkOccluded) {
+        return (!ret.IsBlack() && rcd->unoccluded(scene)) ? ret : Spectrum(0.f);
+    }
     return ret;
 }
 
 Float DiffuseAreaLight::pdf_Li(const Interaction &ref,
                                const Vector3f &wi) const {
-    TRY_PROFILE(Prof::LightPdf)
     return _shape->pdfDir(ref, wi);
 }
 
 Float DiffuseAreaLight::pdf_Li(const DirectSamplingRecord &rcd) const {
-    TRY_PROFILE(Prof::LightPdf)
     return rcd.pdfDir();
 }
 

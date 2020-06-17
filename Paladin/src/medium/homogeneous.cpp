@@ -13,6 +13,7 @@ PALADIN_BEGIN
 
 // Tr(p → p′) = e^(−σt * l)  volpt.hpp 中 9.1式
 Spectrum HomogeneousMedium::Tr(const Ray &ray, Sampler &sampler) const {
+    TRY_PROFILE(Prof::MediumTr)
     return Exp(-_sigma_t * std::min(ray.tMax * ray.dir.length(), MaxFloat));
 }
 
@@ -42,6 +43,7 @@ Spectrum HomogeneousMedium::Tr(const Ray &ray, Sampler &sampler) const {
  *
  */
 Spectrum HomogeneousMedium::sample(const Ray &ray, Sampler &sampler, MemoryArena &arena, MediumInteraction *mi) const {
+    TRY_PROFILE(Prof::MediumSample)
 	// 随机采样一个通道
 	int channel = std::min((int)(sampler.get1D() * Spectrum::nSamples),
                            Spectrum::nSamples - 1);

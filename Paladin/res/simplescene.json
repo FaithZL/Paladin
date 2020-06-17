@@ -446,13 +446,13 @@
     "integrator" : {
         "type" : "volpt",
         "param" : {
-            "maxBounce" : 5,
+            "maxBounce" : 20,
             "rrThreshold" : 1,
             "lightSampleStrategy" : "power"
         }
     },
     "sampler" : {
-        "type" : "halton",
+        "type" : "random",
         "param" : {
             "spp" : 8
         }
@@ -488,7 +488,7 @@
         }
     },
     "accelerator" : {
-        "type" : "embree",
+        "type" : "bvh",
         "param" : {
             "maxPrimsInNode" : 1,
             "splitMethod" : "SAH"

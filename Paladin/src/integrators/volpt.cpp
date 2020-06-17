@@ -13,6 +13,8 @@
 
 PALADIN_BEGIN
 
+STAT_INT_DISTRIBUTION("Integrator/Path length", pathLength);
+
 VolumePathTracer::VolumePathTracer(int maxDepth, std::shared_ptr<const Camera> camera,
                        std::shared_ptr<Sampler> sampler,
                        const AABB2i &pixelBounds, Float rrThreshold /* = 1*/,
@@ -181,7 +183,7 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
         }
     }
-    
+    ReportValue(pathLength, bounce);
     return L;
 }
 
@@ -290,7 +292,7 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
             flags = scatterRcd.sampleType;
             
             ray = scatterRcd.outRay;
-            if (f.IsBlack() || pdf == 0) {
+            if (pdf == 0 || f.IsBlack()) {
                 break;
             }
 
@@ -325,7 +327,7 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
         }
     }
-    
+    ReportValue(pathLength, bounce);
     return L;
 }
 

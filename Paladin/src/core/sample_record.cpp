@@ -54,7 +54,8 @@ _dir(Vector3f(0,0,0)),
 _dist(-1),
 _pdfDir(-1),
 refInside(refIt.mediumInterface.inside),
-refOutside(refIt.mediumInterface.outside) {
+refOutside(refIt.mediumInterface.outside),
+checkOccluded(true) {
     this->measure = ESolidAngle;
 }
 
@@ -83,7 +84,7 @@ VisibilityTester DirectSamplingRecord::getVisibilityTester() const {
 }
 
 void DirectSamplingRecord::computeData() {
-    TRY_PROFILE(Prof::dsRcdComputeData)
+    TRY_PROFILE(Prof::shapePdfDir)
     _dir = _pos - _ref;
     _dist = _dir.length();
     _dir = normalize(_dir);
