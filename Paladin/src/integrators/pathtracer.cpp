@@ -131,7 +131,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             foundIntersection = scene.rayIntersect(ray, &isect);
             Spectrum Li(0.f);
             Float lightPdf = 0;
-            Float weight = 0;
+            Float weight = 1;
             
             if (foundIntersection) {
                 if (light && !light->isDelta()) {
@@ -140,13 +140,17 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                     if (target == light) {
                         Li = isect.Le(-wi);
                         lightPdf = rcd.pdfDir() * pmf;
-                        weight = powerHeuristic(bsdfPdf, lightPdf);
+                        if (!specularBounce) {
+                            weight = powerHeuristic(bsdfPdf, lightPdf);
+                        }
                         L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
                     }
                 }
             } else {
                 Li = scene.evalEnvironment(ray, &lightPdf, distrib);
-                weight = powerHeuristic(bsdfPdf, lightPdf);
+                if (!specularBounce) {
+                    weight = powerHeuristic(bsdfPdf, lightPdf);
+                }
                 L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
             }
             
