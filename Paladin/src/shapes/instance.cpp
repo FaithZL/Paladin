@@ -15,14 +15,31 @@ void Instance::initial() {
     // todo
 }
 
-bool Instance::rayIntersect(const Ray &ray,
+bool Instance::rayIntersect(const Ray &r,
                             SurfaceInteraction * isect,
                             bool testAlphaTexture) const {
+    auto ray = worldToObject->exec(r);
+    if (!_shape->rayIntersect(ray, isect, testAlphaTexture)) {
+        return false;
+    }
+    r.tMax = ray.tMax;
     
+    if (!objectToWorld->isIdentity()) {
+        *isect = objectToWorld->exec(*isect);
+    }
+    
+    if (_mediumInterface.isMediumTransition()){
+        isect->mediumInterface = _mediumInterface;
+    } else {
+        isect->mediumInterface = MediumInterface(r.medium);
+    }
+    isect->shape = this;
+    return true;
 }
 
-bool Instance::rayOccluded(const Ray &ray, bool testAlphaTexture) const {
-    
+bool Instance::rayOccluded(const Ray &r, bool testAlphaTexture) const {
+    auto ray = worldToObject->exec(r);
+    return _shape->rayOccluded(ray);
 }
 
 PALADIN_END

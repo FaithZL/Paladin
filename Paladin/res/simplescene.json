@@ -459,7 +459,7 @@
     "integrator" : {
         "type" : "pt",
         "param" : {
-            "maxBounce" : 20,
+            "maxBounce" : 64,
             "rrThreshold" : 1,
             "lightSampleStrategy" : "power"
         }
@@ -489,7 +489,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "connellbox-glass-random-64spp.png",
+            "fileName" : "connellbox-glass-random-16spp.png",
             "diagonal" : 1,
             "scale" : 1
         }

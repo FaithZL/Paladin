@@ -26,11 +26,11 @@ public:
         
     }
     
-    virtual bool rayIntersect(const Ray &ray,
+    virtual bool rayIntersect(const Ray &r,
                             SurfaceInteraction * isect,
                             bool testAlphaTexture = true) const override;
     
-    virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true) const override;
+    virtual bool rayOccluded(const Ray &r, bool testAlphaTexture = true) const override;
     
     void initial();
     
