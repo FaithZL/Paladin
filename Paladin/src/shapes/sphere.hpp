@@ -76,6 +76,12 @@ public:
     
     virtual bool intersectP(const Ray &ray, bool testAlphaTexture) const override;
     
+    virtual bool rayIntersect(const Ray &ray,
+                        SurfaceInteraction * isect,
+                        bool testAlphaTexture = true) const override;
+    
+    virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true) const override;
+    
     /**
      * 可以把球体当做一个180°的圆弧以z轴旋转360°得到的一个回转体
      * 球体的一部分则可以当做一个圆弧以z轴旋转φ

@@ -143,6 +143,92 @@ bool Sphere::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, boo
     return true;
 }
 
+bool Sphere::rayOccluded(const Ray &r, bool testAlphaTexture) const {
+    Ray ray = worldToObject->exec(r);
+    
+    Float ox = ray.ori.x, oy = ray.ori.y, oz = ray.ori.z;
+    Float dx = ray.dir.x, dy = ray.dir.y, dz = ray.dir.z;
+    
+    Float a = dx * dx + dy * dy + dz * dz;
+    Float b = 2 * (dx * ox + dy * oy + dz * oz);
+    Float c = ox * ox + oy * oy + oz * oz - _radius * _radius;
+    
+    Float t0, t1;
+    if (!quadratic(a, b, c, &t0, &t1)) {
+        return false;
+    }
+    
+    if (t0 > ray.tMax || t1 < ray.tMin) {
+        return false;
+    }
+    
+    Float tShapeHit = t0;
+    
+    if (tShapeHit <= ray.tMin) {
+        tShapeHit = t1;
+        if (tShapeHit > ray.tMax) {
+            return false;
+        }
+    }
+    
+    Point3f pHit = ray.at((Float)tShapeHit);
+    pHit *= _radius / distance(pHit, Point3f(0, 0, 0));
+    
+    if (pHit.x == 0 && pHit.y == 0) {
+        // 避免0/0
+        pHit.x = 1e-5f * _radius;
+    }
+    
+    Float phi = std::atan2(pHit.y, pHit.x);
+    if (phi < 0) {
+        phi += 2 * Pi;
+    }
+    
+    if ((_zMin > -_radius && pHit.z < _zMin)
+            || (_zMax < _radius && pHit.z > _zMax)
+        || phi > _phiMax) {
+        // 如果pHit处在球的缺失部分
+        if (tShapeHit == t1) {
+            // 如果tShapeHit已经是较远点，则返回false
+            return false;
+        }
+        if (t1 > ray.tMax) {
+            return false;
+        }
+
+        // 此时的逻辑是t0处于球的缺失部分，则开始判断t1
+        tShapeHit = t1;
+        pHit = ray.at((Float)tShapeHit);
+
+        pHit *= _radius / distance(pHit, Point3f(0, 0, 0));
+        if (pHit.x == 0 && pHit.y == 0) {
+            // 避免0/0
+            pHit.x = 1e-5f * _radius;
+        }
+        
+        phi = std::atan2(pHit.y, pHit.x);
+        if (phi < 0) {
+            phi += 2 * Pi;
+        }
+
+        // 再次测试球体裁剪参数
+        if ((_zMin > -_radius && pHit.z < _zMin)
+            || (_zMax < _radius && pHit.z > _zMax)
+            || phi > _phiMax) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Sphere::rayIntersect(const Ray &r,
+                            SurfaceInteraction * isect,
+                            bool testAlphaTexture) const {
+    Ray ray = worldToObject->exec(r);
+    
+    
+}
+
 
 bool Sphere::intersectP(const Ray &r, bool testAlphaTexture) const {
     Float phi;
