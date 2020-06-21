@@ -133,9 +133,11 @@ Spectrum Scene::estimateDirectLighting(ScatterSamplingRecord *scatterRcd,
     if (lightPdf > 0 && !Li.IsBlack()) {
         if (it.isSurfaceInteraction()) {
             const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
-            scatterF = isect.bsdf->f(isect.wo, wi, bsdfFlags) *
-                        absDot(wi, isect.shading.normal);
-            scatteringPdf = isect.bsdf->pdfDir(isect.wo, wi);
+            if (isect.bsdf->hasNonSpecular()) {
+                scatterF = isect.bsdf->f(isect.wo, wi, bsdfFlags) *
+                            absDot(wi, isect.shading.normal);
+                scatteringPdf = isect.bsdf->pdfDir(isect.wo, wi);
+            }
         } else {
             const MediumInteraction &mi = (const MediumInteraction &)it;
             Float scatteringPdf = mi.phase->p(mi.wo, wi);

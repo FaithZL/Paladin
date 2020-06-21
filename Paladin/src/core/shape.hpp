@@ -101,11 +101,6 @@ public:
                             bool testAlphaTexture = true) const {
         return intersect(ray, nullptr, nullptr, testAlphaTexture);
     }
-    
-    virtual bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const {
-        DCHECK(false);
-        return true;
-    }
 
     // 表面积
     virtual Float area() const {

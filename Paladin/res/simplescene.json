@@ -467,7 +467,7 @@
     "sampler" : {
         "type" : "random",
         "param" : {
-            "spp" : 64
+            "spp" : 8
         }
     },
     "camera" : {
@@ -501,7 +501,7 @@
         }
     },
     "accelerator" : {
-        "type" : "embree",
+        "type" : "bvh",
         "param" : {
             "maxPrimsInNode" : 1,
             "splitMethod" : "SAH"

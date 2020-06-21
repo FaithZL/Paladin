@@ -41,6 +41,10 @@ public:
         }
         return num;
     }
+    
+    F_INLINE bool hasNonSpecular() const {
+        return numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0;
+    }
 
     /**
      * 根据法线方向，切线向量，付切线向量确定正交基
