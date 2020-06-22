@@ -431,7 +431,7 @@
                 "y" : 1.2,
                 "z" : 0.6
             },
-            "material" : "glass"
+            "material" : "matte1"
         },
         {
             "type" : "triMesh",
@@ -453,7 +453,7 @@
                 "y" : 0.6,
                 "z" : 0.6
             },
-            "material" : "glass"
+            "material" : "matte1"
         }
     ],
     "integrator" : {
@@ -467,7 +467,7 @@
     "sampler" : {
         "type" : "random",
         "param" : {
-            "spp" : 8
+            "spp" : 16
         }
     },
     "camera" : {
@@ -489,7 +489,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "connellbox-glass-random-16spp.png",
+            "fileName" : "connellbox-matte1-random-16spp.png",
             "diagonal" : 1,
             "scale" : 1
         }

@@ -51,10 +51,10 @@ Spectrum PathTracer::Li2(const RayDifferential &r, const Scene &scene, Sampler &
     int bounces;
 
     Float etaScale = 1;
-
+    SurfaceInteraction isect;
+    bool foundIntersection;
     for (bounces = 0;; ++bounces) {
-        SurfaceInteraction isect;
-        bool foundIntersection = scene.rayIntersect(ray, &isect);
+        foundIntersection = scene.rayIntersect(ray, &isect);
         // 如果当前ray是直接从相机发射，
         // 判断光线是否与场景几何图元相交
         if (bounces == 0 || specularBounce) {
@@ -85,34 +85,31 @@ Spectrum PathTracer::Li2(const RayDifferential &r, const Scene &scene, Sampler &
 
         const Distribution1D * distrib = _lightDistribution->lookup(isect.pos);
         // 找到非高光反射comp，如果有，则估计直接光照贡献
-        if (1) {
-            
-            Spectrum Ld;
+        Spectrum Ld;
 
-            Spectrum tmpThroughput = throughput;
-
-            ScatterSamplingRecord scatterRcd(isect, &sampler);
-            if (isect.bsdf->hasNonSpecular()) {
-                Ld = throughput * scene.sampleOneLight(&scatterRcd, arena, distrib, &foundIntersection, &tmpThroughput);
-            } else {
-                Ld = throughput * scene.sampleOneLight(&scatterRcd, arena, distrib, &foundIntersection, &tmpThroughput);
-                if (!Ld.IsBlack()) {
-                    cout << 6 << endl;
-                }
-            }
-            
-            if (isect.bsdf->hasNonSpecular()) {
-                L += Ld;
-            }
+        Spectrum tmpThroughput = throughput;
+        
+        ScatterSamplingRecord scatterRcd(isect, &sampler);
+        Ld = throughput * scene.sampleOneLight(&scatterRcd, arena, distrib, &foundIntersection, &tmpThroughput);
+        if (isect.bsdf->hasNonSpecular()) {
+        
+            L += Ld;
             
         }
 
         // 开始采样BSDF，生成wi方向，追踪更长的路径
+//        Vector3f wo = -ray.dir;
+//        Vector3f wi;
+//        Float pdf;
+//        BxDFType flags;
+//        Spectrum f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(), &pdf, BSDF_ALL, &flags);
+        
         Vector3f wo = -ray.dir;
-        Vector3f wi;
-        Float pdf;
-        BxDFType flags;
-        Spectrum f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(), &pdf, BSDF_ALL, &flags);
+        Vector3f wi = scatterRcd.wi;
+        Float pdf = scatterRcd.pdf;
+        BxDFType flags = scatterRcd.sampleType;
+        Spectrum f = scatterRcd.scatterF;
+
 
         if (f.IsBlack() || pdf == 0.0f) {
             break;
@@ -158,7 +155,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                          Sampler &sampler, MemoryArena &arena, int depth) const {
     TRY_PROFILE(Prof::MonteCarloIntegratorLi)
 //    return _Li(r, scene, sampler, arena, depth);
-    return Li2(r, scene, sampler, arena, depth);
+//    return Li2(r, scene, sampler, arena, depth);
     
     Spectrum L(0.0f);
     Spectrum throughput(1.0f);
@@ -256,7 +253,9 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                         if (!specularBounce) {
                             weight = powerHeuristic(bsdfPdf, lightPdf);
                         }
-                        L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+                        if (bsdf->hasNonSpecular()) {
+                            L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+                        }
                     }
                 }
             } else {
@@ -264,7 +263,9 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                 if (!specularBounce) {
                     weight = powerHeuristic(bsdfPdf, lightPdf);
                 }
-                L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+                if (bsdf->hasNonSpecular()) {
+                    L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+                }
             }
             
             throughput *= f / bsdfPdf;
@@ -348,7 +349,10 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
             flags = scatterRcd.sampleType;
             f = scatterRcd.scatterF;
             
-            L += Ld;
+            if (isect.bsdf->hasNonSpecular()) {
+                L += Ld;
+            }
+//            L += Ld;
 
             if (f.IsBlack() || pdf == 0.0f) {
                 break;
