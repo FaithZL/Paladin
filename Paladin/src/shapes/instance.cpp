@@ -37,6 +37,12 @@ bool Instance::rayIntersect(const Ray &r,
     return true;
 }
 
+RTCGeometry Instance::rtcGeometry(Scene * scene) const {
+    RTCGeometry ret = rtcNewGeometry(EmbreeUtil::getDevice(), RTC_GEOMETRY_TYPE_INSTANCE);
+    
+    return ret;
+}
+
 bool Instance::rayOccluded(const Ray &r, bool testAlphaTexture) const {
     auto ray = worldToObject->exec(r);
     return _shape->rayOccluded(ray);

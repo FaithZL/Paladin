@@ -143,12 +143,12 @@ bool Sphere::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, boo
     return true;
 }
 
-bool Sphere::fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInteraction *isect) const {
+bool Sphere::fillSurfaceInteraction(const Ray &ray, const Vector2f &uv, const Point3f &pHit, SurfaceInteraction *isect) const {
     
     
     Float u = uv[0];
     Float v = uv[1];
-    
+    Float theta = std::acos(clamp(pHit.z / _radius, -1, 1));
     Float zRadius = std::sqrt(pHit.x * pHit.x + pHit.y * pHit.y);
     Float invZRadius = 1 / zRadius;
     Float cosPhi = pHit.x * invZRadius;
@@ -189,7 +189,7 @@ bool Sphere::fillSurfaceInteraction(const Ray &r, const Vector2f &uv, SurfaceInt
                                                  -ray.dir, dpdu, dpdv, dndu, dndv,
                                                     ray.time, this));
     
-    *tHit = (Float)tShapeHit;
+//    *tHit = (Float)tShapeHit;
 }
 
 bool Sphere::rayOccluded(const Ray &r, bool testAlphaTexture) const {
@@ -356,7 +356,7 @@ bool Sphere::rayIntersect(const Ray &r,
     Float theta = std::acos(clamp(pHit.z / _radius, -1, 1));
     Float v = (theta - _thetaMin) / (_thetaMax - _thetaMin);
     
-    fillSurfaceInteraction(r, Vector2f(u, v), isect);
+    fillSurfaceInteraction(r, Vector2f(u, v), pHit, isect);
     
     return true;
 }

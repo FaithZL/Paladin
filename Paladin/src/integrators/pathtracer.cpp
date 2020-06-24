@@ -154,7 +154,7 @@ Spectrum PathTracer::Li2(const RayDifferential &r, const Scene &scene, Sampler &
 Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                          Sampler &sampler, MemoryArena &arena, int depth) const {
     TRY_PROFILE(Prof::MonteCarloIntegratorLi)
-//    return _Li(r, scene, sampler, arena, depth);
+    return _Li(r, scene, sampler, arena, depth);
 //    return Li2(r, scene, sampler, arena, depth);
     
     Spectrum L(0.0f);
@@ -349,10 +349,10 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
             flags = scatterRcd.sampleType;
             f = scatterRcd.scatterF;
             
-            if (isect.bsdf->hasNonSpecular()) {
-                L += Ld;
-            }
-//            L += Ld;
+//            if (isect.bsdf->hasNonSpecular()) {
+//                L += Ld;
+//            }
+            L += Ld;
 
             if (f.IsBlack() || pdf == 0.0f) {
                 break;

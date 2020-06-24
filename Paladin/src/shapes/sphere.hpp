@@ -80,7 +80,7 @@ public:
                         SurfaceInteraction * isect,
                         bool testAlphaTexture = true) const override;
     
-    bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv,
+    bool fillSurfaceInteraction(const Ray &r, const Vector2f &uv, const Point3f &pHit,
                                 SurfaceInteraction *isect) const;
     
     virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true) const override;

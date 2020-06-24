@@ -32,6 +32,8 @@ public:
     
     virtual bool rayOccluded(const Ray &r, bool testAlphaTexture = true) const override;
     
+    virtual RTCGeometry rtcGeometry(Scene * scene) const;
+    
     void initial();
     
 private:
