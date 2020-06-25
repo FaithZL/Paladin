@@ -31,6 +31,10 @@ public:
         CHECK_LT(nBxDFs, MaxBxDFs);
         bxdfs[nBxDFs++] = b;
     }
+    
+    inline bool hasNonSpecular() const {
+        return numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0;
+    }
 
     int numComponents(BxDFType flags = BSDF_ALL) const {
         int num = 0;
