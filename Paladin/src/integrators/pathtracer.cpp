@@ -16,7 +16,7 @@ PALADIN_BEGIN
 
 STAT_PERCENT("Integrator/Zero-radiance paths", zeroRadiancePaths, totalPaths);
 STAT_INT_DISTRIBUTION("Integrator/Path length", pathLength);
-
+STAT_INT_DISTRIBUTION("Integrator/end Throughput", endThroughput);
 
 PathTracer::PathTracer(int maxDepth, std::shared_ptr<const Camera> camera,
                        std::shared_ptr<Sampler> sampler,
@@ -147,14 +147,16 @@ Spectrum PathTracer::Li2(const RayDifferential &r, const Scene &scene, Sampler &
             DCHECK(!std::isinf(throughput.y()));
         }
     }
+    
     ReportValue(pathLength, bounces);
+    ReportValue(endThroughput, throughput.y());
     return L;
 }
 
 Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                          Sampler &sampler, MemoryArena &arena, int depth) const {
     TRY_PROFILE(Prof::MonteCarloIntegratorLi)
-    return _Li(r, scene, sampler, arena, depth);
+//    return _Li(r, scene, sampler, arena, depth);
 //    return Li2(r, scene, sampler, arena, depth);
     
     Spectrum L(0.0f);
@@ -267,8 +269,14 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                     L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
                 }
             }
-            
+            if (throughput.y() > 100) {
+                cout << throughput << endl;
+            }
             throughput *= f / bsdfPdf;
+            
+            if (throughput.y() > 100) {
+                cout << throughput << endl;
+            }
         }
 
         Spectrum rrThroughput = throughput * etaScale;
@@ -282,7 +290,9 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
         }
     }
+    
     ReportValue(pathLength, bounces);
+    ReportValue(endThroughput, throughput.y());
     return L;
 }
 
@@ -388,6 +398,8 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
         }
     }
+    ReportValue(pathLength, bounces);
+    ReportValue(endThroughput, throughput.y());
     return L;
 }
 
