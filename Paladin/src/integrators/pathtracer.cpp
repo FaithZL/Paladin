@@ -124,14 +124,15 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
         // 为何不直接使用throughput，包含的是radiance，radiance是经过折射缩放的
         // 但rrThroughput没有经过折射缩放，包含的是power，我们需要根据能量去筛选路径
         Spectrum rrThroughput = throughput * etaScale;
-		if (rrThroughput.MaxComponentValue() < _rrThreshold && bounces > 3) {
-            Float q = std::max((Float)0.05, 1 - rrThroughput.MaxComponentValue());
+        Float mp = rrThroughput.MaxComponentValue();
+        if (mp < _rrThreshold && bounces > 3) {
+            Float q = std::max((Float)0.05, 1 - mp);
             if (sampler.get1D() < q) {
                 break;
-			}
-			throughput /= 1 - q;
+            }
+            throughput /= 1 - q;
             DCHECK(!std::isinf(throughput.y()));
-		}
+        }
 	}
     ReportValue(pathLength, bounces);
     ReportValue(endThroughput, throughput.y());
