@@ -431,7 +431,7 @@
                 "y" : 1.2,
                 "z" : 0.6
             },
-            "material" : "matte1"
+            "material" : "glass"
         },
         {
             "type" : "triMesh",
@@ -453,13 +453,13 @@
                 "y" : 0.6,
                 "z" : 0.6
             },
-            "material" : "matte1"
+            "material" : "glass"
         }
     ],
     "integrator" : {
         "type" : "pt",
         "param" : {
-            "maxBounce" : 64,
+            "maxBounce" : 30,
             "rrThreshold" : 1,
             "lightSampleStrategy" : "power"
         }
@@ -489,7 +489,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "connellbox-matte1-random-16spp.png",
+            "fileName" : "connellbox-glass-random-16spp.png",
             "diagonal" : 1,
             "scale" : 1
         }
@@ -501,7 +501,7 @@
         }
     },
     "accelerator" : {
-        "type" : "bvh",
+        "type" : "embree",
         "param" : {
             "maxPrimsInNode" : 1,
             "splitMethod" : "SAH"
