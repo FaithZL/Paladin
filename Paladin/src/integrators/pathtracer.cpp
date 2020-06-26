@@ -138,8 +138,9 @@ Spectrum PathTracer::Li2(const RayDifferential &r, const Scene &scene, Sampler &
         // 为何不直接使用throughput，包含的是radiance，radiance是经过折射缩放的
         // 但rrThroughput没有经过折射缩放，包含的是power，我们需要根据能量去筛选路径
         Spectrum rrThroughput = throughput * etaScale;
-        if (rrThroughput.MaxComponentValue() < _rrThreshold && bounces > 3) {
-            Float q = std::max((Float)0.05, 1 - rrThroughput.MaxComponentValue());
+        Float mp = rrThroughput.MaxComponentValue();
+        if (mp < _rrThreshold && bounces > 3) {
+            Float q = std::max((Float)0.05, 1 - mp);
             if (sampler.get1D() < q) {
                 break;
             }
@@ -186,7 +187,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             break;
         }
 
-        isect.computeScatteringFunctions(ray, arena);
+        isect.computeScatteringFunctions(ray, arena, true);
         if (!isect.bsdf) {
             ray = isect.spawnRay(ray.dir, true);
             foundIntersection = scene.rayIntersect(ray, &isect);
@@ -269,24 +270,17 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                     L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
                 }
             }
-            if (throughput.y() > 100) {
-                cout << throughput << endl;
-            }
             throughput *= f / bsdfPdf;
-            
-            if (throughput.y() > 100) {
-                cout << throughput << endl;
-            }
         }
 
         Spectrum rrThroughput = throughput * etaScale;
         Float mp = rrThroughput.MaxComponentValue();
         if (mp < _rrThreshold && bounces > 3) {
-            Float q = std::min((Float)0.05, mp);
-            if (sampler.get1D() >= q) {
+            Float q = std::max((Float)0.05, 1 - mp);
+            if (sampler.get1D() < q) {
                 break;
             }
-            throughput /= q;
+            throughput /= 1 - q;
             DCHECK(!std::isinf(throughput.y()));
         }
     }
@@ -390,11 +384,11 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
         Spectrum rrThroughput = throughput * etaScale;
         Float mp = rrThroughput.MaxComponentValue();
         if (mp < _rrThreshold && bounces > 3) {
-            Float q = std::min((Float)0.05, mp);
-            if (sampler.get1D() >= q) {
+            Float q = std::max((Float)0.05, 1 - mp);
+            if (sampler.get1D() < q) {
                 break;
             }
-            throughput /= q;
+            throughput /= 1 - q;
             DCHECK(!std::isinf(throughput.y()));
         }
     }
