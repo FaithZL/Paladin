@@ -126,11 +126,11 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
         Spectrum rrThroughput = throughput * etaScale;
         Float mp = rrThroughput.MaxComponentValue();
         if (mp < _rrThreshold && bounces > 3) {
-            Float q = std::max((Float)0.05, 1 - mp);
-            if (sampler.get1D() < q) {
+            Float q = std::min((Float)0.95, mp);
+            if (sampler.get1D() >= q) {
                 break;
             }
-            throughput /= 1 - q;
+            throughput /= q;
             DCHECK(!std::isinf(throughput.y()));
         }
 	}

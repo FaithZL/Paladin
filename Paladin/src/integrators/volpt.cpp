@@ -12,7 +12,9 @@
 
 PALADIN_BEGIN
 
+STAT_PERCENT("Integrator/Zero-radiance paths", zeroRadiancePaths, totalPaths);
 STAT_INT_DISTRIBUTION("Integrator/Path length", pathLength);
+STAT_INT_DISTRIBUTION("Integrator/end Throughput", endThroughput);
 
 VolumePathTracer::VolumePathTracer(int maxDepth, std::shared_ptr<const Camera> camera,
                        std::shared_ptr<Sampler> sampler,
@@ -166,6 +168,7 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
         }
     }
     ReportValue(pathLength, bounce);
+    ReportValue(endThroughput, throughput.y());
     return L;
 }
 
