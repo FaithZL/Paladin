@@ -13,6 +13,10 @@
 
 PALADIN_BEGIN
 
+STAT_PERCENT("Integrator/Zero-radiance paths", zeroRadiancePaths, totalPaths);
+STAT_INT_DISTRIBUTION("Integrator/Path length", pathLength);
+STAT_INT_DISTRIBUTION("Integrator/end Throughput", endThroughput);
+
 VolumePathTracer::VolumePathTracer(int maxDepth, std::shared_ptr<const Camera> camera,
                        std::shared_ptr<Sampler> sampler,
                        const AABB2i &pixelBounds, Float rrThreshold /* = 1*/,
@@ -39,23 +43,24 @@ void VolumePathTracer::preprocess(const Scene &scene, Sampler &sampler) {
 
 Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
                               Sampler &sampler, MemoryArena &arena, int depth) const {
-    Spectrum L(0.f);
-    Spectrum throughput(1.f);
+    Spectrum L(0.0f);
+    Spectrum throughput(1.0f);
     RayDifferential ray(r);
     bool specularBounce = false;
-    int bounce;
+    int bounces;
 
-    Float etaScale = 1.f;
+    Float etaScale = 1;
+    
+    SurfaceInteraction isect;
+    bool foundIntersection = scene.rayIntersect(ray, &isect);
 
-    for (bounce = 0; ; ++bounce) {
-        SurfaceInteraction isect;
-        bool foundIntersection = scene.rayIntersect(ray, &isect);
-        
+    for (bounces = 0; ; ++bounces) {
+
         MediumInteraction mi;
         if (ray.medium) {
-            // 如果ray有参与介质，则对参与介质进行采样，计算散射
             throughput *= ray.medium->sample(ray, sampler, arena, &mi);
         }
+        
         if (throughput.IsBlack()) {
             break;
         }
@@ -65,36 +70,57 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
             // 其实跟采样表面一样的处理方式，
             // 1.估计直接光照
             // 2.随机选方向继续追踪
-            if (bounce >= _maxDepth) {
+            if (bounces >= _maxDepth) {
                 break;
             }
             
-            Vector3f wi;
-            Vector3f wo = -ray.dir;
-            Float pdf;
-            BxDFType flags;
-            Spectrum f;
-            Spectrum Ld;
-            bool found;
-            Spectrum tmpThroughput;
-            ScatterSamplingRecord scatterRcd(mi, &sampler);
-            
             const Distribution1D *lightDistrib = _lightDistribution->lookup(mi.pos);
+            DirectSamplingRecord rcd(mi);
             
-            Ld = throughput * scene.sampleOneLight(&scatterRcd, arena, lightDistrib, &found, &tmpThroughput, true);
+            // 采样光源
+            const Light * light = nullptr;
+            Float pmf = 0;
             
-            L += Ld;
+            Spectrum Ld = scene.sampleLightDirect(&rcd, sampler.get2D(), lightDistrib, &pmf);
+            light = static_cast<const Light *>(rcd.object);
             
-            mi.phase->sample_p(wo, &wi, sampler.get2D());
+            if (!Ld.IsBlack()) {
+                Float phasePdf = mi.phase->p(mi.wo, rcd.dir());
+                Spectrum phaseVal(phasePdf);
+                
+                if (phasePdf != 0) {
+                    Spectrum tr = rcd.Tr(scene, sampler);
+                    Ld *= tr;
+                    Float lightPdf = rcd.pdfDir() * pmf;
+                    Float weight = powerHeuristic(lightPdf, phasePdf);
+                    L += throughput * Ld * phaseVal * weight / lightPdf;
+                }
+            }
+            
+            // 采样phase函数
+            Vector3f wi;
+            Float phasePdf = mi.phase->sample_p(mi.wo, &wi, sampler.get2D());
+            Spectrum phaseVal(phasePdf);
             ray = mi.spawnRay(wi);
+            Spectrum Tr(1.f);
+            Spectrum Li;
+            bool onSurface = scene.rayIntersectTr(ray, sampler, &isect, &Tr);
+            if (onSurface) {
+                if (light && !light->isDelta()) {
+                    const Light * targetLight = isect.shape->getAreaLight();
+                    if (targetLight == light) {
+                        rcd.updateTarget(isect);
+                        Li = isect.Le(-wi) * Tr;
+                        Float lightPdf = pmf * rcd.pdfDir();
+                        Float weight = powerHeuristic(phasePdf, lightPdf);
+                        L += throughput * Li * phaseVal * weight / phasePdf;
+                    }
+                }
+            }
             specularBounce = false;
-            
         } else {
-            // 如果采样到的顶点没有落在物体表面
-            // 如果当前ray是直接从相机发射，
-            // 判断光线是否与场景几何图元相交
-            if (specularBounce || bounce == 0) {
-                // 因为在这种情况下，ray的方向是确定的，因此直接取isect的Le
+            // 采样点落在表面上
+            if (bounces == 0 || specularBounce) {
                 if (foundIntersection) {
                     L += throughput * isect.Le(-ray.dir);
                 } else {
@@ -104,76 +130,93 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
                 }
             }
 
-            if (!foundIntersection || bounce > _maxDepth) {
+            if (!foundIntersection || bounces >= _maxDepth) {
                 break;
             }
-            // 计算bsdf
-            isect.computeScatteringFunctions(ray, arena);
-            // 如果没有bsdf，则不计算反射次数
-            // 有些几何图元是仅仅是为了限定参与介质的范围
-            // 所以没有bsdf
+
+            isect.computeScatteringFunctions(ray, arena, true);
             if (!isect.bsdf) {
-                ray = isect.spawnRay(ray.dir);
-                --bounce;
+                ray = isect.spawnRay(ray.dir, true);
+                foundIntersection = scene.rayIntersect(ray, &isect);
+                --bounces;
                 continue;
             }
+
+            BSDF * bsdf = isect.bsdf;
+            
+            // 采样光源
             const Distribution1D * distrib = _lightDistribution->lookup(isect.pos);
-            // 找到非高光反射comp，如果有，则估计直接光照贡献
-            if (isect.bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR))) {
-                
-                Vector3f wi;
-                Vector3f wo = -ray.dir;
-                Float pdf;
-                BxDFType flags;
-                Spectrum f;
-                Spectrum Ld;
-                Spectrum tmpThroughput;
-                bool found;
-                ScatterSamplingRecord scatterRcd(isect, &sampler);
-                
-                Ld = throughput * scene.sampleOneLight(&scatterRcd, arena, distrib, &found, &tmpThroughput, true);
-                
-                L += Ld;
+            DirectSamplingRecord rcd(isect);
+            const Light * light = nullptr;
+            Float pmf = 0;
+            
+            if (bsdf->hasNonSpecular()) {
+                Spectrum Ld = scene.sampleLightDirect(&rcd, sampler.get2D(), distrib, &pmf);
+                light = static_cast<const Light *>(rcd.object);
+                if (!Ld.IsBlack()) {
+                    Spectrum bsdfVal = bsdf->f(isect.wo, rcd.dir());
+                    bsdfVal *= absDot(isect.shading.normal, rcd.dir());
+
+                    if (!bsdfVal.IsBlack()) {
+                        Float bsdfPdf = light->isDelta() ? 0 : bsdf->pdfDir(isect.wo, rcd.dir());
+                        Spectrum tr = rcd.Tr(scene, sampler);
+                        Float lightPdf = rcd.pdfDir() * pmf;
+                        Float weight = bsdfPdf == 0 ? 1 : powerHeuristic(lightPdf, bsdfPdf);
+                        L += throughput * weight * bsdfVal * Ld * tr / lightPdf;
+                    }
+                }
             }
+
+            // 采样bsdf
             Vector3f wo = -ray.dir;
             Vector3f wi;
-            Float pdf;
+            Float bsdfPdf;
             BxDFType flags;
-            Spectrum f = isect.bsdf->sample_f(wo, &wi, sampler.get2D(), &pdf, BSDF_ALL, &flags);
-            ray = isect.spawnRay(wi);
-            if (f.IsBlack() || pdf == 0) {
+            Spectrum f = bsdf->sample_f(wo, &wi, sampler.get2D(),
+                                        &bsdfPdf, BSDF_ALL, &flags);
+            
+            if (bsdfPdf == 0 || f.IsBlack()) {
                 break;
             }
-            /**
-             * 复用之前的路径对吞吐量进行累积
-             *      f(pj+1 → pj → pj-1) |cosθj|
-             *    --------------------------------
-             *             pω(pj+1 - pj)
-             */
-            throughput *= f * absDot(wi, isect.shading.normal) / pdf;
-            CHECK_GE(throughput.y(), 0.0f);
-            DCHECK(!std::isinf(throughput.y()));
+            f *= absDot(wi, isect.shading.normal);
+
             specularBounce = (flags & BSDF_SPECULAR) != 0;
             
-            if (flags & BSDF_TRANSMISSION) {
-                // 如果采样到投射comp
-                Float eta = isect.bsdf->eta;
+            if ((flags & BSDF_TRANSMISSION)) {
+                Float eta = bsdf->eta;
                 // 详见bxdf.hpp文件中SpecularTransmission的注释
                 etaScale *= (dot(wo, isect.normal) > 0) ? (eta * eta) : 1 / (eta * eta);
             }
-            
             ray = isect.spawnRay(wi);
-            if (isect.bssrdf && (flags & BSDF_TRANSMISSION)) {
-                // todo 处理bssrdf
+            Spectrum tr(1.f);
+            foundIntersection = scene.rayIntersectTr(ray, sampler, &isect, &tr);
+            Spectrum Li(0.f);
+            Float lightPdf = 0;
+            Float weight = 0;
+            
+            if (foundIntersection) {
+                if (light && !light->isDelta()) {
+                    rcd.updateTarget(isect);
+                    const Light * target = isect.shape->getAreaLight();
+                    if (target == light) {
+                        Li = isect.Le(-wi) * tr;
+                        lightPdf = rcd.pdfDir() * pmf;
+                        weight = powerHeuristic(bsdfPdf, lightPdf);
+                        L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+                    }
+                }
+            } else {
+                Li = scene.evalEnvironment(ray, &lightPdf, distrib);
+                weight = powerHeuristic(bsdfPdf, lightPdf);
+                L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
             }
+            throughput *= f / bsdfPdf;
         }
-        
-        // 为何不直接使用throughput，包含的是radiance，radiance是经过折射缩放的
-        // 但rrThroughput没有经过折射缩放，包含的是power，我们需要根据能量去筛选路径
+
         Spectrum rrThroughput = throughput * etaScale;
         Float mp = rrThroughput.MaxComponentValue();
-        if (mp < _rrThreshold && bounce > 3) {
-            Float q = std::min((Float)0.05, mp);
+        if (mp < _rrThreshold && bounces > 3) {
+            Float q = std::min((Float)0.95, mp);
             if (sampler.get1D() >= q) {
                 break;
             }
@@ -181,7 +224,8 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
         }
     }
-    
+    ReportValue(pathLength, bounces);
+    ReportValue(endThroughput, throughput.y());
     return L;
 }
 
@@ -262,7 +306,7 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
                 break;
             }
             // 计算bsdf
-            isect.computeScatteringFunctions(ray, arena);
+            isect.computeScatteringFunctions(ray, arena, true);
             // 如果没有bsdf，则不计算反射次数
             // 有些几何图元是仅仅是为了限定参与介质的范围
             // 所以没有bsdf
@@ -281,8 +325,13 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
             Spectrum tmpThroughput = throughput;
             ScatterSamplingRecord scatterRcd(isect, &sampler);
             
-            L += tmpThroughput * scene.sampleOneLight(&scatterRcd, arena, distrib,
-                                                      &foundIntersection, &throughput, true);
+            Spectrum Ld = tmpThroughput * scene.sampleOneLight(&scatterRcd, arena, distrib,
+                                                               &foundIntersection, &throughput, true);
+            
+            if (isect.bsdf->hasNonSpecular()) {
+                L += Ld;
+            }
+            
         
             pdf = scatterRcd.pdf;
             f = scatterRcd.scatterF;
@@ -290,7 +339,7 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
             flags = scatterRcd.sampleType;
             
             ray = scatterRcd.outRay;
-            if (f.IsBlack() || pdf == 0) {
+            if (pdf == 0 || f.IsBlack()) {
                 break;
             }
 
@@ -312,12 +361,10 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
             }
         }
         
-        // 为何不直接使用throughput，包含的是radiance，radiance是经过折射缩放的
-        // 但rrThroughput没有经过折射缩放，包含的是power，我们需要根据能量去筛选路径
         Spectrum rrThroughput = throughput * etaScale;
         Float mp = rrThroughput.MaxComponentValue();
         if (mp < _rrThreshold && bounce > 3) {
-            Float q = std::min((Float)0.05, mp);
+            Float q = std::min((Float)0.95, mp);
             if (sampler.get1D() >= q) {
                 break;
             }
@@ -325,7 +372,8 @@ Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
         }
     }
-    
+    ReportValue(pathLength, bounce);
+    ReportValue(endThroughput, throughput.y());
     return L;
 }
 

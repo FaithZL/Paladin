@@ -24,12 +24,28 @@
             "enable" : false,
             "param" : {
                 "transform" : {
-                    
+                    "type" : "translate",
+                    "param" : [0,0.9,0]
                 },
                 "I" : {
                     "colorType" : 1,
-                    "color" : [1,1,1]
+                    "color" : [0.9,0.9,0.9]
                 }
+            }
+        },
+        {
+            "type" : "distant",
+            "enable" : false,
+            "param" : {
+                "transform" : {
+                    "type" : "translate",
+                    "param" : [1,0,1]
+                },
+                "L" : {
+                    "colorType" : 1,
+                    "color" : [0.9, 0.9, 0.9]
+                },
+                "wLight" : [0,1,-1]
             }
         }
     ],
@@ -444,17 +460,17 @@
         }
     ],
     "integrator" : {
-        "type" : "bdpt",
+        "type" : "pt",
         "param" : {
-            "maxBounce" : 5,
+            "maxBounce" : 20,
             "rrThreshold" : 1,
             "lightSampleStrategy" : "power"
         }
     },
     "sampler" : {
-        "type" : "halton",
+        "type" : "random",
         "param" : {
-            "spp" : 1
+            "spp" : 8
         }
     },
     "camera" : {
@@ -488,7 +504,7 @@
         }
     },
     "accelerator" : {
-        "type" : "embree",
+        "type" : "bvh",
         "param" : {
             "maxPrimsInNode" : 1,
             "splitMethod" : "SAH"

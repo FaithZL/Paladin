@@ -24,12 +24,28 @@
             "enable" : false,
             "param" : {
                 "transform" : {
-                    
+                    "type" : "translate",
+                    "param" : [0,0.9,0]
                 },
                 "I" : {
                     "colorType" : 1,
-                    "color" : [1,1,1]
+                    "color" : [0.9,0.9,0.9]
                 }
+            }
+        },
+        {
+            "type" : "distant",
+            "enable" : false,
+            "param" : {
+                "transform" : {
+                    "type" : "translate",
+                    "param" : [1,0,1]
+                },
+                "L" : {
+                    "colorType" : 1,
+                    "color" : [0.9, 0.9, 0.9]
+                },
+                "wLight" : [0,1,-1]
             }
         }
     ],
@@ -153,6 +169,7 @@
                         "color" : [1, 1, 1]
                     }
                 },
+                "thin" : false,
                 "Kt" : {
                     "type" : "constant",
                     "param" : {
@@ -162,19 +179,15 @@
                 },
                 "uRough" : {
                     "type" : "constant",
-                    "param" : 0.0
+                    "param" : 0
                 },
                 "vRough" : {
                     "type" : "constant",
-                    "param" : 0.0
+                    "param" : 0
                 },
                 "eta" : {
                     "type" : "constant",
                     "param" : 1.5
-                },
-                "bumpMap" : {
-                    "type" : "constant",
-                    "param" : 0
                 },
                 "remapRough" : false 
             }
@@ -356,7 +369,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "front",
-            "enable" : true,
+            "enable" : false,
             "param" : {
                 "transform" :[
                     {
@@ -418,7 +431,7 @@
                 "y" : 1.2,
                 "z" : 0.6
             },
-            "material" : "matte1"
+            "material" : "glass"
         },
         {
             "type" : "triMesh",
@@ -440,21 +453,21 @@
                 "y" : 0.6,
                 "z" : 0.6
             },
-            "material" : "matte1"
+            "material" : "glass"
         }
     ],
     "integrator" : {
-        "type" : "volpt",
+        "type" : "pt",
         "param" : {
-            "maxBounce" : 5,
+            "maxBounce" : 30,
             "rrThreshold" : 1,
             "lightSampleStrategy" : "power"
         }
     },
     "sampler" : {
-        "type" : "halton",
+        "type" : "random",
         "param" : {
-            "spp" : 8
+            "spp" : 16
         }
     },
     "camera" : {
@@ -476,7 +489,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "connellbox-fog-16spp.png",
+            "fileName" : "connellbox-glass-random-16spp.png",
             "diagonal" : 1,
             "scale" : 1
         }

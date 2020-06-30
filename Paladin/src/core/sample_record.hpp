@@ -134,6 +134,8 @@ private:
     
 public:
     
+    bool checkOccluded;
+    
     const Medium * refInside;
     const Medium * refOutside;
     

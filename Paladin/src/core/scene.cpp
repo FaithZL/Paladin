@@ -14,6 +14,7 @@
 
 PALADIN_BEGIN
 
+STAT_COUNTER("Intersections/rayIntersectTr ray intersection tests", nIntersectTrTests);
 
 STAT_COUNTER("Scene/Finity lights", numFinityLights);
 STAT_COUNTER("Scene/Sky lights", numSkyLights);
@@ -36,6 +37,8 @@ void Scene::initInfiniteLights() {
 
 bool Scene::rayIntersectTr(const Ray &r, Sampler &sampler, SurfaceInteraction *isect,
                         Spectrum *Tr) const {
+    TRY_PROFILE(Prof::sceneRayIntersectTr)
+    ++nIntersectTrTests;
     *Tr = Spectrum(1.f);
     Ray ray = r;
     while (true) {
@@ -76,12 +79,7 @@ Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
     Float index = lightDistrib->sampleDiscrete(u.x, pmf, &u.x);
     const Light * light = lights.at(index).get();
     rcd->object = light;
-//    Vector3f wi;
-//    Float pdf;
-//    VisibilityTester vis;
-//    auto r = light->sample_Li(Interaction(rcd->ref()), u, &wi, &pdf, &vis);
-    auto r2 = light->sample_Li(rcd, u, *this);
-    return r2;
+    return light->sample_Li(rcd, u, *this);
 }
 
 Spectrum Scene::sampleOneLight(ScatterSamplingRecord *scatterRcd,
@@ -89,6 +87,7 @@ Spectrum Scene::sampleOneLight(ScatterSamplingRecord *scatterRcd,
                                const Distribution1D *lightDistrib,
                                bool *foundIntersect, Spectrum *throughput,
                                bool handleMedia) const {
+    TRY_PROFILE(Prof::DirectLighting)
     int nLights = int(lights.size());
     if (nLights == 0) {
         return Spectrum(0.0f);
@@ -126,17 +125,19 @@ Spectrum Scene::estimateDirectLighting(ScatterSamplingRecord *scatterRcd,
     Sampler &sampler = *scatterRcd->sampler;
     
     // 采样光源
+    rcd->checkOccluded = false;
     Spectrum Li = light.sample_Li(rcd, u, *this);
     wi = rcd->dir();
     lightPdf = rcd->pdfDir();
     
-    
     if (lightPdf > 0 && !Li.IsBlack()) {
         if (it.isSurfaceInteraction()) {
             const SurfaceInteraction &isect = (const SurfaceInteraction &)it;
-            scatterF = isect.bsdf->f(isect.wo, wi, bsdfFlags) *
-                        absDot(wi, isect.shading.normal);
-            scatteringPdf = isect.bsdf->pdfDir(isect.wo, wi);
+            if (isect.bsdf->hasNonSpecular()) {
+                scatterF = isect.bsdf->f(isect.wo, wi, bsdfFlags) *
+                            absDot(wi, isect.shading.normal);
+                scatteringPdf = isect.bsdf->pdfDir(isect.wo, wi);
+            }
         } else {
             const MediumInteraction &mi = (const MediumInteraction &)it;
             Float scatteringPdf = mi.phase->p(mi.wo, wi);
@@ -146,6 +147,8 @@ Spectrum Scene::estimateDirectLighting(ScatterSamplingRecord *scatterRcd,
             if (handleMedia) {
                 Spectrum tr = rcd->Tr(*this, sampler);
                 Li *= tr;
+            } else if (!rcd->unoccluded(*this)){
+                Li = Spectrum(0.f);
             }
             if (!Li.IsBlack()) {
                 // 如果是delta分布，直接计算辐射度
@@ -178,7 +181,7 @@ Spectrum Scene::estimateDirectLighting(ScatterSamplingRecord *scatterRcd,
     }
     
     scatterRcd->update(wi, scatterF, scatteringPdf, sampledType, Radiance);
-    if (scatteringPdf == 0) {
+    if (scatteringPdf == 0 || scatterF.IsBlack()) {
         return Ld;
     }
     *throughput *= scatterF / scatteringPdf;

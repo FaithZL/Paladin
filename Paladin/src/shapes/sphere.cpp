@@ -143,6 +143,224 @@ bool Sphere::intersect(const Ray &r, Float *tHit, SurfaceInteraction *isect, boo
     return true;
 }
 
+bool Sphere::fillSurfaceInteraction(const Ray &ray, const Vector2f &uv, const Point3f &pHit, SurfaceInteraction *isect) const {
+    
+    
+    Float u = uv[0];
+    Float v = uv[1];
+    Float theta = std::acos(clamp(pHit.z / _radius, -1, 1));
+    Float zRadius = std::sqrt(pHit.x * pHit.x + pHit.y * pHit.y);
+    Float invZRadius = 1 / zRadius;
+    Float cosPhi = pHit.x * invZRadius;
+    Float sinPhi = pHit.y * invZRadius;
+
+    // 曲面上的点p对参数uv的一阶偏导数，以及二阶偏导数，直接用高中数学知识求出即可，具体推导过程就不写了
+    Vector3f dpdu(-_phiMax * pHit.y, _phiMax * pHit.x, 0);
+    Vector3f dpdv = (_thetaMax - _thetaMin) *
+        Vector3f(pHit.z * cosPhi, pHit.z * sinPhi, -_radius * std::sin(theta));
+
+    Vector3f d2Pduu = -_phiMax * _phiMax * Vector3f(pHit.x, pHit.y, 0);
+    Vector3f d2Pduv = (_thetaMax - _thetaMin)
+                        * pHit.z * _phiMax
+                        * Vector3f(-sinPhi, cosPhi, 0.);
+    Vector3f d2Pdvv = -(_thetaMax - _thetaMin)
+                        * (_thetaMax - _thetaMin)
+                        * Vector3f(pHit.x, pHit.y, pHit.z);
+
+    // 法线对于uv参数的一阶二阶偏导数就略显复杂
+    Float E = dot(dpdu, dpdu);
+    Float F = dot(dpdu, dpdv);
+    Float G = dot(dpdv, dpdv);
+    Vector3f N = normalize(cross(dpdu, dpdv));
+    Float e = dot(N, d2Pduu);
+    Float f = dot(N, d2Pduv);
+    Float g = dot(N, d2Pdvv);
+
+    Float invEGF2 = 1 / (E * G - F * F);
+    Normal3f dndu = Normal3f((f * F - e * G) * invEGF2 * dpdu +
+                             (e * F - f * E) * invEGF2 * dpdv);
+    Normal3f dndv = Normal3f((g * F - f * G) * invEGF2 * dpdu +
+                             (f * F - g * E) * invEGF2 * dpdv);
+
+    // sampleA函数中有gamma(5)的推导过程 为何不能像圆锥那样求误差？todo
+    Vector3f pError = gamma(5) * abs(Vector3f(pHit));
+
+    *isect = objectToWorld->exec(SurfaceInteraction(pHit, pError, Point2f(u, v),
+                                                 -ray.dir, dpdu, dpdv, dndu, dndv,
+                                                    ray.time, this));
+    
+//    *tHit = (Float)tShapeHit;
+}
+
+bool Sphere::rayOccluded(const Ray &r, bool testAlphaTexture) const {
+    Ray ray = worldToObject->exec(r);
+    
+    Float ox = ray.ori.x, oy = ray.ori.y, oz = ray.ori.z;
+    Float dx = ray.dir.x, dy = ray.dir.y, dz = ray.dir.z;
+    
+    Float a = dx * dx + dy * dy + dz * dz;
+    Float b = 2 * (dx * ox + dy * oy + dz * oz);
+    Float c = ox * ox + oy * oy + oz * oz - _radius * _radius;
+    
+    Float t0, t1;
+    if (!quadratic(a, b, c, &t0, &t1)) {
+        return false;
+    }
+    
+    if (t0 > ray.tMax || t1 < ray.tMin) {
+        return false;
+    }
+    
+    Float tShapeHit = t0;
+    
+    if (tShapeHit <= ray.tMin) {
+        tShapeHit = t1;
+        if (tShapeHit > ray.tMax) {
+            return false;
+        }
+    }
+    
+    Point3f pHit = ray.at((Float)tShapeHit);
+    pHit *= _radius / distance(pHit, Point3f(0, 0, 0));
+    
+    if (pHit.x == 0 && pHit.y == 0) {
+        // 避免0/0
+        pHit.x = 1e-5f * _radius;
+    }
+    
+    Float phi = std::atan2(pHit.y, pHit.x);
+    if (phi < 0) {
+        phi += 2 * Pi;
+    }
+    
+    if ((_zMin > -_radius && pHit.z < _zMin)
+            || (_zMax < _radius && pHit.z > _zMax)
+        || phi > _phiMax) {
+        // 如果pHit处在球的缺失部分
+        if (tShapeHit == t1) {
+            // 如果tShapeHit已经是较远点，则返回false
+            return false;
+        }
+        if (t1 > ray.tMax) {
+            return false;
+        }
+
+        // 此时的逻辑是t0处于球的缺失部分，则开始判断t1
+        tShapeHit = t1;
+        pHit = ray.at((Float)tShapeHit);
+
+        pHit *= _radius / distance(pHit, Point3f(0, 0, 0));
+        if (pHit.x == 0 && pHit.y == 0) {
+            // 避免0/0
+            pHit.x = 1e-5f * _radius;
+        }
+        
+        phi = std::atan2(pHit.y, pHit.x);
+        if (phi < 0) {
+            phi += 2 * Pi;
+        }
+
+        // 再次测试球体裁剪参数
+        if ((_zMin > -_radius && pHit.z < _zMin)
+            || (_zMax < _radius && pHit.z > _zMax)
+            || phi > _phiMax) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Sphere::rayIntersect(const Ray &r,
+                            SurfaceInteraction * isect,
+                            bool testAlphaTexture) const {
+
+    Ray ray = worldToObject->exec(r);
+    
+    Float ox = ray.ori.x, oy = ray.ori.y, oz = ray.ori.z;
+    Float dx = ray.dir.x, dy = ray.dir.y, dz = ray.dir.z;
+    
+    Float a = dx * dx + dy * dy + dz * dz;
+    Float b = 2 * (dx * ox + dy * oy + dz * oz);
+    Float c = ox * ox + oy * oy + oz * oz - _radius * _radius;
+    
+    Float t0, t1;
+    if (!quadratic(a, b, c, &t0, &t1)) {
+        return false;
+    }
+    
+    if (t0 > ray.tMax || t1 < ray.tMin) {
+        return false;
+    }
+    
+    Float tShapeHit = t0;
+    
+    if (tShapeHit <= ray.tMin) {
+        tShapeHit = t1;
+        if (tShapeHit > ray.tMax) {
+            return false;
+        }
+    }
+    
+    Point3f pHit = ray.at((Float)tShapeHit);
+    pHit *= _radius / distance(pHit, Point3f(0, 0, 0));
+    
+    if (pHit.x == 0 && pHit.y == 0) {
+        // 避免0/0
+        pHit.x = 1e-5f * _radius;
+    }
+    
+    Float phi = std::atan2(pHit.y, pHit.x);
+    if (phi < 0) {
+        phi += 2 * Pi;
+    }
+    
+    if ((_zMin > -_radius && pHit.z < _zMin)
+            || (_zMax < _radius && pHit.z > _zMax)
+        || phi > _phiMax) {
+        // 如果pHit处在球的缺失部分
+        if (tShapeHit == t1) {
+            // 如果tShapeHit已经是较远点，则返回false
+            return false;
+        }
+        if (t1 > ray.tMax) {
+            return false;
+        }
+
+        // 此时的逻辑是t0处于球的缺失部分，则开始判断t1
+        tShapeHit = t1;
+        pHit = ray.at((Float)tShapeHit);
+
+        pHit *= _radius / distance(pHit, Point3f(0, 0, 0));
+        if (pHit.x == 0 && pHit.y == 0) {
+            // 避免0/0
+            pHit.x = 1e-5f * _radius;
+        }
+        
+        phi = std::atan2(pHit.y, pHit.x);
+        if (phi < 0) {
+            phi += 2 * Pi;
+        }
+
+        // 再次测试球体裁剪参数
+        if ((_zMin > -_radius && pHit.z < _zMin)
+            || (_zMax < _radius && pHit.z > _zMax)
+            || phi > _phiMax) {
+            return false;
+        }
+    }
+    
+    
+    // φ = u * φmax
+    // θ = θmin + v * (θmax - θmin)
+    Float u = phi / _phiMax;
+    Float theta = std::acos(clamp(pHit.z / _radius, -1, 1));
+    Float v = (theta - _thetaMin) / (_thetaMax - _thetaMin);
+    
+    fillSurfaceInteraction(r, Vector2f(u, v), pHit, isect);
+    
+    return true;
+}
+
 
 bool Sphere::intersectP(const Ray &r, bool testAlphaTexture) const {
     Float phi;

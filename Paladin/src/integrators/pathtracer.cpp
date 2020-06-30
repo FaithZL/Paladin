@@ -16,7 +16,7 @@ PALADIN_BEGIN
 
 STAT_PERCENT("Integrator/Zero-radiance paths", zeroRadiancePaths, totalPaths);
 STAT_INT_DISTRIBUTION("Integrator/Path length", pathLength);
-
+STAT_INT_DISTRIBUTION("Integrator/end Throughput", endThroughput);
 
 PathTracer::PathTracer(int maxDepth, std::shared_ptr<const Camera> camera,
                        std::shared_ptr<Sampler> sampler,
@@ -46,6 +46,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                          Sampler &sampler, MemoryArena &arena, int depth) const {
     TRY_PROFILE(Prof::MonteCarloIntegratorLi)
 //    return _Li(r, scene, sampler, arena, depth);
+//    return Li2(r, scene, sampler, arena, depth);
     
     Spectrum L(0.0f);
     Spectrum throughput(1.0f);
@@ -74,7 +75,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             break;
         }
 
-        isect.computeScatteringFunctions(ray, arena);
+        isect.computeScatteringFunctions(ray, arena, true);
         if (!isect.bsdf) {
             ray = isect.spawnRay(ray.dir, true);
             foundIntersection = scene.rayIntersect(ray, &isect);
@@ -92,7 +93,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             const Light * light = nullptr;
             Float pmf = 0;
             
-            if (bsdf->numComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
+            if (bsdf->hasNonSpecular()) {
                 Spectrum Ld = scene.sampleLightDirect(&rcd, sampler.get2D(), distrib, &pmf);
                 light = static_cast<const Light *>(rcd.object);
                 if (!Ld.IsBlack()) {
@@ -131,7 +132,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             foundIntersection = scene.rayIntersect(ray, &isect);
             Spectrum Li(0.f);
             Float lightPdf = 0;
-            Float weight = 0;
+            Float weight = 1;
             
             if (foundIntersection) {
                 if (light && !light->isDelta()) {
@@ -140,23 +141,30 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                     if (target == light) {
                         Li = isect.Le(-wi);
                         lightPdf = rcd.pdfDir() * pmf;
-                        weight = powerHeuristic(bsdfPdf, lightPdf);
-                        L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+                        if (!specularBounce) {
+                            weight = powerHeuristic(bsdfPdf, lightPdf);
+                        }
+                        if (bsdf->hasNonSpecular()) {
+                            L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+                        }
                     }
                 }
             } else {
                 Li = scene.evalEnvironment(ray, &lightPdf, distrib);
-                weight = powerHeuristic(bsdfPdf, lightPdf);
-                L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+                if (!specularBounce) {
+                    weight = powerHeuristic(bsdfPdf, lightPdf);
+                }
+                if (bsdf->hasNonSpecular()) {
+                    L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
+                }
             }
-            
             throughput *= f / bsdfPdf;
         }
-
+        
         Spectrum rrThroughput = throughput * etaScale;
         Float mp = rrThroughput.MaxComponentValue();
         if (mp < _rrThreshold && bounces > 3) {
-            Float q = std::min((Float)0.05, mp);
+            Float q = std::min((Float)0.95, mp);
             if (sampler.get1D() >= q) {
                 break;
             }
@@ -164,7 +172,9 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
         }
     }
+    
     ReportValue(pathLength, bounces);
+    ReportValue(endThroughput, throughput.y());
     return L;
 }
 
@@ -231,6 +241,9 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
             flags = scatterRcd.sampleType;
             f = scatterRcd.scatterF;
             
+//            if (isect.bsdf->hasNonSpecular()) {
+//                L += Ld;
+//            }
             L += Ld;
 
             if (f.IsBlack() || pdf == 0.0f) {
@@ -259,7 +272,7 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
         Spectrum rrThroughput = throughput * etaScale;
         Float mp = rrThroughput.MaxComponentValue();
         if (mp < _rrThreshold && bounces > 3) {
-            Float q = std::min((Float)0.05, mp);
+            Float q = std::min((Float)0.95, mp);
             if (sampler.get1D() >= q) {
                 break;
             }
@@ -267,6 +280,8 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
         }
     }
+    ReportValue(pathLength, bounces);
+    ReportValue(endThroughput, throughput.y());
     return L;
 }
 

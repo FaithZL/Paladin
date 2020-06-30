@@ -59,7 +59,7 @@ Spectrum DistantLight::sample_Li(DirectSamplingRecord *rcd,
                                  const Point2f &u,
                                  const Scene &scene) const {
     Vector3f dir = _wLight * (2 * _worldRadius);
-    rcd->updateTarget(dir, 1);
+    rcd->updateTarget(dir, 1.f);
     auto vis = rcd->getVisibilityTester();
     auto ret = vis.unoccluded(scene) ? _L : 0;
     return ret;
