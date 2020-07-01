@@ -59,6 +59,8 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
         MediumInteraction mi;
         if (ray.medium) {
             throughput *= ray.medium->sample(ray, sampler, arena, &mi);
+            auto tmp = ray.medium->sample(ray, sampler, arena, &mi);
+            throughput *= tmp;
         }
         
         if (throughput.IsBlack()) {
@@ -210,10 +212,13 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
                 weight = powerHeuristic(bsdfPdf, lightPdf);
                 L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
             }
-            throughput *= f / bsdfPdf;
+            auto tmp = f / bsdfPdf;
+            cout << tmp << endl;
+            throughput *=tmp;
         }
 
         Spectrum rrThroughput = throughput * etaScale;
+//        cout << rrThroughput << endl;
         Float mp = rrThroughput.MaxComponentValue();
         if (mp < _rrThreshold && bounces > 3) {
             Float q = std::min((Float)0.95, mp);
@@ -240,7 +245,7 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
 Spectrum VolumePathTracer::Li(const RayDifferential &r, const Scene &scene,
 						Sampler &sampler, MemoryArena &arena, int depth) const {
     
-//    return _Li(r, scene, sampler, arena, depth);
+    return _Li(r, scene, sampler, arena, depth);
     
     Spectrum L(0.f);
     Spectrum throughput(1.f);

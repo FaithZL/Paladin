@@ -1,5 +1,5 @@
 {
-    "threadNum" : 0,
+    "threadNum" : 1,
     "transforms" :{
         "name1" : [
             {
@@ -169,7 +169,6 @@
                         "color" : [1, 1, 1]
                     }
                 },
-                "thin" : false,
                 "Kt" : {
                     "type" : "constant",
                     "param" : {
@@ -179,15 +178,19 @@
                 },
                 "uRough" : {
                     "type" : "constant",
-                    "param" : 0
+                    "param" : 0.0
                 },
                 "vRough" : {
                     "type" : "constant",
-                    "param" : 0
+                    "param" : 0.0
                 },
                 "eta" : {
                     "type" : "constant",
                     "param" : 1.5
+                },
+                "bumpMap" : {
+                    "type" : "constant",
+                    "param" : 0
                 },
                 "remapRough" : false 
             }
@@ -369,7 +372,7 @@
             "type" : "triMesh",
             "subType" : "quad",
             "name" : "front",
-            "enable" : false,
+            "enable" : true,
             "param" : {
                 "transform" :[
                     {
@@ -431,7 +434,7 @@
                 "y" : 1.2,
                 "z" : 0.6
             },
-            "material" : "glass"
+            "material" : "matte1"
         },
         {
             "type" : "triMesh",
@@ -453,21 +456,21 @@
                 "y" : 0.6,
                 "z" : 0.6
             },
-            "material" : "glass"
+            "material" : "matte1"
         }
     ],
     "integrator" : {
-        "type" : "pt",
+        "type" : "volpt",
         "param" : {
-            "maxBounce" : 30,
+            "maxBounce" : 20,
             "rrThreshold" : 1,
             "lightSampleStrategy" : "power"
         }
     },
     "sampler" : {
-        "type" : "random",
+        "type" : "halton",
         "param" : {
-            "spp" : 16
+            "spp" : 8
         }
     },
     "camera" : {
@@ -489,7 +492,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "connellbox-glass-random-16spp.png",
+            "fileName" : "connellbox-fog-16spp.png",
             "diagonal" : 1,
             "scale" : 1
         }
@@ -501,7 +504,7 @@
         }
     },
     "accelerator" : {
-        "type" : "embree",
+        "type" : "bvh",
         "param" : {
             "maxPrimsInNode" : 1,
             "splitMethod" : "SAH"
