@@ -50,7 +50,7 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
     int bounces;
 
     Float etaScale = 1;
-    
+    ++nTests;
     SurfaceInteraction isect;
     bool foundIntersection = scene.rayIntersect(ray, &isect);
 
@@ -58,8 +58,8 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
 
         MediumInteraction mi;
         if (ray.medium) {
-            throughput *= ray.medium->sample(ray, sampler, arena, &mi);
             auto tmp = ray.medium->sample(ray, sampler, arena, &mi);
+//            cout <<"phase " << tmp << endl;
             throughput *= tmp;
         }
         
@@ -73,6 +73,7 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
             // 1.估计直接光照
             // 2.随机选方向继续追踪
             if (bounces >= _maxDepth) {
+                ++nHits;
                 break;
             }
             
@@ -213,7 +214,7 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
                 L += Li.IsBlack() ? 0 : f * throughput * Li * weight / bsdfPdf;
             }
             auto tmp = f / bsdfPdf;
-            cout << tmp << endl;
+//            cout <<"bsdf  " << tmp << endl;
             throughput *=tmp;
         }
 
