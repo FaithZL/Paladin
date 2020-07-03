@@ -59,7 +59,7 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
         MediumInteraction mi;
         if (ray.medium) {
             auto tmp = ray.medium->sample(ray, sampler, arena, &mi);
-//            cout <<"phase " << tmp << endl;
+            cout <<"phase " << tmp <<"  "<< mi.isValid()<< endl;
             throughput *= tmp;
         }
         
@@ -120,6 +120,7 @@ Spectrum VolumePathTracer::_Li(const RayDifferential &r, const Scene &scene,
                     }
                 }
             }
+            foundIntersection = onSurface;
             specularBounce = false;
         } else {
             // 采样点落在表面上
