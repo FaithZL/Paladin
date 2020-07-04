@@ -82,6 +82,8 @@ Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
     return light->sample_Li(rcd, u, *this);
 }
 
+
+
 Spectrum Scene::sampleOneLight(ScatterSamplingRecord *scatterRcd,
                                MemoryArena &arena,
                                const Distribution1D *lightDistrib,

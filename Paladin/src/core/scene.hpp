@@ -102,6 +102,13 @@ public:
                             Spectrum * throughput,
                             bool handleMedia = false) const;
     
+    Spectrum NeeAndGenRay(ScatterSamplingRecord *scatterRcd,
+                            MemoryArena &arena,
+                            const Distribution1D *lightDistrib,
+                            bool *foundIntersect,
+                            Spectrum * throughput,
+                            bool handleMedia = false) const;
+    
     Spectrum estimateDirectLighting(ScatterSamplingRecord *scatterRcd,
                             MemoryArena &arena,
                             const Light &light,
