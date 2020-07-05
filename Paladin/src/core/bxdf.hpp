@@ -278,7 +278,7 @@ inline Spectrum schlickFresnel(const Spectrum &R, Float cosTheta) {
 struct ScatterSamplingRecord {
     
     ScatterSamplingRecord(const Interaction &it,
-                          Sampler * sampler = nullptr);
+                          Sampler * sampler);
     
     F_INLINE bool isSpecular() const {
         return (sampleType & BSDF_SPECULAR) != 0;;

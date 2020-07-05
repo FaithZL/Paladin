@@ -15,7 +15,6 @@
 PALADIN_BEGIN
 
 STAT_COUNTER("Intersections/rayIntersectTr ray intersection tests", nIntersectTrTests);
-
 STAT_COUNTER("Scene/Finity lights", numFinityLights);
 STAT_COUNTER("Scene/Sky lights", numSkyLights);
 
@@ -74,7 +73,6 @@ void Scene::initAccel(const nloJson &data, const vector<shared_ptr<const Shape> 
 Spectrum Scene::sampleLightDirect(DirectSamplingRecord *rcd, const Point2f _u,
                                   const Distribution1D *lightDistrib,
                                   Float *pmf) const {
-//    TRY_PROFILE(Prof::sceneSampleLightDirect)
     Point2f u(_u);
     Float index = lightDistrib->sampleDiscrete(u.x, pmf, &u.x);
     const Light * light = lights.at(index).get();
@@ -109,6 +107,53 @@ Spectrum Scene::sampleOneLight(ScatterSamplingRecord *scatterRcd,
     Spectrum dl = estimateDirectLighting(scatterRcd, arena, *light,&rcd, u,
                                          foundIntersect, throughput, handleMedia);
     return dl / lightPdf;
+}
+
+const Light * Scene::selectLight(Float *lightPmf,
+                                 const Distribution1D *lightDistrib,
+                                 Point2f &u) const {
+    int nLights = int(lights.size());
+    if (nLights == 0) {
+        return nullptr;
+    }
+    
+    int lightIndex;
+    // 用于储存选中的光源的概率密度函数值
+    Float lightPdf;
+    lightIndex = lightDistrib->sampleDiscrete(u[0], &lightPdf, &u[0]);
+    if (lightPdf == 0) {
+        return nullptr;
+    }
+    const Light * light = lights[lightIndex].get();
+    return light;
+}
+
+Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
+                                  MemoryArena &arena,
+                                  const Distribution1D *lightDistrib,
+                                  bool *foundIntersect,
+                                  Spectrum *throughput,
+                                  bool handleMedia) const {
+    TRY_PROFILE(Prof::DirectLighting)
+    
+    if (scatterRcd->it.isSurfaceInteraction()) {
+        const SurfaceInteraction &isect = (const SurfaceInteraction &)scatterRcd->it;
+        if (isect.bsdf->hasNonSpecular()) {
+            Float lightPmf = 0;
+            Point2f u = scatterRcd->sampler->get2D();
+            const Light * light = selectLight(&lightPmf, lightDistrib, u);
+            DirectSamplingRecord rcd(scatterRcd->it);
+            rcd.checkOccluded = false;
+            
+            Spectrum Li = light->sample_Li(&rcd, u, *this);
+            Vector3f wi = rcd.dir();
+            Float lightPdf = rcd.pdfDir();
+            
+            if (!Li.IsBlack() && lightPdf > 0) {
+                
+            }
+        }
+    }
 }
 
 Spectrum Scene::estimateDirectLighting(ScatterSamplingRecord *scatterRcd,

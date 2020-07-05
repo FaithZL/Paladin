@@ -102,7 +102,11 @@ public:
                             Spectrum * throughput,
                             bool handleMedia = false) const;
     
-    Spectrum NeeAndGenRay(ScatterSamplingRecord *scatterRcd,
+    const Light * selectLight(Float * lightPmf,
+                              const Distribution1D *lightDistrib,
+                              Point2f &u) const;
+    
+    Spectrum nextEventEstimate(ScatterSamplingRecord *scatterRcd,
                             MemoryArena &arena,
                             const Distribution1D *lightDistrib,
                             bool *foundIntersect,
