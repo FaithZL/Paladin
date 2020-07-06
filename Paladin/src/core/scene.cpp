@@ -135,7 +135,7 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
                                   Spectrum *throughput,
                                   bool handleMedia) const {
     TRY_PROFILE(Prof::DirectLighting)
-    
+    Spectrum L(0.f);
     if (scatterRcd->it.isSurfaceInteraction()) {
         const SurfaceInteraction &isect = (const SurfaceInteraction &)scatterRcd->it;
         if (isect.bsdf->hasNonSpecular()) {
@@ -148,9 +148,17 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
             Spectrum Li = light->sample_Li(&rcd, u, *this);
             Vector3f wi = rcd.dir();
             Float lightPdf = rcd.pdfDir();
-            
+            BxDFType flags = BSDF_ALL;
+            Spectrum f = 0;
+            Float bsdfPdf = 0;
             if (!Li.IsBlack() && lightPdf > 0) {
-                
+                f = isect.bsdf->f(isect.wo, wi, flags);
+                f *= absDot(isect.shading.normal, wi);
+                bsdfPdf = isect.bsdf->pdfDir(isect.wo, wi);
+            }
+            if (!f.IsBlack()) {
+                Float weight = powerHeuristic(lightPdf, bsdfPdf);
+                L += Li * f * weight / lightPdf;
             }
         }
     }
