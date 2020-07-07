@@ -460,7 +460,7 @@
         }
     ],
     "integrator" : {
-        "type" : "volpt",
+        "type" : "pt",
         "param" : {
             "maxBounce" : 20,
             "rrThreshold" : 1,
@@ -492,7 +492,7 @@
         "param" : {
             "resolution" : [1024, 1024],
             "cropWindow" : [0,0,1,1],
-            "fileName" : "connellbox-fog-16spp.png",
+            "fileName" : "connellbox-16spp.png",
             "diagonal" : 1,
             "scale" : 1
         }

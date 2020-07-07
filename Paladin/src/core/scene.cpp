@@ -138,12 +138,14 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
     Spectrum L(0.f);
     if (scatterRcd->it.isSurfaceInteraction()) {
         const SurfaceInteraction &isect = (const SurfaceInteraction &)scatterRcd->it;
+        // sampling light surface
+        const Light * light = nullptr;
         if (isect.bsdf->hasNonSpecular()) {
             Float lightPmf = 0;
             Point2f u = scatterRcd->sampler->get2D();
-            const Light * light = selectLight(&lightPmf, lightDistrib, u);
+            light = selectLight(&lightPmf, lightDistrib, u);
             DirectSamplingRecord rcd(scatterRcd->it);
-            rcd.checkOccluded = false;
+//            rcd.checkOccluded = false;
             
             Spectrum Li = light->sample_Li(&rcd, u, *this);
             Vector3f wi = rcd.dir();
@@ -161,7 +163,59 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
                 L += Li * f * weight / lightPdf;
             }
         }
+        
+        // sampling bsdf
+        Vector3f wi;
+        Float bsdfPdf;
+        BxDFType sampledType;
+        Spectrum f = isect.bsdf->sample_f(isect.wo, &wi,
+                                          scatterRcd->sampler->get2D(),
+                                          &bsdfPdf,
+                                          BSDF_ALL,
+                                          &sampledType);
+        f *= absDot(isect.shading.normal, wi);
+        scatterRcd->update(wi, f, bsdfPdf, sampledType, TransportMode::Radiance);
+        
+        if (bsdfPdf == 0 || f.IsBlack()) {
+            return L;
+        }
+        *throughput *= f / bsdfPdf;
+        Spectrum tr(1.0);
+        SurfaceInteraction targetIsect;
+        Ray ray = scatterRcd->it.spawnRay(wi);
+        scatterRcd->outRay = ray;
+        DirectSamplingRecord rcd(scatterRcd->it);
+        *foundIntersect = handleMedia ?
+                rayIntersectTr(ray, *scatterRcd->sampler, &targetIsect, &tr):
+                rayIntersect(ray, &targetIsect);
+        
+        if (*foundIntersect) {
+            scatterRcd->nextIsect = targetIsect;
+            rcd.updateTarget(targetIsect);
+        } else {
+            rcd.updateTarget(wi, 0);
+        }
+        Float lightPdf = rcd.pdfDir();
+        if (light && !light->isDelta() && !f.IsBlack() && bsdfPdf > 0) {
+            Spectrum Li(0.f);
+            Float weight = 1;
+            if (!scatterRcd->isSpecular()) {
+                weight = powerHeuristic(bsdfPdf, lightPdf);
+            }
+            if (*foundIntersect) {
+                if (targetIsect.shape->getAreaLight() == light) {
+                    Li = targetIsect.Le(-wi);
+                }
+            } else {
+                Li = light->Le(ray);
+            }
+            if (!Li.IsBlack()) {
+                auto tmp = Li * tr * f * weight / bsdfPdf;
+                L += tmp;
+            }
+        }
     }
+    return L;
 }
 
 Spectrum Scene::estimateDirectLighting(ScatterSamplingRecord *scatterRcd,

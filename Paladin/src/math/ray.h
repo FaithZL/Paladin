@@ -42,6 +42,10 @@ public:
         return ori + dir * t;
     }
     
+    bool isValid() const {
+        return !dir.isZero();
+    }
+    
     bool hasNaNs() const {
         return (ori.hasNaNs() || dir.hasNaNs() || isNaN(tMax));
     }

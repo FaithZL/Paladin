@@ -45,7 +45,7 @@ void PathTracer::preprocess(const Scene &scene, Sampler &sampler) {
 Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                          Sampler &sampler, MemoryArena &arena, int depth) const {
     TRY_PROFILE(Prof::MonteCarloIntegratorLi)
-//    return _Li(r, scene, sampler, arena, depth);
+    return _Li(r, scene, sampler, arena, depth);
 //    return Li2(r, scene, sampler, arena, depth);
     
     Spectrum L(0.0f);
@@ -231,10 +231,12 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
 
             Spectrum tmpThroughput = throughput;
             
-            Ld = tmpThroughput * scene.sampleOneLight(&scatterRcd, arena,
-                                                      distrib,
-                                                      &foundIntersection,
-                                                      &throughput);
+//            Ld = tmpThroughput * scene.sampleOneLight(&scatterRcd, arena,
+//                                                      distrib,
+//                                                      &foundIntersection,
+//                                                      &throughput);
+            Ld = tmpThroughput * scene.nextEventEstimate(&scatterRcd, arena, distrib,
+                                         &foundIntersection, &throughput);
             
             wi = scatterRcd.wi;
             pdf = scatterRcd.pdf;
