@@ -140,16 +140,15 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
         const SurfaceInteraction &isect = (const SurfaceInteraction &)scatterRcd->it;
         // sampling light surface
         const Light * light = nullptr;
+        Float lightPmf = 0;
         if (isect.bsdf->hasNonSpecular()) {
-            Float lightPmf = 0;
             Point2f u = scatterRcd->sampler->get2D();
             light = selectLight(&lightPmf, lightDistrib, u);
             DirectSamplingRecord rcd(scatterRcd->it);
-//            rcd.checkOccluded = false;
             
             Spectrum Li = light->sample_Li(&rcd, u, *this);
             Vector3f wi = rcd.dir();
-            Float lightPdf = rcd.pdfDir();
+            Float lightPdf = rcd.pdfDir() * lightPmf;
             BxDFType flags = BSDF_ALL;
             Spectrum f = 0;
             Float bsdfPdf = 0;
@@ -163,7 +162,7 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
                 L += Li * f * weight / lightPdf;
             }
         }
-        
+        PROFILE(Prof::halfDL, __p)
         // sampling bsdf
         Vector3f wi;
         Float bsdfPdf;
@@ -183,11 +182,12 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
         Spectrum tr(1.0);
         SurfaceInteraction targetIsect;
         Ray ray = scatterRcd->it.spawnRay(wi);
-        scatterRcd->outRay = ray;
+        
         DirectSamplingRecord rcd(scatterRcd->it);
         *foundIntersect = handleMedia ?
                 rayIntersectTr(ray, *scatterRcd->sampler, &targetIsect, &tr):
                 rayIntersect(ray, &targetIsect);
+        scatterRcd->outRay = ray;
         
         if (*foundIntersect) {
             scatterRcd->nextIsect = targetIsect;
@@ -195,11 +195,12 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
         } else {
             rcd.updateTarget(wi, 0);
         }
-        Float lightPdf = rcd.pdfDir();
+        
         if (light && !light->isDelta() && !f.IsBlack() && bsdfPdf > 0) {
             Spectrum Li(0.f);
             Float weight = 1;
             if (!scatterRcd->isSpecular()) {
+                Float lightPdf = rcd.pdfDir() * lightPmf;
                 weight = powerHeuristic(bsdfPdf, lightPdf);
             }
             if (*foundIntersect) {

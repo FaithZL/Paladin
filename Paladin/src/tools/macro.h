@@ -112,7 +112,7 @@ static CONSTEXPR Float Sqrt2 = 1.41421356237309504880;
 
 #ifdef PALADIN_HAVE_ITIMER
     #define TRY_PROFILE(args) ProfilePhase __pp(args);
-    #define PROFILE(arg1, arg2) ProfilePhase arg2(args);
+    #define PROFILE(args, arg2) ProfilePhase arg2(args);
 #else
     #define TRY_PROFILE(args) ;
     #define PROFILE(arg1, arg2) ;

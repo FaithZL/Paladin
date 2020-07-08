@@ -107,7 +107,7 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                     }
                 }
             }
-
+            PROFILE(Prof::halfDL, __p)
             // 采样bsdf
             Vector3f wo = -ray.dir;
             Vector3f wi;
@@ -231,10 +231,6 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
 
             Spectrum tmpThroughput = throughput;
             
-//            Ld = tmpThroughput * scene.sampleOneLight(&scatterRcd, arena,
-//                                                      distrib,
-//                                                      &foundIntersection,
-//                                                      &throughput);
             Ld = tmpThroughput * scene.nextEventEstimate(&scatterRcd, arena, distrib,
                                          &foundIntersection, &throughput);
             
@@ -243,9 +239,6 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
             flags = scatterRcd.sampleType;
             f = scatterRcd.scatterF;
             
-//            if (isect.bsdf->hasNonSpecular()) {
-//                L += Ld;
-//            }
             L += Ld;
 
             if (f.IsBlack() || pdf == 0.0f) {
@@ -263,6 +256,7 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
             }
 
             ray = isect.spawnRay(wi);
+//            ray = scatterRcd.outRay;
             
             if (isect.bssrdf && (flags & BSDF_TRANSMISSION)) {
                 // todo 处理bssrdf
