@@ -80,9 +80,11 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
 - 性能优化
   - [x] 内存池
   - [x] 针对cache line优化(内存重排)
-  - [ ] simd
-  - [ ] 误差管理优化
+  - [ ] 向量化
+  - [x] 接入embree
+  - [x] 误差管理优化(详见rtg第六章)
   - [x] 实例化
+  - [x] 优化几何结构，减少内存占用
 
 
 - 滤波器(filter)
@@ -106,7 +108,7 @@ Paladin是本人的第一个离线渲染器，代码基本来自于pbrt，当然
   - [ ] 纹理面光源(texture area light)
 
 - 其他
-  - [ ] 统计机制
+  - [x] 统计机制
  
  * bmw-pt-512spp
    ![](https://github.com/FaithZL/Paladin/blob/master/gallery/bmw-pt-512spp.png)
