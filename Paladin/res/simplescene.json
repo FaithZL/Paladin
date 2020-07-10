@@ -1,5 +1,5 @@
 {
-    "threadNum" : 1,
+    "threadNum" : 0,
     "transforms" :{
         "name1" : [
             {
@@ -468,9 +468,9 @@
         }
     },
     "sampler" : {
-        "type" : "halton",
+        "type" : "random",
         "param" : {
-            "spp" : 2
+            "spp" : 16
         }
     },
     "camera" : {

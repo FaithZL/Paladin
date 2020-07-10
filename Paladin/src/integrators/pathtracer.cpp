@@ -45,7 +45,7 @@ void PathTracer::preprocess(const Scene &scene, Sampler &sampler) {
 Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
                          Sampler &sampler, MemoryArena &arena, int depth) const {
     TRY_PROFILE(Prof::MonteCarloIntegratorLi)
-//    return _Li(r, scene, sampler, arena, depth);
+    return _Li(r, scene, sampler, arena, depth);
 //    return Li2(r, scene, sampler, arena, depth);
     
     Spectrum L(0.0f);
@@ -172,9 +172,6 @@ Spectrum PathTracer::Li(const RayDifferential &r, const Scene &scene,
             DCHECK(!std::isinf(throughput.y()));
         }
     }
-    if (L.IsBlack()) {
-        int a = 0;
-    }
     ReportValue(pathLength, bounces);
     ReportValue(endThroughput, throughput.y());
     return L;
@@ -257,7 +254,6 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
                 etaScale *= (dot(wo, isect.normal) > 0) ? (eta * eta) : 1 / (eta * eta);
             }
 
-//            ray = isect.spawnRay(wi);
             ray = scatterRcd.outRay;
             if (isect.bssrdf && (flags & BSDF_TRANSMISSION)) {
                 // todo 处理bssrdf
@@ -276,9 +272,6 @@ Spectrum PathTracer::_Li(const RayDifferential &r, const Scene &scene,
             throughput /= q;
             DCHECK(!std::isinf(throughput.y()));
         }
-    }
-    if (L.IsBlack()) {
-        int a = 0;
     }
     ReportValue(pathLength, bounces);
     ReportValue(endThroughput, throughput.y());

@@ -119,9 +119,8 @@ const Light * Scene::selectLight(Float *lightPmf,
     
     int lightIndex;
     // 用于储存选中的光源的概率密度函数值
-    Float lightPdf;
-    lightIndex = lightDistrib->sampleDiscrete(u[0], &lightPdf, &u[0]);
-    if (lightPdf == 0) {
+    lightIndex = lightDistrib->sampleDiscrete(u[0], lightPmf, &u[0]);
+    if (*lightPmf == 0) {
         return nullptr;
     }
     const Light * light = lights[lightIndex].get();
