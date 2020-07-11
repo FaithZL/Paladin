@@ -18,6 +18,7 @@ xcuserdata
 
 build
 dev
+test
 
 dev/CMakeFiles
 dev/bvh
