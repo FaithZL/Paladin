@@ -133,7 +133,6 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
                                   bool *foundIntersect,
                                   Spectrum *throughput,
                                   bool handleMedia) const {
-    TRY_PROFILE(Prof::DirectLighting)
     Spectrum L(0.f);
     if (scatterRcd->it.isSurfaceInteraction()) {
         const SurfaceInteraction &isect = (const SurfaceInteraction &)scatterRcd->it;
@@ -141,41 +140,25 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
         const Light * light = nullptr;
         Float lightPmf = 0;
         BSDF * bsdf = isect.bsdf;
-//        if (isect.bsdf->hasNonSpecular()) {
-//            Point2f u = scatterRcd->sampler->get2D();
-//            light = selectLight(&lightPmf, lightDistrib, u);
-//            DirectSamplingRecord rcd(scatterRcd->it);
-//
-//            Spectrum Li = light->sample_Li(&rcd, u, *this);
-//            Vector3f wi = rcd.dir();
-//            Float lightPdf = rcd.pdfDir() * lightPmf;
-//            BxDFType flags = BSDF_ALL;
-//            Spectrum f = 0;
-//            Float bsdfPdf = 0;
-//            if (!Li.IsBlack() && lightPdf > 0) {
-//                f = isect.bsdf->f(isect.wo, wi, flags);
-//                f *= absDot(isect.shading.normal, wi);
-//                bsdfPdf = isect.bsdf->pdfDir(isect.wo, wi);
-//            }
-//            if (!f.IsBlack()) {
-//                Float weight = powerHeuristic(lightPdf, bsdfPdf);
-//                L += Li * f * weight / lightPdf;
-//            }
-//        }
-        DirectSamplingRecord rcd(isect);
-        Sampler &sampler = *scatterRcd->sampler;
-        if (bsdf->hasNonSpecular()) {
-            Spectrum Ld = sampleLightDirect(&rcd, sampler.get2D(), lightDistrib, &lightPmf);
-            light = static_cast<const Light *>(rcd.object);
-            if (!Ld.IsBlack()) {
-                Spectrum bsdfVal = bsdf->f(isect.wo, rcd.dir());
-                bsdfVal *= absDot(isect.shading.normal, rcd.dir());
-                if (!bsdfVal.IsBlack()) {
-                    Float bsdfPdf = light->isDelta() ? 0 : bsdf->pdfDir(isect.wo, rcd.dir());
-                    Float lightPdf = rcd.pdfDir() * lightPmf;
-                    Float weight = bsdfPdf == 0 ? 1 : powerHeuristic(lightPdf, bsdfPdf);
-                    L += *throughput * weight * bsdfVal * Ld / (lightPdf);
-                }
+        DirectSamplingRecord rcd(scatterRcd->it);
+        if (isect.bsdf->hasNonSpecular()) {
+            Point2f u = scatterRcd->sampler->get2D();
+            light = selectLight(&lightPmf, lightDistrib, u);
+
+            Spectrum Li = light->sample_Li(&rcd, u, *this);
+            Vector3f wi = rcd.dir();
+            Float lightPdf = rcd.pdfDir() * lightPmf;
+            BxDFType flags = BSDF_ALL;
+            Spectrum f = 0;
+            Float bsdfPdf = 0;
+            if (!Li.IsBlack() && lightPdf > 0) {
+                f = isect.bsdf->f(isect.wo, wi, flags);
+                f *= absDot(isect.shading.normal, wi);
+                bsdfPdf = isect.bsdf->pdfDir(isect.wo, wi);
+            }
+            if (!f.IsBlack()) {
+                Float weight = powerHeuristic(lightPdf, bsdfPdf);
+                L += Li * f * weight / lightPdf;
             }
         }
         PROFILE(Prof::halfDL, __p)
@@ -199,7 +182,6 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
         SurfaceInteraction targetIsect;
         Ray ray = scatterRcd->it.spawnRay(wi);
         
-//        DirectSamplingRecord rcd(scatterRcd->it);
         *foundIntersect = handleMedia ?
                 rayIntersectTr(ray, *scatterRcd->sampler, &targetIsect, &tr):
                 rayIntersect(ray, &targetIsect);
