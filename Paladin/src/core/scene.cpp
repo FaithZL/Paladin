@@ -162,6 +162,7 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
             }
         }
         PROFILE(Prof::halfDL, __p)
+        
         // sampling bsdf
         Vector3f wi;
         Float bsdfPdf;
@@ -211,6 +212,29 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
             if (!Li.IsBlack()) {
                 auto tmp = Li * tr * f * weight / bsdfPdf;
                 L += tmp;
+            }
+        }
+    } else {
+        const MediumInteraction &mi = (const MediumInteraction &)scatterRcd->it;
+        Vector3f wi;
+        Float scatteringPdf = mi.phase->p(mi.wo, wi);
+        Spectrum scatterF = Spectrum(scatteringPdf);
+        DirectSamplingRecord rcd(scatterRcd->it);
+        if (!scatterF.IsBlack()) {
+            if (handleMedia) {
+                Spectrum tr = rcd->Tr(*this, sampler);
+                Li *= tr;
+            } else if (!rcd->unoccluded(*this)){
+                Li = Spectrum(0.f);
+            }
+            if (!Li.IsBlack()) {
+                // 如果是delta分布，直接计算辐射度
+                if (light.isDelta()) {
+                    Ld += scatterF * Li / lightPdf;
+                } else {
+                    Float weight = powerHeuristic(lightPdf, scatteringPdf);
+                    Ld += scatterF * Li * weight / lightPdf;
+                }
             }
         }
     }
