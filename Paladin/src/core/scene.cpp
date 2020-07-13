@@ -134,6 +134,7 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
                                   Spectrum *throughput,
                                   bool handleMedia) const {
     Spectrum L(0.f);
+    Sampler &sampler = *scatterRcd->sampler;
     if (scatterRcd->it.isSurfaceInteraction()) {
         const SurfaceInteraction &isect = (const SurfaceInteraction &)scatterRcd->it;
         // sampling light surface
@@ -142,7 +143,7 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
         BSDF * bsdf = isect.bsdf;
         DirectSamplingRecord rcd(scatterRcd->it);
         if (isect.bsdf->hasNonSpecular()) {
-            Point2f u = scatterRcd->sampler->get2D();
+            Point2f u = sampler.get2D();
             light = selectLight(&lightPmf, lightDistrib, u);
 
             Spectrum Li = light->sample_Li(&rcd, u, *this);
@@ -216,27 +217,18 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
         }
     } else {
         const MediumInteraction &mi = (const MediumInteraction &)scatterRcd->it;
-        Vector3f wi;
+        DirectSamplingRecord rcd(scatterRcd->it);
+        Float lightPmf = 0;
+        Point2f u = sampler.get2D();
+        const Light * light = selectLight(&lightPmf, lightDistrib, u);
+
+        Spectrum Li = light->sample_Li(&rcd, u, *this);
+        Vector3f wi = rcd.dir();
         Float scatteringPdf = mi.phase->p(mi.wo, wi);
         Spectrum scatterF = Spectrum(scatteringPdf);
-        DirectSamplingRecord rcd(scatterRcd->it);
-        if (!scatterF.IsBlack()) {
-            if (handleMedia) {
-                Spectrum tr = rcd->Tr(*this, sampler);
-                Li *= tr;
-            } else if (!rcd->unoccluded(*this)){
-                Li = Spectrum(0.f);
-            }
-            if (!Li.IsBlack()) {
-                // 如果是delta分布，直接计算辐射度
-                if (light.isDelta()) {
-                    Ld += scatterF * Li / lightPdf;
-                } else {
-                    Float weight = powerHeuristic(lightPdf, scatteringPdf);
-                    Ld += scatterF * Li * weight / lightPdf;
-                }
-            }
-        }
+        Float lightPdf = rcd.pdfDir() * lightPmf;
+        
+        
     }
     return L;
 }
