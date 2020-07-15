@@ -185,7 +185,7 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
         Ray ray = scatterRcd->it.spawnRay(wi);
         
         *foundIntersect = handleMedia ?
-                rayIntersectTr(ray, *scatterRcd->sampler, &targetIsect, &tr):
+                rayIntersectTr(ray, sampler, &targetIsect, &tr):
                 rayIntersect(ray, &targetIsect);
         scatterRcd->outRay = ray;
         
@@ -221,14 +221,53 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
         Float lightPmf = 0;
         Point2f u = sampler.get2D();
         const Light * light = selectLight(&lightPmf, lightDistrib, u);
-
+        
+        // 采样光源
         Spectrum Li = light->sample_Li(&rcd, u, *this);
         Vector3f wi = rcd.dir();
         Float scatteringPdf = mi.phase->p(mi.wo, wi);
-        Spectrum scatterF = Spectrum(scatteringPdf);
+        Spectrum scatterF(scatteringPdf);
         Float lightPdf = rcd.pdfDir() * lightPmf;
+        BxDFType sampledType;
+        if (!scatterF.IsBlack()) {
+            Spectrum tr = rcd.Tr(*this, sampler);
+            Li *= tr;
+        }
+        if (!Li.IsBlack()) {
+            if (light->isDelta()) {
+                L += scatterF * Li / lightPdf;
+            } else {
+                Float weight = powerHeuristic(lightPdf, scatteringPdf);
+                L += scatterF * Li * weight / lightPdf;
+            }
+        }
         
+        // 采样phase函数
+        scatteringPdf = mi.phase->sample_p(mi.wo, &wi, sampler.get2D());
+        scatterF = Spectrum(scatteringPdf);
+        scatterRcd->update(wi, scatterF, scatteringPdf, sampledType, Radiance);
         
+        if (scatteringPdf == 0 || scatterF.IsBlack()) {
+            return L;
+        }
+        
+        Spectrum tr(1.0);
+        SurfaceInteraction targetIsect;
+        Ray ray = mi.spawnRay(wi);
+        
+        *foundIntersect = handleMedia ?
+                rayIntersectTr(ray, sampler, &targetIsect, &tr):
+                rayIntersect(ray, &targetIsect);
+        scatterRcd->outRay = ray;
+        
+        if (*foundIntersect) {
+            scatterRcd->nextIsect = targetIsect;
+            rcd.updateTarget(targetIsect);
+        } else {
+            rcd.updateTarget(wi, 0);
+        }
+        
+        lightPdf = rcd.pdfDir() * lightPmf;
     }
     return L;
 }
