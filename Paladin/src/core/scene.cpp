@@ -268,6 +268,21 @@ Spectrum Scene::nextEventEstimate(ScatterSamplingRecord *scatterRcd,
         }
         
         lightPdf = rcd.pdfDir() * lightPmf;
+        
+        if (!light->isDelta() && !scatterF.IsBlack() && scatteringPdf > 0) {
+            Float weight = powerHeuristic(scatteringPdf, lightPdf);
+            if (*foundIntersect) {
+                if (targetIsect.shape->getAreaLight() == light) {
+                    Li = targetIsect.Le(-wi);
+                }
+            } else {
+                Li = light->Le(ray);
+            }
+            if (!Li.IsBlack()) {
+                auto tmp = Li * tr * scatterF * weight / scatteringPdf;
+                L += tmp;
+            }
+        }
     }
     return L;
 }
