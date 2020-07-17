@@ -72,8 +72,16 @@ void SceneParser::parse(const nloJson &data) {
     
     scene->initAccel(acceleratorData, move(_shapes));
     
+    chrono::system_clock::time_point start = chrono::system_clock::now();
+    
+    auto s = clock();
     _scene.reset(scene);
     _integrator->render(*scene);
+    chrono::system_clock::time_point end = chrono::system_clock::now();
+    auto e = clock();
+    auto count = chrono::duration_cast<chrono::milliseconds>(end - start).count();
+    cout << "it take " << (double)(e - s) / CLOCKS_PER_SEC << endl;
+    cout << "it take ___ " << (float)count << endl;
 }
 
 void SceneParser::start() {
