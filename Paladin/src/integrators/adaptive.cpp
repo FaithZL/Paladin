@@ -28,9 +28,43 @@ void AdaptiveIntegrator::render(const Scene &scene) {
     ProgressReporter reporter("rendering", nTile.x * nTile.y);
     {
         auto renderTile = [&](Point2i tile, int threadIdx) {
+            // 内存池对象，预先申请一大段连续内存
+            // 之后所有内存全都通过arena分配
+            MemoryArena arena;
+            // 每个tile使用不同的随机种子，避免关联采样导致的artifact
+            int seed = tile.y + nTile.x + tile.x;
             
+            std::unique_ptr<Sampler> tileSampler = _sampler->clone(seed);
+
+            // 计算当前tile的起始点与结束点
+            int x0 = samplerBounds.pMin.x + tile.x * tileSize;
+            int x1 = std::min(x0 + tileSize, samplerBounds.pMax.x);
+            int y0 = samplerBounds.pMin.y + tile.y * tileSize;
+            int y1 = std::min(y0 + tileSize, samplerBounds.pMax.y);
+            AABB2i tileBounds(Point2i(x0, y0), Point2i(x1, y1));
+
+            std::unique_ptr<FilmTile> filmTile = _camera->film->getFilmTile(tileBounds);
+            Float diffScale = 1 / std::sqrt((Float)tileSampler->samplesPerPixel);
+            
+            for (Point2i pixel : tileBounds) {
+                {
+                    TRY_PROFILE(Prof::StartPixel)
+                    tileSampler->startPixel(pixel);
+                }
+                if (!insideExclusive(pixel, _pixelBounds)) {
+                    continue;
+                }
+                
+                do {
+                    
+                } while (isContinue());
+            }
         };
     }
+}
+
+bool AdaptiveIntegrator::isContinue() const {
+    return true;
 }
 
 

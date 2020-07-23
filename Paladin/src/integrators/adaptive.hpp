@@ -72,6 +72,8 @@ public:
         return _subIntegrator->Li(ray, scene, sampler, arena, depth);
     }
     
+    bool isContinue() const;
+    
 private:
     unique_ptr<MonteCarloIntegrator> _subIntegrator;
     
