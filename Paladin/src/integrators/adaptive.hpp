@@ -72,7 +72,7 @@ public:
         return _subIntegrator->Li(ray, scene, sampler, arena, depth);
     }
     
-    bool isContinue() const;
+    bool isContinue(Sampler * sampler) const;
     
 private:
     unique_ptr<MonteCarloIntegrator> _subIntegrator;
@@ -83,6 +83,8 @@ private:
     Float _averageLuminance;
     Float _maxSpp;
 };
+
+CObject_ptr createAdaptiveIntegrator(const nloJson &param, const Arguments &lst);
 
 PALADIN_END
 

@@ -11,6 +11,7 @@
 
 PALADIN_BEGIN
 
+STAT_COUNTER("Integrator/Camera rays traced", nCameraRays);
 
 void AdaptiveIntegrator::render(const Scene &scene) {
     TRY_PROFILE(Prof::IntegratorRender)
@@ -56,16 +57,72 @@ void AdaptiveIntegrator::render(const Scene &scene) {
                 }
                 
                 do {
+                    // 循环单个像素，采样spp次
+                    CameraSample cameraSample = tileSampler->getCameraSample(pixel);
                     
-                } while (isContinue());
+                    RayDifferential ray;
+                    Float rayWeight = _camera->generateRayDifferential(cameraSample, &ray);
+                    ++nCameraRays;
+                    ray.scaleDifferentials(diffScale);
+                    
+                    Spectrum L(0.0f);
+                    if (rayWeight > 0) {
+                        L = Li(ray, scene, *tileSampler, arena);
+                    }
+                    
+                    if (L.HasNaNs()) {
+                        COUT << StringPrintf(
+                                "Not-a-number radiance value returned "
+                                "for pixel (%d, %d), sample %d. Setting to black.",
+                                pixel.x, pixel.y,
+                                (int)tileSampler->currentSampleIndex());
+                        DCHECK(false);
+                        L = Spectrum(0.0f);
+                    } else if (L.y() < -1e-5) {
+                        COUT << StringPrintf(
+                                "Negative luminance value, %f, returned "
+                                "for pixel (%d, %d), sample %d. Setting to black.",
+                                L.y(), pixel.x, pixel.y,
+                                (int)tileSampler->currentSampleIndex());
+                        DCHECK(false);
+                        L = Spectrum(0.0f);
+                    } else if (std::isinf(L.y())) {
+                        COUT << StringPrintf(
+                                "Infinite luminance value returned "
+                                "for pixel (%d, %d), sample %d. Setting to black.",
+                                pixel.x, pixel.y,
+                                (int)tileSampler->currentSampleIndex());
+                        DCHECK(false);
+                        L = Spectrum(0.0f);
+                    }
+                    
+                    // 将像素样本值与权重保存到pixel像素数据中
+                    filmTile->addSample(cameraSample.pFilm, L, rayWeight);
+                    arena.reset();
+                    
+                } while (isContinue(tileSampler.get()));
             }
         };
     }
 }
 
-bool AdaptiveIntegrator::isContinue() const {
+bool AdaptiveIntegrator::isContinue(Sampler * sampler) const {
     return true;
 }
 
+
+
+//"param" : {
+//    "maxBounce" : 5,
+//    "rrThreshold" : 1,
+//    "lightSampleStrategy" : "power"
+//}
+// lst = {sampler, camera}
+CObject_ptr createAdaptiveIntegrator(const nloJson &param, const Arguments &lst) {
+    
+    
+}
+
+REGISTER("adaptive", createAdaptiveIntegrator);
 
 PALADIN_END
