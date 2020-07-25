@@ -13,6 +13,10 @@ PALADIN_BEGIN
 
 STAT_COUNTER("Integrator/Camera rays traced", nCameraRays);
 
+void AdaptiveIntegrator::preprocess(const Scene &scene, Sampler &sampler) {
+    
+}
+
 void AdaptiveIntegrator::render(const Scene &scene) {
     TRY_PROFILE(Prof::IntegratorRender)
     _subIntegrator->preprocess(scene, *_sampler);

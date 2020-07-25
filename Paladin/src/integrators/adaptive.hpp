@@ -64,6 +64,8 @@ public:
         _subIntegrator.reset(integrator);
     }
     
+    virtual void preprocess(const Scene &scene, Sampler &sampler);
+    
     virtual void render(const Scene &);
     
     virtual Spectrum Li(const RayDifferential &ray, const Scene &scene,
