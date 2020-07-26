@@ -16,6 +16,7 @@ PALADIN_BEGIN
 enum class FieldType{
     GNormal,
     Tangent,
+    Bitangent,
     UV,
     Depth,
     SNormal,
@@ -34,6 +35,8 @@ public:
             _type = FieldType::SNormal;
         } else if (type == "tangent") {
             _type = FieldType::Tangent;
+        } else if (type == "bitangent") {
+            _type = FieldType::Bitangent;
         } else if (type == "uv") {
             _type = FieldType::UV;
         } else if (type == "depth") {
@@ -51,9 +54,7 @@ public:
         }
     }
     
-    virtual nloJson toJson() const override {
-        return nloJson();
-    }
+    
     
     virtual Spectrum Li(const RayDifferential &ray, const Scene &scene,
                                 Sampler &sampler, MemoryArena &arena,
@@ -74,9 +75,8 @@ public:
                     ret[0] = nn.x;
                     ret[1] = nn.y;
                     ret[2] = nn.z;
+                    break;
                 }
-                break;
-                 
                 case FieldType::Tangent: {
                     auto nn = normalize(ref.shading.dpdu);
                     //映射到[0~1]范围
@@ -84,9 +84,26 @@ public:
                     ret[0] = nn.x;
                     ret[1] = nn.y;
                     ret[2] = nn.z;
+                    break;
                 }
-                break;
-                    
+                case FieldType::Bitangent: {
+                    auto nn = normalize(ref.shading.dpdv);
+                    //映射到[0~1]范围
+                    nn = mapTo01(nn);
+                    ret[0] = nn.x;
+                    ret[1] = nn.y;
+                    ret[2] = nn.z;
+                    break;
+                }
+                case FieldType::Distance: {
+                    ret[0] = ret[1] = ret[2] = ray.tMax;
+                    break;
+                }
+                case FieldType::ShapeIdx: {
+                    ret[0] = ret[1] = ret[2] = ref.shapeIdx;
+                    break;
+                }
+
                 default:
                     break;
             }

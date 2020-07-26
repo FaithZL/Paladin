@@ -24,7 +24,7 @@ Shape::Shape(const Transform *objectToWorld,const Transform* worldToObject,
     worldToObject(worldToObject),
     reverseOrientation(reverseOrientation),
     transformSwapsHandedness(objectToWorld->swapsHandedness()) {
-
+    shapeIdx = ++nShapes;
 }
 
 Shape::Shape(const Transform * ObjectToWorld,
@@ -41,7 +41,7 @@ _mediumInterface(mi),
 _invArea(-1),
 _type(type),
 _material(mat){
-    
+    shapeIdx = ++nShapes;
 }
 
 AABB3f Shape::worldBound() const {

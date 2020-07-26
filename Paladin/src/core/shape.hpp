@@ -17,6 +17,9 @@
 
 PALADIN_BEGIN
 
+STAT_COUNTER("Scene/Shapes num", nShapes);
+STAT_COUNTER("Scene/Primitives num", nPrims);
+
 enum ShapeType {
     EMesh,
     ESphere,
@@ -28,6 +31,10 @@ enum ShapeType {
 class Primitive : public CObject {
     
 public:
+    
+    Primitive() {
+        primIdx = ++nPrims;
+    }
     
     virtual RTCGeometry rtcGeometry(Scene * scene) const {
         DCHECK(false);
@@ -52,6 +59,8 @@ public:
     virtual bool rayOccluded(const Ray &ray, bool testAlphaTexture = true) const {
         DCHECK(false);
     }
+    
+    uint32_t primIdx;
     
 };
 
@@ -185,6 +194,8 @@ public:
     // 通常是模型文件指定的属性
     const bool reverseOrientation;
     const bool transformSwapsHandedness;
+    
+    uint32_t shapeIdx;
 protected:
     // 初始值为-1，-1为非法值
     Float _invArea;

@@ -212,6 +212,9 @@ public:
     mutable Float dudx = 0, dvdx = 0, dudy = 0, dvdy = 0;
 
     int faceIndex = 0;
+    
+    uint32_t shapeIdx;
+    uint32_t primIdx;
 };
 
 PALADIN_END

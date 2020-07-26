@@ -47,7 +47,8 @@ dpdv(dpdv),
 dndu(dndu),
 dndv(dndv),
 shape(shape),
-faceIndex(faceIndex) {
+faceIndex(faceIndex),
+shapeIdx(shape->shapeIdx) {
     
     shading.normal = normal;
     shading.dpdu = dpdu;

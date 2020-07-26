@@ -14,7 +14,7 @@ PALADIN_BEGIN
 //    "type" : "normal",
 //}
 CObject_ptr createFieldIntegrator(const nloJson &param, const Arguments &lst) {
-    string type = param.value("type", "sNormal");
+    string type = param.value("type", "snormal");
     auto iter = lst.begin();
     Sampler * sampler = dynamic_cast<Sampler *>(*iter);
     ++iter;
