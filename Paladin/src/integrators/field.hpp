@@ -10,11 +10,13 @@
 
 #include "core/integrator.hpp"
 #include "core/shape.hpp"
+#include "core/camera.hpp"
 
 PALADIN_BEGIN
 
 enum class FieldType{
     GNormal,
+    CPosition,
     Tangent,
     Bitangent,
     UV,
@@ -103,7 +105,27 @@ public:
                     ret[0] = ret[1] = ret[2] = ref.shapeIdx;
                     break;
                 }
-
+                case FieldType::UV: {
+                    ret[0] = ref.uv[0];
+                    ret[1] = ref.uv[1];
+                    ret[2] = 0;
+                    break;
+                }
+                case FieldType::GNormal: {
+                    auto nn = normalize(ref.normal);
+                    //映射到[0~1]范围
+                    nn = mapTo01(nn);
+                    ret[0] = nn.x;
+                    ret[1] = nn.y;
+                    ret[2] = nn.z;
+                }
+                case FieldType::CPosition: {
+                    auto cPos = _camera->cameraToWorld.getInverse().exec(ref.time, ref.pos);
+                    ret[0] = cPos[0];
+                    ret[1] = cPos[1];
+                    ret[2] = cPos[2];
+                }
+                    
                 default:
                     break;
             }

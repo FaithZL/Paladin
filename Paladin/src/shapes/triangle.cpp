@@ -192,6 +192,8 @@ bool TriangleI::fillSurfaceInteraction(const Ray &ray, const Vector2f &uv, Surfa
         isect->mediumInterface = MediumInterface(ray.medium);
     }
     
+    isect->primIdx = primIdx;
+    
     if (parent->_normals)
         isect->normal = faceforward(isect->normal, isect->shading.normal);
     else if (parent->reverseOrientation ^ parent->transformSwapsHandedness)

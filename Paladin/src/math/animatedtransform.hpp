@@ -188,6 +188,11 @@ public:
     
     RayDifferential exec(const RayDifferential &r) const;
     
+    AnimatedTransform getInverse() const {
+        return AnimatedTransform(_endTransform->getInverse_ptr(), _endTime,
+                                 _startTransform->getInverse_ptr(), _startTime);
+    }
+    
     Point3f exec(Float time, const Point3f &p) const {
         if (time <= _startTime || !_actuallyAnimated) {
             return _startTransform->exec(p);
