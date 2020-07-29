@@ -22,7 +22,7 @@ enum class FieldType{
     UV,
     Depth,
     SNormal,
-    Albedo,
+    SimpleAlbedo,
     Distance,
     ShapeIdx,
     PrimIdx
@@ -47,16 +47,14 @@ public:
             _type = FieldType::Distance;
         } else if (type == "gnormal") {
             _type = FieldType::GNormal;
-        } else if (type == "albedo") {
-            _type = FieldType::Albedo;
+        } else if (type == "simpleAlbedo") {
+            _type = FieldType::SimpleAlbedo;
         } else if (type == "shapeidx") {
             _type = FieldType::ShapeIdx;
         } else if (type == "primidx") {
             _type = FieldType::PrimIdx;
         }
     }
-    
-    
     
     virtual Spectrum Li(const RayDifferential &ray, const Scene &scene,
                                 Sampler &sampler, MemoryArena &arena,
@@ -118,14 +116,27 @@ public:
                     ret[0] = nn.x;
                     ret[1] = nn.y;
                     ret[2] = nn.z;
+                    break;
                 }
                 case FieldType::CPosition: {
                     auto cPos = _camera->cameraToWorld.getInverse().exec(ref.time, ref.pos);
                     ret[0] = cPos[0];
                     ret[1] = cPos[1];
                     ret[2] = cPos[2];
+                    break;
                 }
+                case FieldType::Depth: {
+                    auto pCamera = static_cast<const ProjectiveCamera *>(_camera.get());
+                    auto c2s = pCamera->getCameraToScreen();
+                    auto cPos = _camera->cameraToWorld.getInverse().exec(ref.time, ref.pos);
+                    auto sPos = c2s.exec(cPos);
+                    ret[0] = ret[1] = ret[1] = sPos.z;
+                    break;
+                }
+                case FieldType::SimpleAlbedo: {
                     
+                    break;
+                }
                 default:
                     break;
             }

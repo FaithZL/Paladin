@@ -108,6 +108,10 @@ public:
         _rasterToCamera = _cameraToScreen.getInverse() * _rasterToScreen;
     }
     
+    Transform getCameraToScreen() const {
+        return _cameraToScreen;
+    }
+    
 protected:
 
     Transform _cameraToScreen, _rasterToCamera;

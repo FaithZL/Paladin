@@ -413,6 +413,10 @@ public:
     
     virtual std::string toString() const = 0;
     
+    virtual Spectrum getColor() const {
+        return Spectrum(0.f);
+    }
+    
     const BxDFType type;
 };
 
