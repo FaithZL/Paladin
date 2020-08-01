@@ -11,18 +11,20 @@
 #include "core/integrator.hpp"
 #include "core/shape.hpp"
 #include "core/camera.hpp"
+#include "materials/bxdfs/bsdf.hpp"
 
 PALADIN_BEGIN
 
 enum class FieldType{
     GNormal,
     CPosition,
+    Albedo,
     Tangent,
     Bitangent,
     UV,
     Depth,
     SNormal,
-    SimpleAlbedo,
+    Color,
     Distance,
     ShapeIdx,
     PrimIdx
@@ -47,8 +49,10 @@ public:
             _type = FieldType::Distance;
         } else if (type == "gnormal") {
             _type = FieldType::GNormal;
-        } else if (type == "simpleAlbedo") {
-            _type = FieldType::SimpleAlbedo;
+        } else if (type == "color") {
+            _type = FieldType::Color;
+        } else if (type == "albedo") {
+            _type = FieldType::Albedo;
         } else if (type == "shapeidx") {
             _type = FieldType::ShapeIdx;
         } else if (type == "primidx") {
@@ -103,6 +107,10 @@ public:
                     ret[0] = ret[1] = ret[2] = ref.shapeIdx;
                     break;
                 }
+                case FieldType::PrimIdx: {
+                    ret[0] = ret[1] = ret[2] = ref.primIdx;
+                    break;
+                }
                 case FieldType::UV: {
                     ret[0] = ref.uv[0];
                     ret[1] = ref.uv[1];
@@ -133,8 +141,11 @@ public:
                     ret[0] = ret[1] = ret[1] = sPos.z;
                     break;
                 }
-                case FieldType::SimpleAlbedo: {
-                    
+                case FieldType::Color: {
+                    ret = ref.bsdf->getColor();
+                    break;
+                }
+                case FieldType::Albedo: {
                     break;
                 }
                 default:

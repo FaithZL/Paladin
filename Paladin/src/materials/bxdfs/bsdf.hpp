@@ -85,6 +85,14 @@ public:
                         Float *pdf, BxDFType type = BSDF_ALL,
                         BxDFType *sampledType = nullptr) const;
     
+    Spectrum getColor() const {
+        Spectrum ret(0.f);
+        for(int i = 0; i < nBxDFs; ++i) {
+            ret += bxdfs[i]->getColor();
+        }
+        return ret;
+    }
+    
     /**
      * 跟BXDF的pdfW函数相同，不再赘述
      */
