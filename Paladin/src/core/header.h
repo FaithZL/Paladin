@@ -211,7 +211,7 @@ inline uint64_t floatToBits(double f) {
 
 inline int64_t floatToInt(double f) {
     int64_t i;
-    memcpy(&i, &f, sizeof(float));
+    memcpy(&i, &f, sizeof(double));
     return i;
 }
 
